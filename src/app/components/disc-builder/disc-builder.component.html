@@ -1,0 +1,254 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { DiscService } from '../services/disc.service';
+import { AgentService } from '../services/agent.service';
+import { Disc, DiscSlot } from '../models/disc.model';
+import { Agent } from '../models/agent.model';
+import { ScoringAlgorithm, SCORING_PRESETS } from '../models/scoring.model';
+
+@Component({
+  selector: 'app-disc-builder',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  template: `
+    <div class="disc-builder">
+      <div class="header">
+        <h1>Disc Drive Builder & Rater</h1>
+      </div>
+
+      <div class="main-content">
+        <!-- Filters Section -->
+        <div class="section filters-section">
+          <h2>Filters & Scoring</h2>
+
+          <div class="filter-group">
+            <label>Score for Agent:</label>
+            <select [(ngModel)]="selectedAgentForScoring" (change)="onScoringAgentChange()" class="select-input">
+              <option [ngValue]="null">All Characters</option>
+              <option *ngFor="let agent of agents" [ngValue]="agent">
+                {{agent.name}} ({{agent.specialty}})
+              </option>
+            </select>
+          </div>
+
+          <div class="filter-group" *ngIf="selectedAgentForScoring">
+            <label>Scoring Algorithm:</label>
+            <div class="algorithm-info">
+              <strong>{{currentAlgorithm.name}}</strong>
+              <button class="btn-secondary" (click)="showWeights = !showWeights">
+                {{showWeights ? 'Hide' : 'Show'}} Weights
+              </button>
+            </div>
+
+            <div class="weights-display" *ngIf="showWeights">
+              <div *ngFor="let stat of getWeightedStats()" class="weight-item">
+                <span>{{stat.name}}:</span>
+                <span class="weight-value">{{stat.weight}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label>Slot Filter:</label>
+            <select [(ngModel)]="slotFilter" class="select-input">
+              <option [ngValue]="null">All Slots</option>
+              <option value="Drive1">Slot 1</option>
+              <option value="Drive2">Slot 2</option>
+              <option value="Drive3">Slot 3</option>
+              <option value="Drive4">Slot 4</option>
+              <option value="Drive5">Slot 5</option>
+              <option value="Drive6">Slot 6</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Set Filter:</label>
+            <input
+              type="text"
+              [(ngModel)]="setFilter"
+              placeholder="Search by set name..."
+              class="text-input"
+            />
+          </div>
+
+          <div class="filter-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="showLockedOnly" />
+              Show Locked Only
+            </label>
+          </div>
+
+          <div class="filter-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="showUnequippedOnly" />
+              Show Unequipped Only
+            </label>
+          </div>
+
+          <div class="stats-summary">
+            <h3>Collection Stats</h3>
+            <div class="stat-row">
+              <span>Total Discs:</span>
+              <span>{{discs.length}}</span>
+            </div>
+            <div class="stat-row">
+              <span>Filtered:</span>
+              <span>{{filteredDiscs.length}}</span>
+            </div>
+            <div class="stat-row">
+              <span>S-Rank Discs:</span>
+              <span>{{getSRankCount()}}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Disc List -->
+        <div class="section disc-list-section">
+          <div class="section-header">
+            <h2>Disc Inventory ({{filteredDiscs.length}})</h2>
+            <div class="sort-controls">
+              <label>Sort by:</label>
+              <select [(ngModel)]="sortBy" (change)="applySort()" class="select-input">
+                <option value="score">Score (High to Low)</option>
+                <option value="level">Level (High to Low)</option>
+                <option value="rarity">Rarity (High to Low)</option>
+                <option value="slot">Slot</option>
+                <option value="set">Set Name</option>
+                <option value="potential">Potential (High to Low)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="disc-grid">
+            <div
+              *ngFor="let disc of paginatedDiscs"
+              class="disc-card"
+              [class.locked]="disc.lock"
+              [class.equipped]="disc.equippedBy"
+              (click)="selectDisc(disc)">
+
+              <div class="disc-header">
+                <div class="disc-slot">{{formatSlot(disc.slot)}}</div>
+                <div class="disc-rarity">★{{disc.rarity}}</div>
+                <div class="disc-level">+{{disc.level}}</div>
+              </div>
+
+              <div class="disc-set">{{disc.set}}</div>
+
+              <div class="disc-main-stat">
+                <span class="stat-type">{{formatStatType(disc.mainStat.type)}}</span>
+                <span class="stat-value">{{disc.mainStat.value}}</span>
+              </div>
+
+              <div class="disc-substats">
+                <div *ngFor="let sub of disc.subStats" class="substat">
+                  <span class="substat-type">{{formatStatType(sub.type)}}</span>
+                  <span class="substat-value">
+                    {{sub.value}}
+                    <span class="roll-count" *ngIf="sub.rolls">({{sub.rolls}})</span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="disc-footer">
+                <div class="score-display" *ngIf="selectedAgentForScoring">
+                  <span class="score-label">Score:</span>
+                  <span class="score-value" [class.high-score]="getScore(disc) > 15">
+                    {{getScore(disc)}}
+                  </span>
+                </div>
+                <div class="equipped-by" *ngIf="disc.equippedBy">
+                  <span class="equipped-label">Equipped</span>
+                </div>
+                <div class="lock-icon" *ngIf="disc.lock">🔒</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pagination" *ngIf="totalPages > 1">
+            <button
+              [disabled]="currentPage === 1"
+              (click)="changePage(currentPage - 1)"
+              class="btn-secondary">
+              Previous
+            </button>
+            <span class="page-info">
+              Page {{currentPage}} of {{totalPages}}
+            </span>
+            <button
+              [disabled]="currentPage === totalPages"
+              (click)="changePage(currentPage + 1)"
+              class="btn-secondary">
+              Next
+            </button>
+          </div>
+        </div>
+
+        <!-- Disc Details -->
+        <div class="section disc-details-section" *ngIf="selectedDisc">
+          <h2>Disc Details</h2>
+
+          <div class="detail-group">
+            <label>Set:</label>
+            <span>{{selectedDisc.set}}</span>
+          </div>
+
+          <div class="detail-group">
+            <label>Slot:</label>
+            <span>{{formatSlot(selectedDisc.slot)}}</span>
+          </div>
+
+          <div class="detail-group">
+            <label>Rarity:</label>
+            <span>★{{selectedDisc.rarity}}</span>
+          </div>
+
+          <div class="detail-group">
+            <label>Level:</label>
+            <span>+{{selectedDisc.level}}</span>
+          </div>
+
+          <div class="potential-section">
+            <h3>Potential Analysis</h3>
+            <div class="potential-grid">
+              <div class="potential-item">
+                <span class="potential-label">Current:</span>
+                <span class="potential-value">{{getPotential(selectedDisc).current}}</span>
+              </div>
+              <div class="potential-item">
+                <span class="potential-label">Avg at +15:</span>
+                <span class="potential-value">{{getPotential(selectedDisc).averagePotential}}</span>
+              </div>
+              <div class="potential-item">
+                <span class="potential-label">Max at +15:</span>
+                <span class="potential-value high">{{getPotential(selectedDisc).maxPotential}}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="recommendations-section" *ngIf="selectedAgentForScoring">
+            <h3>Recommendations</h3>
+            <div class="recommendation">
+              <strong>Score: {{getScore(selectedDisc)}}</strong>
+              <p>{{getRecommendation(selectedDisc)}}</p>
+            </div>
+          </div>
+
+          <div class="actions-section">
+            <button
+              class="btn-primary"
+              (click)="toggleLock(selectedDisc)">
+              {{selectedDisc.lock ? 'Unlock' : 'Lock'}} Disc
+            </button>
+
+            <button
+              class="btn-danger"
+              [disabled]="selectedDisc.lock"
+              (click)="deleteDisc(selectedDisc)">
+              Delete Disc
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>

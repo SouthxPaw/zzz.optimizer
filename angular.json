@@ -87,15 +87,22 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/assets"
             ],
             "styles": [
               "src/styles.css"
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "7f6825b9-e3d2-4952-949b-d15af0888665"
   }
 }
