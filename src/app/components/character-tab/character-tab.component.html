@@ -1,0 +1,99 @@
+<div class="character-tab">
+  <div class="header">
+    <h1>Zenless Zone Zero - Agent Builder</h1>
+  </div>
+
+  <div class="content-grid">
+    <!-- Agent Selection -->
+    <div class="section agent-selection">
+      <h2>Select Agent</h2>
+      <div class="agent-grid">
+        <div
+          *ngFor="let agent of agents"
+          class="agent-card"
+          [class.selected]="selectedAgent?.id === agent.id"
+          (click)="selectAgent(agent)">
+          <div class="agent-portrait" [attr.data-element]="agent.element">
+            <span class="agent-name">{{agent.name}}</span>
+          </div>
+          <div class="agent-info">
+            <div class="rarity">★{{agent.rarity}}</div>
+            <div class="specialty">{{agent.specialty}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agent Details -->
+    <div class="section agent-details" *ngIf="selectedAgent">
+      <h2>{{selectedAgent.name}}</h2>
+
+      <!-- Mindscape Cinema -->
+      <div class="mindscape-section">
+        <h3>Mindscape Cinema</h3>
+        <div class="mindscape-toggles">
+          <button
+            *ngFor="let m of [1,2,3,4,5,6]"
+            class="mindscape-btn"
+            [class.active]="mindscapeLevel >= m"
+            (click)="toggleMindscape(m)">
+            M{{m}}
+          </button>
+        </div>
+      </div>
+
+      <!-- W-Engine -->
+      <div class="wengine-section">
+        <h3>W-Engine</h3>
+        <select [(ngModel)]="selectedWEngine" class="wengine-select">
+          <option [ngValue]="null">Select W-Engine</option>
+          <option *ngFor="let engine of wEngines" [ngValue]="engine">
+            {{engine.name}} (★{{engine.rarity}})
+          </option>
+        </select>
+
+        <div *ngIf="selectedWEngine" class="wengine-details">
+          <p>Base ATK: {{selectedWEngine.baseAtk}}</p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-section">
+        <h3>Base Stats</h3>
+        <div class="stats-grid">
+          <div class="stat-row" *ngFor="let stat of [
+            ['HP', selectedAgent.baseStats.hp],
+            ['ATK', selectedAgent.baseStats.atk],
+            ['DEF', selectedAgent.baseStats.def],
+            ['Impact', selectedAgent.baseStats.impact],
+            ['Anomaly Mastery', selectedAgent.baseStats.anomalyMastery],
+            ['CRIT Rate', selectedAgent.baseStats.critRate + '%'],
+            ['CRIT DMG', selectedAgent.baseStats.critDmg + '%']
+          ]">
+            <span class="stat-label">{{stat[0]}}:</span>
+            <span class="stat-value">{{stat[1]}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="disc-section">
+        <h3>Disc Drives</h3>
+        <p class="placeholder">Disc Drive builder coming soon...</p>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="section summary-panel" *ngIf="selectedAgent">
+      <h2>Build Summary</h2>
+      <div class="summary-content">
+        <div class="summary-item"><strong>Agent:</strong> {{selectedAgent.name}}</div>
+        <div class="summary-item"><strong>Element:</strong> {{selectedAgent.element}}</div>
+        <div class="summary-item"><strong>Specialty:</strong> {{selectedAgent.specialty}}</div>
+        <div class="summary-item"><strong>Mindscape:</strong> M{{mindscapeLevel}}</div>
+        <div class="summary-item" *ngIf="selectedWEngine">
+          <strong>W-Engine:</strong> {{selectedWEngine.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

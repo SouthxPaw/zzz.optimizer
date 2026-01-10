@@ -40,17 +40,19 @@ export interface MindscapeEffect {
 export interface WEngine {
   id: string;
   name: string;
-  rarity: 'B' | 'A' | 'S';
-  specialty: Specialty;
+  rarity: 'S' | 'A' | 'B';
+  specialty: 'Attack' | 'Stun' | 'Anomaly' | 'Support' | 'Defense';
   baseAtk: number;
   subStat: {
-    type: keyof BaseStats;
+    type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency';
     value: number;
   };
-  passive: {
+  effect: {
     name: string;
     description: string;
+    maxRefinement?: string;
   };
+  signature?: string;
 }
 
 // models/disc.model.ts

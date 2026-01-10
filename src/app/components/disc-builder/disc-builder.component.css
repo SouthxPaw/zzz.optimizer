@@ -1,435 +1,298 @@
-    .disc-builder {
-      padding: 20px;
-      background: #1a1a2e;
-      color: #eee;
-      min-height: 100vh;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .header h1 {
-      color: #00d9ff;
-      font-size: 2em;
-      margin: 0;
-    }
-
-    .main-content {
-      display: grid;
-      grid-template-columns: 300px 1fr 350px;
-      gap: 20px;
-      max-width: 1800px;
-      margin: 0 auto;
-    }
-
-    .section {
-      background: #16213e;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    }
-
-    .section h2 {
-      color: #00d9ff;
-      margin-top: 0;
-      margin-bottom: 20px;
-      border-bottom: 2px solid #0f3460;
-      padding-bottom: 10px;
-    }
-
-    .section h3 {
-      color: #88d5f5;
-      margin-top: 20px;
-      margin-bottom: 10px;
-    }
-
-    .filter-group {
-      margin-bottom: 15px;
-    }
-
-    .filter-group label {
-      display: block;
-      color: #88d5f5;
-      margin-bottom: 5px;
-      font-size: 0.9em;
-    }
-
-    .select-input, .text-input {
-      width: 100%;
-      padding: 8px;
-      background: #0f3460;
-      color: #eee;
-      border: 2px solid #16213e;
-      border-radius: 6px;
-      font-size: 0.95em;
-    }
-
-    .select-input:focus, .text-input:focus {
-      outline: none;
-      border-color: #00d9ff;
-    }
-
-    .algorithm-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      background: #0f3460;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-
-    .weights-display {
-      background: #0f3460;
-      padding: 10px;
-      border-radius: 6px;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    .weight-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 5px 0;
-      border-bottom: 1px solid #1a1a2e;
-    }
-
-    .weight-value {
-      color: #ffd700;
-      font-weight: bold;
-    }
-
-    .stats-summary {
-      margin-top: 20px;
-      padding: 15px;
-      background: #0f3460;
-      border-radius: 6px;
-    }
-
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 5px 0;
-      color: #ddd;
-    }
-
-    .stat-row span:last-child {
-      color: #00d9ff;
-      font-weight: bold;
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .sort-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .sort-controls label {
-      color: #88d5f5;
-      font-size: 0.9em;
-    }
-
-    .sort-controls .select-input {
-      width: 200px;
-    }
-
-    .disc-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .disc-card {
-      background: #0f3460;
-      border-radius: 8px;
-      padding: 15px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: 2px solid transparent;
-    }
-
-    .disc-card:hover {
-      transform: translateY(-2px);
-      border-color: #00d9ff;
-      box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
-    }
-
-    .disc-card.locked {
-      border-color: #ffd700;
-    }
-
-    .disc-card.equipped {
-      background: linear-gradient(135deg, #0f3460, #1a4d6d);
-    }
-
-    .disc-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .disc-slot {
-      background: #1a1a2e;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.85em;
-      color: #88d5f5;
-    }
-
-    .disc-rarity {
-      color: #ffd700;
-      font-weight: bold;
-    }
-
-    .disc-level {
-      background: #00d9ff;
-      color: #1a1a2e;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-weight: bold;
-      font-size: 0.85em;
-    }
-
-    .disc-set {
-      font-size: 0.95em;
-      color: #ddd;
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
-
-    .disc-main-stat {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px;
-      background: #1a1a2e;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-
-    .stat-type {
-      color: #88d5f5;
-      font-weight: bold;
-    }
-
-    .stat-value {
-      color: #ffd700;
-      font-weight: bold;
-    }
-
-    .disc-substats {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-bottom: 10px;
-    }
-
-    .substat {
-      display: flex;
-      justify-content: space-between;
-      padding: 4px 8px;
-      background: #1a1a2e;
-      border-radius: 4px;
-      font-size: 0.9em;
-    }
-
-    .substat-type {
-      color: #aaa;
-    }
-
-    .substat-value {
-      color: #eee;
-    }
-
-    .roll-count {
-      color: #00d9ff;
-      font-size: 0.85em;
-      margin-left: 4px;
-    }
-
-    .disc-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid #1a1a2e;
-    }
-
-    .score-display {
-      display: flex;
-      gap: 5px;
-      align-items: center;
-    }
-
-    .score-label {
-      color: #888;
-      font-size: 0.85em;
-    }
-
-    .score-value {
-      color: #88d5f5;
-      font-weight: bold;
-    }
-
-    .score-value.high-score {
-      color: #ffd700;
-    }
-
-    .equipped-label {
-      background: #00d9ff;
-      color: #1a1a2e;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.8em;
-      font-weight: bold;
-    }
-
-    .lock-icon {
-      font-size: 1.2em;
-    }
-
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      padding: 20px;
-    }
-
-    .page-info {
-      color: #88d5f5;
-    }
-
-    .detail-group {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      background: #0f3460;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-
-    .detail-group label {
-      color: #88d5f5;
-      font-weight: bold;
-    }
-
-    .potential-section {
-      margin-top: 20px;
-      padding: 15px;
-      background: #0f3460;
-      border-radius: 8px;
-    }
-
-    .potential-grid {
-      display: grid;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .potential-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px;
-      background: #1a1a2e;
-      border-radius: 4px;
-    }
-
-    .potential-label {
-      color: #88d5f5;
-    }
-
-    .potential-value {
-      color: #00d9ff;
-      font-weight: bold;
-    }
-
-    .potential-value.high {
-      color: #ffd700;
-    }
-
-    .recommendations-section {
-      margin-top: 20px;
-      padding: 15px;
-      background: #0f3460;
-      border-radius: 8px;
-    }
-
-    .recommendation {
-      padding: 10px;
-      background: #1a1a2e;
-      border-radius: 6px;
-      border-left: 4px solid #00d9ff;
-    }
-
-    .recommendation strong {
-      color: #ffd700;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .actions-section {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .btn-primary, .btn-secondary, .btn-danger {
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-    }
-
-    .btn-primary {
-      background: #00d9ff;
-      color: #1a1a2e;
-    }
-
-    .btn-primary:hover {
-      background: #00b8d4;
-    }
-
-    .btn-secondary {
-      background: #0f3460;
-      color: #eee;
-      border: 2px solid #00d9ff;
-    }
-
-    .btn-secondary:hover {
-      background: #16213e;
-    }
-
-    .btn-danger {
-      background: #dc3545;
-      color: white;
-    }
-
-    .btn-danger:hover {
-      background: #c82333;
-    }
-
-    .btn-danger:disabled {
-      background: #6c757d;
-      cursor: not-allowed;
-    }
-
-    @media (max-width: 1400px) {
-      .main-content {
-        grid-template-columns: 1fr;
-      }
-    }
+.disc-builder {
+  padding: 20px;
+  background: #1a1a2e;
+  color: #eee;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  color: #00d9ff;
+  font-size: 2em;
+  margin: 0;
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: 300px 1fr 350px;
+  gap: 20px;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+/* Section Styles */
+.section {
+  background: #16213e;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+}
+
+.section h2 {
+  color: #00d9ff;
+  margin-top: 0;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #0f3460;
+  padding-bottom: 10px;
+}
+
+/* Filter Inputs */
+.filter-group {
+  margin-bottom: 15px;
+}
+
+.filter-group label {
+  display: block;
+  color: #88d5f5;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.select-input,
+.text-input {
+  width: 100%;
+  padding: 8px;
+  background: #0f3460;
+  color: #eee;
+  border: 2px solid #16213e;
+  border-radius: 6px;
+}
+
+.text-input {
+  font-size: 0.9em;
+}
+
+input[type="checkbox"] {
+  margin-right: 6px;
+}
+
+/* Stats Summary */
+.stats-summary {
+  margin-top: 20px;
+  background: #0f3460;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.stats-summary h3 {
+  margin-top: 0;
+  color: #00d9ff;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #0f3460;
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+/* Disc Grid */
+.disc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.disc-card {
+  background: #0f3460;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease-in-out;
+}
+
+.disc-card:hover {
+  border-color: #00d9ff;
+}
+
+.disc-card.locked {
+  border-color: #dc3545;
+}
+
+.disc-card.equipped {
+  border-color: #ffd700;
+}
+
+/* Disc Header */
+.disc-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.disc-slot,
+.disc-rarity,
+.disc-level {
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+/* Disc Set & Stats */
+.disc-set {
+  font-size: 0.9em;
+  color: #88d5f5;
+  margin-bottom: 6px;
+}
+
+.disc-main-stat {
+  display: flex;
+  justify-content: space-between;
+  background: #16213e;
+  padding: 4px 6px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.disc-substats .substat {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8em;
+  padding: 2px 4px;
+}
+
+.roll-count {
+  font-size: 0.7em;
+  color: #ffd700;
+}
+
+/* Disc Footer */
+.disc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8em;
+  margin-top: 6px;
+}
+
+.score-display {
+  display: flex;
+  gap: 4px;
+}
+
+.score-value.high-score {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.equipped-by {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.lock-icon {
+  color: #dc3545;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.btn-secondary {
+  background: #0f3460;
+  border: 2px solid #16213e;
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: #eee;
+  cursor: pointer;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Disc Details */
+.disc-details-section h2 {
+  margin-top: 0;
+}
+
+.detail-group {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #0f3460;
+}
+
+.potential-section,
+.recommendations-section {
+  margin-top: 12px;
+}
+
+.potential-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.potential-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #16213e;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.potential-value.high {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.recommendation {
+  background: #0f3460;
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 6px;
+}
+
+.actions-section {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.btn-primary {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  background: #00d9ff;
+  color: #1a1a2e;
+  cursor: pointer;
+}
+
+.btn-danger {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  background: #dc3545;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
