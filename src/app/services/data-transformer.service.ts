@@ -24,7 +24,7 @@ export class DataTransformerService {
   /**
    * Map raw game type codes to our Specialty types
    * Based on common ZZZ specialties:
-   * 1 = Attack, 2 = Stun, 3 = Anomaly, 4 = Support, 5 = Defense
+   * 1 = Attack, 2 = Stun, 3 = Anomaly, 4 = Support, 5 = Defense, 6 = Rupture
    */
   private specialtyMap: { [key: number]: Specialty } = {
     1: 'Attack',
@@ -32,7 +32,7 @@ export class DataTransformerService {
     3: 'Anomaly',
     4: 'Support',
     5: 'Defense',
-    6: 'Anomaly' // Some characters may use 6 for Anomaly variants
+    6: 'Rupture'
   };
 
   /**
