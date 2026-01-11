@@ -1,0 +1,255 @@
+<div class="optimizer">
+  <div class="header">
+    <h1>Build Optimizer</h1>
+    <p class="subtitle">Find the best disc combinations for your agents</p>
+  </div>
+
+  <div class="optimizer-grid">
+    <!-- Configuration Panel -->
+    <div class="section config-panel">
+      <h2>Configuration</h2>
+
+      <div class="config-group">
+        <label>Select Agent:</label>
+        <select [(ngModel)]="selectedAgent" (change)="onAgentChange()" class="select-input">
+          <option [ngValue]="null">Choose an agent...</option>
+          <option *ngFor="let agent of agents" [ngValue]="agent">
+            {{agent.name}} ({{agent.specialty}})
+          </option>
+        </select>
+      </div>
+
+      <div *ngIf="selectedAgent">
+        <div class="config-group">
+          <label>Agent Level:</label>
+          <input
+            type="number"
+            [(ngModel)]="agentLevel"
+            min="1"
+            max="60"
+            class="number-input"
+          />
+        </div>
+
+        <div class="config-group">
+          <label>W-Engine:</label>
+          <select [(ngModel)]="selectedWEngine" class="select-input">
+            <option [ngValue]="null">None</option>
+            <option *ngFor="let wEngine of availableWEngines" [ngValue]="wEngine">
+              {{wEngine.name}} (★{{wEngine.rarity}})
+            </option>
+          </select>
+          <div class="wengine-notice" *ngIf="availableWEngines.length === 0">
+            <small>⚠️ No W-Engines available for {{selectedAgent.specialty}}</small>
+          </div>
+          <div class="wengine-info" *ngIf="selectedWEngine">
+            <small class="info-text">
+              ✓ {{selectedWEngine.subStat.type}}: +{{selectedWEngine.subStat.value}}
+            </small>
+          </div>
+        </div>
+
+        <div class="config-group">
+          <label>Mindscape Level:</label>
+          <div class="mindscape-buttons">
+            <button
+              *ngFor="let m of [0,1,2,3,4,5,6]"
+              [class.active]="mindscapeLevel === m"
+              (click)="mindscapeLevel = m"
+              class="mindscape-btn">
+              M{{m}}
+            </button>
+          </div>
+        </div>
+
+        <div class="config-group">
+          <label>Stat Requirements:</label>
+          <div class="substat-filters">
+            <div class="substat-filter">
+              <label>Min CRIT Rate:</label>
+              <input type="number" [(ngModel)]="minCritRate" class="number-input-sm" />%
+            </div>
+            <div class="substat-filter">
+              <label>Min CRIT DMG:</label>
+              <input type="number" [(ngModel)]="minCritDmg" class="number-input-sm" />%
+            </div>
+          </div>
+        </div>
+
+        <div class="advanced-toggle">
+          <button (click)="toggleAdvancedOptions()" class="btn-secondary">
+            {{showAdvancedOptions ? 'Hide' : 'Show'}} Advanced Options
+          </button>
+        </div>
+
+        <div *ngIf="showAdvancedOptions" class="advanced-options">
+          <div class="config-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="useEfficientMode" />
+              Use Efficient Mode (faster, top 20 discs per slot)
+            </label>
+          </div>
+
+          <div class="config-group">
+            <label>Max Results:</label>
+            <input type="number" [(ngModel)]="maxResults" min="10" max="500" class="number-input" />
+          </div>
+
+          <div class="substat-filters">
+            <div class="substat-filter">
+              <label>Min ATK:</label>
+              <input type="number" [(ngModel)]="minATK" class="number-input-sm" />
+            </div>
+            <div class="substat-filter">
+              <label>Min HP:</label>
+              <input type="number" [(ngModel)]="minHP" class="number-input-sm" />
+            </div>
+            <div class="substat-filter">
+              <label>Min DEF:</label>
+              <input type="number" [(ngModel)]="minDEF" class="number-input-sm" />
+            </div>
+          </div>
+        </div>
+
+        <div class="optimize-section">
+          <button
+            (click)="optimize()"
+            [disabled]="isOptimizing"
+            class="btn-optimize">
+            {{isOptimizing ? 'Optimizing...' : 'Start Optimization'}}
+          </button>
+
+          <div class="progress-info" *ngIf="isOptimizing">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="progress"></div>
+            </div>
+            <span class="progress-text">{{progressText}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Panel -->
+    <div class="section results-panel">
+      <div class="results-header">
+        <h2>Optimization Results</h2>
+        <div class="result-count" *ngIf="results.length > 0">
+          {{results.length}} builds found
+        </div>
+      </div>
+
+      <div class="no-results" *ngIf="!selectedAgent">
+        <p>Select an agent to start optimizing</p>
+      </div>
+
+      <div class="no-results" *ngIf="selectedAgent && results.length === 0 && !isOptimizing">
+        <p>Click "Start Optimization" to find builds</p>
+      </div>
+
+      <div class="results-list" *ngIf="results.length > 0">
+        <div
+          *ngFor="let build of results; let i = index"
+          class="result-card"
+          [class.selected]="selectedResult === build"
+          (click)="selectResult(build)">
+
+          <div class="result-header">
+            <span class="rank">#{{i + 1}}</span>
+            <span class="score">Score: {{build.score.toFixed(2)}}</span>
+          </div>
+
+          <div class="result-stats">
+            <div class="stat-item">
+              <span>ATK:</span>
+              <span>{{build.stats.atk.toFixed(0)}}</span>
+            </div>
+            <div class="stat-item">
+              <span>CRIT Rate:</span>
+              <span>{{build.stats.critRate.toFixed(1)}}%</span>
+            </div>
+            <div class="stat-item">
+              <span>CRIT DMG:</span>
+              <span>{{build.stats.critDmg.toFixed(1)}}%</span>
+            </div>
+          </div>
+
+          <div class="set-bonuses" *ngIf="build.setBonus.length > 0">
+            <div *ngFor="let bonus of build.setBonus" class="set-badge">
+              {{bonus}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Build Details Panel -->
+    <div class="section details-panel" *ngIf="selectedResult">
+      <h2>Build Details</h2>
+
+      <div class="stats-display">
+        <h3>Final Stats</h3>
+        <div class="stats-grid">
+          <div class="stat-row">
+            <span>HP:</span>
+            <span>{{selectedResult.stats.hp.toFixed(0)}}</span>
+          </div>
+          <div class="stat-row">
+            <span>ATK:</span>
+            <span>{{selectedResult.stats.atk.toFixed(0)}}</span>
+          </div>
+          <div class="stat-row">
+            <span>DEF:</span>
+            <span>{{selectedResult.stats.def.toFixed(0)}}</span>
+          </div>
+          <div class="stat-row">
+            <span>CRIT Rate:</span>
+            <span>{{selectedResult.stats.critRate.toFixed(1)}}%</span>
+          </div>
+          <div class="stat-row">
+            <span>CRIT DMG:</span>
+            <span>{{selectedResult.stats.critDmg.toFixed(1)}}%</span>
+          </div>
+          <div class="stat-row">
+            <span>Impact:</span>
+            <span>{{selectedResult.stats.impact.toFixed(0)}}</span>
+          </div>
+          <div class="stat-row">
+            <span>Anomaly Prof:</span>
+            <span>{{selectedResult.stats.anomalyProficiency.toFixed(0)}}</span>
+          </div>
+          <div class="stat-row">
+            <span>PEN Ratio:</span>
+            <span>{{selectedResult.stats.penRatio.toFixed(1)}}%</span>
+          </div>
+          <div class="stat-row">
+            <span>Energy Regen:</span>
+            <span>{{selectedResult.stats.energyRegen.toFixed(1)}}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="disc-breakdown">
+        <h3>Equipped Discs</h3>
+        <div class="disc-list-details">
+          <div *ngFor="let slot of allSlots" class="disc-detail-item">
+            <div class="slot-label">{{slot.replace('Drive', 'Slot ')}}:</div>
+            <div class="disc-info">{{getDiscInSlot(slot)}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="set-bonuses-detail" *ngIf="selectedResult.setBonus.length > 0">
+        <h3>Active Set Bonuses</h3>
+        <div *ngFor="let bonus of selectedResult.setBonus" class="bonus-item">
+          ✓ {{bonus}}
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" (click)="equipBuild()">
+          Equip This Build
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
