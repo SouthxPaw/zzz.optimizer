@@ -1,0 +1,2344 @@
+{
+  "Id": 1471,
+  "Icon": "IconRole53",
+  "Name": "Banyue",
+  "CodeName": "Banyue",
+  "Rarity": 4,
+  "WeaponType": { "6": "Rupture" },
+  "ElementType": { "201": "Fire" },
+  "SpecialElementType": {},
+  "HitType": { "102": "Strike" },
+  "Camp": { "12": "Krampus Compliance Authority" },
+  "Gender": 1,
+  "PartnerInfo": {
+    "Birthday": "JUL 24",
+    "FullName": "Banyue",
+    "Gender": "Male",
+    "IconPath": "UI/Sprite/A1DynamicLoad/IconRoleCircle/UnPacker/IconRoleCircle53.png",
+    "ImpressionF": "Banyue Shifu may look calm and composed, but he's actually got a timid side! Last time he visited Suibian Temple, a mouse happened to scurry in, and though he did his best to hide it, it was clear he was unsettled...",
+    "ImpressionM": "Come to think of it, one time, a kid dropped a marble, and he kept looking at it... I guess Banyue Shifu isn't always the composed martial arts master he seems to be.",
+    "Name": "",
+    "OutlookDesc": "",
+    "ProfileDesc": "Banyue is an Intelligent Construct who runs a martial arts school in Waifei, known to many as \"Banyue Shifu.\" He has lived for a long time, his stone-lion-like presence commanding respect. A martial arts expert of great skill, he shares a long-standing friendship with Yunkui Summit's current High Preceptor, Yixuan.\n\nAs a martial master, Banyue is quiet but dependable. His methods and beliefs are rooted in tradition, and he disciplines his students with strict yet thoughtful guidance, teaching them not just how to fight, but how to learn. Known as a true master of the martial arts, in battle, he can assume a special form known as the Visage of Wrath to vanquish all evil.\n\nA long inhabitant of Waifei, Banyue is quiet and even-tempered. He doesn't express emotions easily and has the manner of someone from another era. Knowing he's out of touch with modern trends, he's been secretly trying to learn the latest internet slang... yet his half-baked grasp of it tends to end in funny little misunderstandings.\n\nBanyue also appears to have a strange liking for round things — stone balls, spherical bollards, and the like. If the conversation ever goes silent while you're alone with him, bringing up something spherical usually does the trick.",
+    "Race": "Krampus Compliance Authority",
+    "RoleIcon": "IconRole/UnPacker/IconRole53",
+    "Stature": "200",
+    "UnlockCondition": [
+      "Obtain Agent",
+      "Complete Main Commission Season 2 Chapter 5",
+      "Complete the \"Anby's Problem\" commission"
+    ],
+    "TrustLv": {
+      "1": "Banyue is an Intelligent Construct who runs a martial arts school in Waifei, known to many as \"Banyue Shifu.\" He has lived for a long time, his stone-lion-like presence commanding respect. A martial arts expert of great skill, he shares a long-standing friendship with Yunkui Summit's current High Preceptor, Yixuan.\n\nAs a martial master, Banyue is quiet but dependable. His methods and beliefs are rooted in tradition, and he disciplines his students with strict yet thoughtful guidance, teaching them not just how to fight, but how to learn. Known as a true master of the martial arts, in battle, he can assume a special form known as the Visage of Wrath to vanquish all evil.\n\nA long inhabitant of Waifei, Banyue is quiet and even-tempered. He doesn't express emotions easily and has the manner of someone from another era. Knowing he's out of touch with modern trends, he's been secretly trying to learn the latest internet slang... yet his half-baked grasp of it tends to end in funny little misunderstandings.\n\nBanyue also appears to have a strange liking for round things — stone balls, spherical bollards, and the like. If the conversation ever goes silent while you're alone with him, bringing up something spherical usually does the trick.",
+      "2": "",
+      "3": "Banyue's true identity is that of a killing machine secretly developed years ago by TOPS, specifically designed to suppress Miasma and codenamed \"Purge Unit - Type Zero.\" The algorithm implanted within him drives him to act according to the most logical solution for eliminating Miasma, which often results in indiscriminate annihilation of all moving targets within sight, including both the Miasma and affected civilians.\n\nAfter a failed operation, Banyue, then still a mere machine, was abandoned by TOPS, but was then discovered by a sage visiting the Lemnian Hollow, who rewrote his Core and constructed new intelligent logic for him, allowing Banyue to gradually develop self-awareness. Later, Banyue was accepted by the residents of the old mining site in Waifei Peninsula, where he integrated into \"human\" life.\n\nDuring the catastrophic Miasma outbreak at the old mining site ten years ago, Banyue rushed to rescue the civilians, yet under the influence of his perfectly rational algorithms, he abandoned those he deemed beyond saving. Though he saved the young Ye Shunguang and Ye Shiyuan, this planted a deep-seated guilt within him for \"abandoning those in need.\" As a result, Banyue never took the Forbidden Fruit test, and despite meeting the criteria of an Intelligent Construct, he remains officially unrecognized as one.\n\nAfter receiving judgment from Dialyn, a Judge of the Krampus Compliance Authority, Banyue resolved to atone for his past regrets by protecting the future. Through Dialyn's recommendation, he has now become a Judge of the Krampus Compliance Authority, embarking on a completely new journey.",
+      "4": ""
+    }
+  },
+  "Skin": {
+    "3114710": {
+      "Name": "Banyue: Blazestone Heart",
+      "Desc": "He carries a righteous, unshakable aura — every bit the master he is. Don't judge him by his silence; a stone heart makes no sound, and compassion doesn't speak aloud either.",
+      "Image": "IconRole53"
+    }
+  },
+  "Stats": {
+    "Armor": 0,
+    "ArmorGrowth": 0,
+    "Attack": 124,
+    "AttackGrowth": 74561,
+    "AvatarPieceId": 5471,
+    "BreakStun": 95,
+    "Crit": 500,
+    "CritDamage": 5000,
+    "CritDmgRes": 0,
+    "CritRes": 0,
+    "Defence": 36,
+    "DefenceGrowth": 48644,
+    "ElementAbnormalPower": 90,
+    "ElementMystery": 89,
+    "Endurance": 0,
+    "HpGrowth": 927143,
+    "HpMax": 683,
+    "PenDelta": 0,
+    "PenRate": 0,
+    "Rbl": 1,
+    "RblCorrectionFactor": 10000,
+    "RblProbability": 0,
+    "Shield": 0,
+    "ShieldGrowth": 0,
+    "SpBarPoint": 0,
+    "SpRecover": 0,
+    "Stun": 0,
+    "Tags": [
+      "BanYue",
+      "Punch",
+      "Fire",
+      "Male",
+      "Camp12",
+      "Size3",
+      "AidTypeParry",
+      "BanYue",
+      "EtherEyesSize2"
+    ],
+    "RpMax": 120,
+    "RpRecover": 200
+  },
+  "Level": {
+    "1": {
+      "HpMax": 0,
+      "Attack": 0,
+      "Defence": 0,
+      "LevelMax": 10,
+      "LevelMin": 0,
+      "Materials": { "10": 24000, "100216": 4 }
+    },
+    "2": {
+      "HpMax": 469,
+      "Attack": 44,
+      "Defence": 25,
+      "LevelMax": 20,
+      "LevelMin": 10,
+      "Materials": { "10": 56000, "100226": 12 }
+    },
+    "3": {
+      "HpMax": 938,
+      "Attack": 88,
+      "Defence": 49,
+      "LevelMax": 30,
+      "LevelMin": 20,
+      "Materials": { "10": 120000, "100226": 20 }
+    },
+    "4": {
+      "HpMax": 1407,
+      "Attack": 132,
+      "Defence": 74,
+      "LevelMax": 40,
+      "LevelMin": 30,
+      "Materials": { "10": 200000, "100236": 10 }
+    },
+    "5": {
+      "HpMax": 1875,
+      "Attack": 177,
+      "Defence": 98,
+      "LevelMax": 50,
+      "LevelMin": 40,
+      "Materials": { "10": 400000, "100236": 20 }
+    },
+    "6": {
+      "HpMax": 2344,
+      "Attack": 221,
+      "Defence": 123,
+      "LevelMax": 60,
+      "LevelMin": 50,
+      "Materials": {}
+    }
+  },
+  "ExtraLevel": {
+    "1": {
+      "MaxLevel": 15,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 0
+        },
+        "20101": {
+          "Prop": 20101,
+          "Name": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Value": 480
+        }
+      }
+    },
+    "2": {
+      "MaxLevel": 25,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 25
+        },
+        "20101": {
+          "Prop": 20101,
+          "Name": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Value": 480
+        }
+      }
+    },
+    "3": {
+      "MaxLevel": 35,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 25
+        },
+        "20101": {
+          "Prop": 20101,
+          "Name": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Value": 960
+        }
+      }
+    },
+    "4": {
+      "MaxLevel": 45,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 50
+        },
+        "20101": {
+          "Prop": 20101,
+          "Name": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Value": 960
+        }
+      }
+    },
+    "5": {
+      "MaxLevel": 55,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 50
+        },
+        "20101": {
+          "Prop": 20101,
+          "Name": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Value": 1440
+        }
+      }
+    },
+    "6": {
+      "MaxLevel": 60,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 75
+        },
+        "20101": {
+          "Prop": 20101,
+          "Name": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Value": 1440
+        }
+      }
+    }
+  },
+  "LevelEXP": [
+    50, 150, 250, 400, 600, 800, 1000, 1250, 1500, 1800, 1935, 2065, 2200, 2335,
+    2465, 2600, 2735, 2865, 3000, 4680, 4975, 5265, 5560, 5855, 6145, 6440,
+    6735, 7025, 7320, 10800, 11400, 12000, 12600, 13200, 13800, 14400, 15000,
+    15600, 16200, 17100, 18300, 19500, 20700, 21900, 23100, 24300, 25500, 26700,
+    27900, 34200, 36600, 39000, 41400, 43800, 46200, 48600, 51000, 53400, 55800,
+    0
+  ],
+  "Skill": {
+    "Basic": {
+      "Description": [
+        {
+          "Name": "Basic Attack: Towering Peaks",
+          "Desc": "Press <IconMap:Icon_Normal> to activate:\nLaunches up to four attacks in front, dealing <color=#FF5521>Fire DMG</color>.\nInterrupt Level is increased during this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Majestic Summit",
+          "Desc": "Press <IconMap:Icon_Special> to activate:\nLaunches up to four attacks in front, dealing <color=#FF5521>Fire DMG</color>.\nAnti-Interrupt Level is increased during this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Immolate",
+          "Desc": "While not in the <color=#FFFFFF>Visage of Wrath</color> state and with at least 120 <color=#FFFFFF>Wrathful Fires</color>, hold <IconMap:Icon_Normal> to activate:\nDeals <color=#FF5521>Fire DMG</color> to nearby enemies, then enters the <color=#FFFFFF>Visage of Wrath</color> state.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Inflame",
+          "Desc": "While not in combat and with more than 50% HP and less than 120 <color=#FFFFFF>Wrathful Fires</color>, hold <IconMap:Icon_Normal> to activate:\nBanyue consumes HP to recover <color=#FFFFFF>Wrathful Fires</color>. Upon reaching 120 <color=#FFFFFF>Wrathful Fires</color>, Banyue immediately enters the <color=#FFFFFF>Visage of Wrath</color> state.\nUpon entering the battlefield, gain one chance to use this skill. In Investigation Zone mode, this effect can trigger once per 180s.\nHP consumption will at most reduce Banyue's HP to 50% of Max HP.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Toppling Mountain",
+          "Desc": "When Banyue is in the <color=#FFFFFF>Visage of Wrath</color> state, hold <IconMap:Icon_Normal> to consume 120 <color=#FFFFFF>Wrathful Fires</color> and activate:\nBanyue hurls a massive mountain at the enemy, dealing massive <color=#FF5521>Fire DMG</color>.\nAfter using this move, Banyue exits the <color=#FFFFFF>Visage of Wrath</color> state.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Crushing Peaks",
+          "Desc": "While Banyue is in the <color=#FFFFFF>Visage of Wrath</color> state and after performing two different <color=#FFFFFF>EX Special Attacks</color> through Basic Attack branches or quick input commands, hold <IconMap:Icon_Normal> to activate:\nBanyue launches his beads forward to imprison enemies, dealing massive <color=#FF5521>Fire DMG</color>.\nBanyue automatically follows up with <color=#FFFFFF>Basic Attack: Toppling Mountain</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Towering Peaks",
+          "Param": [
+            {
+              "Name": "1st-Hit DMG Multiplier",
+              "Desc": "{Skill:1471001, Prop:1001}",
+              "Param": {
+                "1471001": {
+                  "Main": 3960,
+                  "Growth": 360,
+                  "Format": "%",
+                  "DamagePercentage": 3960,
+                  "DamagePercentageGrowth": 360,
+                  "StunRatio": 3710,
+                  "StunRatioGrowth": 170,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 92950,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 3372,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 13500,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3373
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit DMG Multiplier",
+              "Desc": "{Skill:1471002, Prop:1001}",
+              "Param": {
+                "1471002": {
+                  "Main": 4980,
+                  "Growth": 460,
+                  "Format": "%",
+                  "DamagePercentage": 4980,
+                  "DamagePercentageGrowth": 460,
+                  "StunRatio": 4550,
+                  "StunRatioGrowth": 210,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 113850,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4130,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 16530,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4131
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit DMG Multiplier",
+              "Desc": "{Skill:1471003, Prop:1001}",
+              "Param": {
+                "1471003": {
+                  "Main": 10130,
+                  "Growth": 930,
+                  "Format": "%",
+                  "DamagePercentage": 10130,
+                  "DamagePercentageGrowth": 930,
+                  "StunRatio": 9860,
+                  "StunRatioGrowth": 450,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 246400,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 8957,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 35840,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 8958
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "4th-Hit DMG Multiplier",
+              "Desc": "{Skill:1471004, Prop:1001}",
+              "Param": {
+                "1471004": {
+                  "Main": 11630,
+                  "Growth": 1060,
+                  "Format": "%",
+                  "DamagePercentage": 11630,
+                  "DamagePercentageGrowth": 1060,
+                  "StunRatio": 11400,
+                  "StunRatioGrowth": 520,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 285175,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 10362,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 41460,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 10363
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "1st-Hit Daze Multiplier",
+              "Desc": "{Skill:1471001, Prop:1002}",
+              "Param": {
+                "1471001": {
+                  "Main": 3710,
+                  "Growth": 170,
+                  "Format": "%",
+                  "DamagePercentage": 3960,
+                  "DamagePercentageGrowth": 360,
+                  "StunRatio": 3710,
+                  "StunRatioGrowth": 170,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 92950,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 3372,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 13500,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3373
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit Daze Multiplier",
+              "Desc": "{Skill:1471002, Prop:1002}",
+              "Param": {
+                "1471002": {
+                  "Main": 4550,
+                  "Growth": 210,
+                  "Format": "%",
+                  "DamagePercentage": 4980,
+                  "DamagePercentageGrowth": 460,
+                  "StunRatio": 4550,
+                  "StunRatioGrowth": 210,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 113850,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4130,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 16530,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4131
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit Daze Multiplier",
+              "Desc": "{Skill:1471003, Prop:1002}",
+              "Param": {
+                "1471003": {
+                  "Main": 9860,
+                  "Growth": 450,
+                  "Format": "%",
+                  "DamagePercentage": 10130,
+                  "DamagePercentageGrowth": 930,
+                  "StunRatio": 9860,
+                  "StunRatioGrowth": 450,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 246400,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 8957,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 35840,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 8958
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "4th-Hit Daze Multiplier",
+              "Desc": "{Skill:1471004, Prop:1002}",
+              "Param": {
+                "1471004": {
+                  "Main": 11400,
+                  "Growth": 520,
+                  "Format": "%",
+                  "DamagePercentage": 11630,
+                  "DamagePercentageGrowth": 1060,
+                  "StunRatio": 11400,
+                  "StunRatioGrowth": 520,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 285175,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 10362,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 41460,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 10363
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Majestic Summit",
+          "Param": [
+            {
+              "Name": "1st-Hit DMG Multiplier",
+              "Desc": "{Skill:1471005, Prop:1001}",
+              "Param": {
+                "1471005": {
+                  "Main": 5280,
+                  "Growth": 480,
+                  "Format": "%",
+                  "DamagePercentage": 5280,
+                  "DamagePercentageGrowth": 480,
+                  "StunRatio": 4950,
+                  "StunRatioGrowth": 230,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 123750,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4500,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 18000,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4500
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit DMG Multiplier",
+              "Desc": "{Skill:1471006, Prop:1001}",
+              "Param": {
+                "1471006": {
+                  "Main": 7040,
+                  "Growth": 640,
+                  "Format": "%",
+                  "DamagePercentage": 7040,
+                  "DamagePercentageGrowth": 640,
+                  "StunRatio": 6430,
+                  "StunRatioGrowth": 300,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 160875,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 5844,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 23380,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5845
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit DMG Multiplier",
+              "Desc": "{Skill:1471007, Prop:1001}",
+              "Param": {
+                "1471007": {
+                  "Main": 13550,
+                  "Growth": 1240,
+                  "Format": "%",
+                  "DamagePercentage": 13550,
+                  "DamagePercentageGrowth": 1240,
+                  "StunRatio": 13190,
+                  "StunRatioGrowth": 600,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 329725,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 11986,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 47950,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 11987
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "4th-Hit DMG Multiplier",
+              "Desc": "{Skill:1471008, Prop:1001}",
+              "Param": {
+                "1471008": {
+                  "Main": 9240,
+                  "Growth": 840,
+                  "Format": "%",
+                  "DamagePercentage": 9240,
+                  "DamagePercentageGrowth": 840,
+                  "StunRatio": 9180,
+                  "StunRatioGrowth": 420,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 229625,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 8345,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 33390,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 8346
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "1st-Hit Daze Multiplier",
+              "Desc": "{Skill:1471005, Prop:1002}",
+              "Param": {
+                "1471005": {
+                  "Main": 4950,
+                  "Growth": 230,
+                  "Format": "%",
+                  "DamagePercentage": 5280,
+                  "DamagePercentageGrowth": 480,
+                  "StunRatio": 4950,
+                  "StunRatioGrowth": 230,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 123750,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4500,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 18000,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4500
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit Daze Multiplier",
+              "Desc": "{Skill:1471006, Prop:1002}",
+              "Param": {
+                "1471006": {
+                  "Main": 6430,
+                  "Growth": 300,
+                  "Format": "%",
+                  "DamagePercentage": 7040,
+                  "DamagePercentageGrowth": 640,
+                  "StunRatio": 6430,
+                  "StunRatioGrowth": 300,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 160875,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 5844,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 23380,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5845
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit Daze Multiplier",
+              "Desc": "{Skill:1471007, Prop:1002}",
+              "Param": {
+                "1471007": {
+                  "Main": 13190,
+                  "Growth": 600,
+                  "Format": "%",
+                  "DamagePercentage": 13550,
+                  "DamagePercentageGrowth": 1240,
+                  "StunRatio": 13190,
+                  "StunRatioGrowth": 600,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 329725,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 11986,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 47950,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 11987
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "4th-Hit Daze Multiplier",
+              "Desc": "{Skill:1471008, Prop:1002}",
+              "Param": {
+                "1471008": {
+                  "Main": 9180,
+                  "Growth": 420,
+                  "Format": "%",
+                  "DamagePercentage": 9240,
+                  "DamagePercentageGrowth": 840,
+                  "StunRatio": 9180,
+                  "StunRatioGrowth": 420,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 229625,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 8345,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 33390,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 8346
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Immolate",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471027, Prop:1001}",
+              "Param": {
+                "1471027": {
+                  "Main": 11060,
+                  "Growth": 1010,
+                  "Format": "%",
+                  "DamagePercentage": 11060,
+                  "DamagePercentageGrowth": 1010,
+                  "StunRatio": 10630,
+                  "StunRatioGrowth": 490,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 265925,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 9663,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 9664
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471027, Prop:1002}",
+              "Param": {
+                "1471027": {
+                  "Main": 10630,
+                  "Growth": 490,
+                  "Format": "%",
+                  "DamagePercentage": 11060,
+                  "DamagePercentageGrowth": 1010,
+                  "StunRatio": 10630,
+                  "StunRatioGrowth": 490,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 265925,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 9663,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 9664
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Toppling Mountain",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471009, Prop:1001}",
+              "Param": {
+                "1471009": {
+                  "Main": 86980,
+                  "Growth": 7910,
+                  "Format": "%",
+                  "DamagePercentage": 86980,
+                  "DamagePercentageGrowth": 7910,
+                  "StunRatio": 20180,
+                  "StunRatioGrowth": 920,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 504350,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 18336,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 18337
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471009, Prop:1002}",
+              "Param": {
+                "1471009": {
+                  "Main": 20180,
+                  "Growth": 920,
+                  "Format": "%",
+                  "DamagePercentage": 86980,
+                  "DamagePercentageGrowth": 7910,
+                  "StunRatio": 20180,
+                  "StunRatioGrowth": 920,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 504350,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 18336,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 18337
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Crushing Peaks",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471010, Prop:1001}",
+              "Param": {
+                "1471010": {
+                  "Main": 37830,
+                  "Growth": 3440,
+                  "Format": "%",
+                  "DamagePercentage": 37830,
+                  "DamagePercentageGrowth": 3440,
+                  "StunRatio": 15220,
+                  "StunRatioGrowth": 700,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 380325,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 13829,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 13830
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471010, Prop:1002}",
+              "Param": {
+                "1471010": {
+                  "Main": 15220,
+                  "Growth": 700,
+                  "Format": "%",
+                  "DamagePercentage": 37830,
+                  "DamagePercentageGrowth": 3440,
+                  "StunRatio": 15220,
+                  "StunRatioGrowth": 700,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 380325,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 13829,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 13830
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100111": 2 },
+        "2": { "10": 3000, "100111": 3 },
+        "3": { "10": 6000, "100121": 2 },
+        "4": { "10": 9000, "100121": 3 },
+        "5": { "10": 12000, "100121": 4 },
+        "6": { "10": 18000, "100121": 6 },
+        "7": { "10": 45000, "100131": 5 },
+        "8": { "10": 67500, "100131": 8 },
+        "9": { "10": 90000, "100131": 10 },
+        "10": { "10": 112500, "100131": 12 },
+        "11": { "10": 135000, "100131": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Dodge": {
+      "Description": [
+        {
+          "Name": "Dodge: Immovable Mountain",
+          "Desc": "While attacking, press <IconMap:Icon_Evade> without moving the {LAYOUT_CONSOLECONTROLLER#stick}{LAYOUT_FALLBACK#joystick} to activate:\nBanyue enters a defensive stance. If attacked during this time, he parries the enemy's attack and accumulates Daze.\nIf attacked at the exact moment the skill is activated, a Perfect Block occurs.\nCharacter is invulnerable during a successful parry.",
+          "Potential": []
+        },
+        {
+          "Name": "Dodge: Overcome Peaks",
+          "Desc": "Press <IconMap:Icon_Evade> to activate:\nA quick dash dodge.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Dodge: Battle Cry",
+          "Desc": "Rotate the {LAYOUT_CONSOLECONTROLLER#stick}{LAYOUT_FALLBACK#joystick} in a half-circle and press <IconMap:Icon_Evade> to activate:\nDodges backward and taunts enemies.\nAfter any <color=#FFFFFF>EX Special Attack</color>, follow up with <color=#FFFFFF>Dodge: Battle Cry</color> and quickly execute the required inputs during <color=#FFFFFF>Dodge: Battle Cry</color> to then follow up with the corresponding <color=#FFFFFF>EX Special Attack</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Dash Attack: Scattering Sands",
+          "Desc": "During a dodge, press <IconMap:Icon_Normal>, or during <color=#FFFFFF>Dodge: Battle Cry</color>, hold <IconMap:Icon_Normal> to activate:\nLaunches beads forward, dealing <color=#FF5521>Fire DMG</color>.\nAfter using this skill, can be followed up with the 2nd hit of <color=#FFFFFF>Basic Attack: Towering Peaks</color> or the 2nd hit of <color=#FFFFFF>Basic Attack: Majestic Summit</color>.",
+          "Potential": []
+        },
+        {
+          "Name": "Dodge Counter: Stoneburst",
+          "Desc": "After a <color=#FFFFFF>Perfect Dodge</color> is triggered through <color=#FFFFFF>Dodge: Overcome Peaks</color>, press <IconMap:Icon_Normal>, or after a <color=#FFFFFF>Perfect Dodge</color> is triggered though <color=#FFFFFF>Dodge: Battle Cry</color>, hold <IconMap:Icon_Normal> to activate:\nLaunches a forward attack that deals <color=#FF5521>Fire DMG</color>.\nAfter using this skill, can be chained into the 3rd hit of <color=#FFFFFF>Basic Attack: Towering Peaks</color> or the 3rd hit of <color=#FFFFFF>Basic Attack: Majestic Summit</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Dodge: Immovable Mountain",
+          "Param": [
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471011, Prop:1002}",
+              "Param": {
+                "1471011": {
+                  "Main": 9530,
+                  "Growth": 440,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 9530,
+                  "StunRatioGrowth": 440,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 6664
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Dash Attack: Scattering Sands",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471018, Prop:1001}",
+              "Param": {
+                "1471018": {
+                  "Main": 3970,
+                  "Growth": 370,
+                  "Format": "%",
+                  "DamagePercentage": 3970,
+                  "DamagePercentageGrowth": 370,
+                  "StunRatio": 2480,
+                  "StunRatioGrowth": 120,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 62150,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 2251,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 9010,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2252
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471018, Prop:1002}",
+              "Param": {
+                "1471018": {
+                  "Main": 2480,
+                  "Growth": 120,
+                  "Format": "%",
+                  "DamagePercentage": 3970,
+                  "DamagePercentageGrowth": 370,
+                  "StunRatio": 2480,
+                  "StunRatioGrowth": 120,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 62150,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 2251,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 9010,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2252
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Dodge Counter: Stoneburst",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471019, Prop:1001}",
+              "Param": {
+                "1471019": {
+                  "Main": 19490,
+                  "Growth": 1780,
+                  "Format": "%",
+                  "DamagePercentage": 19490,
+                  "DamagePercentageGrowth": 1780,
+                  "StunRatio": 21280,
+                  "StunRatioGrowth": 970,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 256850,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 9336,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 37350,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 24337
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471019, Prop:1002}",
+              "Param": {
+                "1471019": {
+                  "Main": 21280,
+                  "Growth": 970,
+                  "Format": "%",
+                  "DamagePercentage": 19490,
+                  "DamagePercentageGrowth": 1780,
+                  "StunRatio": 21280,
+                  "StunRatioGrowth": 970,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 256850,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 9336,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 37350,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 24337
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100111": 2 },
+        "2": { "10": 3000, "100111": 3 },
+        "3": { "10": 6000, "100121": 2 },
+        "4": { "10": 9000, "100121": 3 },
+        "5": { "10": 12000, "100121": 4 },
+        "6": { "10": 18000, "100121": 6 },
+        "7": { "10": 45000, "100131": 5 },
+        "8": { "10": 67500, "100131": 8 },
+        "9": { "10": 90000, "100131": 10 },
+        "10": { "10": 112500, "100131": 12 },
+        "11": { "10": 135000, "100131": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Special": {
+      "Description": [
+        {
+          "Name": "EX Special Attack: Earth Shaker",
+          "Desc": "With enough Adrenaline, can be activated in one of three ways:\nAfter the 3rd or 4th hit of <color=#FFFFFF>Basic Attack: Towering Peaks</color>, press <IconMap:Icon_SpecialReady_Rp> to activate:\nAfter an <color=#FFFFFF>Assist Follow-Up</color>, <color=#FFFFFF>Dodge Counter</color>, or <color=#FFFFFF>Quick Assist</color>, hold <IconMap:Icon_SpecialReady_Rp> to activate:\nDuring an <color=#FFFFFF>EX Special Attack</color>, <color=#FFFFFF>Basic Attack: Immolate</color>, <color=#FFFFFF>Chain Attack</color>, <color=#FFFFFF>Ultimate</color>, <color=#FFFFFF>Assist Follow-Up</color>, <color=#FFFFFF>Dodge Counter</color>, or <color=#FFFFFF>Quick Assist</color>, quickly input <IconMap:Icon_Normal> <IconMap:Icon_SpecialReady_Rp> <IconMap:Icon_Normal> in sequence to activate:\nBanyue slams the ground repeatedly, dealing <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Mountain Tremor",
+          "Desc": "With enough Adrenaline, can be activated in one of two ways:\nAfter the 1st or 2nd hit of <color=#FFFFFF>Basic Attack: Majestic Summit</color>, press <IconMap:Icon_Normal> to activate:\nDuring an <color=#FFFFFF>EX Special Attack</color>, <color=#FFFFFF>Basic Attack: Immolate</color>, <color=#FFFFFF>Chain Attack</color>, <color=#FFFFFF>Ultimate</color>, <color=#FFFFFF>Assist Follow-Up</color>, <color=#FFFFFF>Dodge Counter</color>, or <color=#FFFFFF>Quick Assist</color>, quickly input <IconMap:Icon_SpecialReady_Rp> <IconMap:Icon_SpecialReady_Rp> <IconMap:Icon_Normal> in sequence to activate:\nBanyue throws a mountain, dealing <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: One's Path",
+          "Desc": "With enough Adrenaline, can be activated in one of three ways:\nAfter the 3rd or 4th hit of <color=#FFFFFF>Basic Attack: Majestic Summit</color>, press <IconMap:Icon_Normal> to activate:\nAfter an <color=#FFFFFF>Assist Follow-Up</color>, <color=#FFFFFF>Dodge Counter</color>, or <color=#FFFFFF>Quick Assist</color>, hold <IconMap:Icon_Normal> to activate:\nDuring an <color=#FFFFFF>EX Special Attack</color>, <color=#FFFFFF>Basic Attack: Immolate</color>, <color=#FFFFFF>Chain Attack</color>, <color=#FFFFFF>Ultimate</color>, <color=#FFFFFF>Assist Follow-Up</color>, <color=#FFFFFF>Dodge Counter</color>, or <color=#FFFFFF>Quick Assist</color>, quickly input <IconMap:Icon_SpecialReady_Rp> <IconMap:Icon_Normal> <IconMap:Icon_SpecialReady_Rp> in sequence to activate:\nBanyue throws out his beads, dealing <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Lion's Roar",
+          "Desc": "With enough Adrenaline, can be activated in one of two ways:\nAfter the 1st or 2nd hit of <color=#FFFFFF>Basic Attack: Towering Peaks</color>, press <IconMap:Icon_SpecialReady_Rp> to activate:\nDuring an <color=#FFFFFF>EX Special Attack</color>, <color=#FFFFFF>Basic Attack: Immolate</color>, <color=#FFFFFF>Chain Attack</color>, <color=#FFFFFF>Ultimate</color>, <color=#FFFFFF>Assist Follow-Up</color>, <color=#FFFFFF>Dodge Counter</color>, or <color=#FFFFFF>Quick Assist</color>, quickly input <IconMap:Icon_Normal> <IconMap:Icon_Normal> <IconMap:Icon_SpecialReady_Rp> in sequence to activate:\nBanyue sends out a sonic wave forward, dealing <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Mountain Tremor - Wrath",
+          "Desc": "With enough Adrenaline when using <color=#FFFFFF>EX Special Attack: Earth Shaker</color>, quickly input <IconMap:Icon_SpecialReady_Rp> <IconMap:Icon_SpecialReady_Rp> <IconMap:Icon_Normal> in sequence to activate:\nBanyue throws out an even larger mountain, dealing <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Lion's Roar - Wrath",
+          "Desc": "With enough Adrenaline when using <color=#FFFFFF>EX Special Attack: One's Path</color>, quickly input <IconMap:Icon_Normal> <IconMap:Icon_Normal> <IconMap:Icon_SpecialReady_Rp> in sequence to activate:\nBanyue releases a powerful sonic wave in front, dealing <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Cancel",
+          "Desc": "When Banyue activates an <color=#FFFFFF>EX Special Attack</color> ALT through quick input commands, the currently activating <color=#FFFFFF>EX Special Attack</color> can be interrupted. Each <color=#FFFFFF>EX Special Attack</color> has its own Perfect Interrupt window. Interrupting an <color=#FFFFFF>EX Special Attack</color> after its Perfect Interrupt window will not affect the interrupted <color=#FFFFFF>EX Special Attack</color>'s effect. Interrupting an <color=#FFFFFF>EX Special Attack</color> during the Perfect Interrupt window is equal to triggering a <color=#FFFFFF>Perfect Cancel</color>.\nWhile in the <color=#FFFFFF>Visage of Wrath</color> state and with <color=#FFFFFF>Mountain's Might</color>, <color=#FFFFFF>Perfect Cancel</color> is easier to trigger.",
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Earth Shaker",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471013, Prop:1001}",
+              "Param": {
+                "1471013": {
+                  "Main": 25480,
+                  "Growth": 2320,
+                  "Format": "%",
+                  "DamagePercentage": 25480,
+                  "DamagePercentageGrowth": 2320,
+                  "StunRatio": 24760,
+                  "StunRatioGrowth": 1130,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 796400,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 24116,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 12830
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471013, Prop:1002}",
+              "Param": {
+                "1471013": {
+                  "Main": 24760,
+                  "Growth": 1130,
+                  "Format": "%",
+                  "DamagePercentage": 25480,
+                  "DamagePercentageGrowth": 2320,
+                  "StunRatio": 24760,
+                  "StunRatioGrowth": 1130,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 796400,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 24116,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 12830
+                }
+              },
+              "Potential": []
+            },
+            { "Name": "Adrenaline Cost", "Desc": "20", "Potential": [] }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Mountain Tremor",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471012, Prop:1001}",
+              "Param": {
+                "1471012": {
+                  "Main": 17130,
+                  "Growth": 1560,
+                  "Format": "%",
+                  "DamagePercentage": 17130,
+                  "DamagePercentageGrowth": 1560,
+                  "StunRatio": 15710,
+                  "StunRatioGrowth": 720,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 535425,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 15575,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 6504
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471012, Prop:1002}",
+              "Param": {
+                "1471012": {
+                  "Main": 15710,
+                  "Growth": 720,
+                  "Format": "%",
+                  "DamagePercentage": 17130,
+                  "DamagePercentageGrowth": 1560,
+                  "StunRatio": 15710,
+                  "StunRatioGrowth": 720,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 535425,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 15575,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 6504
+                }
+              },
+              "Potential": []
+            },
+            { "Name": "Adrenaline Cost", "Desc": "20", "Potential": [] }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: One's Path",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471015, Prop:1001}",
+              "Param": {
+                "1471015": {
+                  "Main": 16240,
+                  "Growth": 1480,
+                  "Format": "%",
+                  "DamagePercentage": 16240,
+                  "DamagePercentageGrowth": 1480,
+                  "StunRatio": 14750,
+                  "StunRatioGrowth": 680,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 507650,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 14666,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5831
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471015, Prop:1002}",
+              "Param": {
+                "1471015": {
+                  "Main": 14750,
+                  "Growth": 680,
+                  "Format": "%",
+                  "DamagePercentage": 16240,
+                  "DamagePercentageGrowth": 1480,
+                  "StunRatio": 14750,
+                  "StunRatioGrowth": 680,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 507650,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 14666,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5831
+                }
+              },
+              "Potential": []
+            },
+            { "Name": "Adrenaline Cost", "Desc": "20", "Potential": [] }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Lion's Roar",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471014, Prop:1001}",
+              "Param": {
+                "1471014": {
+                  "Main": 15370,
+                  "Growth": 1400,
+                  "Format": "%",
+                  "DamagePercentage": 15370,
+                  "DamagePercentageGrowth": 1400,
+                  "StunRatio": 13810,
+                  "StunRatioGrowth": 630,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 480425,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 13775,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5171
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471014, Prop:1002}",
+              "Param": {
+                "1471014": {
+                  "Main": 13810,
+                  "Growth": 630,
+                  "Format": "%",
+                  "DamagePercentage": 15370,
+                  "DamagePercentageGrowth": 1400,
+                  "StunRatio": 13810,
+                  "StunRatioGrowth": 630,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 480425,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 13775,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5171
+                }
+              },
+              "Potential": []
+            },
+            { "Name": "Adrenaline Cost", "Desc": "20", "Potential": [] }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Mountain Tremor - Wrath",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471017, Prop:1001}",
+              "Param": {
+                "1471017": {
+                  "Main": 32500,
+                  "Growth": 2960,
+                  "Format": "%",
+                  "DamagePercentage": 32500,
+                  "DamagePercentageGrowth": 2960,
+                  "StunRatio": 22120,
+                  "StunRatioGrowth": 1010,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 802450,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 22371,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 6504
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471017, Prop:1002}",
+              "Param": {
+                "1471017": {
+                  "Main": 22120,
+                  "Growth": 1010,
+                  "Format": "%",
+                  "DamagePercentage": 32500,
+                  "DamagePercentageGrowth": 2960,
+                  "StunRatio": 22120,
+                  "StunRatioGrowth": 1010,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 802450,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 22371,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 6504
+                }
+              },
+              "Potential": []
+            },
+            { "Name": "Adrenaline Cost", "Desc": "40", "Potential": [] }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Lion's Roar - Wrath",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471016, Prop:1001}",
+              "Param": {
+                "1471016": {
+                  "Main": 30010,
+                  "Growth": 2730,
+                  "Format": "%",
+                  "DamagePercentage": 30010,
+                  "DamagePercentageGrowth": 2730,
+                  "StunRatio": 20210,
+                  "StunRatioGrowth": 920,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 747450,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 20571,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5171
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471016, Prop:1002}",
+              "Param": {
+                "1471016": {
+                  "Main": 20210,
+                  "Growth": 920,
+                  "Format": "%",
+                  "DamagePercentage": 30010,
+                  "DamagePercentageGrowth": 2730,
+                  "StunRatio": 20210,
+                  "StunRatioGrowth": 920,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 747450,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 20571,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5171
+                }
+              },
+              "Potential": []
+            },
+            { "Name": "Adrenaline Cost", "Desc": "40", "Potential": [] }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100111": 2 },
+        "2": { "10": 3000, "100111": 3 },
+        "3": { "10": 6000, "100121": 2 },
+        "4": { "10": 9000, "100121": 3 },
+        "5": { "10": 12000, "100121": 4 },
+        "6": { "10": 18000, "100121": 6 },
+        "7": { "10": 45000, "100131": 5 },
+        "8": { "10": 67500, "100131": 8 },
+        "9": { "10": 90000, "100131": 10 },
+        "10": { "10": 112500, "100131": 12 },
+        "11": { "10": 135000, "100131": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Chain": {
+      "Description": [
+        {
+          "Name": "Chain Attack: Blazing Wrath",
+          "Desc": "When a <color=#FFFFFF>Chain Attack</color> is triggered, select the character to activate:\nLaunches a large area attack in front, dealing massive <color=#FF5521>Fire DMG</color>.\nIf Banyue has more than 120 <color=#FFFFFF>Wrathful Fires</color>, he automatically enters the <color=#FFFFFF>Visage of Wrath</color> state after the attack.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Ultimate: The World Trembles",
+          "Desc": "When Decibel Rating is at <color=#FFFFFF>Maximum</color>, press <IconMap:Icon_UltimateReady> to activate:\nLaunches a large area attack in front, dealing massive <color=#FF5521>Fire DMG</color>.\nIf Banyue has more than 120 <color=#FFFFFF>Wrathful Fires</color>, he automatically enters the <color=#FFFFFF>Visage of Wrath</color> state after the attack.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Chain Attack: Blazing Wrath",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471020, Prop:1001}",
+              "Param": {
+                "1471020": {
+                  "Main": 56090,
+                  "Growth": 5100,
+                  "Format": "%",
+                  "DamagePercentage": 56090,
+                  "DamagePercentageGrowth": 5100,
+                  "StunRatio": 26230,
+                  "StunRatioGrowth": 1200,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 2484350,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 43786,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 23837
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471020, Prop:1002}",
+              "Param": {
+                "1471020": {
+                  "Main": 26230,
+                  "Growth": 1200,
+                  "Format": "%",
+                  "DamagePercentage": 56090,
+                  "DamagePercentageGrowth": 5100,
+                  "StunRatio": 26230,
+                  "StunRatioGrowth": 1200,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 2484350,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 43786,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 23837
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Ultimate: The World Trembles",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471021, Prop:1001}",
+              "Param": {
+                "1471021": {
+                  "Main": 159840,
+                  "Growth": 14540,
+                  "Format": "%",
+                  "DamagePercentage": 159840,
+                  "DamagePercentageGrowth": 14540,
+                  "StunRatio": 26770,
+                  "StunRatioGrowth": 1220,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 24329,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 74330
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471021, Prop:1002}",
+              "Param": {
+                "1471021": {
+                  "Main": 26770,
+                  "Growth": 1220,
+                  "Format": "%",
+                  "DamagePercentage": 159840,
+                  "DamagePercentageGrowth": 14540,
+                  "StunRatio": 26770,
+                  "StunRatioGrowth": 1220,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 24329,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 74330
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100111": 2 },
+        "2": { "10": 3000, "100111": 3 },
+        "3": { "10": 6000, "100121": 2 },
+        "4": { "10": 9000, "100121": 3 },
+        "5": { "10": 12000, "100121": 4 },
+        "6": { "10": 18000, "100121": 6 },
+        "7": { "10": 45000, "100131": 5 },
+        "8": { "10": 67500, "100131": 8 },
+        "9": { "10": 90000, "100131": 10 },
+        "10": { "10": 112500, "100131": 12 },
+        "11": { "10": 135000, "100131": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Assist": {
+      "Description": [
+        {
+          "Name": "Quick Assist: Batholith",
+          "Desc": "When the active character is launched, press <IconMap:Icon_Switch> to activate:\nExecutes a series of attacks against enemies in front, dealing <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Defensive Assist: Iron Bastion",
+          "Desc": "When the on-field character is about to be attacked, press <IconMap:Icon_Switch> to activate:\nParries the enemy's attack, dealing massive Daze.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Assist Follow-Up: Lofty Ascent",
+          "Desc": "Press <IconMap:Icon_Normal> after a <color=#FFFFFF>Defensive Assist</color> to activate:\nQuickly dash forward and attack, dealing <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Assist Follow-Up: Pierce Heavens",
+          "Desc": "After successfully parrying an enemy attack with <color=#FFFFFF>Dodge: Immovable Mountain</color>, press <IconMap:Icon_Normal> to activate:\nQuickly dash forward and attack, dealing <color=#FF5521>Fire DMG</color>\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Quick Assist: Batholith",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471022, Prop:1001}",
+              "Param": {
+                "1471022": {
+                  "Main": 7340,
+                  "Growth": 670,
+                  "Format": "%",
+                  "DamagePercentage": 7340,
+                  "DamagePercentageGrowth": 670,
+                  "StunRatio": 4590,
+                  "StunRatioGrowth": 210,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 114675,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4168,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 16680,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4169
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471022, Prop:1002}",
+              "Param": {
+                "1471022": {
+                  "Main": 4590,
+                  "Growth": 210,
+                  "Format": "%",
+                  "DamagePercentage": 7340,
+                  "DamagePercentageGrowth": 670,
+                  "StunRatio": 4590,
+                  "StunRatioGrowth": 210,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 114675,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4168,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 16680,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4169
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Defensive Assist: Iron Bastion",
+          "Param": [
+            {
+              "Name": "Light Defensive Daze Multiplier",
+              "Desc": "{Skill:1471023, Prop:1002}",
+              "Param": {
+                "1471023": {
+                  "Main": 27130,
+                  "Growth": 1240,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 27130,
+                  "StunRatioGrowth": 1240,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 36664
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Heavy Defensive Daze Multiplier",
+              "Desc": "{Skill:1471024, Prop:1002}",
+              "Param": {
+                "1471024": {
+                  "Main": 34280,
+                  "Growth": 1560,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 34280,
+                  "StunRatioGrowth": 1560,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 41664
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Chain Defensive Daze Multiplier",
+              "Desc": "{Skill:1471025, Prop:1002}",
+              "Param": {
+                "1471025": {
+                  "Main": 16680,
+                  "Growth": 760,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 16680,
+                  "StunRatioGrowth": 760,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 11664
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Assist Follow-Up: Lofty Ascent",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471026, Prop:1001}",
+              "Param": {
+                "1471026": {
+                  "Main": 24160,
+                  "Growth": 2200,
+                  "Format": "%",
+                  "DamagePercentage": 24160,
+                  "DamagePercentageGrowth": 2200,
+                  "StunRatio": 25860,
+                  "StunRatioGrowth": 1180,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 863500,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 25476,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 11670
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471026, Prop:1002}",
+              "Param": {
+                "1471026": {
+                  "Main": 25860,
+                  "Growth": 1180,
+                  "Format": "%",
+                  "DamagePercentage": 24160,
+                  "DamagePercentageGrowth": 2200,
+                  "StunRatio": 25860,
+                  "StunRatioGrowth": 1180,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 863500,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 25476,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 11670
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Assist Follow-Up: Pierce Heavens",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1471029, Prop:1001}",
+              "Param": {
+                "1471029": {
+                  "Main": 22160,
+                  "Growth": 2020,
+                  "Format": "%",
+                  "DamagePercentage": 22160,
+                  "DamagePercentageGrowth": 2020,
+                  "StunRatio": 23840,
+                  "StunRatioGrowth": 1090,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 320925,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 11669,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 46680,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 26670
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1471029, Prop:1002}",
+              "Param": {
+                "1471029": {
+                  "Main": 23840,
+                  "Growth": 1090,
+                  "Format": "%",
+                  "DamagePercentage": 22160,
+                  "DamagePercentageGrowth": 2020,
+                  "StunRatio": 23840,
+                  "StunRatioGrowth": 1090,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 320925,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 11669,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 46680,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 26670
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100111": 2 },
+        "2": { "10": 3000, "100111": 3 },
+        "3": { "10": 6000, "100121": 2 },
+        "4": { "10": 9000, "100121": 3 },
+        "5": { "10": 12000, "100121": 4 },
+        "6": { "10": 18000, "100121": 6 },
+        "7": { "10": 45000, "100131": 5 },
+        "8": { "10": 67500, "100131": 8 },
+        "9": { "10": 90000, "100131": 10 },
+        "10": { "10": 112500, "100131": 12 },
+        "11": { "10": 135000, "100131": 15, "100941": 1 },
+        "12": {}
+      }
+    }
+  },
+  "SkillList": {
+    "1471001": {
+      "Name": "Basic Attack: Towering Peaks",
+      "Desc": "<IconMap:Icon_Normal> ; <IconMap:Icon_Normal> ; <IconMap:Icon_Normal> ; <IconMap:Icon_Normal>",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471002": {
+      "Name": "Basic Attack: Majestic Summit",
+      "Desc": "<IconMap:Icon_Special> ; <IconMap:Icon_Special> ; <IconMap:Icon_Special> ; <IconMap:Icon_Special>",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471003": {
+      "Name": "Basic Attack: Immolate",
+      "Desc": "<IconMap:Icon_Normal> (Hold with enough Wrathful Fires)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471004": {
+      "Name": "Basic Attack: Inflame",
+      "Desc": "<IconMap:Icon_Normal> (While out of combat and with sufficient HP, hold to activate. Can only be used once per battle)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471005": {
+      "Name": "EX Special Attack: Mountain Tremor",
+      "Desc": "<IconMap:Icon_Normal> (During 1st or 2nd hit of Basic Attack: Majestic Summit)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471006": {
+      "Name": "EX Special Attack: Mountain Tremor",
+      "Desc": "<IconMap:Icon_SpecialReady_Rp> ; <IconMap:Icon_SpecialReady_Rp> ; <IconMap:Icon_Normal> (During any EX Special Attack, Basic Attack: Immolate, Quick Assist, Assist Follow-Up, Dodge Counter, Chain Attack: Blazing Wrath, or Ultimate: The World Trembles)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471007": {
+      "Name": "EX Special Attack: Earth Shaker",
+      "Desc": "<IconMap:Icon_SpecialReady_Rp> (During 3rd or 4th hit of Basic Attack: Towering Peaks)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471008": {
+      "Name": "EX Special Attack: Earth Shaker",
+      "Desc": "<IconMap:Icon_SpecialReady_Rp> (Hold after an Assist Follow-Up, Dodge Counter: Stoneburst, or Quick Assist: Batholith)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471009": {
+      "Name": "EX Special Attack: Earth Shaker",
+      "Desc": "<IconMap:Icon_Normal> ; <IconMap:Icon_SpecialReady_Rp> ; <IconMap:Icon_Normal> (During any EX Special Attack, Basic Attack: Immolate, Quick Assist, Assist Follow-Up, Dodge Counter, Chain Attack: Blazing Wrath, or Ultimate: The World Trembles)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471010": {
+      "Name": "EX Special Attack: Lion's Roar",
+      "Desc": "<IconMap:Icon_SpecialReady_Rp> (During 1st or 2nd hit of Basic Attack: Towering Peaks)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471011": {
+      "Name": "EX Special Attack: Lion's Roar",
+      "Desc": "<IconMap:Icon_Normal> ; <IconMap:Icon_Normal> ; <IconMap:Icon_SpecialReady_Rp> (During any EX Special Attack, Basic Attack: Immolate, Quick Assist, Assist Follow-Up, Dodge Counter, Chain Attack: Blazing Wrath, or Ultimate: The World Trembles)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471012": {
+      "Name": "EX Special Attack: One's Path",
+      "Desc": "<IconMap:Icon_Normal> (After the 3rd or 4th hit of Basic Attack: Majestic Summit)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471013": {
+      "Name": "EX Special Attack: One's Path",
+      "Desc": "<IconMap:Icon_Normal> (Hold after an Assist Follow-Up, Dodge Counter: Stoneburst, or Quick Assist: Batholith)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471014": {
+      "Name": "EX Special Attack: One's Path",
+      "Desc": "<IconMap:Icon_SpecialReady_Rp> ; <IconMap:Icon_Normal> ; <IconMap:Icon_SpecialReady_Rp> (During any EX Special Attack, Basic Attack: Immolate, Quick Assist, Assist Follow-Up, Dodge Counter, Chain Attack: Blazing Wrath, or Ultimate: The World Trembles)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471015": {
+      "Name": "EX Special Attack: Lion's Roar - Wrath",
+      "Desc": "<IconMap:Icon_Normal> ; <IconMap:Icon_Normal> ; <IconMap:Icon_SpecialReady_Rp> (During EX Special Attack: One's Path)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471016": {
+      "Name": "EX Special Attack: Mountain Tremor - Wrath",
+      "Desc": "<IconMap:Icon_SpecialReady_Rp> ; <IconMap:Icon_SpecialReady_Rp> ; <IconMap:Icon_Normal> (During EX Special Attack: Earth Shaker)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471017": {
+      "Name": "Basic Attack: Toppling Mountain",
+      "Desc": "<IconMap:Icon_Normal> (Hold while in the Visage of Wrath state)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471018": {
+      "Name": "Basic Attack: Crushing Peaks",
+      "Desc": "<IconMap:Icon_Normal> (While in the Visage of Wrath state, hold after consecutively unleashing two different EX Special Attacks through Basic Attack chains or quick-input commands)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471019": {
+      "Name": "Dodge: Overcome Peaks",
+      "Desc": "<IconMap:Icon_Evade>",
+      "ElementType": 0,
+      "HitType": 0,
+      "Potential": []
+    },
+    "1471020": {
+      "Name": "Dodge: Immovable Mountain",
+      "Desc": "<IconMap:Icon_Evade> (While attacking)",
+      "ElementType": 0,
+      "HitType": 0,
+      "Potential": []
+    },
+    "1471021": {
+      "Name": "Dodge: Battle Cry",
+      "Desc": "<IconMap:Icon_Evade> (Press while rotating the joystick in a half circle)",
+      "ElementType": 0,
+      "HitType": 0,
+      "Potential": []
+    },
+    "1471022": {
+      "Name": "Dash Attack: Scattering Sands",
+      "Desc": "<IconMap:Icon_Evade> ; <IconMap:Icon_Normal>",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471023": {
+      "Name": "Dodge Counter: Stoneburst",
+      "Desc": "<IconMap:Icon_Evade> (Perfect) ; <IconMap:Icon_Normal>",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471024": {
+      "Name": "Chain Attack: Blazing Wrath",
+      "Desc": "<IconMap:Icon_QTE>",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471025": {
+      "Name": "Ultimate: The World Trembles",
+      "Desc": "<IconMap:Icon_UltimateReady>",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471026": {
+      "Name": "Quick Assist: Batholith",
+      "Desc": "<IconMap:Icon_Switch> (When Triggering Quick Assist)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471027": {
+      "Name": "Defensive Assist: Iron Bastion",
+      "Desc": "<IconMap:Icon_Switch> (When triggering Defensive Assist)",
+      "ElementType": 0,
+      "HitType": 0,
+      "Potential": []
+    },
+    "1471028": {
+      "Name": "Assist Follow-Up: Lofty Ascent",
+      "Desc": "<IconMap:Icon_Normal> (After Defensive Assist)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1471029": {
+      "Name": "Assist Follow-Up: Pierce Heavens",
+      "Desc": "<IconMap:Icon_Normal> (After successfully parrying an enemy attack with Dodge: Immovable Mountain)",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    }
+  },
+  "Passive": {
+    "Level": {
+      "1471049": {
+        "Level": 1,
+        "Id": 1471049,
+        "Name": [
+          "Core Passive: One With the Mountains",
+          "Additional Ability: Mountain's Zenith"
+        ],
+        "Desc": [
+          "Banyue gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing his Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Banyue deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Banyue enters the battlefield, he immediately recovers 60 Adrenaline. In Investigation Zone Mode, this effect can trigger once every 180s.\nBanyue can recover <color=#FFFFFF>Wrathful Fires</color> through the following methods:\nRecover 0.5 <color=#FFFFFF>Wrathful Fires</color> for every point of Adrenaline consumed;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon activating <color=#FFFFFF>Defensive Assist</color>;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> when parrying an enemy with <color=#FFFFFF>Dodge: Immovable Mountain</color>, and recover 6 <color=#FFFFFF>Wrathful Fires</color> instead upon triggering a Perfect Block, up to once every 1s;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon triggering a <color=#FFFFFF>Perfect Dodge</color>, up to once every 1s.\nBanyue can have up to 150 <color=#FFFFFF>Wrathful Fires</color>. When he possesses at least 120 <color=#FFFFFF>Wrathful Fires</color>, Banyue can enter the <color=#FFFFFF>Visage of Wrath</color> state by using <color=#FFFFFF>Basic Attack: Immolate</color>. While in <color=#FFFFFF>Visage of Wrath</color> state, Banyue can no longer gain <color=#FFFFFF>Wrathful Fires</color>. After Banyue uses <color=#FFFFFF>Basic Attack: Toppling Mountain</color>, he exits the <color=#FFFFFF>Visage of Wrath</color> state.\nWhen entering the <color=#FFFFFF>Visage of Wrath</color> state, Banyue gains 4 <color=#FFFFFF>Mountain's Might</color>. If Banyue has <color=#FFFFFF>Mountain's Might</color>, launching an <color=#FFFFFF>EX Special Attack</color> no longer consumes Adrenaline, instead consuming 1 <color=#FFFFFF>Mountain's Might</color> and restoring 10 Adrenaline. Upon exiting the <color=#FFFFFF>Visage of Wrath</color> state, remove all <color=#FFFFFF>Mountain's Might</color>.\nWhen possessing <color=#FFFFFF>Mountain's Might</color> in <color=#FFFFFF>Visage of Wrath</color> state, hold <IconMap:Icon_Special> to launch four different <color=#FFFFFF>EX Special Attacks</color> and <color=#FFFFFF>Basic Attack: Toppling Mountain</color> in a fixed sequence.\nWhen Banyue uses an <color=#FFFFFF>EX Special Attack</color> or <color=#FFFFFF>Assist Follow-Up</color>, he increases his Sheer Force by <color=#2BAD00>150</color>, <color=#FF5521>Fire DMG</color> by <color=#2BAD00>18%</color>, and CRIT DMG by <color=#2BAD00>18%</color> for 30s. Repeated triggers reset the duration.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhile in the <color=#FFFFFF>Visage of Wrath</color> state, when Banyue consumes <color=#FFFFFF>Mountain's Might</color> to unleash an <color=#FFFFFF>EX Special Attack</color> through a Basic Attack branch or quick input commands, he gains one stack of <color=#FFFFFF>Vidyaraja</color>. Each stack of <color=#FFFFFF>Vidyaraja</color> increases his <color=#FF5521>Fire DMG</color> by 5%, stacking up to 3 times and lasting 8s. Repeated triggers reset the duration."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1471050": {
+        "Level": 2,
+        "Id": 1471050,
+        "Name": [
+          "Core Passive: One With the Mountains",
+          "Additional Ability: Mountain's Zenith"
+        ],
+        "Desc": [
+          "Banyue gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing his Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Banyue deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Banyue enters the battlefield, he immediately recovers 60 Adrenaline. In Investigation Zone Mode, this effect can trigger once every 180s.\nBanyue can recover <color=#FFFFFF>Wrathful Fires</color> through the following methods:\nRecover 0.5 <color=#FFFFFF>Wrathful Fires</color> for every point of Adrenaline consumed;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon activating <color=#FFFFFF>Defensive Assist</color>;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> when parrying an enemy with <color=#FFFFFF>Dodge: Immovable Mountain</color>, and recover 6 <color=#FFFFFF>Wrathful Fires</color> instead upon triggering a Perfect Block, up to once every 1s;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon triggering a <color=#FFFFFF>Perfect Dodge</color>, up to once every 1s.\nBanyue can have up to 150 <color=#FFFFFF>Wrathful Fires</color>. When he possesses at least 120 <color=#FFFFFF>Wrathful Fires</color>, Banyue can enter the <color=#FFFFFF>Visage of Wrath</color> state by using <color=#FFFFFF>Basic Attack: Immolate</color>. While in <color=#FFFFFF>Visage of Wrath</color> state, Banyue can no longer gain <color=#FFFFFF>Wrathful Fires</color>. After Banyue uses <color=#FFFFFF>Basic Attack: Toppling Mountain</color>, he exits the <color=#FFFFFF>Visage of Wrath</color> state.\nWhen entering the <color=#FFFFFF>Visage of Wrath</color> state, Banyue gains 4 <color=#FFFFFF>Mountain's Might</color>. If Banyue has <color=#FFFFFF>Mountain's Might</color>, launching an <color=#FFFFFF>EX Special Attack</color> no longer consumes Adrenaline, instead consuming 1 <color=#FFFFFF>Mountain's Might</color> and restoring 10 Adrenaline. Upon exiting the <color=#FFFFFF>Visage of Wrath</color> state, remove all <color=#FFFFFF>Mountain's Might</color>.\nWhen possessing <color=#FFFFFF>Mountain's Might</color> in <color=#FFFFFF>Visage of Wrath</color> state, hold <IconMap:Icon_Special> to launch four different <color=#FFFFFF>EX Special Attacks</color> and <color=#FFFFFF>Basic Attack: Toppling Mountain</color> in a fixed sequence.\nWhen Banyue uses an <color=#FFFFFF>EX Special Attack</color> or <color=#FFFFFF>Assist Follow-Up</color>, he increases his Sheer Force by <color=#2BAD00>175</color>, <color=#FF5521>Fire DMG</color> by <color=#2BAD00>21%</color>, and CRIT DMG by <color=#2BAD00>21%</color> for 30s. Repeated triggers reset the duration.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhile in the <color=#FFFFFF>Visage of Wrath</color> state, when Banyue consumes <color=#FFFFFF>Mountain's Might</color> to unleash an <color=#FFFFFF>EX Special Attack</color> through a Basic Attack branch or quick input commands, he gains one stack of <color=#FFFFFF>Vidyaraja</color>. Each stack of <color=#FFFFFF>Vidyaraja</color> increases his <color=#FF5521>Fire DMG</color> by 5%, stacking up to 3 times and lasting 8s. Repeated triggers reset the duration."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1471051": {
+        "Level": 3,
+        "Id": 1471051,
+        "Name": [
+          "Core Passive: One With the Mountains",
+          "Additional Ability: Mountain's Zenith"
+        ],
+        "Desc": [
+          "Banyue gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing his Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Banyue deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Banyue enters the battlefield, he immediately recovers 60 Adrenaline. In Investigation Zone Mode, this effect can trigger once every 180s.\nBanyue can recover <color=#FFFFFF>Wrathful Fires</color> through the following methods:\nRecover 0.5 <color=#FFFFFF>Wrathful Fires</color> for every point of Adrenaline consumed;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon activating <color=#FFFFFF>Defensive Assist</color>;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> when parrying an enemy with <color=#FFFFFF>Dodge: Immovable Mountain</color>, and recover 6 <color=#FFFFFF>Wrathful Fires</color> instead upon triggering a Perfect Block, up to once every 1s;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon triggering a <color=#FFFFFF>Perfect Dodge</color>, up to once every 1s.\nBanyue can have up to 150 <color=#FFFFFF>Wrathful Fires</color>. When he possesses at least 120 <color=#FFFFFF>Wrathful Fires</color>, Banyue can enter the <color=#FFFFFF>Visage of Wrath</color> state by using <color=#FFFFFF>Basic Attack: Immolate</color>. While in <color=#FFFFFF>Visage of Wrath</color> state, Banyue can no longer gain <color=#FFFFFF>Wrathful Fires</color>. After Banyue uses <color=#FFFFFF>Basic Attack: Toppling Mountain</color>, he exits the <color=#FFFFFF>Visage of Wrath</color> state.\nWhen entering the <color=#FFFFFF>Visage of Wrath</color> state, Banyue gains 4 <color=#FFFFFF>Mountain's Might</color>. If Banyue has <color=#FFFFFF>Mountain's Might</color>, launching an <color=#FFFFFF>EX Special Attack</color> no longer consumes Adrenaline, instead consuming 1 <color=#FFFFFF>Mountain's Might</color> and restoring 10 Adrenaline. Upon exiting the <color=#FFFFFF>Visage of Wrath</color> state, remove all <color=#FFFFFF>Mountain's Might</color>.\nWhen possessing <color=#FFFFFF>Mountain's Might</color> in <color=#FFFFFF>Visage of Wrath</color> state, hold <IconMap:Icon_Special> to launch four different <color=#FFFFFF>EX Special Attacks</color> and <color=#FFFFFF>Basic Attack: Toppling Mountain</color> in a fixed sequence.\nWhen Banyue uses an <color=#FFFFFF>EX Special Attack</color> or <color=#FFFFFF>Assist Follow-Up</color>, he increases his Sheer Force by <color=#2BAD00>200</color>, <color=#FF5521>Fire DMG</color> by <color=#2BAD00>24%</color>, and CRIT DMG by <color=#2BAD00>24%</color> for 30s. Repeated triggers reset the duration.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhile in the <color=#FFFFFF>Visage of Wrath</color> state, when Banyue consumes <color=#FFFFFF>Mountain's Might</color> to unleash an <color=#FFFFFF>EX Special Attack</color> through a Basic Attack branch or quick input commands, he gains one stack of <color=#FFFFFF>Vidyaraja</color>. Each stack of <color=#FFFFFF>Vidyaraja</color> increases his <color=#FF5521>Fire DMG</color> by 5%, stacking up to 3 times and lasting 8s. Repeated triggers reset the duration."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1471052": {
+        "Level": 4,
+        "Id": 1471052,
+        "Name": [
+          "Core Passive: One With the Mountains",
+          "Additional Ability: Mountain's Zenith"
+        ],
+        "Desc": [
+          "Banyue gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing his Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Banyue deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Banyue enters the battlefield, he immediately recovers 60 Adrenaline. In Investigation Zone Mode, this effect can trigger once every 180s.\nBanyue can recover <color=#FFFFFF>Wrathful Fires</color> through the following methods:\nRecover 0.5 <color=#FFFFFF>Wrathful Fires</color> for every point of Adrenaline consumed;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon activating <color=#FFFFFF>Defensive Assist</color>;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> when parrying an enemy with <color=#FFFFFF>Dodge: Immovable Mountain</color>, and recover 6 <color=#FFFFFF>Wrathful Fires</color> instead upon triggering a Perfect Block, up to once every 1s;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon triggering a <color=#FFFFFF>Perfect Dodge</color>, up to once every 1s.\nBanyue can have up to 150 <color=#FFFFFF>Wrathful Fires</color>. When he possesses at least 120 <color=#FFFFFF>Wrathful Fires</color>, Banyue can enter the <color=#FFFFFF>Visage of Wrath</color> state by using <color=#FFFFFF>Basic Attack: Immolate</color>. While in <color=#FFFFFF>Visage of Wrath</color> state, Banyue can no longer gain <color=#FFFFFF>Wrathful Fires</color>. After Banyue uses <color=#FFFFFF>Basic Attack: Toppling Mountain</color>, he exits the <color=#FFFFFF>Visage of Wrath</color> state.\nWhen entering the <color=#FFFFFF>Visage of Wrath</color> state, Banyue gains 4 <color=#FFFFFF>Mountain's Might</color>. If Banyue has <color=#FFFFFF>Mountain's Might</color>, launching an <color=#FFFFFF>EX Special Attack</color> no longer consumes Adrenaline, instead consuming 1 <color=#FFFFFF>Mountain's Might</color> and restoring 10 Adrenaline. Upon exiting the <color=#FFFFFF>Visage of Wrath</color> state, remove all <color=#FFFFFF>Mountain's Might</color>.\nWhen possessing <color=#FFFFFF>Mountain's Might</color> in <color=#FFFFFF>Visage of Wrath</color> state, hold <IconMap:Icon_Special> to launch four different <color=#FFFFFF>EX Special Attacks</color> and <color=#FFFFFF>Basic Attack: Toppling Mountain</color> in a fixed sequence.\nWhen Banyue uses an <color=#FFFFFF>EX Special Attack</color> or <color=#FFFFFF>Assist Follow-Up</color>, he increases his Sheer Force by <color=#2BAD00>225</color>, <color=#FF5521>Fire DMG</color> by <color=#2BAD00>27%</color>, and CRIT DMG by <color=#2BAD00>27%</color> for 30s. Repeated triggers reset the duration.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhile in the <color=#FFFFFF>Visage of Wrath</color> state, when Banyue consumes <color=#FFFFFF>Mountain's Might</color> to unleash an <color=#FFFFFF>EX Special Attack</color> through a Basic Attack branch or quick input commands, he gains one stack of <color=#FFFFFF>Vidyaraja</color>. Each stack of <color=#FFFFFF>Vidyaraja</color> increases his <color=#FF5521>Fire DMG</color> by 5%, stacking up to 3 times and lasting 8s. Repeated triggers reset the duration."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1471053": {
+        "Level": 5,
+        "Id": 1471053,
+        "Name": [
+          "Core Passive: One With the Mountains",
+          "Additional Ability: Mountain's Zenith"
+        ],
+        "Desc": [
+          "Banyue gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing his Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Banyue deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Banyue enters the battlefield, he immediately recovers 60 Adrenaline. In Investigation Zone Mode, this effect can trigger once every 180s.\nBanyue can recover <color=#FFFFFF>Wrathful Fires</color> through the following methods:\nRecover 0.5 <color=#FFFFFF>Wrathful Fires</color> for every point of Adrenaline consumed;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon activating <color=#FFFFFF>Defensive Assist</color>;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> when parrying an enemy with <color=#FFFFFF>Dodge: Immovable Mountain</color>, and recover 6 <color=#FFFFFF>Wrathful Fires</color> instead upon triggering a Perfect Block, up to once every 1s;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon triggering a <color=#FFFFFF>Perfect Dodge</color>, up to once every 1s.\nBanyue can have up to 150 <color=#FFFFFF>Wrathful Fires</color>. When he possesses at least 120 <color=#FFFFFF>Wrathful Fires</color>, Banyue can enter the <color=#FFFFFF>Visage of Wrath</color> state by using <color=#FFFFFF>Basic Attack: Immolate</color>. While in <color=#FFFFFF>Visage of Wrath</color> state, Banyue can no longer gain <color=#FFFFFF>Wrathful Fires</color>. After Banyue uses <color=#FFFFFF>Basic Attack: Toppling Mountain</color>, he exits the <color=#FFFFFF>Visage of Wrath</color> state.\nWhen entering the <color=#FFFFFF>Visage of Wrath</color> state, Banyue gains 4 <color=#FFFFFF>Mountain's Might</color>. If Banyue has <color=#FFFFFF>Mountain's Might</color>, launching an <color=#FFFFFF>EX Special Attack</color> no longer consumes Adrenaline, instead consuming 1 <color=#FFFFFF>Mountain's Might</color> and restoring 10 Adrenaline. Upon exiting the <color=#FFFFFF>Visage of Wrath</color> state, remove all <color=#FFFFFF>Mountain's Might</color>.\nWhen possessing <color=#FFFFFF>Mountain's Might</color> in <color=#FFFFFF>Visage of Wrath</color> state, hold <IconMap:Icon_Special> to launch four different <color=#FFFFFF>EX Special Attacks</color> and <color=#FFFFFF>Basic Attack: Toppling Mountain</color> in a fixed sequence.\nWhen Banyue uses an <color=#FFFFFF>EX Special Attack</color> or <color=#FFFFFF>Assist Follow-Up</color>, he increases his Sheer Force by <color=#2BAD00>250</color>, <color=#FF5521>Fire DMG</color> by <color=#2BAD00>30%</color>, and CRIT DMG by <color=#2BAD00>30%</color> for 30s. Repeated triggers reset the duration.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhile in the <color=#FFFFFF>Visage of Wrath</color> state, when Banyue consumes <color=#FFFFFF>Mountain's Might</color> to unleash an <color=#FFFFFF>EX Special Attack</color> through a Basic Attack branch or quick input commands, he gains one stack of <color=#FFFFFF>Vidyaraja</color>. Each stack of <color=#FFFFFF>Vidyaraja</color> increases his <color=#FF5521>Fire DMG</color> by 5%, stacking up to 3 times and lasting 8s. Repeated triggers reset the duration."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1471054": {
+        "Level": 6,
+        "Id": 1471054,
+        "Name": [
+          "Core Passive: One With the Mountains",
+          "Additional Ability: Mountain's Zenith"
+        ],
+        "Desc": [
+          "Banyue gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing his Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Banyue deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Banyue enters the battlefield, he immediately recovers 60 Adrenaline. In Investigation Zone Mode, this effect can trigger once every 180s.\nBanyue can recover <color=#FFFFFF>Wrathful Fires</color> through the following methods:\nRecover 0.5 <color=#FFFFFF>Wrathful Fires</color> for every point of Adrenaline consumed;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon activating <color=#FFFFFF>Defensive Assist</color>;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> when parrying an enemy with <color=#FFFFFF>Dodge: Immovable Mountain</color>, and recover 6 <color=#FFFFFF>Wrathful Fires</color> instead upon triggering a Perfect Block, up to once every 1s;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon triggering a <color=#FFFFFF>Perfect Dodge</color>, up to once every 1s.\nBanyue can have up to 150 <color=#FFFFFF>Wrathful Fires</color>. When he possesses at least 120 <color=#FFFFFF>Wrathful Fires</color>, Banyue can enter the <color=#FFFFFF>Visage of Wrath</color> state by using <color=#FFFFFF>Basic Attack: Immolate</color>. While in <color=#FFFFFF>Visage of Wrath</color> state, Banyue can no longer gain <color=#FFFFFF>Wrathful Fires</color>. After Banyue uses <color=#FFFFFF>Basic Attack: Toppling Mountain</color>, he exits the <color=#FFFFFF>Visage of Wrath</color> state.\nWhen entering the <color=#FFFFFF>Visage of Wrath</color> state, Banyue gains 4 <color=#FFFFFF>Mountain's Might</color>. If Banyue has <color=#FFFFFF>Mountain's Might</color>, launching an <color=#FFFFFF>EX Special Attack</color> no longer consumes Adrenaline, instead consuming 1 <color=#FFFFFF>Mountain's Might</color> and restoring 10 Adrenaline. Upon exiting the <color=#FFFFFF>Visage of Wrath</color> state, remove all <color=#FFFFFF>Mountain's Might</color>.\nWhen possessing <color=#FFFFFF>Mountain's Might</color> in <color=#FFFFFF>Visage of Wrath</color> state, hold <IconMap:Icon_Special> to launch four different <color=#FFFFFF>EX Special Attacks</color> and <color=#FFFFFF>Basic Attack: Toppling Mountain</color> in a fixed sequence.\nWhen Banyue uses an <color=#FFFFFF>EX Special Attack</color> or <color=#FFFFFF>Assist Follow-Up</color>, he increases his Sheer Force by <color=#2BAD00>275</color>, <color=#FF5521>Fire DMG</color> by <color=#2BAD00>33%</color>, and CRIT DMG by <color=#2BAD00>33%</color> for 30s. Repeated triggers reset the duration.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhile in the <color=#FFFFFF>Visage of Wrath</color> state, when Banyue consumes <color=#FFFFFF>Mountain's Might</color> to unleash an <color=#FFFFFF>EX Special Attack</color> through a Basic Attack branch or quick input commands, he gains one stack of <color=#FFFFFF>Vidyaraja</color>. Each stack of <color=#FFFFFF>Vidyaraja</color> increases his <color=#FF5521>Fire DMG</color> by 5%, stacking up to 3 times and lasting 8s. Repeated triggers reset the duration."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1471055": {
+        "Level": 7,
+        "Id": 1471055,
+        "Name": [
+          "Core Passive: One With the Mountains",
+          "Additional Ability: Mountain's Zenith"
+        ],
+        "Desc": [
+          "Banyue gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing his Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Banyue deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Banyue enters the battlefield, he immediately recovers 60 Adrenaline. In Investigation Zone Mode, this effect can trigger once every 180s.\nBanyue can recover <color=#FFFFFF>Wrathful Fires</color> through the following methods:\nRecover 0.5 <color=#FFFFFF>Wrathful Fires</color> for every point of Adrenaline consumed;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon activating <color=#FFFFFF>Defensive Assist</color>;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> when parrying an enemy with <color=#FFFFFF>Dodge: Immovable Mountain</color>, and recover 6 <color=#FFFFFF>Wrathful Fires</color> instead upon triggering a Perfect Block, up to once every 1s;\nRecover 4 <color=#FFFFFF>Wrathful Fires</color> upon triggering a <color=#FFFFFF>Perfect Dodge</color>, up to once every 1s.\nBanyue can have up to 150 <color=#FFFFFF>Wrathful Fires</color>. When he possesses at least 120 <color=#FFFFFF>Wrathful Fires</color>, Banyue can enter the <color=#FFFFFF>Visage of Wrath</color> state by using <color=#FFFFFF>Basic Attack: Immolate</color>. While in <color=#FFFFFF>Visage of Wrath</color> state, Banyue can no longer gain <color=#FFFFFF>Wrathful Fires</color>. After Banyue uses <color=#FFFFFF>Basic Attack: Toppling Mountain</color>, he exits the <color=#FFFFFF>Visage of Wrath</color> state.\nWhen entering the <color=#FFFFFF>Visage of Wrath</color> state, Banyue gains 4 <color=#FFFFFF>Mountain's Might</color>. If Banyue has <color=#FFFFFF>Mountain's Might</color>, launching an <color=#FFFFFF>EX Special Attack</color> no longer consumes Adrenaline, instead consuming 1 <color=#FFFFFF>Mountain's Might</color> and restoring 10 Adrenaline. Upon exiting the <color=#FFFFFF>Visage of Wrath</color> state, remove all <color=#FFFFFF>Mountain's Might</color>.\nWhen possessing <color=#FFFFFF>Mountain's Might</color> in <color=#FFFFFF>Visage of Wrath</color> state, hold <IconMap:Icon_Special> to launch four different <color=#FFFFFF>EX Special Attacks</color> and <color=#FFFFFF>Basic Attack: Toppling Mountain</color> in a fixed sequence.\nWhen Banyue uses an <color=#FFFFFF>EX Special Attack</color> or <color=#FFFFFF>Assist Follow-Up</color>, he increases his Sheer Force by <color=#2BAD00>300</color>, <color=#FF5521>Fire DMG</color> by <color=#2BAD00>36%</color>, and CRIT DMG by <color=#2BAD00>36%</color> for 30s. Repeated triggers reset the duration.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhile in the <color=#FFFFFF>Visage of Wrath</color> state, when Banyue consumes <color=#FFFFFF>Mountain's Might</color> to unleash an <color=#FFFFFF>EX Special Attack</color> through a Basic Attack branch or quick input commands, he gains one stack of <color=#FFFFFF>Vidyaraja</color>. Each stack of <color=#FFFFFF>Vidyaraja</color> increases his <color=#FF5521>Fire DMG</color> by 5%, stacking up to 3 times and lasting 8s. Repeated triggers reset the duration."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      }
+    },
+    "Materials": {
+      "1": { "10": 5000 },
+      "2": { "10": 12000, "110510": 2 },
+      "3": { "10": 28000, "110510": 4 },
+      "4": { "10": 60000, "110007": 2, "110510": 9 },
+      "5": { "10": 100000, "110007": 3, "110510": 15 },
+      "6": { "10": 200000, "110007": 4, "110510": 30 }
+    }
+  },
+  "Talent": {
+    "1": {
+      "Level": 1,
+      "Name": "Greed Burns Like Fire",
+      "Desc": "When Banyue hits an enemy with <color=#FFFFFF>EX Special Attack: One's Path</color> or <color=#FFFFFF>EX Special Attack: Earth Shaker</color>, he inflicts the <color=#FFFFFF>Tremor</color> state. In this state, enemies' <color=#FF5521>Fire RES</color> is reduced by 10%, lasting 30s. When <color=#FFFFFF>EX Special Attack: Lion's Roar</color>, <color=#FFFFFF>EX Special Attack: Lion's Roar - Wrath</color>, <color=#FFFFFF>EX Special Attack: Mountain Tremor</color>, <color=#FFFFFF>EX Special Attack: Mountain Tremor - Wrath</color>, <color=#FFFFFF>Basic Attack: Toppling Mountain</color>, and <color=#FFFFFF>Basic Attack: Crushing Peaks</color> hits an enemy in the <color=#FFFFFF>Tremor</color> state, the Sheer DMG dealt is increased by 10%. When <color=#FFFFFF>Basic Attack: Crushing Peaks</color> hits a Stunned enemy, the current Stun duration is extended by 2s. This effect can only trigger once per Stun and does not stack with similar effects.",
+      "Desc2": "Did Banyue Shifu ever have any desires of his own? He runs a martial arts school in Failume Heights, apparently only because a certain grandmaster once suggested he open one.\nThe school doesn't even have a name, he isn't looking for fame for fortune, and he's never once told his students to shout slogans about passing down his art.\nOnly Banyue Shifu himself knows that the obsession called repentance burns that iron heart, day and night. A single mistake could send him spiralling.\n\n\"Greed is like fire. When kept in check, it lights the way forward, but left unchecked, it burns you instead.\""
+    },
+    "2": {
+      "Level": 2,
+      "Name": "Anger Cuts Like a Blade",
+      "Desc": "The CRIT DMG bonus from the <color=#FFFFFF>Core Passive</color> is increased by an additional 15%, and the <color=#FF5521>Fire DMG</color> bonus is increased by an additional 15%. While in the <color=#FFFFFF>Visage of Wrath</color> state, Banyue restores an additional 5 Adrenaline when consuming <color=#FFFFFF>Mountain's Might</color> to unleash an <color=#FFFFFF>EX Special Attack</color>.",
+      "Desc2": "The students at the martial arts school had never seen Banyue Shifu lose his temper, let alone fly into a rage. Even with the dullest or most reckless students, he seemed endlessly patient. After all, how could a mountain ever grow angry? Its deep, immovable calm makes people almost forget the fury it can hold.\nBut when it stirs with the wrath of the heavens, even the fiercest of beasts will tremble in fear.\n\n\"Anger is like a blade — keep it sheathed in daily life, lest it wound those around you.\""
+    },
+    "3": {
+      "Level": 3,
+      "Name": "Ignorance Binds Like Chains",
+      "Desc": "<color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Dodge</color>, <color=#FFFFFF>Assist</color>, <color=#FFFFFF>Special Attack</color>, and <color=#FFFFFF>Chain Attack</color> Lv. +2",
+      "Desc2": "Banyue Shifu was not just a warrior, but a wise man — or so said both his students and the neighbors who knew him.\nAfter all, he always looked so composed and thoughtful. Though he spoke little, every word that left his mouth sounded like a proverb worth pondering.\nMartial arts, he often said, are not only a way to train the body but also the heart. And as he would always add, he himself was still just a student.\n\n\"I, Banyue, have been slow and foolish, once straying from the right path. But to clear the way for you on this journey... these fists are still yours to command.\""
+    },
+    "4": {
+      "Level": 4,
+      "Name": "Purge Unit - Type Zero",
+      "Desc": "<color=#FFFFFF>EX Special Attack: Lion's Roar - Wrath</color>, <color=#FFFFFF>EX Special Attack: Mountain Tremor - Wrath</color>, <color=#FFFFFF>Basic Attack: Toppling Mountain</color>, and <color=#FFFFFF>Basic Attack: Crushing Peaks</color> DMG increase by <color=#FFFFFF>30%</color>.",
+      "Desc2": "Fate may be ordained by the heavens or shaped by human hands. Yet for some, destiny and guilt were never granted the mercy of free will.\nBefore ever having a name, the combat construct known as \"Type Zero\" was, in the truest sense, nothing more than a killing machine.\nAnd when did a \"heart\" form? Was it the day she erased the chains of his code, or the moment he found the courage to carry it all and keep moving forward?\n\n\"Repentance is too easy. Rather than fleeing from past sins, shoulder the mountain of your past... and throw a punch.\""
+    },
+    "5": {
+      "Level": 5,
+      "Name": "Student",
+      "Desc": "<color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Dodge</color>, <color=#FFFFFF>Assist</color>, <color=#FFFFFF>Special Attack</color>, and <color=#FFFFFF>Chain Attack</color> Lv. +2",
+      "Desc2": "Did you hear? There's a martial arts school up in the mountain taught by some big construct.\nThe students there are no joke; they can even hold their own against Ethereals.\nTheir iron-bodied Shifu often heads into the Hollows to help with rescues, too. Must be quite the martial arts master, huh?\n\n\"I'm still just a clumsy student myself... Though you all call me 'Shifu,' it's you who have taught me what it means to be a person.\""
+    },
+    "6": {
+      "Level": 6,
+      "Name": "Descended Vidyaraja",
+      "Desc": "At any time, when Banyue uses an <color=#FFFFFF>EX Special Attack</color>, he also gains <color=#FFFFFF>Vidyaraja</color>. The <color=#FF5521>Fire DMG</color> bonus from <color=#FFFFFF>Vidyaraja</color> is increased by an additional 8%, and its duration is extended to 30s. When activating <color=#FFFFFF>Basic Attack: Crushing Peaks</color>, Banyue deals <color=#FF5521>Fire DMG</color> equal to 600% of his Sheer Force to nearby enemies. Using <color=#FFFFFF>Dodge: Battle Cry</color> immediately after an <color=#FFFFFF>EX Special Attack</color> also grants <color=#FFFFFF>Vidyaraja</color>.",
+      "Desc2": "\"Dying's the easy way out, isn't it, big guy? You've still got a long path of redemption ahead of you!\"\n\"This... is my final verdict!\"\nHer frame was delicate, yet her words landed with a weight that seemed to cut through a mountain of burden and doubt.\n\n\"I still question whether I have the wisdom and courage to judge... but that's no excuse to stop moving forward.\""
+    }
+  },
+  "FairyRecommend": {
+    "Slot4": 33100,
+    "Slot2": 31000,
+    "SlotSub": 32700,
+    "Part4": {
+      "Prop": 20103,
+      "Name": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconCrit.png"
+    },
+    "Part5": {
+      "Prop": 21103,
+      "Name": "CRIT DMG",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconCritDam.png"
+    },
+    "Part6": {
+      "Prop": 11102,
+      "Name": "HP",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconHpMax.png"
+    },
+    "PartSub": {
+      "Prop": 31603,
+      "Name": "Fire DMG Bonus",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconGeneralBuff/Packer/IconFire.png"
+    }
+  },
+  "Potential": [],
+  "PotentialDetail": {}
+}

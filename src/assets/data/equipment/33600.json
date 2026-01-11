@@ -1,0 +1,9 @@
+{
+  "Id": 33600,
+  "Name": "Shining Aria",
+  "Desc2": "<color=#FE437E>Ether DMG</color> +10%",
+  "Desc4": "When the equipper's <color=#FFFFFF>Basic Attack</color> hits an enemy, their Anomaly Proficiency increases by 36, lasting 8s. Repeated triggers reset the duration. When any enemy on the field is Stunned, the equipper's DMG increases by 25% for 18s. Repeated triggers reset the duration.",
+  "Story": "This was the first album released after the Angels of Delusion debuted. Its sound was bright and energetic, but sales were disappointingly low. Kept as a master copy for memory's sake, the back of the lyric sheet carries the support chants a fan wrote for them.",
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitShiningAria.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitShiningAria.png"
+}
