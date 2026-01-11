@@ -41,7 +41,7 @@ export interface WEngine {
   id: string;
   name: string;
   rarity: 'S' | 'A' | 'B';
-  specialty: 'Attack' | 'Stun' | 'Anomaly' | 'Support' | 'Defense';
+  specialty: 'Attack' | 'Stun' | 'Anomaly' | 'Support' | 'Defense' | 'Rupture';
   baseAtk: number;
   subStat: {
     type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency';
