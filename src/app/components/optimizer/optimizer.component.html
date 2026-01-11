@@ -36,7 +36,7 @@
           <select [(ngModel)]="selectedWEngine" class="select-input">
             <option [ngValue]="null">None</option>
             <option *ngFor="let wEngine of availableWEngines" [ngValue]="wEngine">
-              {{wEngine.name}} ({{wEngine.rarity}}-Rank)
+              {{wEngine.name}} (★{{wEngine.rarity}})
             </option>
           </select>
           <div class="wengine-notice" *ngIf="availableWEngines.length === 0">
@@ -44,7 +44,7 @@
           </div>
           <div class="wengine-info" *ngIf="selectedWEngine">
             <small class="info-text">
-              ✓ Matches {{selectedAgent.specialty}} - Effects will apply
+              ✓ {{selectedWEngine.subStat.type}}: +{{selectedWEngine.subStat.value}}
             </small>
           </div>
         </div>
@@ -62,14 +62,8 @@
           </div>
         </div>
 
-        <div class="preset-section">
-          <button (click)="loadPreset()" class="btn-primary">
-            Load Recommended Preset
-          </button>
-        </div>
-
         <div class="config-group">
-          <label>Minimum Substats:</label>
+          <label>Stat Requirements:</label>
           <div class="substat-filters">
             <div class="substat-filter">
               <label>Min CRIT Rate:</label>
@@ -78,6 +72,41 @@
             <div class="substat-filter">
               <label>Min CRIT DMG:</label>
               <input type="number" [(ngModel)]="minCritDmg" class="number-input-sm" />%
+            </div>
+          </div>
+        </div>
+
+        <div class="advanced-toggle">
+          <button (click)="toggleAdvancedOptions()" class="btn-secondary">
+            {{showAdvancedOptions ? 'Hide' : 'Show'}} Advanced Options
+          </button>
+        </div>
+
+        <div *ngIf="showAdvancedOptions" class="advanced-options">
+          <div class="config-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="useEfficientMode" />
+              Use Efficient Mode (faster, top 20 discs per slot)
+            </label>
+          </div>
+
+          <div class="config-group">
+            <label>Max Results:</label>
+            <input type="number" [(ngModel)]="maxResults" min="10" max="500" class="number-input" />
+          </div>
+
+          <div class="substat-filters">
+            <div class="substat-filter">
+              <label>Min ATK:</label>
+              <input type="number" [(ngModel)]="minATK" class="number-input-sm" />
+            </div>
+            <div class="substat-filter">
+              <label>Min HP:</label>
+              <input type="number" [(ngModel)]="minHP" class="number-input-sm" />
+            </div>
+            <div class="substat-filter">
+              <label>Min DEF:</label>
+              <input type="number" [(ngModel)]="minDEF" class="number-input-sm" />
             </div>
           </div>
         </div>
@@ -94,7 +123,7 @@
             <div class="progress-bar">
               <div class="progress-fill" [style.width.%]="progress"></div>
             </div>
-            <span>{{progressText}}</span>
+            <span class="progress-text">{{progressText}}</span>
           </div>
         </div>
       </div>
@@ -111,6 +140,10 @@
 
       <div class="no-results" *ngIf="!selectedAgent">
         <p>Select an agent to start optimizing</p>
+      </div>
+
+      <div class="no-results" *ngIf="selectedAgent && results.length === 0 && !isOptimizing">
+        <p>Click "Start Optimization" to find builds</p>
       </div>
 
       <div class="results-list" *ngIf="results.length > 0">
@@ -176,6 +209,39 @@
             <span>CRIT DMG:</span>
             <span>{{selectedResult.stats.critDmg.toFixed(1)}}%</span>
           </div>
+          <div class="stat-row">
+            <span>Impact:</span>
+            <span>{{selectedResult.stats.impact.toFixed(0)}}</span>
+          </div>
+          <div class="stat-row">
+            <span>Anomaly Prof:</span>
+            <span>{{selectedResult.stats.anomalyProficiency.toFixed(0)}}</span>
+          </div>
+          <div class="stat-row">
+            <span>PEN Ratio:</span>
+            <span>{{selectedResult.stats.penRatio.toFixed(1)}}%</span>
+          </div>
+          <div class="stat-row">
+            <span>Energy Regen:</span>
+            <span>{{selectedResult.stats.energyRegen.toFixed(1)}}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="disc-breakdown">
+        <h3>Equipped Discs</h3>
+        <div class="disc-list-details">
+          <div *ngFor="let slot of allSlots" class="disc-detail-item">
+            <div class="slot-label">{{slot.replace('Drive', 'Slot ')}}:</div>
+            <div class="disc-info">{{getDiscInSlot(slot)}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="set-bonuses-detail" *ngIf="selectedResult.setBonus.length > 0">
+        <h3>Active Set Bonuses</h3>
+        <div *ngFor="let bonus of selectedResult.setBonus" class="bonus-item">
+          ✓ {{bonus}}
         </div>
       </div>
 
