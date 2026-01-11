@@ -115,6 +115,21 @@ export class DataMappingService {
   }
 
   /**
+   * Get specialty from string name (for weapon JSON format)
+   */
+  getSpecialtyFromName(name: string): Specialty {
+    const nameMap: { [key: string]: Specialty } = {
+      'Attack': 'Attack',
+      'Stun': 'Stun',
+      'Anomaly': 'Anomaly',
+      'Support': 'Support',
+      'Defense': 'Defense',
+      'Rupture': 'Rupture'
+    };
+    return nameMap[name] || 'Attack';
+  }
+
+  /**
    * Get rarity from rank code
    */
   getRarity(rank: number): 'S' | 'A' | 'B' {

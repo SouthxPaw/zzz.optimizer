@@ -1,5 +1,6 @@
 // services/disc.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Disc, DiscSet, MainStatType, SubStat, SubStatType } from '../models/disc.model';
 import { ScoringAlgorithm } from '../models/scoring.model';
@@ -13,17 +14,27 @@ export class DiscService {
   private discsSubject = new BehaviorSubject<Disc[]>([]);
   public discs$: Observable<Disc[]> = this.discsSubject.asObservable();
 
-  constructor(private db: DbService) {
+  constructor(
+    private db: DbService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     this.loadDiscsFromDb();
   }
 
   private async loadDiscsFromDb(): Promise<void> {
+    // Only run in browser
+    if (!isPlatformBrowser(this.platformId)) {
+      this.discsSubject.next([]);
+      return;
+    }
+
     try {
       const discs = await this.db.getAllDiscs();
       this.discsSubject.next(discs);
       console.log(`Loaded ${discs.length} discs from IndexedDB`);
     } catch (error) {
       console.error('Error loading discs from IndexedDB:', error);
+      this.discsSubject.next([]);
     }
   }
 
@@ -164,7 +175,8 @@ export class DiscService {
     return score;
   }
 
-  importDiscs(discs: Disc[]): void {
+  async importDiscs(discs: Disc[]): Promise<void> {
+    await this.db.bulkAddDiscs(discs);
     this.discsSubject.next(discs);
   }
 

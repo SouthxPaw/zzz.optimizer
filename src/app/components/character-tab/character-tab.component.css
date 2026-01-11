@@ -84,6 +84,121 @@
   margin-bottom: 10px;
 }
 
+/* Builds Grid */
+.builds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.build-card {
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 3px solid transparent;
+  position: relative;
+  background: #0f3460;
+}
+
+.build-card:hover {
+  transform: translateY(-4px);
+  border-color: #00d9ff;
+  box-shadow: 0 6px 20px rgba(0, 217, 255, 0.3);
+}
+
+.build-card.selected {
+  border-color: #ffd700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  transform: scale(1.02);
+}
+
+.build-card.selected::before {
+  content: '✓';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 24px;
+  height: 24px;
+  background: #ffd700;
+  color: #1a1a2e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  z-index: 5;
+}
+
+.build-card .delete-btn {
+  opacity: 0;
+}
+
+.build-card:hover .delete-btn {
+  opacity: 1;
+}
+
+.build-portrait {
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f3460, #16213e);
+  position: relative;
+}
+
+.build-portrait[data-element="Fire"] {
+  background: linear-gradient(135deg, #ff4444, #cc0000);
+}
+
+.build-portrait[data-element="Ice"] {
+  background: linear-gradient(135deg, #4db8ff, #0066cc);
+}
+
+.build-portrait[data-element="Electric"] {
+  background: linear-gradient(135deg, #ffeb3b, #ff9800);
+}
+
+.build-portrait[data-element="Physical"] {
+  background: linear-gradient(135deg, #bdbdbd, #757575);
+}
+
+.build-portrait[data-element="Ether"] {
+  background: linear-gradient(135deg, #9c27b0, #4a148c);
+}
+
+.build-name {
+  color: white;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  font-size: 0.95em;
+  text-align: center;
+  padding: 0 5px;
+}
+
+.build-info {
+  background: #0a2540;
+  padding: 10px;
+}
+
+.build-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.stat-badge {
+  background: #16213e;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75em;
+  color: #88d5f5;
+  text-align: center;
+  border: 1px solid #0f3460;
+}
+
 .agent-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));

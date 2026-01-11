@@ -112,6 +112,14 @@
             <span class="stat-value">{{selectedBuild.calculatedStats.anomalyMastery}}</span>
           </div>
           <div class="stat-row">
+            <span class="stat-label">Anomaly Proficiency:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.anomalyProficiency}}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">PEN Ratio:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.penRatio}}%</span>
+          </div>
+          <div class="stat-row">
             <span class="stat-label">CRIT Rate:</span>
             <span class="stat-value">{{selectedBuild.calculatedStats.critRate}}%</span>
           </div>
@@ -249,10 +257,6 @@
           [(ngModel)]="discSearchTerm"
           placeholder="Search by set name..."
           class="search-input">
-        <select [(ngModel)]="discFilterSlot" class="filter-select">
-          <option value="">All Slots</option>
-          <option *ngFor="let slot of discSlots" [value]="slot">{{slot}}</option>
-        </select>
         <select [(ngModel)]="discFilterSet" class="filter-select">
           <option value="">All Sets</option>
           <option *ngFor="let set of availableDiscSets" [value]="set">{{set}}</option>

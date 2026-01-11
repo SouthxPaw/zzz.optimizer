@@ -41,7 +41,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Disc picker filters
   discSearchTerm = '';
-  discFilterSlot: DiscSlot | '' = '';
   discFilterSet = '';
   showOnlyUnequipped = false;
   availableDiscSets: string[] = [];
@@ -128,6 +127,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Check if this agent already has a build
+    const existingBuild = this.builds.find(b => b.agentId === this.selectedAgentForAdd!.id);
+    if (existingBuild) {
+      alert(`You already have a build for ${this.selectedAgentForAdd.name}. Each agent can only have one build.`);
+      return;
+    }
+
     try {
       const newBuild = await this.buildService.createBuild(this.selectedAgentForAdd, 0);
       this.closeAddAgentModal();
@@ -170,21 +176,21 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
   }
 
-  onWEngineChange(event: Event) {
+  async onWEngineChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const wEngineId = selectElement.value;
 
     if (!wEngineId) {
       // Unequip if empty value selected
       if (this.selectedBuild) {
-        this.buildService.unequipWEngine(this.selectedBuild.id);
+        await this.buildService.unequipWEngine(this.selectedBuild.id);
       }
       return;
     }
 
     const wEngine = this.referenceWEngines.find(w => w.id === wEngineId);
     if (wEngine) {
-      this.equipWEngine(wEngine);
+      await this.equipWEngine(wEngine);
     }
   }
 
@@ -233,11 +239,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Filter by selected slot (only show discs that match the slot being filled)
     if (this.selectedDiscSlot) {
       filtered = filtered.filter(d => d.slot === this.selectedDiscSlot);
-    }
-
-    // Filter by slot dropdown
-    if (this.discFilterSlot) {
-      filtered = filtered.filter(d => d.slot === this.discFilterSlot);
     }
 
     // Filter by set
