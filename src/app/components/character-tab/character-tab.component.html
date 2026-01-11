@@ -33,7 +33,7 @@
             <span class="build-name">{{build.name}}</span>
           </div>
           <div class="build-info">
-            <div class="rarity">{{getRarityDisplay(build.agentId)}}</div>
+            <div class="rank">{{getRankDisplay(build.agentId)}}</div>
             <div class="build-stats">
               <div class="stat-badge">M{{build.mindscapeLevel}}</div>
               <div class="stat-badge" *ngIf="build.equippedWEngine">
@@ -73,7 +73,7 @@
           class="wengine-select">
           <option value="">Select W-Engine</option>
           <option *ngFor="let engine of referenceWEngines" [value]="engine.id">
-            {{engine.name}} ({{engine.rarity === 'S' ? '★★★★★' : engine.rarity === 'A' ? '★★★★' : '★★★'}})
+            {{engine.name}} ({{engine.rarity === 'S' ? 'S-Rank' : engine.rarity === 'A' ? 'A-Rank' : 'B-Rank'}})
           </option>
         </select>
 
@@ -128,7 +128,43 @@
 
       <div class="disc-section">
         <h3>Disc Drives ({{getEquippedDiscsCount(selectedBuild)}}/6)</h3>
-        <p class="placeholder">Disc Drive builder coming soon...</p>
+        <div class="disc-grid">
+          <div
+            *ngFor="let slot of discSlots"
+            class="disc-slot"
+            [class.equipped]="selectedBuild.equippedDiscs[slot]"
+            (click)="openDiscPicker(slot)">
+            <div *ngIf="selectedBuild.equippedDiscs[slot]; else emptySlot" class="disc-card">
+              <div class="disc-header">
+                <span class="disc-slot-number">{{slot}}</span>
+                <span class="disc-rarity">{{selectedBuild.equippedDiscs[slot]!.rarity}}</span>
+              </div>
+              <div class="disc-set">{{selectedBuild.equippedDiscs[slot]!.set}}</div>
+              <div class="disc-main-stat">
+                <span class="stat-type">{{selectedBuild.equippedDiscs[slot]!.mainStat.type}}</span>
+                <span class="stat-value">{{selectedBuild.equippedDiscs[slot]!.mainStat.value}}</span>
+              </div>
+              <div class="disc-substats">
+                <div *ngFor="let subStat of selectedBuild.equippedDiscs[slot]!.subStats" class="substat">
+                  {{subStat.type}} +{{subStat.value}}
+                </div>
+              </div>
+              <button class="unequip-btn" (click)="unequipDisc(slot, $event)" title="Unequip disc">×</button>
+            </div>
+            <ng-template #emptySlot>
+              <div class="empty-disc-slot">
+                <span class="slot-number">{{slot}}</span>
+                <span class="slot-label">Empty</span>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+        <div *ngIf="getSetBonuses().length > 0" class="set-bonuses">
+          <h4>Active Set Bonuses:</h4>
+          <div *ngFor="let bonus of getSetBonuses()" class="set-bonus">
+            {{bonus}}
+          </div>
+        </div>
       </div>
     </div>
 
@@ -180,7 +216,7 @@
             <span class="agent-name">{{agent.name}}</span>
           </div>
           <div class="agent-info">
-            <div class="rarity">{{agent.rarity === 'S' ? '★★★★★' : '★★★★'}}</div>
+            <div class="rank">{{agent.rarity === 'S' ? 'S-Rank' : 'A-Rank'}}</div>
             <div class="specialty">{{agent.specialty}}</div>
           </div>
         </div>
@@ -194,6 +230,67 @@
           [disabled]="!selectedAgentForAdd">
           Add Build
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Disc Picker Modal -->
+<div class="modal-overlay" *ngIf="showDiscPicker" (click)="closeDiscPicker()">
+  <div class="modal-content disc-picker-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Select Disc for {{selectedDiscSlot}}</h2>
+      <button class="close-btn" (click)="closeDiscPicker()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="disc-picker-controls">
+        <input
+          type="text"
+          [(ngModel)]="discSearchTerm"
+          placeholder="Search by set name..."
+          class="search-input">
+        <select [(ngModel)]="discFilterSlot" class="filter-select">
+          <option value="">All Slots</option>
+          <option *ngFor="let slot of discSlots" [value]="slot">{{slot}}</option>
+        </select>
+        <select [(ngModel)]="discFilterSet" class="filter-select">
+          <option value="">All Sets</option>
+          <option *ngFor="let set of availableDiscSets" [value]="set">{{set}}</option>
+        </select>
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="showOnlyUnequipped">
+          Unequipped Only
+        </label>
+      </div>
+
+      <div class="disc-picker-grid">
+        <div
+          *ngFor="let disc of getFilteredDiscs()"
+          class="disc-picker-card"
+          [class.equipped]="disc.equippedBy"
+          (click)="equipDiscToBuild(disc)">
+          <div class="disc-picker-header">
+            <span class="disc-picker-slot">{{disc.slot}}</span>
+            <span class="disc-picker-rarity">{{disc.rarity}}</span>
+            <span *ngIf="disc.equippedBy" class="equipped-badge">Equipped</span>
+          </div>
+          <div class="disc-picker-set">{{disc.set}}</div>
+          <div class="disc-picker-level">Lv. {{disc.level}}</div>
+          <div class="disc-picker-main">
+            <span class="stat-type">{{disc.mainStat.type}}</span>
+            <span class="stat-value">{{disc.mainStat.value}}</span>
+          </div>
+          <div class="disc-picker-subs">
+            <div *ngFor="let sub of disc.subStats" class="sub-line">
+              {{sub.type}} +{{sub.value}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="getFilteredDiscs().length === 0" class="no-discs">
+        <p>No discs found matching your filters.</p>
+        <p class="hint">Try adjusting your filters or add discs to your inventory.</p>
       </div>
     </div>
   </div>

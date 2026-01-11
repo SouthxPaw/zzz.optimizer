@@ -74,6 +74,10 @@ export class StatCalculatorService {
         stats.anomalyProficiency += subStatValue;
         break;
     }
+
+    // Note: W-Engine effects are not automatically applied as they are context-dependent
+    // and described in natural language. They should be considered when evaluating builds
+    // but cannot be parsed into stats programmatically.
   }
 
   private applyDiscMainStats(
@@ -226,13 +230,20 @@ export class StatCalculatorService {
     });
 
     // Apply percentage-based stats to base stats
+    // Important: We need to preserve the flat stats already accumulated (from W-Engine base ATK, disc flat stats)
     const baseHP = agent.lvl60Stats.hp;
     const baseATK = agent.lvl60Stats.atk;
     const baseDEF = agent.lvl60Stats.def;
 
-    stats.hp = baseHP + (baseHP * stats.hppercent / 100);
-    stats.atk = baseATK + (baseATK * stats.atkpercent / 100);
-    stats.def = baseDEF + (baseDEF * stats.defpercent / 100);
+    // Calculate the flat stat bonuses that have been added
+    const flatHPBonus = stats.hp - baseHP;
+    const flatATKBonus = stats.atk - baseATK;
+    const flatDEFBonus = stats.def - baseDEF;
+
+    // Apply percentage bonuses to base stats, then add back the flat bonuses
+    stats.hp = baseHP * (1 + stats.hppercent / 100) + flatHPBonus;
+    stats.atk = baseATK * (1 + stats.atkpercent / 100) + flatATKBonus;
+    stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFBonus;
   }
 
   getSetBonuses(discs: { [key in DiscSlot]?: Disc }): string[] {

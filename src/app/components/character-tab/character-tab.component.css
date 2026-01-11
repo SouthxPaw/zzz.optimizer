@@ -185,8 +185,9 @@
   font-size: 0.85em;
 }
 
-.rarity {
+.rank {
   color: #ffd700;
+  font-weight: 600;
 }
 
 .specialty {
@@ -438,8 +439,345 @@
   margin-top: 20px;
 }
 
+/* Disc Grid Styles */
+.disc-section {
+  margin-top: 20px;
+}
+
+.disc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.disc-slot {
+  background: #0f3460;
+  border-radius: 8px;
+  border: 2px solid #1a1a2e;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  min-height: 180px;
+}
+
+.disc-slot:hover {
+  border-color: #00d9ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 217, 255, 0.2);
+}
+
+.disc-slot.equipped {
+  border-color: #00d9ff;
+}
+
+.empty-disc-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 180px;
+  color: #666;
+  padding: 20px;
+}
+
+.empty-disc-slot .slot-number {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.empty-disc-slot .slot-label {
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.disc-card {
+  padding: 12px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.disc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.disc-slot-number {
+  background: #1a1a2e;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.85em;
+}
+
+.disc-rarity {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.disc-set {
+  color: #88d5f5;
+  font-weight: 600;
+  font-size: 0.9em;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.disc-main-stat {
+  display: flex;
+  justify-content: space-between;
+  background: #1a1a2e;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.disc-main-stat .stat-type {
+  color: #00d9ff;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+
+.disc-main-stat .stat-value {
+  color: #fff;
+  font-weight: bold;
+  font-size: 0.85em;
+}
+
+.disc-substats {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.disc-substats .substat {
+  font-size: 0.75em;
+  color: #aaa;
+  padding: 2px 4px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+.unequip-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: #ff4444;
+  color: white;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.disc-slot:hover .unequip-btn {
+  opacity: 1;
+}
+
+.unequip-btn:hover {
+  background: #cc0000;
+}
+
+.set-bonuses {
+  margin-top: 20px;
+  padding: 15px;
+  background: #0f3460;
+  border-radius: 8px;
+  border-left: 4px solid #00d9ff;
+}
+
+.set-bonuses h4 {
+  color: #00d9ff;
+  margin: 0 0 10px 0;
+  font-size: 1em;
+}
+
+.set-bonus {
+  padding: 8px 12px;
+  background: #1a1a2e;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  color: #eee;
+  font-size: 0.9em;
+}
+
+.set-bonus:last-child {
+  margin-bottom: 0;
+}
+
 @media (max-width: 1200px) {
   .content-grid {
     grid-template-columns: 1fr;
   }
+
+  .disc-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .disc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Disc Picker Modal */
+.disc-picker-modal {
+  max-width: 900px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.disc-picker-modal .modal-body {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.disc-picker-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 15px;
+  background: #0f3460;
+  border-radius: 8px;
+}
+
+.search-input, .filter-select {
+  padding: 8px 12px;
+  background: #1a1a2e;
+  border: 2px solid #16213e;
+  border-radius: 6px;
+  color: #eee;
+  font-size: 0.9em;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-input:focus, .filter-select:focus {
+  outline: none;
+  border-color: #00d9ff;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #eee;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.disc-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 10px;
+}
+
+.disc-picker-card {
+  background: #0f3460;
+  border: 2px solid #1a1a2e;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.disc-picker-card:hover {
+  border-color: #00d9ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 217, 255, 0.2);
+}
+
+.disc-picker-card.equipped {
+  opacity: 0.6;
+}
+
+.disc-picker-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.disc-picker-slot {
+  background: #1a1a2e;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.disc-picker-rarity {
+  color: #ffd700;
+  font-size: 0.85em;
+}
+
+.equipped-badge {
+  background: #666;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7em;
+}
+
+.disc-picker-set {
+  color: #88d5f5;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.disc-picker-level {
+  color: #aaa;
+  font-size: 0.85em;
+  margin-bottom: 6px;
+}
+
+.disc-picker-main {
+  display: flex;
+  justify-content: space-between;
+  background: #1a1a2e;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.disc-picker-subs .sub-line {
+  font-size: 0.75em;
+  color: #aaa;
+  padding: 2px 4px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  margin-bottom: 3px;
+}
+
+.no-discs {
+  text-align: center;
+  padding: 40px 20px;
+  color: #888;
 }

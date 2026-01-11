@@ -14,106 +14,103 @@
       <p>Processing...</p>
     </div>
 
-    <!-- Import Section -->
-    <div class="section">
-      <h2>Import Data</h2>
+    <!-- Reference Data Status -->
+    <div class="section info-section">
+      <h2>📚 Reference Data</h2>
       <p class="section-description">
-        Load data from JSON files in the assets/data folder into IndexedDB.
+        Game database (agents, W-Engines) is automatically loaded from assets/data on first run.
+      </p>
+      <p class="status-text">✓ Reference data loads automatically - no manual import needed!</p>
+
+      <div class="button-grid">
+        <button
+          class="btn-secondary"
+          (click)="reloadReferenceData()"
+          [disabled]="isLoading">
+          Force Reload Reference Data
+        </button>
+      </div>
+      <p class="note">Use "Force Reload" only if you've updated the game database files.</p>
+    </div>
+
+    <!-- Import User Data Section -->
+    <div class="section">
+      <h2>💾 Import User Data</h2>
+      <p class="section-description">
+        Import your personal disc inventory. Use this to restore from backup or import sample data.
       </p>
 
       <div class="button-grid">
         <button
-          class="btn-primary"
-          (click)="importAllFromAssets()"
-          [disabled]="isLoading">
-          Import All Data
-        </button>
-        <button
-          class="btn-secondary"
-          (click)="importAgentsFromAssets()"
-          [disabled]="isLoading">
-          Import Agents Only
-        </button>
-        <button
-          class="btn-secondary"
-          (click)="importWEnginesFromAssets()"
-          [disabled]="isLoading">
-          Import W-Engines Only
-        </button>
-        <button
           class="btn-secondary"
           (click)="importDiscsFromAssets()"
           [disabled]="isLoading">
-          Import Discs Only
+          Import Disc Inventory
         </button>
       </div>
     </div>
 
     <!-- Export Section -->
     <div class="section">
-      <h2>Export Data</h2>
+      <h2>📤 Export User Data</h2>
       <p class="section-description">
-        Download your current data from IndexedDB as JSON files.
+        Backup your personal data (disc inventory, builds) as JSON files.
       </p>
 
       <div class="button-grid">
         <button
           class="btn-primary"
-          (click)="exportAllData()"
-          [disabled]="isLoading">
-          Export All Data
-        </button>
-        <button
-          class="btn-secondary"
-          (click)="exportAgents()"
-          [disabled]="isLoading">
-          Export Agents
-        </button>
-        <button
-          class="btn-secondary"
-          (click)="exportWEngines()"
-          [disabled]="isLoading">
-          Export W-Engines
-        </button>
-        <button
-          class="btn-secondary"
           (click)="exportDiscs()"
           [disabled]="isLoading">
-          Export Discs
+          Export Disc Inventory
         </button>
       </div>
+      <p class="note">Note: Reference data (agents, W-Engines) doesn't need to be exported as it's loaded from assets.</p>
     </div>
 
     <!-- Danger Zone -->
     <div class="section danger-zone">
-      <h2>Danger Zone</h2>
+      <h2>⚠️ Danger Zone</h2>
       <p class="section-description">
-        This action will permanently delete all data from IndexedDB.
+        Permanently delete data from IndexedDB. Reference data can be re-imported, but user data will be lost unless exported first.
       </p>
 
-      <button
-        class="btn-danger"
-        (click)="clearAllData()"
-        [disabled]="isLoading">
-        Clear All Data
-      </button>
+      <div class="button-grid">
+        <button
+          class="btn-warning"
+          (click)="clearUserData()"
+          [disabled]="isLoading">
+          Clear User Data Only
+        </button>
+        <button
+          class="btn-warning"
+          (click)="clearReferenceData()"
+          [disabled]="isLoading">
+          Clear Reference Data Only
+        </button>
+        <button
+          class="btn-danger"
+          (click)="clearAllData()"
+          [disabled]="isLoading">
+          Clear Everything
+        </button>
+      </div>
     </div>
 
     <!-- Instructions -->
     <div class="section instructions">
-      <h2>How to Use</h2>
+      <h2>ℹ️ How to Use</h2>
+      <h3>Data Types:</h3>
+      <ul>
+        <li><strong>Reference Data:</strong> Game database (agents.json, wengines.json) - auto-loaded from assets/data/</li>
+        <li><strong>User Data:</strong> Your personal disc inventory and builds - stored in browser cache</li>
+      </ul>
+      <h3>Getting Started:</h3>
       <ol>
-        <li>Place your JSON data files in <code>src/assets/data/</code></li>
-        <li>Expected filenames:
-          <ul>
-            <li><code>agents.json</code> - Agent data</li>
-            <li><code>wengines.json</code> - W-Engine data</li>
-            <li><code>discs.json</code> - Disc Drive data</li>
-          </ul>
-        </li>
-        <li>Click "Import All Data" to load everything into IndexedDB</li>
-        <li>Data persists in your browser's IndexedDB cache</li>
-        <li>Use export functions to backup your data</li>
+        <li>Reference data loads automatically on app startup - you can start building right away!</li>
+        <li>Create your builds and add discs through the app</li>
+        <li>Export your disc inventory regularly for backup</li>
+        <li>If you update game data files, use "Force Reload Reference Data"</li>
       </ol>
     </div>
   </div>

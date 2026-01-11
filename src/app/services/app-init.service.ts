@@ -59,9 +59,7 @@ export class AppInitService {
    */
   private async checkReferenceData(): Promise<boolean> {
     try {
-      // Check localStorage flag
-      const lastLoaded = localStorage.getItem('zzz-optimizer-reference-data-loaded');
-      return lastLoaded !== null;
+      return await this.dataImport.hasReferenceData();
     } catch {
       return false;
     }
@@ -72,18 +70,10 @@ export class AppInitService {
    */
   private async loadReferenceData(): Promise<void> {
     try {
-      console.log('Loading agents from assets/data/agents.json...');
-      const agentCount = await this.dataImport.importAgentsFromFile('assets/data/agents.json', true);
-      console.log(`✓ Successfully loaded ${agentCount} agents`);
+      console.log('Loading reference data from assets...');
+      const results = await this.dataImport.importAllReferenceData();
 
-      console.log('Loading W-Engines from assets/data/wengines.json...');
-      const wEngineCount = await this.dataImport.importWEnginesFromFile('assets/data/wengines.json', true);
-      console.log(`✓ Successfully loaded ${wEngineCount} W-Engines`);
-
-      // Mark reference data as loaded
-      localStorage.setItem('zzz-optimizer-reference-data-loaded', new Date().toISOString());
-
-      console.log(`Reference data loaded successfully: ${agentCount} agents, ${wEngineCount} W-Engines`);
+      console.log(`✓ Reference data loaded successfully: ${results.agents} agents, ${results.wEngines} W-Engines`);
     } catch (error) {
       console.error('Error loading reference data:', error);
       throw error;
@@ -94,7 +84,7 @@ export class AppInitService {
    * Force reload reference data (useful for updates)
    */
   async reloadReferenceData(): Promise<void> {
-    localStorage.removeItem('zzz-optimizer-reference-data-loaded');
+    await this.dataImport.clearReferenceData();
     this.initialized = false;
     await this.initialize();
   }

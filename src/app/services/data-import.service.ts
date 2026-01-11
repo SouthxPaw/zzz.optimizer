@@ -9,6 +9,23 @@ import { Agent } from '../models/agent.model';
 import { WEngine } from '../models/wengine.model';
 import { Disc } from '../models/disc.model';
 
+/**
+ * Data Import/Export Service
+ *
+ * IMPORTANT: This service handles TWO types of data:
+ *
+ * 1. REFERENCE DATA (from assets/data/*.json):
+ *    - agents.json, wengines.json
+ *    - Loaded ONCE on app initialization
+ *    - Should NOT be overwritten or modified
+ *    - Provides the game database for builds
+ *
+ * 2. USER DATA (user's personal data):
+ *    - User's disc inventory
+ *    - User's character builds
+ *    - Can be imported/exported for backup
+ *    - Stored separately from reference data
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -22,7 +39,10 @@ export class DataImportService {
   ) {}
 
   /**
-   * Import agents from a JSON file in the assets folder
+   * Import REFERENCE DATA: agents from a JSON file in the assets folder
+   * This loads the game's agent database and should only be done once on initialization.
+   * Does NOT modify existing reference data.
+   *
    * @param filePath Path to JSON file (e.g., 'assets/data/agents.json')
    * @param transformRawData If true, transforms raw game data format to app format
    */
@@ -59,7 +79,10 @@ export class DataImportService {
   }
 
   /**
-   * Import W-Engines from a JSON file in the assets folder
+   * Import REFERENCE DATA: W-Engines from a JSON file in the assets folder
+   * This loads the game's W-Engine database and should only be done once on initialization.
+   * Does NOT modify existing reference data.
+   *
    * @param filePath Path to JSON file (e.g., 'assets/data/wengines.json')
    * @param transformRawData If true, transforms raw game data format to app format
    */
@@ -95,7 +118,10 @@ export class DataImportService {
   }
 
   /**
-   * Import discs from a JSON file in the assets folder
+   * Import USER DATA: discs from a JSON file
+   * This imports the user's disc inventory (their personal collection).
+   * Can be used for backup/restore of user data.
+   *
    * @param filePath Path to JSON file (e.g., 'assets/data/discs.json')
    */
   async importDiscsFromFile(filePath: string = 'assets/data/discs.json'): Promise<number> {
@@ -122,7 +148,34 @@ export class DataImportService {
   }
 
   /**
-   * Import all data from the assets folder
+   * Import all REFERENCE DATA from the assets folder
+   * This loads the game database (agents, W-Engines) on first run.
+   * Should only be called once or when updating the game database.
+   */
+  async importAllReferenceData(): Promise<{agents: number, wEngines: number}> {
+    const results = {
+      agents: 0,
+      wEngines: 0
+    };
+
+    try {
+      results.agents = await this.importAgentsFromFile();
+    } catch (error) {
+      console.warn('Skipping agents import:', error);
+    }
+
+    try {
+      results.wEngines = await this.importWEnginesFromFile();
+    } catch (error) {
+      console.warn('Skipping W-Engines import:', error);
+    }
+
+    return results;
+  }
+
+  /**
+   * Import all data (both reference and user data) from the assets folder
+   * Use this for initial setup or full restore.
    */
   async importAllData(): Promise<{agents: number, wEngines: number, discs: number}> {
     const results = {
@@ -225,10 +278,33 @@ export class DataImportService {
   }
 
   /**
-   * Clear all data from IndexedDB
+   * Clear only USER DATA (keeps reference data intact)
+   */
+  async clearUserData(): Promise<void> {
+    await this.db.clearUserData();
+    console.log('User data cleared from IndexedDB');
+  }
+
+  /**
+   * Clear only REFERENCE DATA (keeps user data intact)
+   */
+  async clearReferenceData(): Promise<void> {
+    await this.db.clearReferenceData();
+    console.log('Reference data cleared from IndexedDB');
+  }
+
+  /**
+   * Clear ALL data from IndexedDB (both reference and user data)
    */
   async clearAllData(): Promise<void> {
     await this.db.clearAllData();
     console.log('All data cleared from IndexedDB');
+  }
+
+  /**
+   * Check if reference data is already loaded
+   */
+  async hasReferenceData(): Promise<boolean> {
+    return await this.db.hasReferenceData();
   }
 }
