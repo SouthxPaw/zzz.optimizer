@@ -83,30 +83,6 @@ export class OptimizerComponent implements OnInit {
     if (!this.selectedAgent) return;
 
     const preset = SCORING_PRESETS[this.selectedAgent.specialty];
-
-    // Set recommended stat minimums based on specialty
-    switch(this.selectedAgent.specialty) {
-      case 'Attack':
-        this.minCritRate = 50;
-        this.minCritDmg = 100;
-        break;
-      case 'Anomaly':
-        this.minCritRate = 0;
-        this.minCritDmg = 0;
-        break;
-      case 'Stun':
-        this.minCritRate = 30;
-        this.minCritDmg = 50;
-        break;
-      case 'Support':
-        this.minCritRate = 0;
-        this.minCritDmg = 0;
-        break;
-      case 'Defense':
-        this.minCritRate = 0;
-        this.minCritDmg = 0;
-        break;
-    }
   }
 
   optimize() {

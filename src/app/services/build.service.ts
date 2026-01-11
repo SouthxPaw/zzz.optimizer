@@ -2,6 +2,7 @@ import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DbService } from './db.service';
+import { StatCalculatorService } from './stat-calculator.service';
 import { Agent, BaseStats } from '../models/agent.model';
 import { WEngine } from '../models/wengine.model';
 import { Disc } from '../models/disc.model';
@@ -37,6 +38,7 @@ export class BuildService {
 
   constructor(
     private db: DbService,
+    private statCalculator: StatCalculatorService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.loadBuilds();
@@ -150,12 +152,38 @@ export class BuildService {
       updatedAt: new Date()
     };
 
+    // Recalculate stats if equipment changed
+    if (updates.equippedWEngine !== undefined || updates.equippedDiscs !== undefined) {
+      await this.recalculateStats(builds[index]);
+    }
+
     await this.saveBuilds(builds);
 
     // Update selected build if it's the one being updated
     if (this.selectedBuildSubject.value?.id === id) {
       this.selectedBuildSubject.next(builds[index]);
     }
+  }
+
+  /**
+   * Recalculate stats for a build based on equipped gear
+   */
+  private async recalculateStats(build: AgentBuild): Promise<void> {
+    // Get the agent reference data
+    const agent = await this.db.getAgent(build.agentId);
+    if (!agent) {
+      console.warn(`Agent ${build.agentId} not found, using cached stats`);
+      return;
+    }
+
+    // Calculate final stats using the stat calculator
+    build.calculatedStats = this.statCalculator.calculateFinalStats(
+      agent,
+      build.level,
+      build.equippedWEngine || null,
+      build.equippedDiscs,
+      build.mindscapeLevel
+    );
   }
 
   /**

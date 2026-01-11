@@ -34,7 +34,22 @@ export class StatCalculatorService {
     // Apply set bonuses
     this.applySetBonuses(stats, discs, agent);
 
-    return stats;
+    // Round all stats to avoid decimals
+    return {
+      hp: Math.round(stats.hp),
+      hppercent: Math.round(stats.hppercent * 10) / 10, // Round to 1 decimal
+      atk: Math.round(stats.atk),
+      atkpercent: Math.round(stats.atkpercent * 10) / 10,
+      def: Math.round(stats.def),
+      defpercent: Math.round(stats.defpercent * 10) / 10,
+      impact: Math.round(stats.impact),
+      anomalyMastery: Math.round(stats.anomalyMastery),
+      critRate: Math.round(stats.critRate * 10) / 10,
+      critDmg: Math.round(stats.critDmg * 10) / 10,
+      anomalyProficiency: Math.round(stats.anomalyProficiency),
+      penRatio: Math.round(stats.penRatio * 10) / 10,
+      energyRegen: Math.round(stats.energyRegen * 10) / 10
+    };
   }
 
   private applyWEngineStats(stats: BaseStats, wEngine: WEngine, agent: Agent): void {

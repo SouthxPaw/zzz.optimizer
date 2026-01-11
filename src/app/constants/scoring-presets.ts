@@ -13,8 +13,8 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
       Pen_Ratio: 1.2,
     },
     mainStatPreferences: {
-      Drive4: ['CRIT_Rate', 'CRIT_DMG'],
-      Drive5: ['Element_DMG'],
+      Drive4: ['CRIT_Rate', 'CRIT_DMG', 'ATK%'],
+      Drive5: ['Element_DMG', 'ATK%'],
       Drive6: ['ATK%'],
     },
   },
@@ -24,13 +24,14 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
       Anomaly_Proficiency: 2.0,
       'ATK%': 1.5,
       ATK: 0.5,
-      CRIT_Rate: 1.0,
-      CRIT_DMG: 0.8,
+      Pen_Ratio: 0.5,
+      CRIT_Rate: 0.0,
+      CRIT_DMG: 0.0,
     },
     mainStatPreferences: {
-      Drive4: ['Anomaly_Proficiency', 'CRIT_Rate'],
-      Drive5: ['Element_DMG', 'Pen_Ratio'],
-      Drive6: ['Anomaly_Proficiency', 'ATK%'],
+      Drive4: ['Anomaly_Proficiency'],
+      Drive5: ['Element_DMG', 'Pen_Ratio', 'ATK%'],
+      Drive6: ['Anomaly_Mastery', 'ATK%'],
     },
   },
   Stun: {
@@ -38,28 +39,29 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
     weights: {
       Impact: 2.0,
       CRIT_Rate: 1.0,
-      CRIT_DMG: 0.8,
+      CRIT_DMG: 1.0,
       'ATK%': 1.0,
-      Energy_Regen: 1.2,
+      Energy_Regen: 0.8,
     },
     mainStatPreferences: {
-      Drive4: ['CRIT_Rate', 'Impact'],
-      Drive5: ['Element_DMG'],
+      Drive4: ['CRIT_Rate', 'CRIT_DMG'],
+      Drive5: ['Element_DMG', 'ATK%'],
       Drive6: ['Impact', 'Energy_Regen'],
     },
   },
   Support: {
     name: 'Support Build',
     weights: {
-      Energy_Regen: 2.0,
-      'HP%': 1.2,
-      'DEF%': 1.0,
-      'ATK%': 1.0,
+      Energy_Regen: 1.0,
+      'Pen_Ratio': 1.0,
+      'HP%': 0.5,
+      'DEF%': 0.5,
+      'ATK%': 2.0,
     },
     mainStatPreferences: {
-      Drive4: ['CRIT_Rate', 'HP%'],
-      Drive5: ['Pen_Ratio'],
-      Drive6: ['Energy_Regen'],
+      Drive4: ['CRIT_Rate', 'CRIT_DMG', 'ATK%', 'Anomaly_Proficiency'],
+      Drive5: ['ATK%', 'Element_DMG'],
+      Drive6: ['Energy_Regen', 'ATK%'],
     },
   },
   Defense: {
@@ -72,18 +74,23 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
       Energy_Regen: 1.0,
     },
     mainStatPreferences: {
-      Drive4: ['DEF%', 'HP%'],
-      Drive5: ['Pen_Ratio'],
-      Drive6: ['Energy_Regen', 'DEF%'],
+      Drive4: ['CRIT_Rate', 'CRIT_DMG', 'Anomaly_Proficiency', 'ATK%'],
+      Drive5: ['ATK%', 'Element_DMG'],
+      Drive6: ['ATK%', 'Impact', 'Energy_Regen'],
     },
   },
   Rupture: {
     name: 'Rupture Build',
     weights: {
-      'HP%': 2.0
+      'HP%': 2.0,
+      'CRIT_Rate': 1.0,
+      'CRIT_DMG': 1.0,
+      'HP': 0.5
     },
     mainStatPreferences: {
-
+      Drive4: ['CRIT_Rate', 'CRIT_DMG'],
+      Drive5: ['Element_DMG', 'HP%'],
+      Drive6: ['HP%']
     },
   }
 };
