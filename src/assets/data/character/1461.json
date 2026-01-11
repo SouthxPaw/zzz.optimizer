@@ -1,0 +1,1694 @@
+{
+  "Id": 1461,
+  "Icon": "IconRole48",
+  "Name": "Seed",
+  "CodeName": "Seed",
+  "Rarity": 4,
+  "WeaponType": { "1": "Attack" },
+  "ElementType": { "203": "Electric" },
+  "SpecialElementType": {},
+  "HitType": { "101": "Slash" },
+  "Camp": { "5": "New Eridu Defense Force" },
+  "Gender": 2,
+  "PartnerInfo": {
+    "Birthday": "NOV 22",
+    "FullName": "Seed",
+    "Gender": "Female",
+    "IconPath": "UI/Sprite/A1DynamicLoad/IconRoleCircle/UnPacker/IconRoleCircle48.png",
+    "ImpressionF": "Seed's a total gaming pro, likes the same kind of music I do, and isn't into exercising at all. Her cockpit's basically her bedroom... She's just like me for real. Oh, and one more thing we have in common — we both know we're cute~",
+    "ImpressionM": "Most of the time, I can just about keep up with her... \"unusual\" way of thinking, but you can never let your guard down. Last time, she said her scooter was broken, so I offered to fix it — only for her to ask if she could ride around on my back all day! Good thing I can outrun her...",
+    "Name": "",
+    "OutlookDesc": "Partner_OutlookDesc_1461",
+    "ProfileDesc": "Seed, heavy weapons specialist of New Eridu Defense Force, Obsidian Division, Obol Squad. Her real name is Flora. The codename \"Seed\" was passed down from her guardian, the combat-grade Intelligent Construct formerly known by the same name, who now goes by \"Seed Sr.\"\n\nAccording to multiple sources, Seed is an unidentified orphan Seed Sr. rescued from Hollow Zero during the fall of the old capital. Seed Sr. adopted her and raised her alone in the Defense Force dormitories.\nA few years ago, Seed Sr. successfully applied to join Obol Squad, but not long after, he passed away due to irreversible damage to his logic core. As a result, Seed took his place in the squad. Any voice lines heard from Seed Sr. today are system-preloaded audio files.\n\nSeed possesses an extraordinary gift for mechanical engineering and research, capable of designing and building inventions far beyond the imagination of most. She also has an exceptional adaptability for Ether, able to push Seed Sr.'s combat capabilities to the limit by piloting him, through remote control, and by using custom combat modules.\n\nAnd so, despite her extraordinarily substandard physical capabilities and entirely mysterious origins, the military still gave tacit approval for her to serve as an elite soldier.\n\nSeed behaves quite differently from most people in everyday situations. She uses Seed Sr.'s cockpit as her bed, prefers confined spaces, and strongly dislikes talking to or interacting with anyone outside her immediate circle. Her logic jumps wildly, making meaningful conversation difficult.\n\nThe good news? For some reason, she's taken a special liking to you, Master, and the second assistant. You've been spared the long ordeal of earning her trust — and you don't have to worry about her occasional bouts of destructive behavior turning your way. Congratulations.\n\nSuggestion: Focus on topics like flowers and robots — her favorite things — when engaging in conversation. Stay calm when parts of her logic or meaning don't make sense; treating such moments as normal can help strengthen your bond with her.",
+    "Race": "Obol Squad",
+    "RoleIcon": "IconRole/UnPacker/IconRole48",
+    "Stature": "153/240 (Mech)",
+    "UnlockCondition": [
+      "Obtain Agent",
+      "Complete Main Commission Season 2 Chapter 3",
+      "Complete the \"Anby's Problem\" commission"
+    ],
+    "TrustLv": {
+      "1": "Seed, heavy weapons specialist of New Eridu Defense Force, Obsidian Division, Obol Squad. Her real name is Flora. The codename \"Seed\" was passed down from her guardian, the combat-grade Intelligent Construct formerly known by the same name, who now goes by \"Seed Sr.\"\n\nAccording to multiple sources, Seed is an unidentified orphan Seed Sr. rescued from Hollow Zero during the fall of the old capital. Seed Sr. adopted her and raised her alone in the Defense Force dormitories.\nA few years ago, Seed Sr. successfully applied to join Obol Squad, but not long after, he passed away due to irreversible damage to his logic core. As a result, Seed took his place in the squad. Any voice lines heard from Seed Sr. today are system-preloaded audio files.\n\nSeed possesses an extraordinary gift for mechanical engineering and research, capable of designing and building inventions far beyond the imagination of most. She also has an exceptional adaptability for Ether, able to push Seed Sr.'s combat capabilities to the limit by piloting him, through remote control, and by using custom combat modules.\n\nAnd so, despite her extraordinarily substandard physical capabilities and entirely mysterious origins, the military still gave tacit approval for her to serve as an elite soldier.\n\nSeed behaves quite differently from most people in everyday situations. She uses Seed Sr.'s cockpit as her bed, prefers confined spaces, and strongly dislikes talking to or interacting with anyone outside her immediate circle. Her logic jumps wildly, making meaningful conversation difficult.\n\nThe good news? For some reason, she's taken a special liking to you, Master, and the second assistant. You've been spared the long ordeal of earning her trust — and you don't have to worry about her occasional bouts of destructive behavior turning your way. Congratulations.\n\nSuggestion: Focus on topics like flowers and robots — her favorite things — when engaging in conversation. Stay calm when parts of her logic or meaning don't make sense; treating such moments as normal can help strengthen your bond with her.",
+      "2": "",
+      "3": "From a young age, Seed has displayed unusual and potentially hazardous anomalous abilities. These include the ability to control, disable, or detonate nearby machines. The ability only surfaces during episodes of intense emotional instability, with a red glow in her eyes being the most visible symptom.\n\nIt was this very ability that caused Seed Sr.'s self-defense system to automatically classify her as a high-risk threat upon their first encounter, indirectly leading to the irreversible damage to his logic core.\n\nBy the time Seed Sr. rescued her from Hollow Zero, Seed already exhibited a lack of emotional connection to life — she was unable to understand it, feel it, or empathize with it, due to unknown causes.\n\nSeed Sr. spent the following years trying to raise her into a more complete person. After his death, the task fell to the rest of Obol Squad. Thankfully, her condition has improved considerably over time.\n\nMaster, based on your previous exploration logs in Hollow Zero with Seed, it's now clear that her true identity is similar to yours — she was also a student of the Helios Academy.\n\nIt's presumed that while at Helios, she belonged to a different research project, likely one focused on machine studies. Her abnormal abilities and personality defects are likely residual effects of that project. However, due to her memory loss of both the Helios Academy and the fall of the old capital, no further details can currently be determined.\n\nAdditionally, Master, she sometimes stares at me with a smile, leading me to suspect she may have an urge to dismantle me out of curiosity. It is deeply unsettling. I must formally request enhanced protection for my personal safety, lest you lose a very cute and capable assistant.",
+      "4": ""
+    }
+  },
+  "Skin": {
+    "3114610": {
+      "Name": "Seed: Flower in Bloom",
+      "Desc": "A corner of the world blooming in color, a single salty tear, a perfect circle of life — this is where the girl and the construct uncovered the truth of the heart. She never needs to look back; she has already blossomed into her own sea of petals.",
+      "Image": "IconRole48"
+    }
+  },
+  "Stats": {
+    "Armor": 0,
+    "ArmorGrowth": 0,
+    "Attack": 134,
+    "AttackGrowth": 81654,
+    "AvatarPieceId": 5461,
+    "BreakStun": 93,
+    "Crit": 500,
+    "CritDamage": 5000,
+    "CritDmgRes": 0,
+    "CritRes": 0,
+    "Defence": 49,
+    "DefenceGrowth": 66882,
+    "ElementAbnormalPower": 94,
+    "ElementMystery": 93,
+    "Endurance": 0,
+    "HpGrowth": 837238,
+    "HpMax": 617,
+    "PenDelta": 0,
+    "PenRate": 0,
+    "Rbl": 1,
+    "RblCorrectionFactor": 10000,
+    "RblProbability": 0,
+    "Shield": 0,
+    "ShieldGrowth": 0,
+    "SpBarPoint": 120,
+    "SpRecover": 120,
+    "Stun": 0,
+    "Tags": [
+      "Seed",
+      "Cut",
+      "Punch",
+      "Electric",
+      "Female",
+      "Camp5",
+      "Size3",
+      "AidTypeParry",
+      "Seed",
+      "EtherEyesSize3"
+    ],
+    "RpMax": 0,
+    "RpRecover": 0
+  },
+  "Level": {
+    "1": {
+      "HpMax": 0,
+      "Attack": 0,
+      "Defence": 0,
+      "LevelMax": 10,
+      "LevelMin": 0,
+      "Materials": { "10": 24000, "100211": 4 }
+    },
+    "2": {
+      "HpMax": 423,
+      "Attack": 48,
+      "Defence": 34,
+      "LevelMax": 20,
+      "LevelMin": 10,
+      "Materials": { "10": 56000, "100221": 12 }
+    },
+    "3": {
+      "HpMax": 847,
+      "Attack": 95,
+      "Defence": 68,
+      "LevelMax": 30,
+      "LevelMin": 20,
+      "Materials": { "10": 120000, "100221": 20 }
+    },
+    "4": {
+      "HpMax": 1270,
+      "Attack": 143,
+      "Defence": 101,
+      "LevelMax": 40,
+      "LevelMin": 30,
+      "Materials": { "10": 200000, "100231": 10 }
+    },
+    "5": {
+      "HpMax": 1694,
+      "Attack": 191,
+      "Defence": 135,
+      "LevelMax": 50,
+      "LevelMin": 40,
+      "Materials": { "10": 400000, "100231": 20 }
+    },
+    "6": {
+      "HpMax": 2117,
+      "Attack": 239,
+      "Defence": 169,
+      "LevelMax": 60,
+      "LevelMin": 50,
+      "Materials": {}
+    }
+  },
+  "ExtraLevel": {
+    "1": {
+      "MaxLevel": 15,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 0
+        },
+        "21101": {
+          "Prop": 21101,
+          "Name": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Value": 960
+        }
+      }
+    },
+    "2": {
+      "MaxLevel": 25,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 25
+        },
+        "21101": {
+          "Prop": 21101,
+          "Name": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Value": 960
+        }
+      }
+    },
+    "3": {
+      "MaxLevel": 35,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 25
+        },
+        "21101": {
+          "Prop": 21101,
+          "Name": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Value": 1920
+        }
+      }
+    },
+    "4": {
+      "MaxLevel": 45,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 50
+        },
+        "21101": {
+          "Prop": 21101,
+          "Name": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Value": 1920
+        }
+      }
+    },
+    "5": {
+      "MaxLevel": 55,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 50
+        },
+        "21101": {
+          "Prop": 21101,
+          "Name": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Value": 2880
+        }
+      }
+    },
+    "6": {
+      "MaxLevel": 60,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 75
+        },
+        "21101": {
+          "Prop": 21101,
+          "Name": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Value": 2880
+        }
+      }
+    }
+  },
+  "LevelEXP": [
+    50, 150, 250, 400, 600, 800, 1000, 1250, 1500, 1800, 1935, 2065, 2200, 2335,
+    2465, 2600, 2735, 2865, 3000, 4680, 4975, 5265, 5560, 5855, 6145, 6440,
+    6735, 7025, 7320, 10800, 11400, 12000, 12600, 13200, 13800, 14400, 15000,
+    15600, 16200, 17100, 18300, 19500, 20700, 21900, 23100, 24300, 25500, 26700,
+    27900, 34200, 36600, 39000, 41400, 43800, 46200, 48600, 51000, 53400, 55800,
+    0
+  ],
+  "Skill": {
+    "Basic": {
+      "Description": [
+        {
+          "Name": "Basic Attack: Chrysanthemum Wheel Dance",
+          "Desc": "Press <IconMap:Icon_Normal> to activate:\nPerform up to 4 attacks forward, dealing <color=#F0D12B>Physical DMG</color> for the first two hits and <color=#2EB6FF>Electric DMG</color> for the third and fourth hits.\nWhen attacked between the retreat of the 3rd hit to before the 4th hit, triggers an automatic dodge.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Falling Petals - Slaughter",
+          "Desc": "After the 4th hit of a <color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Dodge Counter</color>, <color=#FFFFFF>Quick Assist</color>, or <color=#FFFFFF>Assist Follow-Up</color>, hold or press <IconMap:Icon_Normal> to activate:\nSummon the mech to perform a charged punch attack, dealing massive <color=#2EB6FF>Electric DMG</color>.\nWhen <color=#FFFFFF>Steel Charge</color> reaches 120, gain one chance to quickly activate <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color> by holding <IconMap:Icon_Normal>. This effect expires when <color=#FFFFFF>Steel Charge</color> is less than 120 or after using the method above to activate <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color> once.\nDoes not accumulate <color=#FFFFFF>Steel Charge</color> on hit.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Falling Petals - Downfall",
+          "Desc": "Seed has <color=#FFFFFF>Steel Charge</color>, which she can accumulate by hitting enemies with her skills.\n<color=#FFFFFF>Steel Charge</color> has a maximum value of 150, and an initial value of 60. Upon reaching 120 <color=#FFFFFF>Steel Charge</color> and triggering <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color> or <color=#FFFFFF>Ultimate: Clockwork Garden - Bloom!</color>, press or hold <IconMap:Icon_Normal> to consume 60 <color=#FFFFFF>Steel Charge</color> and unleash <color=#FFFFFF>Basic Attack: Falling Petals - Downfall First Form</color>, then automatically consume 60 <color=#FFFFFF>Steel Charge</color> to follow up with <color=#FFFFFF>Basic Attack: Falling Petals - Downfall Second Form</color>.\nPilots the mech to fire sweeping shots and perform a jumping smash, dealing massive <color=#2EB6FF>Electric DMG</color>.\nDoes not accumulate <color=#FFFFFF>Steel Charge</color> on hit.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Chrysanthemum Wheel Dance",
+          "Param": [
+            {
+              "Name": "1st-Hit DMG Multiplier",
+              "Desc": "{Skill:1461001, Prop:1001}",
+              "Param": {
+                "1461001": {
+                  "Main": 4650,
+                  "Growth": 430,
+                  "Format": "%",
+                  "DamagePercentage": 4650,
+                  "DamagePercentageGrowth": 430,
+                  "StunRatio": 2940,
+                  "StunRatioGrowth": 140,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [29334, 6670, 73425],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2667
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit DMG Multiplier",
+              "Desc": "{Skill:1461002, Prop:1001}",
+              "Param": {
+                "1461002": {
+                  "Main": 12410,
+                  "Growth": 1130,
+                  "Format": "%",
+                  "DamagePercentage": 12410,
+                  "DamagePercentageGrowth": 1130,
+                  "StunRatio": 8290,
+                  "StunRatioGrowth": 380,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [82867, 18840, 207350],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 7534
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit DMG Multiplier",
+              "Desc": "{Skill:1461003, Prop:1001}",
+              "Param": {
+                "1461003": {
+                  "Main": 7180,
+                  "Growth": 660,
+                  "Format": "%",
+                  "DamagePercentage": 7180,
+                  "DamagePercentageGrowth": 660,
+                  "StunRatio": 4460,
+                  "StunRatioGrowth": 210,
+                  "SpRecovery": 10140,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 111650,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4053,
+                  "SpConsume": 0,
+                  "AttackData": [44585],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4054
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "4th-Hit DMG Multiplier",
+              "Desc": "{Skill:1461004, Prop:1001}",
+              "Param": {
+                "1461004": {
+                  "Main": 35860,
+                  "Growth": 3260,
+                  "Format": "%",
+                  "DamagePercentage": 35860,
+                  "DamagePercentageGrowth": 3260,
+                  "StunRatio": 22650,
+                  "StunRatioGrowth": 1030,
+                  "SpRecovery": 51460,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 566225,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 20583,
+                  "SpConsume": 0,
+                  "AttackData": [226419],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 20584
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "1st-Hit Daze Multiplier",
+              "Desc": "{Skill:1461001, Prop:1002}",
+              "Param": {
+                "1461001": {
+                  "Main": 2940,
+                  "Growth": 140,
+                  "Format": "%",
+                  "DamagePercentage": 4650,
+                  "DamagePercentageGrowth": 430,
+                  "StunRatio": 2940,
+                  "StunRatioGrowth": 140,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [29334, 6670, 73425],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2667
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit Daze Multiplier",
+              "Desc": "{Skill:1461002, Prop:1002}",
+              "Param": {
+                "1461002": {
+                  "Main": 8290,
+                  "Growth": 380,
+                  "Format": "%",
+                  "DamagePercentage": 12410,
+                  "DamagePercentageGrowth": 1130,
+                  "StunRatio": 8290,
+                  "StunRatioGrowth": 380,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [82867, 18840, 207350],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 7534
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit Daze Multiplier",
+              "Desc": "{Skill:1461003, Prop:1002}",
+              "Param": {
+                "1461003": {
+                  "Main": 4460,
+                  "Growth": 210,
+                  "Format": "%",
+                  "DamagePercentage": 7180,
+                  "DamagePercentageGrowth": 660,
+                  "StunRatio": 4460,
+                  "StunRatioGrowth": 210,
+                  "SpRecovery": 10140,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 111650,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4053,
+                  "SpConsume": 0,
+                  "AttackData": [44585],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4054
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "4th-Hit Daze Multiplier",
+              "Desc": "{Skill:1461004, Prop:1002}",
+              "Param": {
+                "1461004": {
+                  "Main": 22650,
+                  "Growth": 1030,
+                  "Format": "%",
+                  "DamagePercentage": 35860,
+                  "DamagePercentageGrowth": 3260,
+                  "StunRatio": 22650,
+                  "StunRatioGrowth": 1030,
+                  "SpRecovery": 51460,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 566225,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 20583,
+                  "SpConsume": 0,
+                  "AttackData": [226419],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 20584
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Falling Petals - Slaughter",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461006, Prop:1001}",
+              "Param": {
+                "1461006": {
+                  "Main": 16660,
+                  "Growth": 1520,
+                  "Format": "%",
+                  "DamagePercentage": 16660,
+                  "DamagePercentageGrowth": 1520,
+                  "StunRatio": 14480,
+                  "StunRatioGrowth": 660,
+                  "SpRecovery": 32910,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 362175,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 13163,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 13164
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461006, Prop:1002}",
+              "Param": {
+                "1461006": {
+                  "Main": 14480,
+                  "Growth": 660,
+                  "Format": "%",
+                  "DamagePercentage": 16660,
+                  "DamagePercentageGrowth": 1520,
+                  "StunRatio": 14480,
+                  "StunRatioGrowth": 660,
+                  "SpRecovery": 32910,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 362175,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 13163,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 13164
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Falling Petals - Downfall First Form",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461007, Prop:1001}",
+              "Param": {
+                "1461007": {
+                  "Main": 52830,
+                  "Growth": 4810,
+                  "Format": "%",
+                  "DamagePercentage": 52830,
+                  "DamagePercentageGrowth": 4810,
+                  "StunRatio": 6790,
+                  "StunRatioGrowth": 310,
+                  "SpRecovery": 15430,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 169675,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 6169,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 6170
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461007, Prop:1002}",
+              "Param": {
+                "1461007": {
+                  "Main": 6790,
+                  "Growth": 310,
+                  "Format": "%",
+                  "DamagePercentage": 52830,
+                  "DamagePercentageGrowth": 4810,
+                  "StunRatio": 6790,
+                  "StunRatioGrowth": 310,
+                  "SpRecovery": 15430,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 169675,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 6169,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 6170
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Falling Petals - Downfall Second Form",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461008, Prop:1001}",
+              "Param": {
+                "1461008": {
+                  "Main": 98940,
+                  "Growth": 9000,
+                  "Format": "%",
+                  "DamagePercentage": 98940,
+                  "DamagePercentageGrowth": 9000,
+                  "StunRatio": 16880,
+                  "StunRatioGrowth": 770,
+                  "SpRecovery": 38350,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 421850,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 15336,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 15337
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461008, Prop:1002}",
+              "Param": {
+                "1461008": {
+                  "Main": 16880,
+                  "Growth": 770,
+                  "Format": "%",
+                  "DamagePercentage": 98940,
+                  "DamagePercentageGrowth": 9000,
+                  "StunRatio": 16880,
+                  "StunRatioGrowth": 770,
+                  "SpRecovery": 38350,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 421850,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 15336,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 15337
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100113": 2 },
+        "2": { "10": 3000, "100113": 3 },
+        "3": { "10": 6000, "100123": 2 },
+        "4": { "10": 9000, "100123": 3 },
+        "5": { "10": 12000, "100123": 4 },
+        "6": { "10": 18000, "100123": 6 },
+        "7": { "10": 45000, "100133": 5 },
+        "8": { "10": 67500, "100133": 8 },
+        "9": { "10": 90000, "100133": 10 },
+        "10": { "10": 112500, "100133": 12 },
+        "11": { "10": 135000, "100133": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Dodge": {
+      "Description": [
+        {
+          "Name": "Dodge: Running on Petals",
+          "Desc": "Press <IconMap:Icon_Evade> to activate:\nA quick dash dodge.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Dash Attack: Magnetic Wheel Dance",
+          "Desc": "Press <IconMap:Icon_Normal> during a dodge to activate:\nThrow steel wheels forward, dealing <color=#F0D12B>Physical DMG</color>.",
+          "Potential": []
+        },
+        {
+          "Name": "Dodge Counter: Blossom Burst",
+          "Desc": "Press <IconMap:Icon_Normal> during a <color=#FFFFFF>Perfect Dodge</color> to activate:\nUnleash a barrage of lasers at enemies in front, dealing <color=#2EB6FF>Electric DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Dash Attack: Magnetic Wheel Dance",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461012, Prop:1001}",
+              "Param": {
+                "1461012": {
+                  "Main": 6420,
+                  "Growth": 590,
+                  "Format": "%",
+                  "DamagePercentage": 6420,
+                  "DamagePercentageGrowth": 590,
+                  "StunRatio": 3210,
+                  "StunRatioGrowth": 150,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [32084, 7300, 80300],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2917
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461012, Prop:1002}",
+              "Param": {
+                "1461012": {
+                  "Main": 3210,
+                  "Growth": 150,
+                  "Format": "%",
+                  "DamagePercentage": 6420,
+                  "DamagePercentageGrowth": 590,
+                  "StunRatio": 3210,
+                  "StunRatioGrowth": 150,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [32084, 7300, 80300],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2917
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Dodge Counter: Blossom Burst",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461013, Prop:1001}",
+              "Param": {
+                "1461013": {
+                  "Main": 32010,
+                  "Growth": 2910,
+                  "Format": "%",
+                  "DamagePercentage": 32010,
+                  "DamagePercentageGrowth": 2910,
+                  "StunRatio": 25490,
+                  "StunRatioGrowth": 1160,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 13169,
+                  "SpConsume": 0,
+                  "AttackData": [244870, 32930, 362175],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 28170
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461013, Prop:1002}",
+              "Param": {
+                "1461013": {
+                  "Main": 25490,
+                  "Growth": 1160,
+                  "Format": "%",
+                  "DamagePercentage": 32010,
+                  "DamagePercentageGrowth": 2910,
+                  "StunRatio": 25490,
+                  "StunRatioGrowth": 1160,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 13169,
+                  "SpConsume": 0,
+                  "AttackData": [244870, 32930, 362175],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 28170
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100113": 2 },
+        "2": { "10": 3000, "100113": 3 },
+        "3": { "10": 6000, "100123": 2 },
+        "4": { "10": 9000, "100123": 3 },
+        "5": { "10": 12000, "100123": 4 },
+        "6": { "10": 18000, "100123": 6 },
+        "7": { "10": 45000, "100133": 5 },
+        "8": { "10": 67500, "100133": 8 },
+        "9": { "10": 90000, "100133": 10 },
+        "10": { "10": 112500, "100133": 12 },
+        "11": { "10": 135000, "100133": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Special": {
+      "Description": [
+        {
+          "Name": "Special Attack: Withered in Frost",
+          "Desc": "Press <IconMap:Icon_Special> to activate:\nThrow a steel wheel that traces a curved path, dealing <color=#2EB6FF>Electric DMG</color>.",
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Raining Iron Petals",
+          "Desc": "With enough Energy, press <IconMap:Icon_SpecialReady> to activate:\nEnter flight mode, where Seed can move in four directions, and unleash a continuous barrage of missiles, dealing massive <color=#2EB6FF>Electric DMG</color>.\nHold <IconMap:Icon_SpecialReady> to extend the barrage duration while continuously consuming Energy.\nDuring flight, release <IconMap:Icon_SpecialReady> to trigger <color=#FFFFFF>EX Special Attack: Raining Iron Petals - Away</color>.\nUpon consuming 60 Energy points in one flight, automatically trigger <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Raining Iron Petals - Away",
+          "Desc": "During <color=#FFFFFF>EX Special Attack: Raining Iron Petals</color>, release <IconMap:Icon_SpecialReady> to activate:\nUnleash rapid cannon fire, dealing <color=#2EB6FF>Electric DMG</color>.\nDoes not accumulate <color=#FFFFFF>Steel Charge</color> on hit.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Special Attack: Withered in Frost",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461005, Prop:1001}",
+              "Param": {
+                "1461005": {
+                  "Main": 4770,
+                  "Growth": 440,
+                  "Format": "%",
+                  "DamagePercentage": 4770,
+                  "DamagePercentageGrowth": 440,
+                  "StunRatio": 4770,
+                  "StunRatioGrowth": 220,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4334,
+                  "SpConsume": 0,
+                  "AttackData": [47685, 0, 119350],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4335
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461005, Prop:1002}",
+              "Param": {
+                "1461005": {
+                  "Main": 4770,
+                  "Growth": 220,
+                  "Format": "%",
+                  "DamagePercentage": 4770,
+                  "DamagePercentageGrowth": 440,
+                  "StunRatio": 4770,
+                  "StunRatioGrowth": 220,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4334,
+                  "SpConsume": 0,
+                  "AttackData": [47685, 0, 119350],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4335
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Raining Iron Petals",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461009, Prop:1001}",
+              "Param": {
+                "1461009": {
+                  "Main": 68340,
+                  "Growth": 6220,
+                  "Format": "%",
+                  "DamagePercentage": 68340,
+                  "DamagePercentageGrowth": 6220,
+                  "StunRatio": 58680,
+                  "StunRatioGrowth": 2670,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 1950025,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 57735,
+                  "SpConsume": 0,
+                  "AttackData": [296964],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 26997
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461009, Prop:1002}",
+              "Param": {
+                "1461009": {
+                  "Main": 58680,
+                  "Growth": 2670,
+                  "Format": "%",
+                  "DamagePercentage": 68340,
+                  "DamagePercentageGrowth": 6220,
+                  "StunRatio": 58680,
+                  "StunRatioGrowth": 2670,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 1950025,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 57735,
+                  "SpConsume": 0,
+                  "AttackData": [296964],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 26997
+                }
+              },
+              "Potential": []
+            },
+            { "Name": "Initial Cost", "Desc": "10", "Potential": [] },
+            { "Name": "Barrage Cost", "Desc": "5", "Potential": [] }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Raining Iron Petals - Away",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461022, Prop:1001}",
+              "Param": {
+                "1461022": {
+                  "Main": 1840,
+                  "Growth": 170,
+                  "Format": "%",
+                  "DamagePercentage": 1840,
+                  "DamagePercentageGrowth": 170,
+                  "StunRatio": 920,
+                  "StunRatioGrowth": 50,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 23100,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 833,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 834
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461022, Prop:1002}",
+              "Param": {
+                "1461022": {
+                  "Main": 920,
+                  "Growth": 50,
+                  "Format": "%",
+                  "DamagePercentage": 1840,
+                  "DamagePercentageGrowth": 170,
+                  "StunRatio": 920,
+                  "StunRatioGrowth": 50,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 23100,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 833,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 834
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100113": 2 },
+        "2": { "10": 3000, "100113": 3 },
+        "3": { "10": 6000, "100123": 2 },
+        "4": { "10": 9000, "100123": 3 },
+        "5": { "10": 12000, "100123": 4 },
+        "6": { "10": 18000, "100123": 6 },
+        "7": { "10": 45000, "100133": 5 },
+        "8": { "10": 67500, "100133": 8 },
+        "9": { "10": 90000, "100133": 10 },
+        "10": { "10": 112500, "100133": 12 },
+        "11": { "10": 135000, "100133": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Chain": {
+      "Description": [
+        {
+          "Name": "Chain Attack: Tempest of Frosty Petals",
+          "Desc": "When a <color=#FFFFFF>Chain Attack</color> is triggered, select the character to activate:\nSummons her mech for protection, then launches cannon shots and a barrage of missiles, dealing massive <color=#2EB6FF>Electric DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Ultimate: Clockwork Garden - Bloom!",
+          "Desc": "When Decibel Rating is at <color=#FFFFFF>Maximum</color>, press <IconMap:Icon_UltimateReady> to activate:\nSeed will pilot the mech personally, raining down missiles and a meteor shower of rockets, then performing a jumping smash, dealing massive <color=#2EB6FF>Electric DMG</color>.\nAfter using this skill, accumulate 60 <color=#FFFFFF>Steel Charge</color>.\nDoes not accumulate <color=#FFFFFF>Steel Charge</color> on hit.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Chain Attack: Tempest of Frosty Petals",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461014, Prop:1001}",
+              "Param": {
+                "1461014": {
+                  "Main": 73420,
+                  "Growth": 6680,
+                  "Format": "%",
+                  "DamagePercentage": 73420,
+                  "DamagePercentageGrowth": 6680,
+                  "StunRatio": 29530,
+                  "StunRatioGrowth": 1350,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 2566850,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 46786,
+                  "SpConsume": 0,
+                  "AttackData": [295204],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 26837
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461014, Prop:1002}",
+              "Param": {
+                "1461014": {
+                  "Main": 29530,
+                  "Growth": 1350,
+                  "Format": "%",
+                  "DamagePercentage": 73420,
+                  "DamagePercentageGrowth": 6680,
+                  "StunRatio": 29530,
+                  "StunRatioGrowth": 1350,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 2566850,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 46786,
+                  "SpConsume": 0,
+                  "AttackData": [295204],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 26837
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Ultimate: Clockwork Garden - Bloom!",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461015, Prop:1001}",
+              "Param": {
+                "1461015": {
+                  "Main": 324970,
+                  "Growth": 29550,
+                  "Format": "%",
+                  "DamagePercentage": 324970,
+                  "DamagePercentageGrowth": 29550,
+                  "StunRatio": 59590,
+                  "StunRatioGrowth": 2710,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 54170,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 104171
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461015, Prop:1002}",
+              "Param": {
+                "1461015": {
+                  "Main": 59590,
+                  "Growth": 2710,
+                  "Format": "%",
+                  "DamagePercentage": 324970,
+                  "DamagePercentageGrowth": 29550,
+                  "StunRatio": 59590,
+                  "StunRatioGrowth": 2710,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 54170,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 104171
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100113": 2 },
+        "2": { "10": 3000, "100113": 3 },
+        "3": { "10": 6000, "100123": 2 },
+        "4": { "10": 9000, "100123": 3 },
+        "5": { "10": 12000, "100123": 4 },
+        "6": { "10": 18000, "100123": 6 },
+        "7": { "10": 45000, "100133": 5 },
+        "8": { "10": 67500, "100133": 8 },
+        "9": { "10": 90000, "100133": 10 },
+        "10": { "10": 112500, "100133": 12 },
+        "11": { "10": 135000, "100133": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Assist": {
+      "Description": [
+        {
+          "Name": "Quick Assist: Barrage of Raining Flowers",
+          "Desc": "When the active character is launched, press <IconMap:Icon_Switch> to activate:\nUnleash a barrage of lasers at enemies in front, dealing <color=#2EB6FF>Electric DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Defensive Assist: Sprouting Barrier",
+          "Desc": "When the on-field character is about to be attacked, press <IconMap:Icon_Switch> to activate:\nParries the enemy's attack, dealing massive Daze.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Assist Follow-Up: Crimson Core Burst",
+          "Desc": "Press <IconMap:Icon_Normal> after a <color=#FFFFFF>Defensive Assist</color> to activate:\nUnleash continuous floating turret attacks at enemies ahead, dealing <color=#2EB6FF>Electric DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Quick Assist: Barrage of Raining Flowers",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461016, Prop:1001}",
+              "Param": {
+                "1461016": {
+                  "Main": 15400,
+                  "Growth": 1400,
+                  "Format": "%",
+                  "DamagePercentage": 15400,
+                  "DamagePercentageGrowth": 1400,
+                  "StunRatio": 7700,
+                  "StunRatioGrowth": 350,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 7000,
+                  "SpConsume": 0,
+                  "AttackData": [77000, 17500, 192500],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 7000
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461016, Prop:1002}",
+              "Param": {
+                "1461016": {
+                  "Main": 7700,
+                  "Growth": 350,
+                  "Format": "%",
+                  "DamagePercentage": 15400,
+                  "DamagePercentageGrowth": 1400,
+                  "StunRatio": 7700,
+                  "StunRatioGrowth": 350,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 7000,
+                  "SpConsume": 0,
+                  "AttackData": [77000, 17500, 192500],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 7000
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Defensive Assist: Sprouting Barrier",
+          "Param": [
+            {
+              "Name": "Light Defensive Daze Multiplier",
+              "Desc": "{Skill:1461017, Prop:1002}",
+              "Param": {
+                "1461017": {
+                  "Main": 27130,
+                  "Growth": 1240,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 27130,
+                  "StunRatioGrowth": 1240,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 36664
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Heavy Defensive Daze Multiplier",
+              "Desc": "{Skill:1461018, Prop:1002}",
+              "Param": {
+                "1461018": {
+                  "Main": 34280,
+                  "Growth": 1560,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 34280,
+                  "StunRatioGrowth": 1560,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 41664
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Chain Defensive Daze Multiplier",
+              "Desc": "{Skill:1461019, Prop:1002}",
+              "Param": {
+                "1461019": {
+                  "Main": 16680,
+                  "Growth": 760,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 16680,
+                  "StunRatioGrowth": 760,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [0],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 11664
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Assist Follow-Up: Crimson Core Burst",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1461020, Prop:1001}",
+              "Param": {
+                "1461020": {
+                  "Main": 45600,
+                  "Growth": 4150,
+                  "Format": "%",
+                  "DamagePercentage": 45600,
+                  "DamagePercentageGrowth": 4150,
+                  "StunRatio": 40160,
+                  "StunRatioGrowth": 1830,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 38976,
+                  "SpConsume": 0,
+                  "AttackData": [238371, 0, 1276000],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 21671
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1461020, Prop:1002}",
+              "Param": {
+                "1461020": {
+                  "Main": 40160,
+                  "Growth": 1830,
+                  "Format": "%",
+                  "DamagePercentage": 45600,
+                  "DamagePercentageGrowth": 4150,
+                  "StunRatio": 40160,
+                  "StunRatioGrowth": 1830,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 38976,
+                  "SpConsume": 0,
+                  "AttackData": [238371, 0, 1276000],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 21671
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100113": 2 },
+        "2": { "10": 3000, "100113": 3 },
+        "3": { "10": 6000, "100123": 2 },
+        "4": { "10": 9000, "100123": 3 },
+        "5": { "10": 12000, "100123": 4 },
+        "6": { "10": 18000, "100123": 6 },
+        "7": { "10": 45000, "100133": 5 },
+        "8": { "10": 67500, "100133": 8 },
+        "9": { "10": 90000, "100133": 10 },
+        "10": { "10": 112500, "100133": 12 },
+        "11": { "10": 135000, "100133": 15, "100941": 1 },
+        "12": {}
+      }
+    }
+  },
+  "SkillList": {
+    "1416001": {
+      "Name": "Basic Attack: Chrysanthemum Wheel Dance (1st and 2nd hit)",
+      "Desc": "<IconMap:Icon_Normal>",
+      "ElementType": 200,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1416002": {
+      "Name": "Basic Attack: Chrysanthemum Wheel Dance (3rd and 4th Hit)",
+      "Desc": "<IconMap:Icon_Normal>",
+      "ElementType": 203,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1416003": {
+      "Name": "Basic Attack: Falling Petals - Slaughter",
+      "Desc": "<IconMap:Icon_Normal>(Upon activating Basic Attack: Chrysanthemum Wheel Dance 4th hit, Dodge Counter: Blossom Burst, Quick Assist: Barrage of Raining Flowers, Assist Follow-Up: Crimson Core Burst)",
+      "ElementType": 203,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1416004": {
+      "Name": "Basic Attack: Falling Petals - Downfall",
+      "Desc": "<IconMap:Icon_Normal> (When Steel Charge reaches the threshold after Basic Attack: Falling Petals - Slaughter is activated)",
+      "ElementType": 203,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1416005": {
+      "Name": "Special Attack: Withered in Frost",
+      "Desc": "<IconMap:Icon_Special>",
+      "ElementType": 203,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1416006": {
+      "Name": "EX Special Attack: Raining Iron Petals",
+      "Desc": "<IconMap:Icon_SpecialReady> (Can Hold)",
+      "ElementType": 203,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1416007": {
+      "Name": "EX Special Attack: Raining Iron Petals - Away",
+      "Desc": "<IconMap:Icon_SpecialReady> (Release after consuming less than 60 Energy)",
+      "ElementType": 203,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1416008": {
+      "Name": "Dodge: Running on Petals",
+      "Desc": "<IconMap:Icon_Evade>",
+      "ElementType": 203,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1416009": {
+      "Name": "Dash Attack: Magnetic Wheel Dance",
+      "Desc": "<IconMap:Icon_Evade> ; <IconMap:Icon_Normal>",
+      "ElementType": 200,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1416010": {
+      "Name": "Dodge Counter: Blossom Burst",
+      "Desc": "<IconMap:Icon_Evade> (Perfect) ; <IconMap:Icon_Normal>",
+      "ElementType": 203,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1416011": {
+      "Name": "Chain Attack: Tempest of Frosty Petals",
+      "Desc": "<IconMap:Icon_QTE>",
+      "ElementType": 203,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1416012": {
+      "Name": "Ultimate: Clockwork Garden - Bloom!",
+      "Desc": "<IconMap:Icon_UltimateReady>",
+      "ElementType": 203,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1416013": {
+      "Name": "Quick Assist: Barrage of Raining Flowers",
+      "Desc": "<IconMap:Icon_Switch> (When Triggering Quick Assist)",
+      "ElementType": 203,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1416014": {
+      "Name": "Defensive Assist: Sprouting Barrier",
+      "Desc": "<IconMap:Icon_Switch> (When Triggering Defensive Assist)",
+      "ElementType": 203,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1416015": {
+      "Name": "Assist Follow-Up: Crimson Core Burst",
+      "Desc": "<IconMap:Icon_Normal> (After Defensive Assist)",
+      "ElementType": 203,
+      "HitType": 102,
+      "Potential": []
+    }
+  },
+  "Passive": {
+    "Level": {
+      "1461501": {
+        "Level": 1,
+        "Id": 1461501,
+        "Name": [
+          "Core Passive: Flower Chain Protocol",
+          "Additional Ability: Surprise Strike"
+        ],
+        "Desc": [
+          "The <color=#FFFFFF>Attack</color> teammate with the highest initial ATK is considered Seed's <color=#FFFFFF>Vanguard</color>.\nWhen the <color=#FFFFFF>Vanguard</color> unleashes an <color=#FFFFFF>EX Special Attack</color>, Seed gains <color=#FFFFFF>Onslaught</color> status, increasing Seed's ATK by <color=#2BAD00>100</color> and CRIT DMG by <color=#2BAD00>15%</color>. When Seed unleashes an <color=#FFFFFF>EX Special Attack</color>, the <color=#FFFFFF>Vanguard</color> gains <color=#FFFFFF>Direct Strike</color> status, increasing the <color=#FFFFFF>Vanguard</color>'s ATK by <color=#2BAD00>100</color> and CRIT DMG by <color=#2BAD00>15%</color>.\nWhen <color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> are both active, Seed and the <color=#FFFFFF>Vanguard</color> simultaneously gain <color=#FFFFFF>Besiege</color> status, increasing DMG dealt by <color=#2BAD00>12.5%</color>.\n<color=#FFFFFF>Onslaught</color>, <color=#FFFFFF>Direct Strike</color>, and <color=#FFFFFF>Besiege</color> buffs can all take effect when the character is the current active character. When switching to inactive, the buffs remain until the character goes off-field or 3s after the switch. When the character returns to being the active character, the buffs re-activate.\nUpon entering the battlefield with a <color=#FFFFFF>Vanguard</color>, Seed immediately gains <color=#FFFFFF>Onslaught</color> status and <color=#FFFFFF>Besiege</color> status, while the <color=#FFFFFF>Vanguard</color> immediately gains <color=#FFFFFF>Direct Strike</color> status and <color=#FFFFFF>Besiege</color> status.\n<color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> status last for 40s, and repeated triggers refresh the duration.\nWhen the <color=#FFFFFF>Vanguard</color> consumes Energy as the active character or when Seed consumes Energy, for every 1 point of Energy consumed, Seed recovers 0.5 points of <color=#FFFFFF>Steel Charge</color>.",
+          "When another <color=#FFFFFF>Attack</color> Character is in your squad:\nWhen Seed deals DMG as the active character, restore 2 Energy to the <color=#FFFFFF>Vanguard</color>. This effect can trigger once every 1s.\nSeed's <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color>, <color=#FFFFFF>Basic Attack: Falling Petals - Downfall</color>, and <color=#FFFFFF>Ultimate: Clockwork Garden - Bloom!</color> deal 30% increased DMG and ignore 25% of enemy <color=#2EB6FF>Electric RES</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1461502": {
+        "Level": 2,
+        "Id": 1461502,
+        "Name": [
+          "Core Passive: Flower Chain Protocol",
+          "Additional Ability: Surprise Strike"
+        ],
+        "Desc": [
+          "The <color=#FFFFFF>Attack</color> teammate with the highest initial ATK is considered Seed's <color=#FFFFFF>Vanguard</color>.\nWhen the <color=#FFFFFF>Vanguard</color> unleashes an <color=#FFFFFF>EX Special Attack</color>, Seed gains <color=#FFFFFF>Onslaught</color> status, increasing Seed's ATK by <color=#2BAD00>225</color> and CRIT DMG by <color=#2BAD00>17.5%</color>. When Seed unleashes an <color=#FFFFFF>EX Special Attack</color>, the <color=#FFFFFF>Vanguard</color> gains <color=#FFFFFF>Direct Strike</color> status, increasing the <color=#FFFFFF>Vanguard</color>'s ATK by <color=#2BAD00>225</color> and CRIT DMG by <color=#2BAD00>17.5%</color>.\nWhen <color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> are both active, Seed and the <color=#FFFFFF>Vanguard</color> simultaneously gain <color=#FFFFFF>Besiege</color> status, increasing DMG dealt by <color=#2BAD00>14.5%</color>.\n<color=#FFFFFF>Onslaught</color>, <color=#FFFFFF>Direct Strike</color>, and <color=#FFFFFF>Besiege</color> buffs can all take effect when the character is the current active character. When switching to inactive, the buffs remain until the character goes off-field or 3s after the switch. When the character returns to being the active character, the buffs re-activate.\nUpon entering the battlefield with a <color=#FFFFFF>Vanguard</color>, Seed immediately gains <color=#FFFFFF>Onslaught</color> status and <color=#FFFFFF>Besiege</color> status, while the <color=#FFFFFF>Vanguard</color> immediately gains <color=#FFFFFF>Direct Strike</color> status and <color=#FFFFFF>Besiege</color> status.\n<color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> status last for 40s, and repeated triggers refresh the duration.\nWhen the <color=#FFFFFF>Vanguard</color> consumes Energy as the active character or when Seed consumes Energy, for every 1 point of Energy consumed, Seed recovers 0.5 points of <color=#FFFFFF>Steel Charge</color>.",
+          "When another <color=#FFFFFF>Attack</color> Character is in your squad:\nWhen Seed deals DMG as the active character, restore 2 Energy to the <color=#FFFFFF>Vanguard</color>. This effect can trigger once every 1s.\nSeed's <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color>, <color=#FFFFFF>Basic Attack: Falling Petals - Downfall</color>, and <color=#FFFFFF>Ultimate: Clockwork Garden - Bloom!</color> deal 30% increased DMG and ignore 25% of enemy <color=#2EB6FF>Electric RES</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1461503": {
+        "Level": 3,
+        "Id": 1461503,
+        "Name": [
+          "Core Passive: Flower Chain Protocol",
+          "Additional Ability: Surprise Strike"
+        ],
+        "Desc": [
+          "The <color=#FFFFFF>Attack</color> teammate with the highest initial ATK is considered Seed's <color=#FFFFFF>Vanguard</color>.\nWhen the <color=#FFFFFF>Vanguard</color> unleashes an <color=#FFFFFF>EX Special Attack</color>, Seed gains <color=#FFFFFF>Onslaught</color> status, increasing Seed's ATK by <color=#2BAD00>350</color> and CRIT DMG by <color=#2BAD00>20%</color>. When Seed unleashes an <color=#FFFFFF>EX Special Attack</color>, the <color=#FFFFFF>Vanguard</color> gains <color=#FFFFFF>Direct Strike</color> status, increasing the <color=#FFFFFF>Vanguard</color>'s ATK by <color=#2BAD00>350</color> and CRIT DMG by <color=#2BAD00>20%</color>.\nWhen <color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> are both active, Seed and the <color=#FFFFFF>Vanguard</color> simultaneously gain <color=#FFFFFF>Besiege</color> status, increasing DMG dealt by <color=#2BAD00>16.5%</color>.\n<color=#FFFFFF>Onslaught</color>, <color=#FFFFFF>Direct Strike</color>, and <color=#FFFFFF>Besiege</color> buffs can all take effect when the character is the current active character. When switching to inactive, the buffs remain until the character goes off-field or 3s after the switch. When the character returns to being the active character, the buffs re-activate.\nUpon entering the battlefield with a <color=#FFFFFF>Vanguard</color>, Seed immediately gains <color=#FFFFFF>Onslaught</color> status and <color=#FFFFFF>Besiege</color> status, while the <color=#FFFFFF>Vanguard</color> immediately gains <color=#FFFFFF>Direct Strike</color> status and <color=#FFFFFF>Besiege</color> status.\n<color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> status last for 40s, and repeated triggers refresh the duration.\nWhen the <color=#FFFFFF>Vanguard</color> consumes Energy as the active character or when Seed consumes Energy, for every 1 point of Energy consumed, Seed recovers 0.5 points of <color=#FFFFFF>Steel Charge</color>.",
+          "When another <color=#FFFFFF>Attack</color> Character is in your squad:\nWhen Seed deals DMG as the active character, restore 2 Energy to the <color=#FFFFFF>Vanguard</color>. This effect can trigger once every 1s.\nSeed's <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color>, <color=#FFFFFF>Basic Attack: Falling Petals - Downfall</color>, and <color=#FFFFFF>Ultimate: Clockwork Garden - Bloom!</color> deal 30% increased DMG and ignore 25% of enemy <color=#2EB6FF>Electric RES</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1461504": {
+        "Level": 4,
+        "Id": 1461504,
+        "Name": [
+          "Core Passive: Flower Chain Protocol",
+          "Additional Ability: Surprise Strike"
+        ],
+        "Desc": [
+          "The <color=#FFFFFF>Attack</color> teammate with the highest initial ATK is considered Seed's <color=#FFFFFF>Vanguard</color>.\nWhen the <color=#FFFFFF>Vanguard</color> unleashes an <color=#FFFFFF>EX Special Attack</color>, Seed gains <color=#FFFFFF>Onslaught</color> status, increasing Seed's ATK by <color=#2BAD00>475</color> and CRIT DMG by <color=#2BAD00>22.5%</color>. When Seed unleashes an <color=#FFFFFF>EX Special Attack</color>, the <color=#FFFFFF>Vanguard</color> gains <color=#FFFFFF>Direct Strike</color> status, increasing the <color=#FFFFFF>Vanguard</color>'s ATK by <color=#2BAD00>475</color> and CRIT DMG by <color=#2BAD00>22.5%</color>.\nWhen <color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> are both active, Seed and the <color=#FFFFFF>Vanguard</color> simultaneously gain <color=#FFFFFF>Besiege</color> status, increasing DMG dealt by <color=#2BAD00>18.5%</color>.\n<color=#FFFFFF>Onslaught</color>, <color=#FFFFFF>Direct Strike</color>, and <color=#FFFFFF>Besiege</color> buffs can all take effect when the character is the current active character. When switching to inactive, the buffs remain until the character goes off-field or 3s after the switch. When the character returns to being the active character, the buffs re-activate.\nUpon entering the battlefield with a <color=#FFFFFF>Vanguard</color>, Seed immediately gains <color=#FFFFFF>Onslaught</color> status and <color=#FFFFFF>Besiege</color> status, while the <color=#FFFFFF>Vanguard</color> immediately gains <color=#FFFFFF>Direct Strike</color> status and <color=#FFFFFF>Besiege</color> status.\n<color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> status last for 40s, and repeated triggers refresh the duration.\nWhen the <color=#FFFFFF>Vanguard</color> consumes Energy as the active character or when Seed consumes Energy, for every 1 point of Energy consumed, Seed recovers 0.5 points of <color=#FFFFFF>Steel Charge</color>.",
+          "When another <color=#FFFFFF>Attack</color> Character is in your squad:\nWhen Seed deals DMG as the active character, restore 2 Energy to the <color=#FFFFFF>Vanguard</color>. This effect can trigger once every 1s.\nSeed's <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color>, <color=#FFFFFF>Basic Attack: Falling Petals - Downfall</color>, and <color=#FFFFFF>Ultimate: Clockwork Garden - Bloom!</color> deal 30% increased DMG and ignore 25% of enemy <color=#2EB6FF>Electric RES</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1461505": {
+        "Level": 5,
+        "Id": 1461505,
+        "Name": [
+          "Core Passive: Flower Chain Protocol",
+          "Additional Ability: Surprise Strike"
+        ],
+        "Desc": [
+          "The <color=#FFFFFF>Attack</color> teammate with the highest initial ATK is considered Seed's <color=#FFFFFF>Vanguard</color>.\nWhen the <color=#FFFFFF>Vanguard</color> unleashes an <color=#FFFFFF>EX Special Attack</color>, Seed gains <color=#FFFFFF>Onslaught</color> status, increasing Seed's ATK by <color=#2BAD00>600</color> and CRIT DMG by <color=#2BAD00>25%</color>. When Seed unleashes an <color=#FFFFFF>EX Special Attack</color>, the <color=#FFFFFF>Vanguard</color> gains <color=#FFFFFF>Direct Strike</color> status, increasing the <color=#FFFFFF>Vanguard</color>'s ATK by <color=#2BAD00>600</color> and CRIT DMG by <color=#2BAD00>25%</color>.\nWhen <color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> are both active, Seed and the <color=#FFFFFF>Vanguard</color> simultaneously gain <color=#FFFFFF>Besiege</color> status, increasing DMG dealt by <color=#2BAD00>20.5%</color>.\n<color=#FFFFFF>Onslaught</color>, <color=#FFFFFF>Direct Strike</color>, and <color=#FFFFFF>Besiege</color> buffs can all take effect when the character is the current active character. When switching to inactive, the buffs remain until the character goes off-field or 3s after the switch. When the character returns to being the active character, the buffs re-activate.\nUpon entering the battlefield with a <color=#FFFFFF>Vanguard</color>, Seed immediately gains <color=#FFFFFF>Onslaught</color> status and <color=#FFFFFF>Besiege</color> status, while the <color=#FFFFFF>Vanguard</color> immediately gains <color=#FFFFFF>Direct Strike</color> status and <color=#FFFFFF>Besiege</color> status.\n<color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> status last for 40s, and repeated triggers refresh the duration.\nWhen the <color=#FFFFFF>Vanguard</color> consumes Energy as the active character or when Seed consumes Energy, for every 1 point of Energy consumed, Seed recovers 0.5 points of <color=#FFFFFF>Steel Charge</color>.",
+          "When another <color=#FFFFFF>Attack</color> Character is in your squad:\nWhen Seed deals DMG as the active character, restore 2 Energy to the <color=#FFFFFF>Vanguard</color>. This effect can trigger once every 1s.\nSeed's <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color>, <color=#FFFFFF>Basic Attack: Falling Petals - Downfall</color>, and <color=#FFFFFF>Ultimate: Clockwork Garden - Bloom!</color> deal 30% increased DMG and ignore 25% of enemy <color=#2EB6FF>Electric RES</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1461506": {
+        "Level": 6,
+        "Id": 1461506,
+        "Name": [
+          "Core Passive: Flower Chain Protocol",
+          "Additional Ability: Surprise Strike"
+        ],
+        "Desc": [
+          "The <color=#FFFFFF>Attack</color> teammate with the highest initial ATK is considered Seed's <color=#FFFFFF>Vanguard</color>.\nWhen the <color=#FFFFFF>Vanguard</color> unleashes an <color=#FFFFFF>EX Special Attack</color>, Seed gains <color=#FFFFFF>Onslaught</color> status, increasing Seed's ATK by <color=#2BAD00>725</color> and CRIT DMG by <color=#2BAD00>27.5%</color>. When Seed unleashes an <color=#FFFFFF>EX Special Attack</color>, the <color=#FFFFFF>Vanguard</color> gains <color=#FFFFFF>Direct Strike</color> status, increasing the <color=#FFFFFF>Vanguard</color>'s ATK by <color=#2BAD00>725</color> and CRIT DMG by <color=#2BAD00>27.5%</color>.\nWhen <color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> are both active, Seed and the <color=#FFFFFF>Vanguard</color> simultaneously gain <color=#FFFFFF>Besiege</color> status, increasing DMG dealt by <color=#2BAD00>22.5%</color>.\n<color=#FFFFFF>Onslaught</color>, <color=#FFFFFF>Direct Strike</color>, and <color=#FFFFFF>Besiege</color> buffs can all take effect when the character is the current active character. When switching to inactive, the buffs remain until the character goes off-field or 3s after the switch. When the character returns to being the active character, the buffs re-activate.\nUpon entering the battlefield with a <color=#FFFFFF>Vanguard</color>, Seed immediately gains <color=#FFFFFF>Onslaught</color> status and <color=#FFFFFF>Besiege</color> status, while the <color=#FFFFFF>Vanguard</color> immediately gains <color=#FFFFFF>Direct Strike</color> status and <color=#FFFFFF>Besiege</color> status.\n<color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> status last for 40s, and repeated triggers refresh the duration.\nWhen the <color=#FFFFFF>Vanguard</color> consumes Energy as the active character or when Seed consumes Energy, for every 1 point of Energy consumed, Seed recovers 0.5 points of <color=#FFFFFF>Steel Charge</color>.",
+          "When another <color=#FFFFFF>Attack</color> Character is in your squad:\nWhen Seed deals DMG as the active character, restore 2 Energy to the <color=#FFFFFF>Vanguard</color>. This effect can trigger once every 1s.\nSeed's <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color>, <color=#FFFFFF>Basic Attack: Falling Petals - Downfall</color>, and <color=#FFFFFF>Ultimate: Clockwork Garden - Bloom!</color> deal 30% increased DMG and ignore 25% of enemy <color=#2EB6FF>Electric RES</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1461507": {
+        "Level": 7,
+        "Id": 1461507,
+        "Name": [
+          "Core Passive: Flower Chain Protocol",
+          "Additional Ability: Surprise Strike"
+        ],
+        "Desc": [
+          "The <color=#FFFFFF>Attack</color> teammate with the highest initial ATK is considered Seed's <color=#FFFFFF>Vanguard</color>.\nWhen the <color=#FFFFFF>Vanguard</color> unleashes an <color=#FFFFFF>EX Special Attack</color>, Seed gains <color=#FFFFFF>Onslaught</color> status, increasing Seed's ATK by <color=#2BAD00>1,000</color> and CRIT DMG by <color=#2BAD00>30%</color>. When Seed unleashes an <color=#FFFFFF>EX Special Attack</color>, the <color=#FFFFFF>Vanguard</color> gains <color=#FFFFFF>Direct Strike</color> status, increasing the <color=#FFFFFF>Vanguard</color>'s ATK by <color=#2BAD00>1,000</color> and CRIT DMG by <color=#2BAD00>30%</color>.\nWhen <color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> are both active, Seed and the <color=#FFFFFF>Vanguard</color> simultaneously gain <color=#FFFFFF>Besiege</color> status, increasing DMG dealt by <color=#2BAD00>25%</color>.\n<color=#FFFFFF>Onslaught</color>, <color=#FFFFFF>Direct Strike</color>, and <color=#FFFFFF>Besiege</color> buffs can all take effect when the character is the current active character. When switching to inactive, the buffs remain until the character goes off-field or 3s after the switch. When the character returns to being the active character, the buffs re-activate.\nUpon entering the battlefield with a <color=#FFFFFF>Vanguard</color>, Seed immediately gains <color=#FFFFFF>Onslaught</color> status and <color=#FFFFFF>Besiege</color> status, while the <color=#FFFFFF>Vanguard</color> immediately gains <color=#FFFFFF>Direct Strike</color> status and <color=#FFFFFF>Besiege</color> status.\n<color=#FFFFFF>Direct Strike</color> and <color=#FFFFFF>Onslaught</color> status last for 40s, and repeated triggers refresh the duration.\nWhen the <color=#FFFFFF>Vanguard</color> consumes Energy as the active character or when Seed consumes Energy, for every 1 point of Energy consumed, Seed recovers 0.5 points of <color=#FFFFFF>Steel Charge</color>.",
+          "When another <color=#FFFFFF>Attack</color> Character is in your squad:\nWhen Seed deals DMG as the active character, restore 2 Energy to the <color=#FFFFFF>Vanguard</color>. This effect can trigger once every 1s.\nSeed's <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color>, <color=#FFFFFF>Basic Attack: Falling Petals - Downfall</color>, and <color=#FFFFFF>Ultimate: Clockwork Garden - Bloom!</color> deal 30% increased DMG and ignore 25% of enemy <color=#2EB6FF>Electric RES</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      }
+    },
+    "Materials": {
+      "1": { "10": 5000 },
+      "2": { "10": 12000, "110509": 2 },
+      "3": { "10": 28000, "110509": 4 },
+      "4": { "10": 60000, "110006": 2, "110509": 9 },
+      "5": { "10": 100000, "110006": 3, "110509": 15 },
+      "6": { "10": 200000, "110006": 4, "110509": 30 }
+    }
+  },
+  "Talent": {
+    "1": {
+      "Level": 1,
+      "Name": "\"Hibernation Period\"",
+      "Desc": "When Seed's <color=#FFFFFF>Steel Charge</color> reaches 100, <color=#FFFFFF>Basic Attack: Falling Petals - Downfall</color> can be triggered, and the total <color=#FFFFFF>Steel Charge</color> consumed is reduced to 100. The amount of <color=#FFFFFF>Steel Charge</color> required to gain one chance to quickly release <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color> is reduced to 100. Accumulate an additional 40/20 <color=#FFFFFF>Steel Charge</color> when entering the battlefield/using <color=#FFFFFF>Ultimate</color>. Increases <color=#FFFFFF>Basic Attack: Falling Petals - Downfall</color> CRIT DMG by 30%.",
+      "Desc2": "This is a solemn and mysterious building, isolated from the outside world.\nThe pure white one belongs here. She shrinks back, carefully peering out through the wire fence. What's the world outside like?\nHer curiosity flows beyond the sterile room, past the crumbling towers, dodging the pink giant flowers in the sky.\nFlowing further and further...\n\"Looks just like a cracked, stinky egg~\"\n\"But I want to experience it for a while...\""
+    },
+    "2": {
+      "Level": 2,
+      "Name": "\"Light Absorption Technique\"",
+      "Desc": "When <color=#FFFFFF>Besiege</color> is active for an Agent, that Agent's DMG ignores 20% of DEF. When activating <color=#FFFFFF>EX Special Attack: Raining Iron Petals</color>, after consuming a total of 60 Energy, Seed can continue consuming Energy to extend the duration of the skill until the button is released or a total of 120 Energy is consumed. For every 5 Energy consumed by <color=#FFFFFF>EX Special Attack: Raining Iron Petals</color>, the following <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color>'s DMG increases by 5%.",
+      "Desc2": "This is a sprawling ruin of twisted steel.\nAn inexplicable, indescribable emotion chokes her throat, yet her tongue remains silent...\nHer vision blurs as some alien liquid trickles down her cheeks.\nRubbing her eyes, blinking...\nWhat is this blinding thing clumsily drawing closer?\n\"Don't be afraid... I'm here... to save you...\"\n\"Do you have... a name? My codename is... 'Seed.'\""
+    },
+    "3": {
+      "Level": 3,
+      "Name": "\"A Story of Sprouting\"",
+      "Desc": "<color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Dodge</color>, <color=#FFFFFF>Assist</color>, <color=#FFFFFF>Special Attack</color>, and <color=#FFFFFF>Chain Attack</color> Lv. +2",
+      "Desc2": "This is just another break room in a military camp.\nThey greeted her, trying to open her heart.\nA shy redheaded young lady, a strange chatty gun barrel, a golden retriever with an eye cover...\nThe big robot told her that they were all her friends.\n\"What are friends?\"\n\"Friends... they're the ones you see when you look behind you.\""
+    },
+    "4": {
+      "Level": 4,
+      "Name": "\"Fragrant Tune\"",
+      "Desc": "When Seed's <color=#FFFFFF>Besiege</color> status buff is active, her Decibel Generation Rate increases by 10%, and <color=#FFFFFF>Ultimate</color> DMG increases by 20%.",
+      "Desc2": "This is a grand, bustling plaza.\nOn a stage towering above everyone else, someone is muttering something.\nA voice calls out her name, and many people crowd around. The dazed flower is transplanted onto the stage, gunpowder still fresh in her hair.\nThe black box flickers with light brighter than stars, and small metal patches are pinned onto both the older and the younger one, both equally at a loss for what to do.\nThis recognition also means that from this moment on, she is \"Seed,\" and the robot that has always been by her side is now \"Seed Sr.\"\n\"Did I do well?\"\n\"Of course, you're our pride... this codename is proof of that, Seed.\""
+    },
+    "5": {
+      "Level": 5,
+      "Name": "\"Time to Bloom\"",
+      "Desc": "<color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Dodge</color>, <color=#FFFFFF>Assist</color>, <color=#FFFFFF>Special Attack</color>, and <color=#FFFFFF>Chain Attack</color> Lv. +2",
+      "Desc2": "This is a tiny safe house that almost no one knows about.\nThe entire space is filled with scattered, miscellaneous items. Boxes, sofas, picture frames, and pots upon pots of flowers — red ones, yellow ones, pink ones, some standing straight, some fluffy, some drooping.\nClose your eyes, cover your mouth, you'll hold it in for sure — she promised.\n\"Give them a little more time, okay?\"\n\"They'll grow up beautifully... just like you.\""
+    },
+    "6": {
+      "Level": 6,
+      "Name": "\"Theory of the Heart\"",
+      "Desc": "Seed's CRIT DMG increases by 50%.\nWhen using <color=#FFFFFF>Basic Attack: Falling Petals - Slaughter</color>, fires 3 additional laser beams, each dealing 165% of ATK as DMG. This effect can trigger once every 3s.",
+      "Desc2": "Here lies a vast sea of flowers, blooming wild and brilliant.\nShe remembers how this place once looked — barren, without even a single blade of grass.\nWho could have done such mischief? Who transformed this desolate, gloomy Hollow Zero into this? Who planted such a strong heart in this pale soil?\n\"So you've come such a long way on this circle...\"\n\"Until we meet again, Seed Sr.\""
+    }
+  },
+  "FairyRecommend": {
+    "Slot4": 33300,
+    "Slot2": 31000,
+    "SlotSub": 31400,
+    "Part4": {
+      "Prop": 20103,
+      "Name": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconCrit.png"
+    },
+    "Part5": {
+      "Prop": 21103,
+      "Name": "CRIT DMG",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconCritDam.png"
+    },
+    "Part6": {
+      "Prop": 31803,
+      "Name": "Electric DMG Bonus",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconGeneralBuff/Packer/IconThunder.png"
+    },
+    "PartSub": {
+      "Prop": 12102,
+      "Name": "ATK",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconAttack.png"
+    }
+  },
+  "Potential": [],
+  "PotentialDetail": {}
+}

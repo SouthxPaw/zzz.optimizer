@@ -1,0 +1,1630 @@
+{
+  "Id": 1331,
+  "Icon": "IconRole41",
+  "Name": "Vivian",
+  "CodeName": "Vivian",
+  "Rarity": 4,
+  "WeaponType": { "3": "Anomaly" },
+  "ElementType": { "205": "Ether" },
+  "SpecialElementType": {},
+  "HitType": { "101": "Slash" },
+  "Camp": { "9": "Mockingbird" },
+  "Gender": 2,
+  "PartnerInfo": {
+    "Birthday": "APR 10",
+    "FullName": "Vivian Banshee",
+    "Gender": "Female",
+    "IconPath": "UI/Sprite/A1DynamicLoad/IconRoleCircle/UnPacker/IconRoleCircle41.png",
+    "ImpressionF": "Vivian knows so many people and has worked in so many places... Not at all what you'd expect from how she first comes across!",
+    "ImpressionM": "Once I found out she was Sjal's senior, a lot of things suddenly made sense...",
+    "Name": "",
+    "OutlookDesc": "Partner_OutlookDesc_1331",
+    "ProfileDesc": "Vivian is a member of Mockingbird, skilled in gathering all kinds of intel. She's also a jack of many trades — cooking, mixology, translation, art forgery, electronics repair, and more.\nIn the past, she apparently wandered without a home and was viewed as one who \"brought disaster,\" almost like a living omen of bad luck.\nIt's said she can predict incoming misfortune through her tears, though there's no scientific proof of this ability.\nA loyal follower of Phaethon. Ever since your original account went inactive on Inter-Knot, she's been trying to track you down — digging for clues, running intense searches across the network. However, Master, she didn't find anything... all thanks to my efforts in keeping your cybersecurity airtight.\nSuggestion: Until her true intentions are clear, do not reveal your identity as Phaethon.\nIn case you've already let your identity slip, be sure to lock your doors and wear proper sleepwear before going to bed. Based on her old blog posts, she's likely to express her admiration in... overly passionate and intense ways.",
+    "Race": "Mockingbird",
+    "RoleIcon": "IconRole/UnPacker/IconRole41",
+    "Stature": "162",
+    "UnlockCondition": [
+      "Obtain Agent",
+      "Complete Main Story \"Leisurely Lull: Wandering Visitor\" (available after completing Main Story Season 1 - Epilogue (B))",
+      "Complete the \"Anby's Problem\" commission"
+    ],
+    "TrustLv": {
+      "1": "Vivian is a member of Mockingbird, skilled in gathering all kinds of intel. She's also a jack of many trades — cooking, mixology, translation, art forgery, electronics repair, and more.\nIn the past, she apparently wandered without a home and was viewed as one who \"brought disaster,\" almost like a living omen of bad luck.\nIt's said she can predict incoming misfortune through her tears, though there's no scientific proof of this ability.\nA loyal follower of Phaethon. Ever since your original account went inactive on Inter-Knot, she's been trying to track you down — digging for clues, running intense searches across the network. However, Master, she didn't find anything... all thanks to my efforts in keeping your cybersecurity airtight.\nSuggestion: Until her true intentions are clear, do not reveal your identity as Phaethon.\nIn case you've already let your identity slip, be sure to lock your doors and wear proper sleepwear before going to bed. Based on her old blog posts, she's likely to express her admiration in... overly passionate and intense ways.",
+      "2": "",
+      "3": "As a child, Vivian was adopted by a man named Landon, a member of the Exaltists, and became close friends with a girl named Dina.\nAfter Landon's crimes were exposed, Dina continued to defend her father, while Vivian broke away from the Exaltists and cut ties with her.\nVivian fell into despair for a while, hitting rock bottom — until you responded to one of her messages. That single reply gave her the hope to start trying again.\nOut of respect for Vivian's wishes, I cannot tell you which message it was.\nI may not fully understand human emotions, but I am certain you gave her hope and comfort when she needed it most.",
+      "4": ""
+    }
+  },
+  "Skin": {
+    "3113310": {
+      "Name": "Vivian: Fluttering Violet",
+      "Desc": "Maintain your elegance, Miss Vivian, from the point of your parasol, right down to your flowing skirt. Maintain your courage, Miss Vivian, through last night's lonely walk, or here today at my side.",
+      "Image": "IconRole41"
+    },
+    "3113311": {
+      "Name": "Vivian: Iris of the Shore",
+      "Desc": "Birds soar into the starlit skies, while irises bloom by the pond. Though this enchanting moonlit night may be brief, please let me see the lingering anticipation in your eyes in the moment I bloom.",
+      "Image": "IconRole41_01"
+    }
+  },
+  "Stats": {
+    "Armor": 0,
+    "ArmorGrowth": 0,
+    "Attack": 127,
+    "AttackGrowth": 76728,
+    "AvatarPieceId": 5331,
+    "BreakStun": 86,
+    "Crit": 500,
+    "CritDamage": 5000,
+    "CritDmgRes": 0,
+    "CritRes": 0,
+    "Defence": 49,
+    "DefenceGrowth": 66203,
+    "ElementAbnormalPower": 108,
+    "ElementMystery": 118,
+    "Endurance": 0,
+    "HpGrowth": 837238,
+    "HpMax": 617,
+    "PenDelta": 0,
+    "PenRate": 0,
+    "Rbl": 1,
+    "RblCorrectionFactor": 10000,
+    "RblProbability": 0,
+    "Shield": 0,
+    "ShieldGrowth": 0,
+    "SpBarPoint": 120,
+    "SpRecover": 120,
+    "Stun": 0,
+    "Tags": [
+      "Vivian",
+      "Cut",
+      "Ether",
+      "Female",
+      "Camp9",
+      "Size2",
+      "AidTypeParry",
+      "Vivian",
+      "EtherEyesSize2"
+    ],
+    "RpMax": 0,
+    "RpRecover": 0
+  },
+  "Level": {
+    "1": {
+      "HpMax": 0,
+      "Attack": 0,
+      "Defence": 0,
+      "LevelMax": 10,
+      "LevelMin": 0,
+      "Materials": { "10": 24000, "100213": 4 }
+    },
+    "2": {
+      "HpMax": 423,
+      "Attack": 45,
+      "Defence": 33,
+      "LevelMax": 20,
+      "LevelMin": 10,
+      "Materials": { "10": 56000, "100223": 12 }
+    },
+    "3": {
+      "HpMax": 847,
+      "Attack": 90,
+      "Defence": 67,
+      "LevelMax": 30,
+      "LevelMin": 20,
+      "Materials": { "10": 120000, "100223": 20 }
+    },
+    "4": {
+      "HpMax": 1270,
+      "Attack": 136,
+      "Defence": 100,
+      "LevelMax": 40,
+      "LevelMin": 30,
+      "Materials": { "10": 200000, "100233": 10 }
+    },
+    "5": {
+      "HpMax": 1694,
+      "Attack": 181,
+      "Defence": 134,
+      "LevelMax": 50,
+      "LevelMin": 40,
+      "Materials": { "10": 400000, "100233": 20 }
+    },
+    "6": {
+      "HpMax": 2117,
+      "Attack": 226,
+      "Defence": 167,
+      "LevelMax": 60,
+      "LevelMin": 50,
+      "Materials": {}
+    }
+  },
+  "ExtraLevel": {
+    "1": {
+      "MaxLevel": 15,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 0
+        },
+        "31401": {
+          "Prop": 31401,
+          "Name": "Anomaly Mastery",
+          "Format": "{0:0.#}",
+          "Value": 12
+        }
+      }
+    },
+    "2": {
+      "MaxLevel": 25,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 25
+        },
+        "31401": {
+          "Prop": 31401,
+          "Name": "Anomaly Mastery",
+          "Format": "{0:0.#}",
+          "Value": 12
+        }
+      }
+    },
+    "3": {
+      "MaxLevel": 35,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 25
+        },
+        "31401": {
+          "Prop": 31401,
+          "Name": "Anomaly Mastery",
+          "Format": "{0:0.#}",
+          "Value": 24
+        }
+      }
+    },
+    "4": {
+      "MaxLevel": 45,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 50
+        },
+        "31401": {
+          "Prop": 31401,
+          "Name": "Anomaly Mastery",
+          "Format": "{0:0.#}",
+          "Value": 24
+        }
+      }
+    },
+    "5": {
+      "MaxLevel": 55,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 50
+        },
+        "31401": {
+          "Prop": 31401,
+          "Name": "Anomaly Mastery",
+          "Format": "{0:0.#}",
+          "Value": 36
+        }
+      }
+    },
+    "6": {
+      "MaxLevel": 60,
+      "Extra": {
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 75
+        },
+        "31401": {
+          "Prop": 31401,
+          "Name": "Anomaly Mastery",
+          "Format": "{0:0.#}",
+          "Value": 36
+        }
+      }
+    }
+  },
+  "LevelEXP": [
+    50, 150, 250, 400, 600, 800, 1000, 1250, 1500, 1800, 1935, 2065, 2200, 2335,
+    2465, 2600, 2735, 2865, 3000, 4680, 4975, 5265, 5560, 5855, 6145, 6440,
+    6735, 7025, 7320, 10800, 11400, 12000, 12600, 13200, 13800, 14400, 15000,
+    15600, 16200, 17100, 18300, 19500, 20700, 21900, 23100, 24300, 25500, 26700,
+    27900, 34200, 36600, 39000, 41400, 43800, 46200, 48600, 51000, 53400, 55800,
+    0
+  ],
+  "Skill": {
+    "Basic": {
+      "Description": [
+        {
+          "Name": "Basic Attack: Feathered Strike",
+          "Desc": "Press <IconMap:Icon_Normal> to activate:\nUnleashes up to four attacks in front, dealing <color=#F0D12B>Physical DMG</color> and <color=#FE437E>Ether DMG</color>.\nAfter triggering the fourth attack, enter the <color=#FFFFFF>Noblewoman</color> state.\nWith <color=#FFFFFF>Flight Feathers</color> available, holding <IconMap:Icon_Normal> during the fourth attack will activate the <color=#FFFFFF>Fluttering Frock</color> state.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Noblewoman - Waltz",
+          "Desc": "Press <IconMap:Icon_Normal> while in the <color=#FFFFFF>Noblewoman</color> state to activate:\nDash forward with an attack that deals <color=#FE437E>Ether DMG</color> and restores 1 <color=#FFFFFF>Flight Feather</color> upon hitting an enemy.\nCharacter is invulnerable while using this skill.\nIf a Perfect Dodge is triggered during the dash, gain 1 additional <color=#FFFFFF>Flight Feather</color>.\nIf <color=#FFFFFF>Flight Feathers</color> are available after the skill, enter the <color=#FFFFFF>Fluttering Frock</color> state, which can be canceled by holding <IconMap:Icon_Evade> when the skill is used.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Fluttering Frock - Suspension",
+          "Desc": "Press <IconMap:Icon_Normal> while in the <color=#FFFFFF>Fluttering Frock</color> state to activate:\nAttack an area ahead, dealing <color=#FE437E>Ether DMG</color>.\nAfter activation, this skill consumes all <color=#FFFFFF>Flight Feathers</color>, and each one consumed grants 1 <color=#FFFFFF>Guard Feather</color>.\nCharacter is invulnerable while using this skill.\nWhen switching characters during the <color=#FFFFFF>Fluttering Frock</color> state, Vivian will automatically perform <color=#FFFFFF>Basic Attack: Fluttering Frock - Suspension</color>.\nWhile in the <color=#FFFFFF>Fluttering Frock</color> state, press <IconMap:Icon_Evade> to exit the state.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Featherbloom",
+          "Desc": "After any squad member hits a target with an <color=#FFFFFF>EX Special Attack</color>, Vivian will consume 1 <color=#FFFFFF>Guard Feather</color> to launch <color=#FFFFFF>Basic Attack: Featherbloom</color> against the target, dealing <color=#FE437E>Ether DMG</color>, triggering at most once per use of a skill. This effect can trigger even while Vivian is off-field.\nA maximum of 5 <color=#FFFFFF>Guard Feathers</color> can be stored.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Feathered Strike",
+          "Param": [
+            {
+              "Name": "1st-Hit DMG Multiplier",
+              "Desc": "{Skill:1331001, Prop:1001}",
+              "Param": {
+                "1331001": {
+                  "Main": 3410,
+                  "Growth": 310,
+                  "Format": "%",
+                  "DamagePercentage": 3410,
+                  "DamagePercentageGrowth": 310,
+                  "StunRatio": 4240,
+                  "StunRatioGrowth": 200,
+                  "SpRecovery": 13870,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 106150,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3851
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit DMG Multiplier",
+              "Desc": "{Skill:1331002, Prop:1001}",
+              "Param": {
+                "1331002": {
+                  "Main": 2420,
+                  "Growth": 220,
+                  "Format": "%",
+                  "DamagePercentage": 2420,
+                  "DamagePercentageGrowth": 220,
+                  "StunRatio": 2810,
+                  "StunRatioGrowth": 130,
+                  "SpRecovery": 9200,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 70400,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2555
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit DMG Multiplier",
+              "Desc": "{Skill:1331003, Prop:1001}",
+              "Param": {
+                "1331003": {
+                  "Main": 7690,
+                  "Growth": 700,
+                  "Format": "%",
+                  "DamagePercentage": 7690,
+                  "DamagePercentageGrowth": 700,
+                  "StunRatio": 8180,
+                  "StunRatioGrowth": 380,
+                  "SpRecovery": 26750,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 204600,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 7431
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "4th-Hit DMG Multiplier",
+              "Desc": "{Skill:1331004, Prop:1001}",
+              "Param": {
+                "1331004": {
+                  "Main": 12840,
+                  "Growth": 1170,
+                  "Format": "%",
+                  "DamagePercentage": 12840,
+                  "DamagePercentageGrowth": 1170,
+                  "StunRatio": 12720,
+                  "StunRatioGrowth": 580,
+                  "SpRecovery": 41600,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 317900,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 8661,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 11555
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "1st-Hit Daze Multiplier",
+              "Desc": "{Skill:1331001, Prop:1002}",
+              "Param": {
+                "1331001": {
+                  "Main": 4240,
+                  "Growth": 200,
+                  "Format": "%",
+                  "DamagePercentage": 3410,
+                  "DamagePercentageGrowth": 310,
+                  "StunRatio": 4240,
+                  "StunRatioGrowth": 200,
+                  "SpRecovery": 13870,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 106150,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3851
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit Daze Multiplier",
+              "Desc": "{Skill:1331002, Prop:1002}",
+              "Param": {
+                "1331002": {
+                  "Main": 2810,
+                  "Growth": 130,
+                  "Format": "%",
+                  "DamagePercentage": 2420,
+                  "DamagePercentageGrowth": 220,
+                  "StunRatio": 2810,
+                  "StunRatioGrowth": 130,
+                  "SpRecovery": 9200,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 70400,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2555
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit Daze Multiplier",
+              "Desc": "{Skill:1331003, Prop:1002}",
+              "Param": {
+                "1331003": {
+                  "Main": 8180,
+                  "Growth": 380,
+                  "Format": "%",
+                  "DamagePercentage": 7690,
+                  "DamagePercentageGrowth": 700,
+                  "StunRatio": 8180,
+                  "StunRatioGrowth": 380,
+                  "SpRecovery": 26750,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 204600,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 7431
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "4th-Hit Daze Multiplier",
+              "Desc": "{Skill:1331004, Prop:1002}",
+              "Param": {
+                "1331004": {
+                  "Main": 12720,
+                  "Growth": 580,
+                  "Format": "%",
+                  "DamagePercentage": 12840,
+                  "DamagePercentageGrowth": 1170,
+                  "StunRatio": 12720,
+                  "StunRatioGrowth": 580,
+                  "SpRecovery": 41600,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 317900,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 8661,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 11555
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Noblewoman - Waltz",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1331005, Prop:1001}",
+              "Param": {
+                "1331005": {
+                  "Main": 4780,
+                  "Growth": 440,
+                  "Format": "%",
+                  "DamagePercentage": 4780,
+                  "DamagePercentageGrowth": 440,
+                  "StunRatio": 3720,
+                  "StunRatioGrowth": 170,
+                  "SpRecovery": 12150,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 92950,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 3375,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3375
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1331005, Prop:1002}",
+              "Param": {
+                "1331005": {
+                  "Main": 3720,
+                  "Growth": 170,
+                  "Format": "%",
+                  "DamagePercentage": 4780,
+                  "DamagePercentageGrowth": 440,
+                  "StunRatio": 3720,
+                  "StunRatioGrowth": 170,
+                  "SpRecovery": 12150,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 92950,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 3375,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3375
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Fluttering Frock - Suspension",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1331006, Prop:1001}",
+              "Param": {
+                "1331006": {
+                  "Main": 8020,
+                  "Growth": 730,
+                  "Format": "%",
+                  "DamagePercentage": 8020,
+                  "DamagePercentageGrowth": 730,
+                  "StunRatio": 6240,
+                  "StunRatioGrowth": 290,
+                  "SpRecovery": 20400,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 155925,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 5665,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5666
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1331006, Prop:1002}",
+              "Param": {
+                "1331006": {
+                  "Main": 6240,
+                  "Growth": 290,
+                  "Format": "%",
+                  "DamagePercentage": 8020,
+                  "DamagePercentageGrowth": 730,
+                  "StunRatio": 6240,
+                  "StunRatioGrowth": 290,
+                  "SpRecovery": 20400,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 155925,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 5665,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5666
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Featherbloom",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1331008, Prop:1001}",
+              "Param": {
+                "1331008": {
+                  "Main": 22000,
+                  "Growth": 2000,
+                  "Format": "%",
+                  "DamagePercentage": 22000,
+                  "DamagePercentageGrowth": 2000,
+                  "StunRatio": 0,
+                  "StunRatioGrowth": 0,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 12600,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 0
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1331008, Prop:1002}",
+              "Param": {
+                "1331008": {
+                  "Main": 0,
+                  "Growth": 0,
+                  "Format": "%",
+                  "DamagePercentage": 22000,
+                  "DamagePercentageGrowth": 2000,
+                  "StunRatio": 0,
+                  "StunRatioGrowth": 0,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 12600,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 0
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100115": 2 },
+        "2": { "10": 3000, "100115": 3 },
+        "3": { "10": 6000, "100125": 2 },
+        "4": { "10": 9000, "100125": 3 },
+        "5": { "10": 12000, "100125": 4 },
+        "6": { "10": 18000, "100125": 6 },
+        "7": { "10": 45000, "100135": 5 },
+        "8": { "10": 67500, "100135": 8 },
+        "9": { "10": 90000, "100135": 10 },
+        "10": { "10": 112500, "100135": 12 },
+        "11": { "10": 135000, "100135": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Dodge": {
+      "Description": [
+        {
+          "Name": "Dodge: Lightstream",
+          "Desc": "Press <IconMap:Icon_Evade> to activate:\nA quick dash dodge.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Dash Attack: Silver Thorned Melody",
+          "Desc": "Press <IconMap:Icon_Normal> during a dodge to activate:\nLaunches a forward thrust at enemies in front, dealing <color=#F0D12B>Physical DMG</color>.",
+          "Potential": []
+        },
+        {
+          "Name": "Dodge Counter: Wingblade Reverb",
+          "Desc": "Press <IconMap:Icon_Normal> during a <color=#FFFFFF>Perfect Dodge</color> to activate:\nLaunches an attack on enemies ahead, dealing <color=#F0D12B>Physical DMG</color> and <color=#FE437E>Ether DMG</color>.\nCharacter is invulnerable while using this skill.\nAfter activating the skill, enter the <color=#FFFFFF>Noblewoman</color> state.\nWhen there are <color=#FFFFFF>Flight Feathers</color> available, hold <IconMap:Icon_Normal> during skill activation to enter the <color=#FFFFFF>Fluttering Frock</color> state.",
+          "Potential": []
+        },
+        {
+          "Name": "Dodge: Dainty Steps",
+          "Desc": "When in the <color=#FFFFFF>Noblewoman</color> state and about to be attacked, an automatic dodge will trigger, during which the character will be Invulnerable, but a <color=#FFFFFF>Perfect Dodge</color> will not be triggered.\nThis can trigger once each time the <color=#FFFFFF>Noblewoman</color> state is entered.",
+          "Potential": []
+        },
+        {
+          "Name": "Dash Attack: Silver Thorned Melody",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1331011, Prop:1001}",
+              "Param": {
+                "1331011": {
+                  "Main": 4960,
+                  "Growth": 460,
+                  "Format": "%",
+                  "DamagePercentage": 4960,
+                  "DamagePercentageGrowth": 460,
+                  "StunRatio": 2480,
+                  "StunRatioGrowth": 120,
+                  "SpRecovery": 8110,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 62150,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2251
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1331011, Prop:1002}",
+              "Param": {
+                "1331011": {
+                  "Main": 2480,
+                  "Growth": 120,
+                  "Format": "%",
+                  "DamagePercentage": 4960,
+                  "DamagePercentageGrowth": 460,
+                  "StunRatio": 2480,
+                  "StunRatioGrowth": 120,
+                  "SpRecovery": 8110,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 62150,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2251
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Dodge Counter: Wingblade Reverb",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1331012, Prop:1001}",
+              "Param": {
+                "1331012": {
+                  "Main": 23640,
+                  "Growth": 2150,
+                  "Format": "%",
+                  "DamagePercentage": 23640,
+                  "DamagePercentageGrowth": 2150,
+                  "StunRatio": 20730,
+                  "StunRatioGrowth": 950,
+                  "SpRecovery": 31820,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 243100,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 7069,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 23837
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1331012, Prop:1002}",
+              "Param": {
+                "1331012": {
+                  "Main": 20730,
+                  "Growth": 950,
+                  "Format": "%",
+                  "DamagePercentage": 23640,
+                  "DamagePercentageGrowth": 2150,
+                  "StunRatio": 20730,
+                  "StunRatioGrowth": 950,
+                  "SpRecovery": 31820,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 243100,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 7069,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 23837
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100115": 2 },
+        "2": { "10": 3000, "100115": 3 },
+        "3": { "10": 6000, "100125": 2 },
+        "4": { "10": 9000, "100125": 3 },
+        "5": { "10": 12000, "100125": 4 },
+        "6": { "10": 18000, "100125": 6 },
+        "7": { "10": 45000, "100135": 5 },
+        "8": { "10": 67500, "100135": 8 },
+        "9": { "10": 90000, "100135": 10 },
+        "10": { "10": 112500, "100135": 12 },
+        "11": { "10": 135000, "100135": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Special": {
+      "Description": [
+        {
+          "Name": "Special Attack: Song of Silver Wings",
+          "Desc": "Press <IconMap:Icon_Special> to activate:\nQuickly attack forward, dealing <color=#F0D12B>Physical DMG</color> and <color=#FE437E>Ether DMG</color>.\nAnti-Interrupt level is increased while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Violet Requiem",
+          "Desc": "With enough Energy, press <IconMap:Icon_SpecialReady> to activate:\nUnleash a powerful forward attack that deals massive <color=#FE437E>Ether DMG</color> and grants 3 <color=#FFFFFF>Flight Feathers</color>.\nCharacter is invulnerable while using this skill.\nEnter the <color=#FFFFFF>Fluttering Frock</color> state after using the skill. Hold <IconMap:Icon_Evade> during the skill to enter the <color=#FFFFFF>Noblewoman</color> state.",
+          "Potential": []
+        },
+        {
+          "Name": "Special Attack: Song of Silver Wings",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1331009, Prop:1001}",
+              "Param": {
+                "1331009": {
+                  "Main": 5690,
+                  "Growth": 520,
+                  "Format": "%",
+                  "DamagePercentage": 5690,
+                  "DamagePercentageGrowth": 520,
+                  "StunRatio": 5690,
+                  "StunRatioGrowth": 260,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 142175,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4134,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5169
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1331009, Prop:1002}",
+              "Param": {
+                "1331009": {
+                  "Main": 5690,
+                  "Growth": 260,
+                  "Format": "%",
+                  "DamagePercentage": 5690,
+                  "DamagePercentageGrowth": 520,
+                  "StunRatio": 5690,
+                  "StunRatioGrowth": 260,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 142175,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4134,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5169
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Violet Requiem",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1331010, Prop:1001}",
+              "Param": {
+                "1331010": {
+                  "Main": 59260,
+                  "Growth": 5390,
+                  "Format": "%",
+                  "DamagePercentage": 59260,
+                  "DamagePercentageGrowth": 5390,
+                  "StunRatio": 48480,
+                  "StunRatioGrowth": 2210,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 1751200,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 35256,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 14671
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1331010, Prop:1002}",
+              "Param": {
+                "1331010": {
+                  "Main": 48480,
+                  "Growth": 2210,
+                  "Format": "%",
+                  "DamagePercentage": 59260,
+                  "DamagePercentageGrowth": 5390,
+                  "StunRatio": 48480,
+                  "StunRatioGrowth": 2210,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 1751200,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 35256,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 14671
+                }
+              },
+              "Potential": []
+            },
+            { "Name": "Energy Cost", "Desc": "60", "Potential": [] }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100115": 2 },
+        "2": { "10": 3000, "100115": 3 },
+        "3": { "10": 6000, "100125": 2 },
+        "4": { "10": 9000, "100125": 3 },
+        "5": { "10": 12000, "100125": 4 },
+        "6": { "10": 18000, "100125": 6 },
+        "7": { "10": 45000, "100135": 5 },
+        "8": { "10": 67500, "100135": 8 },
+        "9": { "10": 90000, "100135": 10 },
+        "10": { "10": 112500, "100135": 12 },
+        "11": { "10": 135000, "100135": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Chain": {
+      "Description": [
+        {
+          "Name": "Chain Attack: Chorus of Celestial Wings",
+          "Desc": "When a <color=#FFFFFF>Chain Attack</color> is triggered, select the character to activate:\nLaunch a powerful attack on a large area of enemies ahead, dealing massive <color=#FE437E>Ether DMG</color> and gaining 2 <color=#FFFFFF>Flight Feathers</color>.\nCharacter is invulnerable while using this skill.\nAfter the skill activates, enter the <color=#FFFFFF>Fluttering Frock</color> state, which can be canceled by holding <IconMap:Icon_Evade> during the skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Ultimate: Soaring Bird's Song",
+          "Desc": "When Decibel Rating is at <color=#FFFFFF>Maximum</color>, press <IconMap:Icon_UltimateReady> to activate:\nLaunch a powerful attack on a large area of enemies ahead, dealing massive <color=#FE437E>Ether DMG</color> and gaining 5 <color=#FFFFFF>Flight Feathers</color>.\nCharacter is invulnerable while using this skill.\nAfter the skill is activated, enter the <color=#FFFFFF>Fluttering Frock</color> state, which can be canceled by holding <IconMap:Icon_Evade> during the skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Chain Attack: Chorus of Celestial Wings",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1331013, Prop:1001}",
+              "Param": {
+                "1331013": {
+                  "Main": 65890,
+                  "Growth": 5990,
+                  "Format": "%",
+                  "DamagePercentage": 65890,
+                  "DamagePercentageGrowth": 5990,
+                  "StunRatio": 22000,
+                  "StunRatioGrowth": 1000,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 2378750,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 31957,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 19997
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1331013, Prop:1002}",
+              "Param": {
+                "1331013": {
+                  "Main": 22000,
+                  "Growth": 1000,
+                  "Format": "%",
+                  "DamagePercentage": 65890,
+                  "DamagePercentageGrowth": 5990,
+                  "StunRatio": 22000,
+                  "StunRatioGrowth": 1000,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 2378750,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 31957,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 19997
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Ultimate: Soaring Bird's Song",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1331014, Prop:1001}",
+              "Param": {
+                "1331014": {
+                  "Main": 168680,
+                  "Growth": 15340,
+                  "Format": "%",
+                  "DamagePercentage": 168680,
+                  "DamagePercentageGrowth": 15340,
+                  "StunRatio": 24940,
+                  "StunRatioGrowth": 1140,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 80856,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 72671
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1331014, Prop:1002}",
+              "Param": {
+                "1331014": {
+                  "Main": 24940,
+                  "Growth": 1140,
+                  "Format": "%",
+                  "DamagePercentage": 168680,
+                  "DamagePercentageGrowth": 15340,
+                  "StunRatio": 24940,
+                  "StunRatioGrowth": 1140,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 80856,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 72671
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100115": 2 },
+        "2": { "10": 3000, "100115": 3 },
+        "3": { "10": 6000, "100125": 2 },
+        "4": { "10": 9000, "100125": 3 },
+        "5": { "10": 12000, "100125": 4 },
+        "6": { "10": 18000, "100125": 6 },
+        "7": { "10": 45000, "100135": 5 },
+        "8": { "10": 67500, "100135": 8 },
+        "9": { "10": 90000, "100135": 10 },
+        "10": { "10": 112500, "100135": 12 },
+        "11": { "10": 135000, "100135": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Assist": {
+      "Description": [
+        {
+          "Name": "Quick Assist: Frostwing Guard",
+          "Desc": "When the active character is launched, press <IconMap:Icon_Switch> to activate:\nLaunches an attack on enemies ahead, dealing <color=#F0D12B>Physical DMG</color> and <color=#FE437E>Ether DMG</color>.\nCharacter is invulnerable while using this skill.\nAfter the skill activates, enter the <color=#FFFFFF>Noblewoman</color> state.\nWith <color=#FFFFFF>Flight Feathers</color> available, hold <IconMap:Icon_Normal> during skill activation to enter the <color=#FFFFFF>Fluttering Frock</color> state.",
+          "Potential": []
+        },
+        {
+          "Name": "Defensive Assist: Silver Umbrella Formation",
+          "Desc": "When the on-field character is about to be attacked, press <IconMap:Icon_Switch> to activate:\nParries the enemy's attack, dealing massive Daze.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Assist Follow-Up: Featherblade Execution",
+          "Desc": "Press <IconMap:Icon_Normal> after a <color=#FFFFFF>Defensive Assist</color> to activate:\nLaunch an attack at enemies ahead, dealing <color=#FE437E>Ether DMG</color> and gaining 2 <color=#FFFFFF>Flight Feathers</color>.\nCharacter is invulnerable while using this skill.\nAfter the skill activates enter the <color=#FFFFFF>Fluttering Frock</color> state, which can be canceled by holding <IconMap:Icon_Evade> during the skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Quick Assist: Frostwing Guard",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1331015, Prop:1001}",
+              "Param": {
+                "1331015": {
+                  "Main": 9730,
+                  "Growth": 890,
+                  "Format": "%",
+                  "DamagePercentage": 9730,
+                  "DamagePercentageGrowth": 890,
+                  "StunRatio": 4870,
+                  "StunRatioGrowth": 230,
+                  "SpRecovery": 15910,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 121550,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 3534,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4419
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1331015, Prop:1002}",
+              "Param": {
+                "1331015": {
+                  "Main": 4870,
+                  "Growth": 230,
+                  "Format": "%",
+                  "DamagePercentage": 9730,
+                  "DamagePercentageGrowth": 890,
+                  "StunRatio": 4870,
+                  "StunRatioGrowth": 230,
+                  "SpRecovery": 15910,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 121550,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 3534,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4419
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Defensive Assist: Silver Umbrella Formation",
+          "Param": [
+            {
+              "Name": "Light Defensive Daze Multiplier",
+              "Desc": "{Skill:1331016, Prop:1002}",
+              "Param": {
+                "1331016": {
+                  "Main": 27130,
+                  "Growth": 1240,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 27130,
+                  "StunRatioGrowth": 1240,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 36664
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Heavy Defensive Daze Multiplier",
+              "Desc": "{Skill:1331017, Prop:1002}",
+              "Param": {
+                "1331017": {
+                  "Main": 34280,
+                  "Growth": 1560,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 34280,
+                  "StunRatioGrowth": 1560,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 41664
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Chain Defensive Daze Multiplier",
+              "Desc": "{Skill:1331018, Prop:1002}",
+              "Param": {
+                "1331018": {
+                  "Main": 16680,
+                  "Growth": 760,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 16680,
+                  "StunRatioGrowth": 760,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 11664
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Assist Follow-Up: Featherblade Execution",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1331019, Prop:1001}",
+              "Param": {
+                "1331019": {
+                  "Main": 37390,
+                  "Growth": 3400,
+                  "Format": "%",
+                  "DamagePercentage": 37390,
+                  "DamagePercentageGrowth": 3400,
+                  "StunRatio": 32530,
+                  "StunRatioGrowth": 1480,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 1056000,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 23656,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 16337
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1331019, Prop:1002}",
+              "Param": {
+                "1331019": {
+                  "Main": 32530,
+                  "Growth": 1480,
+                  "Format": "%",
+                  "DamagePercentage": 37390,
+                  "DamagePercentageGrowth": 3400,
+                  "StunRatio": 32530,
+                  "StunRatioGrowth": 1480,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 1056000,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 23656,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 16337
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100115": 2 },
+        "2": { "10": 3000, "100115": 3 },
+        "3": { "10": 6000, "100125": 2 },
+        "4": { "10": 9000, "100125": 3 },
+        "5": { "10": 12000, "100125": 4 },
+        "6": { "10": 18000, "100125": 6 },
+        "7": { "10": 45000, "100135": 5 },
+        "8": { "10": 67500, "100135": 8 },
+        "9": { "10": 90000, "100135": 10 },
+        "10": { "10": 112500, "100135": 12 },
+        "11": { "10": 135000, "100135": 15, "100941": 1 },
+        "12": {}
+      }
+    }
+  },
+  "SkillList": {
+    "1331001": {
+      "Name": "Basic Attack: Feathered Strike (1st, 2nd, and 3rd hit)",
+      "Desc": "<IconMap:Icon_Normal>",
+      "ElementType": 200,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331002": {
+      "Name": "Basic Attack: Feathered Strike (4th hit)",
+      "Desc": "<IconMap:Icon_Normal>",
+      "ElementType": 205,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331003": {
+      "Name": "Basic Attack: Noblewoman - Waltz",
+      "Desc": "<IconMap:Icon_Normal> (During Noblewoman state)",
+      "ElementType": 205,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331004": {
+      "Name": "Basic Attack: Fluttering Frock - Suspension",
+      "Desc": "<IconMap:Icon_Normal> (During Fluttering Frock state)",
+      "ElementType": 205,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331005": {
+      "Name": "Special Attack: Song of Silver Wings",
+      "Desc": "<IconMap:Icon_Special>",
+      "ElementType": 205,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331006": {
+      "Name": "EX Special Attack: Violet Requiem",
+      "Desc": "<IconMap:Icon_SpecialReady>",
+      "ElementType": 205,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331007": {
+      "Name": "Dash Attack: Silver Thorned Melody",
+      "Desc": "<IconMap:Icon_Evade> ; <IconMap:Icon_Normal>",
+      "ElementType": 200,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331008": {
+      "Name": "Dodge Counter: Wingblade Reverb",
+      "Desc": "<IconMap:Icon_Evade> (Perfect) ; <IconMap:Icon_Normal>",
+      "ElementType": 205,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331009": {
+      "Name": "Chain Attack: Chorus of Celestial Wings",
+      "Desc": "<IconMap:Icon_QTE>",
+      "ElementType": 205,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331010": {
+      "Name": "Ultimate: Soaring Bird's Song",
+      "Desc": "<IconMap:Icon_UltimateReady>",
+      "ElementType": 205,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331011": {
+      "Name": "Quick Assist: Frostwing Guard",
+      "Desc": "<IconMap:Icon_Switch> (When Triggering Quick Assist)",
+      "ElementType": 205,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331012": {
+      "Name": "Defensive Assist: Silver Umbrella Formation",
+      "Desc": "<IconMap:Icon_Switch> (When Triggering Defensive Assist)",
+      "ElementType": 205,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1331013": {
+      "Name": "Assist Follow-Up: Featherblade Execution",
+      "Desc": "<IconMap:Icon_Normal> (After Defensive Assist)",
+      "ElementType": 205,
+      "HitType": 101,
+      "Potential": []
+    }
+  },
+  "Passive": {
+    "Level": {
+      "1331501": {
+        "Level": 1,
+        "Id": 1331501,
+        "Name": [
+          "Core Passive: Dirge of Destiny",
+          "Additional Ability: Prophetic Tears"
+        ],
+        "Desc": [
+          "When <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target that is suffering from an <color=#FE437E>Ether</color>, <color=#2EB6FF>Electric</color>, <color=#FF5521>Fire</color>, <color=#F0D12B>Physical</color>, or <color=#98EFF0>Ice</color> Anomaly, it will trigger <color=#FFFFFF>Abloom</color>, dealing additional Attribute Anomaly DMG. The additional DMG is <color=#FE437E>3.07%</color>/<color=#2EB6FF>1.6%</color>/<color=#FF5521>4%</color>/<color=#F0D12B>0.37%</color>/<color=#98EFF0>0.54%</color> per 10 points of Anomaly Proficiency of the original Anomaly DMG.\nWhen <color=#FFFFFF>Basic Attack: Fluttering Frock - Suspension</color> or <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target suffering any Attribute Anomaly, it will inflict <color=#FFFFFF>Vivian's Prophecy</color>, causing the target to take <color=#FE437E>Ether DMG</color> equal to 55% of Vivian's ATK every 0.55s. This DMG can trigger additional DMG from Attribute Anomalies. <color=#FFFFFF>Vivian's Prophecy</color> ends when the target is no longer suffering an Attribute Anomaly.\nWhen entering the battlefield, Vivian gains 2 <color=#FFFFFF>Flight Feathers</color>.",
+          "When another character in your squad is an <color=#FFFFFF>Anomaly</color> character or shares the same attribute:\nWhenever another squad member applies an Attribute Anomaly to an enemy, Vivian will consume 1 <color=#FFFFFF>Guard Feather</color> to launch <color=#FFFFFF>Basic Attack: Featherbloom</color> on the target. This can trigger once every 0.5s.\n<color=#FE437E>Corruption</color> DMG dealt by all squad members and the <color=#FE437E>Corruption</color> status' <color=#FFFFFF>Disorder</color> DMG increases by <color=#2BAD00>12%</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1331502": {
+        "Level": 2,
+        "Id": 1331502,
+        "Name": [
+          "Core Passive: Dirge of Destiny",
+          "Additional Ability: Prophetic Tears"
+        ],
+        "Desc": [
+          "When <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target that is suffering from an <color=#FE437E>Ether</color>, <color=#2EB6FF>Electric</color>, <color=#FF5521>Fire</color>, <color=#F0D12B>Physical</color>, or <color=#98EFF0>Ice</color> Anomaly, it will trigger <color=#FFFFFF>Abloom</color>, dealing additional Attribute Anomaly DMG. The additional DMG is <color=#FE437E>3.59%</color>/<color=#2EB6FF>1.86%</color>/<color=#FF5521>4.66%</color>/<color=#F0D12B>0.44%</color>/<color=#98EFF0>0.63%</color> per 10 points of Anomaly Proficiency of the original Anomaly DMG.\nWhen <color=#FFFFFF>Basic Attack: Fluttering Frock - Suspension</color> or <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target suffering any Attribute Anomaly, it will inflict <color=#FFFFFF>Vivian's Prophecy</color>, causing the target to take <color=#FE437E>Ether DMG</color> equal to 55% of Vivian's ATK every 0.55s. This DMG can trigger additional DMG from Attribute Anomalies. <color=#FFFFFF>Vivian's Prophecy</color> ends when the target is no longer suffering an Attribute Anomaly.\nWhen entering the battlefield, Vivian gains 2 <color=#FFFFFF>Flight Feathers</color>.",
+          "When another character in your squad is an <color=#FFFFFF>Anomaly</color> character or shares the same attribute:\nWhenever another squad member applies an Attribute Anomaly to an enemy, Vivian will consume 1 <color=#FFFFFF>Guard Feather</color> to launch <color=#FFFFFF>Basic Attack: Featherbloom</color> on the target. This can trigger once every 0.5s.\n<color=#FE437E>Corruption</color> DMG dealt by all squad members and the <color=#FE437E>Corruption</color> status' <color=#FFFFFF>Disorder</color> DMG increases by <color=#2BAD00>12%</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1331503": {
+        "Level": 3,
+        "Id": 1331503,
+        "Name": [
+          "Core Passive: Dirge of Destiny",
+          "Additional Ability: Prophetic Tears"
+        ],
+        "Desc": [
+          "When <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target that is suffering from an <color=#FE437E>Ether</color>, <color=#2EB6FF>Electric</color>, <color=#FF5521>Fire</color>, <color=#F0D12B>Physical</color>, or <color=#98EFF0>Ice</color> Anomaly, it will trigger <color=#FFFFFF>Abloom</color>, dealing additional Attribute Anomaly DMG. The additional DMG is <color=#FE437E>4.11%</color>/<color=#2EB6FF>2.12%</color>/<color=#FF5521>5.32%</color>/<color=#F0D12B>0.51%</color>/<color=#98EFF0>0.72%</color> per 10 points of Anomaly Proficiency of the original Anomaly DMG.\nWhen <color=#FFFFFF>Basic Attack: Fluttering Frock - Suspension</color> or <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target suffering any Attribute Anomaly, it will inflict <color=#FFFFFF>Vivian's Prophecy</color>, causing the target to take <color=#FE437E>Ether DMG</color> equal to 55% of Vivian's ATK every 0.55s. This DMG can trigger additional DMG from Attribute Anomalies. <color=#FFFFFF>Vivian's Prophecy</color> ends when the target is no longer suffering an Attribute Anomaly.\nWhen entering the battlefield, Vivian gains 2 <color=#FFFFFF>Flight Feathers</color>.",
+          "When another character in your squad is an <color=#FFFFFF>Anomaly</color> character or shares the same attribute:\nWhenever another squad member applies an Attribute Anomaly to an enemy, Vivian will consume 1 <color=#FFFFFF>Guard Feather</color> to launch <color=#FFFFFF>Basic Attack: Featherbloom</color> on the target. This can trigger once every 0.5s.\n<color=#FE437E>Corruption</color> DMG dealt by all squad members and the <color=#FE437E>Corruption</color> status' <color=#FFFFFF>Disorder</color> DMG increases by <color=#2BAD00>12%</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1331504": {
+        "Level": 4,
+        "Id": 1331504,
+        "Name": [
+          "Core Passive: Dirge of Destiny",
+          "Additional Ability: Prophetic Tears"
+        ],
+        "Desc": [
+          "When <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target that is suffering from an <color=#FE437E>Ether</color>, <color=#2EB6FF>Electric</color>, <color=#FF5521>Fire</color>, <color=#F0D12B>Physical</color>, or <color=#98EFF0>Ice</color> Anomaly, it will trigger <color=#FFFFFF>Abloom</color>, dealing additional Attribute Anomaly DMG. The additional DMG is <color=#FE437E>4.63%</color>/<color=#2EB6FF>2.38%</color>/<color=#FF5521>5.98%</color>/<color=#F0D12B>0.58%</color>/<color=#98EFF0>0.81%</color> per 10 points of Anomaly Proficiency of the original Anomaly DMG.\nWhen <color=#FFFFFF>Basic Attack: Fluttering Frock - Suspension</color> or <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target suffering any Attribute Anomaly, it will inflict <color=#FFFFFF>Vivian's Prophecy</color>, causing the target to take <color=#FE437E>Ether DMG</color> equal to 55% of Vivian's ATK every 0.55s. This DMG can trigger additional DMG from Attribute Anomalies. <color=#FFFFFF>Vivian's Prophecy</color> ends when the target is no longer suffering an Attribute Anomaly.\nWhen entering the battlefield, Vivian gains 2 <color=#FFFFFF>Flight Feathers</color>.",
+          "When another character in your squad is an <color=#FFFFFF>Anomaly</color> character or shares the same attribute:\nWhenever another squad member applies an Attribute Anomaly to an enemy, Vivian will consume 1 <color=#FFFFFF>Guard Feather</color> to launch <color=#FFFFFF>Basic Attack: Featherbloom</color> on the target. This can trigger once every 0.5s.\n<color=#FE437E>Corruption</color> DMG dealt by all squad members and the <color=#FE437E>Corruption</color> status' <color=#FFFFFF>Disorder</color> DMG increases by <color=#2BAD00>12%</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1331505": {
+        "Level": 5,
+        "Id": 1331505,
+        "Name": [
+          "Core Passive: Dirge of Destiny",
+          "Additional Ability: Prophetic Tears"
+        ],
+        "Desc": [
+          "When <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target that is suffering from an <color=#FE437E>Ether</color>, <color=#2EB6FF>Electric</color>, <color=#FF5521>Fire</color>, <color=#F0D12B>Physical</color>, or <color=#98EFF0>Ice</color> Anomaly, it will trigger <color=#FFFFFF>Abloom</color>, dealing additional Attribute Anomaly DMG. The additional DMG is <color=#FE437E>5.15%</color>/<color=#2EB6FF>2.64%</color>/<color=#FF5521>6.64%</color>/<color=#F0D12B>0.65%</color>/<color=#98EFF0>0.9%</color> per 10 points of Anomaly Proficiency of the original Anomaly DMG.\nWhen <color=#FFFFFF>Basic Attack: Fluttering Frock - Suspension</color> or <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target suffering any Attribute Anomaly, it will inflict <color=#FFFFFF>Vivian's Prophecy</color>, causing the target to take <color=#FE437E>Ether DMG</color> equal to 55% of Vivian's ATK every 0.55s. This DMG can trigger additional DMG from Attribute Anomalies. <color=#FFFFFF>Vivian's Prophecy</color> ends when the target is no longer suffering an Attribute Anomaly.\nWhen entering the battlefield, Vivian gains 2 <color=#FFFFFF>Flight Feathers</color>.",
+          "When another character in your squad is an <color=#FFFFFF>Anomaly</color> character or shares the same attribute:\nWhenever another squad member applies an Attribute Anomaly to an enemy, Vivian will consume 1 <color=#FFFFFF>Guard Feather</color> to launch <color=#FFFFFF>Basic Attack: Featherbloom</color> on the target. This can trigger once every 0.5s.\n<color=#FE437E>Corruption</color> DMG dealt by all squad members and the <color=#FE437E>Corruption</color> status' <color=#FFFFFF>Disorder</color> DMG increases by <color=#2BAD00>12%</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1331506": {
+        "Level": 6,
+        "Id": 1331506,
+        "Name": [
+          "Core Passive: Dirge of Destiny",
+          "Additional Ability: Prophetic Tears"
+        ],
+        "Desc": [
+          "When <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target that is suffering from an <color=#FE437E>Ether</color>, <color=#2EB6FF>Electric</color>, <color=#FF5521>Fire</color>, <color=#F0D12B>Physical</color>, or <color=#98EFF0>Ice</color> Anomaly, it will trigger <color=#FFFFFF>Abloom</color>, dealing additional Attribute Anomaly DMG. The additional DMG is <color=#FE437E>5.65%</color>/<color=#2EB6FF>2.9%</color>/<color=#FF5521>7.3%</color>/<color=#F0D12B>0.7%</color>/<color=#98EFF0>0.99%</color> per 10 points of Anomaly Proficiency of the original Anomaly DMG.\nWhen <color=#FFFFFF>Basic Attack: Fluttering Frock - Suspension</color> or <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target suffering any Attribute Anomaly, it will inflict <color=#FFFFFF>Vivian's Prophecy</color>, causing the target to take <color=#FE437E>Ether DMG</color> equal to 55% of Vivian's ATK every 0.55s. This DMG can trigger additional DMG from Attribute Anomalies. <color=#FFFFFF>Vivian's Prophecy</color> ends when the target is no longer suffering an Attribute Anomaly.\nWhen entering the battlefield, Vivian gains 2 <color=#FFFFFF>Flight Feathers</color>.",
+          "When another character in your squad is an <color=#FFFFFF>Anomaly</color> character or shares the same attribute:\nWhenever another squad member applies an Attribute Anomaly to an enemy, Vivian will consume 1 <color=#FFFFFF>Guard Feather</color> to launch <color=#FFFFFF>Basic Attack: Featherbloom</color> on the target. This can trigger once every 0.5s.\n<color=#FE437E>Corruption</color> DMG dealt by all squad members and the <color=#FE437E>Corruption</color> status' <color=#FFFFFF>Disorder</color> DMG increases by <color=#2BAD00>12%</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      },
+      "1331507": {
+        "Level": 7,
+        "Id": 1331507,
+        "Name": [
+          "Core Passive: Dirge of Destiny",
+          "Additional Ability: Prophetic Tears"
+        ],
+        "Desc": [
+          "When <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target that is suffering from an <color=#FE437E>Ether</color>, <color=#2EB6FF>Electric</color>, <color=#FF5521>Fire</color>, <color=#F0D12B>Physical</color>, or <color=#98EFF0>Ice</color> Anomaly, it will trigger <color=#FFFFFF>Abloom</color>, dealing additional Attribute Anomaly DMG. The additional DMG is <color=#FE437E>6.15%</color>/<color=#2EB6FF>3.2%</color>/<color=#FF5521>8%</color>/<color=#F0D12B>0.75%</color>/<color=#98EFF0>1.08%</color> per 10 points of Anomaly Proficiency of the original Anomaly DMG.\nWhen <color=#FFFFFF>Basic Attack: Fluttering Frock - Suspension</color> or <color=#FFFFFF>Basic Attack: Featherbloom</color> hits a target suffering any Attribute Anomaly, it will inflict <color=#FFFFFF>Vivian's Prophecy</color>, causing the target to take <color=#FE437E>Ether DMG</color> equal to 55% of Vivian's ATK every 0.55s. This DMG can trigger additional DMG from Attribute Anomalies. <color=#FFFFFF>Vivian's Prophecy</color> ends when the target is no longer suffering an Attribute Anomaly.\nWhen entering the battlefield, Vivian gains 2 <color=#FFFFFF>Flight Feathers</color>.",
+          "When another character in your squad is an <color=#FFFFFF>Anomaly</color> character or shares the same attribute:\nWhenever another squad member applies an Attribute Anomaly to an enemy, Vivian will consume 1 <color=#FFFFFF>Guard Feather</color> to launch <color=#FFFFFF>Basic Attack: Featherbloom</color> on the target. This can trigger once every 0.5s.\n<color=#FE437E>Corruption</color> DMG dealt by all squad members and the <color=#FE437E>Corruption</color> status' <color=#FFFFFF>Disorder</color> DMG increases by <color=#2BAD00>12%</color>."
+        ],
+        "ExtraProperty": {},
+        "Potential": []
+      }
+    },
+    "Materials": {
+      "1": { "10": 5000 },
+      "2": { "10": 12000, "110508": 2 },
+      "3": { "10": 28000, "110508": 4 },
+      "4": { "10": 60000, "110005": 2, "110508": 9 },
+      "5": { "10": 100000, "110005": 3, "110508": 15 },
+      "6": { "10": 200000, "110005": 4, "110508": 30 }
+    }
+  },
+  "Talent": {
+    "1": {
+      "Level": 1,
+      "Name": "\"Walking Into the Orchard in Spring\"",
+      "Desc": "When a total of 4 <color=#FFFFFF>Guard Feathers</color> are consumed, gain 1 <color=#FFFFFF>Flight Feather</color>. All Attribute Anomaly DMG and <color=#FFFFFF>Disorder</color> DMG received by targets under <color=#FFFFFF>Vivian's Prophecy</color> increases by 16%.",
+      "Desc2": "\"Every morning is like our first encounter, every night a reunion.\"\nShe had once seen fate's fickleness, with the inevitable ending always tainted by tears.\nShe no longer wishes to be the prophetic bird of disaster. She's willing to vanish in the fire, sleep in the light, and change your fate with all she has.\nSo, please don't close the window; the bird will bring you love and carry away death."
+    },
+    "2": {
+      "Level": 2,
+      "Name": "\"Stormy Night, Stormy Night\"",
+      "Desc": "Vivian's <color=#FE437E>Ether Anomaly Buildup Rate</color> increases by 25%. The benefits of <color=#FFFFFF>Abloom</color> from Anomaly Proficiency are raised to 130% of the original value, and 15% of the target's All-Attribute RES is ignored.",
+      "Desc2": "\"If I had never seen the sun, I could have endured the darkness.\"\nThe word \"savior\" feels too heavy, and \"good person\" seems too light.\nSo, perhaps it's better to say, you were once her boatman.\nIn that storm called malice and self-regret, you were a ray of light, guiding her through the flood.\nFrom that moment on, she could no longer bear the curse or the nightmares. She set out on a journey to find you."
+    },
+    "3": {
+      "Level": 3,
+      "Name": "\"Another and the Same\"",
+      "Desc": "<color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Dodge</color>, <color=#FFFFFF>Assist</color>, <color=#FFFFFF>Special Attack</color>, and <color=#FFFFFF>Chain Attack</color> Lv. +2",
+      "Desc2": "\"We measure each other's shadows with the dusk, discovering they completely overlap.\"\nIn countless dusks you were unaware of, she watched the same sun set with you, turning the sea into a beautiful warmth.\nAmid countless diverging paths, she resolutely chose the one that led to your side.\nAnd today, she finally stands with her shadow overlapping yours.\nAnd today, the sunset remains unchanged."
+    },
+    "4": {
+      "Level": 4,
+      "Name": "\"The Wind Between the Reeds\"",
+      "Desc": "<color=#FFFFFF>Basic Attack: Fluttering Frock - Suspension</color> and <color=#FFFFFF>Basic Attack: Featherbloom</color> will always CRIT on hit, and they will also increase Vivian's ATK by 12% for 12s. Repeated triggers reset the duration.\nWhen entering the battlefield, Vivian immediately gains 5 <color=#FFFFFF>Guard Feathers</color>.",
+      "Desc2": "\"I will lay my true heart, like moonlight, to cover the path beneath your feet.\"\nIn chasing after you, she has already formed her own sky.\nShe is not one of vast love, nor does she have much.\nBut for you, only for you, she can spill moonlight, cover the darkness, and repair the fractures.\nYou are her only generosity, her greatest bravery."
+    },
+    "5": {
+      "Level": 5,
+      "Name": "\"Sonnet\"",
+      "Desc": "<color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Dodge</color>, <color=#FFFFFF>Assist</color>, <color=#FFFFFF>Special Attack</color>, and <color=#FFFFFF>Chain Attack</color> Lv. +2",
+      "Desc2": "\"Shall I compare thee to a summer's day?\"\nShe is like a bird, flying from late autumn with excitement and anticipation, her wings sweeping across the winter snow. In the spring, she picks a flower and flies straight into the scorching sun of summer.\nAll because your eyes hide a thousand suns, she loves the fierce sunlight and fears no frost."
+    },
+    "6": {
+      "Level": 6,
+      "Name": "\"Vivian\"",
+      "Desc": "Vivian's <color=#FE437E>Ether DMG</color> increases by 40%. When triggering a Perfect Dodge during <color=#FFFFFF>Basic Attack: Noblewoman - Waltz</color>'s dash, or using <color=#FFFFFF>EX Special Attack: Violet Requiem</color>, gain 1 additional <color=#FFFFFF>Flight Feather</color>. Launching <color=#FFFFFF>Basic Attack: Fluttering Frock - Suspension</color> consumes all <color=#FFFFFF>Guard Feathers</color>, the downward attack's area of effect increases, and upon hit, triggers a special instance of <color=#FFFFFF>Abloom</color>. Each additional <color=#FFFFFF>Guard Feather</color> consumed will increase the proportion of additional Anomaly DMG dealt by that instance of <color=#FFFFFF>Abloom</color>, consuming a maximum of 5 <color=#FFFFFF>Guard Feathers</color> to increase the DMG up to a maximum of 5 times the original.",
+      "Desc2": "\"Vivian is a love poem written only for you.\"\n\"We have all the time in the world.\"\n\"So, please allow me to write the rest of my life as your footnotes.\""
+    }
+  },
+  "FairyRecommend": {
+    "Slot4": 33000,
+    "Slot2": 31300,
+    "SlotSub": 31600,
+    "Part4": {
+      "Prop": 31203,
+      "Name": "Anomaly Proficiency",
+      "Format": "{0:0}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconElementMystery.png"
+    },
+    "Part5": {
+      "Prop": 31903,
+      "Name": "Ether DMG Bonus",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconGeneralBuff/Packer/IconDungeonBuffEther.png"
+    },
+    "Part6": {
+      "Prop": 31402,
+      "Name": "Anomaly Mastery",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconElementAbnormalPower.png"
+    },
+    "PartSub": {
+      "Prop": 12102,
+      "Name": "ATK",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconAttack.png"
+    }
+  },
+  "Potential": [],
+  "PotentialDetail": {}
+}
