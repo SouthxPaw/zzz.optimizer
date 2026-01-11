@@ -91,6 +91,11 @@ h1 {
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
+.info-section {
+  background: #0f3460;
+  border: 2px solid #00d9ff;
+}
+
 .section h2 {
   color: #00d9ff;
   margin: 0 0 10px 0;
@@ -103,6 +108,16 @@ h1 {
   line-height: 1.6;
 }
 
+.status-text {
+  color: #4caf50;
+  font-weight: 600;
+  margin: 15px 0;
+  padding: 10px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 6px;
+  border-left: 4px solid #4caf50;
+}
+
 .button-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -111,6 +126,7 @@ h1 {
 
 .btn-primary,
 .btn-secondary,
+.btn-warning,
 .btn-danger {
   padding: 14px 24px;
   border: none;
@@ -144,6 +160,17 @@ h1 {
   border-color: #00b8d4;
 }
 
+.btn-warning {
+  background: #ff9800;
+  color: white;
+}
+
+.btn-warning:hover:not(:disabled) {
+  background: #f57c00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+}
+
 .btn-danger {
   background: #f44336;
   color: white;
@@ -157,6 +184,7 @@ h1 {
 
 .btn-primary:disabled,
 .btn-secondary:disabled,
+.btn-warning:disabled,
 .btn-danger:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -185,6 +213,20 @@ h1 {
 .instructions ul {
   margin: 10px 0;
   padding-left: 20px;
+}
+
+.instructions h3 {
+  color: #00d9ff;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+}
+
+.note {
+  color: #888;
+  font-size: 0.9em;
+  margin-top: 10px;
+  font-style: italic;
 }
 
 .instructions li {

@@ -2,11 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { Agent } from '../../models/agent.model';
+import { Agent, DiscSlot } from '../../models/agent.model';
 import { WEngine } from '../../models/wengine.model';
+import { Disc } from '../../models/disc.model';
 import { AgentService } from '../../services/agent.service';
 import { WEngineService } from '../../services/wengine.service';
+import { DiscService } from '../../services/disc.service';
 import { BuildService, AgentBuild } from '../../services/build.service';
+import { StatCalculatorService } from '../../services/stat-calculator.service';
 
 @Component({
   selector: 'app-character-tab',
@@ -27,13 +30,30 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   // UI state
   showAddAgentModal = false;
   selectedAgentForAdd: Agent | null = null;
+  showDiscPicker = false;
+  selectedDiscSlot: DiscSlot | null = null;
+
+  // Disc slots
+  discSlots: DiscSlot[] = ['Drive1', 'Drive2', 'Drive3', 'Drive4', 'Drive5', 'Drive6'];
+
+  // Disc inventory
+  allDiscs: Disc[] = [];
+
+  // Disc picker filters
+  discSearchTerm = '';
+  discFilterSlot: DiscSlot | '' = '';
+  discFilterSet = '';
+  showOnlyUnequipped = false;
+  availableDiscSets: string[] = [];
 
   private destroy$ = new Subject<void>();
 
   constructor(
     private buildService: BuildService,
     private agentService: AgentService,
-    private wEngineService: WEngineService
+    private wEngineService: WEngineService,
+    private discService: DiscService,
+    private statCalculator: StatCalculatorService
   ) {}
 
   ngOnInit() {
@@ -67,6 +87,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(wEngines => {
         this.referenceWEngines = wEngines;
+      });
+
+    // Load user disc inventory
+    this.discService.discs$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(discs => {
+        this.allDiscs = discs;
+        // Extract unique disc sets for filtering
+        this.availableDiscSets = [...new Set(discs.map(d => d.set))].sort();
       });
   }
 
@@ -163,9 +192,82 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return Object.keys(build.equippedDiscs).length;
   }
 
-  // Helper to get agent rarity display
-  getRarityDisplay(agentId: string): string {
+  // Helper to get agent rank display
+  getRankDisplay(agentId: string): string {
     const agent = this.referenceAgents.find(a => a.id === agentId);
-    return agent?.rarity === 'S' ? '★★★★★' : '★★★★';
+    return agent?.rarity === 'S' ? 'S-Rank' : 'A-Rank';
+  }
+
+  // Disc management methods
+  openDiscPicker(slot: DiscSlot) {
+    if (!this.selectedBuild) return;
+    this.selectedDiscSlot = slot;
+    this.showDiscPicker = true;
+  }
+
+  closeDiscPicker() {
+    this.showDiscPicker = false;
+    this.selectedDiscSlot = null;
+  }
+
+  async unequipDisc(slot: DiscSlot, event: Event) {
+    event.stopPropagation();
+    if (!this.selectedBuild) return;
+
+    try {
+      await this.buildService.unequipDisc(this.selectedBuild.id, slot);
+    } catch (error) {
+      console.error('Error unequipping disc:', error);
+    }
+  }
+
+  getSetBonuses(): string[] {
+    if (!this.selectedBuild) return [];
+    return this.statCalculator.getSetBonuses(this.selectedBuild.equippedDiscs);
+  }
+
+  // Disc picker methods
+  getFilteredDiscs(): Disc[] {
+    let filtered = this.allDiscs;
+
+    // Filter by selected slot (only show discs that match the slot being filled)
+    if (this.selectedDiscSlot) {
+      filtered = filtered.filter(d => d.slot === this.selectedDiscSlot);
+    }
+
+    // Filter by slot dropdown
+    if (this.discFilterSlot) {
+      filtered = filtered.filter(d => d.slot === this.discFilterSlot);
+    }
+
+    // Filter by set
+    if (this.discFilterSet) {
+      filtered = filtered.filter(d => d.set === this.discFilterSet);
+    }
+
+    // Filter by search term
+    if (this.discSearchTerm) {
+      const searchLower = this.discSearchTerm.toLowerCase();
+      filtered = filtered.filter(d => d.set.toLowerCase().includes(searchLower));
+    }
+
+    // Filter unequipped only
+    if (this.showOnlyUnequipped) {
+      filtered = filtered.filter(d => !d.equippedBy);
+    }
+
+    return filtered;
+  }
+
+  async equipDiscToBuild(disc: Disc) {
+    if (!this.selectedBuild || !this.selectedDiscSlot) return;
+
+    try {
+      await this.buildService.equipDisc(this.selectedBuild.id, disc);
+      this.closeDiscPicker();
+    } catch (error) {
+      console.error('Error equipping disc:', error);
+      alert('Error equipping disc');
+    }
   }
 }

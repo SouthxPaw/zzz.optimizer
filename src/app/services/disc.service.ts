@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Disc, DiscSet, MainStatType, SubStat, SubStatType } from '../models/disc.model';
 import { ScoringAlgorithm } from '../models/scoring.model';
 import { DiscSlot } from '../models/agent.model';
+import { DbService } from './db.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,18 @@ export class DiscService {
   private discsSubject = new BehaviorSubject<Disc[]>([]);
   public discs$: Observable<Disc[]> = this.discsSubject.asObservable();
 
-  constructor() {
+  constructor(private db: DbService) {
+    this.loadDiscsFromDb();
+  }
+
+  private async loadDiscsFromDb(): Promise<void> {
+    try {
+      const discs = await this.db.getAllDiscs();
+      this.discsSubject.next(discs);
+      console.log(`Loaded ${discs.length} discs from IndexedDB`);
+    } catch (error) {
+      console.error('Error loading discs from IndexedDB:', error);
+    }
   }
 
   getDiscs(): Disc[] {
@@ -23,21 +35,24 @@ export class DiscService {
     return this.discsSubject.value.find(d => d.uid === uid);
   }
 
-  addDisc(disc: Disc): void {
+  async addDisc(disc: Disc): Promise<void> {
+    await this.db.addDisc(disc);
     const current = this.discsSubject.value;
     this.discsSubject.next([...current, disc]);
   }
 
-  updateDisc(uid: string, updates: Partial<Disc>): void {
+  async updateDisc(uid: string, updates: Partial<Disc>): Promise<void> {
     const current = this.discsSubject.value;
     const index = current.findIndex(d => d.uid === uid);
     if (index !== -1) {
+      await this.db.updateDisc(uid, updates);
       current[index] = { ...current[index], ...updates };
       this.discsSubject.next([...current]);
     }
   }
 
-  deleteDisc(uid: string): void {
+  async deleteDisc(uid: string): Promise<void> {
+    await this.db.deleteDisc(uid);
     const current = this.discsSubject.value.filter(d => d.uid !== uid);
     this.discsSubject.next(current);
   }
@@ -109,6 +124,7 @@ export class DiscService {
       CRIT_Rate: 3.2,
       CRIT_DMG: 6.4,
       Anomaly_Proficiency: 9,
+      Anomaly_Mastery: 9,
       Pen_Ratio: 4.8,
       Impact: 4.8,
       Energy_Regen: 4.8,

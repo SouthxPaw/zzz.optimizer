@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Agent, Element, Specialty, BaseStats } from '../models/agent.model';
+import { Agent, BaseStats } from '../models/agent.model';
 import { WEngine } from '../models/wengine.model';
+import { DataMappingService } from './data-mapping.service';
 
 /**
  * Service to transform raw game data JSON into app-compatible format
@@ -10,30 +11,7 @@ import { WEngine } from '../models/wengine.model';
 })
 export class DataTransformerService {
 
-  /**
-   * Map raw game element codes to our Element types
-   */
-  private elementMap: { [key: number]: Element } = {
-    200: 'Physical',
-    201: 'Fire',
-    202: 'Ice',
-    203: 'Electric',
-    205: 'Ether'
-  };
-
-  /**
-   * Map raw game type codes to our Specialty types
-   * Based on common ZZZ specialties:
-   * 1 = Attack, 2 = Stun, 3 = Anomaly, 4 = Support, 5 = Defense, 6 = Rupture
-   */
-  private specialtyMap: { [key: number]: Specialty } = {
-    1: 'Attack',
-    2: 'Stun',
-    3: 'Anomaly',
-    4: 'Support',
-    5: 'Defense',
-    6: 'Rupture'
-  };
+  constructor(private mappingService: DataMappingService) {}
 
   /**
    * Transform raw agents JSON to Agent[] format
@@ -71,14 +49,14 @@ export class DataTransformerService {
       return null;
     }
 
-    // Map rarity: rank 3 = A-rank, rank 4 = S-rank, rank 5 = S-rank
-    const rarity: 'A' | 'S' = rawAgent.rank >= 4 ? 'S' : 'A';
+    // Map rarity: rank 3 = A-rank, rank 4+ = S-rank
+    const rarity: 'A' | 'S' = this.mappingService.getRarity(rawAgent.rank) as 'A' | 'S';
 
     // Map element
-    const element = this.elementMap[rawAgent.element] || 'Physical';
+    const element = this.mappingService.getElement(rawAgent.element);
 
     // Map specialty
-    const specialty = this.specialtyMap[rawAgent.type] || 'Attack';
+    const specialty = this.mappingService.getSpecialty(rawAgent.type);
 
     return {
       id: id,
@@ -106,16 +84,37 @@ export class DataTransformerService {
       const baseDef = stats.Defence || 0;
 
       const finalHp = baseHp + (level6?.HpMax || 0);
-      const finalAtk = baseAtk + (level6?.Attack || 0);
       const finalDef = baseDef + (level6?.Defence || 0);
 
       const critRate = (stats.Crit || 500) / 100;
       const critDmg = (stats.CritDamage || 5000) / 100;
-      const impact = stats.BreakStun || 0;
+      let impact = stats.BreakStun || 0;
       const anomalyMastery = stats.ElementAbnormalPower || 0;
       const anomalyProficiency = stats.ElementMystery || 0;
       const penRatio = (stats.PenRate || stats.PenDelta || 0) / 100;
       const energyRegen = (stats.SpRecover || stats.SpBarPoint || 120) / 100;
+
+      // Add ExtraLevel bonuses (ascension bonuses)
+      // These add additional stats at each ascension phase
+      let extraAtk = 0;
+      if (rawAgent.ExtraLevel) {
+        for (const [, levelData] of Object.entries(rawAgent.ExtraLevel as any)) {
+          const extra = (levelData as any).Extra;
+          if (extra) {
+            // 12101 is the property code for Base ATK
+            if (extra['12101']) {
+              extraAtk += extra['12101'].Value || 0;
+            }
+            // 12201 is the property code for Impact
+            if (extra['12201']) {
+              impact += extra['12201'].Value || 0;
+            }
+          }
+        }
+      }
+
+      // Calculate final ATK including level growth and ascension bonuses
+      const finalAtk = baseAtk + (level6?.Attack || 0) + extraAtk;
 
       return {
         hp: Math.round(finalHp),
@@ -231,18 +230,11 @@ export class DataTransformerService {
       return null;
     }
 
-    // Map rarity: 2 = B, 3 = A, 4 = S
-    let rarity: 'S' | 'A' | 'B';
-    if (rawWEngine.rank >= 4) {
-      rarity = 'S';
-    } else if (rawWEngine.rank === 3) {
-      rarity = 'A';
-    } else {
-      rarity = 'B';
-    }
+    // Map rarity: 2 = B, 3 = A, 4+ = S
+    const rarity = this.mappingService.getRarity(rawWEngine.rank);
 
     // Map specialty
-    const specialty = this.specialtyMap[rawWEngine.type] || 'Attack';
+    const specialty = this.mappingService.getSpecialty(rawWEngine.type);
 
     // Estimate base ATK based on rarity
     let baseAtk: number;
@@ -269,6 +261,46 @@ export class DataTransformerService {
         description: rawWEngine.desc || 'No description available'
       }
     };
+  }
+
+  /**
+   * Transform a single agent with enhanced stats from detailed character JSON
+   * This method merges data from agents.json with character/{id}.json for accurate stats
+   */
+  transformAgentWithDetailedStats(id: string, basicAgent: any, detailedData: any): Agent {
+    // Use detailed stats if available, otherwise fall back to extractLevel60Stats
+    const lvl60Stats = this.extractLevel60Stats(detailedData) || this.extractLevel60Stats(basicAgent);
+
+    if (!lvl60Stats) {
+      throw new Error(`Failed to extract stats for agent ${id}`);
+    }
+
+    const rarity = this.mappingService.getRarity(basicAgent.rank) as 'A' | 'S';
+    const element = this.mappingService.getElement(basicAgent.element);
+    const specialty = this.mappingService.getSpecialty(basicAgent.type);
+
+    return {
+      id: id,
+      name: basicAgent.EN || detailedData.Name || 'Unknown',
+      rarity: rarity,
+      element: element,
+      specialty: specialty,
+      lvl60Stats: lvl60Stats
+    };
+  }
+
+  /**
+   * Get agent image path helper
+   */
+  getAgentImagePath(agentId: string): string {
+    return this.mappingService.getAgentImagePath(agentId);
+  }
+
+  /**
+   * Get W-Engine image path helper
+   */
+  getWEngineImagePath(icon: string): string {
+    return this.mappingService.getWEngineImagePath(icon);
   }
 
   /**

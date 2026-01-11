@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataImportService } from '../../services/data-import.service';
+import { AppInitService } from '../../services/app-init.service';
 
 @Component({
   selector: 'app-data-manager',
@@ -14,11 +15,31 @@ export class DataManagerComponent {
   message = '';
   messageType: 'success' | 'error' | 'info' = 'info';
 
-  constructor(private dataImportService: DataImportService) {}
+  constructor(
+    private dataImportService: DataImportService,
+    private appInitService: AppInitService
+  ) {}
+
+  async reloadReferenceData() {
+    if (confirm('This will reload all reference data (agents, W-Engines) from assets. Continue?')) {
+      this.isLoading = true;
+      this.setMessage('Reloading reference data from assets folder...', 'info');
+
+      try {
+        await this.appInitService.reloadReferenceData();
+        this.setMessage('Reference data reloaded successfully', 'success');
+      } catch (error) {
+        console.error('Reload error:', error);
+        this.setMessage('Error reloading reference data. Check console for details.', 'error');
+      } finally {
+        this.isLoading = false;
+      }
+    }
+  }
 
   async importAllFromAssets() {
     this.isLoading = true;
-    this.setMessage('Importing data from assets folder...', 'info');
+    this.setMessage('Importing all data from assets folder...', 'info');
 
     try {
       const results = await this.dataImportService.importAllData();
@@ -134,8 +155,42 @@ export class DataManagerComponent {
     }
   }
 
+  async clearUserData() {
+    if (confirm('Are you sure you want to delete your user data (disc inventory)? This cannot be undone!')) {
+      this.isLoading = true;
+      this.setMessage('Clearing user data...', 'info');
+
+      try {
+        await this.dataImportService.clearUserData();
+        this.setMessage('User data cleared successfully', 'success');
+      } catch (error) {
+        console.error('Clear error:', error);
+        this.setMessage('Error clearing user data. Check console for details.', 'error');
+      } finally {
+        this.isLoading = false;
+      }
+    }
+  }
+
+  async clearReferenceData() {
+    if (confirm('Are you sure you want to delete reference data (agents, W-Engines)? You can re-import it from assets.')) {
+      this.isLoading = true;
+      this.setMessage('Clearing reference data...', 'info');
+
+      try {
+        await this.dataImportService.clearReferenceData();
+        this.setMessage('Reference data cleared successfully', 'success');
+      } catch (error) {
+        console.error('Clear error:', error);
+        this.setMessage('Error clearing reference data. Check console for details.', 'error');
+      } finally {
+        this.isLoading = false;
+      }
+    }
+  }
+
   async clearAllData() {
-    if (confirm('Are you sure you want to delete ALL data? This cannot be undone!')) {
+    if (confirm('Are you sure you want to delete ALL data (both reference and user data)? This cannot be undone!')) {
       this.isLoading = true;
       this.setMessage('Clearing all data...', 'info');
 

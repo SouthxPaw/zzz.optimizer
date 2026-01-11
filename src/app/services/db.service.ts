@@ -4,20 +4,37 @@ import { Agent } from '../models/agent.model';
 import { WEngine } from '../models/wengine.model';
 import { Disc } from '../models/disc.model';
 
+/**
+ * Database Service
+ *
+ * IMPORTANT DATA ARCHITECTURE:
+ * - agents/wEngines tables = REFERENCE DATA (game database, loaded once from assets)
+ * - discs table = USER DATA (user's disc inventory)
+ * - builds table = USER DATA (user's character builds)
+ *
+ * Reference data is loaded from assets/data/*.json and should NOT be modified by users.
+ * User data is created/modified by users and stored separately.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class DbService extends Dexie {
+  // REFERENCE DATA - Loaded from assets, not user-modifiable
   agents!: Table<Agent, string>;
   wEngines!: Table<WEngine, string>;
+
+  // USER DATA - Created and managed by users
   discs!: Table<Disc, string>;
 
   constructor() {
     super('ZZZOptimizerDB');
 
     this.version(1).stores({
+      // Reference data tables
       agents: 'id, name, rarity, element, specialty',
       wEngines: 'id, name, rarity, specialty',
+
+      // User data tables
       discs: 'uid, slot, set, rarity, equippedBy'
     });
   }
@@ -97,10 +114,30 @@ export class DbService extends Dexie {
     return await this.discs.bulkAdd(discs, { allKeys: true }) as any;
   }
 
-  // Clear all data
-  async clearAllData(): Promise<void> {
+  // Clear user data only (keeps reference data intact)
+  async clearUserData(): Promise<void> {
+    await this.discs.clear();
+    console.log('User data (discs) cleared');
+  }
+
+  // Clear reference data only
+  async clearReferenceData(): Promise<void> {
     await this.agents.clear();
     await this.wEngines.clear();
-    await this.discs.clear();
+    console.log('Reference data (agents, W-Engines) cleared');
+  }
+
+  // Clear ALL data (both reference and user data)
+  async clearAllData(): Promise<void> {
+    await this.clearReferenceData();
+    await this.clearUserData();
+    console.log('All data cleared');
+  }
+
+  // Check if reference data is loaded
+  async hasReferenceData(): Promise<boolean> {
+    const agentCount = await this.agents.count();
+    const wEngineCount = await this.wEngines.count();
+    return agentCount > 0 && wEngineCount > 0;
   }
 }

@@ -98,7 +98,7 @@
           <select [(ngModel)]="sortBy" (change)="applySort()" class="select-input">
             <option value="score">Score (High to Low)</option>
             <option value="level">Level (High to Low)</option>
-            <option value="rarity">Rarity (High to Low)</option>
+            <option value="rarity">Rank (High to Low)</option>
             <option value="slot">Slot</option>
             <option value="set">Set Name</option>
             <option value="potential">Potential (High to Low)</option>
@@ -116,7 +116,7 @@
 
           <div class="disc-header">
             <div class="disc-slot">{{formatSlot(disc.slot)}}</div>
-            <div class="disc-rarity">★{{disc.rarity}}</div>
+            <div class="disc-rank">{{disc.rarity}}-Rank</div>
             <div class="disc-level">+{{disc.level}}</div>
           </div>
 
@@ -186,8 +186,8 @@
       </div>
 
       <div class="detail-group">
-        <label>Rarity:</label>
-        <span>★{{selectedDisc.rarity}}</span>
+        <label>Rank:</label>
+        <span>{{selectedDisc.rarity}}-Rank</span>
       </div>
 
       <div class="detail-group">
