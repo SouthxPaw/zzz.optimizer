@@ -1,0 +1,120 @@
+<div class="data-manager">
+  <div class="container">
+    <h1>Data Manager</h1>
+    <p class="subtitle">Import and manage your ZZZ Optimizer data</p>
+
+    <!-- Message Display -->
+    <div *ngIf="message" class="message" [class]="messageType">
+      {{ message }}
+    </div>
+
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="loading">
+      <div class="spinner"></div>
+      <p>Processing...</p>
+    </div>
+
+    <!-- Import Section -->
+    <div class="section">
+      <h2>Import Data</h2>
+      <p class="section-description">
+        Load data from JSON files in the assets/data folder into IndexedDB.
+      </p>
+
+      <div class="button-grid">
+        <button
+          class="btn-primary"
+          (click)="importAllFromAssets()"
+          [disabled]="isLoading">
+          Import All Data
+        </button>
+        <button
+          class="btn-secondary"
+          (click)="importAgentsFromAssets()"
+          [disabled]="isLoading">
+          Import Agents Only
+        </button>
+        <button
+          class="btn-secondary"
+          (click)="importWEnginesFromAssets()"
+          [disabled]="isLoading">
+          Import W-Engines Only
+        </button>
+        <button
+          class="btn-secondary"
+          (click)="importDiscsFromAssets()"
+          [disabled]="isLoading">
+          Import Discs Only
+        </button>
+      </div>
+    </div>
+
+    <!-- Export Section -->
+    <div class="section">
+      <h2>Export Data</h2>
+      <p class="section-description">
+        Download your current data from IndexedDB as JSON files.
+      </p>
+
+      <div class="button-grid">
+        <button
+          class="btn-primary"
+          (click)="exportAllData()"
+          [disabled]="isLoading">
+          Export All Data
+        </button>
+        <button
+          class="btn-secondary"
+          (click)="exportAgents()"
+          [disabled]="isLoading">
+          Export Agents
+        </button>
+        <button
+          class="btn-secondary"
+          (click)="exportWEngines()"
+          [disabled]="isLoading">
+          Export W-Engines
+        </button>
+        <button
+          class="btn-secondary"
+          (click)="exportDiscs()"
+          [disabled]="isLoading">
+          Export Discs
+        </button>
+      </div>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="section danger-zone">
+      <h2>Danger Zone</h2>
+      <p class="section-description">
+        This action will permanently delete all data from IndexedDB.
+      </p>
+
+      <button
+        class="btn-danger"
+        (click)="clearAllData()"
+        [disabled]="isLoading">
+        Clear All Data
+      </button>
+    </div>
+
+    <!-- Instructions -->
+    <div class="section instructions">
+      <h2>How to Use</h2>
+      <ol>
+        <li>Place your JSON data files in <code>src/assets/data/</code></li>
+        <li>Expected filenames:
+          <ul>
+            <li><code>agents.json</code> - Agent data</li>
+            <li><code>wengines.json</code> - W-Engine data</li>
+            <li><code>discs.json</code> - Disc Drive data</li>
+          </ul>
+        </li>
+        <li>Click "Import All Data" to load everything into IndexedDB</li>
+        <li>Data persists in your browser's IndexedDB cache</li>
+        <li>Use export functions to backup your data</li>
+      </ol>
+    </div>
+  </div>
+</div>

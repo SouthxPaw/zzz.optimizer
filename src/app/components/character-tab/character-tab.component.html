@@ -1,0 +1,200 @@
+<div class="character-tab">
+  <div class="header">
+    <h1>My Builds</h1>
+    <div class="header-actions">
+      <button class="btn-primary" (click)="openAddAgentModal()">
+        + Add Agent
+      </button>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <!-- Builds List -->
+    <div class="section builds-list">
+      <h2>Characters</h2>
+
+      <!-- Empty State -->
+      <div *ngIf="builds.length === 0" class="empty-state">
+        <div class="empty-icon">🎭</div>
+        <h3>No Builds Yet</h3>
+        <p>Click "Add Agent" to create your first build.</p>
+        <button class="btn-primary" (click)="openAddAgentModal()">+ Add Agent</button>
+      </div>
+
+      <!-- Builds Grid -->
+      <div class="builds-grid" *ngIf="builds.length > 0">
+        <div
+          *ngFor="let build of builds"
+          class="build-card"
+          [class.selected]="selectedBuild?.id === build.id"
+          (click)="selectBuild(build)">
+          <button class="delete-btn" (click)="deleteBuild(build.id, $event)" title="Delete build">×</button>
+          <div class="build-portrait" [attr.data-element]="build.element || 'Physical'">
+            <span class="build-name">{{build.name}}</span>
+          </div>
+          <div class="build-info">
+            <div class="rarity">{{getRarityDisplay(build.agentId)}}</div>
+            <div class="build-stats">
+              <div class="stat-badge">M{{build.mindscapeLevel}}</div>
+              <div class="stat-badge" *ngIf="build.equippedWEngine">
+                {{build.equippedWEngine.name.substring(0, 10)}}
+              </div>
+              <div class="stat-badge">{{getEquippedDiscsCount(build)}}/6 Discs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Build Details -->
+    <div class="section build-details" *ngIf="selectedBuild">
+      <h2>{{selectedBuild.name}}</h2>
+
+      <!-- Mindscape Cinema -->
+      <div class="mindscape-section">
+        <h3>Mindscape Cinema</h3>
+        <div class="mindscape-toggles">
+          <button
+            *ngFor="let m of [1,2,3,4,5,6]"
+            class="mindscape-btn"
+            [class.active]="selectedBuild.mindscapeLevel >= m"
+            (click)="toggleMindscape(m)">
+            M{{m}}
+          </button>
+        </div>
+      </div>
+
+      <!-- W-Engine -->
+      <div class="wengine-section">
+        <h3>W-Engine</h3>
+        <select
+          [value]="selectedBuild.equippedWEngine?.id || ''"
+          (change)="onWEngineChange($event)"
+          class="wengine-select">
+          <option value="">Select W-Engine</option>
+          <option *ngFor="let engine of referenceWEngines" [value]="engine.id">
+            {{engine.name}} ({{engine.rarity === 'S' ? '★★★★★' : engine.rarity === 'A' ? '★★★★' : '★★★'}})
+          </option>
+        </select>
+
+        <div *ngIf="selectedBuild.equippedWEngine" class="wengine-details">
+          <p><strong>Base ATK:</strong> {{selectedBuild.equippedWEngine.baseAtk}}</p>
+          <p><strong>{{selectedBuild.equippedWEngine.subStat.type}}:</strong> {{selectedBuild.equippedWEngine.subStat.value}}%</p>
+          <p class="wengine-effect">
+            <strong>{{selectedBuild.equippedWEngine.effect.name}}:</strong>
+            {{selectedBuild.equippedWEngine.effect.description}}
+          </p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-section">
+        <h3>Calculated Stats</h3>
+        <div class="stats-grid">
+          <div class="stat-row">
+            <span class="stat-label">HP:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.hp}}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">ATK:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.atk}}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">DEF:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.def}}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Impact:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.impact}}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Anomaly Mastery:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.anomalyMastery}}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">CRIT Rate:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.critRate}}%</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">CRIT DMG:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.critDmg}}%</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Energy Regen:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.energyRegen}}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="disc-section">
+        <h3>Disc Drives ({{getEquippedDiscsCount(selectedBuild)}}/6)</h3>
+        <p class="placeholder">Disc Drive builder coming soon...</p>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="section summary-panel" *ngIf="selectedBuild">
+      <h2>Build Summary</h2>
+      <div class="summary-content">
+        <div class="summary-item">
+          <strong>Build Score:</strong> {{selectedBuild.score}}/100
+        </div>
+        <div class="summary-item">
+          <strong>Level:</strong> {{selectedBuild.level}}
+        </div>
+        <div class="summary-item">
+          <strong>Mindscape:</strong> M{{selectedBuild.mindscapeLevel}}
+        </div>
+        <div class="summary-item" *ngIf="selectedBuild.equippedWEngine">
+          <strong>W-Engine:</strong> {{selectedBuild.equippedWEngine.name}}
+        </div>
+        <div class="summary-item">
+          <strong>Disc Sets:</strong> {{getEquippedDiscsCount(selectedBuild)}}/6 equipped
+        </div>
+        <div class="summary-item">
+          <strong>Created:</strong> {{selectedBuild.createdAt | date:'short'}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Agent Modal -->
+<div class="modal-overlay" *ngIf="showAddAgentModal" (click)="closeAddAgentModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Add Agent</h2>
+      <button class="close-btn" (click)="closeAddAgentModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <p>Select an agent to create a new build:</p>
+
+      <!-- Agent Selection Grid -->
+      <div class="agent-select-grid">
+        <div
+          *ngFor="let agent of referenceAgents"
+          class="agent-select-card"
+          [class.selected]="selectedAgentForAdd?.id === agent.id"
+          (click)="selectAgentForAdd(agent)">
+          <div class="agent-portrait" [attr.data-element]="agent.element">
+            <span class="agent-name">{{agent.name}}</span>
+          </div>
+          <div class="agent-info">
+            <div class="rarity">{{agent.rarity === 'S' ? '★★★★★' : '★★★★'}}</div>
+            <div class="specialty">{{agent.specialty}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="closeAddAgentModal()">Cancel</button>
+        <button
+          class="btn-primary"
+          (click)="addAgentBuild()"
+          [disabled]="!selectedAgentForAdd">
+          Add Build
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

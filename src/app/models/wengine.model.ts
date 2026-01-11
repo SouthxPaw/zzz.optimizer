@@ -1,18 +1,20 @@
-import { BaseStats, Specialty } from "./agent.model";
+import { Specialty } from "./agent.model";
 
 // models/wengine.model.ts
 export interface WEngine {
   id: string;
   name: string;
-  rarity: 'B' | 'A' | 'S';
+  rarity: 'S' | 'A' | 'B';
   specialty: Specialty;
   baseAtk: number;
   subStat: {
-    type: keyof BaseStats;
+    type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency';
     value: number;
   };
-  passive: {
+  effect: {
     name: string;
     description: string;
+    maxRefinement?: string;
   };
+  signature?: string;
 }

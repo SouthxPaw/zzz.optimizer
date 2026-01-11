@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Disc, DiscSet, MainStatType, SubStat, SubStatType } from '../models/disc.model';
 import { ScoringAlgorithm } from '../models/scoring.model';
+import { DiscSlot } from '../models/agent.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +42,7 @@ export class DiscService {
     this.discsSubject.next(current);
   }
 
-  getDiscsBySlot(slot: DiscSet): Disc[] {
+  getDiscsBySlot(slot: DiscSlot): Disc[] {
     return this.discsSubject.value.filter(d => d.slot === slot);
   }
 
