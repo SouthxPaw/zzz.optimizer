@@ -70,8 +70,8 @@ export class AppInitService {
    */
   private async loadReferenceData(): Promise<void> {
     try {
-      console.log('Loading reference data from assets...');
-      const results = await this.dataImport.importAllReferenceData();
+      console.log('Loading reference data from individual JSON files...');
+      const results = await this.dataImport.importReferenceDataFromIndividualFiles();
 
       console.log(`✓ Reference data loaded successfully: ${results.agents} agents, ${results.wEngines} W-Engines`);
     } catch (error) {

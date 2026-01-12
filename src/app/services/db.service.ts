@@ -22,6 +22,7 @@ export class DbService extends Dexie {
   // REFERENCE DATA - Loaded from assets, not user-modifiable
   agents!: Table<Agent, string>;
   wEngines!: Table<WEngine, string>;
+  discSets!: Table<any, string>;
 
   // USER DATA - Created and managed by users
   discs!: Table<Disc, string>;
@@ -33,6 +34,17 @@ export class DbService extends Dexie {
       // Reference data tables
       agents: 'id, name, rarity, element, specialty',
       wEngines: 'id, name, rarity, specialty',
+
+      // User data tables
+      discs: 'uid, slot, set, rarity, equippedBy'
+    });
+
+    // Version 2: Add disc sets table
+    this.version(2).stores({
+      // Reference data tables
+      agents: 'id, name, rarity, element, specialty',
+      wEngines: 'id, name, rarity, specialty',
+      discSets: 'id, name',
 
       // User data tables
       discs: 'uid, slot, set, rarity, equippedBy'
@@ -114,6 +126,15 @@ export class DbService extends Dexie {
     return await this.discs.bulkAdd(discs, { allKeys: true }) as any;
   }
 
+  // Disc Set operations
+  async getAllDiscSets(): Promise<any[]> {
+    return await this.discSets.toArray();
+  }
+
+  async bulkAddDiscSets(discSets: any[]): Promise<string> {
+    return await this.discSets.bulkAdd(discSets, { allKeys: true }) as any;
+  }
+
   // Clear user data only (keeps reference data intact)
   async clearUserData(): Promise<void> {
     await this.discs.clear();
@@ -124,7 +145,8 @@ export class DbService extends Dexie {
   async clearReferenceData(): Promise<void> {
     await this.agents.clear();
     await this.wEngines.clear();
-    console.log('Reference data (agents, W-Engines) cleared');
+    await this.discSets.clear();
+    console.log('Reference data (agents, W-Engines, disc sets) cleared');
   }
 
   // Clear ALL data (both reference and user data)
@@ -138,6 +160,7 @@ export class DbService extends Dexie {
   async hasReferenceData(): Promise<boolean> {
     const agentCount = await this.agents.count();
     const wEngineCount = await this.wEngines.count();
-    return agentCount > 0 && wEngineCount > 0;
+    const discSetCount = await this.discSets.count();
+    return agentCount > 0 && wEngineCount > 0 && discSetCount > 0;
   }
 }
