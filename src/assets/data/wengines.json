@@ -1,822 +1,3027 @@
 {
   "12001": {
-    "icon": "Weapon_B_Common_01",
-    "rank": 2,
-    "type": 1,
-    "EN": "[Lunar] Pleniluna",
-    "desc": "A W-Engine that prioritizes damage output over noise reduction. It can indiscriminately deal considerable damage to all units nearby.",
-    "KO": "「루나」-보름달",
-    "CHS": "「月相」-望",
-    "JA": "「月相」-望"
+    "Id": 12001,
+    "CodeName": "Weapon_B_Common_01",
+    "Name": "[Lunar] Pleniluna",
+    "Desc": "A W-Engine that prioritizes damage output over noise reduction. It can indiscriminately deal considerable damage to all units nearby. Its designer compares it to the full moon. Bright moonlight can interrupt people's sleep, and nothing can be done about it. But the moonlight does not bother anyone on purpose — you just have to get used to it.",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "A W-Engine that prioritizes damage output over noise reduction. It can indiscriminately deal considerable damage to all units nearby.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_01.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Basic Attack, Dash Attack, and Dodge Counter DMG increases by %"
+    }
   },
   "12002": {
-    "icon": "Weapon_B_Common_02",
-    "rank": 2,
-    "type": 1,
-    "EN": "[Lunar] Decrescent",
-    "desc": "A W-Engine with excellent sonic and thermal energy usage, capable of hitting its target with a double whammy.",
-    "KO": "「루나」-그믐달",
-    "CHS": "「月相」-晦",
-    "JA": "「月相」-晦"
+    "Id": 12002,
+    "CodeName": "Weapon_B_Common_02",
+    "Name": "[Lunar] Decrescent",
+    "Desc": "A W-Engine with excellent sonic and thermal energy usage, capable of hitting its target with a double whammy. Those hit, be it intentionally or not, have a chance to be diagnosed with snow blindness. The exact cause remains unknown, so obtaining insurance compensation after falling victim to this malady is close to impossible. There was a poor Hollow investigator who learned it the hard way.",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "A W-Engine with excellent sonic and thermal energy usage, capable of hitting its target with a double whammy.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_02.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Launching a Chain Attack or Ultimate increases the equipper's DMG by % for 6s."
+    }
   },
   "12003": {
-    "icon": "Weapon_B_Common_03",
-    "rank": 2,
-    "type": 1,
-    "EN": "[Lunar] Noviluna",
-    "desc": "A high-capacity portable W-Engine that can collect dissipated energy from its surroundings, thus enhancing the combat effectiveness of its operator.",
-    "KO": "「루나」-초승달",
-    "CHS": "「月相」-朔",
-    "JA": "「月相」-朔"
+    "Id": 12003,
+    "CodeName": "Weapon_B_Common_03",
+    "Name": "[Lunar] Noviluna",
+    "Desc": "This high-capacity portable W-Engine can collect dissipated energy from its surroundings, thus enhancing the combat effectiveness of its operator. It is a perfect choice for novice explorers who are worried that their W-Engine may run out of power during expeditions.",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "A high-capacity portable W-Engine that can collect dissipated energy from its surroundings, thus enhancing the combat effectiveness of its operator.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_03.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 1600
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Launching an EX Special Attack generates [NUMBER] Energy for the equipper. This effect can trigger once every 12s."
+    }
   },
   "12004": {
-    "icon": "Weapon_B_Common_04",
-    "rank": 2,
-    "type": 4,
-    "EN": "[Reverb] Mark I",
-    "desc": "A special W-Engine featuring a built-in sonic generator that boosts its damage output.",
-    "KO": "「잔향」-Ⅰ형",
-    "CHS": "「残响」-Ⅰ型",
-    "JA": "「残響」-Ⅰ型"
+    "Id": 12004,
+    "CodeName": "Weapon_B_Common_04",
+    "Name": "[Reverb] Mark I",
+    "Desc": "This special W-Engine features a built-in sonic generator that converts collected energy into penetrating infrasound waves, thereby boosting its damage output. However, to activate this function, the operator needs to charge up enough power, and the first step of charging up is to use up any remaining energy in the W-Engine.",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "A special W-Engine featuring a built-in sonic generator that boosts its damage output.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_04.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Impact",
+          "Name2": "Impact",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 800,
+            "W2": 900,
+            "W3": 1000,
+            "W4": 1100,
+            "W5": 1200
+          }
+        }
+      ],
+      "Desc": "Launching an EX Special Attack increases all squad members' Impact by % for 10s. This effect can trigger once every 20s. Passive effects of the same name do not stack."
+    }
   },
   "12005": {
-    "icon": "Weapon_B_Common_05",
-    "rank": 2,
-    "type": 4,
-    "EN": "[Reverb] Mark II",
-    "desc": "A standardized W-Engine with balanced performance that enhances its owner's and their teammates' combat effectiveness in all aspects.",
-    "KO": "「잔향」-Ⅱ형",
-    "CHS": "「残响」-Ⅱ型",
-    "JA": "「残響」-Ⅱ型"
+    "Id": 12005,
+    "CodeName": "Weapon_B_Common_05",
+    "Name": "[Reverb] Mark II",
+    "Desc": "A standardized W-Engine with balanced performance. Despite lacking any particular tendencies, it enhances its owner's and it's owner's teammates' combat effectiveness in all aspects. For novice explorers who have not figured out their preferred combat style, this W-Engine is an excellent choice.",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "A standardized W-Engine with balanced performance that enhances its owner's and their teammates' combat effectiveness in all aspects.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_05.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 4000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Mastery",
+          "Name2": "Anomaly Mastery",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 10,
+            "W2": 12,
+            "W3": 13,
+            "W4": 15,
+            "W5": 16
+          }
+        },
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0}",
+          "Overclock": {
+            "W1": 10,
+            "W2": 12,
+            "W3": 13,
+            "W4": 15,
+            "W5": 16
+          }
+        }
+      ],
+      "Desc": "Launching an EX Special Attack or Chain Attack increases all squad members' Anomaly Mastery and Anomaly Proficiency by [NUMBER] for 10s. This effect can trigger once every 20s. Passive effects of the same name do not stack."
+    }
   },
   "12006": {
-    "icon": "Weapon_B_Common_06",
-    "rank": 2,
-    "type": 4,
-    "EN": "[Reverb] Mark III",
-    "desc": "A special W-Engine that features motion capture algorithms, which enhance the overall combat competency of your squad.",
-    "KO": "「잔향」-Ⅲ형",
-    "CHS": "「残响」-Ⅲ型",
-    "JA": "「残響」-Ⅲ型"
+    "Id": 12006,
+    "CodeName": "Weapon_B_Common_06",
+    "Name": "[Reverb] Mark III",
+    "Desc": "This special W-Engine features motion capture algorithms that monitor the status of the operator's teammates, enabling it to send signals to coordinate tactical movements and enhance the overall combat competency of the squad. However, this premise assumes that everyone can keep up with its signals instead of stepping on other members' toes...",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "A special W-Engine that features motion capture algorithms, which enhance the overall combat competency of your squad.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_06.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 32
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 800
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 800,
+            "W2": 900,
+            "W3": 1000,
+            "W4": 1100,
+            "W5": 1200
+          }
+        }
+      ],
+      "Desc": "Launching a Chain Attack or Ultimate increases all squad members' ATK by % for 10s. This effect can trigger once every 20s. Passive effects of the same name do not stack."
+    }
   },
   "12007": {
-    "icon": "Weapon_B_Common_07",
-    "rank": 2,
-    "type": 2,
-    "EN": "[Vortex] Revolver",
-    "desc": "An energy-storage type W-Engine with a unique operation circuit. It will absorb scattered energy up to a certain amount before unleashing it all at once.",
-    "KO": "「급류」-총",
-    "CHS": "「湍流」-铳型",
-    "JA": "「激流」-銃型"
+    "Id": 12007,
+    "CodeName": "Weapon_B_Common_07",
+    "Name": "[Vortex] Revolver",
+    "Desc": "An energy-storage type W-Engine with a unique operation circuit. It will absorb scattered energy up to a certain amount before unleashing it, dealing some extra impact. It's impossible to control when that energy is unleashed, but when it is, it'll give you the joy of winning a prize draw.",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "An energy-storage type W-Engine with a unique operation circuit. It will absorb scattered energy up to a certain amount before unleashing it all at once.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_07.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "EX Special Attacks inflict % more Daze."
+    }
   },
   "12008": {
-    "icon": "Weapon_B_Common_08",
-    "rank": 2,
-    "type": 2,
-    "EN": "[Vortex] Arrow",
-    "desc": "A tactical W-Engine that locates enemies using high-frequency sound waves. Its aiming aid can make its operator's precision attack more deadly.",
-    "KO": "「급류」-화살",
-    "CHS": "「湍流」-矢型",
-    "JA": "「激流」-矢型"
+    "Id": 12008,
+    "CodeName": "Weapon_B_Common_08",
+    "Name": "[Vortex] Arrow",
+    "Desc": "A tactical W-Engine that locates enemies using high-frequency sound waves. Once it has marked its targets, it will activate its aiming aid to make the operator's precision attack more deadly. While this feature increases the operator's efficiency in battles, it may occasionally attract curious Ethereals from afar.",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "A tactical W-Engine that locates enemies using high-frequency sound waves. Its aiming aid can make its operator's precision attack more deadly.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_08.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1200
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 800,
+            "W2": 900,
+            "W3": 1000,
+            "W4": 1100,
+            "W5": 1200
+          }
+        }
+      ],
+      "Desc": "The equipper's attacks inflict 8% more Daze on their main target."
+    }
   },
   "12009": {
-    "icon": "Weapon_B_Common_09",
-    "rank": 2,
-    "type": 2,
-    "EN": "[Vortex] Hatchet",
-    "desc": "A frequency-converting W-Engine that can quickly generate excessive power and effectively increase its user's battle prowess.",
-    "KO": "「급류」-도끼",
-    "CHS": "「湍流」-斧型",
-    "JA": "「激流」-斧型"
+    "Id": 12009,
+    "CodeName": "Weapon_B_Common_09",
+    "Name": "[Vortex] Hatchet",
+    "Desc": "This inverter W-Engine can generate excessive power and effectively increase its operator's battle prowess. However, due to its poor heat dissipation, it emits ear-splitting noise during battle. As a result, all squad members will need to wear earplugs.",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "A frequency-converting W-Engine that can quickly generate excessive power and effectively increase its user's battle prowess.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_09.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 4000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Impact",
+          "Name2": "Impact",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 900,
+            "W2": 1000,
+            "W3": 1100,
+            "W4": 1200,
+            "W5": 1300
+          }
+        }
+      ],
+      "Desc": "Upon becoming the active character in combat, the equipper's Impact increases by % for 10s. This effect can trigger once every 20s."
+    }
   },
   "12010": {
-    "icon": "Weapon_B_Common_10",
-    "rank": 2,
-    "type": 3,
-    "EN": "[Magnetic Storm] Alpha",
-    "desc": "A special W-Engine that can analyze the target's weak spots through real-time calculations.",
-    "KO": "「자기 폭풍」-알파",
-    "CHS": "「电磁暴」-壹式",
-    "JA": "「磁気嵐」-壱式"
+    "Id": 12010,
+    "CodeName": "Weapon_B_Common_10",
+    "Name": "[Magnetic Storm] Alpha",
+    "Desc": "This special W-Engine can analyze the target's weak spots through real-time calculations. Although its heavy exoskeleton can be a burden to the operator, some users have found it to be an efficient way to exercise and lose weight, and have thus become loyal customers.",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "A special W-Engine that can analyze the target's weak spots through real-time calculations.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_10.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Mastery",
+          "Name2": "Anomaly Mastery",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 25,
+            "W2": 28,
+            "W3": 32,
+            "W4": 36,
+            "W5": 40
+          }
+        }
+      ],
+      "Desc": "Accumulating Anomaly Buildup increases the equipper's Anomaly Mastery by [NUMBER] for 10s. This effect can trigger once every 20s."
+    }
   },
   "12011": {
-    "icon": "Weapon_B_Common_11",
-    "rank": 2,
-    "type": 3,
-    "EN": "[Magnetic Storm] Bravo",
-    "desc": "A damage-type W-Engine that features an enhanced movement detection module that can quickly alter its output intensity to optimize battle efficiency.",
-    "KO": "「자기 폭풍」-브라보",
-    "CHS": "「电磁暴」-贰式",
-    "JA": "「磁気嵐」-弐式"
+    "Id": 12011,
+    "CodeName": "Weapon_B_Common_11",
+    "Name": "[Magnetic Storm] Bravo",
+    "Desc": "This damage-type W-Engine features enhanced movement detection modules that can detect the operator's status in real-time and boost their combat prowess at critical moments to optimize battle efficiency. After the operator completes the finishing move, the W-Engine emits a dazzling multicolored flash and rates the operator's move.",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "A damage-type W-Engine that features an enhanced movement detection module that can quickly alter its output intensity to optimize battle efficiency.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_11.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "Anomaly Proficiency",
+      "Name2": "Anomaly Proficiency",
+      "Format": "{0:0}",
+      "Value": 60
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0}",
+          "Overclock": {
+            "W1": 25,
+            "W2": 28,
+            "W3": 32,
+            "W4": 36,
+            "W5": 40
+          }
+        }
+      ],
+      "Desc": "Accumulating Anomaly Buildup increases the equipper's Anomaly Proficiency by [NUMBER] for 10s. This effect can trigger once every 20s."
+    }
   },
   "12012": {
-    "icon": "Weapon_B_Common_12",
-    "rank": 2,
-    "type": 3,
-    "EN": "[Magnetic Storm] Charlie",
-    "desc": "A high-capacity W-Engine that features a built-in generator, which allows it to keep a stable storage of electrical power.",
-    "KO": "「자기 폭풍」-찰리",
-    "CHS": "「电磁暴」-叁式",
-    "JA": "「磁気嵐」-参式"
+    "Id": 12012,
+    "CodeName": "Weapon_B_Common_12",
+    "Name": "[Magnetic Storm] Charlie",
+    "Desc": "A high-capacity W-Engine that features a built-in generator, allowing it to keep a stable storage of electrical power without any manual operation from the operator. As a result, it proves to be exceptionally used in battle as its electric current can stun tough enemies.",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "A high-capacity W-Engine that features a built-in generator, which allows it to keep a stable storage of electrical power.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_12.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "PEN Ratio",
+      "Name2": "PEN Ratio",
+      "Format": "{0:0.#%}",
+      "Value": 1600
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Whenever a squad member inflicts an Attribute Anomaly on an enemy, the equipper generates [NUMBER] Energy. This effect can trigger once every 12s."
+    }
   },
   "12013": {
-    "icon": "Weapon_B_Common_13",
-    "rank": 2,
-    "type": 5,
-    "EN": "[Identity] Base",
-    "desc": "A W-Engine with a component structure adjusted according to specific parameters. It can enhance the defensive capabilities of those who have a certain style of combat.",
-    "KO": "「아이덴티티」-베이스",
-    "CHS": "「恒等式」-本格",
-    "JA": "「恒等式」-本格"
+    "Id": 12013,
+    "CodeName": "Weapon_B_Common_13",
+    "Name": "[Identity] Base",
+    "Desc": "A W-Engine with a component structure adjusted according to specific parameters. It can enhance the defensive capabilities of those who have a certain style of combat. If the user does not meet the requirements for this W-Engine, then carrying it would be like lugging around an over-sized shield in battle.",
+    "Desc2": "Equip to increase Defense Agents' combat capabilities",
+    "Desc3": "A W-Engine with a component structure adjusted according to specific parameters. It can enhance the defensive capabilities of those who have a certain style of combat.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_13.png",
+    "WeaponType": { "5": "Defense" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "DEF",
+      "Name2": "Percent DEF",
+      "Format": "{0:0.#%}",
+      "Value": 3200
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "DEF",
+          "Name2": "Percent DEF",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2300,
+            "W3": 2600,
+            "W4": 2900,
+            "W5": 3200
+          }
+        }
+      ],
+      "Desc": "When attacked, the equipper's DEF increases by % for 8s."
+    }
   },
   "12014": {
-    "icon": "Weapon_B_Common_14",
-    "rank": 2,
-    "type": 5,
-    "EN": "[Identity] Inflection",
-    "desc": "A functional W-Engine that specializes in energy conversion. It can analyze combat environments and generate special sounds to disrupt the enemy's offense.",
-    "KO": "「아이덴티티」-인플렉션",
-    "CHS": "「恒等式」-变格",
-    "JA": "「恒等式」-変格"
+    "Id": 12014,
+    "CodeName": "Weapon_B_Common_14",
+    "Name": "[Identity] Inflection",
+    "Desc": "A functional W-Engine that specializes in energy conversion. It can analyze combat environments and generate special sounds to disrupt the enemy's attack. However, when facing a strong-willed enemy, you will still need to seize the right opportunity to attack. Luckily, most Ethereals lack the willpower to resist it.",
+    "Desc2": "Equip to increase Defense Agents' combat capabilities",
+    "Desc3": "A functional W-Engine that specializes in energy conversion. It can analyze combat environments and generate special sounds to disrupt the enemy's offense.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_14.png",
+    "WeaponType": { "5": "Defense" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "DEF",
+      "Name2": "Percent DEF",
+      "Format": "{0:0.#%}",
+      "Value": 3200
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When attacked, reduces the attacker's DMG by 6% for 12s."
+    }
   },
   "12015": {
-    "icon": "Weapon_B_Common_15",
-    "rank": 2,
-    "type": 6,
-    "EN": "[Cinder] Cobalt",
-    "desc": "A W-Engine with a built-in heating component. When operating at high speeds, it resembles a blazing blue flame.",
-    "KO": "「잿더미」-코발트블루",
-    "CHS": "「灰烬」-钴蓝",
-    "JA": "「灰燼」-蒼藍"
+    "Id": 12015,
+    "CodeName": "Weapon_B_Common_15",
+    "Name": "[Cinder] Cobalt",
+    "Desc": "This W-Engine with an integrated heating element offers a significant combat boost by reaching extreme temperatures, allowing the user to effortlessly break through the enemy's defenses. This cobalt blue flame, burning quietly, is darkly beautiful, but be sure to keep your distance and avoid touching it.",
+    "Desc2": "Equip to increase Rupture Agents' combat capabilities",
+    "Desc3": "A W-Engine with a built-in heating component. When operating at high speeds, it resembles a blazing blue flame.",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_15.png",
+    "WeaponType": { "6": "Rupture" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 475
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 2000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 720,
+            "W2": 820,
+            "W3": 930,
+            "W4": 1040,
+            "W5": 1150
+          }
+        }
+      ],
+      "Desc": "Upon becoming the active character in combat, the equipper's ATK increases by % for 10s. This effect can trigger once every 20s."
+    }
   },
   "13001": {
-    "icon": "Weapon_A_Common_01",
-    "rank": 3,
-    "type": 1,
-    "EN": "Street Superstar",
-    "desc": "A custom-made W-Engine designed for urban music lovers. It sacrifices heat dissipation components for improved sound quality.",
-    "KO": "거리의 슈퍼스타",
-    "CHS": "街头巨星",
-    "JA": "ストリートスター"
+    "Id": 13001,
+    "CodeName": "Weapon_A_Common_01",
+    "Name": "Street Superstar",
+    "Desc": "A custom-made W-Engine designed for street music lovers. It sacrifices cooling components to make space for high-end speaker modules, ensuring your fans, both Ethereal and human, hear your every word.\n——From the streets to the Hollows, superstars are never short of flowers and applause. The bars they spit are so flaming hot, they add the perfect heat to any battlefield.",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "A custom-made W-Engine designed for urban music lovers. It sacrifices heat dissipation components for improved sound quality.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_01.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Whenever a squad member launches a Chain Attack, the equipper gains 1 Charge stack, stacking up to 3 times. Upon activating their own Ultimate, the equipper consumes all Charge stacks, and each stack increases the skill's DMG by %."
+    }
   },
   "13002": {
-    "icon": "Weapon_A_Common_02",
-    "rank": 3,
-    "type": 4,
-    "EN": "Slice of Time",
-    "desc": "A special W-Engine equipped with a high-speed camera module. The best choice for in-Hollow photography enthusiasts.",
-    "KO": "시간의 파편",
-    "CHS": "时光切片",
-    "JA": "歳月の薄片"
+    "Id": 13002,
+    "CodeName": "Weapon_A_Common_02",
+    "Name": "Slice of Time",
+    "Desc": "A special W-Engine equipped with a high-speed camera module. The best choice for in-Hollow photography enthusiasts. It captures every touching moment spent beating up your Ethereal friends, as long as you have a free hand to press the shutter.\nP.S. The internal optical components have not undergone anti-corruption treatment. Please do not lose the warranty form.",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "A special W-Engine equipped with a high-speed camera module. The best choice for in-Hollow photography enthusiasts.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_02.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "PEN Ratio",
+      "Name2": "PEN Ratio",
+      "Format": "{0:0.#%}",
+      "Value": 2000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Any squad members' Dodge Counter, EX Special Attack, Assist Attack, or Chain Attack respectively generates [NUMBERS] more Decibels and generates [NUMBER] Energy for the equipper. This effect can trigger once every 12s. The cooldown for each type of attack is independent of others. Passive effects of the same name do not stack."
+    }
   },
   "13003": {
-    "icon": "Weapon_A_Common_03",
-    "rank": 3,
-    "type": 3,
-    "EN": "Rainforest Gourmet",
-    "desc": "A consumer-class W-Engine launched by an exotic pet fan club to promote pet culture. Due to its cute appearance, it was once a very popular model.",
-    "KO": "우림의 식객",
-    "CHS": "雨林饕客",
-    "JA": "密林の食いしん坊"
+    "Id": 13003,
+    "CodeName": "Weapon_A_Common_03",
+    "Name": "Rainforest Gourmet",
+    "Desc": "A consumer-class W-Engine launched by an exotic pet fan club to promote pet culture. It used to be a popular model until three customers' fingers, a staff member, and half a Bangboo disappeared into a Gourmet's big mouth. Ether blocks generated by the mouth module can rapidly devour substances. Please avoid putting your head and limbs inside.",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "A consumer-class W-Engine launched by an exotic pet fan club to promote pet culture. Due to its cute appearance, it was once a very popular model.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_03.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Anomaly Proficiency",
+      "Name2": "Anomaly Proficiency",
+      "Format": "{0:0}",
+      "Value": 75
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 250,
+            "W2": 280,
+            "W3": 320,
+            "W4": 360,
+            "W5": 400
+          }
+        }
+      ],
+      "Desc": "For every 10 Energy consumed, the equipper gains a buff that increases ATK by % for 10s, stacking up to 10 times. The duration of each stack is calculated separately."
+    }
   },
   "13004": {
-    "icon": "Weapon_A_Common_04",
-    "rank": 3,
-    "type": 1,
-    "EN": "Starlight Engine",
-    "desc": "A damage-type W-Engine made of special Etheric matter. When its user is attacked, it builds up energy.",
-    "KO": "별빛 엔진",
-    "CHS": "星徽引擎",
-    "JA": "スターライトエンジン"
+    "Id": 13004,
+    "CodeName": "Weapon_A_Common_04",
+    "Name": "Starlight Engine",
+    "Desc": "A damage-type W-Engine made of special Etheric matter. When its operator is attacked, it builds up energy and boosts its damage output. Although it does not grant the operator the power to transform into a Starlight Knight, it provides a surge of courage when the operator is in dire situations.",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "A damage-type W-Engine made of special Etheric matter. When its user is attacked, it builds up energy.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_04.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1200,
+            "W2": 1380,
+            "W3": 1560,
+            "W4": 1740,
+            "W5": 1920
+          }
+        }
+      ],
+      "Desc": "Launching a Dodge Counter or Quick Assist increases the equipper's ATK by 12% for 12s."
+    }
   },
   "13005": {
-    "icon": "Weapon_A_Common_05",
-    "rank": 3,
-    "type": 2,
-    "EN": "Steam Oven",
-    "desc": "A high-power W-Engine that boasts a cutting-edge energy conversion system. It collects excess heat and supplies it to the steamer.",
-    "KO": "스팀오븐",
-    "CHS": "人为刀俎",
-    "JA": "まな板の鯉"
+    "Id": 13005,
+    "CodeName": "Weapon_A_Common_05",
+    "Name": "Steam Oven",
+    "Desc": "This high-power W-Engine boasts a cutting-edge energy conversion device that collects heat from its surroundings and supplies it to the steamer, making it easy for the operator to cook or heat up objects. This makes it a perfect choice for Hollow explorers. However... please be careful when using it to avoid burns.",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "A high-power W-Engine that boasts a cutting-edge energy conversion system. It collects excess heat and supplies it to the steamer.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_05.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 5000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Impact",
+          "Name2": "Impact",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1600,
+            "W2": 1840,
+            "W3": 2080,
+            "W4": 2320,
+            "W5": 2560
+          }
+        }
+      ],
+      "Desc": "For every 10 Energy accumulated, the equipper's Impact is increased by %, stacking up to 8 times. After Energy is consumed, this bonus remains for 8 more seconds. The duration of each stack is calculated separately."
+    }
   },
   "13006": {
-    "icon": "Weapon_A_Common_06",
-    "rank": 3,
-    "type": 2,
-    "EN": "Precious Fossilized Core",
-    "desc": "A special W-Engine whose outer shell is made of composite Etheric matter that effectively absorbs impact, and turns it against the enemy.",
-    "KO": "귀중한 화석 코어",
-    "CHS": "贵重骨核",
-    "JA": "貴重な石化コア"
+    "Id": 13006,
+    "CodeName": "Weapon_A_Common_06",
+    "Name": "Precious Fossilized Core",
+    "Desc": "A special W-Engine whose outer shell is made of composite Etheric matter that effectively absorb incoming impacts in combat and turn it against the enemy. Rumors suggest that its prototype was crafted by a legendary Hollow explorer, and despite its ancient appearance, it continues to run smoothly. This W-Engine is literally an \"old timer\" in the field of W-Engines.",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "A special W-Engine whose outer shell is made of composite Etheric matter that effectively absorbs impact, and turns it against the enemy.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_06.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1500
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When the target's HP is no lower than 50%, the equipper inflicts 10% more Daze to the target. When the target's HP is no lower than 75%, this bonus is further increased by 10%."
+    }
   },
   "13007": {
-    "icon": "Weapon_A_Common_07",
-    "rank": 3,
-    "type": 5,
-    "EN": "Original Transmorpher",
-    "desc": "An epic W-Engine favored by Starlight Knight fans. Its high popularity and scarcity marketing strategy have caused an influx of knock-offs.",
-    "KO": "오리지널 변신 아이템",
-    "CHS": "正版变身器",
-    "JA": "正規版変身装置"
+    "Id": 13007,
+    "CodeName": "Weapon_A_Common_07",
+    "Name": "Original Transmorpher",
+    "Desc": "A dream W-Engine adored by Starlight Knights fans. Its copyright owner claims that counterfeit transformers can transform you into a bad guy NPC. Watch out for a flying kick that'll scare the bejesus out of the bad guys — that's the power of genuine copyrighted merch!\n\"Starlight Knights, transform— Transform! Transform! Why can't I transform? Unless... the stars haven't chosen me?!\" — from an unboxing vlog recorded by an anonymous member of the Cunning Hares.",
+    "Desc2": "Equip to increase Defense Agents' combat capabilities",
+    "Desc3": "An epic W-Engine favored by Starlight Knight fans. Its high popularity and scarcity marketing strategy have caused an influx of knock-offs.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_07.png",
+    "WeaponType": { "5": "Defense" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "HP",
+          "Name2": "Percent HP",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 800,
+            "W2": 900,
+            "W3": 1000,
+            "W4": 1100,
+            "W5": 1250
+          }
+        },
+        {
+          "Name": "Impact",
+          "Name2": "Impact",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1000,
+            "W2": 1150,
+            "W3": 1300,
+            "W4": 1450,
+            "W5": 1600
+          }
+        }
+      ],
+      "Desc": "Increases Max HP by %. When attacked, the equipper's Impact is increased by % for 12s."
+    }
   },
   "13008": {
-    "icon": "Weapon_A_Common_08",
-    "rank": 3,
-    "type": 3,
-    "EN": "Weeping Gemini",
-    "desc": "A W-Engine produced by recycling abandoned Bangboo shells. Its electrode cores made of recycled metals can release high-voltage charges.",
-    "KO": "쌍둥이의 눈물",
-    "CHS": "双生泣星",
-    "JA": "双生の涙"
+    "Id": 13008,
+    "CodeName": "Weapon_A_Common_08",
+    "Name": "Weeping Gemini",
+    "Desc": "A W-Engine produced by recycling abandoned Bangboo shells. Though it's made from scrapped parts, it still caused some distress among Bangboo lovers. \"No Bangboo were hurt during the production of this W-Engine.\" — the manufacturer had to include this note on the packaging due to protests from Bangboo rights organizations.",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "A W-Engine produced by recycling abandoned Bangboo shells. Its electrode cores made of recycled metals can release high-voltage charges.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_08.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0}",
+          "Overclock": {
+            "W1": 120,
+            "W2": 136,
+            "W3": 152,
+            "W4": 168,
+            "W5": 192
+          }
+        }
+      ],
+      "Desc": "Whenever a squad member inflicts an Attribute Anomaly on an enemy, the equipper gains a buff that increases Anomaly Proficiency by [NUMBER], stacking up to 4 times. This effect expires when the target recovers from Stun or is defeated. The duration of each stack is calculated separately."
+    }
   },
   "13009": {
-    "icon": "Weapon_A_Common_09",
-    "rank": 3,
-    "type": 3,
-    "EN": "Electro-Lip Gloss",
-    "desc": "This damage-type W-Engine boasts a built-in current transformer, and automatically attracts electrically sensitive objects around the operator and deals additional damage to them.",
-    "KO": "감전 립글로스",
-    "CHS": "触电唇彩",
-    "JA": "電撃リップグロス"
+    "Id": 13009,
+    "CodeName": "Weapon_A_Common_09",
+    "Name": "Electro-Lip Gloss",
+    "Desc": "This damage-type W-Engine boasts a built-in current transformer, with its discharge part designed as a protruding lip gloss. It automatically attracts electrically sensitive objects around the operator and deals additional damage to them. Such is not the power of love, but rather the Lorentz force generated by a 1,000-volt electric field.",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "This damage-type W-Engine boasts a built-in current transformer, and automatically attracts electrically sensitive objects around the operator and deals additional damage to them.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_09.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Anomaly Proficiency",
+      "Name2": "Anomaly Proficiency",
+      "Format": "{0:0}",
+      "Value": 75
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1000,
+            "W2": 1150,
+            "W3": 1300,
+            "W4": 1450,
+            "W5": 1600
+          }
+        }
+      ],
+      "Desc": "When there are enemies inflicted with Attribute Anomaly on the field, the equipper's ATK increases by % and they deal an additional % more DMG to the target."
+    }
   },
   "13010": {
-    "icon": "Weapon_A_Common_10",
-    "rank": 3,
-    "type": 5,
-    "EN": "Bunny Band",
-    "desc": "A special W-Engine decorated with a fluffy bunny. However, it is just an imitation of the real animal.",
-    "KO": "버니 밴드",
-    "CHS": "兔能环",
-    "JA": "ラビットチャージャー"
+    "Id": 13010,
+    "CodeName": "Weapon_A_Common_10",
+    "Name": "Bunny Band",
+    "Desc": "A special W-Engine decorated with a fluffy bunny. Although it is a mere imitation of the real animal, even the fiercest of Hollow Raiders can relieve stress by petting their bunnies while taking a break, which enhances their combat performance. There are many similar models in this series of W-Engines: a portable bunny, a foldable bunny, a furless bunny... Everyone can find one they will not be able to refuse.",
+    "Desc2": "Equip to increase Defense Agents' combat capabilities",
+    "Desc3": "A special W-Engine decorated with a fluffy bunny. However, it is just an imitation of the real animal.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_10.png",
+    "WeaponType": { "5": "Defense" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "DEF",
+      "Name2": "Percent DEF",
+      "Format": "{0:0.#%}",
+      "Value": 4000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "HP",
+          "Name2": "Percent HP",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 800,
+            "W2": 920,
+            "W3": 1040,
+            "W4": 1160,
+            "W5": 1280
+          }
+        },
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1000,
+            "W2": 1150,
+            "W3": 1300,
+            "W4": 1450,
+            "W5": 1600
+          }
+        }
+      ],
+      "Desc": "Increases Max HP by %. Increases the equipper's ATK by % when they are shielded."
+    }
   },
   "13011": {
-    "icon": "Weapon_A_Common_11",
-    "rank": 3,
-    "type": 5,
-    "EN": "Spring Embrace",
-    "desc": "A special W-Engine equipped with a temperature regulator where residual heat generated by the W-Engine's high frequency is funneled into the hot springs on its surface.",
-    "KO": "봄날의 포옹",
-    "CHS": "春日融融",
-    "JA": "ホットスプリング"
+    "Id": 13011,
+    "CodeName": "Weapon_A_Common_11",
+    "Name": "Spring Embrace",
+    "Desc": "A special W-Engine equipped with a temperature regulator where residual heat generated by the W-Engine's high frequency is funneled into the hot springs on its surface. The owner of this W-Engine can drink hot spring soup with all its spring warmth in front of frost-covered enemies. Of course, some people think it's like drinking bath water.",
+    "Desc2": "Equip to increase Defense Agents' combat capabilities",
+    "Desc3": "A special W-Engine equipped with a temperature regulator where residual heat generated by the W-Engine's high frequency is funneled into the hot springs on its surface.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_11.png",
+    "WeaponType": { "5": "Defense" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Energy Regen",
+          "Name2": "Energy Regen",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1000,
+            "W2": 1150,
+            "W3": 1300,
+            "W4": 1450,
+            "W5": 1600
+          }
+        }
+      ],
+      "Desc": "Reduces DMG taken by %. When attacked, the equipper's Energy Generation Rate increases by % for 12s. When the equipper switches off-field, this buff will be transferred to the new on-field character with its duration refreshed. Passive effects of the same name do not stack."
+    }
   },
   "13012": {
-    "icon": "Weapon_A_Common_12",
-    "rank": 3,
-    "type": 6,
-    "EN": "Puzzle Sphere",
-    "desc": "The W-Engine, with its bright colors and great performance, saw poor sales at first because it resembled a toy. But with its reasonable price, it slowly gained a positive reputation.",
-    "KO": "기변의 큐브",
-    "CHS": "幻变魔方",
-    "JA": "魔法の立体パズル"
+    "Id": 13012,
+    "CodeName": "Weapon_A_Common_12",
+    "Name": "Puzzle Sphere",
+    "Desc": "While it can be seen as an item to boost combat performance, it is also a uniquely shaped puzzle. The inspiration behind this W-Engine is said to have come from the designer's childhood, when a similar puzzle his mother made by hand helped him get through tired mornings and dreary afternoons. He poured his deep longing for his mother into the W-Engine and this longing brings the user a sense of comfort: holding the sphere is like returning to a childhood where, after a nightmare, you'd run to your mother's side for protection.",
+    "Desc2": "Equip to increase Rupture Agents' combat capabilities",
+    "Desc3": "The W-Engine, with its bright colors and great performance, saw poor sales at first because it resembled a toy. But with its reasonable price, it slowly gained a positive reputation.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_12.png",
+    "WeaponType": { "6": "Rupture" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT DMG",
+          "Name2": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1600,
+            "W2": 1840,
+            "W3": 2080,
+            "W4": 2320,
+            "W5": 2560
+          }
+        }
+      ],
+      "Desc": "Upon launching an EX Special Attack, the equipper's CRIT DMG increases by % for 12s. Additionally, if the target's current HP is below 50% of their Max HP, EX Special Attack DMG increases by %."
+    }
   },
   "13013": {
-    "icon": "Weapon_A_Common_13",
-    "rank": 3,
-    "type": 1,
-    "EN": "Gilded Blossom",
-    "desc": "A W-Engine with a grandiose and luxurious appearance equipped with a premium Ether-powered anti-theft device. It's actually used to provide the equipper with energy.",
-    "KO": "도금된 화신풍",
-    "CHS": "鎏金花信",
-    "JA": "金メッキの花信"
+    "Id": 13013,
+    "CodeName": "Weapon_A_Common_13",
+    "Name": "Gilded Blossom",
+    "Desc": "A W-Engine that represents the brilliance and magnificence of flowers, seemingly crafted from the most luxurious materials. However, after finally dismantling the Ether-powered premium anti-theft device, an experienced thief will discover with terror that this W-Engine... is only gold plated.",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "A W-Engine with a grandiose and luxurious appearance equipped with a premium Ether-powered anti-theft device. It's actually used to provide the equipper with energy.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_13.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 600,
+            "W2": 690,
+            "W3": 780,
+            "W4": 870,
+            "W5": 960
+          }
+        }
+      ],
+      "Desc": "ATK increases by %, and DMG dealt by EX Special Attacks increases by %."
+    }
   },
   "13014": {
-    "icon": "Weapon_A_Common_14",
-    "rank": 3,
-    "type": 6,
-    "EN": "Radiowave Journey",
-    "desc": "Designed for those Hollow-dwelling bards who refuse to listen to the same albums repeatedly, this W-Engine comes equipped with a radio module that can transform Etheric frequencies into melodies.",
-    "KO": "일렉트로 워크",
-    "CHS": "电波漫步",
-    "JA": "エレクトロウォーク"
+    "Id": 13014,
+    "CodeName": "Weapon_A_Common_14",
+    "Name": "Radiowave Journey",
+    "Desc": "Not content with repeatedly listening to the same albums' melodies, and unwilling to stay stuck in the same Hollow scenery. Even among the travelers who wander the Hollows, there are those romantic adventurers, poets of sorts, who go too far. \"Radiowave Journey\" is designed specifically for these romantic fools. Its additional radio module can convert Etheric frequencies into musical melodies, playing different styles of music depending on the type of Hollow you're in.",
+    "Desc2": "Equip to increase Rupture Agents' combat capabilities",
+    "Desc3": "Designed for those Hollow-dwelling bards who refuse to listen to the same albums repeatedly, this W-Engine comes equipped with a radio module that can transform Etheric frequencies into melodies.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_14.png",
+    "WeaponType": { "6": "Rupture" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When launching a Chain Attack or Ultimate, the equipper gains 1 stack of a buff effect. Each stack increases the equipper's Sheer Force by [NUMBER], stacking up to 3 times, and lasting 12s. The duration of each stack is calculated separately."
+    }
   },
   "13015": {
-    "icon": "Weapon_A_Common_15",
-    "rank": 3,
-    "type": 1,
-    "EN": "Marcato Desire",
-    "desc": "Gather 'round, mortals! Turn up the music!",
-    "KO": "열망의 악센트",
-    "CHS": "强音热望",
-    "JA": "強音デザイア"
+    "Id": 13015,
+    "CodeName": "Weapon_A_Common_15",
+    "Name": "Marcato Desire",
+    "Desc": "Art can save those drowning in life. Mortals gather together, music of different emotions collide, and the drying graffiti on the wall speaks of a thousand unique forms of agency.\nNow, turn up the music until the soundwaves crash the Hollow. Even if Ethereals don't have ears, let's make them feel the power of humanity!",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "Gather 'round, mortals! Turn up the music!",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_15.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1200,
+            "W2": 1380,
+            "W3": 1560,
+            "W4": 1740,
+            "W5": 1920
+          }
+        }
+      ],
+      "Desc": "When an EX Special Attack or Chain Attack hits an enemy, the equipper's ATK increases by % for 8s. While the target is under an Attribute Anomaly, this effect is increased by an additional %."
+    }
   },
   "13016": {
-    "icon": "Weapon_A_Common_16",
-    "rank": 3,
-    "type": 5,
-    "EN": "Reel Projector",
-    "desc": "Clearly a W-Engine is for sound, and not images. What kind of lunatic genius would insist on stuffing a 16mm film camera into a W-Engine?",
-    "KO": "조명을 새기는 칼",
-    "CHS": "光影刻刀",
-    "JA": "光と影のカット"
+    "Id": 13016,
+    "CodeName": "Weapon_A_Common_16",
+    "Name": "Reel Projector",
+    "Desc": "It's not surprising when a film student does something outrageous, but this fan of Hollow-themed films from the renowned New Eridu film school still drew a rebuke from W-engine craftsmen: \"You DO know that W-Engines are for sound right, and not visuals?\"",
+    "Desc2": "Equip to increase Defense Agents' combat capabilities",
+    "Desc3": "Clearly a W-Engine is for sound, and not images. What kind of lunatic genius would insist on stuffing a 16mm film camera into a W-Engine?",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_16.png",
+    "WeaponType": { "5": "Defense" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1500
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When a squad member's HP is greater than or equal to 50%, they take % less DMG, and % less Miasma Contamination. Only one instance of this effect can exist in the same squad."
+    }
   },
   "13019": {
-    "icon": "Weapon_A_Common_19",
-    "rank": 3,
-    "type": 6,
-    "EN": "Cauldron of Clarity",
-    "desc": "Countless threads of Sword Will echo through this tiny stretch of sky.",
-    "KO": "푸른 물결의 솥",
-    "CHS": "青漪灵鼎",
-    "JA": "蒼き波の霊器"
+    "Id": 13019,
+    "CodeName": "Weapon_A_Common_19",
+    "Name": "Cauldron of Clarity",
+    "Desc": "Countless threads of Sword Will pulse like heartbeats, echoing through this tiny stretch of sky. Just don't get too close and don't try to make sense of the world inside the cauldron with your own ears. Those echoes have already been twisted into the brain-melting chant of \"Ehn-ne ehn-ne.\"",
+    "Desc2": "Equip to increase Rupture Agents' combat capabilities",
+    "Desc3": "Countless threads of Sword Will echo through this tiny stretch of sky.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_19.png",
+    "WeaponType": { "6": "Rupture" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 650,
+            "W2": 750,
+            "W3": 850,
+            "W4": 940,
+            "W5": 1040
+          }
+        }
+      ],
+      "Desc": "When the equipper activates an EX Special Attack, they gain 1 stack of a buff. Each stack increases the equipper's DMG by %, up to 3 stacks, and lasting 20s. This effect can trigger once every 0.5s, and repeated triggers reset the duration. At 3 stacks, the equipper's CRIT Rate increases by %."
+    }
   },
   "13101": {
-    "icon": "Weapon_A_1011",
-    "rank": 3,
-    "type": 2,
-    "EN": "Demara Battery Mark II",
-    "desc": "A customized W-Engine that focuses on energy storage, modified to improve its energy capacity. This model is often used by Anby.",
-    "KO": "데마라 배터리 Ⅱ형",
-    "CHS": "德玛拉电池Ⅱ型",
-    "JA": "デマラ式電池Ⅱ型"
+    "Id": 13101,
+    "CodeName": "Weapon_A_1011",
+    "Name": "Demara Battery Mark II",
+    "Desc": "This customized W-Engine Core focuses on power storage and has been modified to enhance power storage functions. It can effectively boost Zap damage output for weapons, and is the gadget store owner's piece de resistance. Not long after, Anby made some tweaks based on user habits, but judging by how serious and careful she is while conducting each maintenance session, these are probably not the safest of modifications.\n\n<color=#959595>\"Weapons SHOULD be dangerous. If it can't shock me, then how is it going to shock the enemy?\" — Anby's response while carefully performing maintenance</color>",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "A customized W-Engine that focuses on energy storage, modified to improve its energy capacity. This model is often used by Anby.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1011.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Energy Regen",
+          "Name2": "Energy Regen",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1800,
+            "W2": 2050,
+            "W3": 2300,
+            "W4": 2500,
+            "W5": 2750
+          }
+        }
+      ],
+      "Desc": "Increases Electric DMG by %. When the equipper hits an enemy with a Dodge Counter or Assist Attack, their Energy Generation Rate increases by % for 8s."
+    }
   },
   "13103": {
-    "icon": "Weapon_A_1031",
-    "rank": 3,
-    "type": 4,
-    "EN": "The Vault",
-    "desc": "A cost-effective W-Engine that can store energy, with improvements made to its internal space. This model is often used by Nicole.",
-    "KO": "보물함",
-    "CHS": "聚宝箱",
-    "JA": "ザ���ボールト"
+    "Id": 13103,
+    "CodeName": "Weapon_A_1031",
+    "Name": "The Vault",
+    "Desc": "A cost-effective W-Engine that focuses on energy storage. After Nicole modified its internal space, it can now be used as a storage box. While the gold coins stored inside are fake, they may catch greedy Hollow Raiders off guard. Or rather, the operator can simply toss the heavy coins at them and knock them out.\n\n<color=#959595>\"Hurts, doesn't it? Impressive, right? Hmph, that's just what money can do!\" — Nicole, gloating after defeating an enemy</color>",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "A cost-effective W-Engine that can store energy, with improvements made to its internal space. This model is often used by Nicole.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1031.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 5000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Dealing Ether DMG using an EX Special Attack, Chain Attack, or Ultimate increases all units' DMG against the target by % and increases the equipper's Energy Regen by /s for 2s. Passive effects of the same name do not stack."
+    }
   },
   "13106": {
-    "icon": "Weapon_A_1061",
-    "rank": 3,
-    "type": 1,
-    "EN": "Housekeeper",
-    "desc": "An enhanced W-Engine with a high rotation speed. A chainsaw has been integrated into its shaft. This model is often used by Corin.",
-    "KO": "하우스키퍼",
-    "CHS": "家政员",
-    "JA": "ハウスキーパー"
+    "Id": 13106,
+    "CodeName": "Weapon_A_1061",
+    "Name": "Housekeeper",
+    "Desc": "An enhanced W-Engine with a high rotation speed. Corin has integrated its shaft portion with a chainsaw to provide additional cutting power for her \"cleaning\" work. To ensure that her \"cleaning\" goes smoothly and to minimize the pain inflicted on her target, she has thoughtfully increased the rotation speed to the maximum.\n\n<color=#959595>\"Um... Don't worry, it won't hurt! Well... I mean, it will only hurt for a moment, and then it won't hurt anymore!\" — Corin, attempting to comfort her opponent before attacking</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "An enhanced W-Engine with a high rotation speed. A chainsaw has been integrated into its shaft. This model is often used by Corin.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1061.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "While off-field, the equipper's Energy Regen increases by /s. When an EX Special Attack hits an enemy, the equipper's Physical DMG increases by %, stacking up to 15 times and lasting 1s. Repeated triggers reset the duration."
+    }
   },
   "13108": {
-    "icon": "Weapon_A_1081",
-    "rank": 3,
-    "type": 1,
-    "EN": "Starlight Engine Replica",
-    "desc": "A customized supercomputing W-Engine, specialized in aim support and ballistic calculations. Modified by Billy, it now looks like some sort of knock-off Starlight Knight figurine.",
-    "KO": "별빛 엔진 레플리카",
-    "CHS": "仿制星徽引擎",
-    "JA": "なんちゃってスターライトエンジン"
+    "Id": 13108,
+    "CodeName": "Weapon_A_1081",
+    "Name": "Starlight Engine Replica",
+    "Desc": "A custom supercomputing W-Engine which specializes in aim assist and calculating trajectories, it looks more like some kind of pirated Starlight Knight figurine now that Billy's finished his modifications. It flashes brightly whenever an enemy is detected, and shouts out pre-set quotes. Despite this move clearly exposing one's location and attracting the enemy, this is not an issue for Billy so long as everything is cool enough.\n\n<color=#959595>\"COPY? How can you call that a copy?! I've poured all my passion, wisdom, soul, and moisture into this! Apart from summoning a shooting star to transform me — this is real deal, bona fide Starlight Knight equipment!\" — Billy, enthusiastically outlining his modding philosophy</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "A customized supercomputing W-Engine, specialized in aim support and ballistic calculations. Modified by Billy, it now looks like some sort of knock-off Starlight Knight figurine.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1081.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Increases the equipper's Physical DMG against the target by % for 8s upon hitting an enemy at least 6 meters away with a Basic Attack or Dash Attack."
+    }
   },
   "13111": {
-    "icon": "Weapon_A_1111",
-    "rank": 3,
-    "type": 1,
-    "EN": "Drill Rig - Red Axis",
-    "desc": "Originally a rev-enhanced W-Engine, it has been modified by Anton with the most expensive rotary drill parts that allow it to exceed its output limits.",
-    "KO": "굴착기-붉은 축",
-    "CHS": "旋钻机-赤轴",
-    "JA": "ドリルリグ-レッドシャフト"
+    "Id": 13111,
+    "CodeName": "Weapon_A_1111",
+    "Name": "Drill Rig - Red Axis",
+    "Desc": "Originally a high-rev W-Engine, it has been modified by Anton with the most expensive rotary drill parts. These modifications allow the engine to temporarily exceed its output limits, enabling it to better serve Anton's \"bro.\" When it comes to anything involving his \"bro,\" Anton spares no expense.\n\n<color=#959595>\"Ben bought the materials, Grace helped with the modding, and the force was signed off by the president herself... Bro, the blessings of all Belobog are inside you. Let's do this!\" — Anton muttering to himself the first time he starts it up</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "Originally a rev-enhanced W-Engine, it has been modified by Anton with the most expensive rotary drill parts that allow it to exceed its output limits.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1111.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 5000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When launching an EX Special Attack or Chain Attack, Electric DMG from Basic Attacks and Dash Attacks increases by % for 10s. This effect can trigger once every 15s."
+    }
   },
   "13112": {
-    "icon": "Weapon_A_1121",
-    "rank": 3,
-    "type": 5,
-    "EN": "Big Cylinder",
-    "desc": "A powerful protection-type W-Engine, characterized by thick oil cylinders that ceaselessly roar inside it. It can provide sufficient power for heavy machinery.",
-    "KO": "빅 실린더",
-    "CHS": "比格气缸",
-    "JA": "ビガー・シリンダー"
+    "Id": 13112,
+    "CodeName": "Weapon_A_1121",
+    "Name": "Big Cylinder",
+    "Desc": "This super-powerful support W-Engine, into which Ben installed extra heavy oil cylinders to keep it growling along, can even provide sufficient power for heavy-duty machinery. Despite its weight being so massive that ordinary people cannot lift it, for Ben, it's the perfect counterweight ball for his concrete pillar.\n\n<color=#959595>\"Don't worry. I've calculated the counterweight position and impact resistance factor down to four decimal places. It won't impact weapon performance.\" — Ben, before taking out his notebook to check over the calculations yet again</color>",
+    "Desc2": "Equip to increase Defense Agents' combat capabilities",
+    "Desc3": "A powerful protection-type W-Engine, characterized by thick oil cylinders that ceaselessly roar inside it. It can provide sufficient power for heavy machinery.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1121.png",
+    "WeaponType": { "5": "Defense" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "DEF",
+      "Name2": "Percent DEF",
+      "Format": "{0:0.#%}",
+      "Value": 4000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Reduces DMG taken by %. After being attacked, the next attack to hit an enemy will trigger a critical hit and deal % of the equipper's DEF as additional DMG. This effect can be triggered once every 7.5s."
+    }
   },
   "13113": {
-    "icon": "Weapon_A_1131",
-    "rank": 3,
-    "type": 4,
-    "EN": "Bashful Demon",
-    "desc": "An intricate W-Engine developed by Section 6 and later modified with extra features. It can control Ether particles to form an energy field. This model is favored by Soukaku.",
-    "KO": "수줍은 악마",
-    "CHS": "含羞恶面",
-    "JA": "恥じらう悪面"
+    "Id": 13113,
+    "CodeName": "Weapon_A_1131",
+    "Name": "Bashful Demon",
+    "Desc": "An intricate W-Engine developed by Section 6 and later modified using the technology of a certain martial arts clan. It can control Ether particles to form an energy field and boasts a terrifying appearance that can easily silence a crying child! If you are unfortunate enough to face its wicked stare, then just wait until it unfurls its fangs. What lies inside is... Don't laugh! This poor little thing really hurts when it hits you!\n\n<color=#959595>\"Hmm... Instead of a cool mask, I'd rather carry another lunchbox... I'll go ask Nagi if I can pack some snacks in it!\" — Soukaku, excitedly running to the Section 6 office</color>",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "An intricate W-Engine developed by Section 6 and later modified with extra features. It can control Ether particles to form an energy field. This model is favored by Soukaku.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1131.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 800,
+            "W2": 920,
+            "W3": 1040,
+            "W4": 1160,
+            "W5": 1280
+          }
+        }
+      ],
+      "Desc": "Increases Ice DMG by %. When launching an EX Special Attack, all squad members' ATK increases by % for 12s, stacking up to 4 times. Repeated triggers reset the duration. Passive effects of the same name do not stack."
+    }
   },
   "13115": {
-    "icon": "Weapon_A_1151",
-    "rank": 3,
-    "type": 4,
-    "EN": "Kaboom the Cannon",
-    "desc": "A support W-Engine propelled by jets that is both mobile and impactful, it can traverse the entire battlefield providing combat buffs.",
-    "KO": "호전적인 꽝꽝이",
-    "CHS": "好斗的阿炮",
-    "JA": "喧嘩腰のボンバルダム"
+    "Id": 13115,
+    "CodeName": "Weapon_A_1151",
+    "Name": "Kaboom the Cannon",
+    "Desc": "A support W-Engine propelled by jets that is both mobile and impactful, it can traverse the entire battlefield providing combat buffs. Not only is it practical, but it's the biggest imaginary enemy and most-feared sparring partner of Grassy, Woody, and Bricky. The little boars can hear Lucy say in their nightmares.\n\n<color=#959595>\"If you can't do it, go train with Kaboom!\" — Lucy, lecturing her three loyal guard boars</color>",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "A support W-Engine propelled by jets that is both mobile and impactful, it can traverse the entire battlefield providing combat buffs.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1151.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 5000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1000,
+            "W2": 1120,
+            "W3": 1280,
+            "W4": 1440,
+            "W5": 1600
+          }
+        }
+      ],
+      "Desc": "When any friendly unit in the squad attacks and hits an enemy, all friendly units' ATK increases by % for 8s, stacking up to 4 times. The duration of each stack is calculated separately, and each friendly unit can provide 1 stack of the buff. Passive effects of the same name do not stack."
+    }
   },
   "13127": {
-    "icon": "Weapon_A_1271",
-    "rank": 3,
-    "type": 5,
-    "EN": "Peacekeeper - Specialized",
-    "desc": "A defensive W-Engine independently researched and created by Public Security which simplifies the offensive components to enhance the energy conversion ability in its shield. ",
-    "KO": "평화 수호자-특화형",
-    "CHS": "维序者-特化型",
-    "JA": "秩序の守り手・特化型"
+    "Id": 13127,
+    "CodeName": "Weapon_A_1271",
+    "Name": "Peacekeeper - Specialized",
+    "Desc": "A defensive W-Engine independently researched and created by Public Security with special emphasis on enhancing the energy conversion ability in its shield. Rumor has it that this model of W-Engine became the standard for all supporting units in Hollow operations due to an unknown member of the top brass pushing for mass production.\n\n<color=#959595>\"Even if you took it apart and rebuilt it into an actual physical shield, it would still be extremely sturdy... but it really is super heavy!\" —Seth, musing aloud as he studies the extremely expensive material of the W-Engine</color>",
+    "Desc2": "Equip to increase Defense Agents' combat capabilities",
+    "Desc3": "A defensive W-Engine independently researched and created by Public Security which simplifies the offensive components to enhance the energy conversion ability in its shield. ",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1271.png",
+    "WeaponType": { "5": "Defense" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "While Shielded, the equipper's Energy Regen increases by /s. The Anomaly Buildup of EX Special Attacks and Assist Follow-Ups increase by %."
+    }
   },
   "13128": {
-    "icon": "Weapon_A_1281",
-    "rank": 3,
-    "type": 3,
-    "EN": "Roaring Ride",
-    "desc": "An energy W-Engine modded from spare parts of a truck's engine. It converts the original cylinder into an energy storage unit, which is highly advantageous.",
-    "KO": "뛰뛰빵빵",
-    "CHS": "轰鸣座驾",
-    "JA": "グロウル・マイ・カー"
+    "Id": 13128,
+    "CodeName": "Weapon_A_1281",
+    "Name": "Roaring Ride",
+    "Desc": "This energy W-Engine, modded from spare parts of a truck's engine, converts the original cylinder into an energy storage unit, which is highly advantageous. It placed first in the internal Leaps and Bounds competition, surpassing many heavy-duty motorbikes and even a truck driven by Piper herself.\n\n<color=#959595>\"Too bad there's no way to carry cargo... Maybe we can hang it on the tusks?\" — Piper, top-notch logistics driver</color>",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "An energy W-Engine modded from spare parts of a truck's engine. It converts the original cylinder into an energy storage unit, which is highly advantageous.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1281.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 800,
+            "W2": 920,
+            "W3": 1040,
+            "W4": 1160,
+            "W5": 1280
+          }
+        },
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0}",
+          "Overclock": {
+            "W1": 40,
+            "W2": 46,
+            "W3": 52,
+            "W4": 58,
+            "W5": 64
+          }
+        }
+      ],
+      "Desc": "When EX Special Attack hits an enemy, one of three possible effects is randomly triggered for 5 seconds. This effect can trigger once every 0.3s. The same types of effects cannot stack. Repeated triggers reset the duration, allowing several effects to be active at once: Increases the equipper's ATK by %, increases the equipper's Anomaly Proficiency by [NUMBER], or increases the equipper's Anomaly Buildup Rate by %."
+    }
   },
   "13135": {
-    "icon": "Weapon_A_1351",
-    "rank": 3,
-    "type": 2,
-    "EN": "Box Cutter",
-    "desc": "An energy W-Engine modded from spare parts of a truck's engine. It converts the original cylinder into an energy storage unit, which is highly advantageous.",
-    "KO": "커터칼",
-    "CHS": "裁纸刀",
-    "JA": "ペーパーカッター"
+    "Id": 13135,
+    "CodeName": "Weapon_A_1351",
+    "Name": "Box Cutter",
+    "Desc": "This W-Engine's design was originally much more modest. The focus during its creation was on offensive capability and stealth until its owner met a group of curious and loud individuals who had no concept of subtlety. Not only did they put flashy stickers on it, but after injuring their fingers, they often used it to cut ropes, open boxes, and even slice through sticky tape...\n\"That... yeah, that box cutter, lemme borrow it, thanks!\" \"Boss, it's not a box cutter, it's called Hidden Claw!\" \"Hey, Kitty, lemme borrow your box cutter!\" \"It's not a box cutter, it's called Hidden Claw!\" \"Mind if lil ol me takes your box cutter for a mo?\" \"...\"\n\n<color=#959595>\"Fine, it's a box cutter. Whatever makes you happy.\" — Pulchra</color>",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "An energy W-Engine modded from spare parts of a truck's engine. It converts the original cylinder into an energy storage unit, which is highly advantageous.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1351.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1500
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Upon launching an Aftershock, the equipper's Physical DMG increases by %, and Daze increases by %, lasting 10s."
+    }
   },
   "13142": {
-    "icon": "Weapon_A_1421",
-    "rank": 3,
-    "type": 5,
-    "EN": "Tremor Trigram Vessel",
-    "desc": "Pressing acupoints is like cooking. Striking the fatal acupoint is like setting the stove on fire, bringing disaster.",
-    "KO": "진괘를 담은 함",
-    "CHS": "震元奇枢",
-    "JA": "雷鳴が如き八卦"
+    "Id": 13142,
+    "CodeName": "Weapon_A_1421",
+    "Name": "Tremor Trigram Vessel",
+    "Desc": "The art of acupoint is much like a chef in the kitchen. First, you explore the meridians, which is like rinsing the ingredients; then, you warm your palms, akin to heating the pan; and with two fingers pressing on the laughter point, the sound of laughter is like stir-frying. Practitioners must never recklessly strike a person's fatal point — it's like pouring hot oil into a stove, causing a disaster.\n\n<color=#959595>\"This little ball is darting between the acupoints, just like the fish balls I fling when making stir-fried noodles on the hot iron plate.\" —Pan Yinhu, distracted by random thoughts while doing acupoint memory training with a wooden panda sculpture.</color>",
+    "Desc2": "Equip to increase Defense Agents' combat capabilities",
+    "Desc3": "Pressing acupoints is like cooking. Striking the fatal acupoint is like setting the stove on fire, bringing disaster.",
+    "Rarity": 3,
+    "Icon": "Assets/NapResources/UI/Sprite/A1DynamicLoad/ItemIconWeapon/UnPacker/Weapon_A_1421.png",
+    "WeaponType": { "5": "Defense" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 42
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 1000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "The equipper's EX Special Attack and Ultimate DMG increases by %. Whenever any squad member takes DMG or recovers HP, the equipper gains [NUMBER] Energy. This effect can trigger once every 5s."
+    }
   },
   "13144": {
-    "icon": "Weapon_A_1441",
-    "rank": 3,
-    "type": 6,
-    "EN": "Grill O'Wisp",
-    "desc": "A flame both fierce and faithful, burning without end.",
-    "KO": "어스름한 밤의 화염",
-    "CHS": "燔火胧夜",
-    "JA": "燔火の朧夜"
+    "Id": 13144,
+    "CodeName": "Weapon_A_1441",
+    "Name": "Grill O'Wisp",
+    "Desc": "Under the stars at midnight, the artisan raised this tool, awakening slumbering flames. Amid the misty dark, it was the lone flame that refused to die.\nIts body gleamed black with a crimson sheen, etched with cryptic markings. Was it an ancient relic, a mere toy, or a legendary weapon? Only its wielder knew the truth.\n\n<color=#959595>\"It's nothing more than a fire-starting tool... but I can't deny it's useful.\" —So he would say, each time someone guessed it served some impressive function.</color>",
+    "Desc2": "Equip to increase Rupture Agents' combat capabilities",
+    "Desc3": "A flame both fierce and faithful, burning without end.",
+    "Rarity": 3,
+    "Icon": "Weapon_A_1441.png",
+    "WeaponType": { "6": "Rupture" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 624
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 2500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1500,
+            "W2": 1725,
+            "W3": 1950,
+            "W4": 2175,
+            "W5": 2400
+          }
+        }
+      ],
+      "Desc": "The equipper's Fire DMG increases by %. When the equipper's HP decreases, their CRIT Rate increases by % for 5s."
+    }
   },
   "14001": {
-    "icon": "Weapon_S_Common_01",
-    "rank": 3,
-    "type": 1,
-    "EN": "Cannon Rotor",
-    "desc": "A high-performance supercomputing W-Engine, capable of collecting real-time battlefield data and equipped with mini cannons.",
-    "KO": "캐논 로터",
-    "CHS": "加农转子",
-    "JA": "キャノンローラー"
+    "Id": 14001,
+    "CodeName": "Weapon_S_Common_01",
+    "Name": "Cannon Rotor",
+    "Desc": "A high-performance supercomputing W-Engine, capable of collecting real-time data on the battlefield and providing tactical support to its operator. Additionally, it is equipped with mini cannons and can even be deployed as an automatic combat unit in critical moments. In such situations, the operator may become more of a hindrance than a help.",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "A high-performance supercomputing W-Engine, capable of collecting real-time battlefield data and equipped with mini cannons.",
+    "Rarity": 3,
+    "Icon": "Weapon_S_Common_01.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 750,
+            "W2": 860,
+            "W3": 970,
+            "W4": 1080,
+            "W5": 1200
+          }
+        }
+      ],
+      "Desc": "Increases ATK by %. Landing a critical hit on an enemy will inflict an additional % of ATK as DMG. This effect can trigger once every 8s."
+    }
   },
   "14002": {
-    "icon": "Weapon_S_Common_02",
-    "rank": 3,
-    "type": 4,
-    "EN": "Unfettered Game Ball",
-    "desc": "A new supercomputing W-Engine, featuring cutting-edge integrated chips that dynamically monitor the battlefield and provide tactical analysis for the user.",
-    "KO": "내 맘대로 게임 볼",
-    "CHS": "逍遥游球",
-    "JA": "ゲームボール"
+    "Id": 14002,
+    "CodeName": "Weapon_S_Common_02",
+    "Name": "Unfettered Game Ball",
+    "Desc": "A new supercomputing W-Engine, featuring cutting-edge integrated chips that dynamically monitor the battlefield and provide tactical analysis for its user. Furthermore, this W-Engine can serve as a portable console, allowing its user to play the most popular video games anytime, anywhere. However, it is not advisable to use the speakers while playing games... Especially not in Hollow areas frequented by Ethereals.",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "A new supercomputing W-Engine, featuring cutting-edge integrated chips that dynamically monitor the battlefield and provide tactical analysis for the user.",
+    "Rarity": 3,
+    "Icon": "Weapon_S_Common_02.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 5000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1200,
+            "W2": 1350,
+            "W3": 1550,
+            "W4": 1750,
+            "W5": 2000
+          }
+        }
+      ],
+      "Desc": "Whenever the equipper's attack triggers an Attribute Counter effect, all units' CRIT Rate against the struck enemy increases by % for 12s. Passive effects of the same name do not stack."
+    }
   },
   "14003": {
-    "icon": "Weapon_S_Common_03",
-    "rank": 3,
-    "type": 2,
-    "EN": "Six Shooter",
-    "desc": "A special W-Engine modeled after a revolver. It can load bullet-shaped condensed Ether batteries, which release a great amount of power when fired.",
-    "KO": "리볼버 로터",
-    "CHS": "左轮转子",
-    "JA": "シックスシューター"
+    "Id": 14003,
+    "CodeName": "Weapon_S_Common_03",
+    "Name": "Six Shooter",
+    "Desc": "A special W-Engine modeled after a revolver. It can apparently load six bullet-shaped condensed Ether batteries, which release a significant amount of power when fired. It is said that as long as you carry this W-Engine, you will be able to spontaneously learn how to whistle and will occasionally reference old movies in a cowboy voice.",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "A special W-Engine modeled after a revolver. It can load bullet-shaped condensed Ether batteries, which release a great amount of power when fired.",
+    "Rarity": 3,
+    "Icon": "Weapon_S_Common_03.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1500
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "The equipper gains 1 Charge stack every 3s, stacking up to 6 times. When launching an EX Special Attack, consumes all Charge stacks and each stack consumed increases the skill's Daze inflicted by 4%."
+    }
   },
   "14102": {
-    "icon": "Weapon_S_1021",
-    "rank": 4,
-    "type": 1,
-    "EN": "Steel Cushion",
-    "desc": "A supercomputing W-Engine equipped with a motion monitoring feature. Thanks to Nekomata's modifications, it perfectly matches the fast reflexes and combat maneuvers of feline Thirens.",
-    "KO": "스틸 쿠션",
-    "CHS": "钢铁肉垫",
-    "JA": "鋼の肉球"
+    "Id": 14102,
+    "CodeName": "Weapon_S_1021",
+    "Name": "Steel Cushion",
+    "Desc": "A supercomputing W-Engine equipped with an enhanced motion monitoring feature, perfectly matching the fast reflexes and combat maneuvers of Cat Thirens. Nekomata has added a foldable knife to its casing. Despite claiming that this design is to facilitate her in battle, the knife has fresh mackerel stains smeared onto it...\n\n<color=#959595>\"Lots of people call me a clever clogs for doing this mod, but when you're out on the streets, you gotta put everything you can to good use: Every little trick, every little thought, every little hustle... And look! A little kitty!\" — Nekomata, diverting attention away while secretly trying to fish out the listener's wallet</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "A supercomputing W-Engine equipped with a motion monitoring feature. Thanks to Nekomata's modifications, it perfectly matches the fast reflexes and combat maneuvers of feline Thirens.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1021.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 684
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2400
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Increases Physical DMG by %. The equipper's DMG increases by % when hitting the enemy from behind."
+    }
   },
   "14104": {
-    "icon": "Weapon_S_1041",
-    "rank": 4,
-    "type": 1,
-    "EN": "The Brimstone",
-    "desc": "A W-Engine made for Soldier 11 by Obsidian Division. Its intense heat can be used to clear the entire battlefield.",
-    "KO": "유황석",
-    "CHS": "硫磺石",
-    "JA": "ブリムストーン"
+    "Id": 14104,
+    "CodeName": "Weapon_S_1041",
+    "Name": "The Brimstone",
+    "Desc": "A violent Obsidian Division W-Engine forged with fire and filled with a forbidden fuel that has been reprocessed using Ether-technology. Its intense heat can be used to clear the entire battlefield. Rumor has it that its designer was exchanging W-Engine design ideas with Soldier 11 over dinner. After an hour spent enjoying extra spicy noodles, she decided to bring extra spicy revenge to her enemies.\n\n<color=#959595>\"I really like it. It's stable, efficient, and practical. The high temperature can clean the battle residue off my blade and even disinfect wounds when needed... Why are you sitting so far away?\" — Soldier 11, introducing her W-Engine to her teammates</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "A W-Engine made for Soldier 11 by Obsidian Division. Its intense heat can be used to clear the entire battlefield.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1041.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 684
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2800,
+            "W2": 3520,
+            "W3": 4160,
+            "W4": 4800,
+            "W5": 5600
+          }
+        }
+      ],
+      "Desc": "Upon hitting an enemy with a Basic Attack, Dash Attack, or Dodge Counter, the equipper's ATK increases by % for 8s, stacking up to 8 times. This effect can trigger once every 0.5s. The duration of each stack is calculated separately."
+    }
   },
   "14105": {
-    "icon": "Weapon_S_1051",
-    "rank": 4,
-    "type": 6,
-    "EN": "Kraken's Cradle",
-    "desc": "In chasing illusions, she was entranced by the light that pierced through the mist.",
-    "KO": "크라켄의 요람",
-    "CHS": "海妖摇篮",
-    "JA": "セイレーンクレードル"
+    "Id": 14105,
+    "CodeName": "Weapon_S_1051",
+    "Name": "Kraken's Cradle",
+    "Desc": "Most inspiration streaks by like a meteor, vanishing in a blink. Yet while modifying this W-Engine, a surge of powerful emotion sparked an idea that anchored itself in her mind, refusing to fade. Not a shackle, nor a consuming force, but something treasured — something she longed to keep safe. That became the source of this W-Engine's design.\n\n<color=#959595>\"It's simply trying to guard the greatest treasure in this world, in the way it knows how.\" —She spoke softly, noticing the puzzled expressions on the Proxy siblings.</color>",
+    "Desc2": "Equip to increase Rupture Agents' combat capabilities",
+    "Desc3": "In chasing illusions, she was entranced by the light that pierced through the mist.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1051.png",
+    "WeaponType": { "6": "Rupture" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2300,
+            "W3": 2600,
+            "W4": 2900,
+            "W5": 3200
+          }
+        }
+      ],
+      "Desc": "When the equipper's HP decreases, their Ice Sheer DMG increases by %, stacking up to 3 times and lasting 25s. The duration of each stack is calculated separately. This effect can trigger once every 0.5s. When the equipper's HP falls to 50% of Max HP or below, CRIT Rate increases by %."
+    }
   },
   "14107": {
-    "icon": "Weapon_S_1071",
-    "rank": 4,
-    "type": 5,
-    "EN": "Tusks of Fury",
-    "desc": "A versatile W-Engine based on a motorcycle tire that Big Daddy made for Caesar.",
-    "KO": "저돌적인 송곳니",
-    "CHS": "奔袭獠牙",
-    "JA": "猛進するキバ"
+    "Id": 14107,
+    "CodeName": "Weapon_S_1071",
+    "Name": "Tusks of Fury",
+    "Desc": "A multi-functional W- Engine specially designed with a motorcycle tire as the foundation. It boasts rapid speed, ferocious tearing power, solid defense, unexpectedly low energy consumption, and a domineering appearance. Apparently, this was initially just a toy that Big Daddy made for Caesar to play with, but every time Caesar played with it, it would end up in tatters. As a result, Big Daddy spent years reinforcing and modifying it over a hundred times, eventually creating this superb piece of equipment that can function as a weapon, shield, wheel, and even a light source.\n\n<color=#959595>\"It was originally supposed to also function as a piano, with keys embedded around the edge of the tire! But after a few tries, it didn't work out well. After spinning it a few times, I couldn't tell the correct notes apart, so I had to dismantle it... Fortunately, it can still be used as a fan when it gets hot.\" — Caesar, playfully flicking the W-Engine tire with her finger, whipping up a gust of wind.</color>",
+    "Desc2": "Equip to increase Defense Agents' combat capabilities",
+    "Desc3": "A versatile W-Engine based on a motorcycle tire that Big Daddy made for Caesar.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1071.png",
+    "WeaponType": { "5": "Defense" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1800
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "The Shield value provided by the equipper increases by 30%. When any squad member triggers Interrupt or Perfect Dodge, all squad members' DMG increases by 18% and Daze dealt increases by 12% for 20s. Passive effects of the same name do not stack."
+    }
   },
   "14109": {
-    "icon": "Weapon_S_1091",
-    "rank": 4,
-    "type": 3,
-    "EN": "Hailstorm Shrine",
-    "desc": "Hail falls before the shrine, waking her. The blizzard is coming.",
-    "KO": "싸락눈 내린 별각",
-    "CHS": "霰落星殿",
-    "JA": "あられ落つ星殿"
+    "Id": 14109,
+    "CodeName": "Weapon_S_1091",
+    "Name": "Hailstorm Shrine",
+    "Desc": "Slaughter is endless. Kill, conquer, the fate of the cursed, a restless forbidden power. Only between battles, when rushing to the next frontline, does the foxfire enjoy a brief reprieve in its shrine.\nHow many more corpses, how many more sacrifices, how many more calamities until we reach the void on the other side?\nShe needs no answer. At the peak of martial power, the stench of blood will freeze in the air before being breathed in. Once all evil is eradicated, the world will be able to enter peaceful slumber with the blade sealed.\nHail falls before the shrine, waking the wielder of this power. The blizzard is coming.\n\n<color=#959595>\"Perfect for training... If I could shrink to its size, that is.\" —Miyabi, muttering to herself as she gazes at the interior.</color>",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "Hail falls before the shrine, waking her. The blizzard is coming.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1091.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 743
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2400
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT DMG",
+          "Name2": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 5000,
+            "W2": 5700,
+            "W3": 6500,
+            "W4": 7200,
+            "W5": 8000
+          }
+        }
+      ],
+      "Desc": "CRIT DMG increases by %. When using an EX Special Attack or when any squad member applies an Attribute Anomaly to an enemy, the equipper's Ice DMG increases by %, stacking up to 2 times and lasting 15s. The duration of each stack is calculated separately."
+    }
   },
   "14110": {
-    "icon": "Weapon_S_1101",
-    "rank": 4,
-    "type": 2,
-    "EN": "Hellfire Gears",
-    "desc": "A functional W-Engine with ultra-high power capacity. Modified by Koleda, its energy level has almost exceeded the safety limit.",
-    "KO": "헬파이어 기어",
-    "CHS": "燃狱齿轮",
-    "JA": "燃獄ギア"
+    "Id": 14110,
+    "CodeName": "Weapon_S_1101",
+    "Name": "Hellfire Gears",
+    "Desc": "This W-Engine is renowned for its ultra power. Modified by Koleda, its energy level has almost exceeded the safety limit. Although this W-Engine is entirely designed for damage output, and the Speedup and Blaze functions have been merged into one, this is precisely what Koleda wanted.\n\n<color=#959595>\"I've got a clear shot at your shins, you know? So you'd better think twice before saying I'm short, got it?\" — Koleda, warning a rude business partner</color>",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "A functional W-Engine with ultra-high power capacity. Modified by Koleda, its energy level has almost exceeded the safety limit.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1101.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 684
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1800
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Impact",
+          "Name2": "Impact",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2500,
+            "W3": 3000,
+            "W4": 3500,
+            "W5": 4000
+          }
+        }
+      ],
+      "Desc": "While off-field, the equipper's Energy Regen increases by /s. When using an EX Special Attack, the equipper's Impact is increased by % for 10s, stacking up to 2 times. The duration of each stack is calculated separately."
+    }
   },
   "14114": {
-    "icon": "Weapon_S_1141",
-    "rank": 4,
-    "type": 2,
-    "EN": "The Restrained",
-    "desc": "A special W-Engine with a powerful temperature control system. Modified by Lycaon, it has the capability to quickly create extremely cold environments.",
-    "KO": "구속된 자",
-    "CHS": "拘缚者",
-    "JA": "拘縛されし者"
+    "Id": 14114,
+    "CodeName": "Weapon_S_1141",
+    "Name": "The Restrained",
+    "Desc": "This special W-Engine has the capability to create extreme low temperatures. Its radiator opening was designed with an eerie animal teeth decoration and often drips condensation. After Lycaon's improvements, its rough appearance has become much more refined and elegant, and the opening is now utilized to store envelopes and other keepsakes.\n\n<color=#959595>\"Manners aren't a leash for wildness; it enhances it before it's set free.\" — Lycaon, speaking gently during a tea party</color>",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "A special W-Engine with a powerful temperature control system. Modified by Lycaon, it has the capability to quickly create extremely cold environments.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1141.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 684
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1800
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When an attack hits an enemy, DMG and Daze from Basic Attacks increase by 6% for 8s, stacking up to 5 times. This effect can trigger at most once during each skill. The duration of each stack is calculated separately."
+    }
   },
   "14116": {
-    "icon": "Weapon_S_1161",
-    "rank": 4,
-    "type": 2,
-    "EN": "Blazing Laurel",
-    "desc": "A violent W-Engine that can ignite flames with a siphon. It deals simple and crude burn damage, encouraging relentless, bone-crushing follow-up attacks.",
-    "KO": "화염의 월계관",
-    "CHS": "焰心桂冠",
-    "JA": "炎心の桂冠"
+    "Id": 14116,
+    "CodeName": "Weapon_S_1161",
+    "Name": "Blazing Laurel",
+    "Desc": "A violent W-Engine that can ignite flames with a siphon. It deals simple and crude burn damage, encouraging relentless, bone-crushing follow-up attacks. Rumor has it that the liquid fluid within was once a secret weapon from an old civilization's empire that dominated naval warfare! The formula has long since been lost and recreating it is extremely difficult!\n\n<color=#959595>\"...Actually, all I said was that I wanted a backup lighter.\" —Lighter says as the user of this valuable fuel</color>",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "A violent W-Engine that can ignite flames with a siphon. It deals simple and crude burn damage, encouraging relentless, bone-crushing follow-up attacks.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1161.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1800
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Impact",
+          "Name2": "Impact",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2500,
+            "W2": 2875,
+            "W3": 3250,
+            "W4": 3625,
+            "W5": 4000
+          }
+        },
+        {
+          "Name": "CRIT DMG",
+          "Name2": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 3000,
+            "W2": 3440,
+            "W3": 3900,
+            "W4": 4340,
+            "W5": 4800
+          }
+        }
+      ],
+      "Desc": "Upon launching a Quick Assist or Perfect Assist, the equipper's Impact increases by % for 8s. When the equipper launches and hits an enemy with a Basic Attack, apply Wilt to the target for 30s, stacking up to 20 times, repeated triggers reset the duration. When any squad member hits an enemy, for every stack of Wilt applied to the target, the CRIT DMG of the Ice DMG and Fire DMG dealt by that attack increases by %. Only one instance of this effect can exist in the same squad."
+    }
   },
   "14117": {
-    "icon": "Weapon_S_1171",
-    "rank": 4,
-    "type": 3,
-    "EN": "Flamemaker Shaker",
-    "desc": "Modified by Burnice, this W-Engine uses a special fuel as its power source to boost combustion performance to the max.",
-    "KO": "타오르는 셰이커",
-    "CHS": "灼心摇壶",
-    "JA": "バーニング・シェイカー"
+    "Id": 14117,
+    "CodeName": "Weapon_S_1171",
+    "Name": "Flamemaker Shaker",
+    "Desc": "Powered by a specially formulated fuel, this modified W-Engine is optimized to push combustion performance to the extreme. The engine operates by injecting fuel from the tank into the reaction chamber, where a high-pressure reaction device converts the fuel into searing flames, leaving behind a scorched aroma. It's rumored Nitro-Fuel can also be used as a power source, as there was a sighting of Burnice pouring one into the tank, and later scraping the remaining liquid back into a bar glass after the battle.\n\n<color=#959595>\"This is definitely slander from a competitor. The special drinks I serve to my customers are always clean and hygienic! The Nitro-Fuel that drains out from the tank is for my own consumption because the high-pressure concentration gives it a special taste!\" — Burnice, in defense of her professional reputation, oblivious to her customers unconsciously taking a step back.</color>",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "Modified by Burnice, this W-Engine uses a special fuel as its power source to boost combustion performance to the max.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1171.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0}",
+          "Overclock": {
+            "W1": 50,
+            "W2": 62,
+            "W3": 75,
+            "W4": 87,
+            "W5": 100
+          }
+        }
+      ],
+      "Desc": "While off-field, the equipper's Energy Regen increases by /s. When hitting an enemy with an EX Special Attack or Assist Attack, the equipper's DMG increases by %, stacking up to 10 times and lasting for 6s. This effect can trigger once every 0.3s. While off-field, the stack effect is doubled. Repeated triggers reset the duration. Upon obtaining the DMG increase effect, if the number of current stacks is greater than or equal to 5, then the equipper's Anomaly Proficiency increases by [NUMBER]. This Anomaly Proficiency increase does not stack and lasts for 6s."
+    }
   },
   "14118": {
-    "icon": "Weapon_S_1181",
-    "rank": 4,
-    "type": 3,
-    "EN": "Fusion Compiler",
-    "desc": "The latest W-Engine that possesses a hypercalculation core. It can compile operational codes for machines at top speed. This model is favored by Grace.",
-    "KO": "감입 컴파일러",
-    "CHS": "嵌合编译器",
-    "JA": "複合コンパイラ"
+    "Id": 14118,
+    "CodeName": "Weapon_S_1181",
+    "Name": "Fusion Compiler",
+    "Desc": "Embedded with a supercomputer core, this latest-model W-Engine can compile operating code for machines at an astonishing speed, or quickly collect battlefield data to provide support for the whole squad. Of course, for Grace, this W-Engine is just a little toy for her to communicate with her \"silicon-based children.\"\n\n<color=#959595>\"Looking carefully... you're handsome in your own way! Oh, it says in the manual that once it's sealed, it shouldn't be opened... Hmmm... Well, how would we know if we don't give it a try?!\" — Grace, suddenly enthusiastic while holding the engine in her hand</color>",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "The latest W-Engine that possesses a hypercalculation core. It can compile operational codes for machines at top speed. This model is favored by Grace.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1181.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 684
+    },
+    "RandProperty": {
+      "Name": "PEN Ratio",
+      "Name2": "PEN Ratio",
+      "Format": "{0:0.#%}",
+      "Value": 2400
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0}",
+          "Overclock": {
+            "W1": 75,
+            "W2": 93,
+            "W3": 111,
+            "W4": 129,
+            "W5": 150
+          }
+        }
+      ],
+      "Desc": "When using a Special Attack or EX Special Attack, the equipper's Anomaly Proficiency is increased by [NUMBER] for 8s, stacking up to 3 times. The duration of each stack is calculated separately."
+    }
   },
   "14119": {
-    "icon": "Weapon_S_1191",
-    "rank": 4,
-    "type": 1,
-    "EN": "Deep Sea Visitor",
-    "desc": "A high-power W-Engine that possesses efficient freezing capabilities and high damage output. This model is often used by Ellen.",
-    "KO": "심해 방문객",
-    "CHS": "深海访客",
-    "JA": "ディープシー・ビジター"
+    "Id": 14119,
+    "CodeName": "Weapon_S_1191",
+    "Name": "Deep Sea Visitor",
+    "Desc": "This high-power W-Engine has the capability to rapidly lower the temperature of the environment, allowing it to instantly freeze nearby objects. Although it is an excellent tactical W-Engine due to its efficient freezing and high damage output, Ellen primarily uses it to make frappes.\n\n<color=#959595>\"I want to bring it to school, especially in the summer. But Lycaon and Rina won't let me... So annoying.\" — Ellen, shaking her head while eating ice</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "A high-power W-Engine that possesses efficient freezing capabilities and high damage output. This model is often used by Ellen.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1191.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2400
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2500,
+            "W3": 3000,
+            "W4": 3500,
+            "W5": 4000
+          }
+        }
+      ],
+      "Desc": "Increases Ice DMG by %. Upon hitting an enemy with a Basic Attack, the equipper's CRIT Rate increases by % for 8s. When dealing Ice DMG with a Dash Attack, the equipper's CRIT Rate increases by an additional % for 15s. The duration of each effect is calculated separately."
+    }
   },
   "14120": {
-    "icon": "Weapon_S_1201",
-    "rank": 4,
-    "type": 1,
-    "EN": "Zanshin Herb Case",
-    "desc": "Bitterness and pain beget hope, and he devours them all.",
-    "KO": "잔심의 청낭",
-    "CHS": "残心青囊",
-    "JA": "残心の青籠"
+    "Id": 14120,
+    "CodeName": "Weapon_S_1201",
+    "Name": "Zanshin Herb Case",
+    "Desc": "Medicine is neither benevolent nor cruel. It merely heals what it must and brings its own side effects.\nA warrior cares not how bitter and painful it may be to ingest. The ending is set in stone, so in order to shoot arrows that reach brighter places, he can do nothing but swallow them all.\n\n<color=#959595>\"There's a medicine that is real useful for faking sickness to get sick leave. If you don't take it with other stuff, it'll give you a brief fever. Unfortunately, it's pretty expensive, and it's not included in health insurance...\" ��Harumasa, sharing his insights into how to slack off.</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "Bitterness and pain beget hope, and he devours them all.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1201.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "CRIT DMG",
+      "Name2": "CRIT DMG",
+      "Format": "{0:0.#%}",
+      "Value": 4800
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2300,
+            "W3": 2600,
+            "W4": 2900,
+            "W5": 3200
+          }
+        }
+      ],
+      "Desc": "CRIT Rate increases by %. Dash Attack Electric DMG increases by %. When any squad member applies an Attribute Anomaly or Stuns an enemy, the equipper's CRIT Rate increases by an additional % for 15s."
+    }
   },
   "14121": {
-    "icon": "Weapon_S_1211",
-    "rank": 4,
-    "type": 4,
-    "EN": "Weeping Cradle",
-    "desc": "A special W-Engine with multiple layers embedded inside. It can quickly recharge \tspecial-model Bangboo and custom-made combat equipment. This model is favored by Rina.",
-    "KO": "흐느끼는 요람",
-    "CHS": "啜泣摇篮",
-    "JA": "啜り泣くゆりかご"
+    "Id": 14121,
+    "CodeName": "Weapon_S_1211",
+    "Name": "Weeping Cradle",
+    "Desc": "A special W-Engine with multiple layers embedded inside. It contains a special Ether charging layer that can quickly recharge special-model Bangboo and custom-made combat equipment. Even though this W-Engine looks like a cruel confinement chamber, Rina's Bangboo seem to enjoy sneaking in there to recharge their batteries. They even treat resting inside as a cozy reward.\n\n<color=#959595>\"Shhh... The two little ones are resting; if they're woken suddenly they'll be sure to cause a ruckus. Let's avoid making any noise while we enjoy our tea.\" — Rina, giving a gentle reminder as she serves tea to friends</color>",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "A special W-Engine with multiple layers embedded inside. It can quickly recharge \tspecial-model Bangboo and custom-made combat equipment. This model is favored by Rina.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1211.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 684
+    },
+    "RandProperty": {
+      "Name": "PEN Ratio",
+      "Name2": "PEN Ratio",
+      "Format": "{0:0.#%}",
+      "Value": 2400
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "While off-field, the equipper's Energy Regen increases by /s. Attacks from the equipper increase all units' DMG against a struck target by % for 3 seconds. During this period, this effect is further increased by % every 0.5s, up to a maximum additional increase of %. Repeated triggers only refresh the duration without refreshing the DMG increase effect. Passive effects of the same name do not stack."
+    }
   },
   "14122": {
-    "icon": "Weapon_S_1221",
-    "rank": 4,
-    "type": 3,
-    "EN": "Timeweaver",
-    "desc": "A new model of supercomputing W-Engine custom-made by HSO Section 6, equipped with the most elite calculation and analysis functions.",
-    "KO": "시류의 현자",
-    "CHS": "时流贤者",
-    "JA": "刻流の賢者"
+    "Id": 14122,
+    "CodeName": "Weapon_S_1221",
+    "Name": "Timeweaver",
+    "Desc": "A new model of supercomputing W-Engine custom-made by HSO Section 6, equipped with the most elite calculation and analysis functions, precisely records the user's time active and physical state to calculate the best plan of action. Embedded within is Yanagi's prized watch, but each time the W-Engine is turned on, the hands of the clock face go whirling around from the Ether energy, and it can no longer be used to accurately tell time. So, when she uses the time on here to tell you that you should hurry and be more efficient if you don't want to be late completing your mission, don't believe her.\n\n<color=#959595>\"So you're saying this is the ultimate weapon against time? I see, as the watch in the W-Engine moves so fast, the time it goes past is 'killed' so to speak, therefore it's a weapon against time... However, time in the real world does not actually change from this. No matter how fast the watch goes, it cannot kill time faster. Though the concept is decent, this punchline is only a six out of ten in my eyes.\" —Tsukishiro Yanagi, replying to her colleague's off-hand joke with complete seriousness</color>",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "A new model of supercomputing W-Engine custom-made by HSO Section 6, equipped with the most elite calculation and analysis functions.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1221.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0}",
+          "Overclock": {
+            "W1": 75,
+            "W2": 85,
+            "W3": 95,
+            "W4": 105,
+            "W5": 115
+          }
+        }
+      ],
+      "Desc": "The equipper's Electric Anomaly Buildup Rate increases by %. When Special Attacks or EX Special Attacks hit enemies suffering an Attribute Anomaly, the equipper's Anomaly Proficiency increases by [NUMBER] for 15s. When the equipper's Anomaly Proficiency is greater than or equal to 375, Disorder DMG inflicted by the equipper increases by %."
+    }
   },
   "14124": {
-    "icon": "Weapon_S_1241",
-    "rank": 4,
-    "type": 1,
-    "EN": "Riot Suppressor Mark VI",
-    "desc": "The latest tactical W-Engine used by Public Security's elite Hollow squads, possessing a powerful Ether energy source. It's Zhu Yuan's favored model.",
-    "KO": "서프레서 Ⅵ형",
-    "CHS": "防暴者Ⅵ型",
-    "JA": "サプレッサーⅥ型"
+    "Id": 14124,
+    "CodeName": "Weapon_S_1241",
+    "Name": "Riot Suppressor Mark VI",
+    "Desc": "The latest tactical W-Engine used by Public Security's elite Hollow squads. It uses a powerful Ether energy source to supply all combat equipment with explosive power for a short period of time. Although the W-Engines of many elite squad members often suffer from prolonged combat, Zhu Yuan's is in perfect condition. She treats it with utmost care and carefully maintains it, keeping it looking completely brand new.\n\n<color=#959595>\"Non-woven fabric, brush, lubricant, rust remover... alright, ready to go. Timer... starting now!\" — Zhu Yuan, timing herself as she starts maintenance, aiming to beat her previous record</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "The latest tactical W-Engine used by Public Security's elite Hollow squads, possessing a powerful Ether energy source. It's Zhu Yuan's favored model.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1241.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "CRIT DMG",
+      "Name2": "CRIT DMG",
+      "Format": "{0:0.#%}",
+      "Value": 4800
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1500,
+            "W2": 1880,
+            "W3": 2260,
+            "W4": 2640,
+            "W5": 3000
+          }
+        }
+      ],
+      "Desc": "Increases CRIT Rate by %. Launching an EX Special Attack grants the equipper 8 Charge stacks, up to a maximum of 8 stacks. Whenever the equipper's Basic Attack or Dash Attack deals Ether DMG, consumes a Charge stack and increases the skill's DMG by %."
+    }
   },
   "14125": {
-    "icon": "Weapon_S_1251",
-    "rank": 4,
-    "type": 2,
-    "EN": "Ice-Jade Teapot",
-    "desc": "A custom stun W-Engine made for an Automaton referencing the combat style and abilities of one. Energy is stored within, then lashes outwards upon conversion.",
-    "KO": "맑은 옥주전자",
-    "CHS": "玉壶青冰",
-    "JA": "玉壺青氷"
+    "Id": 14125,
+    "CodeName": "Weapon_S_1251",
+    "Name": "Ice-Jade Teapot",
+    "Desc": "A custom stun W-Engine made for an Automaton referencing the combat style and abilities of one. Energy is stored within, then lashes outwards upon conversion. The texture seeks to imitate fine artistry that was once highly sought after in ancient civilizations: Burn to procure what is sleek and elegant, shatter to create what is unyielding and sharp; this heat-proof pot bears a sacred bird shape with, as its name suggests, a unique pattern of ice-cracked celadon... but actually that pattern was drawn on.\n\n<color=#959595>\"It fares well in preserving temperature, and I can drink hot water whenever I need even in a Hollow.\" —Qingyi, giving her honest and carefully contemplated review</color>",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "A custom stun W-Engine made for an Automaton referencing the combat style and abilities of one. Energy is stored within, then lashes outwards upon conversion.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1251.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1800
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Impact",
+          "Name2": "Impact",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2100,
+            "W2": 2640,
+            "W3": 3150,
+            "W4": 3660,
+            "W5": 4200
+          }
+        }
+      ],
+      "Desc": "When a Basic Attack hits an enemy, gain 1 stack of Tea-riffic. Each stack of Tea-riffic increases the user's Impact by %, stacking up to 30 times, and lasting for 8s. The duration of each stack is calculated separately. Upon acquiring Tea-riffic, if the equipper possesses stacks of Tea-riffic greater than or equal to 15, all squad members' DMG is increased by % for 10s. Passive effects of the same name do not stack."
+    }
   },
   "14126": {
-    "icon": "Weapon_S_1261",
-    "rank": 4,
-    "type": 3,
-    "EN": "Sharpened Stinger",
-    "desc": "A deadly W-Engine from unknown sources, modified personally by Jane Doe with the intent to deal severe physical damage and Anomaly.",
-    "KO": "예리한 집게칼",
-    "CHS": "淬锋钳刺",
-    "JA": "磨き抜かれた切っ先"
+    "Id": 14126,
+    "CodeName": "Weapon_S_1261",
+    "Name": "Sharpened Stinger",
+    "Desc": "A deadly W-Engine from unknown sources, modified personally by Jane Doe with the intent to deal severe physical damage and Anomaly. The power circulation system within ensures the affliction of Anomalies and the edges of the exterior have been honed until they're razor-sharp to inflict unexpected tearing damage.\n\n<color=#959595>\"What, am I meant to adhere to duel etiquette with an Ethereal? Isn't it polite to end its pain in the quickest way possible?\" —Jane, in response to \"aren't your combat techniques a little too cruel\"</color>",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "A deadly W-Engine from unknown sources, modified personally by Jane Doe with the intent to deal severe physical damage and Anomaly.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1261.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Anomaly Proficiency",
+      "Name2": "Anomaly Proficiency",
+      "Format": "{0:0}",
+      "Value": 90
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Upon activating a Dash Attack, gain 1 stack of Predatory Instinct. Each stack of Predatory Instinct increases the equipper's Physical DMG by % for 10s, stacking up to 3 times. This effect can trigger once every 0.5s and repeated triggers reset the duration. When entering combat or triggering Perfect Dodge, gain 3 stacks of Predatory Instinct. While Predatory Instinct is at maximum stacks, the equipper's Anomaly Buildup Rate increases by %."
+    }
   },
   "14129": {
-    "icon": "Weapon_S_1291",
-    "rank": 4,
-    "type": 1,
-    "EN": "Myriad Eclipse",
-    "desc": "Shadowed by darkness at every step, he laid bare his heart to kindle a single, flickering flame.",
-    "KO": "천변하는 태양의 몰락",
-    "CHS": "千面日陨",
-    "JA": "千面の落日"
+    "Id": 14129,
+    "CodeName": "Weapon_S_1291",
+    "Name": "Myriad Eclipse",
+    "Desc": "A refined collector, a cunning phantom thief, a loathsome swindler, an arrogant, self-important bastard...\nThe world has a thousand identities for him. The elite despise his very presence, while the common folk hail him as a symbol of justice. In the alleys, they talk of him as a criminal legend walking the razor's edge. Among nobles, speaking of him is like lifting the lid of a cursed tomb.\nHe wears a thousand masks — yet none reveal who he truly is.\n\n<color=#959595>\"I'll live on in a thousand different tales.\" — Hugo</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "Shadowed by darkness at every step, he laid bare his heart to kindle a single, flickering flame.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1291.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2400
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT DMG",
+          "Name2": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 4500,
+            "W2": 5175,
+            "W3": 5850,
+            "W4": 6525,
+            "W5": 7200
+          }
+        }
+      ],
+      "Desc": "Increases CRIT DMG by %. When using an EX Special Attack, Chain Attack, or Ultimate to deal Ice DMG, the equipper gains the Absolute Zero Death Sentence effect for 3s. While Absolute Zero Death Sentence is active, the character ignores % of the enemy's DEF when landing a hit."
+    }
   },
   "14130": {
-    "icon": "Weapon_S_1301",
-    "rank": 4,
-    "type": 1,
-    "EN": "Bellicose Blaze",
-    "desc": "She lingers by the banks of the Styx, waiting for the tide to extinguish the fury burning in her chamber.",
-    "KO": "소란한 총성과 화염",
-    "CHS": "嚣枪喧焰",
-    "JA": "憤怒の銃騒"
+    "Id": 14130,
+    "CodeName": "Weapon_S_1301",
+    "Name": "Bellicose Blaze",
+    "Desc": "While developing this W-Engine, Captain Magus stood nearby repeating, \"Not hot enough, not intense enough,\" pushing the maker to keep raising the temperature — right up to the brink of the material's melting point. The poor craftsman had to endure Magus's grumbling, Orphie's apologies, and suffocating steam to get the job done. Finally, with a sharp whine from the pressure, the special W-Engine emerged from its hellish forge — refined through fire and hammering, and cooled with a roar rivaling its master.\n\n<color=#959595>\"Captain, why are you always so angry?\"\n\"I'm a gun, Orphie. All that flows through my chamber is metal and gunpowder.\"\n—For the first time, Orphie saw a trace of sorrow in the weapon she called \"Captain.\"</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "She lingers by the banks of the Styx, waiting for the tide to extinguish the fury burning in her chamber.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1301.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 6000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2300,
+            "W3": 2600,
+            "W4": 2900,
+            "W5": 3200
+          }
+        }
+      ],
+      "Desc": "Increases CRIT Rate by %. When the equipper triggers an Aftershock that deals Fire DMG, their attacks ignore % of the target's DEF for 8s. Can stack once every 3s, up to 2 stacks. Repeated triggers reset the duration."
+    }
   },
   "14131": {
-    "icon": "Weapon_S_1311",
-    "rank": 4,
-    "type": 4,
-    "EN": "Elegant Vanity",
-    "desc": "Underneath the radiant splendor, her genuine self has never been hidden.",
-    "KO": "우아한 베니티백",
-    "CHS": "玲珑妆匣",
-    "JA": "優美のヴァニティ"
+    "Id": 14131,
+    "CodeName": "Weapon_S_1311",
+    "Name": "Elegant Vanity",
+    "Desc": "Light gradually begins to appear, and dazzling colors leak from the box, blurring the boundary between reality and fantasy. They reveal untold secrets behind the stage, where wealth and peril silently mingle, drawing in the observer and holding their gaze.\n\n<color=#959595>\"This is my secret weapon~ All the gentleness, allure, strength, pride, and radiance of a girl are hidden inside!\"\n—Astra, blending her lip color with her ring finger, then closing the vanity case with a playful smile.</color>",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "Underneath the radiant splendor, her genuine self has never been hidden.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1311.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When any squad member enters the field through a Quick Assist, Chain Attack, Defensive Assist, or Evasive Assist, the equipper gains [NUMBER] Energy. This effect can trigger once every 5s. When the equipper consumes 25 or more Energy, the DMG dealt by all squad members increases by %, stacking up to 2 times, and lasting 20s. Repeated triggers reset the duration. Only one instance of this effect can exist in the same squad."
+    }
   },
   "14132": {
-    "icon": "Weapon_S_1321",
-    "rank": 4,
-    "type": 1,
-    "EN": "Heartstring Nocturne",
-    "desc": "The sound of the strings, sharp as blades, cut through the night, protecting the one.",
-    "KO": "심금을 울리는 야상곡",
-    "CHS": "心弦夜响",
-    "JA": "心弦のノクターン"
+    "Id": 14132,
+    "CodeName": "Weapon_S_1321",
+    "Name": "Heartstring Nocturne",
+    "Desc": "The soft hum of hidden strings and faint light blooming in the deep night, where sharpness and calm intertwine, transforming into a silent melody. Thread by thread, it captures everything held dear within.\n\n<color=#959595>\"This? It's just a device for storing instrument strings.\"\n—Evelyn, gently strumming the strings. A low hum fills the air, and as the final note echoes, the enemy falls silent.</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "The sound of the strings, sharp as blades, cut through the night, protecting the one.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1321.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2400
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT DMG",
+          "Name2": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 5000,
+            "W2": 5750,
+            "W3": 6500,
+            "W4": 7250,
+            "W5": 8000
+          }
+        }
+      ],
+      "Desc": "CRIT DMG increases by %. When the equipper enters combat, or activates a Chain Attack or Ultimate, they gain 1 stack of Heartstring. Each stack of Heartstring allows the equipper's Chain Attack and Ultimate to ignore % of the target's Fire RES, stacking up to 2 times and lasting 30s. Repeated triggers reset the duration."
+    }
   },
   "14133": {
-    "icon": "Weapon_S_1331",
-    "rank": 4,
-    "type": 3,
-    "EN": "Flight of Fancy",
-    "desc": "A bird landed on the windowsill, scattering starlight from its tail feathers.",
-    "KO": "별빛 꿈을 누비는 새",
-    "CHS": "���鸟星梦",
-    "JA": "鳥は夢へと羽ばたいて"
+    "Id": 14133,
+    "CodeName": "Weapon_S_1331",
+    "Name": "Flight of Fancy",
+    "Desc": "Birds in flight, stars in the sky, blossoms, parasols, and swirling skirts — unspoken feelings, yet emotions laid bare. Only when the moon begins to sigh does the flower bud dare to bloom, releasing a joyous bird. It weaves through the stars, gathering glimmers of starlight, and before dawn breaks, it lands beneath your eaves... shaking off a night full of whispered love.\n\n<color=#959595>\"Lord Phaethon needs only Vivian. Lord Phaethon loves only Vivian. Lord Phaethon sees only Vivian... Chant that to it for 178 days, and you can give it to Lord Phaethon.\" — Vivian, fortune telling and voodoo are not scientific and offer no real value. Do not attempt them lightly</color>",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "A bird landed on the windowsill, scattering starlight from its tail feathers.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1331.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Anomaly Proficiency",
+      "Name2": "Anomaly Proficiency",
+      "Format": "{0:0}",
+      "Value": 90
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0}",
+          "Overclock": {
+            "W1": 120,
+            "W2": 138,
+            "W3": 156,
+            "W4": 174,
+            "W5": 192
+          }
+        }
+      ],
+      "Desc": "Increases Anomaly Buildup Rate by %. When the equipper deals Ether DMG, their Anomaly Proficiency increases by [NUMBER] for 5s, stacking up to 6 times. This effect can trigger once every 0.5s, and repeated triggers reset the duration."
+    }
   },
   "14134": {
-    "icon": "Weapon_S_1341",
-    "rank": 4,
-    "type": 5,
-    "EN": "Half-Sugar Bunny",
-    "desc": "Not too sweet, and not too cold.",
-    "KO": "당도 50% 눈토끼",
-    "CHS": "半糖雪兔",
-    "JA": "甘さ控えめ雪うさぎ"
+    "Id": 14134,
+    "CodeName": "Weapon_S_1341",
+    "Name": "Half-Sugar Bunny",
+    "Desc": "100% cold, and 120% sweet. The maker says it's his best custom W-Engine of the year. \"So, Miss Zhao, what do you think? I've named this one 'Full-Sugar Bunny.' Fits your style, right? Huh? Change it to Half-Sugar? But why...? Ah, no no, you're the client, you get to name it however you like!\"\n\n<color=#959595>\"Equivalent exchange means finding a balance — not a bit more, not a bit less.\" —That was Xiao'Zhao's answer after Dialyn asked her several times, \"What's wrong with full-sugar?\"</color>",
+    "Desc2": "Equip to increase Defense Agents' combat capabilities",
+    "Desc3": "Not too sweet, and not too cold.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1341.png",
+    "WeaponType": { "5": "Defense" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "HP",
+          "Name2": "Percent HP",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1000,
+            "W2": 1150,
+            "W3": 1300,
+            "W4": 1450,
+            "W5": 1600
+          }
+        },
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1000,
+            "W2": 1150,
+            "W3": 1300,
+            "W4": 1450,
+            "W5": 1600
+          }
+        },
+        {
+          "Name": "CRIT DMG",
+          "Name2": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 3000,
+            "W2": 3450,
+            "W3": 3900,
+            "W4": 4350,
+            "W5": 4800
+          }
+        }
+      ],
+      "Desc": "The equipper's Energy Regen increases by /s. All squad members gain % ATK and % Max HP. Only one instance of this effect can exist in the same squad. When the equipper activates or extends an Ether Veil, all squad members gain % CRIT DMG for 60s. Repeated triggers reset the duration."
+    }
   },
   "14136": {
-    "icon": "Weapon_S_1361",
-    "rank": 4,
-    "type": 2,
-    "EN": "Spectral Gaze",
-    "desc": "Broken eyes hold both resilience and vulnerability.",
-    "KO": "탐혼의 눈동자",
-    "CHS": "索魂影眸",
-    "JA": "奪魂の瞑目"
+    "Id": 14136,
+    "CodeName": "Weapon_S_1361",
+    "Name": "Spectral Gaze",
+    "Desc": "Her life was one of seeking. Seeking companions, enemies, the truth, warmth. She reached out time and again, only to have it slip through her fingers. If one day she finds the missing fragments of her incomplete soul, will she be able to hear the melody in the wind once more?\n\n<color=#959595>\"Target has returned to the second floor of the video store. It sounds like they're preparing to sleep. Update on their location has been filed.\" — Trigger, apparently tracking and documenting a particular target.</color>",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "Broken eyes hold both resilience and vulnerability.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1361.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2400
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Impact",
+          "Name2": "Impact",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2300,
+            "W3": 2600,
+            "W4": 2900,
+            "W5": 3200
+          }
+        }
+      ],
+      "Desc": "When the equipper's Aftershock hits an enemy, causing Electric DMG, the target's DEF is reduced by % for 5s. Passive effects of the same name do not stack. When this effect is triggered, if the equipper is not the active character, they gain 1 stack of Spirit Lock, up to a maximum of 3 stacks. This can trigger only once per use of a skill. Each stack of Spirit Lock increases the equipper's Impact by %, lasting 12s. The duration of each stack is calculated separately. At full stacks of Spirit Lock, the equipper's Impact increases by an additional %."
+    }
   },
   "14137": {
-    "icon": "Weapon_S_1371",
-    "rank": 4,
-    "type": 6,
-    "EN": "Qingming Birdcage",
-    "desc": "The world is vast and full of change, and fate is unpredictable. But regardless of hardship or lack thereof, one must stay true to one's heart.",
-    "KO": "청명의 보금자리",
-    "CHS": "青溟笼舍",
-    "JA": "青溟の鳥籠"
+    "Id": 14137,
+    "CodeName": "Weapon_S_1371",
+    "Name": "Qingming Birdcage",
+    "Desc": "Once a disciple of Yunkui, and now the sect leader.\nYunkui Summit has always upheld the duty of saving the world and helping others. Whenever Eridu faces disaster, a Yunkui disciple always steps up... until the day the old capital fell.\nTime can allow new cities to rise and turn the old capital into ruins, but it cannot erase the past.\nThough she traveled far and wide, trying to put the past behind her. Yet wherever she went, looking back, it always seemed as though everything was still right there in front of her.\n\n<color=#959595>\"Rivers may shift, but old dreams are hard to forget.\" —Yixuan</color>",
+    "Desc2": "Equip to increase Rupture Agents' combat capabilities",
+    "Desc3": "The world is vast and full of change, and fate is unpredictable. But regardless of hardship or lack thereof, one must stay true to one's heart.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1371.png",
+    "WeaponType": { "6": "Rupture" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 743
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2300,
+            "W3": 2600,
+            "W4": 2900,
+            "W5": 3200
+          }
+        }
+      ],
+      "Desc": "CRIT Rate increases by %. When the equipper launches an EX Special Attack, the character gains 1 stack of Qingming Companion effect, stacking up to 2 times and lasting 15s. On entering combat, immediately gain 2 stacks. Repeated triggers reset the duration. Each stack of the Qingming Companion effect increases the equipper's Ether DMG by %, and increases Ultimate and EX Special Attack Ether Sheer DMG by %."
+    }
   },
   "14138": {
-    "icon": "Weapon_S_1381",
-    "rank": 4,
-    "type": 1,
-    "EN": "Severed Innocence",
-    "desc": "The sheen of silver is not innocence. Can the blades of the past cut through fate's connections?",
-    "KO": "순결한 희생",
-    "CHS": "牺牲洁纯",
-    "JA": "純然たる犠牲"
+    "Id": 14138,
+    "CodeName": "Weapon_S_1381",
+    "Name": "Severed Innocence",
+    "Desc": "If a storm subdued still has the power to save a certain person... The ringing of the old sword in its crate speaks of the \"good\" old days that one doesn't want to remember.\n\n<color=#959595>\"Nekomata, put it down. No, there's no secret... Nicole, please let me explain, she was the one who started it...\" — Anby, just a typical day with the Cunning Hares.</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "The sheen of silver is not innocence. Can the blades of the past cut through fate's connections?",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1381.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "CRIT DMG",
+      "Name2": "CRIT DMG",
+      "Format": "{0:0.#%}",
+      "Value": 4800
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT DMG",
+          "Name2": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 6000,
+            "W2": 6900,
+            "W3": 7800,
+            "W4": 8700,
+            "W5": 9600
+          }
+        }
+      ],
+      "Desc": "CRIT DMG is increased by %. When the equipper lands a hit with a Basic Attack, Special Attack, or Aftershock, they gain 1 stack of a buff. Each stack increases the equipper's CRIT DMG by an additional %, stacking up to 3 times. The effect lasts for 30s, with each stack's duration calculated separately, and can only be triggered once per use of a skill. With all 3 stacks, the equipper's Electric DMG increases by %."
+    }
   },
   "14139": {
-    "icon": "Weapon_S_1391",
-    "rank": 4,
-    "type": 2,
-    "EN": "Roaring Fur-nace",
-    "desc": "The warm fire blazes through the long night, casting light on the tiger's roar in my heart.",
-    "KO": "복을 뿜는 맹호",
-    "CHS": "福虓炉炉",
-    "JA": "招福の虎炉"
+    "Id": 14139,
+    "CodeName": "Weapon_S_1391",
+    "Name": "Roaring Fur-nace",
+    "Desc": "Goodbye to the fate of the past, goodbye to the childhood that slipped away so quickly, goodbye to my father's embrace and my mother's smile, goodbye to the claws and the stripes, goodbye to the unmoving mountains and the clouds that never linger, goodbye to my mentor and old friends, goodbye to me, goodbye to me.\nAs long as the world remembers, I once roared with courage.\n\n<color=#959595>\"Never fear! Your senior is here!\" —  Fufu's line when coming to the rescue.</color>",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "The warm fire blazes through the long night, casting light on the tiger's roar in my heart.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1391.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "The Daze dealt by the equipper's EX Special Attack, Chain Attack, and Ultimate increases by %. When using a Chain Attack or Ultimate to deal Fire DMG, the DMG dealt by all squad members increases by %, stacking up to 2 times and lasting 30s. The duration of each stack is calculated separately. Triggers once per use of a skill. Only one instance of this effect can exist in the same squad."
+    }
   },
   "14140": {
-    "icon": "Weapon_S_1401",
-    "rank": 4,
-    "type": 3,
-    "EN": "Practiced Perfection",
-    "desc": "Starlight became her blade, and she held courage and love firmly in her hands.",
-    "KO": "완벽하게 단조된 별",
-    "CHS": "十方锻星",
-    "JA": "十面百錬の星"
+    "Id": 14140,
+    "CodeName": "Weapon_S_1401",
+    "Name": "Practiced Perfection",
+    "Desc": "The stars fell into the web of absolute order, just as it had years ago, reflected in the girl's clear gaze. Confidence, grace, resolve, courage, and love — now shaped into a sword of pride, held firmly in her grasp.\n\n<color=#959595>\"I want to 3D print a model that's perfectly symmetrical from every angle. I just need to input the command, right?\" —Alice, one minute before her W-Engine started billowing black smoke and shut down.</color>",
+    "Desc2": "Equip to increase Anomaly Agents' combat capabilities",
+    "Desc3": "Starlight became her blade, and she held courage and love firmly in her hands.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1401.png",
+    "WeaponType": { "3": "Anomaly" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Mastery",
+          "Name2": "Anomaly Mastery",
+          "Format": "{0:0}",
+          "Overclock": {
+            "W1": 60,
+            "W2": 69,
+            "W3": 78,
+            "W4": 87,
+            "W5": 96
+          }
+        }
+      ],
+      "Desc": "The equipper's Anomaly Mastery increases by [NUMBER]. When inflicting Assault, the equipper's Physical DMG increases by % for 20s, stacking up to 2 times. Repeated triggers reset the duration. When the equipper enters combat, immediately gain 2 stacks."
+    }
   },
   "14141": {
-    "icon": "Weapon_S_1411",
-    "rank": 4,
-    "type": 4,
-    "EN": "Metanukimorphosis",
-    "desc": "A masterfully crafted design, infused with the creator's pursuit of beauty.",
-    "KO": "너구리의 7단 변신",
-    "CHS": "狸法七变化",
-    "JA": "狸の七変化"
+    "Id": 14141,
+    "CodeName": "Weapon_S_1411",
+    "Name": "Metanukimorphosis",
+    "Desc": "This compact mini W-Engine was just a budget unit issued for her first Hollow field training at school, but Yuzuha's kept it ever since — its compact size makes it too convenient to give up.\nHer first modification boosted the W-Engine's power output. The second added two Ether-Anomaly-tuned components. The third attempted a rewiring of the internals, but caused a short circuit that burned a hole in her skirt. Manato helped with the fourth, repairing the heat conduction module damaged in the short circuit, though the meal she treated him to afterward cost enough to buy three new ones. The fifth upgrade installed a new resonance chamber, and the sixth improved its response to high-frequency signals from Drive Discs.\nAt last, it was perfect — a flawless, battle-ready device that could follow its owner through life and death! And yet—\n\"Dad, have you seen my W-Engine?\"\n\"It's over there! I redid the casing for you. It looked way too ugly before! Can't have people thinking my daughter has no taste!\"\n\"Dad! It's a W-Engine! You made it so flashy — what if it breaks?!\"\n\"Well then, don't go doing stuff that could break it!\"",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "A masterfully crafted design, infused with the creator's pursuit of beauty.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1411.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 6000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Mastery",
+          "Name2": "Anomaly Mastery",
+          "Format": "{0:0}",
+          "Overclock": {
+            "W1": 30,
+            "W2": 34,
+            "W3": 39,
+            "W4": 43,
+            "W5": 48
+          }
+        },
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0}",
+          "Overclock": {
+            "W1": 60,
+            "W2": 69,
+            "W3": 78,
+            "W4": 87,
+            "W5": 96
+          }
+        }
+      ],
+      "Desc": "When the equipper's EX Special Attack or Ultimate deals Physical DMG, their Anomaly Mastery increases by [NUMBER] for 40s. When the equipper's Aftershock hits an enemy, all squad members' Anomaly Proficiency increases by [NUMBER] for 40s. Only one instance of this effect can exist in the same squad."
+    }
   },
   "14143": {
-    "icon": "Weapon_S_1431",
-    "rank": 4,
-    "type": 1,
-    "EN": "Cloudcleave Radiance",
-    "desc": "The world may change, but my heart remains constant, like clouds standing eternal.",
-    "KO": "구름을 헤친 빛",
-    "CHS": "云霓孤光",
-    "JA": "孤光彩雲"
+    "Id": 14143,
+    "CodeName": "Weapon_S_1431",
+    "Name": "Cloudcleave Radiance",
+    "Desc": "From innocence to maturity, from confusion to resolve.\nThe long path ahead stretches on, and she grips her sword and presses forward, walking a path untrodden.\nUntil her blade flashes like a soaring swan, illuminating the clouds above.\n\n<color=#959595>\"Whenever I swing my sword, it grows warm... It's comforting.\" —Ye Shunguang</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "The world may change, but my heart remains constant, like clouds standing eternal.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1431.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 743
+    },
+    "RandProperty": {
+      "Name": "CRIT DMG",
+      "Name2": "CRIT DMG",
+      "Format": "{0:0.#%}",
+      "Value": 4800
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT DMG",
+          "Name2": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2500,
+            "W2": 2870,
+            "W3": 3250,
+            "W4": 3620,
+            "W5": 4000
+          }
+        }
+      ],
+      "Desc": "The equipper's DMG ignores % of the target's Physical RES. When the equipper activates an Ether Veil, the equipper's DMG increases by % and CRIT DMG increases by % for 40s. Repeated triggers reset the duration."
+    }
   },
   "14145": {
-    "icon": "Weapon_S_1451",
-    "rank": 4,
-    "type": 4,
-    "EN": "Dreamlit Hearth",
-    "desc": "After countless years, it remains a silent puzzle.",
-    "KO": "꿈을 빚는 용광로의 노래",
-    "CHS": "铸梦炉歌",
-    "JA": "炉で歌い上げられる夢"
+    "Id": 14145,
+    "CodeName": "Weapon_S_1451",
+    "Name": "Dreamlit Hearth",
+    "Desc": "Its origin cannot be dated, its craftsmanship beyond record. From appearance alone, it seems to be a relic of the old capital, preserved to this day by the Ether burning within its core.\nMany years later, the river washed it ashore on a shallow bank, where a young girl picked up the finely crafted toy. From then on, it stood in for her lost family, keeping her company each night, offering a small light in the dark.\n\n<color=#959595>\"Yeah, it's a super great night-light!\" —That's what Lucia said when asked.</color>",
+    "Desc2": "Equip to increase Support Agents' combat capabilities",
+    "Desc3": "After countless years, it remains a silent puzzle.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1451.png",
+    "WeaponType": { "4": "Support" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "HP",
+          "Name2": "Percent HP",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1500,
+            "W2": 1730,
+            "W3": 1950,
+            "W4": 2180,
+            "W5": 2400
+          }
+        }
+      ],
+      "Desc": "The equipper's Energy Regen increases by /s. When the equipper activates Ether Veil or extends its duration, all squad members gain % increased DMG and % increased Max HP for 45s. Repeated triggers reset the duration. Only one instance of this effect can exist in the same squad."
+    }
   },
   "14146": {
-    "icon": "Weapon_S_1461",
-    "rank": 4,
-    "type": 1,
-    "EN": "Cordis Germina",
-    "desc": "Her journey continues along the long, endless circle.",
-    "KO": "기계 심장에 내린 씨앗",
-    "CHS": "机巧心种",
-    "JA": "駆動する種"
+    "Id": 14146,
+    "CodeName": "Weapon_S_1461",
+    "Name": "Cordis Germina",
+    "Desc": "What is a \"heart\"?\n\nWhat is the weight of life?\n\nNo matter how many machines she takes apart, no matter how many flowers she tends to, she still can't find the answer.\n\nShe programmed the W-Engine to mimic her heartbeat exactly, hoping it would lead her to an answer. But as the rhythm echoed, she slowly drifted to sleep. In her dreams, Seed Sr. came to life — with a heartbeat of his own — and once again responded to her wild, wandering questions, just like he used to...\nHer journey continues along the long, endless circle.\n\n<color=#959595>\"Trigger's heartbeat is nice and steady. Soldier 11's is a bit fast. Orphie's picks up when the Captain scolds her, but it's kind of slow otherwise. As for you, Proxies~ Hmm, yours feels really intense?\" —Seed, pressing an ear against the chests of the Phaethon siblings to listen to their heartbeats.</color>",
+    "Desc2": "Equip to increase Attack Agents' combat capabilities",
+    "Desc3": "Her journey continues along the long, endless circle.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1461.png",
+    "WeaponType": { "1": "Attack" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2400
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1500,
+            "W2": 1700,
+            "W3": 1900,
+            "W4": 2100,
+            "W5": 2300
+          }
+        }
+      ],
+      "Desc": "Increases CRIT Rate by %. When the equipper deals DMG with a Basic Attack or EX Special Attack, they gain 1 stack of a buff. Each stack increases the equipper's Electric DMG by %, up to 2 stacks. Each stack lasts 40s. The duration of each stack is calculated separately. Can trigger once per use of a skill. At 2 stacks, the wearer's Basic Attack and Ultimate DMG ignore % of enemy DEF."
+    }
   },
   "14147": {
-    "icon": "Weapon_S_1471",
-    "rank": 4,
-    "type": 6,
-    "EN": "Wrathful Vajra",
-    "desc": "The purging flames burned a hundred times, yet never cleansed me.",
-    "KO": "성난 눈의 금강",
-    "CHS": "怒目金刚",
-    "JA": "金剛不壊怒髪衝冠"
+    "Id": 14147,
+    "CodeName": "Weapon_S_1471",
+    "Name": "Wrathful Vajra",
+    "Desc": "The Vajra with unquenchable rage — surely there's more to their cruelty than this. The warrior as steadfast as a mountain — surely there's more to their purity than this. The ascetic with a heart of flame — surely there's more to their suffering than this.\n\n<color=#959595>\"The craftsman was really fixated on the design of the lion's head... He said all the anger and courage were hidden in those eyes.\"\n—Banyue, who can't help but think the W-Engine looks a bit too much like himself.</color>",
+    "Desc2": "Equip to increase Rupture Agents' combat capabilities",
+    "Desc3": "The purging flames burned a hundred times, yet never cleansed me.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1471.png",
+    "WeaponType": { "6": "Rupture" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2300,
+            "W3": 2600,
+            "W4": 2900,
+            "W5": 3200
+          }
+        }
+      ],
+      "Desc": "CRIT Rate increases by %. When the equipper launches an EX Special Attack, their Fire Sheer DMG increases by %, stacking up to 2 times and lasting 20s. The duration of each stack is calculated separately."
+    }
   },
   "14148": {
-    "icon": "Weapon_S_1481",
-    "rank": 4,
-    "type": 2,
-    "EN": "Yesterday Calls",
-    "desc": "That call you never picked up... she's the one who answered it.",
-    "KO": "지난밤의 전화",
-    "CHS": "昨夜来电",
-    "JA": "昨夜からの着信"
+    "Id": 14148,
+    "CodeName": "Weapon_S_1481",
+    "Name": "Yesterday Calls",
+    "Desc": "Riiiing, riiing — every missed call from the Hollows will be answered by Krampus' top-tier customer service!\nThat playful line hardly captures the weight of old obsessions, grudges, and regrets carried through those calls. But in truth, it's the most earnest vow of one prepared to bear that burden.\n\n<color=#959595>\"Everyone else enters the Hollow armed to the teeth. Why am I the one carrying a bunch of phones?\" —Dialyn, venting to her boss about her assigned gear.</color>",
+    "Desc2": "Equip to increase Stun Agents' combat capabilities",
+    "Desc3": "That call you never picked up... she's the one who answered it.",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1481.png",
+    "WeaponType": { "2": "Stun" },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2400
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT DMG",
+          "Name2": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 3000,
+            "W2": 3450,
+            "W3": 3900,
+            "W4": 4350,
+            "W5": 4800
+          }
+        }
+      ],
+      "Desc": "While off-field, the equipper's Energy Regen increases by /s. When the equipper deals Physical DMG with an EX Special Attack, the Daze dealt by the equipper's attacks increases by % for 10s, stacking up to 3 times. At 3 stacks, all squad members gain % additional CRIT DMG for 40s. Repeated triggers reset the duration. Only one instance of this CRIT DMG boost effect can exist in the same squad."
+    }
   }
 }

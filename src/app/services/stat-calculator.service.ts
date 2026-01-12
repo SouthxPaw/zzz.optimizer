@@ -15,14 +15,20 @@ export class StatCalculatorService {
     level: number,
     wEngine: WEngine | null,
     discs: { [key in DiscSlot]?: Disc },
-    mindscapeLevel: number = 0
+    mindscapeLevel: number = 0,
+    wEngineRefinement: number = 1
   ): BaseStats {
     // Start with base stats at level 60
     const stats: BaseStats = { ...agent.lvl60Stats };
 
     // Apply W-Engine stats
     if (wEngine) {
-      this.applyWEngineStats(stats, wEngine, agent);
+      this.applyWEngineStats(stats, wEngine, agent, wEngineRefinement);
+    }
+
+    // Apply mindscape stat bonuses
+    if (agent.mindscapeEffects && mindscapeLevel > 0) {
+      this.applyMindscapeStats(stats, agent, mindscapeLevel);
     }
 
     // Apply disc main stats
@@ -52,7 +58,7 @@ export class StatCalculatorService {
     };
   }
 
-  private applyWEngineStats(stats: BaseStats, wEngine: WEngine, agent: Agent): void {
+  private applyWEngineStats(stats: BaseStats, wEngine: WEngine, agent: Agent, refinement: number = 1): void {
     // Add base ATK from W-Engine
     stats.atk += wEngine.baseAtk;
 
@@ -90,9 +96,112 @@ export class StatCalculatorService {
         break;
     }
 
-    // Note: W-Engine effects are not automatically applied as they are context-dependent
-    // and described in natural language. They should be considered when evaluating builds
-    // but cannot be parsed into stats programmatically.
+    // Apply refinement bonuses ONLY if W-Engine specialty matches agent specialty
+    if (wEngine.specialty === agent.specialty && wEngine.effect.properties) {
+      this.applyRefinementBonuses(stats, wEngine.effect.properties, refinement);
+    }
+  }
+
+  /**
+   * Apply W-Engine refinement bonuses based on refinement level
+   * @param stats The stats object to modify
+   * @param properties The refinement properties from the W-Engine
+   * @param refinement The refinement level (1-5)
+   */
+  private applyRefinementBonuses(stats: BaseStats, properties: any[], refinement: number): void {
+    const refinementKey = `W${Math.min(Math.max(refinement, 1), 5)}` as 'W1' | 'W2' | 'W3' | 'W4' | 'W5';
+
+    properties.forEach(prop => {
+      const value = prop.values[refinementKey];
+      const type = prop.type;
+
+      switch(type) {
+        case 'ATK%':
+          stats.atkpercent += value;
+          break;
+        case 'HP%':
+          stats.hppercent += value;
+          break;
+        case 'DEF%':
+          stats.defpercent += value;
+          break;
+        case 'CRIT_Rate':
+          stats.critRate += value;
+          break;
+        case 'CRIT_DMG':
+          stats.critDmg += value;
+          break;
+        case 'PEN_Ratio':
+          stats.penRatio += value;
+          break;
+        case 'Energy_Regen':
+          stats.energyRegen += value;
+          break;
+        case 'Impact':
+          stats.impact += value;
+          break;
+        case 'Anomaly_Proficiency':
+          stats.anomalyProficiency += value;
+          break;
+      }
+    });
+  }
+
+  /**
+   * Apply mindscape stat bonuses based on mindscape level
+   * Only applies bonuses from mindscapes at or below the current level
+   * Only applies unconditional bonuses (conditional bonuses are ignored)
+   */
+  private applyMindscapeStats(stats: BaseStats, agent: Agent, mindscapeLevel: number): void {
+    if (!agent.mindscapeEffects || mindscapeLevel === 0) {
+      return;
+    }
+
+    // Apply stat bonuses from all unlocked mindscapes (level 1 through mindscapeLevel)
+    agent.mindscapeEffects.forEach(mindscape => {
+      if (mindscape.level <= mindscapeLevel && mindscape.statBonuses) {
+        mindscape.statBonuses.forEach(bonus => {
+          // Only apply unconditional bonuses
+          if (!bonus.conditional) {
+            const value = bonus.value;
+            const type = bonus.type;
+
+            switch(type) {
+              case 'ATK%':
+                stats.atkpercent += value;
+                break;
+              case 'HP%':
+                stats.hppercent += value;
+                break;
+              case 'DEF%':
+                stats.defpercent += value;
+                break;
+              case 'CRIT_Rate':
+                stats.critRate += value;
+                break;
+              case 'CRIT_DMG':
+                stats.critDmg += value;
+                break;
+              case 'PEN_Ratio':
+                stats.penRatio += value;
+                break;
+              case 'Energy_Regen':
+                stats.energyRegen += value;
+                break;
+              case 'Anomaly_Proficiency':
+                stats.anomalyProficiency += value;
+                break;
+              case 'Anomaly_Mastery':
+                stats.anomalyMastery += value;
+                break;
+              case 'Impact':
+                stats.impact += value;
+                break;
+            }
+          }
+        });
+      }
+    });
   }
 
   private applyDiscMainStats(
@@ -225,21 +334,7 @@ export class StatCalculatorService {
       discSet.bonuses.forEach(bonus => {
         if (count >= bonus.pieces) {
           // Parse bonus description and apply stats
-          // This is simplified - you may want to make this more robust
-          if (bonus.description.includes('ATK +10%')) {
-            stats.atkpercent += 10;
-          } else if (bonus.description.includes('CRIT Rate +8%')) {
-            stats.critRate += 8;
-          } else if (bonus.description.includes('Anomaly Proficiency +30')) {
-            stats.anomalyProficiency += 30;
-          } else if (bonus.description.includes('PEN Ratio +8%')) {
-            stats.penRatio += 8;
-          } else if (bonus.description.includes('Energy Regen +20%')) {
-            stats.energyRegen += 20;
-          } else if (bonus.description.includes('Impact +6%')) {
-            stats.impact += 6;
-          }
-          // Element DMG bonuses would be tracked separately
+          this.parseAndApplyBonus(bonus.description, stats);
         }
       });
     });
@@ -261,6 +356,56 @@ export class StatCalculatorService {
     stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFBonus;
   }
 
+  /**
+   * Parse bonus description and apply stat changes
+   */
+  private parseAndApplyBonus(description: string, stats: BaseStats): void {
+    // Match patterns like "ATK +10%" or "CRIT Rate +8%" or "Anomaly Proficiency +30"
+    const percentMatch = description.match(/(ATK|HP|DEF|CRIT Rate|CRIT DMG|PEN Ratio|Energy Regen|Impact)\s*\+(\d+(?:\.\d+)?)%/i);
+    const flatMatch = description.match(/(Anomaly Proficiency|Anomaly Mastery)\s*\+(\d+)/i);
+
+    if (percentMatch) {
+      const [, stat, value] = percentMatch;
+      const numValue = parseFloat(value);
+
+      switch (stat.toUpperCase()) {
+        case 'ATK':
+          stats.atkpercent += numValue;
+          break;
+        case 'HP':
+          stats.hppercent += numValue;
+          break;
+        case 'DEF':
+          stats.defpercent += numValue;
+          break;
+        case 'CRIT RATE':
+          stats.critRate += numValue;
+          break;
+        case 'CRIT DMG':
+          stats.critDmg += numValue;
+          break;
+        case 'PEN RATIO':
+          stats.penRatio += numValue;
+          break;
+        case 'ENERGY REGEN':
+          stats.energyRegen += numValue;
+          break;
+        case 'IMPACT':
+          stats.impact += numValue;
+          break;
+      }
+    } else if (flatMatch) {
+      const [, stat, value] = flatMatch;
+      const numValue = parseInt(value);
+
+      if (stat.includes('Proficiency')) {
+        stats.anomalyProficiency += numValue;
+      } else if (stat.includes('Mastery')) {
+        stats.anomalyMastery += numValue;
+      }
+    }
+  }
+
   getSetBonuses(discs: { [key in DiscSlot]?: Disc }): string[] {
     const setCounts = new Map<string, number>();
     Object.values(discs).forEach(disc => {
@@ -271,11 +416,15 @@ export class StatCalculatorService {
 
     const activeBonuses: string[] = [];
     setCounts.forEach((count, setName) => {
-      if (count >= 4) {
-        activeBonuses.push(`${setName} (4)`);
-      } else if (count >= 2) {
-        activeBonuses.push(`${setName} (2)`);
-      }
+      const discSet = DISC_SETS.find(s => s.name === setName);
+      if (!discSet) return;
+
+      // Show all active bonuses with their descriptions
+      discSet.bonuses.forEach(bonus => {
+        if (count >= bonus.pieces) {
+          activeBonuses.push(`${setName} (${bonus.pieces}pc): ${bonus.description}`);
+        }
+      });
     });
 
     return activeBonuses;

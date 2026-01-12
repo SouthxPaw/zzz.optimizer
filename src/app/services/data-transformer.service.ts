@@ -59,13 +59,39 @@ export class DataTransformerService {
     const mappedElement = this.mappingService.getElement(element);
     const mappedSpecialty = this.mappingService.getSpecialty(specialty);
 
+    // Extract icon from rawAgent if available (character/{id}.json has Icon field like "IconRole11")
+    let icon: string | undefined;
+
+    if (rawAgent.Icon) {
+      // Extract number from IconRole format (e.g., "IconRole11" -> "11")
+      const match = rawAgent.Icon.match(/IconRole(\d+)/);
+      if (match) {
+        const iconNumber = match[1];
+        icon = `/assets/data/images/agents/IconRole${iconNumber}.webp`;
+      }
+    }
+
+    // If no Icon field, fallback to default (shouldn't happen with proper data)
+    if (!icon) {
+      icon = `/assets/data/images/agents/IconRole01.webp`;
+    }
+
+    // Map element icon
+    const elementIcon = `/assets/data/images/elements/Icon${mappedElement}.webp`;
+
+    // Map specialty icon
+    const specialtyIcon = `/assets/data/images/roles/Icon${mappedSpecialty === 'Attack' ? 'AttackType' : mappedSpecialty}.webp`;
+
     return {
       id: id,
       name: name,
       rarity: rarity === 'S' ? 'S' : 'A',
       element: mappedElement,
       specialty: mappedSpecialty,
-      lvl60Stats: lvl60Stats
+      lvl60Stats: lvl60Stats,
+      icon: icon,
+      elementIcon: elementIcon,
+      specialtyIcon: specialtyIcon
     };
   }
 
@@ -86,12 +112,12 @@ export class DataTransformerService {
         def: Math.round(lvl60.Defence || 0),
         defpercent: 0,
         impact: Math.round(lvl60.BreakStun || stats?.BreakStun || 0),
-        anomalyMastery: Math.round(stats?.ElementAbnormalPower || 0),
+        anomalyMastery: Math.round(lvl60.ElementAbnormalPower || stats?.ElementAbnormalPower || 0),
         critRate: (lvl60.Crit || 500) / 100,
         critDmg: (lvl60.CritDamage || 5000) / 100,
         anomalyProficiency: Math.round(lvl60.ElementMystery || stats?.ElementMystery || 0),
         penRatio: (lvl60.PenRate || 0) / 100,
-        energyRegen: (lvl60.SpBarPoint || 120) / 10
+        energyRegen: (lvl60.SpBarPoint || 12) / 10  // 12 / 10 = 1.2
       };
     }
 
@@ -271,36 +297,93 @@ export class DataTransformerService {
       return null;
     }
 
-    // Map rarity: 2 = B, 3 = A, 4+ = S
-    const rarity = this.mappingService.getRarity(rawWEngine.rank);
+    // Map rarity from Rarity field if available, otherwise use rank
+    const rarity = rawWEngine.Rarity
+      ? this.mappingService.getRarity(rawWEngine.Rarity)
+      : this.mappingService.getRarity(rawWEngine.rank);
 
-    // Map specialty
-    const specialty = this.mappingService.getSpecialty(rawWEngine.type);
-
-    // Estimate base ATK based on rarity
-    let baseAtk: number;
-    if (rarity === 'S') {
-      baseAtk = 713; // S-rank W-Engines
-    } else if (rarity === 'A') {
-      baseAtk = 594; // A-rank W-Engines
+    // Map specialty from WeaponType if available
+    let specialty: 'Attack' | 'Stun' | 'Anomaly' | 'Support' | 'Defense';
+    if (rawWEngine.WeaponType) {
+      const weaponTypeObj = rawWEngine.WeaponType;
+      const weaponTypeValue = Object.values(weaponTypeObj)[0] as string;
+      specialty = this.mappingService.getSpecialtyFromName(weaponTypeValue || 'Attack') as any;
     } else {
-      baseAtk = 475; // B-rank W-Engines
+      specialty = this.mappingService.getSpecialty(rawWEngine.type) as any;
     }
+
+    // Extract base ATK from BaseProperty (already at level 60)
+    const baseAtk = rawWEngine.BaseProperty?.Value || (rarity === 'S' ? 713 : rarity === 'A' ? 594 : 475);
+
+    // Extract substat from RandProperty (already at level 60)
+    const randProp = rawWEngine.RandProperty || {};
+    const subStatName = randProp.Name || 'ATK';
+    const subStatValue = (randProp.Value || 0) / 100; // Convert from basis points to percentage
+
+    // Map substat name to our StatType
+    let subStatType: any = 'ATK%';
+    if (subStatName === 'CRIT Rate') {
+      subStatType = 'CRIT_Rate';
+    } else if (subStatName === 'CRIT DMG') {
+      subStatType = 'CRIT_DMG';
+    } else if (subStatName.includes('ATK')) {
+      subStatType = 'ATK%';
+    } else if (subStatName.includes('DEF')) {
+      subStatType = 'DEF%';
+    } else if (subStatName.includes('HP')) {
+      subStatType = 'HP%';
+    } else if (subStatName.includes('Anomaly Proficiency')) {
+      subStatType = 'Anomaly_Proficiency';
+    } else if (subStatName.includes('Impact')) {
+      subStatType = 'Impact';
+    } else if (subStatName.includes('Energy')) {
+      subStatType = 'Energy_Regen';
+    } else if (subStatName.includes('PEN')) {
+      subStatType = 'Pen_Ratio';
+    }
+
+    // Get effect description from Effect field
+    const effectDesc = rawWEngine.Effect?.Desc || rawWEngine.desc || 'No description available';
+
+    // Extract refinement properties from Effect.Properties
+    const refinementProperties = this.extractRefinementProperties(rawWEngine.Effect?.Properties || []);
+
+    // Map icon path from Icon field or construct from rarity/id
+    let icon: string;
+    if (rawWEngine.Icon) {
+      // Icon field might be just filename or might need .webp extension
+      const iconFile = typeof rawWEngine.Icon === 'string' ? rawWEngine.Icon : '';
+      icon = iconFile.endsWith('.webp')
+        ? `/assets/data/images/wengines/${iconFile}`
+        : `/assets/data/images/wengines/${iconFile}.webp`;
+    } else if (rawWEngine.icon) {
+      // Fallback to lowercase icon field
+      icon = `/assets/data/images/wengines/${rawWEngine.icon}.webp`;
+    } else {
+      // Fallback to rarity/id format
+      const rarityLetter = rarity === 'S' ? 'S' : rarity === 'A' ? 'A' : 'B';
+      icon = `/assets/data/images/wengines/Weapon_${rarityLetter}_${id}.webp`;
+    }
+
+    // Get name from Name field or fallback to EN
+    const name = rawWEngine.Name || rawWEngine.EN || `W-Engine ${id}`;
 
     return {
       id: id,
-      name: rawWEngine.EN,
+      name: name,
       rarity: rarity,
       specialty: specialty,
       baseAtk: baseAtk,
       subStat: {
-        type: 'ATK%', // Default, would need more data to determine actual substat
-        value: rarity === 'S' ? 30 : rarity === 'A' ? 25 : 20
+        type: subStatType,
+        value: subStatValue
       },
       effect: {
         name: 'Effect',
-        description: rawWEngine.desc || 'No description available'
-      }
+        description: effectDesc,
+        properties: refinementProperties.length > 0 ? refinementProperties : undefined
+      },
+      icon: icon
     };
   }
 
@@ -355,10 +438,31 @@ export class DataTransformerService {
       subStatType = 'Pen_Ratio';
     }
 
-    // Get effect description from Talents (first talent)
+    // Get effect description from Effect.Desc first, then fallback to Talents (first talent)
     const talents = raw.Talents || {};
     const firstTalent = talents['1'] || {};
-    const effectDesc = firstTalent.Desc || raw.Desc || 'No description available';
+    const effectDesc = raw.Effect?.Desc || firstTalent.Desc || raw.Desc || 'No description available';
+
+    // Extract icon from Icon field or construct from rarity/id
+    let icon: string;
+    if (raw.Icon && typeof raw.Icon === 'string') {
+      // Icon format: "Assets/.../UnPacker/Weapon_B_Common_01.png"
+      // Extract filename and convert to webp
+      const fileName = raw.Icon.split('/').pop()?.replace('.png', '.webp');
+      icon = fileName ? `/assets/data/images/wengines/${fileName}` : `/assets/data/images/wengines/Weapon_${rarity}_${id}.webp`;
+    } else {
+      // Fallback to rarity/id format
+      const rarityLetter = rarity === 'S' ? 'S' : rarity === 'A' ? 'A' : 'B';
+      icon = `/assets/data/images/wengines/Weapon_${rarityLetter}_${id}.webp`;
+    }
+
+    // Extract refinement properties if available - prefer Effect.Properties over Talents
+    let refinementProperties: any[] = [];
+    if (raw.Effect?.Properties && Array.isArray(raw.Effect.Properties)) {
+      refinementProperties = this.extractRefinementProperties(raw.Effect.Properties);
+    } else {
+      refinementProperties = this.extractRefinementPropertiesFromTalents(raw.Talents || {});
+    }
 
     return {
       id: id,
@@ -372,9 +476,11 @@ export class DataTransformerService {
       },
       effect: {
         name: firstTalent.Name || 'Effect',
-        description: effectDesc
+        description: effectDesc,
+        properties: refinementProperties.length > 0 ? refinementProperties : undefined
       },
-      signature: raw.CharacterId ? String(raw.CharacterId) : undefined
+      signature: raw.CharacterId ? String(raw.CharacterId) : undefined,
+      icon: icon
     };
   }
 
@@ -390,9 +496,33 @@ export class DataTransformerService {
       throw new Error(`Failed to extract stats for agent ${id}`);
     }
 
-    const rarity = this.mappingService.getRarity(basicAgent.rank) as 'A' | 'S';
-    const element = this.mappingService.getElement(basicAgent.element);
-    const specialty = this.mappingService.getSpecialty(basicAgent.type);
+    // Use rarity directly if available (agents.json), otherwise map from rank
+    const rarity = (basicAgent.rarity || this.mappingService.getRarity(basicAgent.rank)) as 'A' | 'S';
+    // Use element/specialty directly or map from ID
+    const element = this.mappingService.getElement(basicAgent.element?.id || basicAgent.element);
+    const specialty = this.mappingService.getSpecialty(basicAgent.specialty?.id || basicAgent.type);
+
+    // Extract icon from detailedData (character/{id}.json has Icon field like "IconRole11")
+    let icon: string | undefined;
+    let iconNumber: string | undefined;
+
+    if (detailedData.Icon) {
+      // Extract number from IconRole format (e.g., "IconRole11" -> "11")
+      const match = detailedData.Icon.match(/IconRole(\d+)/);
+      if (match) {
+        iconNumber = match[1];
+        icon = `/assets/data/images/agents/IconRole${iconNumber}.webp`;
+      }
+    }
+
+    // Map element icon
+    const elementIcon = `/assets/data/images/elements/Icon${element}.webp`;
+
+    // Map specialty icon
+    const specialtyIcon = `/assets/data/images/roles/Icon${specialty === 'Attack' ? 'AttackType' : specialty}.webp`;
+
+    // Extract mindscape effects from basicAgent (agents.json has mindscape_cinemas)
+    const mindscapeEffects = this.extractMindscapeEffects(basicAgent.mindscape_cinemas || []);
 
     return {
       id: id,
@@ -400,8 +530,77 @@ export class DataTransformerService {
       rarity: rarity,
       element: element,
       specialty: specialty,
-      lvl60Stats: lvl60Stats
+      lvl60Stats: lvl60Stats,
+      icon: icon,
+      elementIcon: elementIcon,
+      specialtyIcon: specialtyIcon,
+      mindscapeEffects: mindscapeEffects.length > 0 ? mindscapeEffects : undefined
     };
+  }
+
+  /**
+   * Extract mindscape effects from mindscape_cinemas array
+   * Only includes mindscapes that provide stat bonuses matching BaseStats
+   */
+  private extractMindscapeEffects(mindscapeCinemas: any[]): any[] {
+    if (!mindscapeCinemas || mindscapeCinemas.length === 0) {
+      return [];
+    }
+
+    const effects: any[] = [];
+
+    mindscapeCinemas.forEach(cinema => {
+      const statBonuses = this.parseMindscapeStatBonuses(cinema.description);
+
+      // Only include mindscapes that have stat bonuses
+      if (statBonuses.length > 0) {
+        effects.push({
+          level: cinema.level,
+          name: cinema.name,
+          description: cinema.description,
+          statBonuses: statBonuses
+        });
+      }
+    });
+
+    return effects;
+  }
+
+  /**
+   * Parse mindscape description to extract stat bonuses
+   * Only extracts bonuses that match BaseStats model
+   */
+  private parseMindscapeStatBonuses(description: string): any[] {
+    const bonuses: any[] = [];
+
+    // Patterns for different stat types
+    const patterns = [
+      { regex: /ATK increases by (\d+(?:\.\d+)?)%/i, type: 'ATK%', conditional: false },
+      { regex: /HP (?:increases|is increased) by (\d+(?:\.\d+)?)%/i, type: 'HP%', conditional: false },
+      { regex: /Max HP increases by (\d+(?:\.\d+)?)%/i, type: 'HP%', conditional: false },
+      { regex: /DEF increases by (\d+(?:\.\d+)?)%/i, type: 'DEF%', conditional: false },
+      { regex: /CRIT Rate increases by (\d+(?:\.\d+)?)%/i, type: 'CRIT_Rate', conditional: false },
+      { regex: /CRIT DMG increases by (\d+(?:\.\d+)?)%/i, type: 'CRIT_DMG', conditional: false },
+      { regex: /PEN Ratio increases by (\d+(?:\.\d+)?)%/i, type: 'PEN_Ratio', conditional: false },
+      { regex: /Energy (?:Generation Rate|Regen) increases by (\d+(?:\.\d+)?)%/i, type: 'Energy_Regen', conditional: false },
+      { regex: /Anomaly Proficiency increases by (\d+)/i, type: 'Anomaly_Proficiency', conditional: false },
+      { regex: /Anomaly Mastery increases by (\d+)/i, type: 'Anomaly_Mastery', conditional: false },
+      { regex: /Impact increases by (\d+)/i, type: 'Impact', conditional: false },
+    ];
+
+    patterns.forEach(pattern => {
+      const match = description.match(pattern.regex);
+      if (match) {
+        const value = parseFloat(match[1]);
+        bonuses.push({
+          type: pattern.type,
+          value: value,
+          conditional: pattern.conditional
+        });
+      }
+    });
+
+    return bonuses;
   }
 
   /**
@@ -464,11 +663,21 @@ export class DataTransformerService {
       });
     }
 
+    // Transform icon path from game format to local assets
+    // Example: "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitWoodpeckerElectro.png"
+    // becomes: "/assets/data/images/discs/SuitWoodpeckerElectro.webp"
+    let icon: string | undefined;
+    const iconPath = raw.Icon || raw.Icon2;
+    if (iconPath) {
+      const fileName = iconPath.split('/').pop()?.replace('.png', '.webp');
+      icon = `/assets/data/images/discs/${fileName}`;
+    }
+
     return {
       id: id,
       name: raw.Name,
       bonuses: bonuses,
-      icon: raw.Icon || raw.Icon2
+      icon: icon
     };
   }
 
@@ -498,5 +707,68 @@ export class DataTransformerService {
         energyRegen: 0
       }
     };
+  }
+
+  /**
+   * Extract refinement properties from Effect.Properties array
+   * Properties format: { Name: "ATK", Overclock: { W1: 1000, W2: 1150, ... } }
+   * Values are in basis points (1000 = 10%)
+   */
+  private extractRefinementProperties(properties: any[]): any[] {
+    if (!properties || properties.length === 0) {
+      return [];
+    }
+
+    return properties.map(prop => {
+      const name = prop.Name || '';
+      const overclock = prop.Overclock || {};
+
+      // Map property name to our stat type
+      let type: any = 'ATK%';
+      if (name === 'CRIT Rate') {
+        type = 'CRIT_Rate';
+      } else if (name === 'CRIT DMG') {
+        type = 'CRIT_DMG';
+      } else if (name.includes('ATK')) {
+        type = 'ATK%';
+      } else if (name.includes('DEF')) {
+        type = 'DEF%';
+      } else if (name.includes('HP')) {
+        type = 'HP%';
+      } else if (name.includes('Anomaly Proficiency')) {
+        type = 'Anomaly_Proficiency';
+      } else if (name.includes('Impact')) {
+        type = 'Impact';
+      } else if (name.includes('Energy')) {
+        type = 'Energy_Regen';
+      } else if (name.includes('PEN')) {
+        type = 'Pen_Ratio';
+      }
+
+      // Convert from basis points to percentage
+      return {
+        name: name,
+        type: type,
+        values: {
+          W1: (overclock.W1 || 0) / 100,
+          W2: (overclock.W2 || 0) / 100,
+          W3: (overclock.W3 || 0) / 100,
+          W4: (overclock.W4 || 0) / 100,
+          W5: (overclock.W5 || 0) / 100
+        }
+      };
+    });
+  }
+
+  /**
+   * Extract refinement properties from weapon/{id}.json Talents object
+   * Note: Talents in weapon files don't have stat bonuses, they only have effect descriptions
+   * The actual stat bonuses are in Effect.Properties from wengines.json
+   * So this method returns empty array for weapon files
+   */
+  private extractRefinementPropertiesFromTalents(talents: any): any[] {
+    // Weapon/{id}.json Talents only contain effect descriptions, not stat bonuses
+    // Stat bonuses come from wengines.json Effect.Properties
+    return [];
   }
 }

@@ -26,6 +26,9 @@ export interface Agent {
   element: Element;
   specialty: Specialty;
   lvl60Stats: BaseStats;
+  icon?: string;
+  elementIcon?: string;
+  specialtyIcon?: string;
   mindscapeEffects?: MindscapeEffect[];
   coreSkill?: string;
 }
@@ -34,6 +37,13 @@ export interface MindscapeEffect {
   level: 1 | 2 | 3 | 4 | 5 | 6;
   name: string;
   description: string;
+  statBonuses?: MindscapeStatBonus[];
+}
+
+export interface MindscapeStatBonus {
+  type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Anomaly_Proficiency' | 'Anomaly_Mastery' | 'Impact';
+  value: number;
+  conditional: boolean; // true if bonus requires conditions, false if always active
 }
 
 // models/wengine.model.ts

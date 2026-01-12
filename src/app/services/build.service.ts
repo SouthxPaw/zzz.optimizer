@@ -19,6 +19,7 @@ export interface AgentBuild {
   level: number; // Agent level (default 60)
   mindscapeLevel: number; // 0-6
   equippedWEngine?: WEngine;
+  wEngineRefinement: number; // 1-5 (number of copies: 1 copy = refinement 1, 5 copies = refinement 5)
   equippedDiscs: { [slot: string]: Disc }; // Drive1-6
   calculatedStats: BaseStats; // Final calculated stats
   score: number; // Overall build rating
@@ -58,6 +59,14 @@ export class BuildService {
       const buildsJson = localStorage.getItem('zzz-optimizer-builds');
       if (buildsJson) {
         const builds = JSON.parse(buildsJson);
+
+        // Migrate old builds to add wEngineRefinement field
+        builds.forEach((build: AgentBuild) => {
+          if (build.wEngineRefinement === undefined) {
+            build.wEngineRefinement = 1; // Default to 1 copy
+          }
+        });
+
         this.buildsSubject.next(builds);
         console.log(`Loaded ${builds.length} user builds`);
       } else {
@@ -122,6 +131,7 @@ export class BuildService {
       specialty: agent.specialty,
       level: 60,
       mindscapeLevel: mindscapeLevel,
+      wEngineRefinement: 1, // Default to 1 copy (refinement 1)
       equippedDiscs: {},
       calculatedStats: { ...agent.lvl60Stats }, // Start with base stats
       score: 0,
@@ -152,8 +162,13 @@ export class BuildService {
       updatedAt: new Date()
     };
 
-    // Recalculate stats if equipment changed
-    if (updates.equippedWEngine !== undefined || updates.equippedDiscs !== undefined) {
+    // Handle explicit undefined for equippedWEngine (to properly remove it)
+    if ('equippedWEngine' in updates && updates.equippedWEngine === undefined) {
+      delete builds[index].equippedWEngine;
+    }
+
+    // Recalculate stats if equipment or refinement changed
+    if (updates.equippedWEngine !== undefined || updates.equippedDiscs !== undefined || 'equippedWEngine' in updates || updates.wEngineRefinement !== undefined) {
       await this.recalculateStats(builds[index]);
     }
 
@@ -182,7 +197,8 @@ export class BuildService {
       build.level,
       build.equippedWEngine || null,
       build.equippedDiscs,
-      build.mindscapeLevel
+      build.mindscapeLevel,
+      build.wEngineRefinement
     );
   }
 
