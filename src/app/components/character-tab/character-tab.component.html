@@ -11,11 +11,16 @@
   <div class="content-grid">
     <!-- Builds List -->
     <div class="section builds-list">
-      <h2>Characters</h2>
+      <div class="section-header-inline">
+        <h2>Characters</h2>
+        <button class="btn-primary btn-compact" (click)="openAddAgentModal()">
+          + Add Agent
+        </button>
+      </div>
 
       <!-- Empty State -->
       <div *ngIf="builds.length === 0" class="empty-state">
-        <div class="empty-icon">🎭</div>
+        <div class="empty-icon">📋</div>
         <h3>No Builds Yet</h3>
         <p>Click "Add Agent" to create your first build.</p>
         <button class="btn-primary" (click)="openAddAgentModal()">+ Add Agent</button>
@@ -27,18 +32,21 @@
           *ngFor="let build of builds"
           class="build-card"
           [class.selected]="selectedBuild?.id === build.id"
+          [class.s-rank]="getAgentRarity(build.agentId) === 'S'"
+          [class.a-rank]="getAgentRarity(build.agentId) === 'A'"
           (click)="selectBuild(build)">
           <button class="delete-btn" (click)="deleteBuild(build.id, $event)" title="Delete build">×</button>
-          <div class="build-portrait" [attr.data-element]="build.element || 'Physical'">
-            <span class="build-name">{{build.name}}</span>
+          <div class="build-portrait">
+            <img *ngIf="getAgentIcon(build.agentId)"
+                 [src]="getAgentIcon(build.agentId)"
+                 [alt]="build.name"
+                 class="agent-icon">
+            <span *ngIf="!getAgentIcon(build.agentId)" class="build-name">{{build.name}}</span>
           </div>
           <div class="build-info">
-            <div class="rank">{{getRankDisplay(build.agentId)}}</div>
+            <div class="agent-name-label">{{build.name}}</div>
             <div class="build-stats">
               <div class="stat-badge">M{{build.mindscapeLevel}}</div>
-              <div class="stat-badge" *ngIf="build.equippedWEngine">
-                {{build.equippedWEngine.name.substring(0, 10)}}
-              </div>
               <div class="stat-badge">{{getEquippedDiscsCount(build)}}/6 Discs</div>
             </div>
           </div>
@@ -66,18 +74,92 @@
 
       <!-- W-Engine -->
       <div class="wengine-section">
-        <h3>W-Engine</h3>
-        <select
-          [value]="selectedBuild.equippedWEngine?.id || ''"
-          (change)="onWEngineChange($event)"
-          class="wengine-select">
-          <option value="">Select W-Engine</option>
-          <option *ngFor="let engine of referenceWEngines" [value]="engine.id">
-            {{engine.name}} ({{engine.rarity === 'S' ? 'S-Rank' : engine.rarity === 'A' ? 'A-Rank' : 'B-Rank'}})
-          </option>
-        </select>
+        <div class="wengine-selector-header">
+          <h3>W-Engine</h3>
+          <button class="btn-secondary small" (click)="showWEnginePicker = !showWEnginePicker">
+            {{ showWEnginePicker ? 'Hide' : 'Select W-Engine' }}
+          </button>
+        </div>
+
+        <!-- W-Engine Picker -->
+        <div *ngIf="showWEnginePicker" class="wengine-picker">
+          <div class="wengine-picker-controls">
+            <input
+              type="text"
+              [(ngModel)]="wengineSearchTerm"
+              placeholder="Search W-Engines..."
+              class="search-input">
+            <div class="filter-group">
+              <label>Specialty:</label>
+              <select [(ngModel)]="wengineSpecialtyFilter" class="filter-select">
+                <option value="">All Specialties</option>
+                <option value="Attack">Attack</option>
+                <option value="Stun">Stun</option>
+                <option value="Anomaly">Anomaly</option>
+                <option value="Support">Support</option>
+                <option value="Defense">Defense</option>
+                <option value="Rupture">Rupture</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="wengine-list">
+            <div class="wengine-list-item" (click)="onWEngineSelect('')">
+              <span class="wengine-list-name">None</span>
+            </div>
+            <div
+              *ngFor="let engine of getFilteredWEngines()"
+              class="wengine-list-item"
+              [class.s-rank]="engine.rarity === 'S'"
+              [class.a-rank]="engine.rarity === 'A'"
+              [class.b-rank]="engine.rarity === 'B'"
+              [class.selected]="selectedBuild.equippedWEngine?.id === engine.id"
+              (click)="onWEngineSelect(engine.id)">
+              <img *ngIf="engine.icon"
+                   [src]="engine.icon"
+                   [alt]="engine.name"
+                   class="wengine-thumbnail">
+              <div class="wengine-list-info">
+                <span class="wengine-list-name">{{engine.name}}</span>
+                <span class="wengine-list-rarity">
+                  {{engine.rarity}}-Rank
+                </span>
+              </div>
+              <img
+                [src]="getSpecialtyIcon(engine.specialty)"
+                [alt]="engine.specialty"
+                class="wengine-specialty-icon"
+                [title]="engine.specialty">
+            </div>
+          </div>
+        </div>
 
         <div *ngIf="selectedBuild.equippedWEngine" class="wengine-details">
+          <div class="wengine-header">
+            <img *ngIf="selectedBuild.equippedWEngine.icon"
+                 [src]="selectedBuild.equippedWEngine.icon"
+                 [alt]="selectedBuild.equippedWEngine.name"
+                 class="wengine-icon">
+            <div class="wengine-info">
+              <h4>{{selectedBuild.equippedWEngine.name}}</h4>
+              <p class="wengine-rarity">{{selectedBuild.equippedWEngine.rarity}}-Rank</p>
+            </div>
+          </div>
+
+          <!-- Refinement Selector -->
+          <div class="refinement-selector">
+            <label><strong>Refinement (Copies):</strong></label>
+            <div class="refinement-buttons">
+              <button
+                *ngFor="let level of [1, 2, 3, 4, 5]"
+                class="refinement-btn"
+                [class.active]="selectedBuild.wEngineRefinement === level"
+                (click)="setWEngineRefinement(level)">
+                {{level}}
+              </button>
+            </div>
+          </div>
+
           <p><strong>Base ATK:</strong> {{selectedBuild.equippedWEngine.baseAtk}}</p>
           <p><strong>{{selectedBuild.equippedWEngine.subStat.type}}:</strong> {{selectedBuild.equippedWEngine.subStat.value}}%</p>
           <p class="wengine-effect">
@@ -112,6 +194,14 @@
             <span class="stat-value">{{selectedBuild.calculatedStats.anomalyMastery}}</span>
           </div>
           <div class="stat-row">
+            <span class="stat-label">Anomaly Proficiency:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.anomalyProficiency}}</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">PEN Ratio:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.penRatio}}%</span>
+          </div>
+          <div class="stat-row">
             <span class="stat-label">CRIT Rate:</span>
             <span class="stat-value">{{selectedBuild.calculatedStats.critRate}}%</span>
           </div>
@@ -137,7 +227,13 @@
             <div *ngIf="selectedBuild.equippedDiscs[slot]; else emptySlot" class="disc-card">
               <div class="disc-header">
                 <span class="disc-slot-number">{{slot}}</span>
-                <span class="disc-rarity">{{selectedBuild.equippedDiscs[slot]!.rarity}}</span>
+                <div *ngIf="getDiscScore(selectedBuild.equippedDiscs[slot]!) as discScore"
+                     class="disc-rating-badge"
+                     [ngClass]="getDiscRatingClass(discScore.rating)"
+                     [title]="discScore.rating.description">
+                  <span class="rating-grade">{{discScore.rating.grade}}</span>
+                  <span class="rating-score">{{discScore.score}}</span>
+                </div>
               </div>
               <div class="disc-set">{{selectedBuild.equippedDiscs[slot]!.set}}</div>
               <div class="disc-main-stat">
@@ -159,6 +255,49 @@
             </ng-template>
           </div>
         </div>
+        <!-- W-Engine Stat Bonuses -->
+        <div *ngIf="selectedBuild.equippedWEngine" class="wengine-active-effect">
+          <h4>W-Engine Bonuses:</h4>
+          <div class="wengine-effect-box">
+            <p class="effect-name">{{selectedBuild.equippedWEngine.name}} (R{{selectedBuild.wEngineRefinement}})</p>
+
+            <!-- Show refinement bonuses if specialty matches -->
+            <div *ngIf="isWEngineSpecialtyMatch() && selectedBuild.equippedWEngine.effect.properties && selectedBuild.equippedWEngine.effect.properties.length > 0">
+              <p class="effect-match">✓ Specialty matches - applying bonuses:</p>
+              <div *ngFor="let prop of getWEngineRefinementBonuses()" class="bonus-stat">
+                {{prop.name}}: +{{prop.value}}{{prop.isPercent ? '%' : ''}}
+              </div>
+            </div>
+
+            <!-- Show message if no refinement bonuses -->
+            <p class="effect-note" *ngIf="isWEngineSpecialtyMatch() && (!selectedBuild.equippedWEngine.effect.properties || selectedBuild.equippedWEngine.effect.properties.length === 0)">
+              ✓ Specialty matches (no additional refinement stats)
+            </p>
+
+            <!-- Show mismatch warning -->
+            <p class="effect-mismatch" *ngIf="!isWEngineSpecialtyMatch()">
+              ⚠ Specialty mismatch - refinement bonuses not applied
+            </p>
+          </div>
+        </div>
+
+        <!-- Mindscape Stat Bonuses -->
+        <div *ngIf="getMindscapeBonuses().length > 0" class="mindscape-active-effect">
+          <h4>Mindscape Bonuses:</h4>
+          <div class="mindscape-effect-box">
+            <p class="effect-name">M{{selectedBuild.mindscapeLevel}} Active</p>
+            <div *ngFor="let bonus of getMindscapeBonuses()" class="bonus-stat">
+              <span class="mindscape-label">M{{bonus.level}} - {{bonus.name}}:</span>
+              <span class="mindscape-stats">
+                <span *ngFor="let stat of bonus.stats; let last = last">
+                  {{stat.name}}: +{{stat.value}}{{stat.isPercent ? '%' : ''}}{{!last ? ', ' : ''}}
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Disc Set Bonuses -->
         <div *ngIf="getSetBonuses().length > 0" class="set-bonuses">
           <h4>Active Set Bonuses:</h4>
           <div *ngFor="let bonus of getSetBonuses()" class="set-bonus">
@@ -172,8 +311,15 @@
     <div class="section summary-panel" *ngIf="selectedBuild">
       <h2>Build Summary</h2>
       <div class="summary-content">
-        <div class="summary-item">
-          <strong>Build Score:</strong> {{selectedBuild.score}}/100
+        <div class="summary-item build-rating-display" *ngIf="getBuildScore() as buildScore">
+          <strong>Build Rating:</strong>
+          <div class="build-rating-badge"
+               [ngClass]="getBuildRatingClass(buildScore.rating)"
+               [title]="buildScore.rating.description">
+            <span class="rating-grade-large">{{buildScore.rating.grade}}</span>
+            <span class="rating-score-large">{{buildScore.score.toFixed(1)}}%</span>
+          </div>
+          <p class="rating-description">{{buildScore.rating.description}}</p>
         </div>
         <div class="summary-item">
           <strong>Level:</strong> {{selectedBuild.level}}
@@ -205,19 +351,63 @@
     <div class="modal-body">
       <p>Select an agent to create a new build:</p>
 
+      <!-- Agent Filters -->
+      <div class="agent-picker-controls">
+        <div class="filter-group">
+          <label>Element:</label>
+          <select [(ngModel)]="agentElementFilter" class="filter-select">
+            <option value="">All Elements</option>
+            <option value="Fire">Fire</option>
+            <option value="Ice">Ice</option>
+            <option value="Electric">Electric</option>
+            <option value="Physical">Physical</option>
+            <option value="Ether">Ether</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Specialty:</label>
+          <select [(ngModel)]="agentSpecialtyFilter" class="filter-select">
+            <option value="">All Specialties</option>
+            <option value="Attack">Attack</option>
+            <option value="Stun">Stun</option>
+            <option value="Anomaly">Anomaly</option>
+            <option value="Support">Support</option>
+            <option value="Defense">Defense</option>
+            <option value="Rupture">Rupture</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Agent Selection Grid -->
       <div class="agent-select-grid">
         <div
-          *ngFor="let agent of referenceAgents"
+          *ngFor="let agent of getFilteredAgents()"
           class="agent-select-card"
           [class.selected]="selectedAgentForAdd?.id === agent.id"
+          [class.s-rank]="agent.rarity === 'S'"
+          [class.a-rank]="agent.rarity === 'A'"
           (click)="selectAgentForAdd(agent)">
-          <div class="agent-portrait" [attr.data-element]="agent.element">
-            <span class="agent-name">{{agent.name}}</span>
+          <div class="agent-portrait">
+            <img *ngIf="agent.icon"
+                 [src]="agent.icon"
+                 [alt]="agent.name"
+                 class="agent-icon">
+            <span *ngIf="!agent.icon" class="agent-name">{{agent.name}}</span>
           </div>
           <div class="agent-info">
-            <div class="rank">{{agent.rarity === 'S' ? 'S-Rank' : 'A-Rank'}}</div>
-            <div class="specialty">{{agent.specialty}}</div>
+            <div class="agent-name-label">{{agent.name}}</div>
+            <div class="agent-badges">
+              <img *ngIf="agent.elementIcon"
+                   [src]="agent.elementIcon"
+                   [alt]="agent.element"
+                   class="element-badge"
+                   [title]="agent.element">
+              <img *ngIf="agent.specialtyIcon"
+                   [src]="agent.specialtyIcon"
+                   [alt]="agent.specialty"
+                   class="specialty-badge"
+                   [title]="agent.specialty">
+            </div>
           </div>
         </div>
       </div>
@@ -239,7 +429,7 @@
 <div class="modal-overlay" *ngIf="showDiscPicker" (click)="closeDiscPicker()">
   <div class="modal-content disc-picker-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h2>Select Disc for {{selectedDiscSlot}}</h2>
+      <h2>Select Disc Set for {{selectedDiscSlot}}</h2>
       <button class="close-btn" (click)="closeDiscPicker()">×</button>
     </div>
     <div class="modal-body">
@@ -249,48 +439,120 @@
           [(ngModel)]="discSearchTerm"
           placeholder="Search by set name..."
           class="search-input">
-        <select [(ngModel)]="discFilterSlot" class="filter-select">
-          <option value="">All Slots</option>
-          <option *ngFor="let slot of discSlots" [value]="slot">{{slot}}</option>
-        </select>
-        <select [(ngModel)]="discFilterSet" class="filter-select">
-          <option value="">All Sets</option>
-          <option *ngFor="let set of availableDiscSets" [value]="set">{{set}}</option>
-        </select>
-        <label class="checkbox-label">
-          <input type="checkbox" [(ngModel)]="showOnlyUnequipped">
-          Unequipped Only
-        </label>
       </div>
 
-      <div class="disc-picker-grid">
+      <div class="disc-set-grid">
         <div
-          *ngFor="let disc of getFilteredDiscs()"
-          class="disc-picker-card"
-          [class.equipped]="disc.equippedBy"
-          (click)="equipDiscToBuild(disc)">
-          <div class="disc-picker-header">
-            <span class="disc-picker-slot">{{disc.slot}}</span>
-            <span class="disc-picker-rarity">{{disc.rarity}}</span>
-            <span *ngIf="disc.equippedBy" class="equipped-badge">Equipped</span>
+          *ngFor="let discSet of getFilteredDiscSets()"
+          class="disc-set-card"
+          (click)="selectDiscSet(discSet)">
+          <div class="disc-set-header">
+            <img *ngIf="discSet.icon"
+                 [src]="discSet.icon"
+                 [alt]="discSet.name"
+                 class="disc-set-icon">
+            <div class="disc-set-name">{{discSet.name}}</div>
           </div>
-          <div class="disc-picker-set">{{disc.set}}</div>
-          <div class="disc-picker-level">Lv. {{disc.level}}</div>
-          <div class="disc-picker-main">
-            <span class="stat-type">{{disc.mainStat.type}}</span>
-            <span class="stat-value">{{disc.mainStat.value}}</span>
-          </div>
-          <div class="disc-picker-subs">
-            <div *ngFor="let sub of disc.subStats" class="sub-line">
-              {{sub.type}} +{{sub.value}}
+          <div class="disc-set-bonuses">
+            <div *ngFor="let bonus of discSet.bonuses" class="bonus-line">
+              <strong>{{bonus.pieces}}-Piece:</strong> {{bonus.description}}
             </div>
           </div>
         </div>
       </div>
 
-      <div *ngIf="getFilteredDiscs().length === 0" class="no-discs">
-        <p>No discs found matching your filters.</p>
-        <p class="hint">Try adjusting your filters or add discs to your inventory.</p>
+      <div *ngIf="getFilteredDiscSets().length === 0" class="no-discs">
+        <p>No disc sets found matching your search.</p>
+        <p class="hint">Try adjusting your search term.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Disc Stats Form Modal -->
+<div class="modal-overlay" *ngIf="showDiscForm" (click)="closeDiscForm()">
+  <div class="modal-content disc-form-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Configure Disc Stats</h2>
+      <button class="close-btn" (click)="closeDiscForm()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="disc-form-info">
+        <p><strong>Slot:</strong> {{selectedDiscSlot}}</p>
+        <p><strong>Set:</strong> {{selectedDiscSetForCreation?.name}}</p>
+        <p *ngIf="selectedDiscSlot && (selectedDiscSlot === 'Drive1' || selectedDiscSlot === 'Drive2' || selectedDiscSlot === 'Drive3')">
+          <strong>Main Stat:</strong> {{getDefaultMainStatForSlot(selectedDiscSlot!)}} ({{getMainStatValueForSlot(selectedDiscSlot)}} at level 15)
+        </p>
+      </div>
+
+      <!-- Main Stat Selection for Slots 4-6 -->
+      <div class="form-section" *ngIf="selectedDiscSlot && selectedDiscSlot !== 'Drive1' && selectedDiscSlot !== 'Drive2' && selectedDiscSlot !== 'Drive3'">
+        <label>Main Stat Type:</label>
+        <select [(ngModel)]="discFormData.mainStatType" class="stat-select">
+          <option value="">Select main stat...</option>
+          <option value="HP%">HP%</option>
+          <option value="ATK%">ATK%</option>
+          <option value="DEF%">DEF%</option>
+          <option value="CRIT_Rate">CRIT Rate</option>
+          <option value="CRIT_DMG">CRIT DMG</option>
+          <option value="Anomaly_Proficiency">Anomaly Proficiency</option>
+          <option value="Pen_Ratio">PEN Ratio</option>
+          <option value="Element_DMG">Element DMG</option>
+          <option value="Impact">Impact</option>
+          <option value="Energy_Regen">Energy Regen</option>
+          <option value="Anomaly_Mastery">Anomaly Mastery</option>
+        </select>
+      </div>
+
+      <div class="form-section" *ngIf="selectedDiscSlot && selectedDiscSlot !== 'Drive1' && selectedDiscSlot !== 'Drive2' && selectedDiscSlot !== 'Drive3'">
+        <label>Main Stat Value:</label>
+        <input
+          type="number"
+          [(ngModel)]="discFormData.mainStatValue"
+          placeholder="Enter main stat value"
+          class="stat-input">
+      </div>
+
+      <div class="form-section">
+        <div class="section-header">
+          <label>Sub Stats (max 4):</label>
+          <button
+            class="btn-secondary btn-sm"
+            (click)="addSubStat()"
+            [disabled]="discFormData.subStats.length >= 4">
+            + Add Sub Stat
+          </button>
+        </div>
+
+        <div class="substats-list">
+          <div *ngFor="let subStat of discFormData.subStats; let i = index" class="substat-row">
+            <select [(ngModel)]="subStat.type" class="substat-type-select">
+              <option value="HP">HP</option>
+              <option value="HP%">HP%</option>
+              <option value="ATK">ATK</option>
+              <option value="ATK%">ATK%</option>
+              <option value="DEF">DEF</option>
+              <option value="DEF%">DEF%</option>
+              <option value="CRIT_Rate">CRIT Rate</option>
+              <option value="CRIT_DMG">CRIT DMG</option>
+              <option value="Anomaly_Proficiency">Anomaly Proficiency</option>
+              <option value="PEN">PEN (Flat)</option>
+              <option value="Impact">Impact</option>
+              <option value="Energy_Regen">Energy Regen</option>
+            </select>
+            <input
+              type="number"
+              [(ngModel)]="subStat.value"
+              placeholder="Value"
+              class="substat-value-input">
+            <button class="btn-danger btn-sm" (click)="removeSubStat(i)">×</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="closeDiscForm()">Cancel</button>
+        <button class="btn-primary" (click)="createAndEquipDisc()">Create & Equip</button>
       </div>
     </div>
   </div>

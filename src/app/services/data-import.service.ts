@@ -122,9 +122,9 @@ export class DataImportService {
    * This imports the user's disc inventory (their personal collection).
    * Can be used for backup/restore of user data.
    *
-   * @param filePath Path to JSON file (e.g., 'assets/data/discs.json')
+   * @param filePath Path to JSON file (e.g., 'assets/data/sample-discs.json')
    */
-  async importDiscsFromFile(filePath: string = 'assets/data/discs.json'): Promise<number> {
+  async importDiscsFromFile(filePath: string = 'assets/data/sample-discs.json'): Promise<number> {
     try {
       // Ensure path starts with / to make it absolute
       const absolutePath = filePath.startsWith('/') ? filePath : `/${filePath}`;
@@ -232,6 +232,108 @@ export class DataImportService {
       return items.length;
     } catch (error) {
       console.error(`Error importing ${type}:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Import REFERENCE DATA from individual JSON files in assets/data/character/, weapon/, and equipment/
+   * This is the preferred method as it loads complete data with accurate stats
+   */
+  async importReferenceDataFromIndividualFiles(): Promise<{ agents: number, wEngines: number, discSets: number }> {
+    console.log('Starting import from individual JSON files...');
+
+    try {
+      // Load the index files to get IDs
+      const agentsData = await firstValueFrom(this.http.get<any>('/assets/data/agents.json'));
+      const wEnginesIndex = await firstValueFrom(this.http.get<any>('/assets/data/wengines.json'));
+
+      // Handle both array and object formats for agents
+      let agentIds: string[];
+      let agentsIndex: any;
+
+      if (Array.isArray(agentsData)) {
+        // Array format: extract IDs from the 'id' field
+        agentIds = agentsData.map(agent => String(agent.id));
+        // Create an index object for backward compatibility
+        agentsIndex = {};
+        agentsData.forEach(agent => {
+          agentsIndex[String(agent.id)] = agent;
+        });
+      } else {
+        // Object format: use keys directly
+        agentIds = Object.keys(agentsData);
+        agentsIndex = agentsData;
+      }
+
+      const wEngineIds = Object.keys(wEnginesIndex);
+
+      // Disc set IDs from equipment folder (31000-33600)
+      const discSetIds = ['31000', '31100', '31200', '31300', '31400', '31500', '31600', '31800', '31900',
+                          '32200', '32300', '32400', '32500', '32600', '32700', '32800', '32900',
+                          '33000', '33100', '33200', '33300', '33400', '33500', '33600'];
+
+      console.log(`Found ${agentIds.length} agents, ${wEngineIds.length} W-Engines, and ${discSetIds.length} disc sets`);
+
+      // Load all agent detail files
+      const agentPromises = agentIds.map(async (id) => {
+        try {
+          const detailData = await firstValueFrom(
+            this.http.get<any>(`/assets/data/character/${id}.json`)
+          );
+          // Transform using the detailed data
+          return this.transformer.transformAgentWithDetailedStats(id, agentsIndex[id], detailData);
+        } catch (error) {
+          console.warn(`Failed to load detailed data for agent ${id}, using basic transform`);
+          return this.transformer.transformSingleAgent(id, agentsIndex[id]);
+        }
+      });
+
+      // Load W-Engines from wengines.json (already has correct level 60 stats and Effect.Properties)
+      const wEnginePromises = wEngineIds.map(async (id) => {
+        // Use wEnginesIndex directly - it has the correct level 60 data
+        const transformed = this.transformer.transformWEngines({ [id]: wEnginesIndex[id] });
+        return transformed[0]; // transformWEngines returns an array
+      });
+
+      // Load all disc set files
+      const discSetPromises = discSetIds.map(async (id) => {
+        try {
+          const discSetData = await firstValueFrom(
+            this.http.get<any>(`/assets/data/equipment/${id}.json`)
+          );
+          // Transform disc set data
+          const transformed = this.transformer.transformDiscSets({ [id]: discSetData });
+          return transformed[0];
+        } catch (error) {
+          console.warn(`Failed to load disc set ${id}`);
+          return null;
+        }
+      });
+
+      // Wait for all loads to complete
+      const agents = (await Promise.all(agentPromises)).filter(a => a !== null) as Agent[];
+      const wEngines = (await Promise.all(wEnginePromises)).filter(w => w !== null) as WEngine[];
+      const discSets = (await Promise.all(discSetPromises)).filter(d => d !== null);
+
+      console.log(`Transformed ${agents.length} agents, ${wEngines.length} W-Engines, and ${discSets.length} disc sets`);
+
+      // Import into database
+      await this.agentService.bulkImportAgents(agents);
+      await this.wEngineService.bulkImportWEngines(wEngines);
+
+      // Store disc sets in IndexedDB
+      await this.db.bulkAddDiscSets(discSets);
+
+      console.log('Successfully imported all reference data from individual files');
+
+      return {
+        agents: agents.length,
+        wEngines: wEngines.length,
+        discSets: discSets.length
+      };
+    } catch (error) {
+      console.error('Error importing from individual files:', error);
       throw error;
     }
   }

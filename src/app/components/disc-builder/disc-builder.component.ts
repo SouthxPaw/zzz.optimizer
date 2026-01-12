@@ -151,14 +151,14 @@ export class DiscBuilderComponent implements OnInit {
     const potential = this.getPotential(disc);
 
     if (score >= 20)
-      return 'Excellent disc! This is a keeper for this character.';
+      return 'S';
     if (score >= 15)
-      return 'Great disc with good substats. Consider leveling to +15.';
+      return 'A';
     if (score >= 10 && potential.maxPotential >= 15)
-      return 'Decent disc with upgrade potential. Monitor rolls when upgrading.';
+      return 'B';
     if (score < 10 && disc.level < 9)
-      return 'Mediocre disc. Consider using as fodder unless rolls improve.';
-    return 'Not ideal for this character. Better suited for others or fodder.';
+      return 'C';
+    return 'F';
   }
 
   toggleLock(disc: Disc) {

@@ -1,6 +1,6 @@
 .navbar {
-  background: #16213e;
-  border-bottom: 2px solid #0f3460;
+  background: #1a1a1a;
+  border-bottom: 2px solid #F4B942;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -18,7 +18,7 @@
 }
 
 .nav-brand h1 {
-  color: #00d9ff;
+  color: #F4B942;
   font-size: 1.5em;
   margin: 0;
   font-weight: 700;
@@ -35,7 +35,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: #0f3460;
+  background: #151515;
   color: #aaa;
   text-decoration: none;
   border-radius: 8px;
@@ -50,21 +50,21 @@
 }
 
 .nav-link:hover {
-  background: #1a2a4e;
-  color: #00d9ff;
-  border-color: #00d9ff;
+  background: #2a2a2a;
+  color: #FFD666;
+  border-color: #F4B942;
   transform: translateY(-1px);
 }
 
 .nav-link.active {
-  background: #00d9ff;
-  color: #1a1a2e;
-  border-color: #00d9ff;
+  background: #F4B942;
+  color: #0a0a0a;
+  border-color: #F4B942;
 }
 
 .nav-link.active:hover {
-  background: #00b8d4;
-  border-color: #00b8d4;
+  background: #FFD666;
+  border-color: #FFD666;
 }
 
 @media (max-width: 768px) {
