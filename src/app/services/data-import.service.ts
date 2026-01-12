@@ -245,10 +245,27 @@ export class DataImportService {
 
     try {
       // Load the index files to get IDs
-      const agentsIndex = await firstValueFrom(this.http.get<any>('/assets/data/agents.json'));
+      const agentsData = await firstValueFrom(this.http.get<any>('/assets/data/agents.json'));
       const wEnginesIndex = await firstValueFrom(this.http.get<any>('/assets/data/wengines.json'));
 
-      const agentIds = Object.keys(agentsIndex);
+      // Handle both array and object formats for agents
+      let agentIds: string[];
+      let agentsIndex: any;
+
+      if (Array.isArray(agentsData)) {
+        // Array format: extract IDs from the 'id' field
+        agentIds = agentsData.map(agent => String(agent.id));
+        // Create an index object for backward compatibility
+        agentsIndex = {};
+        agentsData.forEach(agent => {
+          agentsIndex[String(agent.id)] = agent;
+        });
+      } else {
+        // Object format: use keys directly
+        agentIds = Object.keys(agentsData);
+        agentsIndex = agentsData;
+      }
+
       const wEngineIds = Object.keys(wEnginesIndex);
 
       // Disc set IDs from equipment folder (31000-33600)
@@ -272,20 +289,11 @@ export class DataImportService {
         }
       });
 
-      // Load all weapon detail files
+      // Load W-Engines from wengines.json (already has correct level 60 stats and Effect.Properties)
       const wEnginePromises = wEngineIds.map(async (id) => {
-        try {
-          const weaponData = await firstValueFrom(
-            this.http.get<any>(`/assets/data/weapon/${id}.json`)
-          );
-          // Transform using the detailed weapon data (new format)
-          const transformed = this.transformer.transformWEngines({ [id]: weaponData });
-          return transformed[0]; // transformWEngines returns an array
-        } catch (error) {
-          console.warn(`Failed to load weapon data for ${id}, using basic transform`);
-          const transformed = this.transformer.transformWEngines({ [id]: wEnginesIndex[id] });
-          return transformed[0];
-        }
+        // Use wEnginesIndex directly - it has the correct level 60 data
+        const transformed = this.transformer.transformWEngines({ [id]: wEnginesIndex[id] });
+        return transformed[0]; // transformWEngines returns an array
       });
 
       // Load all disc set files
