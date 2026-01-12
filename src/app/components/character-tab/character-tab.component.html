@@ -222,9 +222,8 @@
           <div
             *ngFor="let slot of discSlots"
             class="disc-slot"
-            [class.equipped]="selectedBuild.equippedDiscs[slot]"
-            (click)="openDiscPicker(slot)">
-            <div *ngIf="selectedBuild.equippedDiscs[slot]; else emptySlot" class="disc-card">
+            [class.equipped]="selectedBuild.equippedDiscs[slot]">
+            <div *ngIf="selectedBuild.equippedDiscs[slot]; else emptySlot" class="disc-card" (click)="openDiscEdit(slot)">
               <div class="disc-header">
                 <span class="disc-slot-number">{{slot}}</span>
                 <div *ngIf="getDiscScore(selectedBuild.equippedDiscs[slot]!) as discScore"
@@ -248,7 +247,7 @@
               <button class="unequip-btn" (click)="unequipDisc(slot, $event)" title="Unequip disc">×</button>
             </div>
             <ng-template #emptySlot>
-              <div class="empty-disc-slot">
+              <div class="empty-disc-slot" (click)="openDiscPicker(slot)">
                 <span class="slot-number">{{slot}}</span>
                 <span class="slot-label">Empty</span>
               </div>
@@ -293,6 +292,37 @@
                   {{stat.name}}: +{{stat.value}}{{stat.isPercent ? '%' : ''}}{{!last ? ', ' : ''}}
                 </span>
               </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4pc Disc Set Effect Bonuses -->
+        <div *ngIf="get4pcEffectBonuses().length > 0" class="disc4pc-active-effect">
+          <h4>4pc Set Effect Bonuses:</h4>
+          <div *ngFor="let effect of get4pcEffectBonuses()" class="disc4pc-effect-box">
+            <p class="effect-name">{{effect.setName}} (4pc)</p>
+            <p class="effect-description">{{effect.description}}</p>
+
+            <!-- Unconditional bonuses (always active) -->
+            <div *ngIf="effect.unconditionalStats.length > 0" class="bonus-stat">
+              <span class="bonus-label">Always Active:</span>
+              <span class="bonus-stats">
+                <span *ngFor="let stat of effect.unconditionalStats; let last = last">
+                  {{stat.name}}: +{{stat.value}}{{stat.isPercent ? '%' : ''}}{{!last ? ', ' : ''}}
+                </span>
+              </span>
+            </div>
+
+            <!-- Conditional bonuses -->
+            <div *ngIf="effect.conditionalStats" class="conditional-bonuses">
+              <div *ngFor="let conditional of effect.conditionalStats" class="bonus-stat conditional">
+                <span class="condition-label">When {{conditional.condition}}:</span>
+                <span class="bonus-stats">
+                  <span *ngFor="let stat of conditional.stats; let last = last">
+                    {{stat.name}}: +{{stat.value}}{{stat.isPercent ? '%' : ''}}{{!last ? ', ' : ''}}
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -473,7 +503,7 @@
 <div class="modal-overlay" *ngIf="showDiscForm" (click)="closeDiscForm()">
   <div class="modal-content disc-form-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h2>Configure Disc Stats</h2>
+      <h2>{{ isEditMode ? 'Edit Disc Stats' : 'Configure Disc Stats' }}</h2>
       <button class="close-btn" (click)="closeDiscForm()">×</button>
     </div>
     <div class="modal-body">
@@ -552,7 +582,8 @@
 
       <div class="modal-actions">
         <button class="btn-secondary" (click)="closeDiscForm()">Cancel</button>
-        <button class="btn-primary" (click)="createAndEquipDisc()">Create & Equip</button>
+        <button *ngIf="isEditMode" class="btn-secondary" (click)="closeDiscForm(); openDiscPicker(selectedDiscSlot!)">Change Set</button>
+        <button class="btn-primary" (click)="createAndEquipDisc()">{{ isEditMode ? 'Save Changes' : 'Create & Equip' }}</button>
       </div>
     </div>
   </div>

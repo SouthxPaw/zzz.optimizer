@@ -1,14 +1,81 @@
 // services/stat-calculator.service.ts
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { Agent, BaseStats, DiscSlot } from '../models/agent.model';
 import { Disc, SubStatType } from '../models/disc.model';
 import { WEngine } from '../models/wengine.model';
 import { DISC_SETS } from '../constants/disc-sets';
 
+interface DiscSetEquipmentData {
+  Id: number;
+  Name: string;
+  Desc2: string;
+  Desc4: string;
+  '4pcEffect': {
+    Properties: Array<{
+      Name: string;
+      Name2: string;
+      Format: string;
+      Value: number;
+    }>;
+  } | Array<{
+    Condition?: {
+      Type: string;
+      Stat: string;
+      Operator: string;
+      Value: number;
+    };
+    Properties: Array<{
+      Name: string;
+      Name2: string;
+      Format: string;
+      Value: number;
+    }>;
+  }>;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class StatCalculatorService {
+  private discSetEquipmentData: { [setName: string]: DiscSetEquipmentData } = {};
+  private dataLoaded = false;
+
+  constructor(private http: HttpClient) {
+    this.loadDiscSetEquipmentData();
+  }
+
+  /**
+   * Load disc set equipment data from JSON files
+   */
+  private async loadDiscSetEquipmentData() {
+    try {
+      const setIds = [
+        '31000', '31100', '31200', '31300', '31400', '31500', '31600', '31800', '31900',
+        '32200', '32300', '32400', '32500', '32600', '32700', '32800', '32900',
+        '33000', '33100', '33200', '33300', '33400', '33500', '33600'
+      ];
+
+      const promises = setIds.map(id =>
+        firstValueFrom(
+          this.http.get<DiscSetEquipmentData>(`/assets/data/equipment/${id}.json`)
+        ).catch(() => null)
+      );
+
+      const results = await Promise.all(promises);
+      results.forEach(data => {
+        if (data) {
+          this.discSetEquipmentData[data.Name] = data;
+        }
+      });
+
+      this.dataLoaded = true;
+      console.log('Loaded disc set equipment data for stat calculation');
+    } catch (error) {
+      console.error('Failed to load disc set equipment data:', error);
+    }
+  }
 
   calculateFinalStats(
     agent: Agent,
@@ -338,10 +405,15 @@ export class StatCalculatorService {
 
       discSet.bonuses.forEach(bonus => {
         if (count >= bonus.pieces) {
-          // Parse bonus description and apply stats
+          // Parse bonus description and apply stats (2pc bonuses)
           this.parseAndApplyBonus(bonus.description, stats);
         }
       });
+
+      // Apply 4pc effect stat bonuses from equipment data
+      if (count >= 4) {
+        this.apply4pcEffectBonuses(setName, stats);
+      }
     });
 
     // Apply percentage-based stats to base stats
@@ -359,6 +431,143 @@ export class StatCalculatorService {
     stats.hp = baseHP * (1 + stats.hppercent / 100) + flatHPBonus;
     stats.atk = baseATK * (1 + stats.atkpercent / 100) + flatATKBonus;
     stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFBonus;
+  }
+
+  /**
+   * Apply 4pc effect stat bonuses from equipment data
+   * Only applies conditional bonuses when conditions are met
+   */
+  private apply4pcEffectBonuses(setName: string, stats: BaseStats): void {
+    const equipmentData = this.discSetEquipmentData[setName];
+    if (!equipmentData || !equipmentData['4pcEffect']) {
+      return;
+    }
+
+    const effect = equipmentData['4pcEffect'];
+
+    // Handle simple format (object with Properties array)
+    if (!Array.isArray(effect)) {
+      this.applyPropertiesArray(effect.Properties, stats);
+    }
+    // Handle conditional format (array of effect objects)
+    else {
+      effect.forEach(effectPart => {
+        // Only apply if condition is met or no condition exists
+        if (!effectPart.Condition || this.evaluateCondition(effectPart.Condition, stats)) {
+          this.applyPropertiesArray(effectPart.Properties, stats);
+        }
+      });
+    }
+  }
+
+  /**
+   * Evaluate if a condition is met based on current stats
+   */
+  private evaluateCondition(
+    condition: { Type: string; Stat: string; Operator: string; Value: number },
+    stats: BaseStats
+  ): boolean {
+    // Map condition stat names to BaseStats properties
+    const statMapping: { [key: string]: keyof BaseStats } = {
+      'Anomaly_Mastery': 'anomalyMastery',
+      'Anomaly_Proficiency': 'anomalyProficiency',
+      'CRIT_Rate': 'critRate',
+      'CRIT_DMG': 'critDmg',
+      'ATK': 'atk',
+      'ATK%': 'atkpercent',
+      'HP': 'hp',
+      'HP%': 'hppercent',
+      'DEF': 'def',
+      'DEF%': 'defpercent',
+      'Impact': 'impact',
+      'PEN': 'pen',
+      'PEN_Ratio': 'penRatio',
+      'Energy_Regen': 'energyRegen'
+    };
+
+    const statKey = statMapping[condition.Stat];
+    if (!statKey) {
+      console.warn(`Unknown stat in condition: ${condition.Stat}`);
+      return false;
+    }
+
+    const currentValue = stats[statKey] as number;
+
+    switch (condition.Operator) {
+      case '>=':
+        return currentValue >= condition.Value;
+      case '>':
+        return currentValue > condition.Value;
+      case '<=':
+        return currentValue <= condition.Value;
+      case '<':
+        return currentValue < condition.Value;
+      case '==':
+        return currentValue === condition.Value;
+      default:
+        console.warn(`Unknown operator in condition: ${condition.Operator}`);
+        return false;
+    }
+  }
+
+  /**
+   * Apply an array of property bonuses to stats
+   */
+  private applyPropertiesArray(
+    properties: Array<{ Name: string; Name2: string; Format: string; Value: number }>,
+    stats: BaseStats
+  ): void {
+    properties.forEach(prop => {
+      const statType = prop.Name;
+      // Value is stored as integer (e.g., 2800 = 28%, 36 = 36 flat)
+      const value = prop.Format.includes('%') ? prop.Value / 100 : prop.Value;
+
+      switch (statType) {
+        case 'ATK%':
+          stats.atkpercent += value;
+          break;
+        case 'HP%':
+          stats.hppercent += value;
+          break;
+        case 'DEF%':
+          stats.defpercent += value;
+          break;
+        case 'CRIT_Rate':
+        case 'CRIT_RATE':
+          stats.critRate += value;
+          break;
+        case 'CRIT_DMG':
+          stats.critDmg += value;
+          break;
+        case 'PEN_Ratio':
+          stats.penRatio += value;
+          break;
+        case 'Energy_Regen':
+          stats.energyRegen += value;
+          break;
+        case 'Impact':
+          stats.impact += value;
+          break;
+        case 'Anomaly_Proficiency':
+          stats.anomalyProficiency += value;
+          break;
+        case 'Anomaly_Mastery':
+          stats.anomalyMastery += value;
+          break;
+        case 'ATK':
+          stats.atk += value;
+          break;
+        case 'HP':
+          stats.hp += value;
+          break;
+        case 'DEF':
+          stats.def += value;
+          break;
+        case 'PEN':
+          stats.pen += value;
+          break;
+      }
+    });
   }
 
   /**
@@ -433,5 +642,122 @@ export class StatCalculatorService {
     });
 
     return activeBonuses;
+  }
+
+  /**
+   * Get active 4pc effect stat bonuses for UI display
+   * Returns formatted stat bonuses similar to mindscape display
+   * Separates unconditional and conditional bonuses
+   */
+  get4pcEffectBonuses(discs: { [key in DiscSlot]?: Disc }): Array<{
+    setName: string;
+    description: string;
+    unconditionalStats: Array<{ name: string; value: number; isPercent: boolean }>;
+    conditionalStats?: Array<{
+      condition: string;
+      stats: Array<{ name: string; value: number; isPercent: boolean }>;
+    }>;
+  }> {
+    const setCounts = new Map<string, number>();
+    Object.values(discs).forEach(disc => {
+      if (!disc) return;
+      const count = setCounts.get(disc.set) || 0;
+      setCounts.set(disc.set, count + 1);
+    });
+
+    const active4pcBonuses: Array<{
+      setName: string;
+      description: string;
+      unconditionalStats: Array<{ name: string; value: number; isPercent: boolean }>;
+      conditionalStats?: Array<{
+        condition: string;
+        stats: Array<{ name: string; value: number; isPercent: boolean }>;
+      }>;
+    }> = [];
+
+    setCounts.forEach((count, setName) => {
+      if (count >= 4) {
+        const equipmentData = this.discSetEquipmentData[setName];
+        if (equipmentData && equipmentData['4pcEffect']) {
+          const effect = equipmentData['4pcEffect'];
+
+          // Handle simple format (unconditional)
+          if (!Array.isArray(effect)) {
+            const stats = effect.Properties.map(prop => ({
+              name: prop.Name,
+              value: prop.Format.includes('%') ? prop.Value / 100 : prop.Value,
+              isPercent: prop.Format.includes('%')
+            }));
+
+            active4pcBonuses.push({
+              setName: setName,
+              description: equipmentData.Desc4,
+              unconditionalStats: stats
+            });
+          }
+          // Handle conditional format
+          else {
+            const unconditional: Array<{ name: string; value: number; isPercent: boolean }> = [];
+            const conditional: Array<{
+              condition: string;
+              stats: Array<{ name: string; value: number; isPercent: boolean }>;
+            }> = [];
+
+            effect.forEach(effectPart => {
+              const stats = effectPart.Properties.map(prop => ({
+                name: prop.Name,
+                value: prop.Format.includes('%') ? prop.Value / 100 : prop.Value,
+                isPercent: prop.Format.includes('%')
+              }));
+
+              if (!effectPart.Condition) {
+                // Unconditional bonus
+                unconditional.push(...stats);
+              } else {
+                // Conditional bonus - format the condition for display
+                const conditionText = this.formatCondition(effectPart.Condition);
+                conditional.push({
+                  condition: conditionText,
+                  stats: stats
+                });
+              }
+            });
+
+            active4pcBonuses.push({
+              setName: setName,
+              description: equipmentData.Desc4,
+              unconditionalStats: unconditional,
+              conditionalStats: conditional.length > 0 ? conditional : undefined
+            });
+          }
+        }
+      }
+    });
+
+    return active4pcBonuses;
+  }
+
+  /**
+   * Format condition object into readable text
+   */
+  private formatCondition(condition: { Type: string; Stat: string; Operator: string; Value: number }): string {
+    const statName = condition.Stat.replace(/_/g, ' ');
+    const operator = condition.Operator;
+    const value = condition.Value;
+
+    switch (operator) {
+      case '>=':
+        return `${statName} ≥ ${value}`;
+      case '>':
+        return `${statName} > ${value}`;
+      case '<=':
+        return `${statName} ≤ ${value}`;
+      case '<':
+        return `${statName} < ${value}`;
+      case '==':
+        return `${statName} = ${value}`;
+      default:
+        return `${statName} ${operator} ${value}`;
+    }
   }
 }
