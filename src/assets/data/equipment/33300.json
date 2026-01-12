@@ -1,8 +1,8 @@
 {
   "Id": 33300,
   "Name": "Dawn's Bloom",
-  "Desc2": "Increases <color=#FFFFFF>Basic Attack</color> DMG by 15%.",
-  "Desc4": "Increases <color=#FFFFFF>Basic Attack</color> DMG by 20%. When equipped by an Attack character, using an <color=#FFFFFF>EX Special Attack</color> or <color=#FFFFFF>Ultimate</color> will further increase <color=#FFFFFF>Basic Attack</color> DMG by 20% for 25s. Repeated triggers reset the duration.",
+  "Desc2": "Increases Basic Attack DMG by 15%.",
+  "Desc4": "Increases Basic Attack DMG by 20%. When equipped by an Attack character, using an EX Special Attack or Ultimate will further increase Basic Attack DMG by 20% for 25s. Repeated triggers reset the duration.",
   "Story": "Years after the fall of the old capital, an aging singer who had long since put down the pen released this album. According to the artist, its inspiration came from a hazy, childlike lullaby heard while hiding in the ruins during that catastrophe — on the verge of breaking down.",
   "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitDawnsBloom.png",
   "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitDawnsBloom.png"
