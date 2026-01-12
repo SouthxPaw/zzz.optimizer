@@ -116,6 +116,7 @@ export class DataTransformerService {
         critRate: (lvl60.Crit || 500) / 100,
         critDmg: (lvl60.CritDamage || 5000) / 100,
         anomalyProficiency: Math.round(lvl60.ElementMystery || stats?.ElementMystery || 0),
+        pen: Math.round(lvl60.PenDelta || 0),
         penRatio: (lvl60.PenRate || 0) / 100,
         energyRegen: (lvl60.SpBarPoint || 12) / 10  // 12 / 10 = 1.2
       };
@@ -186,6 +187,7 @@ export class DataTransformerService {
         critRate: critRate,
         critDmg: critDmg,
         anomalyProficiency: Math.round(anomalyProficiency),
+        pen: Math.round(stats.PenDelta || 0),
         penRatio: penRatio,
         energyRegen: energyRegen
       };
@@ -214,6 +216,7 @@ export class DataTransformerService {
       critRate: 5,
       critDmg: 50,
       anomalyProficiency: 0,
+      pen: 0,
       penRatio: 0,
       energyRegen: 1.2
     };
@@ -703,6 +706,7 @@ export class DataTransformerService {
         critRate: 5,
         critDmg: 50,
         anomalyProficiency: 0,
+        pen: 0,
         penRatio: 0,
         energyRegen: 0
       }

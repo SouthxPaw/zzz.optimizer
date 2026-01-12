@@ -11,6 +11,9 @@ import { DiscService } from '../../services/disc.service';
 import { DiscSetService, DiscSet } from '../../services/disc-set.service';
 import { BuildService, AgentBuild } from '../../services/build.service';
 import { StatCalculatorService } from '../../services/stat-calculator.service';
+import { ScoringService } from '../../services/scoring.service';
+import { ImagePreloaderService } from '../../services/image-preloader.service';
+import { DiscRating, BuildRating } from '../../constants/disc-scoring';
 
 @Component({
   selector: 'app-character-tab',
@@ -58,6 +61,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   // W-Engine picker
   showWEnginePicker = false;
   wengineSearchTerm = '';
+  wengineSpecialtyFilter = '';
+
+  // Agent picker filters
+  agentElementFilter = '';
+  agentSpecialtyFilter = '';
 
   private destroy$ = new Subject<void>();
 
@@ -67,7 +75,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private wEngineService: WEngineService,
     private discService: DiscService,
     private discSetService: DiscSetService,
-    private statCalculator: StatCalculatorService
+    private statCalculator: StatCalculatorService,
+    private scoringService: ScoringService,
+    private imagePreloader: ImagePreloaderService
   ) {}
 
   ngOnInit() {
@@ -94,6 +104,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(agents => {
         this.referenceAgents = agents;
+        // Preload agent images
+        this.preloadAgentImages(agents);
       });
 
     // Load reference W-Engines
@@ -101,6 +113,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(wEngines => {
         this.referenceWEngines = wEngines;
+        // Preload W-Engine images
+        this.preloadWEngineImages(wEngines);
       });
 
     // Load reference disc sets
@@ -108,6 +122,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(discSets => {
         this.referenceDiscSets = discSets;
+        // Preload disc set images
+        this.preloadDiscSetImages(discSets);
       });
 
     // Load user disc inventory
@@ -253,8 +269,29 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return specialtyMap[specialty] || '/assets/data/images/roles/IconAttackType.webp';
   }
 
+  getFilteredAgents(): Agent[] {
+    let filtered = this.referenceAgents;
+
+    // Filter by element
+    if (this.agentElementFilter) {
+      filtered = filtered.filter(a => a.element === this.agentElementFilter);
+    }
+
+    // Filter by specialty
+    if (this.agentSpecialtyFilter) {
+      filtered = filtered.filter(a => a.specialty === this.agentSpecialtyFilter);
+    }
+
+    return filtered;
+  }
+
   getFilteredWEngines(): WEngine[] {
     let filtered = this.referenceWEngines;
+
+    // Filter by specialty
+    if (this.wengineSpecialtyFilter) {
+      filtered = filtered.filter(w => w.specialty === this.wengineSpecialtyFilter);
+    }
 
     // Filter by search term
     if (this.wengineSearchTerm) {
@@ -564,5 +601,77 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       'Drive3': 184    // DEF
     };
     return fixedValues[slot] || 0;
+  }
+
+  // Disc scoring methods
+  getDiscScore(disc: Disc): { score: number, rating: DiscRating } | null {
+    if (!this.selectedBuild) return null;
+
+    // Get equipped discs as array for hybrid agent detection
+    const equippedDiscsArray = Object.values(this.selectedBuild.equippedDiscs).filter(d => d !== undefined);
+
+    const result = this.scoringService.calculateDiscScore(
+      disc,
+      this.selectedBuild.agentId,
+      equippedDiscsArray
+    );
+    return {
+      score: result.score,
+      rating: result.rating
+    };
+  }
+
+  getDiscRatingClass(rating: DiscRating): string {
+    return `rating-${rating.grade.toLowerCase()}`;
+  }
+
+  // Build scoring methods
+  getBuildScore(): { score: number, rating: BuildRating } | null {
+    if (!this.selectedBuild) return null;
+
+    const result = this.scoringService.calculateBuildScore(
+      this.selectedBuild.agentId,
+      this.selectedBuild.calculatedStats
+    );
+
+    return {
+      score: result.score,
+      rating: result.rating
+    };
+  }
+
+  getBuildRatingClass(rating: BuildRating): string {
+    return `rating-${rating.grade.toLowerCase()}`;
+  }
+
+  // Image preloading methods
+  private preloadAgentImages(agents: Agent[]): void {
+    const imageUrls = agents
+      .map(agent => agent.icon)
+      .filter(icon => icon) as string[];
+
+    this.imagePreloader.preloadImages(imageUrls).then(() => {
+      console.log(`Preloaded ${imageUrls.length} agent images`);
+    });
+  }
+
+  private preloadWEngineImages(wEngines: WEngine[]): void {
+    const imageUrls = wEngines
+      .map(engine => engine.icon)
+      .filter(icon => icon) as string[];
+
+    this.imagePreloader.preloadImages(imageUrls).then(() => {
+      console.log(`Preloaded ${imageUrls.length} W-Engine images`);
+    });
+  }
+
+  private preloadDiscSetImages(discSets: DiscSet[]): void {
+    const imageUrls = discSets
+      .map(discSet => discSet.icon)
+      .filter(icon => icon) as string[];
+
+    this.imagePreloader.preloadImages(imageUrls).then(() => {
+      console.log(`Preloaded ${imageUrls.length} disc set images`);
+    });
   }
 }

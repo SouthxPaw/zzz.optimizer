@@ -40,6 +40,10 @@ export class StatCalculatorService {
     // Apply set bonuses
     this.applySetBonuses(stats, discs, agent);
 
+    // Convert flat PEN to PEN Ratio (using 800 as baseline enemy DEF)
+    const penRatioFromFlat = (stats.pen / 800) * 100;
+    const totalPenRatio = stats.penRatio + penRatioFromFlat;
+
     // Round all stats to avoid decimals
     return {
       hp: Math.round(stats.hp),
@@ -53,7 +57,8 @@ export class StatCalculatorService {
       critRate: Math.round(stats.critRate * 10) / 10,
       critDmg: Math.round(stats.critDmg * 10) / 10,
       anomalyProficiency: Math.round(stats.anomalyProficiency),
-      penRatio: Math.round(stats.penRatio * 10) / 10,
+      pen: Math.round(stats.pen),
+      penRatio: Math.round(totalPenRatio * 10) / 10,
       energyRegen: Math.round(stats.energyRegen * 10) / 10
     };
   }
@@ -299,8 +304,8 @@ export class StatCalculatorService {
           case 'Anomaly_Proficiency':
             stats.anomalyProficiency += subStat.value;
             break;
-          case 'Pen_Ratio':
-            stats.penRatio += subStat.value;
+          case 'PEN':
+            stats.pen += subStat.value;
             break;
           case 'Impact':
             stats.impact += subStat.value;

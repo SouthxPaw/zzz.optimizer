@@ -17,18 +17,32 @@ export const SUBSTAT_WEIGHTS: { [key: string]: number } = {
   // Secondary stats
   'HP%': 0.8,            // 1% HP = 0.8 points
   'DEF%': 0.8,           // 1% DEF = 0.8 points
-  'Energy_Regen': 1.2,   // 1% Energy Regen = 1.2 points
+  'Energy_Regen': 0.6,   // 1% Energy Regen = 0.6 points (only rolls on W-Engines/Disc 6 main stat)
 
   // Anomaly stats
-  'Anomaly_Proficiency': 0.15,  // 1 Anomaly Proficiency = 0.15 points
-  'Anomaly_Mastery': 0.1,       // 1 Anomaly Mastery = 0.1 points
+  'Anomaly_Proficiency': 0.15,  // 1 Anomaly Proficiency = 0.15 points (always flat, acceptable)
+  'Anomaly_Mastery': 0.05,      // 1 Anomaly Mastery = 0.05 points (only W-Engines/Disc 6 main stat)
+  'PEN': 0.12,           // 1 flat PEN = 0.12 points (always flat, acceptable)
 
-  // Flat stats (much less valuable)
+  // Flat stats (much less valuable - these are "bad" flats)
   'ATK': 0.05,           // 1 flat ATK = 0.05 points
   'HP': 0.02,            // 1 flat HP = 0.02 points
   'DEF': 0.03,           // 1 flat DEF = 0.03 points
-  'Impact': 0.1,         // 1 Impact = 0.1 points
+  'Impact': 0.05,        // 1 Impact = 0.05 points (only rolls on W-Engines/specific slots)
 };
+
+/**
+ * Stats that count as "bad" flat stats for penalty calculation
+ * These stats reduce disc value when multiple appear together
+ * Excludes Anomaly_Proficiency and PEN because they only roll flat
+ */
+export const BAD_FLAT_STATS = ['HP', 'ATK', 'DEF'];
+
+/**
+ * Penalty applied for each additional "bad" flat stat beyond the first
+ * Example: 1 bad flat = 0 penalty, 2 bad flats = -2 points, 3 bad flats = -4 points
+ */
+export const FLAT_STAT_PENALTY_PER_ADDITIONAL = 2;
 
 /**
  * Role-specific weight multipliers
@@ -99,7 +113,7 @@ export const MAIN_STAT_BONUS: { [slot: string]: { [stat: string]: number } } = {
     'HP%': 2,
     'DEF%': 2,
     'PEN_Ratio': 3,
-    'Element_DMG': 3,  // Element DMG on slot 5 is optimal
+    'Element_DMG': 2,  // Element DMG on slot 5 is decent (middle of the road)
   },
   'Drive6': {
     'ATK%': 2,

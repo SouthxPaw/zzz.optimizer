@@ -11,11 +11,16 @@
   <div class="content-grid">
     <!-- Builds List -->
     <div class="section builds-list">
-      <h2>Characters</h2>
+      <div class="section-header-inline">
+        <h2>Characters</h2>
+        <button class="btn-primary btn-compact" (click)="openAddAgentModal()">
+          + Add Agent
+        </button>
+      </div>
 
       <!-- Empty State -->
       <div *ngIf="builds.length === 0" class="empty-state">
-        <div class="empty-icon">🎭</div>
+        <div class="empty-icon">📋</div>
         <h3>No Builds Yet</h3>
         <p>Click "Add Agent" to create your first build.</p>
         <button class="btn-primary" (click)="openAddAgentModal()">+ Add Agent</button>
@@ -78,11 +83,25 @@
 
         <!-- W-Engine Picker -->
         <div *ngIf="showWEnginePicker" class="wengine-picker">
-          <input
-            type="text"
-            [(ngModel)]="wengineSearchTerm"
-            placeholder="Search W-Engines..."
-            class="search-input">
+          <div class="wengine-picker-controls">
+            <input
+              type="text"
+              [(ngModel)]="wengineSearchTerm"
+              placeholder="Search W-Engines..."
+              class="search-input">
+            <div class="filter-group">
+              <label>Specialty:</label>
+              <select [(ngModel)]="wengineSpecialtyFilter" class="filter-select">
+                <option value="">All Specialties</option>
+                <option value="Attack">Attack</option>
+                <option value="Stun">Stun</option>
+                <option value="Anomaly">Anomaly</option>
+                <option value="Support">Support</option>
+                <option value="Defense">Defense</option>
+                <option value="Rupture">Rupture</option>
+              </select>
+            </div>
+          </div>
 
           <div class="wengine-list">
             <div class="wengine-list-item" (click)="onWEngineSelect('')">
@@ -208,7 +227,13 @@
             <div *ngIf="selectedBuild.equippedDiscs[slot]; else emptySlot" class="disc-card">
               <div class="disc-header">
                 <span class="disc-slot-number">{{slot}}</span>
-                <!-- Placeholder for future disc score/ranking -->
+                <div *ngIf="getDiscScore(selectedBuild.equippedDiscs[slot]!) as discScore"
+                     class="disc-rating-badge"
+                     [ngClass]="getDiscRatingClass(discScore.rating)"
+                     [title]="discScore.rating.description">
+                  <span class="rating-grade">{{discScore.rating.grade}}</span>
+                  <span class="rating-score">{{discScore.score}}</span>
+                </div>
               </div>
               <div class="disc-set">{{selectedBuild.equippedDiscs[slot]!.set}}</div>
               <div class="disc-main-stat">
@@ -286,8 +311,15 @@
     <div class="section summary-panel" *ngIf="selectedBuild">
       <h2>Build Summary</h2>
       <div class="summary-content">
-        <div class="summary-item">
-          <strong>Build Score:</strong> {{selectedBuild.score}}/100
+        <div class="summary-item build-rating-display" *ngIf="getBuildScore() as buildScore">
+          <strong>Build Rating:</strong>
+          <div class="build-rating-badge"
+               [ngClass]="getBuildRatingClass(buildScore.rating)"
+               [title]="buildScore.rating.description">
+            <span class="rating-grade-large">{{buildScore.rating.grade}}</span>
+            <span class="rating-score-large">{{buildScore.score.toFixed(1)}}%</span>
+          </div>
+          <p class="rating-description">{{buildScore.rating.description}}</p>
         </div>
         <div class="summary-item">
           <strong>Level:</strong> {{selectedBuild.level}}
@@ -319,10 +351,37 @@
     <div class="modal-body">
       <p>Select an agent to create a new build:</p>
 
+      <!-- Agent Filters -->
+      <div class="agent-picker-controls">
+        <div class="filter-group">
+          <label>Element:</label>
+          <select [(ngModel)]="agentElementFilter" class="filter-select">
+            <option value="">All Elements</option>
+            <option value="Fire">Fire</option>
+            <option value="Ice">Ice</option>
+            <option value="Electric">Electric</option>
+            <option value="Physical">Physical</option>
+            <option value="Ether">Ether</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Specialty:</label>
+          <select [(ngModel)]="agentSpecialtyFilter" class="filter-select">
+            <option value="">All Specialties</option>
+            <option value="Attack">Attack</option>
+            <option value="Stun">Stun</option>
+            <option value="Anomaly">Anomaly</option>
+            <option value="Support">Support</option>
+            <option value="Defense">Defense</option>
+            <option value="Rupture">Rupture</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Agent Selection Grid -->
       <div class="agent-select-grid">
         <div
-          *ngFor="let agent of referenceAgents"
+          *ngFor="let agent of getFilteredAgents()"
           class="agent-select-card"
           [class.selected]="selectedAgentForAdd?.id === agent.id"
           [class.s-rank]="agent.rarity === 'S'"
@@ -477,7 +536,7 @@
               <option value="CRIT_Rate">CRIT Rate</option>
               <option value="CRIT_DMG">CRIT DMG</option>
               <option value="Anomaly_Proficiency">Anomaly Proficiency</option>
-              <option value="Pen_Ratio">PEN Ratio</option>
+              <option value="PEN">PEN (Flat)</option>
               <option value="Impact">Impact</option>
               <option value="Energy_Regen">Energy Regen</option>
             </select>

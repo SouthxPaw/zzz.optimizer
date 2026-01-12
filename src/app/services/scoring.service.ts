@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { Disc } from '../models/agent.model';
+import { Disc } from '../models/disc.model';
 import { BaseStats } from '../models/agent.model';
 import {
   SUBSTAT_WEIGHTS,
@@ -9,6 +9,8 @@ import {
   MAIN_STAT_BONUS,
   DISC_RATING_THRESHOLDS,
   BUILD_RATING_THRESHOLDS,
+  BAD_FLAT_STATS,
+  FLAT_STAT_PENALTY_PER_ADDITIONAL,
   DiscRating,
   BuildRating
 } from '../constants/disc-scoring';
@@ -29,6 +31,7 @@ interface AgentBreakpoints {
     critRate: AgentBreakpoint;
     critDmg: AgentBreakpoint;
     anomalyProficiency: AgentBreakpoint;
+    pen: AgentBreakpoint;
     penRatio: AgentBreakpoint;
     energyRegen: AgentBreakpoint;
   };
@@ -64,28 +67,198 @@ export class ScoringService {
   }
 
   /**
+   * Detect build type from equipped discs for hybrid agents
+   * Returns 'crit' or 'anomaly' based on equipped disc investment
+   */
+  private detectBuildType(equippedDiscs: Disc[]): 'crit' | 'anomaly' | null {
+    if (!equippedDiscs || equippedDiscs.length === 0) {
+      return null;
+    }
+
+    let critScore = 0;
+    let anomalyScore = 0;
+
+    equippedDiscs.forEach(disc => {
+      // Check main stats (heavily weighted)
+      if (disc.mainStat.type === 'CRIT_Rate' || disc.mainStat.type === 'CRIT_DMG') {
+        critScore += 5;
+      } else if (disc.mainStat.type === 'Anomaly_Proficiency' || disc.mainStat.type === 'Anomaly_Mastery') {
+        anomalyScore += 5;
+      }
+
+      // Check substats
+      disc.subStats.forEach(sub => {
+        if (sub.type === 'CRIT_Rate' || sub.type === 'CRIT_DMG') {
+          critScore += sub.value * 0.1; // Normalize the contribution
+        } else if (sub.type === 'Anomaly_Proficiency' || sub.type === 'Anomaly_Mastery') {
+          anomalyScore += sub.value * 0.1;
+        }
+      });
+    });
+
+    // If neither has significant investment, return null (use default weights)
+    if (critScore < 1 && anomalyScore < 1) {
+      return null;
+    }
+
+    return critScore > anomalyScore ? 'crit' : 'anomaly';
+  }
+
+  /**
+   * Get hybrid build weights for agents that can build either Crit or Anomaly
+   * Based on detected build from equipped discs
+   */
+  private getHybridBuildWeights(agentId: string, buildType: 'crit' | 'anomaly'): { [statType: string]: number } | null {
+    const hybridAgents: { [key: string]: { crit: { [key: string]: number }, anomaly: { [key: string]: number } } } = {
+      '1071': { // Caesar
+        crit: {
+          'CRIT_Rate': 2,
+          'CRIT_DMG': 2,
+          'ATK%': 1.5,
+          'ATK': 0.5,
+          'HP%': 0.5,
+          'HP': 0.2,
+          'DEF%': 0.5,
+          'DEF': 0.2,
+          'PEN_Ratio': 0.5,
+          'Energy_Regen': 0,
+          'Anomaly_Proficiency': 0,
+          'Anomaly_Mastery': 0,
+          'Impact': 1.5,
+          'PEN': 0
+        },
+        anomaly: {
+          'CRIT_Rate': 0,
+          'CRIT_DMG': 0,
+          'ATK%': 1.5,
+          'ATK': 0.5,
+          'HP%': 0.5,
+          'HP': 0.2,
+          'DEF%': 0.5,
+          'DEF': 0.2,
+          'PEN_Ratio': 1,
+          'Energy_Regen': 0,
+          'Anomaly_Proficiency': 2,
+          'Anomaly_Mastery': 1.5,
+          'Impact': 1.5,
+          'PEN': 0.5
+        }
+      },
+      '1031': { // Nicole
+        crit: {
+          'CRIT_Rate': 1.5,
+          'CRIT_DMG': 1.5,
+          'ATK%': 1,
+          'ATK': 0.5,
+          'HP%': 0,
+          'HP': 0,
+          'DEF%': 1,
+          'DEF': 0.5,
+          'PEN_Ratio': 0.5,
+          'Energy_Regen': 0.5,
+          'Anomaly_Proficiency': 0,
+          'Anomaly_Mastery': 0,
+          'Impact': 0,
+          'PEN': 0
+        },
+        anomaly: {
+          'CRIT_Rate': 0,
+          'CRIT_DMG': 0,
+          'ATK%': 1,
+          'ATK': 0.5,
+          'HP%': 0,
+          'HP': 0,
+          'DEF%': 1,
+          'DEF': 0.5,
+          'PEN_Ratio': 1,
+          'Energy_Regen': 0.5,
+          'Anomaly_Proficiency': 2,
+          'Anomaly_Mastery': 1.5,
+          'Impact': 0,
+          'PEN': 0.5
+        }
+      },
+      '1311': { // Astra Yao
+        crit: {
+          'CRIT_Rate': 1.5,
+          'CRIT_DMG': 1.5,
+          'ATK%': 1,
+          'ATK': 0.5,
+          'HP%': 1,
+          'HP': 0.5,
+          'DEF%': 0,
+          'DEF': 0,
+          'PEN_Ratio': 0.5,
+          'Energy_Regen': 1,
+          'Anomaly_Proficiency': 0,
+          'Anomaly_Mastery': 0,
+          'Impact': 0,
+          'PEN': 0
+        },
+        anomaly: {
+          'CRIT_Rate': 0,
+          'CRIT_DMG': 0,
+          'ATK%': 1,
+          'ATK': 0.5,
+          'HP%': 1,
+          'HP': 0.5,
+          'DEF%': 0,
+          'DEF': 0,
+          'PEN_Ratio': 1,
+          'Energy_Regen': 1,
+          'Anomaly_Proficiency': 2,
+          'Anomaly_Mastery': 1.5,
+          'Impact': 0,
+          'PEN': 0.5
+        }
+      }
+    };
+
+    return hybridAgents[agentId]?.[buildType] || null;
+  }
+
+  /**
    * Calculate disc score based on substats and main stat
    * Uses agent-specific weights from breakpoints config
+   * For hybrid agents, detects build type from equippedDiscs
    */
-  calculateDiscScore(disc: Disc, agentId?: string): { score: number, rating: DiscRating, breakdown: any } {
+  calculateDiscScore(disc: Disc, agentId?: string, equippedDiscs?: Disc[]): { score: number, rating: DiscRating, breakdown: any } {
     let totalPoints = 0;
     const breakdown = {
       mainStatPoints: 0,
       subStatPoints: 0,
+      detectedBuild: null as string | null,
       details: [] as Array<{ stat: string, value: number, points: number }>
     };
 
     // Get agent-specific weights if available, otherwise use base weights
     let weights: { [key: string]: number } = SUBSTAT_WEIGHTS;
     if (agentId && this.agentBreakpoints[agentId]?.discWeights) {
-      // Use agent-specific disc weights
-      const agentWeights = this.agentBreakpoints[agentId].discWeights;
-      weights = { ...SUBSTAT_WEIGHTS };
+      // Check if this is a hybrid agent and we have equipped discs to analyze
+      const detectedBuild = equippedDiscs ? this.detectBuildType(equippedDiscs) : null;
 
-      // Override with agent-specific weights
-      Object.keys(agentWeights).forEach(statType => {
-        weights[statType] = agentWeights[statType];
-      });
+      if (detectedBuild) {
+        const hybridWeights = this.getHybridBuildWeights(agentId, detectedBuild);
+        if (hybridWeights) {
+          // Use detected build-specific weights
+          weights = hybridWeights;
+          breakdown.detectedBuild = detectedBuild;
+        } else {
+          // Not a hybrid agent, use standard agent weights
+          const agentWeights = this.agentBreakpoints[agentId].discWeights;
+          weights = { ...SUBSTAT_WEIGHTS };
+          Object.keys(agentWeights).forEach(statType => {
+            weights[statType] = agentWeights[statType];
+          });
+        }
+      } else {
+        // No build detected or no equipped discs, use standard agent weights
+        const agentWeights = this.agentBreakpoints[agentId].discWeights;
+        weights = { ...SUBSTAT_WEIGHTS };
+        Object.keys(agentWeights).forEach(statType => {
+          weights[statType] = agentWeights[statType];
+        });
+      }
     }
 
     // Award points for optimal main stat
@@ -107,6 +280,18 @@ export class ScoringService {
 
       totalPoints += points;
     });
+
+    // Apply penalty for multiple "bad" flat stats (HP, ATK, DEF)
+    const badFlatCount = disc.subStats.filter(sub => BAD_FLAT_STATS.includes(sub.type)).length;
+    if (badFlatCount > 1) {
+      const penalty = (badFlatCount - 1) * FLAT_STAT_PENALTY_PER_ADDITIONAL;
+      totalPoints -= penalty;
+      breakdown.details.push({
+        stat: 'Bad Flat Penalty',
+        value: badFlatCount,
+        points: -penalty
+      });
+    }
 
     // Determine rating based on total points
     const rating = this.getDiscRating(totalPoints);
@@ -172,6 +357,7 @@ export class ScoringService {
       'critRate': stats.critRate,
       'critDmg': stats.critDmg,
       'anomalyProficiency': stats.anomalyProficiency,
+      'pen': stats.pen,
       'penRatio': stats.penRatio,
       'energyRegen': stats.energyRegen
     };
