@@ -4,6 +4,9 @@
   "Desc2": "ATK +10%",
   "Desc4": "Whenever any squad member enters the field using a Quick Assist, all squad members gain 1 stack of Astral up to a maximum of 3 stacks, and lasting 15s. Repeated triggers reset the duration. Each stack of Astral increases the DMG dealt by the character entering the field using a Quick Assist by 8%. Passive effects of the same name do not stack.",
   "Story": "Drive Discs made by a Hollow Raider and Astra Yao fan that record a signature motif in Astra's works. Meanwhile, on the back, the Hollow Raider's own story is printed there.",
+  "4pcEffect": {
+    "Properties": []
+  },
   "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitAstralVoice.png",
   "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitAstralVoice.png"
 }

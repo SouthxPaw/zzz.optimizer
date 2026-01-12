@@ -3,6 +3,16 @@
   "Name": "Yunkui Tales",
   "Desc2": "HP +10%",
   "Desc4": "When using EX Special Attack, Chain Attack, or Ultimate, CRIT Rate increases by 4%, stacking up to 3 times and lasting 15s. Repeated triggers reset the duration. When having 3 stacks of this effect, Sheer DMG increases by 10%.",
+    "4pcEffect": {
+    "Properties": [
+      {
+        "Name": "CRIT_RATE",
+        "Name2": "CRIT_RATE",
+        "Format": "{0:0#%}%",
+        "Value": 1200
+      }
+    ]
+  },
   "Story": "Records of songs and rhymes passed down through generations at Yunkui Summit - tales of clouds, stories of mountains, and chronicles of those who dwelled among the peaks and drifted through the mists.",
   "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitYunkuiTales.png",
   "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitYunkuiTales.png"

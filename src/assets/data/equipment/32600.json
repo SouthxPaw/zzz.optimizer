@@ -3,6 +3,9 @@
   "Name": "Fanged Metal",
   "Desc2": "Physical DMG +10%",
   "Desc4": "Whenever a squad member inflicts Assault on an enemy, the equipper deals 35% additional DMG to the target for 12s.",
+  "4pcEffect": {
+    "Properties": []
+  },
   "Story": "A Drive Disc burned with specialized Ether technology offering personalized attribute amplification to the user.",
   "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitFangedMetal.png",
   "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitFangedMetal.png"

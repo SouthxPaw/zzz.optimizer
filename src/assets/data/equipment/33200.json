@@ -3,6 +3,34 @@
   "Name": "King of the Summit",
   "Desc2": "Increases Daze of attacks by 6%",
   "Desc4": "When the equipper is a Stun character and uses an EX Special Attack or Chain Attack, increases CRIT DMG of all squad members by 15%, and when the equipper's CRIT Rate is more than or equal to 50%, further increases CRIT DMG by 15%, lasting 15s. Repeated triggers reset the duration. Passive effects of the same name do not stack.",
+  "4pcEffect": [
+    {
+      "Properties": [
+        {
+          "Name": "CRIT_DMG",
+          "Name2": "CRIT_DMG",
+          "Format": "{0:0.#}%",
+          "Value": 1500
+        }
+      ]
+    },
+    {
+      "Condition": {
+        "Type": "StatThreshold",
+        "Stat": "CRIT_RATE",
+        "Operator": ">=",
+        "Value": 50
+      },
+      "Properties": [
+        {
+          "Name": "CRIT_DMG",
+          "Name2": "CRIT_DMG",
+          "Format": "{0:0.#}%",
+          "Value": 1500
+        }
+      ]
+    }
+  ],
   "Story": "This collaboration theme between sports brand True Martial and Yunkui Summit was reportedly composed by a renowned direct disciple of Yunkui Summit, depicting the legend of an awe-inspiring King of the Summit.",
   "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitKingoftheSummit.png",
   "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitKingoftheSummit.png"
