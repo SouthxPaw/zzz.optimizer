@@ -6,8 +6,10 @@ export type MainStatType =
   | 'CRIT_Rate' | 'CRIT_DMG' | 'Anomaly_Proficiency' | 'Anomaly_Mastery'
   | 'Pen_Ratio' | 'Element_DMG' | 'Impact' | 'Energy_Regen';
 
-export type SubStatType = Exclude<MainStatType,
-  'Element_DMG'>;
+export type SubStatType =
+  | 'HP' | 'HP%' | 'ATK' | 'ATK%' | 'DEF' | 'DEF%'
+  | 'CRIT_Rate' | 'CRIT_DMG' | 'Anomaly_Proficiency' | 'Anomaly_Mastery'
+  | 'PEN' | 'Impact' | 'Energy_Regen';
 
 export interface SubStat {
   type: SubStatType;

@@ -136,7 +136,7 @@ export class DiscService {
       CRIT_DMG: 6.4,
       Anomaly_Proficiency: 9,
       Anomaly_Mastery: 9,
-      Pen_Ratio: 4.8,
+      PEN: 4.8,
       Impact: 4.8,
       Energy_Regen: 4.8,
     };
