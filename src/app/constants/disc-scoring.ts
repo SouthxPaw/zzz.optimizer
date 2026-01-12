@@ -45,6 +45,26 @@ export const BAD_FLAT_STATS = ['HP', 'ATK', 'DEF'];
 export const FLAT_STAT_PENALTY_PER_ADDITIONAL = 2;
 
 /**
+ * Weight multipliers for external stat sources in build rating
+ * These sources contribute to calculated stats but with reduced impact
+ */
+export const EXTERNAL_STAT_WEIGHTS = {
+  WENGINE: 0.25,      // W-Engine stats contribute at 25% weight
+  MINDSCAPE: 0.25,    // Mindscape stats contribute at 25% weight
+};
+
+/**
+ * Component weights for composite build scoring
+ * Must add up to 1.0 (100%)
+ */
+export const BUILD_SCORE_WEIGHTS = {
+  BREAKPOINT: 0.40,      // 40% - Meeting stat breakpoints
+  DISC_QUALITY: 0.30,    // 30% - Average disc rating quality
+  STAT_EFFICIENCY: 0.20, // 20% - Stat allocation efficiency
+  SET_BONUS: 0.10,       // 10% - Set effect alignment
+};
+
+/**
  * Role-specific weight multipliers
  * Adjusts substat values based on what the agent role values most
  */

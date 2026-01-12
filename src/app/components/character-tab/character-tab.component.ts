@@ -41,6 +41,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   // Disc creation state
   showDiscForm = false;
   selectedDiscSetForCreation: DiscSet | null = null;
+  editingDiscUid: string | null = null;  // Track which disc is being edited
+  isEditMode: boolean = false;  // Track if we're editing vs creating
   discFormData = {
     mainStatType: '',  // Only used for slots 4-6
     mainStatValue: 0,  // Only used for slots 4-6
@@ -423,6 +425,41 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.showDiscPicker = true;
   }
 
+  openDiscEdit(slot: DiscSlot, event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
+    if (!this.selectedBuild) return;
+
+    // Get the currently equipped disc for this slot
+    const equippedDisc = this.selectedBuild.equippedDiscs[slot];
+    if (!equippedDisc) return;
+
+    // Find the disc set
+    const discSet = this.referenceDiscSets.find(ds => ds.name === equippedDisc.set);
+    if (!discSet) return;
+
+    // Set edit mode state
+    this.isEditMode = true;
+    this.editingDiscUid = equippedDisc.uid;
+    this.selectedDiscSlot = slot;
+    this.selectedDiscSetForCreation = discSet;
+
+    // Pre-populate form data with existing disc stats
+    this.discFormData = {
+      mainStatType: equippedDisc.mainStat.type,
+      mainStatValue: equippedDisc.mainStat.value,
+      subStats: equippedDisc.subStats.map(s => ({
+        type: s.type,
+        value: s.value
+      }))
+    };
+
+    // Open the form directly (skip picker)
+    this.showDiscForm = true;
+    this.showDiscPicker = false;
+  }
+
   closeDiscPicker() {
     this.showDiscPicker = false;
     this.selectedDiscSlot = null;
@@ -442,6 +479,19 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   getSetBonuses(): string[] {
     if (!this.selectedBuild) return [];
     return this.statCalculator.getSetBonuses(this.selectedBuild.equippedDiscs);
+  }
+
+  get4pcEffectBonuses(): Array<{
+    setName: string;
+    description: string;
+    unconditionalStats: Array<{ name: string; value: number; isPercent: boolean }>;
+    conditionalStats?: Array<{
+      condition: string;
+      stats: Array<{ name: string; value: number; isPercent: boolean }>;
+    }>;
+  }> {
+    if (!this.selectedBuild) return [];
+    return this.statCalculator.get4pcEffectBonuses(this.selectedBuild.equippedDiscs);
   }
 
   // Disc picker methods
@@ -506,7 +556,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.showDiscPicker = false;
     this.showDiscForm = true;
 
-    // Reset form with defaults
+    // Reset form with defaults (creating new disc)
+    this.isEditMode = false;
+    this.editingDiscUid = null;
     this.discFormData = {
       mainStatType: '',
       mainStatValue: 0,
@@ -517,6 +569,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   closeDiscForm() {
     this.showDiscForm = false;
     this.selectedDiscSetForCreation = null;
+    this.isEditMode = false;
+    this.editingDiscUid = null;
     this.discFormData = {
       mainStatType: '',
       mainStatValue: 0,
@@ -551,32 +605,53 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       mainStatValue = this.discFormData.mainStatValue;
     }
 
-    const newDisc: Disc = {
-      uid: `${Date.now()}-${Math.random()}`,
-      slot: this.selectedDiscSlot,
-      set: this.selectedDiscSetForCreation.name,
-      rarity: 'S',
-      level: 15,
-      mainStat: {
-        type: mainStatType,
-        value: mainStatValue
-      },
-      subStats: this.discFormData.subStats.map(s => ({
-        type: s.type as any,
-        value: s.value
-      })),
-      lock: false
-    };
-
     try {
-      // Add disc to inventory
-      await this.discService.addDisc(newDisc);
-      // Equip it to the build
-      await this.buildService.equipDisc(this.selectedBuild.id, newDisc);
+      if (this.isEditMode && this.editingDiscUid) {
+        // UPDATE MODE: Modify existing disc
+        const updates: Partial<Disc> = {
+          set: this.selectedDiscSetForCreation.name,
+          mainStat: {
+            type: mainStatType,
+            value: mainStatValue
+          },
+          subStats: this.discFormData.subStats.map(s => ({
+            type: s.type as any,
+            value: s.value
+          }))
+        };
+
+        // Update in inventory
+        await this.discService.updateDisc(this.editingDiscUid, updates);
+        // The build will automatically update since it references the same disc
+      } else {
+        // CREATE MODE: Create new disc
+        const newDisc: Disc = {
+          uid: `${Date.now()}-${Math.random()}`,
+          slot: this.selectedDiscSlot,
+          set: this.selectedDiscSetForCreation.name,
+          rarity: 'S',
+          level: 15,
+          mainStat: {
+            type: mainStatType,
+            value: mainStatValue
+          },
+          subStats: this.discFormData.subStats.map(s => ({
+            type: s.type as any,
+            value: s.value
+          })),
+          lock: false
+        };
+
+        // Add disc to inventory
+        await this.discService.addDisc(newDisc);
+        // Equip it to the build
+        await this.buildService.equipDisc(this.selectedBuild.id, newDisc);
+      }
+
       this.closeDiscForm();
     } catch (error) {
-      console.error('Error creating and equipping disc:', error);
-      alert('Error creating disc');
+      console.error('Error creating/updating disc:', error);
+      alert(this.isEditMode ? 'Error updating disc' : 'Error creating disc');
     }
   }
 

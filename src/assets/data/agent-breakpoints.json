@@ -58,7 +58,7 @@
         "PEN_Ratio",
         "Impact"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1,
         "CRIT_DMG": 1,
         "ATK%": 0.5,
@@ -131,7 +131,7 @@
         "PEN_Ratio",
         "ATK"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -203,7 +203,7 @@
         "Anomaly_Proficiency",
         "Energy_Regen"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
         "ATK%": 2,
@@ -276,7 +276,7 @@
         "ATK",
         "PEN_Ratio"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -350,7 +350,7 @@
         "HP",
         "HP%"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1.5,
         "CRIT_DMG": 1.5,
         "ATK%": 0.5,
@@ -423,7 +423,7 @@
         "ATK",
         "PEN_Ratio"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -498,7 +498,7 @@
         "PEN_Ratio",
         "Impact"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1.5,
         "CRIT_DMG": 1.5,
         "ATK%": 1.5,
@@ -571,7 +571,7 @@
         "PEN_Ratio",
         "ATK"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 2,
@@ -646,7 +646,7 @@
         "ATK",
         "PEN_Ratio"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -719,7 +719,7 @@
         "ATK",
         "PEN_Ratio"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -793,7 +793,7 @@
         "PEN_Ratio",
         "Energy_Regen"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1,
         "CRIT_DMG": 1,
         "ATK%": 0.5,
@@ -863,7 +863,7 @@
         "ATK%",
         "ATK"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1,
         "CRIT_DMG": 1,
         "ATK%": 2,
@@ -937,7 +937,7 @@
         "PEN_Ratio",
         "ATK"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -1009,7 +1009,7 @@
         "ATK%",
         "ATK"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 2,
@@ -1083,7 +1083,7 @@
         "PEN",
         "Energy_Regen"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
         "ATK%": 1.5,
@@ -1156,7 +1156,7 @@
         "ATK%",
         "ATK"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -1230,7 +1230,7 @@
         "ATK",
         "PEN_Ratio"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1.5,
         "CRIT_DMG": 1.5,
         "ATK%": 1.5,
@@ -1302,7 +1302,7 @@
         "ATK%",
         "ATK"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
         "ATK%": 1.5,
@@ -1375,7 +1375,7 @@
         "Anomaly_Proficiency",
         "PEN_Ratio"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
         "ATK%": 1.5,
@@ -1448,7 +1448,7 @@
         "ATK",
         "PEN_Ratio"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -1521,7 +1521,7 @@
         "ATK%",
         "ATK"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
         "ATK%": 1,
@@ -1594,7 +1594,7 @@
         "ATK",
         "Impact"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 1.5,
         "ATK%": 1.5,
@@ -1667,7 +1667,7 @@
         "HP%",
         "ATK%"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 0.5,
@@ -1741,7 +1741,7 @@
         "PEN_Ratio",
         "Impact"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1.5,
         "CRIT_DMG": 0.5,
         "ATK%": 1.5,
@@ -1813,7 +1813,7 @@
         "PEN_Ratio",
         "ATK%"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
         "ATK%": 1.5,
@@ -1880,7 +1880,7 @@
         }
       },
       "priorityStats": ["Anomaly_Mastery", "Anomaly_Proficiency", "PEN", "PEN_Ratio", "ATK", "ATK%"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
         "ATK%": 2,
@@ -1952,7 +1952,7 @@
         "ATK%",
         "ATK"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1,
         "CRIT_DMG": 1,
         "ATK%": 2,
@@ -2025,7 +2025,7 @@
         "ATK",
         "PEN_Ratio"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -2092,7 +2092,7 @@
         }
       },
       "priorityStats": ["HP","HP%","CRIT_DMG","CRIT_Rate"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1.5,
         "CRIT_DMG": 1.5,
         "ATK%": 0.5,
@@ -2165,7 +2165,7 @@
         "ATK",
         "PEN_Ratio"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -2237,7 +2237,7 @@
         "HP",
         "HP%"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 0.5,
@@ -2304,7 +2304,7 @@
         }
       },
       "priorityStats": ["CRIT_DMG", "CRIT_Rate", "ATK%", "PEN", "ATK"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 0.5,
         "ATK%": 0.5,
@@ -2376,7 +2376,7 @@
         "PEN",
         "Impact"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 1,
         "ATK%": 1,
@@ -2443,7 +2443,7 @@
         }
       },
       "priorityStats": ["CRIT_DMG","CRIT_Rate","ATK%","ATK","PEN"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1,
         "CRIT_DMG": 1,
         "ATK%": 2,
@@ -2509,7 +2509,7 @@
         }
       },
       "priorityStats": ["Anomaly_Mastery","Anomaly_Proficiency","ATK%","ATK","PEN","PEN_Ratio"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
         "ATK%": 1.5,
@@ -2582,7 +2582,7 @@
         "PEN_Ratio",
         "PEN"
       ],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
         "ATK%": 1.5,
@@ -2648,7 +2648,7 @@
         }
       },
       "priorityStats": ["CRIT_DMG","CRIT_Rate","ATK%","ATK","PEN","PEN_Ratio"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -2715,7 +2715,7 @@
         }
       },
       "priorityStats": ["Anomaly_Mastery","Anomaly_Proficiency","ATK","ATK%","PEN_Ratio","PEN"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
         "ATK%": 1.5,
@@ -2782,7 +2782,7 @@
         }
       },
       "priorityStats": ["ATK%", "ATK", "Anomaly_Proficiency", "PEN","Anomaly_Mastery","Energy_Regen"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
         "ATK%": 2,
@@ -2849,7 +2849,7 @@
         }
       },
       "priorityStats": ["CRIT_DMG", "CRIT_Rate", "ATK%", "PEN_Ratio", "PEN", "ATK"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -2916,7 +2916,7 @@
         }
       },
       "priorityStats": ["CRIT_DMG", "CRIT_Rate", "ATK%", "ATK","Energy_Regen","PEN","PEN_Ratio"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -2983,7 +2983,7 @@
         }
       },
       "priorityStats": ["ATK","ATK%","Energy_Regen","Anomaly_Proficiency","CRIT_DMG","CRIT_Rate"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 0.5,
         "CRIT_DMG": 0.5,
         "ATK%": 2,
@@ -3050,7 +3050,7 @@
         }
       },
       "priorityStats": ["CRIT_DMG","CRIT_Rate","ATK","ATK%","HP","HP%","Energy_Regen"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1.0,
         "CRIT_DMG": 1.0,
         "ATK%": 0,
@@ -3117,7 +3117,7 @@
         }
       },
       "priorityStats": ["CRIT_DMG", "Impact", "CRIT_Rate","Anomaly_Mastery","Anomaly_Proficiency","PEN","ATK","ATK%"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1.5,
         "CRIT_DMG": 1.5,
         "ATK%": 1,
@@ -3184,7 +3184,7 @@
         }
       },
       "priorityStats": ["CRIT_DMG","CRIT_Rate","ATK","ATK%","PEN"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
         "ATK%": 1.5,
@@ -3251,7 +3251,7 @@
         }
       },
       "priorityStats": ["CRIT_DMG","CRIT_Rate","HP","HP%","ATK","ATK%"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 1.5,
         "CRIT_DMG": 1.5,
         "ATK%": 0.5,
@@ -3318,7 +3318,7 @@
         }
       },
       "priorityStats": ["CRIT_Rate","CRIT_DMG","ATK%","ATK","PEN","PEN_Ratio"],
-      "discWeights": {
+      "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 1.5,
         "ATK%": 1.5,
