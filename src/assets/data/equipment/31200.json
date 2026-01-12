@@ -3,6 +3,9 @@
   "Name": "Shockstar Disco",
   "Desc2": "Impact +6%",
   "Desc4": "Basic Attacks, Dash Attacks, and Dodge Counters inflict 20% more Daze to the main target.",
+  "4pcEffect": {
+    "Properties": []
+  },
   "Story": "A Drive Disc designed with algorithmic optimization for W-Engine compatibility, improving auxiliary performance.",
   "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitShockstarDisco.png",
   "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitShockstarDisco.png"

@@ -3,6 +3,16 @@
   "Name": "Thunder Metal",
   "Desc2": "Electric DMG +10%",
   "Desc4": "As long as an enemy in combat is Shocked, the equipper's ATK is increased by 28%.",
+  "4pcEffect": {
+    "Properties": [
+      {
+        "Name": "ATK%",
+        "Name2": "ATK",
+        "Format": "{0:0.#}%",
+        "Value": 2800
+      }
+    ]
+  },
   "Story": "A Drive Disc burned with specialized Ether technology offering personalized attribute amplification to the user.",
   "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitThunderMetal.png",
   "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitThunderMetal.png"
