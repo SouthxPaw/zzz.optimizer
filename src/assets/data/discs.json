@@ -4,7 +4,7 @@
     "EN": {
       "name": "Woodpecker Electro",
       "desc2": "CRIT Rate +8%",
-      "desc4": "Landing a critical hit on an enemy with a <color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Dodge Counter</color>, or <color=#FFFFFF>EX Special Attack</color> increases the equipper's ATK by 9% for 6s. The buff duration for different skills are calculated separately."
+      "desc4": "Landing a critical hit on an enemy with a Basic Attack, Dodge Counter, or EX Special Attack increases the equipper's ATK by 9% for 6s. The buff duration for different skills are calculated separately."
     },
     "KO": {
       "name": "딱따구리 일렉트로",
