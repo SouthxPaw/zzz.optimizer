@@ -2091,10 +2091,10 @@
           "optimal": 0
         }
       },
-      "priorityStats": [],
+      "priorityStats": ["HP","HP%","CRIT_DMG","CRIT_Rate"],
       "discWeights": {
-        "CRIT_Rate": 1,
-        "CRIT_DMG": 1,
+        "CRIT_Rate": 1.5,
+        "CRIT_DMG": 1.5,
         "ATK%": 0.5,
         "ATK": 0.5,
         "HP%": 2,
@@ -2464,24 +2464,24 @@
       "name": "Burnice",
       "breakpoints": {
         "hp": {
-          "min": 0,
-          "optimal": 0
+          "min": 9500,
+          "optimal": 10000
         },
         "atk": {
-          "min": 0,
-          "optimal": 0
+          "min": 2500,
+          "optimal": 3200
         },
         "def": {
-          "min": 0,
-          "optimal": 0
+          "min": 800,
+          "optimal": 800
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 0,
-          "optimal": 0
+          "min": 153,
+          "optimal": 153
         },
         "critRate": {
           "min": 0,
@@ -2492,8 +2492,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 0,
-          "optimal": 0
+          "min": 350,
+          "optimal": 400
         },
         "pen": {
           "min": 0,
@@ -2508,19 +2508,21 @@
           "optimal": 0
         }
       },
-      "priorityStats": [],
+      "priorityStats": ["Anomaly_Mastery","Anomaly_Proficiency","ATK%","ATK","PEN","PEN_Ratio"],
       "discWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 1,
+        "CRIT_Rate": 0,
+        "CRIT_DMG": 0,
         "ATK%": 1.5,
-        "HP%": 0.8,
-        "DEF%": 0.8,
-        "PEN_Ratio": 2,
-        "Energy_Regen": 1.2,
-        "Anomaly_Proficiency": 0.15,
-        "Anomaly_Mastery": 0.1,
-        "Impact": 0.1,
-        "PEN": 0
+        "HP%": 0,
+        "HP": 0,
+        "DEF%": 0,
+        "DEF":0,
+        "PEN_Ratio": 0.5,
+        "Energy_Regen": 0,
+        "Anomaly_Proficiency": 2,
+        "Anomaly_Mastery": 2,
+        "Impact": 0,
+        "PEN": 0.5
       }
     },
     "1181": {
@@ -2528,24 +2530,24 @@
       "name": "Grace",
       "breakpoints": {
         "hp": {
-          "min": 0,
-          "optimal": 0
+          "min": 9500,
+          "optimal": 9500
         },
         "atk": {
-          "min": 0,
-          "optimal": 0
+          "min": 2300,
+          "optimal": 3000
         },
         "def": {
-          "min": 0,
-          "optimal": 0
+          "min": 800,
+          "optimal": 800
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 0,
-          "optimal": 0
+          "min": 150,
+          "optimal": 190
         },
         "critRate": {
           "min": 0,
@@ -2556,8 +2558,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 0,
-          "optimal": 0
+          "min": 350,
+          "optimal": 450
         },
         "pen": {
           "min": 0,
@@ -2577,23 +2579,23 @@
         "Anomaly_Proficiency",
         "ATK%",
         "ATK",
-        "PEN_Ratio"
+        "PEN_Ratio",
+        "PEN"
       ],
       "discWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
-        "ATK%": 2,
-        "ATK": 1,
+        "ATK%": 1.5,
         "HP%": 0,
         "HP": 0,
         "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
+        "DEF":0,
+        "PEN_Ratio": 0.5,
         "Energy_Regen": 0,
         "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 1.5,
+        "Anomaly_Mastery": 2,
         "Impact": 0,
-        "PEN": 0
+        "PEN": 0.5
       }
     },
     "1191": {
