@@ -79,6 +79,20 @@ export class DataTransformerService {
     // Map element icon
     const elementIcon = `/assets/data/images/elements/Icon${mappedElement}.webp`;
 
+    // Check for special element icons for specific agents
+    let specialElementIcon: string | undefined;
+    const agentIdStr = id.toString();
+    if (agentIdStr === '1091') {
+      // Miyabi - Frost (Ice variant)
+      specialElementIcon = 'Frost';
+    } else if (agentIdStr === '1371') {
+      // Yi Xuan - AuricInk (Ether variant)
+      specialElementIcon = 'AuricInk';
+    } else if (agentIdStr === '1431') {
+      // Ye Shunguang - HonedEdge (Physical variant)
+      specialElementIcon = 'HonedEdge';
+    }
+
     // Map specialty icon
     const specialtyIcon = `/assets/data/images/roles/Icon${mappedSpecialty === 'Attack' ? 'AttackType' : mappedSpecialty}.webp`;
 
@@ -91,6 +105,7 @@ export class DataTransformerService {
       lvl60Stats: lvl60Stats,
       icon: icon,
       elementIcon: elementIcon,
+      specialElementIcon: specialElementIcon,
       specialtyIcon: specialtyIcon
     };
   }
@@ -220,25 +235,6 @@ export class DataTransformerService {
       penRatio: 0,
       energyRegen: 1.2
     };
-  }
-
-  /**
-   * Estimate base stat from growth value
-   */
-  private estimateBaseStat(growthValue: number, type: number, statType: 'hp' | 'atk' | 'def'): number {
-    // The growth values represent stat increases from level 1 to 60
-    // Typical base stats for ZZZ characters:
-    // HP: 5000-6000 base + growth
-    // ATK: 2500-3500 base + growth
-    // DEF: 500-700 base + growth
-
-    if (statType === 'hp') {
-      return 5500; // Average base HP
-    } else if (statType === 'atk') {
-      return 2800; // Average base ATK
-    } else {
-      return 600; // Average base DEF
-    }
   }
 
   /**
@@ -521,6 +517,20 @@ export class DataTransformerService {
     // Map element icon
     const elementIcon = `/assets/data/images/elements/Icon${element}.webp`;
 
+    // Check for special element icons for specific agents
+    let specialElementIcon: string | undefined;
+    const agentIdStr = id.toString();
+    if (agentIdStr === '1091') {
+      // Miyabi - Frost (Ice variant)
+      specialElementIcon = 'Frost';
+    } else if (agentIdStr === '1371') {
+      // Yi Xuan - AuricInk (Ether variant)
+      specialElementIcon = 'AuricInk';
+    } else if (agentIdStr === '1431') {
+      // Ye Shunguang - HonedEdge (Physical variant)
+      specialElementIcon = 'HonedEdge';
+    }
+
     // Map specialty icon
     const specialtyIcon = `/assets/data/images/roles/Icon${specialty === 'Attack' ? 'AttackType' : specialty}.webp`;
 
@@ -536,6 +546,7 @@ export class DataTransformerService {
       lvl60Stats: lvl60Stats,
       icon: icon,
       elementIcon: elementIcon,
+      specialElementIcon: specialElementIcon,
       specialtyIcon: specialtyIcon,
       mindscapeEffects: mindscapeEffects.length > 0 ? mindscapeEffects : undefined
     };
@@ -607,20 +618,6 @@ export class DataTransformerService {
   }
 
   /**
-   * Get agent image path helper
-   */
-  getAgentImagePath(agentId: string): string {
-    return this.mappingService.getAgentImagePath(agentId);
-  }
-
-  /**
-   * Get W-Engine image path helper
-   */
-  getWEngineImagePath(icon: string): string {
-    return this.mappingService.getWEngineImagePath(icon);
-  }
-
-  /**
    * Transform disc sets from equipment JSON files
    */
   transformDiscSets(rawData: any): any[] {
@@ -681,35 +678,6 @@ export class DataTransformerService {
       name: raw.Name,
       bonuses: bonuses,
       icon: icon
-    };
-  }
-
-  /**
-   * Create a sample properly formatted agent for reference
-   */
-  createSampleAgent(): Agent {
-    return {
-      id: 'ellen-joe',
-      name: 'Ellen Joe',
-      rarity: 'S',
-      element: 'Ice',
-      specialty: 'Attack',
-      lvl60Stats: {
-        hp: 8367,
-        hppercent: 0,
-        atk: 3373,
-        atkpercent: 0,
-        def: 686,
-        defpercent: 0,
-        impact: 96,
-        anomalyMastery: 92,
-        critRate: 5,
-        critDmg: 50,
-        anomalyProficiency: 0,
-        pen: 0,
-        penRatio: 0,
-        energyRegen: 0
-      }
     };
   }
 

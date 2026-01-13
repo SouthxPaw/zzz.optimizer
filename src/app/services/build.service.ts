@@ -191,6 +191,9 @@ export class BuildService {
       return;
     }
 
+    // Ensure disc set equipment data is loaded for 4pc effects
+    await this.statCalculator.ensureDataLoaded();
+
     // Calculate final stats using the stat calculator
     build.calculatedStats = this.statCalculator.calculateFinalStats(
       agent,
@@ -306,6 +309,32 @@ export class BuildService {
   async clearAllBuilds(): Promise<void> {
     await this.saveBuilds([]);
     this.selectedBuildSubject.next(null);
+  }
+
+  /**
+   * Get all builds (for export)
+   */
+  async getAllBuilds(): Promise<AgentBuild[]> {
+    return this.buildsSubject.value;
+  }
+
+  /**
+   * Import a single build
+   */
+  async importBuild(build: AgentBuild): Promise<void> {
+    const builds = [...this.buildsSubject.value];
+
+    // Check if build with this ID already exists
+    const existingIndex = builds.findIndex(b => b.id === build.id);
+    if (existingIndex >= 0) {
+      // Replace existing build
+      builds[existingIndex] = build;
+    } else {
+      // Add new build
+      builds.push(build);
+    }
+
+    await this.saveBuilds(builds);
   }
 
   /**

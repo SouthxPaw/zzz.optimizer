@@ -1,11 +1,24 @@
 <div class="character-tab">
   <div class="header">
     <h1>My Builds</h1>
-    <div class="header-actions">
-      <button class="btn-primary" (click)="openAddAgentModal()">
-        + Add Agent
-      </button>
+  </div>
+
+  <!-- Important Assumptions Notice -->
+  <div *ngIf="showAssumptionsNotice" class="assumptions-notice">
+    <div class="notice-icon">ℹ️</div>
+    <div class="notice-content">
+      <h3>Important Assumptions</h3>
+      <ul>
+        <li><strong>All Discs:</strong> Assumed to be S-Rank and +15</li>
+        <li><strong>All Agents:</strong> Assumed to be Level 60 with Core Skill/Passive maxed out</li>
+        <li><strong>W-Engine Effects:</strong> Assumed to meet best-case scenario conditions</li>
+      </ul>
+      <p>
+        This tool provides estimates and is not indicative of your skill or build quality. We don't enforce "optimal" W-Engines or disc sets
+        because we believe in player creativity and experimentation. Skill expression is what makes ZZZ awesome - play your way!
+      </p>
     </div>
+    <button class="notice-close-btn" (click)="dismissAssumptionsNotice()" title="Dismiss notice">×</button>
   </div>
 
   <div class="content-grid">
@@ -20,10 +33,9 @@
 
       <!-- Empty State -->
       <div *ngIf="builds.length === 0" class="empty-state">
-        <div class="empty-icon">📋</div>
+        <img src="assets/data/images/page-icons/avatar_default.webp" alt="No builds" class="empty-icon-img">
         <h3>No Builds Yet</h3>
-        <p>Click "Add Agent" to create your first build.</p>
-        <button class="btn-primary" (click)="openAddAgentModal()">+ Add Agent</button>
+        <p>Click "+ Add Agent" in the top right to create your first build.</p>
       </div>
 
       <!-- Builds Grid -->
@@ -296,41 +308,13 @@
           </div>
         </div>
 
-        <!-- 4pc Disc Set Effect Bonuses -->
-        <div *ngIf="get4pcEffectBonuses().length > 0" class="disc4pc-active-effect">
-          <h4>4pc Set Effect Bonuses:</h4>
-          <div *ngFor="let effect of get4pcEffectBonuses()" class="disc4pc-effect-box">
-            <p class="effect-name">{{effect.setName}} (4pc)</p>
-            <p class="effect-description">{{effect.description}}</p>
-
-            <!-- Unconditional bonuses (always active) -->
-            <div *ngIf="effect.unconditionalStats.length > 0" class="bonus-stat">
-              <span class="bonus-label">Always Active:</span>
-              <span class="bonus-stats">
-                <span *ngFor="let stat of effect.unconditionalStats; let last = last">
-                  {{stat.name}}: +{{stat.value}}{{stat.isPercent ? '%' : ''}}{{!last ? ', ' : ''}}
-                </span>
-              </span>
-            </div>
-
-            <!-- Conditional bonuses -->
-            <div *ngIf="effect.conditionalStats" class="conditional-bonuses">
-              <div *ngFor="let conditional of effect.conditionalStats" class="bonus-stat conditional">
-                <span class="condition-label">When {{conditional.condition}}:</span>
-                <span class="bonus-stats">
-                  <span *ngFor="let stat of conditional.stats; let last = last">
-                    {{stat.name}}: +{{stat.value}}{{stat.isPercent ? '%' : ''}}{{!last ? ', ' : ''}}
-                  </span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Disc Set Bonuses -->
-        <div *ngIf="getSetBonuses().length > 0" class="set-bonuses">
+        <!-- Disc Set Bonuses (includes 2pc and 4pc effects) -->
+        <div *ngIf="getSetBonuses().length > 0 || get4pcEffectBonuses().length > 0" class="set-bonuses">
           <h4>Active Set Bonuses:</h4>
           <div *ngFor="let bonus of getSetBonuses()" class="set-bonus">
+            {{bonus}}
+          </div>
+          <div *ngFor="let bonus of get4pcEffectBonuses()" class="set-bonus">
             {{bonus}}
           </div>
         </div>
@@ -427,8 +411,8 @@
           <div class="agent-info">
             <div class="agent-name-label">{{agent.name}}</div>
             <div class="agent-badges">
-              <img *ngIf="agent.elementIcon"
-                   [src]="agent.elementIcon"
+              <img *ngIf="getAgentElementIcon(agent.id)"
+                   [src]="getAgentElementIcon(agent.id)"
                    [alt]="agent.element"
                    class="element-badge"
                    [title]="agent.element">
@@ -544,18 +528,10 @@
       </div>
 
       <div class="form-section">
-        <div class="section-header">
-          <label>Sub Stats (max 4):</label>
-          <button
-            class="btn-secondary btn-sm"
-            (click)="addSubStat()"
-            [disabled]="discFormData.subStats.length >= 4">
-            + Add Sub Stat
-          </button>
-        </div>
-
+        <label class="section-label">Sub Stats:</label>
         <div class="substats-list">
           <div *ngFor="let subStat of discFormData.subStats; let i = index" class="substat-row">
+            <label class="substat-label">Substat {{i + 1}}:</label>
             <select [(ngModel)]="subStat.type" class="substat-type-select">
               <option value="HP">HP</option>
               <option value="HP%">HP%</option>
@@ -575,7 +551,6 @@
               [(ngModel)]="subStat.value"
               placeholder="Value"
               class="substat-value-input">
-            <button class="btn-danger btn-sm" (click)="removeSubStat(i)">×</button>
           </div>
         </div>
       </div>

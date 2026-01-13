@@ -167,8 +167,22 @@ export class DataMappingService {
 
   /**
    * Get element icon path
+   * Can accept a special element icon name (Frost, AuricInk, HonedEdge) or standard element
    */
-  getElementIconPath(element: Element): string {
+  getElementIconPath(element: Element | string): string {
+    // Special element icons
+    const specialIconMap: { [key: string]: string } = {
+      'Frost': 'IconFrost.webp',
+      'AuricInk': 'IconAuricInk.webp',
+      'HonedEdge': 'IconHonedEdge.webp'
+    };
+
+    // Check if it's a special element
+    if (typeof element === 'string' && specialIconMap[element]) {
+      return `assets/data/images/elements/${specialIconMap[element]}`;
+    }
+
+    // Standard element icons
     const iconMap: { [key in Element]: string } = {
       'Physical': 'IconPhysical.webp',
       'Fire': 'IconFire.webp',
@@ -176,7 +190,7 @@ export class DataMappingService {
       'Electric': 'IconElectric.webp',
       'Ether': 'IconEther.webp'
     };
-    return `assets/data/images/elements/${iconMap[element]}`;
+    return `assets/data/images/elements/${iconMap[element as Element]}`;
   }
 
   /**

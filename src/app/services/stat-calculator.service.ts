@@ -41,9 +41,17 @@ interface DiscSetEquipmentData {
 export class StatCalculatorService {
   private discSetEquipmentData: { [setName: string]: DiscSetEquipmentData } = {};
   private dataLoaded = false;
+  private dataLoadPromise: Promise<void>;
 
   constructor(private http: HttpClient) {
-    this.loadDiscSetEquipmentData();
+    this.dataLoadPromise = this.loadDiscSetEquipmentData();
+  }
+
+  /**
+   * Ensure disc set equipment data is loaded before calculating stats
+   */
+  async ensureDataLoaded(): Promise<void> {
+    await this.dataLoadPromise;
   }
 
   /**
@@ -646,18 +654,16 @@ export class StatCalculatorService {
 
   /**
    * Get active 4pc effect stat bonuses for UI display
-   * Returns formatted stat bonuses similar to mindscape display
-   * Separates unconditional and conditional bonuses
+   * Returns formatted strings similar to 2pc bonuses
+   * Only includes conditional bonuses when conditions are met
    */
-  get4pcEffectBonuses(discs: { [key in DiscSlot]?: Disc }): Array<{
-    setName: string;
-    description: string;
-    unconditionalStats: Array<{ name: string; value: number; isPercent: boolean }>;
-    conditionalStats?: Array<{
-      condition: string;
-      stats: Array<{ name: string; value: number; isPercent: boolean }>;
-    }>;
-  }> {
+  get4pcEffectBonuses(
+    discs: { [key in DiscSlot]?: Disc },
+    agent: Agent,
+    wEngine: WEngine | null,
+    mindscapeLevel: number = 0,
+    wEngineRefinement: number = 1
+  ): string[] {
     const setCounts = new Map<string, number>();
     Object.values(discs).forEach(disc => {
       if (!disc) return;
@@ -665,70 +671,42 @@ export class StatCalculatorService {
       setCounts.set(disc.set, count + 1);
     });
 
-    const active4pcBonuses: Array<{
-      setName: string;
-      description: string;
-      unconditionalStats: Array<{ name: string; value: number; isPercent: boolean }>;
-      conditionalStats?: Array<{
-        condition: string;
-        stats: Array<{ name: string; value: number; isPercent: boolean }>;
-      }>;
-    }> = [];
+    // Calculate current stats to check conditions
+    const currentStats = this.calculateFinalStats(agent, 60, wEngine, discs, mindscapeLevel, wEngineRefinement);
+
+    const active4pcBonuses: string[] = [];
 
     setCounts.forEach((count, setName) => {
       if (count >= 4) {
         const equipmentData = this.discSetEquipmentData[setName];
         if (equipmentData && equipmentData['4pcEffect']) {
           const effect = equipmentData['4pcEffect'];
+          const statParts: string[] = [];
 
           // Handle simple format (unconditional)
           if (!Array.isArray(effect)) {
-            const stats = effect.Properties.map(prop => ({
-              name: prop.Name,
-              value: prop.Format.includes('%') ? prop.Value / 100 : prop.Value,
-              isPercent: prop.Format.includes('%')
-            }));
-
-            active4pcBonuses.push({
-              setName: setName,
-              description: equipmentData.Desc4,
-              unconditionalStats: stats
+            effect.Properties.forEach(prop => {
+              const value = prop.Format.includes('%') ? prop.Value / 100 : prop.Value;
+              const formattedValue = prop.Format.includes('%') ? `${value}%` : value;
+              statParts.push(`${prop.Name2}: +${formattedValue}`);
             });
           }
           // Handle conditional format
           else {
-            const unconditional: Array<{ name: string; value: number; isPercent: boolean }> = [];
-            const conditional: Array<{
-              condition: string;
-              stats: Array<{ name: string; value: number; isPercent: boolean }>;
-            }> = [];
-
             effect.forEach(effectPart => {
-              const stats = effectPart.Properties.map(prop => ({
-                name: prop.Name,
-                value: prop.Format.includes('%') ? prop.Value / 100 : prop.Value,
-                isPercent: prop.Format.includes('%')
-              }));
-
-              if (!effectPart.Condition) {
-                // Unconditional bonus
-                unconditional.push(...stats);
-              } else {
-                // Conditional bonus - format the condition for display
-                const conditionText = this.formatCondition(effectPart.Condition);
-                conditional.push({
-                  condition: conditionText,
-                  stats: stats
+              // Only include stats if there's no condition OR condition is met
+              if (!effectPart.Condition || this.evaluateCondition(effectPart.Condition, currentStats)) {
+                effectPart.Properties.forEach(prop => {
+                  const value = prop.Format.includes('%') ? prop.Value / 100 : prop.Value;
+                  const formattedValue = prop.Format.includes('%') ? `${value}%` : value;
+                  statParts.push(`${prop.Name2}: +${formattedValue}`);
                 });
               }
             });
+          }
 
-            active4pcBonuses.push({
-              setName: setName,
-              description: equipmentData.Desc4,
-              unconditionalStats: unconditional,
-              conditionalStats: conditional.length > 0 ? conditional : undefined
-            });
+          if (statParts.length > 0) {
+            active4pcBonuses.push(`${setName} (4pc): ${statParts.join(', ')}`);
           }
         }
       }
@@ -737,27 +715,4 @@ export class StatCalculatorService {
     return active4pcBonuses;
   }
 
-  /**
-   * Format condition object into readable text
-   */
-  private formatCondition(condition: { Type: string; Stat: string; Operator: string; Value: number }): string {
-    const statName = condition.Stat.replace(/_/g, ' ');
-    const operator = condition.Operator;
-    const value = condition.Value;
-
-    switch (operator) {
-      case '>=':
-        return `${statName} ≥ ${value}`;
-      case '>':
-        return `${statName} > ${value}`;
-      case '<=':
-        return `${statName} ≤ ${value}`;
-      case '<':
-        return `${statName} < ${value}`;
-      case '==':
-        return `${statName} = ${value}`;
-      default:
-        return `${statName} ${operator} ${value}`;
-    }
-  }
 }
