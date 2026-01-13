@@ -58,6 +58,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Disc picker filters
   discSearchTerm = '';
+  discEffectSearchTerm = '';
   discFilterSet = '';
   showOnlyUnequipped = false;
 
@@ -65,10 +66,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   showWEnginePicker = false;
   wengineSearchTerm = '';
   wengineSpecialtyFilter = '';
+  wengineSortBy = 'name';
 
   // Agent picker filters
   agentElementFilter = '';
   agentSpecialtyFilter = '';
+  agentSortBy = 'name';
 
   // Assumptions notice
   showAssumptionsNotice = true;
@@ -293,7 +296,32 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       filtered = filtered.filter(a => a.specialty === this.agentSpecialtyFilter);
     }
 
-    return filtered;
+    // Sort
+    return this.sortAgents(filtered);
+  }
+
+  sortAgents(agents: Agent[]): Agent[] {
+    const sorted = [...agents];
+
+    switch (this.agentSortBy) {
+      case 'name':
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'element':
+        sorted.sort((a, b) => a.element.localeCompare(b.element));
+        break;
+      case 'specialty':
+        sorted.sort((a, b) => a.specialty.localeCompare(b.specialty));
+        break;
+      case 'rarity':
+        sorted.sort((a, b) => {
+          const rarityOrder: { [key: string]: number } = { 'S': 2, 'A': 1 };
+          return (rarityOrder[b.rarity] || 0) - (rarityOrder[a.rarity] || 0);
+        });
+        break;
+    }
+
+    return sorted;
   }
 
   getFilteredWEngines(): WEngine[] {
@@ -313,7 +341,29 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       );
     }
 
-    return filtered;
+    // Sort
+    return this.sortWEngines(filtered);
+  }
+
+  sortWEngines(wengines: WEngine[]): WEngine[] {
+    const sorted = [...wengines];
+
+    switch (this.wengineSortBy) {
+      case 'name':
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'rarity':
+        sorted.sort((a, b) => {
+          const rarityOrder: { [key: string]: number } = { 'S': 2, 'A': 1, 'B': 0 };
+          return (rarityOrder[b.rarity] || 0) - (rarityOrder[a.rarity] || 0);
+        });
+        break;
+      case 'atk':
+        sorted.sort((a, b) => (b.baseAtk || 0) - (a.baseAtk || 0));
+        break;
+    }
+
+    return sorted;
   }
 
   isWEngineSpecialtyMatch(): boolean {
@@ -533,10 +583,21 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       filtered = filtered.filter(s => s.name === this.discFilterSet);
     }
 
-    // Filter by search term
+    // Filter by set name search term
     if (this.discSearchTerm) {
       const searchLower = this.discSearchTerm.toLowerCase();
       filtered = filtered.filter(s => s.name.toLowerCase().includes(searchLower));
+    }
+
+    // Filter by effect search term
+    if (this.discEffectSearchTerm) {
+      const effectSearchLower = this.discEffectSearchTerm.toLowerCase();
+      filtered = filtered.filter(s => {
+        // Search in bonus descriptions (2pc and 4pc effects)
+        return s.bonuses.some(bonus =>
+          bonus.description.toLowerCase().includes(effectSearchLower)
+        );
+      });
     }
 
     return filtered;
@@ -858,5 +919,20 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.imagePreloader.preloadImages(imageUrls).then(() => {
       console.log(`Preloaded ${imageUrls.length} disc set images`);
     });
+  }
+
+  // Text formatting helpers for consistent UI display
+  formatStatType(statType: string): string {
+    if (!statType) return '';
+
+    // Replace underscores with spaces
+    let formatted = statType.replace(/_/g, ' ');
+
+    return formatted;
+  }
+
+  formatDiscSlot(slot: DiscSlot): string {
+    // Convert "Drive1" to "Drive 1", "Drive2" to "Drive 2", etc.
+    return slot.replace(/(\D+)(\d+)/, '$1 $2');
   }
 }

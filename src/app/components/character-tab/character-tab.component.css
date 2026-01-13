@@ -3,7 +3,6 @@
   background: #0a0a0a;
   color: #e0e0e0;
   min-height: 100vh;
-  font-family: Arial, sans-serif;
 }
 
 .header {
@@ -650,8 +649,29 @@
 }
 
 .agent-select-card.selected {
-  border-color: #ffd700;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  border-color: #00d9ff !important;
+  border-width: 3px !important;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.8), 0 0 40px rgba(0, 217, 255, 0.4) !important;
+  transform: scale(1.05) !important;
+  position: relative;
+}
+
+.agent-select-card.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #00d9ff;
+  color: #000;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Rarity-based backgrounds for agent select modal */
@@ -751,6 +771,30 @@
   border-color: #F4B942;
 }
 
+/* Empty disc slot with prominent indicator */
+.disc-slot:not(.equipped) {
+  border: 2px dashed #ff6b6b;
+  background: rgba(255, 107, 107, 0.05);
+  animation: pulse-border 2s ease-in-out infinite;
+}
+
+.disc-slot:not(.equipped):hover {
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+@keyframes pulse-border {
+  0%, 100% {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 rgba(255, 107, 107, 0.4);
+  }
+  50% {
+    border-color: #ff8787;
+    box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
+  }
+}
+
 .empty-disc-slot {
   display: flex;
   flex-direction: column;
@@ -758,20 +802,42 @@
   justify-content: center;
   height: 100%;
   min-height: 180px;
-  color: #666;
+  color: #ff8787;
   padding: 20px;
+  gap: 8px;
+}
+
+.empty-disc-slot::before {
+  content: '⚠';
+  font-size: 2.5em;
+  opacity: 0.8;
+  animation: pulse-icon 2s ease-in-out infinite;
+}
+
+@keyframes pulse-icon {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
 }
 
 .empty-disc-slot .slot-number {
-  font-size: 2em;
+  font-size: 1.5em;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
+  color: #ff6b6b;
 }
 
 .empty-disc-slot .slot-label {
-  font-size: 0.9em;
+  font-size: 0.85em;
   text-transform: uppercase;
   letter-spacing: 1px;
+  color: #ff8787;
+  font-weight: 600;
 }
 
 .disc-card {

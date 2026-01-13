@@ -688,7 +688,8 @@ export class StatCalculatorService {
             effect.Properties.forEach(prop => {
               const value = prop.Format.includes('%') ? prop.Value / 100 : prop.Value;
               const formattedValue = prop.Format.includes('%') ? `${value}%` : value;
-              statParts.push(`${prop.Name2}: +${formattedValue}`);
+              const formattedStatName = prop.Name2.replace(/_/g, ' ');
+              statParts.push(`${formattedStatName}: +${formattedValue}`);
             });
           }
           // Handle conditional format
@@ -699,7 +700,8 @@ export class StatCalculatorService {
                 effectPart.Properties.forEach(prop => {
                   const value = prop.Format.includes('%') ? prop.Value / 100 : prop.Value;
                   const formattedValue = prop.Format.includes('%') ? `${value}%` : value;
-                  statParts.push(`${prop.Name2}: +${formattedValue}`);
+                  const formattedStatName = prop.Name2.replace(/_/g, ' ');
+                  statParts.push(`${formattedStatName}: +${formattedValue}`);
                 });
               }
             });
