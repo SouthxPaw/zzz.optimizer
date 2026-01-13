@@ -1,3 +1,7 @@
 <app-navigation></app-navigation>
 <router-outlet />
 <app-footer></app-footer>
+
+<!-- Global components -->
+<app-loading-overlay [show]="isLoading" [message]="loadingMessage"></app-loading-overlay>
+<app-notification></app-notification>

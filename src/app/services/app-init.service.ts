@@ -1,6 +1,8 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { DataImportService } from './data-import.service';
+import { LoadingService } from './loading.service';
+import { NotificationService } from './notification.service';
 
 /**
  * Service to handle app initialization
@@ -14,6 +16,8 @@ export class AppInitService {
 
   constructor(
     private dataImport: DataImportService,
+    private loadingService: LoadingService,
+    private notificationService: NotificationService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -34,6 +38,7 @@ export class AppInitService {
     }
 
     console.log('Initializing ZZZ Optimizer...');
+    this.loadingService.show('Initializing ZZZ Optimizer...');
 
     try {
       // Check if reference data already exists in IndexedDB
@@ -41,7 +46,9 @@ export class AppInitService {
 
       if (!hasData) {
         console.log('No reference data found. Loading from assets...');
+        this.loadingService.show('Loading game data...');
         await this.loadReferenceData();
+        this.notificationService.success('Game data loaded successfully!');
       } else {
         console.log('Reference data already loaded');
       }
@@ -50,7 +57,10 @@ export class AppInitService {
       console.log('ZZZ Optimizer initialized successfully');
     } catch (error) {
       console.error('Error initializing app:', error);
+      this.notificationService.error('Failed to load game data. Please refresh the page.');
       // Don't throw - app should still work even if reference data fails
+    } finally {
+      this.loadingService.hide();
     }
   }
 

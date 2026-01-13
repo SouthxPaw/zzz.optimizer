@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DiscService } from '../../services/disc.service';
 import { AgentService } from '../../services/agent.service';
 import { Disc, DiscSet } from '../../models/disc.model';
@@ -15,7 +17,7 @@ import { SCORING_PRESETS } from '../../constants/scoring-presets';
   templateUrl: './disc-builder.component.html',
   styleUrls: ['./disc-builder.component.css'],
 })
-export class DiscBuilderComponent implements OnInit {
+export class DiscBuilderComponent implements OnInit, OnDestroy {
   discs: Disc[] = [];
   filteredDiscs: Disc[] = [];
   paginatedDiscs: Disc[] = [];
@@ -27,6 +29,7 @@ export class DiscBuilderComponent implements OnInit {
 
   slotFilter: DiscSlot | null = null;
   setFilter = '';
+  private setFilterSubject = new Subject<string>();
   showLockedOnly = false;
   showUnequippedOnly = false;
 
@@ -48,6 +51,25 @@ export class DiscBuilderComponent implements OnInit {
       this.discs = discs;
       this.applyFilters();
     });
+
+    // Debounce the set filter input
+    this.setFilterSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(() => {
+        this.applyFilters();
+      });
+  }
+
+  ngOnDestroy() {
+    this.setFilterSubject.complete();
+  }
+
+  onSetFilterChange(value: string) {
+    this.setFilter = value;
+    this.setFilterSubject.next(value);
   }
 
   applyFilters() {
