@@ -52,7 +52,8 @@
         <label>Set Filter:</label>
         <input
           type="text"
-          [(ngModel)]="setFilter"
+          [ngModel]="setFilter"
+          (ngModelChange)="onSetFilterChange($event)"
           placeholder="Search by set name..."
           class="text-input"
         />
