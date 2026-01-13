@@ -878,14 +878,21 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Get equipped discs as array
     const equippedDiscsArray = Object.values(this.selectedBuild.equippedDiscs).filter(d => d !== undefined);
 
-    // Use composite scoring which accounts for disc quality, W-Engine, Mindscape, and set bonuses
+    // Get agent info for damage estimation
+    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+
+    // Use composite scoring which accounts for disc quality, W-Engine, Mindscape, set bonuses, and damage estimation
     const result = this.scoringService.calculateCompositeBuildScore(
       this.selectedBuild.agentId,
       this.selectedBuild.calculatedStats,
       equippedDiscsArray,
       this.selectedBuild.equippedWEngine || undefined,
       this.selectedBuild.wEngineRefinement || 1,
-      this.selectedBuild.mindscapeLevel || 0
+      this.selectedBuild.mindscapeLevel || 0,
+      agent?.name,
+      agent?.specialty,
+      agent?.element,
+      60 // Default level 60, can be updated later
     );
 
     return {

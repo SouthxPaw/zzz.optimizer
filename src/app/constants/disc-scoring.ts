@@ -47,6 +47,34 @@ export const BAD_FLAT_STATS = ['HP', 'ATK', 'DEF'];
 export const FLAT_STAT_PENALTY_PER_ADDITIONAL = 2;
 
 /**
+ * Diminishing returns configuration
+ * Applied when a stat exceeds its optimal threshold
+ */
+export const DIMINISHING_RETURNS = {
+  // Power function exponents for different stat types
+  // Lower = more aggressive diminishing returns
+  POWER: {
+    STANDARD: 0.25,  // CRIT Rate, CRIT DMG, ATK%, etc. (mild diminishing)
+    ENERGY: 0.20,    // Energy Regen (moderate diminishing)
+  },
+  // Threshold percentage - stats below this don't get diminishing returns
+  // e.g., 0.80 = only apply diminishing returns if stat is above 80% of optimal
+  THRESHOLD_PERCENT: 0.80,
+};
+
+/**
+ * Breakpoint penalty configuration
+ * Applied when a stat fails to meet its minimum or optimal threshold
+ */
+export const BREAKPOINT_PENALTIES = {
+  // Penalty for missing minimum breakpoint (0-100%)
+  MISSING_MIN: 0.30,  // 30% penalty if below minimum
+  // Penalty for missing optimal breakpoint (0-100%)
+  MISSING_OPTIMAL: 0.15,  // 15% penalty if between min and optimal
+  // No penalty if at or above optimal
+};
+
+/**
  * Weight multipliers for external stat sources in build rating
  * These sources contribute to calculated stats but with reduced impact
  */
@@ -60,10 +88,11 @@ export const EXTERNAL_STAT_WEIGHTS = {
  * Must add up to 1.0 (100%)
  */
 export const BUILD_SCORE_WEIGHTS = {
-  BREAKPOINT: 0.30,      // 30% - Meeting stat breakpoints
-  DISC_QUALITY: 0.50,    // 50% - Average disc rating quality (MOST IMPORTANT)
+  BREAKPOINT: 0.25,      // 25% - Meeting stat breakpoints (reduced from 30%)
+  DISC_QUALITY: 0.40,    // 40% - Average disc rating quality (reduced from 50%)
   STAT_EFFICIENCY: 0.10, // 10% - Stat allocation efficiency
   SET_BONUS: 0.10,       // 10% - Set effect alignment
+  DAMAGE_OUTPUT: 0.15,   // 15% - Estimated damage output (NEW)
 };
 
 /**
@@ -148,6 +177,7 @@ export const MAIN_STAT_BONUS: { [slot: string]: { [stat: string]: number } } = {
 
 /**
  * Disc rating thresholds based on total points
+ * Updated with normalized grading (relative to realistic benchmarks)
  */
 export interface DiscRating {
   grade: 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
@@ -157,18 +187,19 @@ export interface DiscRating {
 }
 
 export const DISC_RATING_THRESHOLDS: DiscRating[] = [
-  { grade: 'SSS', minPoints: 50, color: '#FF6B9D', description: 'Perfect disc - max rolls on premium stats' },
-  { grade: 'SS', minPoints: 40, color: '#FF8C42', description: 'Excellent disc - high rolls on good stats' },
-  { grade: 'S', minPoints: 30, color: '#FFD93D', description: 'Very good disc - solid rolls' },
-  { grade: 'A', minPoints: 22, color: '#6BCF7F', description: 'Good disc - usable rolls' },
-  { grade: 'B', minPoints: 15, color: '#4D96FF', description: 'Decent disc - acceptable rolls' },
-  { grade: 'C', minPoints: 10, color: '#A0A0A0', description: 'Below average disc' },
-  { grade: 'D', minPoints: 5, color: '#808080', description: 'Poor disc' },
-  { grade: 'F', minPoints: 0, color: '#606060', description: 'Trash disc - fodder' },
+  { grade: 'SSS', minPoints: 50, color: '#FF6B9D', description: 'Perfect - 150%+ of benchmark (god roll)' },
+  { grade: 'SS', minPoints: 40, color: '#FF8C42', description: 'Excellent - 130%+ of benchmark' },
+  { grade: 'S', minPoints: 30, color: '#FFD93D', description: 'Very Good - 100%+ of benchmark' },
+  { grade: 'A', minPoints: 22, color: '#6BCF7F', description: 'Good - 80%+ of benchmark' },
+  { grade: 'B', minPoints: 15, color: '#4D96FF', description: 'Decent - 60%+ of benchmark' },
+  { grade: 'C', minPoints: 10, color: '#A0A0A0', description: 'Below Average - 50%+ of benchmark' },
+  { grade: 'D', minPoints: 5, color: '#808080', description: 'Poor - <50% of benchmark' },
+  { grade: 'F', minPoints: 0, color: '#606060', description: 'Unusable - fodder material' },
 ];
 
 /**
  * Build rating thresholds based on stat breakpoints
+ * Updated with normalized grading and breakpoint penalties applied
  */
 export interface BuildRating {
   grade: 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
@@ -178,12 +209,12 @@ export interface BuildRating {
 }
 
 export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
-  { grade: 'SSS', breakpointsMetPercentage: 90, color: '#FF6B9D', description: 'Perfect build - exceeds all breakpoints' },
-  { grade: 'SS', breakpointsMetPercentage: 80, color: '#FF8C42', description: 'Excellent build - meets most breakpoints' },
-  { grade: 'S', breakpointsMetPercentage: 70, color: '#FFD93D', description: 'Very good build - meets key breakpoints' },
-  { grade: 'A', breakpointsMetPercentage: 60, color: '#6BCF7F', description: 'Good build - solid performance' },
-  { grade: 'B', breakpointsMetPercentage: 45, color: '#4D96FF', description: 'Decent build - room for improvement' },
-  { grade: 'C', breakpointsMetPercentage: 30, color: '#A0A0A0', description: 'Below average build' },
-  { grade: 'D', breakpointsMetPercentage: 15, color: '#808080', description: 'Poor build - needs work' },
-  { grade: 'F', breakpointsMetPercentage: 0, color: '#606060', description: 'Unoptimized build' },
+  { grade: 'SSS', breakpointsMetPercentage: 90, color: '#FF6B9D', description: 'Perfect - Exceeds all breakpoints (whale tier)' },
+  { grade: 'SS', breakpointsMetPercentage: 80, color: '#FF8C42', description: 'Excellent - Meets all priority breakpoints' },
+  { grade: 'S', breakpointsMetPercentage: 70, color: '#FFD93D', description: 'Very Good - Benchmark build (100%)' },
+  { grade: 'A', breakpointsMetPercentage: 60, color: '#6BCF7F', description: 'Good - Most breakpoints met' },
+  { grade: 'B', breakpointsMetPercentage: 45, color: '#4D96FF', description: 'Decent - Room for improvement' },
+  { grade: 'C', breakpointsMetPercentage: 30, color: '#A0A0A0', description: 'Below Average - Missing key stats' },
+  { grade: 'D', breakpointsMetPercentage: 15, color: '#808080', description: 'Poor - Major gaps in stats' },
+  { grade: 'F', breakpointsMetPercentage: 0, color: '#606060', description: 'Unoptimized - Needs complete rework' },
 ];
