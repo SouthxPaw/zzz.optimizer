@@ -72,7 +72,7 @@
 
       <!-- Mindscape Cinema -->
       <div class="mindscape-section">
-        <h3>Mindscape Cinema</h3>
+        <h3 data-tooltip="Agent duplication level (constellations/eidolons)">Mindscape Cinema</h3>
         <div class="mindscape-toggles">
           <button
             *ngFor="let m of [1,2,3,4,5,6]"
@@ -334,7 +334,7 @@
       <h2>Build Summary</h2>
       <div class="summary-content">
         <div class="summary-item build-rating-display" *ngIf="getBuildScore() as buildScore">
-          <strong>Build Rating:</strong>
+          <strong data-tooltip="Overall rating of your build based on disc quality and optimization for this agent">Build Rating:</strong>
           <div class="build-rating-badge"
                [ngClass]="getBuildRatingClass(buildScore.rating)"
                [title]="buildScore.rating.description">
@@ -364,11 +364,11 @@
 </div>
 
 <!-- Add Agent Modal -->
-<div class="modal-overlay" *ngIf="showAddAgentModal" (click)="closeAddAgentModal()">
+<div class="modal-overlay" *ngIf="showAddAgentModal" (click)="closeAddAgentModal()" role="dialog" aria-labelledby="add-agent-title" aria-modal="true">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h2>Add Agent</h2>
-      <button class="close-btn" (click)="closeAddAgentModal()">×</button>
+      <h2 id="add-agent-title">Add Agent</h2>
+      <button class="close-btn" (click)="closeAddAgentModal()" aria-label="Close modal">×</button>
     </div>
     <div class="modal-body">
       <p>Select an agent to create a new build:</p>
@@ -410,7 +410,7 @@
       </div>
 
       <!-- Agent Selection Grid -->
-      <div class="agent-select-grid">
+      <div class="agent-select-grid scrollable">
         <div
           *ngFor="let agent of getFilteredAgents()"
           class="agent-select-card"
@@ -457,22 +457,24 @@
 </div>
 
 <!-- Disc Picker Modal -->
-<div class="modal-overlay" *ngIf="showDiscPicker" (click)="closeDiscPicker()">
+<div class="modal-overlay" *ngIf="showDiscPicker" (click)="closeDiscPicker()" role="dialog" aria-labelledby="disc-picker-title" aria-modal="true">
   <div class="modal-content disc-picker-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h2>Select Disc Set for {{formatDiscSlot(selectedDiscSlot!)}}</h2>
-      <button class="close-btn" (click)="closeDiscPicker()">×</button>
+      <h2 id="disc-picker-title">Select Disc Set for {{formatDiscSlot(selectedDiscSlot!)}}</h2>
+      <button class="close-btn" (click)="closeDiscPicker()" aria-label="Close modal">×</button>
     </div>
     <div class="modal-body">
       <div class="disc-picker-controls">
         <input
           type="text"
           [(ngModel)]="discSearchTerm"
+          (ngModelChange)="onDiscSearchChange($event)"
           placeholder="Search set name..."
           class="search-input">
         <input
           type="text"
           [(ngModel)]="discEffectSearchTerm"
+          (ngModelChange)="onDiscEffectSearchChange($event)"
           placeholder="Search effects (e.g., CRIT, ATK)..."
           class="search-input">
       </div>
@@ -582,6 +584,23 @@
         <button *ngIf="isEditMode" class="btn-secondary" (click)="closeDiscForm(); openDiscPicker(selectedDiscSlot!)">Change Set</button>
         <button class="btn-primary" (click)="createAndEquipDisc()">{{ isEditMode ? 'Save Changes' : 'Create & Equip' }}</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Dialog Modal -->
+<div class="modal-overlay" *ngIf="showConfirmDialog" (click)="closeConfirmDialog()" role="alertdialog" aria-labelledby="confirm-dialog-title" aria-describedby="confirm-dialog-message" aria-modal="true">
+  <div class="modal-content confirm-dialog-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 id="confirm-dialog-title">{{confirmDialogData.title}}</h2>
+      <button class="close-btn" (click)="closeConfirmDialog()" aria-label="Close dialog">×</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-dialog-message" class="confirm-message">{{confirmDialogData.message}}</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" (click)="closeConfirmDialog()" aria-label="Cancel action">{{confirmDialogData.cancelText}}</button>
+      <button class="btn-danger" (click)="confirmAction()" aria-label="Confirm action">{{confirmDialogData.confirmText}}</button>
     </div>
   </div>
 </div>

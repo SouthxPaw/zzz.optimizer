@@ -1715,3 +1715,41 @@
 .stat-input::placeholder {
   color: #666;
 }
+
+/* Confirmation Dialog */
+.confirm-dialog-modal {
+  max-width: 450px;
+}
+
+.confirm-dialog-modal .modal-body {
+  padding: 24px;
+}
+
+.confirm-dialog-modal .modal-actions {
+  padding: 20px 24px;
+}
+
+.confirm-message {
+  color: #e0e0e0;
+  font-size: 1em;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.btn-danger {
+  padding: 10px 24px;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}

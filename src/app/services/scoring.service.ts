@@ -126,7 +126,7 @@ export class ScoringService {
       const results = await Promise.all(promises);
       results.forEach((data, index) => {
         if (data) {
-          this.discSetData[setIds[index]] = data;
+          this.discSetData[DISC_SET_EQUIPMENT_IDS[index]] = data;
         }
       });
 

@@ -94,6 +94,20 @@
     <div class="section disc-list-section">
       <div class="section-header">
         <h2>Disc Inventory ({{filteredDiscs.length}})</h2>
+        <div class="bulk-selection-controls" *ngIf="!bulkSelectionMode">
+          <button class="btn-secondary" (click)="toggleBulkSelectionMode()">
+            Select Multiple
+          </button>
+        </div>
+        <div class="bulk-selection-controls" *ngIf="bulkSelectionMode">
+          <span class="selection-count">{{selectedDiscUids.size}} selected</span>
+          <button class="btn-secondary btn-sm" (click)="selectAllVisible()">Select All</button>
+          <button class="btn-secondary btn-sm" (click)="deselectAll()">Deselect All</button>
+          <button class="btn-secondary btn-sm" (click)="bulkLock()" [disabled]="selectedDiscUids.size === 0">Lock</button>
+          <button class="btn-secondary btn-sm" (click)="bulkUnlock()" [disabled]="selectedDiscUids.size === 0">Unlock</button>
+          <button class="btn-danger btn-sm" (click)="bulkDelete()" [disabled]="selectedDiscUids.size === 0">Delete</button>
+          <button class="btn-secondary btn-sm" (click)="toggleBulkSelectionMode()">Cancel</button>
+        </div>
         <div class="sort-controls">
           <label>Sort by:</label>
           <select [(ngModel)]="sortBy" (change)="applySort()" class="select-input">
@@ -107,13 +121,34 @@
         </div>
       </div>
 
-      <div class="disc-grid">
+      <!-- Skeleton Loaders -->
+      <div class="disc-grid" *ngIf="isLoading">
+        <div *ngFor="let i of [1,2,3,4,5,6,7,8]" class="disc-card skeleton-card">
+          <div class="skeleton skeleton-header"></div>
+          <div class="skeleton skeleton-set"></div>
+          <div class="skeleton skeleton-main-stat"></div>
+          <div class="skeleton skeleton-substat"></div>
+          <div class="skeleton skeleton-substat"></div>
+          <div class="skeleton skeleton-substat"></div>
+        </div>
+      </div>
+
+      <!-- Actual Disc Grid -->
+      <div class="disc-grid" *ngIf="!isLoading">
         <div
           *ngFor="let disc of paginatedDiscs"
           class="disc-card"
           [class.locked]="disc.lock"
           [class.equipped]="disc.equippedBy"
-          (click)="selectDisc(disc)">
+          [class.selected]="selectedDiscUids.has(disc.uid)"
+          (click)="bulkSelectionMode ? toggleDiscSelection(disc.uid) : selectDisc(disc)">
+
+          <div class="bulk-selection-checkbox" *ngIf="bulkSelectionMode" (click)="$event.stopPropagation()">
+            <input
+              type="checkbox"
+              [checked]="selectedDiscUids.has(disc.uid)"
+              (change)="toggleDiscSelection(disc.uid)">
+          </div>
 
           <div class="disc-header">
             <div class="disc-slot">{{formatSlot(disc.slot)}}</div>
@@ -133,14 +168,14 @@
               <span class="substat-type">{{formatStatType(sub.type)}}</span>
               <span class="substat-value">
                 {{sub.value}}
-                <span class="roll-count" *ngIf="sub.rolls">({{sub.rolls}})</span>
+                <span class="roll-count" *ngIf="sub.rolls" data-tooltip="Number of times this substat was upgraded">({{sub.rolls}})</span>
               </span>
             </div>
           </div>
 
           <div class="disc-footer">
             <div class="score-display" *ngIf="selectedAgentForScoring">
-              <span class="score-label">Score:</span>
+              <span class="score-label" data-tooltip="Calculated score based on how well this disc's stats match the selected agent's needs">Score:</span>
               <span class="score-value" [class.high-score]="getScore(disc) > 15">
                 {{getScore(disc)}}
               </span>

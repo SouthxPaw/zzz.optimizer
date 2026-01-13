@@ -27,6 +27,10 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
   selectedAgentForScoring: Agent | null = null;
   currentAlgorithm: ScoringAlgorithm = SCORING_PRESETS.Attack;
 
+  // Bulk selection
+  bulkSelectionMode = false;
+  selectedDiscUids = new Set<string>();
+
   slotFilter: DiscSlot | null = null;
   setFilter = '';
   private setFilterSubject = new Subject<string>();
@@ -35,6 +39,7 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
 
   sortBy = 'score';
   showWeights = false;
+  isLoading = true;
 
   currentPage = 1;
   itemsPerPage = 12;
@@ -50,6 +55,7 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
     this.discService.discs$.subscribe((discs) => {
       this.discs = discs;
       this.applyFilters();
+      this.isLoading = false;
     });
 
     // Debounce the set filter input
@@ -228,5 +234,83 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
 
   getSRankCount(): number {
     return this.discs.filter((d) => d.rarity === 'S').length;
+  }
+
+  // Bulk selection methods
+  toggleBulkSelectionMode() {
+    this.bulkSelectionMode = !this.bulkSelectionMode;
+    if (!this.bulkSelectionMode) {
+      this.selectedDiscUids.clear();
+    }
+  }
+
+  toggleDiscSelection(uid: string) {
+    if (this.selectedDiscUids.has(uid)) {
+      this.selectedDiscUids.delete(uid);
+    } else {
+      this.selectedDiscUids.add(uid);
+    }
+  }
+
+  selectAllVisible() {
+    this.paginatedDiscs.forEach(disc => {
+      this.selectedDiscUids.add(disc.uid);
+    });
+  }
+
+  deselectAll() {
+    this.selectedDiscUids.clear();
+  }
+
+  async bulkDelete() {
+    if (this.selectedDiscUids.size === 0) return;
+
+    if (confirm(`Are you sure you want to delete ${this.selectedDiscUids.size} disc(s)?`)) {
+      try {
+        for (const uid of this.selectedDiscUids) {
+          await this.discService.deleteDisc(uid);
+        }
+        this.selectedDiscUids.clear();
+      } catch (error) {
+        console.error('Error deleting discs:', error);
+        alert('Error deleting some discs');
+      }
+    }
+  }
+
+  async bulkLock() {
+    if (this.selectedDiscUids.size === 0) return;
+
+    try {
+      for (const uid of this.selectedDiscUids) {
+        const disc = this.discs.find(d => d.uid === uid);
+        if (disc && !disc.locked) {
+          await this.discService.toggleDiscLock(uid);
+        }
+      }
+      this.selectedDiscUids.clear();
+      this.bulkSelectionMode = false;
+    } catch (error) {
+      console.error('Error locking discs:', error);
+      alert('Error locking some discs');
+    }
+  }
+
+  async bulkUnlock() {
+    if (this.selectedDiscUids.size === 0) return;
+
+    try {
+      for (const uid of this.selectedDiscUids) {
+        const disc = this.discs.find(d => d.uid === uid);
+        if (disc && disc.locked) {
+          await this.discService.toggleDiscLock(uid);
+        }
+      }
+      this.selectedDiscUids.clear();
+      this.bulkSelectionMode = false;
+    } catch (error) {
+      console.error('Error unlocking discs:', error);
+      alert('Error unlocking some discs');
+    }
   }
 }
