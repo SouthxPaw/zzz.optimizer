@@ -16,6 +16,7 @@ import {
   DiscRating,
   BuildRating
 } from '../constants/disc-scoring';
+import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
 
 interface AgentBreakpoint {
   min: number;
@@ -116,14 +117,7 @@ export class ScoringService {
    */
   private async loadDiscSetData() {
     try {
-      // Load all disc set files (31000-33600)
-      const setIds = [
-        '31000', '31100', '31200', '31300', '31400', '31500', '31600', '31800', '31900',
-        '32200', '32300', '32400', '32500', '32600', '32700', '32800', '32900',
-        '33000', '33100', '33200', '33300', '33400', '33500', '33600'
-      ];
-
-      const promises = setIds.map(id =>
+      const promises = DISC_SET_EQUIPMENT_IDS.map(id =>
         firstValueFrom(
           this.http.get<DiscSetData>(`assets/data/equipment/${id}.json`)
         ).catch(() => null) // Ignore errors for missing files

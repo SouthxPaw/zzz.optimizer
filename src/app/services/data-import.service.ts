@@ -9,6 +9,7 @@ import { BuildService } from './build.service';
 import { Agent } from '../models/agent.model';
 import { WEngine } from '../models/wengine.model';
 import { Disc } from '../models/disc.model';
+import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
 
 /**
  * Data Import/Export Service
@@ -270,12 +271,7 @@ export class DataImportService {
 
       const wEngineIds = Object.keys(wEnginesIndex);
 
-      // Disc set IDs from equipment folder (31000-33600)
-      const discSetIds = ['31000', '31100', '31200', '31300', '31400', '31500', '31600', '31800', '31900',
-                          '32200', '32300', '32400', '32500', '32600', '32700', '32800', '32900',
-                          '33000', '33100', '33200', '33300', '33400', '33500', '33600'];
-
-      console.log(`Found ${agentIds.length} agents, ${wEngineIds.length} W-Engines, and ${discSetIds.length} disc sets`);
+      console.log(`Found ${agentIds.length} agents, ${wEngineIds.length} W-Engines, and ${DISC_SET_EQUIPMENT_IDS.length} disc sets`);
 
       // Load all agent detail files
       const agentPromises = agentIds.map(async (id) => {
@@ -299,7 +295,7 @@ export class DataImportService {
       });
 
       // Load all disc set files
-      const discSetPromises = discSetIds.map(async (id) => {
+      const discSetPromises = DISC_SET_EQUIPMENT_IDS.map(async (id) => {
         try {
           const discSetData = await firstValueFrom(
             this.http.get<any>(`assets/data/equipment/${id}.json`)
