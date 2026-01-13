@@ -5,6 +5,7 @@ import { DbService } from './db.service';
 import { AgentService } from './agent.service';
 import { WEngineService } from './wengine.service';
 import { DataTransformerService } from './data-transformer.service';
+import { BuildService } from './build.service';
 import { Agent } from '../models/agent.model';
 import { WEngine } from '../models/wengine.model';
 import { Disc } from '../models/disc.model';
@@ -35,7 +36,8 @@ export class DataImportService {
     private db: DbService,
     private agentService: AgentService,
     private wEngineService: WEngineService,
-    private transformer: DataTransformerService
+    private transformer: DataTransformerService,
+    private buildService: BuildService
   ) {}
 
   /**
@@ -384,7 +386,8 @@ export class DataImportService {
    */
   async clearUserData(): Promise<void> {
     await this.db.clearUserData();
-    console.log('User data cleared from IndexedDB');
+    await this.buildService.clearAllBuilds();
+    console.log('User data (discs and builds) cleared');
   }
 
   /**
@@ -400,7 +403,8 @@ export class DataImportService {
    */
   async clearAllData(): Promise<void> {
     await this.db.clearAllData();
-    console.log('All data cleared from IndexedDB');
+    await this.buildService.clearAllBuilds();
+    console.log('All data cleared from IndexedDB and localStorage');
   }
 
   /**

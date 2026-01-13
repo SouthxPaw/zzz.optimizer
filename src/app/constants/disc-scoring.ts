@@ -6,29 +6,31 @@
  * Higher values = more valuable stats
  */
 export const SUBSTAT_WEIGHTS: { [key: string]: number } = {
-  // Premium stats (most valuable)
-  'CRIT_Rate': 2.0,      // 1% CRIT Rate = 2 points
-  'CRIT_DMG': 1.0,       // 1% CRIT DMG = 1 point
-  'PEN_Ratio': 2.0,      // 1% PEN Ratio = 2 points (very rare and valuable)
+  // Premium stats (most valuable) - base values, multiplied by agent weights
+  // Calibrated for ZZZ where substats can reach ~20% through upgrades
+  'CRIT_Rate': 0.5,      // 1% CRIT Rate = 0.5 points (×2 for crit agents = 1.0)
+  'CRIT_DMG': 0.25,      // 1% CRIT DMG = 0.25 points (×2 for crit agents = 0.5)
+  'PEN_Ratio': 0.5,      // 1% PEN Ratio = 0.5 points (very rare and valuable)
 
   // Primary DPS stats
-  'ATK%': 1.5,           // 1% ATK = 1.5 points
+  'ATK%': 0.35,          // 1% ATK = 0.35 points (×1.5-2 for most DPS = 0.525-0.7)
 
   // Secondary stats
-  'HP%': 0.8,            // 1% HP = 0.8 points
-  'DEF%': 0.8,           // 1% DEF = 0.8 points
-  'Energy_Regen': 0.6,   // 1% Energy Regen = 0.6 points (only rolls on W-Engines/Disc 6 main stat)
+  'HP%': 0.2,            // 1% HP = 0.2 points
+  'DEF%': 0.2,           // 1% DEF = 0.2 points
+  'Energy_Regen': 0.15,  // 1% Energy Regen = 0.15 points
 
-  // Anomaly stats
-  'Anomaly_Proficiency': 0.15,  // 1 Anomaly Proficiency = 0.15 points (always flat, acceptable)
-  'Anomaly_Mastery': 0.05,      // 1 Anomaly Mastery = 0.05 points (only W-Engines/Disc 6 main stat)
-  'PEN': 0.12,           // 1 flat PEN = 0.12 points (always flat, acceptable)
+  // "Good" flat stats (no % alternative exists, so these are legitimate substats)
+  // Weighted to be valuable when agent needs them, scaled for ZZZ's roll ranges
+  'Anomaly_Proficiency': 0.09,  // 1 Anomaly Proficiency = 0.09 points (×2 for anomaly = 0.18)
+  'Anomaly_Mastery': 0.09,      // 1 Anomaly Mastery = 0.09 points (×1.5-2 = 0.135-0.18)
+  'PEN': 0.06,                  // 1 flat PEN = 0.06 points (rolls very high, 112 × 0.06 = ~6.7)
+  'Impact': 0.09,               // 1 Impact = 0.09 points (×1.5-2 = 0.135-0.18)
 
-  // Flat stats (much less valuable - these are "bad" flats)
-  'ATK': 0.05,           // 1 flat ATK = 0.05 points
-  'HP': 0.02,            // 1 flat HP = 0.02 points
-  'DEF': 0.03,           // 1 flat DEF = 0.03 points
-  'Impact': 0.05,        // 1 Impact = 0.05 points (only rolls on W-Engines/specific slots)
+  // "Bad" flat stats (much less valuable because % versions exist and are much better)
+  'ATK': 0.015,          // 1 flat ATK = 0.015 points (bad because ATK% exists)
+  'HP': 0.006,           // 1 flat HP = 0.006 points (bad because HP% exists)
+  'DEF': 0.009,          // 1 flat DEF = 0.009 points (bad because DEF% exists)
 };
 
 /**
@@ -58,9 +60,9 @@ export const EXTERNAL_STAT_WEIGHTS = {
  * Must add up to 1.0 (100%)
  */
 export const BUILD_SCORE_WEIGHTS = {
-  BREAKPOINT: 0.40,      // 40% - Meeting stat breakpoints
-  DISC_QUALITY: 0.30,    // 30% - Average disc rating quality
-  STAT_EFFICIENCY: 0.20, // 20% - Stat allocation efficiency
+  BREAKPOINT: 0.30,      // 30% - Meeting stat breakpoints
+  DISC_QUALITY: 0.50,    // 50% - Average disc rating quality (MOST IMPORTANT)
+  STAT_EFFICIENCY: 0.10, // 10% - Stat allocation efficiency
   SET_BONUS: 0.10,       // 10% - Set effect alignment
 };
 
@@ -155,13 +157,13 @@ export interface DiscRating {
 }
 
 export const DISC_RATING_THRESHOLDS: DiscRating[] = [
-  { grade: 'SSS', minPoints: 25, color: '#FF6B9D', description: 'Perfect disc - max rolls on premium stats' },
-  { grade: 'SS', minPoints: 20, color: '#FF8C42', description: 'Excellent disc - high rolls on good stats' },
-  { grade: 'S', minPoints: 15, color: '#FFD93D', description: 'Very good disc - solid rolls' },
-  { grade: 'A', minPoints: 12, color: '#6BCF7F', description: 'Good disc - usable rolls' },
-  { grade: 'B', minPoints: 9, color: '#4D96FF', description: 'Decent disc - acceptable rolls' },
-  { grade: 'C', minPoints: 6, color: '#A0A0A0', description: 'Below average disc' },
-  { grade: 'D', minPoints: 3, color: '#808080', description: 'Poor disc' },
+  { grade: 'SSS', minPoints: 50, color: '#FF6B9D', description: 'Perfect disc - max rolls on premium stats' },
+  { grade: 'SS', minPoints: 40, color: '#FF8C42', description: 'Excellent disc - high rolls on good stats' },
+  { grade: 'S', minPoints: 30, color: '#FFD93D', description: 'Very good disc - solid rolls' },
+  { grade: 'A', minPoints: 22, color: '#6BCF7F', description: 'Good disc - usable rolls' },
+  { grade: 'B', minPoints: 15, color: '#4D96FF', description: 'Decent disc - acceptable rolls' },
+  { grade: 'C', minPoints: 10, color: '#A0A0A0', description: 'Below average disc' },
+  { grade: 'D', minPoints: 5, color: '#808080', description: 'Poor disc' },
   { grade: 'F', minPoints: 0, color: '#606060', description: 'Trash disc - fodder' },
 ];
 
@@ -176,12 +178,12 @@ export interface BuildRating {
 }
 
 export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
-  { grade: 'SSS', breakpointsMetPercentage: 95, color: '#FF6B9D', description: 'Perfect build - exceeds all breakpoints' },
-  { grade: 'SS', breakpointsMetPercentage: 85, color: '#FF8C42', description: 'Excellent build - meets most breakpoints' },
-  { grade: 'S', breakpointsMetPercentage: 75, color: '#FFD93D', description: 'Very good build - meets key breakpoints' },
-  { grade: 'A', breakpointsMetPercentage: 65, color: '#6BCF7F', description: 'Good build - solid performance' },
-  { grade: 'B', breakpointsMetPercentage: 50, color: '#4D96FF', description: 'Decent build - room for improvement' },
-  { grade: 'C', breakpointsMetPercentage: 35, color: '#A0A0A0', description: 'Below average build' },
-  { grade: 'D', breakpointsMetPercentage: 20, color: '#808080', description: 'Poor build - needs work' },
+  { grade: 'SSS', breakpointsMetPercentage: 90, color: '#FF6B9D', description: 'Perfect build - exceeds all breakpoints' },
+  { grade: 'SS', breakpointsMetPercentage: 80, color: '#FF8C42', description: 'Excellent build - meets most breakpoints' },
+  { grade: 'S', breakpointsMetPercentage: 70, color: '#FFD93D', description: 'Very good build - meets key breakpoints' },
+  { grade: 'A', breakpointsMetPercentage: 60, color: '#6BCF7F', description: 'Good build - solid performance' },
+  { grade: 'B', breakpointsMetPercentage: 45, color: '#4D96FF', description: 'Decent build - room for improvement' },
+  { grade: 'C', breakpointsMetPercentage: 30, color: '#A0A0A0', description: 'Below average build' },
+  { grade: 'D', breakpointsMetPercentage: 15, color: '#808080', description: 'Poor build - needs work' },
   { grade: 'F', breakpointsMetPercentage: 0, color: '#606060', description: 'Unoptimized build' },
 ];

@@ -47,12 +47,6 @@
           [disabled]="isLoading">
           Import Builds & Discs
         </button>
-        <button
-          class="btn-secondary"
-          (click)="importDiscsFromAssets()"
-          [disabled]="isLoading">
-          Import Sample Disc Inventory
-        </button>
       </div>
       <input
         #fileInput
@@ -93,12 +87,6 @@
           (click)="exportBuilds()"
           [disabled]="isLoading">
           Export Builds & Discs
-        </button>
-        <button
-          class="btn-secondary"
-          (click)="exportDiscs()"
-          [disabled]="isLoading">
-          Export Disc Inventory Only
         </button>
       </div>
       <p class="note">Export includes all your builds and disc inventory. Reference data (agents, W-Engines) loads automatically.</p>

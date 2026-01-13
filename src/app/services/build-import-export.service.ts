@@ -48,7 +48,8 @@ export class BuildImportExportService {
 
     const link = document.createElement('a');
     link.href = url;
-    link.download = `zzz-optimizer-builds-${new Date().toISOString().split('T')[0]}.json`;
+    const timestamp = new Date().toISOString().replace(/:/g, '-').replace(/\..+/, '');
+    link.download = `zzz-optimizer-builds-${timestamp}.json`;
     link.click();
 
     URL.revokeObjectURL(url);

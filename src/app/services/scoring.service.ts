@@ -321,8 +321,9 @@ export class ScoringService {
       details: [] as Array<{ stat: string, value: number, points: number }>
     };
 
-    // Get agent-specific weights if available, otherwise use base weights
-    let weights: { [key: string]: number } = SUBSTAT_WEIGHTS;
+    // Use agent-specific weights directly from breakpoints
+    let weights: { [key: string]: number } = {};
+
     if (agentId && this.agentBreakpoints[agentId]?.statWeights) {
       // Check if this is a hybrid agent and we have equipped discs to analyze
       const detectedBuild = equippedDiscs ? this.detectBuildType(equippedDiscs) : null;
@@ -330,25 +331,20 @@ export class ScoringService {
       if (detectedBuild) {
         const hybridWeights = this.getHybridBuildWeights(agentId, detectedBuild);
         if (hybridWeights) {
-          // Use detected build-specific weights
+          // Use detected build-specific weights directly
           weights = hybridWeights;
           breakdown.detectedBuild = detectedBuild;
         } else {
-          // Not a hybrid agent, use standard agent weights
-          const agentWeights = this.agentBreakpoints[agentId].statWeights;
-          weights = { ...SUBSTAT_WEIGHTS };
-          Object.keys(agentWeights).forEach(statType => {
-            weights[statType] = agentWeights[statType];
-          });
+          // Not a hybrid agent, use standard agent weights directly
+          weights = this.agentBreakpoints[agentId].statWeights;
         }
       } else {
-        // No build detected or no equipped discs, use standard agent weights
-        const agentWeights = this.agentBreakpoints[agentId].statWeights;
-        weights = { ...SUBSTAT_WEIGHTS };
-        Object.keys(agentWeights).forEach(statType => {
-          weights[statType] = agentWeights[statType];
-        });
+        // Use standard agent weights directly
+        weights = this.agentBreakpoints[agentId].statWeights;
       }
+    } else {
+      // No agent specified - use default weights from SUBSTAT_WEIGHTS as fallback
+      weights = SUBSTAT_WEIGHTS;
     }
 
     // Award points for optimal main stat
@@ -660,6 +656,11 @@ export class ScoringService {
       if (count >= 4) {
         activeSets++;
         const properties = setData['4pcEffect'].Properties;
+
+        // Check if properties exist before iterating
+        if (!properties || properties.length === 0) {
+          return;
+        }
 
         properties.forEach(prop => {
           // Map property names to breakpoint keys

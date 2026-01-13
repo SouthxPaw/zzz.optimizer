@@ -46,8 +46,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   isEditMode: boolean = false;  // Track if we're editing vs creating
   discFormData = {
     mainStatType: '',  // Only used for slots 4-6
-    mainStatValue: 0,  // Only used for slots 4-6
-    subStats: [] as Array<{ type: string; value: number }>
+    mainStatValue: '' as string | number,  // Can be string for input, number for processing
+    subStats: [] as Array<{ type: string; value: string | number }>
   };
 
   // Disc slots
@@ -470,17 +470,17 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Always ensure we have 4 substat slots
     const existingSubStats = equippedDisc.subStats.map(s => ({
       type: s.type,
-      value: s.value
+      value: s.value as string | number  // Keep as number for display
     }));
 
     // Pad with empty substats to always have 4 slots
     while (existingSubStats.length < 4) {
-      existingSubStats.push({ type: 'ATK%', value: 0 });
+      existingSubStats.push({ type: 'ATK%', value: '' });
     }
 
     this.discFormData = {
       mainStatType: equippedDisc.mainStat.type,
-      mainStatValue: equippedDisc.mainStat.value,
+      mainStatValue: equippedDisc.mainStat.value,  // Keep as number for display
       subStats: existingSubStats
     };
 
@@ -591,12 +591,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     if (!this.isEditMode) {
       this.discFormData = {
         mainStatType: '',
-        mainStatValue: 0,
+        mainStatValue: '',
         subStats: [
-          { type: 'ATK%', value: 0 },
-          { type: 'ATK%', value: 0 },
-          { type: 'ATK%', value: 0 },
-          { type: 'ATK%', value: 0 }
+          { type: 'ATK%', value: '' },
+          { type: 'ATK%', value: '' },
+          { type: 'ATK%', value: '' },
+          { type: 'ATK%', value: '' }
         ]
       };
     }
@@ -609,12 +609,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.editingDiscUid = null;
     this.discFormData = {
       mainStatType: '',
-      mainStatValue: 0,
+      mainStatValue: '',
       subStats: [
-        { type: 'ATK%', value: 0 },
-        { type: 'ATK%', value: 0 },
-        { type: 'ATK%', value: 0 },
-        { type: 'ATK%', value: 0 }
+        { type: 'ATK%', value: '' },
+        { type: 'ATK%', value: '' },
+        { type: 'ATK%', value: '' },
+        { type: 'ATK%', value: '' }
       ]
     };
   }
@@ -633,7 +633,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     } else {
       // User input for slots 4-6
       mainStatType = this.discFormData.mainStatType;
-      mainStatValue = this.discFormData.mainStatValue;
+      // Convert string to number if needed
+      mainStatValue = typeof this.discFormData.mainStatValue === 'string'
+        ? parseFloat(this.discFormData.mainStatValue) || 0
+        : this.discFormData.mainStatValue;
     }
 
     try {
@@ -647,7 +650,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           },
           subStats: this.discFormData.subStats.map(s => ({
             type: s.type as any,
-            value: s.value
+            value: typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value
           }))
         };
 
@@ -678,7 +681,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           },
           subStats: this.discFormData.subStats.map(s => ({
             type: s.type as any,
-            value: s.value
+            value: typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value
           })),
           lock: false
         };
@@ -723,6 +726,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   getDiscScore(disc: Disc): { score: number, rating: DiscRating } | null {
     if (!this.selectedBuild) return null;
 
+    // Wait for scoring service to load data before calculating
+    if (!this.scoringService.areBreakpointsLoaded()) {
+      return null;
+    }
+
     // Get equipped discs as array for hybrid agent detection
     const equippedDiscsArray = Object.values(this.selectedBuild.equippedDiscs).filter(d => d !== undefined);
 
@@ -745,9 +753,22 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   getBuildScore(): { score: number, rating: BuildRating } | null {
     if (!this.selectedBuild) return null;
 
-    const result = this.scoringService.calculateBuildScore(
+    // Wait for scoring service to load data before calculating
+    if (!this.scoringService.areBreakpointsLoaded()) {
+      return null;
+    }
+
+    // Get equipped discs as array
+    const equippedDiscsArray = Object.values(this.selectedBuild.equippedDiscs).filter(d => d !== undefined);
+
+    // Use composite scoring which accounts for disc quality, W-Engine, Mindscape, and set bonuses
+    const result = this.scoringService.calculateCompositeBuildScore(
       this.selectedBuild.agentId,
-      this.selectedBuild.calculatedStats
+      this.selectedBuild.calculatedStats,
+      equippedDiscsArray,
+      this.selectedBuild.equippedWEngine || undefined,
+      this.selectedBuild.wEngineRefinement || 1,
+      this.selectedBuild.mindscapeLevel || 0
     );
 
     return {
@@ -758,6 +779,42 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   getBuildRatingClass(rating: BuildRating): string {
     return `rating-${rating.grade.toLowerCase()}`;
+  }
+
+  // Input validation and formatting methods
+  validateAndFormatMainStat(): void {
+    const value = this.discFormData.mainStatValue;
+    if (typeof value === 'string') {
+      // Remove any non-numeric characters except decimal point and negative sign
+      const cleaned = value.replace(/[^\d.-]/g, '');
+      const parsed = parseFloat(cleaned);
+
+      if (isNaN(parsed)) {
+        this.discFormData.mainStatValue = 0;
+      } else {
+        // Round to 1 decimal place
+        this.discFormData.mainStatValue = Math.round(parsed * 10) / 10;
+      }
+    }
+  }
+
+  validateAndFormatSubStat(index: number): void {
+    const subStat = this.discFormData.subStats[index];
+    if (!subStat) return;
+
+    const value = subStat.value;
+    if (typeof value === 'string') {
+      // Remove any non-numeric characters except decimal point and negative sign
+      const cleaned = value.replace(/[^\d.-]/g, '');
+      const parsed = parseFloat(cleaned);
+
+      if (isNaN(parsed)) {
+        subStat.value = 0;
+      } else {
+        // Round to 1 decimal place
+        subStat.value = Math.round(parsed * 10) / 10;
+      }
+    }
   }
 
   // Image preloading methods
