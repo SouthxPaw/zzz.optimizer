@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:ghpages": "ng build --configuration=github-pages",
-    "deploy:ghpages": "npm run build:ghpages && npx angular-cli-ghpages --dir=dist/zzz.optimizer",
+    "deploy:ghpages": "npm run build:ghpages && npx angular-cli-ghpages --dir=dist/zzz.optimizer/browser",
     "watch": "ng build --watch --configuration=development",
     "test": "ng test"
   },
