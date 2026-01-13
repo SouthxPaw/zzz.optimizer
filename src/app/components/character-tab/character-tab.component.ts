@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { Agent, DiscSlot } from '../../models/agent.model';
 import { WEngine } from '../../models/wengine.model';
 import { Disc } from '../../models/disc.model';
@@ -62,6 +62,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   discFilterSet = '';
   showOnlyUnequipped = false;
 
+  // Search subjects for debouncing
+  private discSearchSubject$ = new Subject<string>();
+  private discEffectSearchSubject$ = new Subject<string>();
+
+  // Actual debounced search values
+  private debouncedDiscSearch = '';
+  private debouncedDiscEffectSearch = '';
+
   // W-Engine picker
   showWEnginePicker = false;
   wengineSearchTerm = '';
@@ -76,7 +84,18 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   // Assumptions notice
   showAssumptionsNotice = true;
 
+  // Confirmation dialog
+  showConfirmDialog = false;
+  confirmDialogData = {
+    title: '',
+    message: '',
+    confirmText: 'Confirm',
+    cancelText: 'Cancel',
+    onConfirm: () => {}
+  };
+
   private destroy$ = new Subject<void>();
+  private previouslyFocusedElement: HTMLElement | null = null;
 
   constructor(
     private buildService: BuildService,
@@ -142,6 +161,28 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .subscribe(discs => {
         this.allDiscs = discs;
       });
+
+    // Set up debounced search for disc set name
+    this.discSearchSubject$
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(searchTerm => {
+        this.debouncedDiscSearch = searchTerm;
+      });
+
+    // Set up debounced search for disc effects
+    this.discEffectSearchSubject$
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(searchTerm => {
+        this.debouncedDiscEffectSearch = searchTerm;
+      });
   }
 
   ngOnDestroy() {
@@ -154,13 +195,22 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   openAddAgentModal() {
+    this.previouslyFocusedElement = document.activeElement as HTMLElement;
     this.showAddAgentModal = true;
     this.selectedAgentForAdd = null;
+    // Focus first interactive element after modal renders
+    setTimeout(() => {
+      const firstFocusable = document.querySelector('.modal-content button, .modal-content input, .modal-content select') as HTMLElement;
+      firstFocusable?.focus();
+    }, 100);
   }
 
   closeAddAgentModal() {
     this.showAddAgentModal = false;
     this.selectedAgentForAdd = null;
+    // Restore focus to previously focused element
+    this.previouslyFocusedElement?.focus();
+    this.previouslyFocusedElement = null;
   }
 
   dismissAssumptionsNotice() {
@@ -197,14 +247,20 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   async deleteBuild(buildId: string, event: Event) {
     event.stopPropagation();
 
-    if (confirm('Are you sure you want to delete this build?')) {
-      try {
-        await this.buildService.deleteBuild(buildId);
-      } catch (error) {
-        console.error('Error deleting build:', error);
-        alert('Error deleting build');
-      }
-    }
+    this.showConfirmation(
+      'Delete Build',
+      'Are you sure you want to delete this build? This action cannot be undone.',
+      async () => {
+        try {
+          await this.buildService.deleteBuild(buildId);
+        } catch (error) {
+          console.error('Error deleting build:', error);
+          alert('Error deleting build');
+        }
+      },
+      'Delete',
+      'Cancel'
+    );
   }
 
   toggleMindscape(level: number) {
@@ -583,15 +639,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       filtered = filtered.filter(s => s.name === this.discFilterSet);
     }
 
-    // Filter by set name search term
-    if (this.discSearchTerm) {
-      const searchLower = this.discSearchTerm.toLowerCase();
+    // Filter by set name search term (debounced)
+    if (this.debouncedDiscSearch) {
+      const searchLower = this.debouncedDiscSearch.toLowerCase();
       filtered = filtered.filter(s => s.name.toLowerCase().includes(searchLower));
     }
 
-    // Filter by effect search term
-    if (this.discEffectSearchTerm) {
-      const effectSearchLower = this.discEffectSearchTerm.toLowerCase();
+    // Filter by effect search term (debounced)
+    if (this.debouncedDiscEffectSearch) {
+      const effectSearchLower = this.debouncedDiscEffectSearch.toLowerCase();
       filtered = filtered.filter(s => {
         // Search in bonus descriptions (2pc and 4pc effects)
         return s.bonuses.some(bonus =>
@@ -934,5 +990,73 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   formatDiscSlot(slot: DiscSlot): string {
     // Convert "Drive1" to "Drive 1", "Drive2" to "Drive 2", etc.
     return slot.replace(/(\D+)(\d+)/, '$1 $2');
+  }
+
+  // Debounced search handlers
+  onDiscSearchChange(searchTerm: string) {
+    this.discSearchSubject$.next(searchTerm);
+  }
+
+  onDiscEffectSearchChange(searchTerm: string) {
+    this.discEffectSearchSubject$.next(searchTerm);
+  }
+
+  // Confirmation dialog methods
+  showConfirmation(title: string, message: string, onConfirm: () => void, confirmText = 'Confirm', cancelText = 'Cancel') {
+    this.confirmDialogData = {
+      title,
+      message,
+      confirmText,
+      cancelText,
+      onConfirm
+    };
+    this.showConfirmDialog = true;
+  }
+
+  confirmAction() {
+    this.confirmDialogData.onConfirm();
+    this.closeConfirmDialog();
+  }
+
+  closeConfirmDialog() {
+    this.showConfirmDialog = false;
+  }
+
+  // Keyboard shortcuts handler
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    // Esc key - close any open modal
+    if (event.key === 'Escape') {
+      if (this.showConfirmDialog) {
+        this.closeConfirmDialog();
+        event.preventDefault();
+      } else if (this.showAddAgentModal) {
+        this.closeAddAgentModal();
+        event.preventDefault();
+      } else if (this.showDiscPicker) {
+        this.closeDiscPicker();
+        event.preventDefault();
+      } else if (this.showDiscForm) {
+        this.closeDiscForm();
+        event.preventDefault();
+      } else if (this.showWEnginePicker) {
+        this.showWEnginePicker = false;
+        event.preventDefault();
+      }
+    }
+
+    // Enter key - confirm action in modals
+    if (event.key === 'Enter' && !event.shiftKey) {
+      if (this.showConfirmDialog) {
+        this.confirmAction();
+        event.preventDefault();
+      } else if (this.showAddAgentModal && this.selectedAgentForAdd) {
+        this.addAgentBuild();
+        event.preventDefault();
+      } else if (this.showDiscForm) {
+        this.createAndEquipDisc();
+        event.preventDefault();
+      }
+    }
   }
 }

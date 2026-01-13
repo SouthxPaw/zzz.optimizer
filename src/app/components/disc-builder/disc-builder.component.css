@@ -296,3 +296,94 @@ input[type="checkbox"] {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* Bulk Selection Styles */
+.bulk-selection-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.selection-count {
+  color: #00d9ff;
+  font-weight: 600;
+  padding: 6px 12px;
+  background: rgba(0, 217, 255, 0.1);
+  border-radius: 4px;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.85em;
+}
+
+.bulk-selection-checkbox {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.bulk-selection-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.disc-card.selected {
+  border-color: #00d9ff !important;
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.5);
+  transform: scale(1.02);
+}
+
+.disc-card {
+  position: relative;
+}
+
+/* Skeleton Loaders */
+.skeleton-card {
+  pointer-events: none;
+  cursor: default;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #2a2a3e 25%, #3a3a4e 50%, #2a2a3e 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+  margin: 6px 0;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-header {
+  height: 20px;
+  width: 100%;
+}
+
+.skeleton-set {
+  height: 18px;
+  width: 80%;
+}
+
+.skeleton-main-stat {
+  height: 24px;
+  width: 60%;
+  margin-top: 12px;
+}
+
+.skeleton-substat {
+  height: 16px;
+  width: 90%;
+}

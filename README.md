@@ -22,7 +22,7 @@ A comprehensive build optimizer and character builder for **Zenless Zone Zero** 
   - Create and manage your disc inventory
   - Filter discs by set, slot, and equipped status
   - Real-time disc scoring based on agent preferences
-  - Quality ratings (SSS, SS, S, A+, A, B, C, D)
+  - Quality ratings (SSS, SS, S, A, B, C, D, F)
 
 - **Build Scoring & Optimization**:
   - Agent-specific scoring algorithms

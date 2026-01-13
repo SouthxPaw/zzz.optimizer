@@ -38,6 +38,8 @@ testem.log
 
 # Miscellaneous files to ignore
 .claude
+*.md
+!README.md
 
 # System files
 .DS_Store
