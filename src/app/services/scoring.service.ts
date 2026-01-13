@@ -101,7 +101,7 @@ export class ScoringService {
   private async loadAgentBreakpoints() {
     try {
       const data = await firstValueFrom(
-        this.http.get<any>('/assets/data/agent-breakpoints.json')
+        this.http.get<any>('assets/data/agent-breakpoints.json')
       );
       this.agentBreakpoints = data.agents || {};
       this.breakpointsLoaded = true;
@@ -125,7 +125,7 @@ export class ScoringService {
 
       const promises = setIds.map(id =>
         firstValueFrom(
-          this.http.get<DiscSetData>(`/assets/data/equipment/${id}.json`)
+          this.http.get<DiscSetData>(`assets/data/equipment/${id}.json`)
         ).catch(() => null) // Ignore errors for missing files
       );
 
@@ -148,7 +148,7 @@ export class ScoringService {
   private async loadMindscapeData() {
     try {
       this.mindscapeData = await firstValueFrom(
-        this.http.get<MindscapeData>('/assets/data/mindscape-stats.json')
+        this.http.get<MindscapeData>('assets/data/mindscape-stats.json')
       );
       console.log('Loaded mindscape data for scoring');
     } catch (error) {

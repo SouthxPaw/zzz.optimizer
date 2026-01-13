@@ -67,17 +67,17 @@ export class DataTransformerService {
       const match = rawAgent.Icon.match(/IconRole(\d+)/);
       if (match) {
         const iconNumber = match[1];
-        icon = `/assets/data/images/agents/IconRole${iconNumber}.webp`;
+        icon = `assets/data/images/agents/IconRole${iconNumber}.webp`;
       }
     }
 
     // If no Icon field, fallback to default (shouldn't happen with proper data)
     if (!icon) {
-      icon = `/assets/data/images/agents/IconRole01.webp`;
+      icon = `assets/data/images/agents/IconRole01.webp`;
     }
 
     // Map element icon
-    const elementIcon = `/assets/data/images/elements/Icon${mappedElement}.webp`;
+    const elementIcon = `assets/data/images/elements/Icon${mappedElement}.webp`;
 
     // Check for special element icons for specific agents
     let specialElementIcon: string | undefined;
@@ -94,7 +94,7 @@ export class DataTransformerService {
     }
 
     // Map specialty icon
-    const specialtyIcon = `/assets/data/images/roles/Icon${mappedSpecialty === 'Attack' ? 'AttackType' : mappedSpecialty}.webp`;
+    const specialtyIcon = `assets/data/images/roles/Icon${mappedSpecialty === 'Attack' ? 'AttackType' : mappedSpecialty}.webp`;
 
     return {
       id: id,
@@ -353,15 +353,15 @@ export class DataTransformerService {
       // Icon field might be just filename or might need .webp extension
       const iconFile = typeof rawWEngine.Icon === 'string' ? rawWEngine.Icon : '';
       icon = iconFile.endsWith('.webp')
-        ? `/assets/data/images/wengines/${iconFile}`
-        : `/assets/data/images/wengines/${iconFile}.webp`;
+        ? `assets/data/images/wengines/${iconFile}`
+        : `assets/data/images/wengines/${iconFile}.webp`;
     } else if (rawWEngine.icon) {
       // Fallback to lowercase icon field
-      icon = `/assets/data/images/wengines/${rawWEngine.icon}.webp`;
+      icon = `assets/data/images/wengines/${rawWEngine.icon}.webp`;
     } else {
       // Fallback to rarity/id format
       const rarityLetter = rarity === 'S' ? 'S' : rarity === 'A' ? 'A' : 'B';
-      icon = `/assets/data/images/wengines/Weapon_${rarityLetter}_${id}.webp`;
+      icon = `assets/data/images/wengines/Weapon_${rarityLetter}_${id}.webp`;
     }
 
     // Get name from Name field or fallback to EN
@@ -448,11 +448,11 @@ export class DataTransformerService {
       // Icon format: "Assets/.../UnPacker/Weapon_B_Common_01.png"
       // Extract filename and convert to webp
       const fileName = raw.Icon.split('/').pop()?.replace('.png', '.webp');
-      icon = fileName ? `/assets/data/images/wengines/${fileName}` : `/assets/data/images/wengines/Weapon_${rarity}_${id}.webp`;
+      icon = fileName ? `assets/data/images/wengines/${fileName}` : `assets/data/images/wengines/Weapon_${rarity}_${id}.webp`;
     } else {
       // Fallback to rarity/id format
       const rarityLetter = rarity === 'S' ? 'S' : rarity === 'A' ? 'A' : 'B';
-      icon = `/assets/data/images/wengines/Weapon_${rarityLetter}_${id}.webp`;
+      icon = `assets/data/images/wengines/Weapon_${rarityLetter}_${id}.webp`;
     }
 
     // Extract refinement properties if available - prefer Effect.Properties over Talents
@@ -510,12 +510,12 @@ export class DataTransformerService {
       const match = detailedData.Icon.match(/IconRole(\d+)/);
       if (match) {
         iconNumber = match[1];
-        icon = `/assets/data/images/agents/IconRole${iconNumber}.webp`;
+        icon = `assets/data/images/agents/IconRole${iconNumber}.webp`;
       }
     }
 
     // Map element icon
-    const elementIcon = `/assets/data/images/elements/Icon${element}.webp`;
+    const elementIcon = `assets/data/images/elements/Icon${element}.webp`;
 
     // Check for special element icons for specific agents
     let specialElementIcon: string | undefined;
@@ -532,7 +532,7 @@ export class DataTransformerService {
     }
 
     // Map specialty icon
-    const specialtyIcon = `/assets/data/images/roles/Icon${specialty === 'Attack' ? 'AttackType' : specialty}.webp`;
+    const specialtyIcon = `assets/data/images/roles/Icon${specialty === 'Attack' ? 'AttackType' : specialty}.webp`;
 
     // Extract mindscape effects from basicAgent (agents.json has mindscape_cinemas)
     const mindscapeEffects = this.extractMindscapeEffects(basicAgent.mindscape_cinemas || []);
@@ -665,12 +665,12 @@ export class DataTransformerService {
 
     // Transform icon path from game format to local assets
     // Example: "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitWoodpeckerElectro.png"
-    // becomes: "/assets/data/images/discs/SuitWoodpeckerElectro.webp"
+    // becomes: "assets/data/images/discs/SuitWoodpeckerElectro.webp"
     let icon: string | undefined;
     const iconPath = raw.Icon || raw.Icon2;
     if (iconPath) {
       const fileName = iconPath.split('/').pop()?.replace('.png', '.webp');
-      icon = `/assets/data/images/discs/${fileName}`;
+      icon = `assets/data/images/discs/${fileName}`;
     }
 
     return {

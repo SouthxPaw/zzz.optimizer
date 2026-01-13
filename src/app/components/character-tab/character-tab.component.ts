@@ -270,14 +270,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   getSpecialtyIcon(specialty: string): string {
     const specialtyMap: { [key: string]: string } = {
-      'Attack': '/assets/data/images/roles/IconAttackType.webp',
-      'Stun': '/assets/data/images/roles/IconStun.webp',
-      'Anomaly': '/assets/data/images/roles/IconAnomaly.webp',
-      'Support': '/assets/data/images/roles/IconSupport.webp',
-      'Defense': '/assets/data/images/roles/IconDefense.webp',
-      'Rupture': '/assets/data/images/roles/IconRupture.webp'
+      'Attack': 'assets/data/images/roles/IconAttackType.webp',
+      'Stun': 'assets/data/images/roles/IconStun.webp',
+      'Anomaly': 'assets/data/images/roles/IconAnomaly.webp',
+      'Support': 'assets/data/images/roles/IconSupport.webp',
+      'Defense': 'assets/data/images/roles/IconDefense.webp',
+      'Rupture': 'assets/data/images/roles/IconRupture.webp'
     };
-    return specialtyMap[specialty] || '/assets/data/images/roles/IconAttackType.webp';
+    return specialtyMap[specialty] || 'assets/data/images/roles/IconAttackType.webp';
   }
 
   getFilteredAgents(): Agent[] {

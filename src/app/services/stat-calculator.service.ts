@@ -67,7 +67,7 @@ export class StatCalculatorService {
 
       const promises = setIds.map(id =>
         firstValueFrom(
-          this.http.get<DiscSetEquipmentData>(`/assets/data/equipment/${id}.json`)
+          this.http.get<DiscSetEquipmentData>(`assets/data/equipment/${id}.json`)
         ).catch(() => null)
       );
 
