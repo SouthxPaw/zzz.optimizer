@@ -37,16 +37,46 @@
     <div class="section">
       <h2>💾 Import User Data</h2>
       <p class="section-description">
-        Import your personal disc inventory. Use this to restore from backup or import sample data.
+        Import your builds and disc inventory from a backup file.
       </p>
 
       <div class="button-grid">
         <button
           class="btn-secondary"
+          (click)="fileInput.click()"
+          [disabled]="isLoading">
+          Import Builds & Discs
+        </button>
+        <button
+          class="btn-secondary"
           (click)="importDiscsFromAssets()"
           [disabled]="isLoading">
-          Import Disc Inventory
+          Import Sample Disc Inventory
         </button>
+      </div>
+      <input
+        #fileInput
+        type="file"
+        accept=".json"
+        (change)="onFileSelected($event)"
+        style="display: none;">
+
+      <div *ngIf="selectedFile" class="file-info">
+        <p><strong>Selected file:</strong> {{selectedFile.name}}</p>
+        <div class="import-options">
+          <label>
+            <input type="checkbox" [(ngModel)]="replaceExisting">
+            Replace existing builds and discs (will clear current data)
+          </label>
+        </div>
+        <div class="button-grid">
+          <button class="btn-primary" (click)="importBuildsFromFile()" [disabled]="isLoading">
+            Confirm Import
+          </button>
+          <button class="btn-secondary" (click)="cancelFileSelection()">
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
 
@@ -54,18 +84,24 @@
     <div class="section">
       <h2>📤 Export User Data</h2>
       <p class="section-description">
-        Backup your personal data (disc inventory, builds) as JSON files.
+        Backup your builds and disc inventory. Save this file to restore your data later.
       </p>
 
       <div class="button-grid">
         <button
           class="btn-primary"
+          (click)="exportBuilds()"
+          [disabled]="isLoading">
+          Export Builds & Discs
+        </button>
+        <button
+          class="btn-secondary"
           (click)="exportDiscs()"
           [disabled]="isLoading">
-          Export Disc Inventory
+          Export Disc Inventory Only
         </button>
       </div>
-      <p class="note">Note: Reference data (agents, W-Engines) doesn't need to be exported as it's loaded from assets.</p>
+      <p class="note">Export includes all your builds and disc inventory. Reference data (agents, W-Engines) loads automatically.</p>
     </div>
 
     <!-- Danger Zone -->

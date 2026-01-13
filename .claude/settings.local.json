@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(ng generate:*)",
+      "Bash(npm run build:ghpages:*)",
+      "Bash(ls:*)"
+    ]
+  }
+}

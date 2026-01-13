@@ -183,4 +183,17 @@ export class DiscService {
   exportDiscs(): string {
     return JSON.stringify(this.discsSubject.value, null, 2);
   }
+
+  async getAllDiscs(): Promise<Disc[]> {
+    return this.discsSubject.value;
+  }
+
+  async clearAllDiscs(): Promise<void> {
+    // Clear from database
+    const allDiscs = this.discsSubject.value;
+    for (const disc of allDiscs) {
+      await this.db.deleteDisc(disc.uid);
+    }
+    this.discsSubject.next([]);
+  }
 }

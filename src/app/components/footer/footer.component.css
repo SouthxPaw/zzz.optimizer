@@ -1,0 +1,87 @@
+.footer {
+  background: #1a1a1a;
+  border-top: 1px solid #333;
+  padding: 20px 0;
+  margin-top: 40px;
+  width: 100%;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-left,
+.footer-center,
+.footer-right {
+  flex: 1;
+}
+
+.footer-left {
+  text-align: left;
+}
+
+.footer-center {
+  text-align: center;
+}
+
+.footer-right {
+  text-align: right;
+}
+
+.version {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #2a2a2a;
+  color: #F4B942;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-weight: 500;
+  border: 1px solid #3a3a3a;
+}
+
+.copyright {
+  color: #888;
+  font-size: 0.85em;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.github-link {
+  color: #F4B942;
+  text-decoration: none;
+  font-size: 0.9em;
+  padding: 6px 16px;
+  border: 1px solid #F4B942;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.github-link:hover {
+  background: #F4B942;
+  color: #0a0a0a;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    text-align: center;
+  }
+
+  .copyright {
+    font-size: 0.8em;
+  }
+}

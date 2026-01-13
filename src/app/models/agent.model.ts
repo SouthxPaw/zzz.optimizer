@@ -29,6 +29,7 @@ export interface Agent {
   lvl60Stats: BaseStats;
   icon?: string;
   elementIcon?: string;
+  specialElementIcon?: string;  // For special element variants (Frost, AuricInk, HonedEdge)
   specialtyIcon?: string;
   mindscapeEffects?: MindscapeEffect[];
   coreSkill?: string;

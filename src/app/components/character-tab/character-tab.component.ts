@@ -13,6 +13,7 @@ import { BuildService, AgentBuild } from '../../services/build.service';
 import { StatCalculatorService } from '../../services/stat-calculator.service';
 import { ScoringService } from '../../services/scoring.service';
 import { ImagePreloaderService } from '../../services/image-preloader.service';
+import { DataMappingService } from '../../services/data-mapping.service';
 import { DiscRating, BuildRating } from '../../constants/disc-scoring';
 
 @Component({
@@ -69,6 +70,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   agentElementFilter = '';
   agentSpecialtyFilter = '';
 
+  // Assumptions notice
+  showAssumptionsNotice = true;
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -79,7 +83,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private discSetService: DiscSetService,
     private statCalculator: StatCalculatorService,
     private scoringService: ScoringService,
-    private imagePreloader: ImagePreloaderService
+    private imagePreloader: ImagePreloaderService,
+    private dataMappingService: DataMappingService
   ) {}
 
   ngOnInit() {
@@ -153,6 +158,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   closeAddAgentModal() {
     this.showAddAgentModal = false;
     this.selectedAgentForAdd = null;
+  }
+
+  dismissAssumptionsNotice() {
+    this.showAssumptionsNotice = false;
   }
 
   selectAgentForAdd(agent: Agent) {
@@ -412,6 +421,18 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return agent?.icon;
   }
 
+  // Helper to get agent element icon (with special element support)
+  getAgentElementIcon(agentId: string): string | undefined {
+    const agent = this.referenceAgents.find(a => a.id === agentId);
+    if (!agent) return undefined;
+
+    // Use special element icon if available, otherwise use standard element icon
+    if (agent.specialElementIcon) {
+      return this.dataMappingService.getElementIconPath(agent.specialElementIcon);
+    }
+    return agent.elementIcon;
+  }
+
   // Helper to get agent rarity
   getAgentRarity(agentId: string): 'A' | 'S' | undefined {
     const agent = this.referenceAgents.find(a => a.id === agentId);
@@ -446,13 +467,21 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.selectedDiscSetForCreation = discSet;
 
     // Pre-populate form data with existing disc stats
+    // Always ensure we have 4 substat slots
+    const existingSubStats = equippedDisc.subStats.map(s => ({
+      type: s.type,
+      value: s.value
+    }));
+
+    // Pad with empty substats to always have 4 slots
+    while (existingSubStats.length < 4) {
+      existingSubStats.push({ type: 'ATK%', value: 0 });
+    }
+
     this.discFormData = {
       mainStatType: equippedDisc.mainStat.type,
       mainStatValue: equippedDisc.mainStat.value,
-      subStats: equippedDisc.subStats.map(s => ({
-        type: s.type,
-        value: s.value
-      }))
+      subStats: existingSubStats
     };
 
     // Open the form directly (skip picker)
@@ -481,17 +510,18 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return this.statCalculator.getSetBonuses(this.selectedBuild.equippedDiscs);
   }
 
-  get4pcEffectBonuses(): Array<{
-    setName: string;
-    description: string;
-    unconditionalStats: Array<{ name: string; value: number; isPercent: boolean }>;
-    conditionalStats?: Array<{
-      condition: string;
-      stats: Array<{ name: string; value: number; isPercent: boolean }>;
-    }>;
-  }> {
+  get4pcEffectBonuses(): string[] {
     if (!this.selectedBuild) return [];
-    return this.statCalculator.get4pcEffectBonuses(this.selectedBuild.equippedDiscs);
+    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    if (!agent) return [];
+
+    return this.statCalculator.get4pcEffectBonuses(
+      this.selectedBuild.equippedDiscs,
+      agent,
+      this.selectedBuild.equippedWEngine || null,
+      this.selectedBuild.mindscapeLevel || 0,
+      this.selectedBuild.wEngineRefinement || 1
+    );
   }
 
   // Disc picker methods
@@ -556,14 +586,20 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.showDiscPicker = false;
     this.showDiscForm = true;
 
-    // Reset form with defaults (creating new disc)
-    this.isEditMode = false;
-    this.editingDiscUid = null;
-    this.discFormData = {
-      mainStatType: '',
-      mainStatValue: 0,
-      subStats: []
-    };
+    // Only reset form if we're not in edit mode
+    // If we're editing and changing set, preserve the form data
+    if (!this.isEditMode) {
+      this.discFormData = {
+        mainStatType: '',
+        mainStatValue: 0,
+        subStats: [
+          { type: 'ATK%', value: 0 },
+          { type: 'ATK%', value: 0 },
+          { type: 'ATK%', value: 0 },
+          { type: 'ATK%', value: 0 }
+        ]
+      };
+    }
   }
 
   closeDiscForm() {
@@ -574,18 +610,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.discFormData = {
       mainStatType: '',
       mainStatValue: 0,
-      subStats: []
+      subStats: [
+        { type: 'ATK%', value: 0 },
+        { type: 'ATK%', value: 0 },
+        { type: 'ATK%', value: 0 },
+        { type: 'ATK%', value: 0 }
+      ]
     };
-  }
-
-  addSubStat() {
-    if (this.discFormData.subStats.length < 4) {
-      this.discFormData.subStats.push({ type: 'ATK%', value: 0 });
-    }
-  }
-
-  removeSubStat(index: number) {
-    this.discFormData.subStats.splice(index, 1);
   }
 
   async createAndEquipDisc() {
@@ -622,7 +653,17 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
         // Update in inventory
         await this.discService.updateDisc(this.editingDiscUid, updates);
-        // The build will automatically update since it references the same disc
+
+        // Get the updated disc from inventory
+        const updatedDisc = this.discService.getDiscById(this.editingDiscUid);
+        if (updatedDisc) {
+          // Update the build's equippedDiscs with the updated disc
+          const currentDiscs = { ...this.selectedBuild.equippedDiscs };
+          currentDiscs[this.selectedDiscSlot] = updatedDisc;
+          await this.buildService.updateBuild(this.selectedBuild.id, {
+            equippedDiscs: currentDiscs
+          });
+        }
       } else {
         // CREATE MODE: Create new disc
         const newDisc: Disc = {
@@ -721,6 +762,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Image preloading methods
   private preloadAgentImages(agents: Agent[]): void {
+    if (!agents || agents.length === 0) {
+      return; // Don't preload if no agents yet
+    }
+
     const imageUrls = agents
       .map(agent => agent.icon)
       .filter(icon => icon) as string[];
@@ -731,6 +776,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   private preloadWEngineImages(wEngines: WEngine[]): void {
+    if (!wEngines || wEngines.length === 0) {
+      return; // Don't preload if no W-Engines yet
+    }
+
     const imageUrls = wEngines
       .map(engine => engine.icon)
       .filter(icon => icon) as string[];
@@ -741,6 +790,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   private preloadDiscSetImages(discSets: DiscSet[]): void {
+    if (!discSets || discSets.length === 0) {
+      return; // Don't preload if no disc sets yet
+    }
+
     const imageUrls = discSets
       .map(discSet => discSet.icon)
       .filter(icon => icon) as string[];

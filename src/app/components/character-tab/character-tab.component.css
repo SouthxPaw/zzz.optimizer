@@ -21,6 +21,81 @@
   margin: 0;
 }
 
+.assumptions-notice {
+  background: rgba(244, 185, 66, 0.1);
+  border: 2px solid #F4B942;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  position: relative;
+}
+
+.notice-icon {
+  font-size: 2em;
+  flex-shrink: 0;
+}
+
+.notice-content h3 {
+  color: #F4B942;
+  margin: 0 0 10px 0;
+  font-size: 1.2em;
+}
+
+.notice-content ul {
+  margin: 0 0 15px 0;
+  padding-left: 20px;
+  color: #ddd;
+  line-height: 1.8;
+}
+
+.notice-content li {
+  margin-bottom: 8px;
+}
+
+.notice-content li:last-child {
+  margin-bottom: 0;
+}
+
+.notice-content strong {
+  color: #F4B942;
+}
+
+.notice-content p {
+  color: #ddd;
+  line-height: 1.6;
+  margin: 15px 0 0 0;
+  padding-top: 15px;
+  border-top: 1px solid rgba(244, 185, 66, 0.3);
+  font-style: italic;
+}
+
+.notice-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: #F4B942;
+  font-size: 1.8em;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.notice-close-btn:hover {
+  background: rgba(244, 185, 66, 0.2);
+  transform: scale(1.1);
+}
+
 .header-actions {
   display: flex;
   gap: 10px;
@@ -436,6 +511,14 @@
   font-size: 4em;
   margin-bottom: 20px;
   opacity: 0.6;
+}
+
+.empty-icon-img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+  opacity: 0.7;
+  object-fit: contain;
 }
 
 .empty-state h3 {
@@ -1450,4 +1533,119 @@
   background: linear-gradient(135deg, #8B0000 0%, #4B0000 100%);
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(139, 0, 0, 0.5);
+}
+
+/* Disc Form Styling */
+.section-label {
+  display: block;
+  color: #F4B942;
+  font-size: 1em;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.substats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.substat-row {
+  display: grid;
+  grid-template-columns: auto 1fr 120px;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  background: rgba(244, 185, 66, 0.05);
+  border: 1px solid rgba(244, 185, 66, 0.2);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.substat-row:hover {
+  background: rgba(244, 185, 66, 0.08);
+  border-color: rgba(244, 185, 66, 0.3);
+}
+
+.substat-label {
+  color: #ddd;
+  font-size: 0.9em;
+  font-weight: 500;
+  min-width: 80px;
+}
+
+.substat-type-select {
+  padding: 8px 12px;
+  background: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 6px;
+  color: #eee;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.substat-type-select:hover {
+  border-color: #F4B942;
+  background: #222;
+}
+
+.substat-type-select:focus {
+  outline: none;
+  border-color: #F4B942;
+  background: #222;
+  box-shadow: 0 0 0 3px rgba(244, 185, 66, 0.1);
+}
+
+.substat-value-input {
+  padding: 8px 12px;
+  background: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 6px;
+  color: #eee;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+}
+
+.substat-value-input:hover {
+  border-color: #F4B942;
+  background: #222;
+}
+
+.substat-value-input:focus {
+  outline: none;
+  border-color: #F4B942;
+  background: #222;
+  box-shadow: 0 0 0 3px rgba(244, 185, 66, 0.1);
+}
+
+.substat-value-input::placeholder {
+  color: #666;
+}
+
+/* Style the main stat inputs similarly */
+.stat-input {
+  padding: 8px 12px;
+  background: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 6px;
+  color: #eee;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+}
+
+.stat-input:hover {
+  border-color: #F4B942;
+  background: #222;
+}
+
+.stat-input:focus {
+  outline: none;
+  border-color: #F4B942;
+  background: #222;
+  box-shadow: 0 0 0 3px rgba(244, 185, 66, 0.1);
+}
+
+.stat-input::placeholder {
+  color: #666;
 }

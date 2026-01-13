@@ -124,4 +124,18 @@ export const DISC_SETS: DiscSet[] = [
       },
     ],
   },
+  {
+    id: 'branch_blade_song',
+    name: 'Branch & Blade Song',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'CRIT DMG +16%',
+      },
+      {
+        pieces: 4,
+        description: 'When Anomaly Mastery exceeds or equals 115 points, the equipper\'s CRIT DMG increases by 30%. When any squad member applies Freeze or triggers the Shatter effect on an enemy, the equipper\'s CRIT Rate increases by 12%, lasting 15s.',
+      },
+    ],
+  },
 ];

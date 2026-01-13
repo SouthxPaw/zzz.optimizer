@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { DataImportService } from '../../services/data-import.service';
 import { AppInitService } from '../../services/app-init.service';
+import { BuildImportExportService } from '../../services/build-import-export.service';
 
 @Component({
   selector: 'app-data-manager',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './data-manager.component.html',
   styleUrls: ['./data-manager.component.css']
 })
@@ -14,10 +16,13 @@ export class DataManagerComponent {
   isLoading = false;
   message = '';
   messageType: 'success' | 'error' | 'info' = 'info';
+  selectedFile: File | null = null;
+  replaceExisting = false;
 
   constructor(
     private dataImportService: DataImportService,
-    private appInitService: AppInitService
+    private appInitService: AppInitService,
+    private buildImportExportService: BuildImportExportService
   ) {}
 
   async reloadReferenceData() {
@@ -203,6 +208,62 @@ export class DataManagerComponent {
       } finally {
         this.isLoading = false;
       }
+    }
+  }
+
+  async exportBuilds() {
+    this.isLoading = true;
+    this.setMessage('Exporting builds and discs...', 'info');
+
+    try {
+      await this.buildImportExportService.downloadBuilds();
+      this.setMessage('Builds and discs exported successfully', 'success');
+    } catch (error) {
+      console.error('Export error:', error);
+      this.setMessage('Error exporting builds', 'error');
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      this.replaceExisting = false;
+    }
+  }
+
+  cancelFileSelection() {
+    this.selectedFile = null;
+    this.replaceExisting = false;
+  }
+
+  async importBuildsFromFile() {
+    if (!this.selectedFile) {
+      this.setMessage('No file selected', 'error');
+      return;
+    }
+
+    this.isLoading = true;
+    this.setMessage('Importing builds and discs...', 'info');
+
+    try {
+      const fileContent = await this.buildImportExportService.readFileAsText(this.selectedFile);
+      const result = await this.buildImportExportService.importBuilds(fileContent, this.replaceExisting);
+
+      if (result.success) {
+        this.setMessage(result.message, 'success');
+        this.selectedFile = null;
+        this.replaceExisting = false;
+      } else {
+        this.setMessage(result.message, 'error');
+      }
+    } catch (error) {
+      console.error('Import error:', error);
+      this.setMessage('Error importing file. Check console for details.', 'error');
+    } finally {
+      this.isLoading = false;
     }
   }
 

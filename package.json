@@ -1,10 +1,12 @@
 {
   "name": "zzz.optimizer",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:ghpages": "ng build --configuration=github-pages",
+    "deploy:ghpages": "ng build --configuration=github-pages && npx angular-cli-ghpages --dir=dist/zzz.optimizer/browser",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:zzz.optimizer": "node dist/zzz.optimizer/server/server.mjs"

@@ -49,6 +49,12 @@
   font-size: 1.2em;
 }
 
+.nav-link .nav-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
 .nav-link:hover {
   background: #2a2a2a;
   color: #FFD666;
@@ -60,6 +66,10 @@
   background: #F4B942;
   color: #0a0a0a;
   border-color: #F4B942;
+}
+
+.nav-link.active .nav-icon {
+  filter: brightness(0) saturate(100%);
 }
 
 .nav-link.active:hover {
