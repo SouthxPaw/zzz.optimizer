@@ -10,7 +10,7 @@ A comprehensive build optimizer and character builder for **Zenless Zone Zero** 
 
 - **Character Build Management**: Create and manage multiple builds for your agents
 - **Real-Time Stat Calculation**: Automatically calculates all stats including:
-  - Base stats (HP, ATK, DEF)
+  - Base stats (ie: HP%, ATK%, DEF%)
   - Critical Rate & Critical Damage
   - Anomaly Proficiency & Mastery
   - Impact, PEN, and Energy Regen
@@ -22,7 +22,7 @@ A comprehensive build optimizer and character builder for **Zenless Zone Zero** 
   - Create and manage your disc inventory
   - Filter discs by set, slot, and equipped status
   - Real-time disc scoring based on agent preferences
-  - Quality ratings (S+, S, A+, A, B, C, D)
+  - Quality ratings (SSS, SS, S, A+, A, B, C, D)
 
 - **Build Scoring & Optimization**:
   - Agent-specific scoring algorithms
@@ -39,53 +39,9 @@ A comprehensive build optimizer and character builder for **Zenless Zone Zero** 
 
 ## Live Demo
 
-Visit the live site: [https://southxpaw.github.io/zzz.optimizer/](https://southxpaw.github.io/zzz.optimizer/)
+Visit the live site: [ZZZ Optimizer](https://southxpaw.github.io/zzz.optimizer/)
 
 ## Getting Started
-
-### Prerequisites
-
-- Node.js (v18 or higher)
-- npm (v9 or higher)
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/SouthxPaw/zzz.optimizer.git
-cd zzz.optimizer
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the development server:
-```bash
-npm start
-```
-
-4. Open your browser and navigate to `http://localhost:4200/`
-
-## Building
-
-### Development Build
-```bash
-npm run build
-```
-
-### GitHub Pages Build
-```bash
-npm run build:ghpages
-```
-
-### Deploy to GitHub Pages
-```bash
-npm run deploy:ghpages
-```
-
-Build artifacts will be stored in the `dist/zzz.optimizer/` directory.
 
 ## Usage
 
@@ -111,32 +67,11 @@ Build artifacts will be stored in the `dist/zzz.optimizer/` directory.
 3. Use **"Import Builds & Discs"** to restore from backup
 4. Option to merge with existing data or replace entirely
 
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── components/        # UI components
-│   │   ├── character-tab/ # Main build manager
-│   │   ├── data-manager/  # Import/export tools
-│   │   ├── navigation/    # Top navigation
-│   │   └── footer/        # Footer with version
-│   ├── models/           # TypeScript interfaces
-│   ├── services/         # Business logic
-│   │   ├── agent.service.ts
-│   │   ├── wengine.service.ts
-│   │   ├── disc.service.ts
-│   │   ├── build.service.ts
-│   │   ├── stat-calculator.service.ts
-│   │   └── scoring.service.ts
-│   ├── constants/        # Game data and scoring weights
-│   └── assets/           # Images and JSON data
-```
-
 ## Data Sources
 
 This tool uses game data from:
 - [Prydwen.gg](https://www.prydwen.gg/zenless/) - Character guides and analysis
+- [Hakushin](https://zzz3.hakush.in/) - Game data
 - Official game assets and calculations
 
 ## Assumptions
@@ -154,7 +89,8 @@ This tool provides **estimates only** and is not indicative of your skill or the
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please reach out to me on discord - notsouthpaw.
+Would love any suggestions, improvements, or feedback.
 
 ## Disclaimer
 
@@ -169,3 +105,4 @@ MIT License - See LICENSE file for details
 - **HoYoverse** - For creating Zenless Zone Zero
 - **Prydwen.gg** - For community resources and guides
 - **ZZZ Community** - For support and feedback
+- [**Fribbels HSR Optimizer**](https://fribbels.github.io/hsr-optimizer) - For the idea of doing this for ZZZ
