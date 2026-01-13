@@ -13,10 +13,24 @@ import {
   FLAT_STAT_PENALTY_PER_ADDITIONAL,
   EXTERNAL_STAT_WEIGHTS,
   BUILD_SCORE_WEIGHTS,
+  DIMINISHING_RETURNS,
+  BREAKPOINT_PENALTIES,
   DiscRating,
   BuildRating
 } from '../constants/disc-scoring';
 import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
+import { calculateRollCount } from '../constants/substat-rolls';
+import {
+  estimateDamage,
+  calculateStatusDamage,
+  STATUS_EFFECT_MULTIPLIERS
+} from '../constants/damage-formulas';
+import {
+  getAgentSkillMultiplier,
+  getAgentDamageType,
+  getStatusEffectType
+} from '../constants/agent-skills';
+import { SkillParserService } from './skill-parser.service';
 
 interface AgentBreakpoint {
   min: number;
@@ -80,7 +94,10 @@ export class ScoringService {
   private mindscapeData: MindscapeData | null = null;
   private dataLoaded = false;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private skillParserService: SkillParserService
+  ) {
     this.loadAllData();
   }
 
@@ -91,9 +108,33 @@ export class ScoringService {
     await Promise.all([
       this.loadAgentBreakpoints(),
       this.loadDiscSetData(),
-      this.loadMindscapeData()
+      this.loadMindscapeData(),
+      this.loadSkillMultipliers()
     ]);
     this.dataLoaded = true;
+  }
+
+  /**
+   * Load skill multipliers for damage estimation
+   */
+  private async loadSkillMultipliers() {
+    try {
+      // Get all agent IDs from breakpoints
+      const agentIds = Object.keys(this.agentBreakpoints);
+      if (agentIds.length === 0) {
+        // If breakpoints not loaded yet, use common agent IDs
+        const commonAgentIds = [
+          '1011', '1021', '1031', '1041', '1081', '1091', '1101', '1111',
+          '1121', '1131', '1141', '1151', '1161', '1181', '1191', '1211',
+          '1241', '1251', '1281'
+        ];
+        await this.skillParserService.loadSkillMultipliers(commonAgentIds);
+      } else {
+        await this.skillParserService.loadSkillMultipliers(agentIds);
+      }
+    } catch (error) {
+      console.warn('Failed to load skill multipliers:', error);
+    }
   }
 
   /**
@@ -148,6 +189,73 @@ export class ScoringService {
     } catch (error) {
       console.error('Failed to load mindscape data:', error);
     }
+  }
+
+  /**
+   * Apply diminishing returns to a stat value
+   * Prevents over-investment in a single stat beyond optimal thresholds
+   *
+   * @param statType - Type of stat (for determining power exponent)
+   * @param rawValue - Actual stat value
+   * @param optimalValue - Optimal target value from breakpoints
+   * @returns Adjusted value with diminishing returns applied
+   */
+  private applyDiminishingReturns(
+    statType: string,
+    rawValue: number,
+    optimalValue: number
+  ): number {
+    // If no optimal defined or value is at/below threshold, no penalty
+    if (optimalValue <= 0 || rawValue <= optimalValue * DIMINISHING_RETURNS.THRESHOLD_PERCENT) {
+      return rawValue;
+    }
+
+    const threshold = optimalValue * DIMINISHING_RETURNS.THRESHOLD_PERCENT;
+    const excess = rawValue - threshold;
+
+    // Determine power based on stat type
+    const power = statType === 'energyRegen'
+      ? DIMINISHING_RETURNS.POWER.ENERGY
+      : DIMINISHING_RETURNS.POWER.STANDARD;
+
+    // Apply power function to excess
+    const diminishedExcess = Math.pow(excess, power);
+
+    return threshold + diminishedExcess;
+  }
+
+  /**
+   * Calculate breakpoint penalty multiplier
+   * Returns a multiplier (0.0-1.0) to apply to score based on missing breakpoints
+   *
+   * @param currentValue - Actual stat value
+   * @param breakpoint - Target breakpoint with min and optimal
+   * @returns Penalty multiplier (1.0 = no penalty, 0.7 = 30% penalty)
+   */
+  private calculateBreakpointPenalty(
+    currentValue: number,
+    breakpoint: AgentBreakpoint
+  ): number {
+    // At or above optimal - no penalty
+    if (currentValue >= breakpoint.optimal) {
+      return 1.0;
+    }
+
+    // Below minimum - apply full penalty
+    if (currentValue < breakpoint.min) {
+      return 1.0 - BREAKPOINT_PENALTIES.MISSING_MIN;
+    }
+
+    // Between min and optimal - apply partial penalty
+    // Linear scaling between min (full penalty) and optimal (no penalty)
+    const range = breakpoint.optimal - breakpoint.min;
+    const position = currentValue - breakpoint.min;
+    const percentOfRange = range > 0 ? position / range : 0;
+
+    // Interpolate penalty from MISSING_OPTIMAL at min to 0 at optimal
+    const penalty = BREAKPOINT_PENALTIES.MISSING_OPTIMAL * (1 - percentOfRange);
+
+    return 1.0 - penalty;
   }
 
   /**
@@ -312,7 +420,8 @@ export class ScoringService {
       mainStatPoints: 0,
       subStatPoints: 0,
       detectedBuild: null as string | null,
-      details: [] as Array<{ stat: string, value: number, points: number }>
+      totalRolls: 0,
+      details: [] as Array<{ stat: string, value: number, points: number, rolls: number }>
     };
 
     // Use agent-specific weights directly from breakpoints
@@ -351,11 +460,16 @@ export class ScoringService {
       const weight = weights[substat.type] || 0;
       const points = substat.value * weight;
 
+      // Calculate roll count for this substat
+      const rolls = calculateRollCount(substat.type, substat.value);
+      breakdown.totalRolls += rolls;
+
       breakdown.subStatPoints += points;
       breakdown.details.push({
         stat: substat.type,
         value: substat.value,
-        points: points
+        points: points,
+        rolls: rolls
       });
 
       totalPoints += points;
@@ -369,7 +483,8 @@ export class ScoringService {
       breakdown.details.push({
         stat: 'Bad Flat Penalty',
         value: badFlatCount,
-        points: -penalty
+        points: -penalty,
+        rolls: 0
       });
     }
 
@@ -442,18 +557,35 @@ export class ScoringService {
       'energyRegen': stats.energyRegen
     };
 
-    // Check each breakpoint
+    let totalPenaltyMultiplier = 1.0; // Start with no penalty
+    const penaltyDetails: Array<{stat: string, penalty: number}> = [];
+
+    // Check each breakpoint with diminishing returns and penalties
     Object.keys(breakpoints.breakpoints).forEach(statKey => {
       const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
-      const currentValue = statMapping[statKey] || 0;
+      const rawValue = statMapping[statKey] || 0;
       const isPriority = breakpoints.priorityStats.includes(statKey);
 
       // Only count breakpoints where optimal > 0 (meaning this stat matters)
       if (breakpoint.optimal > 0) {
         breakdown.totalBreakpoints++;
 
-        const metMin = currentValue >= breakpoint.min;
-        const metOptimal = currentValue >= breakpoint.optimal;
+        // Apply diminishing returns to value
+        const adjustedValue = this.applyDiminishingReturns(statKey, rawValue, breakpoint.optimal);
+
+        const metMin = adjustedValue >= breakpoint.min;
+        const metOptimal = adjustedValue >= breakpoint.optimal;
+
+        // Calculate breakpoint penalty for this stat
+        const penaltyMultiplier = this.calculateBreakpointPenalty(adjustedValue, breakpoint);
+        if (penaltyMultiplier < 1.0 && isPriority) {
+          // Only apply penalty multiplier to priority stats (more strict)
+          totalPenaltyMultiplier *= penaltyMultiplier;
+          penaltyDetails.push({
+            stat: statKey,
+            penalty: (1.0 - penaltyMultiplier) * 100 // Convert to percentage
+          });
+        }
 
         // Award points based on meeting breakpoints
         // Priority stats are weighted more heavily
@@ -465,7 +597,7 @@ export class ScoringService {
 
         breakdown.statDetails.push({
           stat: statKey,
-          current: currentValue,
+          current: rawValue,
           min: breakpoint.min,
           optimal: breakpoint.optimal,
           metMin: metMin,
@@ -476,9 +608,12 @@ export class ScoringService {
     });
 
     // Calculate percentage of breakpoints met
-    const breakpointsMetPercentage = breakdown.totalBreakpoints > 0
+    let breakpointsMetPercentage = breakdown.totalBreakpoints > 0
       ? (breakdown.metBreakpoints / breakdown.totalBreakpoints) * 100
       : 0;
+
+    // Apply accumulated breakpoint penalties to final score
+    breakpointsMetPercentage *= totalPenaltyMultiplier;
 
     // Determine rating based on percentage
     const rating = this.getBuildRating(breakpointsMetPercentage);
@@ -486,7 +621,11 @@ export class ScoringService {
     return {
       score: Math.round(breakpointsMetPercentage * 10) / 10,
       rating: rating,
-      breakdown: breakdown
+      breakdown: {
+        ...breakdown,
+        penaltyMultiplier: Math.round(totalPenaltyMultiplier * 1000) / 1000,
+        penalties: penaltyDetails
+      }
     };
   }
 
@@ -502,6 +641,115 @@ export class ScoringService {
     }
     // Default to F if no threshold is met
     return BUILD_RATING_THRESHOLDS[BUILD_RATING_THRESHOLDS.length - 1];
+  }
+
+  /**
+   * Estimate damage output for a build
+   * Returns estimated damage per hit for Attack/Crit agents
+   * or status damage for Anomaly agents
+   *
+   * @param stats - Character stats
+   * @param agentName - Name of the agent (for skill multiplier)
+   * @param agentRole - Role of the agent (Attack, Anomaly, etc.)
+   * @param agentElement - Element of the agent (for status effect type)
+   * @param elementalDMGBonus - Elemental DMG% from discs/buffs
+   * @returns Damage estimation object
+   */
+  estimateBuildDamage(
+    stats: {
+      ATK: number;
+      critRate: number;
+      critDMG: number;
+      penRatio?: number;
+      flatPEN?: number;
+      anomalyProficiency?: number;
+      anomalyMastery?: number;
+      level?: number;
+    },
+    agentId: string,
+    agentName: string,
+    agentRole: string,
+    agentElement: string,
+    elementalDMGBonus: number = 0
+  ): {
+    directDamage: number;
+    statusDamage?: number;
+    totalDamage: number;
+    damageType: string;
+  } {
+    // Get skill multiplier for this agent (from parsed JSON or fallback)
+    let skillMultiplier = this.skillParserService.getAgentMultiplier(agentId);
+
+    // If skill parser didn't find it, use fallback
+    if (!skillMultiplier || skillMultiplier === 2.5) {
+      skillMultiplier = getAgentSkillMultiplier(agentName);
+    }
+
+    // Common damage bonuses (elemental DMG%, etc.)
+    const dmgBonuses = elementalDMGBonus > 0 ? [elementalDMGBonus] : [];
+
+    // Determine damage type based on role
+    const damageType = getAgentDamageType(agentRole);
+
+    let directDamage = 0;
+    let statusDamage = 0;
+
+    if (damageType === 'status' || damageType === 'hybrid') {
+      // Anomaly agents: Calculate status effect damage
+      const statusType = getStatusEffectType(agentElement);
+      statusDamage = calculateStatusDamage(statusType, stats.ATK, dmgBonuses);
+    }
+
+    if (damageType === 'direct' || damageType === 'hybrid') {
+      // Attack/Stun/Support agents: Calculate direct damage
+      directDamage = estimateDamage(
+        {
+          ATK: stats.ATK,
+          critRate: stats.critRate / 100, // Convert % to decimal
+          critDMG: stats.critDMG / 100,
+          penRatio: (stats.penRatio || 0) / 100,
+          flatPEN: stats.flatPEN || 0,
+          level: stats.level || 60,
+        },
+        skillMultiplier,
+        dmgBonuses
+      );
+    }
+
+    // For hybrid agents (Stun), use whichever is higher
+    const totalDamage = damageType === 'hybrid'
+      ? Math.max(directDamage, statusDamage)
+      : directDamage + statusDamage;
+
+    return {
+      directDamage: Math.round(directDamage),
+      statusDamage: statusDamage > 0 ? Math.round(statusDamage) : undefined,
+      totalDamage: Math.round(totalDamage),
+      damageType: damageType,
+    };
+  }
+
+  /**
+   * Normalize damage output to 0-100 scale
+   * Uses role-specific benchmarks
+   *
+   * @param damage - Total damage value
+   * @param role - Agent role
+   * @returns Normalized score (0-100)
+   */
+  private normalizeDamageScore(damage: number, role: string): number {
+    const DAMAGE_BENCHMARKS: { [key: string]: number } = {
+      'Attack': 50000,   // High damage expected
+      'Stun': 30000,     // Moderate damage
+      'Anomaly': 40000,  // Status effect damage (per proc)
+      'Support': 15000,  // Low damage expected
+      'Defense': 20000,  // Low-moderate damage
+    };
+
+    const benchmark = DAMAGE_BENCHMARKS[role] || 40000;
+    const normalized = (damage / benchmark) * 100;
+
+    return Math.min(100, normalized); // Cap at 100
   }
 
   /**
@@ -868,7 +1116,11 @@ export class ScoringService {
     equippedDiscs: Disc[],
     wEngine?: WEngine,
     wEngineLevel?: number,
-    mindscapeLevel: number = 0
+    mindscapeLevel: number = 0,
+    agentName?: string,
+    agentRole?: string,
+    agentElement?: string,
+    agentLevel?: number
   ): { score: number, rating: BuildRating, breakdown: any } {
     const breakpoints = this.agentBreakpoints[agentId];
 
@@ -901,12 +1153,48 @@ export class ScoringService {
 
     const setBonusScore = this.calculateSetBonusScore(equippedDiscs, agentId); // 0-100
 
+    // Calculate damage estimation score (if agent info provided)
+    let damageScore = 0;
+    let damageEstimate: any = null;
+
+    if (agentName && agentRole && agentElement) {
+      // Calculate elemental DMG% from equipped discs (slot 5 main stat)
+      let elementalDMGBonus = 0;
+      const slot5Disc = equippedDiscs.find(d => d.slot === 'Drive5');
+      if (slot5Disc?.mainStat.type.includes('DMG')) {
+        elementalDMGBonus = slot5Disc.mainStat.value / 100; // Convert % to decimal
+      }
+
+      // Estimate damage
+      damageEstimate = this.estimateBuildDamage(
+        {
+          ATK: weightedStats.atk,
+          critRate: weightedStats.critRate,
+          critDMG: weightedStats.critDmg,
+          penRatio: weightedStats.penRatio,
+          flatPEN: weightedStats.pen,
+          anomalyProficiency: weightedStats.anomalyProficiency,
+          anomalyMastery: weightedStats.anomalyMastery,
+          level: agentLevel || 60,
+        },
+        agentId,
+        agentName,
+        agentRole,
+        agentElement,
+        elementalDMGBonus
+      );
+
+      // Normalize damage to 0-100 score
+      damageScore = this.normalizeDamageScore(damageEstimate.totalDamage, agentRole);
+    }
+
     // Combine with weights
     const compositeScore =
       breakpointScore * BUILD_SCORE_WEIGHTS.BREAKPOINT +
       discQualityScore * BUILD_SCORE_WEIGHTS.DISC_QUALITY +
       statEfficiencyScore * BUILD_SCORE_WEIGHTS.STAT_EFFICIENCY +
-      setBonusScore * BUILD_SCORE_WEIGHTS.SET_BONUS;
+      setBonusScore * BUILD_SCORE_WEIGHTS.SET_BONUS +
+      damageScore * BUILD_SCORE_WEIGHTS.DAMAGE_OUTPUT;
 
     const rating = this.getBuildRating(compositeScore);
 
@@ -919,6 +1207,8 @@ export class ScoringService {
         discQualityScore: Math.round(discQualityScore * 10) / 10,
         statEfficiencyScore: Math.round(statEfficiencyScore * 10) / 10,
         setBonusScore: Math.round(setBonusScore * 10) / 10,
+        damageScore: damageScore > 0 ? Math.round(damageScore * 10) / 10 : undefined,
+        damageEstimate: damageEstimate,
         wEngineContribution: wEngineContribution,
         mindscapeContribution: mindscapeContribution,
         componentWeights: BUILD_SCORE_WEIGHTS

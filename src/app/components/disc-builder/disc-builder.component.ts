@@ -9,6 +9,7 @@ import { Disc, DiscSet } from '../../models/disc.model';
 import { Agent, DiscSlot } from '../../models/agent.model';
 import { ScoringAlgorithm } from '../../models/scoring.model';
 import { SCORING_PRESETS } from '../../constants/scoring-presets';
+import { calculateRollCount } from '../../constants/substat-rolls';
 
 @Component({
   selector: 'app-disc-builder',
@@ -53,7 +54,14 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.agents = this.agentService.getAgents();
     this.discService.discs$.subscribe((discs) => {
-      this.discs = discs;
+      // Add roll counts to substats for display
+      this.discs = discs.map(disc => ({
+        ...disc,
+        subStats: disc.subStats.map(sub => ({
+          ...sub,
+          rolls: calculateRollCount(sub.type, sub.value)
+        }))
+      }));
       this.applyFilters();
       this.isLoading = false;
     });
