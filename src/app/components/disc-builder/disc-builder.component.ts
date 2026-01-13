@@ -80,9 +80,24 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
     }
 
     if (this.setFilter) {
-      filtered = filtered.filter((d) =>
-        d.set.toLowerCase().includes(this.setFilter.toLowerCase())
-      );
+      const searchLower = this.setFilter.toLowerCase();
+      filtered = filtered.filter((d) => {
+        // Search in set name
+        if (d.set.toLowerCase().includes(searchLower)) return true;
+
+        // Search in main stat type (format it first)
+        const formattedMainStat = this.formatStatType(d.mainStat.type).toLowerCase();
+        if (formattedMainStat.includes(searchLower)) return true;
+
+        // Search in substats
+        const hasMatchingSubstat = d.subStats.some(sub => {
+          const formattedSubStat = this.formatStatType(sub.type).toLowerCase();
+          return formattedSubStat.includes(searchLower);
+        });
+        if (hasMatchingSubstat) return true;
+
+        return false;
+      });
     }
 
     if (this.showLockedOnly) {

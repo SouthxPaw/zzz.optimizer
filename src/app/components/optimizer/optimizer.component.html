@@ -44,7 +44,7 @@
           </div>
           <div class="wengine-info" *ngIf="selectedWEngine">
             <small class="info-text">
-              ✓ {{selectedWEngine.subStat.type}}: +{{selectedWEngine.subStat.value}}
+              ✓ {{formatStatType(selectedWEngine.subStat.type)}}: +{{selectedWEngine.subStat.value}}
             </small>
           </div>
         </div>

@@ -168,11 +168,21 @@ export class OptimizerComponent implements OnInit {
   getDiscInSlot(slot: DiscSlot): string {
     const disc = this.selectedResult?.discs[slot];
     if (!disc) return 'Empty';
-    return `${disc.set} (${disc.mainStat.type})`;
+    return `${disc.set} (${this.formatStatType(disc.mainStat.type)})`;
   }
 
   // Get all disc slots
   get allSlots(): DiscSlot[] {
     return ['Drive1', 'Drive2', 'Drive3', 'Drive4', 'Drive5', 'Drive6'];
+  }
+
+  // Text formatting helper for consistent UI display
+  formatStatType(statType: string): string {
+    if (!statType) return '';
+
+    // Replace underscores with spaces
+    let formatted = statType.replace(/_/g, ' ');
+
+    return formatted;
   }
 }

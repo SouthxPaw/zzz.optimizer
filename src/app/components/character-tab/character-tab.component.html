@@ -113,6 +113,14 @@
                 <option value="Rupture">Rupture</option>
               </select>
             </div>
+            <div class="filter-group">
+              <label>Sort By:</label>
+              <select [(ngModel)]="wengineSortBy" class="filter-select">
+                <option value="name">Name</option>
+                <option value="rarity">Rarity</option>
+                <option value="atk">ATK</option>
+              </select>
+            </div>
           </div>
 
           <div class="wengine-list">
@@ -173,7 +181,7 @@
           </div>
 
           <p><strong>Base ATK:</strong> {{selectedBuild.equippedWEngine.baseAtk}}</p>
-          <p><strong>{{selectedBuild.equippedWEngine.subStat.type}}:</strong> {{selectedBuild.equippedWEngine.subStat.value}}%</p>
+          <p><strong>{{formatStatType(selectedBuild.equippedWEngine.subStat.type)}}:</strong> {{selectedBuild.equippedWEngine.subStat.value}}%</p>
           <p class="wengine-effect">
             <strong>{{selectedBuild.equippedWEngine.effect.name}}:</strong>
             {{selectedBuild.equippedWEngine.effect.description}}
@@ -237,7 +245,7 @@
             [class.equipped]="selectedBuild.equippedDiscs[slot]">
             <div *ngIf="selectedBuild.equippedDiscs[slot]; else emptySlot" class="disc-card" (click)="openDiscEdit(slot)">
               <div class="disc-header">
-                <span class="disc-slot-number">{{slot}}</span>
+                <span class="disc-slot-number">{{formatDiscSlot(slot)}}</span>
                 <div *ngIf="getDiscScore(selectedBuild.equippedDiscs[slot]!) as discScore"
                      class="disc-rating-badge"
                      [ngClass]="getDiscRatingClass(discScore.rating)"
@@ -248,19 +256,19 @@
               </div>
               <div class="disc-set">{{selectedBuild.equippedDiscs[slot]!.set}}</div>
               <div class="disc-main-stat">
-                <span class="stat-type">{{selectedBuild.equippedDiscs[slot]!.mainStat.type}}</span>
+                <span class="stat-type">{{formatStatType(selectedBuild.equippedDiscs[slot]!.mainStat.type)}}</span>
                 <span class="stat-value">{{selectedBuild.equippedDiscs[slot]!.mainStat.value}}</span>
               </div>
               <div class="disc-substats">
                 <div *ngFor="let subStat of selectedBuild.equippedDiscs[slot]!.subStats" class="substat">
-                  {{subStat.type}} +{{subStat.value}}
+                  {{formatStatType(subStat.type)}} +{{subStat.value}}
                 </div>
               </div>
               <button class="unequip-btn" (click)="unequipDisc(slot, $event)" title="Unequip disc">×</button>
             </div>
             <ng-template #emptySlot>
               <div class="empty-disc-slot" (click)="openDiscPicker(slot)">
-                <span class="slot-number">{{slot}}</span>
+                <span class="slot-number">{{formatDiscSlot(slot)}}</span>
                 <span class="slot-label">Empty</span>
               </div>
             </ng-template>
@@ -390,6 +398,15 @@
             <option value="Rupture">Rupture</option>
           </select>
         </div>
+        <div class="filter-group">
+          <label>Sort By:</label>
+          <select [(ngModel)]="agentSortBy" class="filter-select">
+            <option value="name">Name</option>
+            <option value="element">Element</option>
+            <option value="specialty">Specialty</option>
+            <option value="rarity">Rarity</option>
+          </select>
+        </div>
       </div>
 
       <!-- Agent Selection Grid -->
@@ -443,7 +460,7 @@
 <div class="modal-overlay" *ngIf="showDiscPicker" (click)="closeDiscPicker()">
   <div class="modal-content disc-picker-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
-      <h2>Select Disc Set for {{selectedDiscSlot}}</h2>
+      <h2>Select Disc Set for {{formatDiscSlot(selectedDiscSlot!)}}</h2>
       <button class="close-btn" (click)="closeDiscPicker()">×</button>
     </div>
     <div class="modal-body">
@@ -451,7 +468,12 @@
         <input
           type="text"
           [(ngModel)]="discSearchTerm"
-          placeholder="Search by set name..."
+          placeholder="Search set name..."
+          class="search-input">
+        <input
+          type="text"
+          [(ngModel)]="discEffectSearchTerm"
+          placeholder="Search effects (e.g., CRIT, ATK)..."
           class="search-input">
       </div>
 
@@ -492,10 +514,10 @@
     </div>
     <div class="modal-body">
       <div class="disc-form-info">
-        <p><strong>Slot:</strong> {{selectedDiscSlot}}</p>
+        <p><strong>Slot:</strong> {{formatDiscSlot(selectedDiscSlot!)}}</p>
         <p><strong>Set:</strong> {{selectedDiscSetForCreation?.name}}</p>
         <p *ngIf="selectedDiscSlot && (selectedDiscSlot === 'Drive1' || selectedDiscSlot === 'Drive2' || selectedDiscSlot === 'Drive3')">
-          <strong>Main Stat:</strong> {{getDefaultMainStatForSlot(selectedDiscSlot!)}} ({{getMainStatValueForSlot(selectedDiscSlot)}})
+          <strong>Main Stat:</strong> {{formatStatType(getDefaultMainStatForSlot(selectedDiscSlot!))}} ({{getMainStatValueForSlot(selectedDiscSlot)}})
         </p>
       </div>
 
