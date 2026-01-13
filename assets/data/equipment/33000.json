@@ -1,0 +1,19 @@
+{
+  "Id": 33000,
+  "Name": "Phaethon's Melody",
+  "Desc2": "Anomaly Mastery +8%.",
+  "Desc4": "When any squad member uses an EX Special Attack, the equipper's Anomaly Proficiency increases by 45 for 8s. If the character using the EX Special Attack is not the equipper, the equipper's Ether DMG is increased by 25%.",
+  "4pcEffect": {
+    "Properties": [
+      {
+        "Name": "Anomaly_Proficiency",
+        "Name2": "Anomaly_Proficiency",
+        "Format": "{0:0}%",
+        "Value": 45
+      }
+    ]
+  },
+  "Story": "A peculiar Drive Disc created by fanatical followers of Phaethon. The eccentric singer repeats an odd melody with a strange voice, striving to spread the legendary deeds of \"Lord Phaethon.\"",
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitSavior.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitSavior.png"
+}

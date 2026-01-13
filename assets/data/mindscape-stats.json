@@ -1,0 +1,100 @@
+{
+  "comment": "Defines unconditional stat bonuses from mindscapes. Only includes bonuses that are always active (not conditional).",
+  "mindscapes": {
+    "1211": {
+      "comment": "Miyabi",
+      "6": [
+        {
+          "type": "CRIT_DMG",
+          "value": 60,
+          "note": "During Shimotsuki Stance, DMG +60%"
+        }
+      ]
+    },
+    "1181": {
+      "comment": "Jane Doe",
+      "6": [
+        {
+          "type": "CRIT_Rate",
+          "value": 20,
+          "note": "While in Passion state"
+        },
+        {
+          "type": "CRIT_DMG",
+          "value": 40,
+          "note": "While in Passion state"
+        }
+      ]
+    },
+    "1041": {
+      "comment": "Evelyn",
+      "2": [
+        {
+          "type": "ATK%",
+          "value": 15,
+          "note": "Unconditional ATK increase"
+        }
+      ]
+    },
+    "1191": {
+      "comment": "Seed",
+      "6": [
+        {
+          "type": "CRIT_DMG",
+          "value": 50,
+          "note": "Unconditional CRIT DMG increase"
+        }
+      ]
+    },
+    "1111": {
+      "comment": "Yidhari",
+      "2": [
+        {
+          "type": "CRIT_DMG",
+          "value": 40,
+          "note": "Unconditional CRIT DMG increase"
+        }
+      ]
+    },
+    "1011": {
+      "comment": "Soldier 0 - Anby",
+      "2": [
+        {
+          "type": "CRIT_Rate",
+          "value": 12,
+          "note": "Unconditional CRIT Rate increase"
+        }
+      ]
+    },
+    "1021": {
+      "comment": "Ellen",
+      "6": [
+        {
+          "type": "PEN_Ratio",
+          "value": 20,
+          "note": "When using certain attacks (treated as unconditional for simplicity)"
+        }
+      ]
+    },
+    "1221": {
+      "comment": "Pulchra",
+      "2": [
+        {
+          "type": "ATK%",
+          "value": 15,
+          "note": "While in Hunter's Gait state"
+        }
+      ]
+    },
+    "1091": {
+      "comment": "Manato",
+      "4": [
+        {
+          "type": "HP%",
+          "value": 8,
+          "note": "Unconditional Max HP increase"
+        }
+      ]
+    }
+  }
+}

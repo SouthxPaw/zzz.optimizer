@@ -1,0 +1,41 @@
+{
+  "Id": 33500,
+  "Name": "White Water Ballad",
+  "Desc2": "Physical DMG +10%",
+  "Desc4": "When the equipper is within any Ether Veil, their CRIT Rate increases by 10%. After leaving the Ether Veil, this buff remains for 15s. If the equipper is an Attack character, activating an Ether Veil or extending an Ether Veil's duration increases their CRIT Rate by 10% and ATK by 10% for 30s. Repeated triggers reset the duration.",
+  "4pcEffect": [
+    {
+      "Properties": [
+        {
+          "Name": "CRIT_RATE",
+          "Name2": "CRIT_RATE",
+          "Format": "{0:0.#}%",
+          "Value": 1000
+        }
+      ]
+    },
+    {
+      "Condition": {
+        "Type": "Specialty",
+        "Value": "Attack"
+      },
+      "Properties": [
+        {
+          "Name": "CRIT_RATE",
+          "Name2": "CRIT_RATE",
+          "Format": "{0:0.#}%",
+          "Value": 1000
+        },
+        {
+          "Name": "ATK%",
+          "Name2": "ATK%",
+          "Format": "{0:0.#}%",
+          "Value": 1000
+        }
+      ]
+    }
+  ],
+  "Story": "Written on paper turned yellow with age and tucked inside the Qingming Sword Manual for years, no one knows who composed this melody — most likely a Qingming Sword Keeper long since lost to history.",
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitWhiteWaterBallad.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitWhiteWaterBallad.png"
+}

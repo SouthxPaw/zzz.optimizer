@@ -1,0 +1,12 @@
+{
+  "Id": 32500,
+  "Name": "Polar Metal",
+  "Desc2": "Ice DMG +10%",
+  "Desc4": "Increase the DMG of Basic Attack and Dash Attack by 20%. When any squad member inflicts Freeze or Shatter, this effect increases by an additional 20% for 12s.",
+  "4pcEffect": {
+    "Properties": []
+  },
+  "Story": "A Drive Disc burned with specialized Ether technology offering personalized attribute amplification to the user.",
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitPolarMetal.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitPolarMetal.png"
+}

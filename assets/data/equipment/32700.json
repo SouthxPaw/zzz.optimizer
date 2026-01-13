@@ -1,0 +1,37 @@
+{
+  "Id": 32700,
+  "Name": "Branch & Blade Song",
+  "Desc2": "CRIT DMG +16%",
+  "Desc4": "When Anomaly Mastery exceeds or equals 115 points, the equipper's CRIT DMG increases by 30%. When any squad member applies Freeze or triggers the Shatter effect on an enemy, the equipper's CRIT Rate increases by 12%, lasting 15s.",
+  "4pcEffect": [
+    {
+      "Properties": [
+        {
+          "Name": "CRIT_RATE",
+          "Name2": "CRIT_RATE",
+          "Format": "{0:0.#}%",
+          "Value": 1200
+        }
+      ]
+    },
+    {
+      "Condition": {
+        "Type": "StatThreshold",
+        "Stat": "Anomaly_Mastery",
+        "Operator": ">=",
+        "Value": 115
+      },
+      "Properties": [
+        {
+          "Name": "CRIT_DMG",
+          "Name2": "CRIT_DMG",
+          "Format": "{0:0.#}%",
+          "Value": 3000
+        }
+      ]
+    }
+  ],
+  "Story": "Inspired by the legendary \"Tale of Blade & Branch,\" this song depicts a young man with amazing swordsmanship as he travels the world, doing good deeds and fighting evil. Some say it's a biography of a prodigious swordsman of the Hoshimi family.",
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitBranch&BladeSong.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitBranch&BladeSong.png"
+}

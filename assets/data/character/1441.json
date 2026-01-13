@@ -1,0 +1,2143 @@
+{
+  "Id": 1441,
+  "Icon": "IconRole51",
+  "Name": "Manato",
+  "CodeName": "Manato",
+  "Rarity": 3,
+  "WeaponType": { "6": "Rupture" },
+  "ElementType": { "201": "Fire" },
+  "SpecialElementType": {},
+  "HitType": { "101": "Slash" },
+  "Camp": { "11": "Spook Shack" },
+  "Gender": 1,
+  "PartnerInfo": {
+    "Birthday": "JAN 5",
+    "FullName": "Komano Manato",
+    "Gender": "Male",
+    "IconPath": "UI/Sprite/A1DynamicLoad/IconRoleCircle/UnPacker/IconRoleCircle51.png",
+    "ImpressionF": "It's amazing how Manato can remember every neighbor's name and little habits whenever they stop to greet him!",
+    "ImpressionM": "Being with Manato really lessens the fright of ghost stories...",
+    "Name": "",
+    "OutlookDesc": "",
+    "ProfileDesc": "Komano Manato, a member of Spook Shack and an exceptionally reliable person. Having lost his family in the fall of the old capital, he grew up alone in Waifei Peninsula until the day he happened to adopt two street children, A-Cing and A-Yuet. Since then, the three have lived as a family, depending on one another. It may be a young household, but to Manato, nothing matters more than looking after them.\nManato is currently enrolled at a company affiliated school in the city, where rumors paint him as the terrifying \"school delinquent.\" The label likely comes from his intimidating appearance, though in reality, he's far more soft-hearted and generous than he seems.\nAt first, Manato really did want to do something to clear up the misunderstanding about being a delinquent, but for various reasons, his efforts didn't make much of an impact. Still, his optimism soon led him to realize that the title wasn't all bad. It let him dodge unnecessary social events, live without being bothered by strangers, and even leverage the \"delinquent\" image to sniff out stories of school ghost tales, all while standing up for classmates suffering from actual bullying.\nBut when it comes to grades, he really does live up to the \"school delinquent\" label of a company affiliated school student.",
+    "Race": "Spook Shack",
+    "RoleIcon": "IconRole/UnPacker/IconRole51",
+    "Stature": "198",
+    "UnlockCondition": [
+      "Obtain Agent",
+      "Complete Main Commission Season 2 Chapter 4",
+      "Complete the \"Anby's Problem\" commission"
+    ],
+    "TrustLv": {
+      "1": "Komano Manato, a member of Spook Shack and an exceptionally reliable person. Having lost his family in the fall of the old capital, he grew up alone in Waifei Peninsula until the day he happened to adopt two street children, A-Cing and A-Yuet. Since then, the three have lived as a family, depending on one another. It may be a young household, but to Manato, nothing matters more than looking after them.\nManato is currently enrolled at a company affiliated school in the city, where rumors paint him as the terrifying \"school delinquent.\" The label likely comes from his intimidating appearance, though in reality, he's far more soft-hearted and generous than he seems.\nAt first, Manato really did want to do something to clear up the misunderstanding about being a delinquent, but for various reasons, his efforts didn't make much of an impact. Still, his optimism soon led him to realize that the title wasn't all bad. It let him dodge unnecessary social events, live without being bothered by strangers, and even leverage the \"delinquent\" image to sniff out stories of school ghost tales, all while standing up for classmates suffering from actual bullying.\nBut when it comes to grades, he really does live up to the \"school delinquent\" label of a company affiliated school student.",
+      "2": "",
+      "3": "\nAt times, Manato's disarming honesty and friendly nature lead to unexpected trouble. Whenever he shows up at the market or anywhere crowded with locals, he can't help but draw attention. Cheerful shop owners, stall vendors, and neighbors passing by love slipping their finest items to him as presents, along with warm reminders of little everyday matters.\n\nAfter his parents passed away, Manato quickly learned how to take care of himself. He became an excellent cook and could even mend the clothes A-Cing and A-Yuet tore while playing.\n\nAt his company affiliated school internship, Manato was also greeted with enthusiasm. In such an environment, his problem of not being able to hold back his strength proved to be the best support the miners could ask for.",
+      "4": ""
+    }
+  },
+  "Skin": {
+    "3114410": {
+      "Name": "Komano Manato: Loyal Wild Soul",
+      "Desc": "The standard attire of the unofficial mediator in Sailume Bay, enough to intimidate petty thugs.\nStill, it sometimes draws wandering eyes.",
+      "Image": "IconRole51"
+    },
+    "3114411": {
+      "Name": "Komano Manato: White Heart Silhouette",
+      "Desc": "A young Manato made a solitary vow to himself — and from his deep reverie, a lone pale shadow was born.\nMimicking his attire enhances Manato's already exceedingly intimidating presence.",
+      "Image": "IconRole51_01"
+    }
+  },
+  "Stats": {
+    "Armor": 0,
+    "ArmorGrowth": 0,
+    "Attack": 109,
+    "AttackGrowth": 63934,
+    "AvatarPieceId": 5441,
+    "BreakStun": 95,
+    "Crit": 500,
+    "CritDamage": 5000,
+    "CritDmgRes": 0,
+    "CritRes": 0,
+    "Defence": 36,
+    "DefenceGrowth": 48400,
+    "ElementAbnormalPower": 87,
+    "ElementMystery": 90,
+    "Endurance": 0,
+    "HpGrowth": 842857,
+    "HpMax": 621,
+    "PenDelta": 0,
+    "PenRate": 0,
+    "Rbl": 1,
+    "RblCorrectionFactor": 10000,
+    "RblProbability": 0,
+    "Shield": 0,
+    "ShieldGrowth": 0,
+    "SpBarPoint": 0,
+    "SpRecover": 0,
+    "Stun": 0,
+    "Tags": [
+      "Norano",
+      "Cut",
+      "Fire",
+      "Male",
+      "Camp11",
+      "Size3",
+      "AidTypeParry",
+      "Norano",
+      "EtherEyesSize2"
+    ],
+    "RpMax": 120,
+    "RpRecover": 0
+  },
+  "Level": {
+    "1": {
+      "HpMax": 0,
+      "Attack": 0,
+      "Defence": 0,
+      "LevelMax": 10,
+      "LevelMin": 0,
+      "Materials": { "10": 24000, "100216": 4 }
+    },
+    "2": {
+      "HpMax": 426,
+      "Attack": 39,
+      "Defence": 24,
+      "LevelMax": 20,
+      "LevelMin": 10,
+      "Materials": { "10": 56000, "100226": 12 }
+    },
+    "3": {
+      "HpMax": 852,
+      "Attack": 78,
+      "Defence": 49,
+      "LevelMax": 30,
+      "LevelMin": 20,
+      "Materials": { "10": 120000, "100226": 20 }
+    },
+    "4": {
+      "HpMax": 1279,
+      "Attack": 116,
+      "Defence": 73,
+      "LevelMax": 40,
+      "LevelMin": 30,
+      "Materials": { "10": 200000, "100236": 10 }
+    },
+    "5": {
+      "HpMax": 1705,
+      "Attack": 155,
+      "Defence": 98,
+      "LevelMax": 50,
+      "LevelMin": 40,
+      "Materials": { "10": 400000, "100236": 20 }
+    },
+    "6": {
+      "HpMax": 2131,
+      "Attack": 194,
+      "Defence": 122,
+      "LevelMax": 60,
+      "LevelMin": 50,
+      "Materials": {}
+    }
+  },
+  "ExtraLevel": {
+    "1": {
+      "MaxLevel": 15,
+      "Extra": {
+        "11102": {
+          "Prop": 11102,
+          "Name": "HP",
+          "Format": "{0:0.#%}",
+          "Value": 600
+        },
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 0
+        }
+      }
+    },
+    "2": {
+      "MaxLevel": 25,
+      "Extra": {
+        "11102": {
+          "Prop": 11102,
+          "Name": "HP",
+          "Format": "{0:0.#%}",
+          "Value": 600
+        },
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 25
+        }
+      }
+    },
+    "3": {
+      "MaxLevel": 35,
+      "Extra": {
+        "11102": {
+          "Prop": 11102,
+          "Name": "HP",
+          "Format": "{0:0.#%}",
+          "Value": 1200
+        },
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 25
+        }
+      }
+    },
+    "4": {
+      "MaxLevel": 45,
+      "Extra": {
+        "11102": {
+          "Prop": 11102,
+          "Name": "HP",
+          "Format": "{0:0.#%}",
+          "Value": 1200
+        },
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 50
+        }
+      }
+    },
+    "5": {
+      "MaxLevel": 55,
+      "Extra": {
+        "11102": {
+          "Prop": 11102,
+          "Name": "HP",
+          "Format": "{0:0.#%}",
+          "Value": 1800
+        },
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 50
+        }
+      }
+    },
+    "6": {
+      "MaxLevel": 60,
+      "Extra": {
+        "11102": {
+          "Prop": 11102,
+          "Name": "HP",
+          "Format": "{0:0.#%}",
+          "Value": 1800
+        },
+        "12101": {
+          "Prop": 12101,
+          "Name": "Base ATK",
+          "Format": "{0:0.#}",
+          "Value": 75
+        }
+      }
+    }
+  },
+  "LevelEXP": [
+    50, 150, 250, 400, 600, 800, 1000, 1250, 1500, 1800, 1935, 2065, 2200, 2335,
+    2465, 2600, 2735, 2865, 3000, 4680, 4975, 5265, 5560, 5855, 6145, 6440,
+    6735, 7025, 7320, 10800, 11400, 12000, 12600, 13200, 13800, 14400, 15000,
+    15600, 16200, 17100, 18300, 19500, 20700, 21900, 23100, 24300, 25500, 26700,
+    27900, 34200, 36600, 39000, 41400, 43800, 46200, 48600, 51000, 53400, 55800,
+    0
+  ],
+  "Skill": {
+    "Basic": {
+      "Description": [
+        {
+          "Name": "Basic Attack: Blazing Wind Slash",
+          "Desc": "Press <IconMap:Icon_Normal> to activate:\nPerform up to three forward slashes, dealing <color=#F0D12B>Physical DMG</color>.\nDuring each slash, pressing <IconMap:Icon_Special> triggers Scorchwind, causing the attack to deal increased <color=#FF5521>Fire DMG</color>.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Blazing Wind - Misty Slash",
+          "Desc": "While in the Molten Edge state, press <IconMap:Icon_Normal> to activate:\nUnleash up to four forward slashes, dealing <color=#FF5521>Fire DMG</color>.\nIf Manato's HP is above 30% when the skill is activated, 3.5% of his Max HP will be consumed.",
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Blazing Wind Slash",
+          "Param": [
+            {
+              "Name": "1st-Hit DMG Multiplier",
+              "Desc": "{Skill:1441001, Prop:1001}",
+              "Param": {
+                "1441001": {
+                  "Main": 2870,
+                  "Growth": 270,
+                  "Format": "%",
+                  "DamagePercentage": 2870,
+                  "DamagePercentageGrowth": 270,
+                  "StunRatio": 2690,
+                  "StunRatioGrowth": 130,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 73975,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 8060,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2687
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit DMG Multiplier",
+              "Desc": "{Skill:1441002, Prop:1001}+{Skill:1441003, Prop:1001}",
+              "Param": {
+                "1441002": {
+                  "Main": 3820,
+                  "Growth": 350,
+                  "Format": "%",
+                  "DamagePercentage": 3820,
+                  "DamagePercentageGrowth": 350,
+                  "StunRatio": 3620,
+                  "StunRatioGrowth": 170,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 99550,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 10860,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3618
+                },
+                "1441003": {
+                  "Main": 4450,
+                  "Growth": 410,
+                  "Format": "%",
+                  "DamagePercentage": 4450,
+                  "DamagePercentageGrowth": 410,
+                  "StunRatio": 4310,
+                  "StunRatioGrowth": 200,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 118525,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 12910,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4302
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit DMG Multiplier",
+              "Desc": "{Skill:1441004, Prop:1001}+{Skill:1441005, Prop:1001}",
+              "Param": {
+                "1441004": {
+                  "Main": 6000,
+                  "Growth": 550,
+                  "Format": "%",
+                  "DamagePercentage": 6000,
+                  "DamagePercentageGrowth": 550,
+                  "StunRatio": 5900,
+                  "StunRatioGrowth": 270,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 162250,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 17680,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5891
+                },
+                "1441005": {
+                  "Main": 7460,
+                  "Growth": 680,
+                  "Format": "%",
+                  "DamagePercentage": 7460,
+                  "DamagePercentageGrowth": 680,
+                  "StunRatio": 7430,
+                  "StunRatioGrowth": 340,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 204325,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 22270,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 7424
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "1st-Hit DMG Multiplier (Triggering Scorchwind)",
+              "Desc": "{Skill:1441001, Prop:1001}+{Skill:1441006, Prop:1001}",
+              "Param": {
+                "1441001": {
+                  "Main": 2870,
+                  "Growth": 270,
+                  "Format": "%",
+                  "DamagePercentage": 2870,
+                  "DamagePercentageGrowth": 270,
+                  "StunRatio": 2690,
+                  "StunRatioGrowth": 130,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 73975,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 8060,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2687
+                },
+                "1441006": {
+                  "Main": 3440,
+                  "Growth": 320,
+                  "Format": "%",
+                  "DamagePercentage": 3440,
+                  "DamagePercentageGrowth": 320,
+                  "StunRatio": 3050,
+                  "StunRatioGrowth": 140,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 83875,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 3581,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 9140,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3045
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit DMG Multiplier (Triggering Scorchwind)",
+              "Desc": "{Skill:1441002, Prop:1001}+{Skill:1441007, Prop:1001}",
+              "Param": {
+                "1441002": {
+                  "Main": 3820,
+                  "Growth": 350,
+                  "Format": "%",
+                  "DamagePercentage": 3820,
+                  "DamagePercentageGrowth": 350,
+                  "StunRatio": 3620,
+                  "StunRatioGrowth": 170,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 99550,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 10860,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3618
+                },
+                "1441007": {
+                  "Main": 5730,
+                  "Growth": 530,
+                  "Format": "%",
+                  "DamagePercentage": 5730,
+                  "DamagePercentageGrowth": 530,
+                  "StunRatio": 5510,
+                  "StunRatioGrowth": 260,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 151525,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 5501,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 16510,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5502
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit DMG Multiplier (Triggering Scorchwind)",
+              "Desc": "{Skill:1441004, Prop:1001}+{Skill:1441008, Prop:1001}",
+              "Param": {
+                "1441004": {
+                  "Main": 6000,
+                  "Growth": 550,
+                  "Format": "%",
+                  "DamagePercentage": 6000,
+                  "DamagePercentageGrowth": 550,
+                  "StunRatio": 5900,
+                  "StunRatioGrowth": 270,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 162250,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 17680,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5891
+                },
+                "1441008": {
+                  "Main": 8330,
+                  "Growth": 760,
+                  "Format": "%",
+                  "DamagePercentage": 8330,
+                  "DamagePercentageGrowth": 760,
+                  "StunRatio": 8260,
+                  "StunRatioGrowth": 380,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 227150,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 7165,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 24770,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 8257
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "1st-Hit Daze Multiplier",
+              "Desc": "{Skill:1441001, Prop:1002}",
+              "Param": {
+                "1441001": {
+                  "Main": 2690,
+                  "Growth": 130,
+                  "Format": "%",
+                  "DamagePercentage": 2870,
+                  "DamagePercentageGrowth": 270,
+                  "StunRatio": 2690,
+                  "StunRatioGrowth": 130,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 73975,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 8060,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2687
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit Daze Multiplier",
+              "Desc": "{Skill:1441002, Prop:1002}+{Skill:1441003, Prop:1002}",
+              "Param": {
+                "1441002": {
+                  "Main": 3620,
+                  "Growth": 170,
+                  "Format": "%",
+                  "DamagePercentage": 3820,
+                  "DamagePercentageGrowth": 350,
+                  "StunRatio": 3620,
+                  "StunRatioGrowth": 170,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 99550,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 10860,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3618
+                },
+                "1441003": {
+                  "Main": 4310,
+                  "Growth": 200,
+                  "Format": "%",
+                  "DamagePercentage": 4450,
+                  "DamagePercentageGrowth": 410,
+                  "StunRatio": 4310,
+                  "StunRatioGrowth": 200,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 118525,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 12910,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4302
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit Daze Multiplier",
+              "Desc": "{Skill:1441004, Prop:1002}+{Skill:1441005, Prop:1002}",
+              "Param": {
+                "1441004": {
+                  "Main": 5900,
+                  "Growth": 270,
+                  "Format": "%",
+                  "DamagePercentage": 6000,
+                  "DamagePercentageGrowth": 550,
+                  "StunRatio": 5900,
+                  "StunRatioGrowth": 270,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 162250,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 17680,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5891
+                },
+                "1441005": {
+                  "Main": 7430,
+                  "Growth": 340,
+                  "Format": "%",
+                  "DamagePercentage": 7460,
+                  "DamagePercentageGrowth": 680,
+                  "StunRatio": 7430,
+                  "StunRatioGrowth": 340,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 204325,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 22270,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 7424
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "1st-Hit Daze Multiplier (Triggering Scorchwind)",
+              "Desc": "{Skill:1441001, Prop:1002}+{Skill:1441006, Prop:1002}",
+              "Param": {
+                "1441001": {
+                  "Main": 2690,
+                  "Growth": 130,
+                  "Format": "%",
+                  "DamagePercentage": 2870,
+                  "DamagePercentageGrowth": 270,
+                  "StunRatio": 2690,
+                  "StunRatioGrowth": 130,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 73975,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 8060,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 2687
+                },
+                "1441006": {
+                  "Main": 3050,
+                  "Growth": 140,
+                  "Format": "%",
+                  "DamagePercentage": 3440,
+                  "DamagePercentageGrowth": 320,
+                  "StunRatio": 3050,
+                  "StunRatioGrowth": 140,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 83875,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 3581,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 9140,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3045
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit Daze Multiplier (Triggering Scorchwind)",
+              "Desc": "{Skill:1441002, Prop:1002}+{Skill:1441007, Prop:1002}",
+              "Param": {
+                "1441002": {
+                  "Main": 3620,
+                  "Growth": 170,
+                  "Format": "%",
+                  "DamagePercentage": 3820,
+                  "DamagePercentageGrowth": 350,
+                  "StunRatio": 3620,
+                  "StunRatioGrowth": 170,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 99550,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 10860,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3618
+                },
+                "1441007": {
+                  "Main": 5510,
+                  "Growth": 260,
+                  "Format": "%",
+                  "DamagePercentage": 5730,
+                  "DamagePercentageGrowth": 530,
+                  "StunRatio": 5510,
+                  "StunRatioGrowth": 260,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 151525,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 5501,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 16510,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5502
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit Daze Multiplier (Triggering Scorchwind)",
+              "Desc": "{Skill:1441004, Prop:1002}+{Skill:1441008, Prop:1002}",
+              "Param": {
+                "1441004": {
+                  "Main": 5900,
+                  "Growth": 270,
+                  "Format": "%",
+                  "DamagePercentage": 6000,
+                  "DamagePercentageGrowth": 550,
+                  "StunRatio": 5900,
+                  "StunRatioGrowth": 270,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 162250,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 17680,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5891
+                },
+                "1441008": {
+                  "Main": 8260,
+                  "Growth": 380,
+                  "Format": "%",
+                  "DamagePercentage": 8330,
+                  "DamagePercentageGrowth": 760,
+                  "StunRatio": 8260,
+                  "StunRatioGrowth": 380,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 227150,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 7165,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 24770,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 8257
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Basic Attack: Blazing Wind - Misty Slash",
+          "Param": [
+            {
+              "Name": "1st-Hit DMG Multiplier",
+              "Desc": "{Skill:1441009, Prop:1001}",
+              "Param": {
+                "1441009": {
+                  "Main": 5310,
+                  "Growth": 490,
+                  "Format": "%",
+                  "DamagePercentage": 5310,
+                  "DamagePercentageGrowth": 490,
+                  "StunRatio": 3880,
+                  "StunRatioGrowth": 180,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 106700,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 3875,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 11630,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3876
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit DMG Multiplier",
+              "Desc": "{Skill:1441010, Prop:1001}",
+              "Param": {
+                "1441010": {
+                  "Main": 11120,
+                  "Growth": 1020,
+                  "Format": "%",
+                  "DamagePercentage": 11120,
+                  "DamagePercentageGrowth": 1020,
+                  "StunRatio": 8740,
+                  "StunRatioGrowth": 400,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 240350,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 8736,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 26210,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 8737
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit DMG Multiplier",
+              "Desc": "{Skill:1441011, Prop:1001}",
+              "Param": {
+                "1441011": {
+                  "Main": 15450,
+                  "Growth": 1410,
+                  "Format": "%",
+                  "DamagePercentage": 15450,
+                  "DamagePercentageGrowth": 1410,
+                  "StunRatio": 14160,
+                  "StunRatioGrowth": 650,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 389400,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 14153,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 42470,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 14154
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "4th-Hit DMG Multiplier",
+              "Desc": "{Skill:1441012, Prop:1001}",
+              "Param": {
+                "1441012": {
+                  "Main": 23780,
+                  "Growth": 2170,
+                  "Format": "%",
+                  "DamagePercentage": 23780,
+                  "DamagePercentageGrowth": 2170,
+                  "StunRatio": 21750,
+                  "StunRatioGrowth": 990,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 598125,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 21742,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 65230,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 21743
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "1st-Hit Daze Multiplier",
+              "Desc": "{Skill:1441009, Prop:1002}",
+              "Param": {
+                "1441009": {
+                  "Main": 3880,
+                  "Growth": 180,
+                  "Format": "%",
+                  "DamagePercentage": 5310,
+                  "DamagePercentageGrowth": 490,
+                  "StunRatio": 3880,
+                  "StunRatioGrowth": 180,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 106700,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 3875,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 11630,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3876
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "2nd-Hit Daze Multiplier",
+              "Desc": "{Skill:1441010, Prop:1002}",
+              "Param": {
+                "1441010": {
+                  "Main": 8740,
+                  "Growth": 400,
+                  "Format": "%",
+                  "DamagePercentage": 11120,
+                  "DamagePercentageGrowth": 1020,
+                  "StunRatio": 8740,
+                  "StunRatioGrowth": 400,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 240350,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 8736,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 26210,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 8737
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "3rd-Hit Daze Multiplier",
+              "Desc": "{Skill:1441011, Prop:1002}",
+              "Param": {
+                "1441011": {
+                  "Main": 14160,
+                  "Growth": 650,
+                  "Format": "%",
+                  "DamagePercentage": 15450,
+                  "DamagePercentageGrowth": 1410,
+                  "StunRatio": 14160,
+                  "StunRatioGrowth": 650,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 389400,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 14153,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 42470,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 14154
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "4th-Hit Daze Multiplier",
+              "Desc": "{Skill:1441012, Prop:1002}",
+              "Param": {
+                "1441012": {
+                  "Main": 21750,
+                  "Growth": 990,
+                  "Format": "%",
+                  "DamagePercentage": 23780,
+                  "DamagePercentageGrowth": 2170,
+                  "StunRatio": 21750,
+                  "StunRatioGrowth": 990,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 598125,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 21742,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 65230,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 21743
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100111": 2 },
+        "2": { "10": 3000, "100111": 3 },
+        "3": { "10": 6000, "100121": 2 },
+        "4": { "10": 9000, "100121": 3 },
+        "5": { "10": 12000, "100121": 4 },
+        "6": { "10": 18000, "100121": 6 },
+        "7": { "10": 45000, "100131": 5 },
+        "8": { "10": 67500, "100131": 8 },
+        "9": { "10": 90000, "100131": 10 },
+        "10": { "10": 112500, "100131": 12 },
+        "11": { "10": 135000, "100131": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Dodge": {
+      "Description": [
+        {
+          "Name": "Dodge: Radiant Blade",
+          "Desc": "Press <IconMap:Icon_Evade> to activate:\nA quick dash dodge.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Dash Attack: Radiant Blade - Zanshin",
+          "Desc": "Press <IconMap:Icon_Normal> during a dodge to activate:\nPerform a shoulder slam forward, dealing <color=#F0D12B>Physical DMG</color>.",
+          "Potential": []
+        },
+        {
+          "Name": "Dodge Counter: Radiant Blade - Battle Sweep",
+          "Desc": "Press <IconMap:Icon_Normal> during a <color=#FFFFFF>Perfect Dodge</color> to activate:\nPerform a slash followed by a punch at enemies ahead, dealing <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Dash Attack: Radiant Blade - Zanshin",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1441016, Prop:1001}",
+              "Param": {
+                "1441016": {
+                  "Main": 5870,
+                  "Growth": 540,
+                  "Format": "%",
+                  "DamagePercentage": 5870,
+                  "DamagePercentageGrowth": 540,
+                  "StunRatio": 3670,
+                  "StunRatioGrowth": 170,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 100925,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 11000,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3667
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1441016, Prop:1002}",
+              "Param": {
+                "1441016": {
+                  "Main": 3670,
+                  "Growth": 170,
+                  "Format": "%",
+                  "DamagePercentage": 5870,
+                  "DamagePercentageGrowth": 540,
+                  "StunRatio": 3670,
+                  "StunRatioGrowth": 170,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 100925,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 11000,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 3667
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Dodge Counter: Radiant Blade - Battle Sweep",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1441017, Prop:1001}",
+              "Param": {
+                "1441017": {
+                  "Main": 19800,
+                  "Growth": 1800,
+                  "Format": "%",
+                  "DamagePercentage": 19800,
+                  "DamagePercentageGrowth": 1800,
+                  "StunRatio": 21340,
+                  "StunRatioGrowth": 970,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 311850,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 11336,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 34020,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 26337
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1441017, Prop:1002}",
+              "Param": {
+                "1441017": {
+                  "Main": 21340,
+                  "Growth": 970,
+                  "Format": "%",
+                  "DamagePercentage": 19800,
+                  "DamagePercentageGrowth": 1800,
+                  "StunRatio": 21340,
+                  "StunRatioGrowth": 970,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 311850,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 11336,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 34020,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 26337
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100111": 2 },
+        "2": { "10": 3000, "100111": 3 },
+        "3": { "10": 6000, "100121": 2 },
+        "4": { "10": 9000, "100121": 3 },
+        "5": { "10": 12000, "100121": 4 },
+        "6": { "10": 18000, "100121": 6 },
+        "7": { "10": 45000, "100131": 5 },
+        "8": { "10": 67500, "100131": 8 },
+        "9": { "10": 90000, "100131": 10 },
+        "10": { "10": 112500, "100131": 12 },
+        "11": { "10": 135000, "100131": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Special": {
+      "Description": [
+        {
+          "Name": "Special Attack: Return to Ashes",
+          "Desc": "Press <IconMap:Icon_Special> to activate:\nSlash forward at enemies, dealing <color=#FF5521>Fire DMG</color>.\nIf hit by an enemy during the skill, restore 20% of missing HP when unleashing the slash. The healing effects of <color=#FFFFFF>Special Attack: Return to Ashes</color> and <color=#FFFFFF>Special Attack: Return to Ashes - Sacrifice</color> have a shared cooldown and can trigger once every 20s.\nIf hit by an enemy during the skill, the slash is enhanced.\nDMG taken is reduced by 40% while using this skill.\nAnti-Interrupt level is increased while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Special Attack: Return to Ashes - Sacrifice",
+          "Desc": "Hold <IconMap:Icon_Special> to activate:\nEnter a charging state, consuming up to 10% of Max HP and gaining 100 <color=#FFFFFF>Blazing Heart</color>. HP consumption will at most reduce Manato's HP to 30% of Max HP.\nRelease the button to activate <color=#FFFFFF>Special Attack: Return to Ashes</color>. If struck during the skill, the slash heals 20% of missing HP. The healing effects of <color=#FFFFFF>Special Attack: Return to Ashes</color> and <color=#FFFFFF>Special Attack: Return to Ashes - Sacrifice</color> have a shared cooldown and can trigger once every 20s.\nIf hit by an enemy during the skill or if charging reaches a certain duration, the slash is enhanced.\nDMG taken is reduced by 40% while using this skill.\nAnti-Interrupt level is increased while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Return to Ashes - Fall",
+          "Desc": "While in the Molten Edge state and with sufficient Adrenaline, press <IconMap:Icon_SpecialReady_Rp> to activate:\nJump up and unleash a falling slash on enemies in front, dealing massive <color=#FF5521>Fire DMG</color>.\nUpon activating the skill, restore 33% of Max HP.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Special Attack: Return to Ashes",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1441013, Prop:1001}",
+              "Param": {
+                "1441013": {
+                  "Main": 5070,
+                  "Growth": 470,
+                  "Format": "%",
+                  "DamagePercentage": 5070,
+                  "DamagePercentageGrowth": 470,
+                  "StunRatio": 4760,
+                  "StunRatioGrowth": 220,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 130900,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4752,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4753
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1441013, Prop:1002}",
+              "Param": {
+                "1441013": {
+                  "Main": 4760,
+                  "Growth": 220,
+                  "Format": "%",
+                  "DamagePercentage": 5070,
+                  "DamagePercentageGrowth": 470,
+                  "StunRatio": 4760,
+                  "StunRatioGrowth": 220,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 130900,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 4752,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 4753
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "DMG Multiplier (Charged or Successful Block)",
+              "Desc": "{Skill:1441014, Prop:1001}",
+              "Param": {
+                "1441014": {
+                  "Main": 13070,
+                  "Growth": 1190,
+                  "Format": "%",
+                  "DamagePercentage": 13070,
+                  "DamagePercentageGrowth": 1190,
+                  "StunRatio": 12260,
+                  "StunRatioGrowth": 560,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 337150,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 12252,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 12253
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier (Charged or Successful Block)",
+              "Desc": "{Skill:1441014, Prop:1002}",
+              "Param": {
+                "1441014": {
+                  "Main": 12260,
+                  "Growth": 560,
+                  "Format": "%",
+                  "DamagePercentage": 13070,
+                  "DamagePercentageGrowth": 1190,
+                  "StunRatio": 12260,
+                  "StunRatioGrowth": 560,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 337150,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 12252,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 12253
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "EX Special Attack: Return to Ashes - Fall",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1441015, Prop:1001}",
+              "Param": {
+                "1441015": {
+                  "Main": 65260,
+                  "Growth": 5940,
+                  "Format": "%",
+                  "DamagePercentage": 65260,
+                  "DamagePercentageGrowth": 5940,
+                  "StunRatio": 66220,
+                  "StunRatioGrowth": 3010,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 2665300,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 73891,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 20167
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1441015, Prop:1002}",
+              "Param": {
+                "1441015": {
+                  "Main": 66220,
+                  "Growth": 3010,
+                  "Format": "%",
+                  "DamagePercentage": 65260,
+                  "DamagePercentageGrowth": 5940,
+                  "StunRatio": 66220,
+                  "StunRatioGrowth": 3010,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 2665300,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 73891,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 20167
+                }
+              },
+              "Potential": []
+            },
+            { "Name": "Adrenaline Cost", "Desc": "80", "Potential": [] }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100111": 2 },
+        "2": { "10": 3000, "100111": 3 },
+        "3": { "10": 6000, "100121": 2 },
+        "4": { "10": 9000, "100121": 3 },
+        "5": { "10": 12000, "100121": 4 },
+        "6": { "10": 18000, "100121": 6 },
+        "7": { "10": 45000, "100131": 5 },
+        "8": { "10": 67500, "100131": 8 },
+        "9": { "10": 90000, "100131": 10 },
+        "10": { "10": 112500, "100131": 12 },
+        "11": { "10": 135000, "100131": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Chain": {
+      "Description": [
+        {
+          "Name": "Chain Attack: Blazing Eruption",
+          "Desc": "When a <color=#FFFFFF>Chain Attack</color> is triggered, select the character to activate:\nHurls his sword forward, then charges the enemy to trigger an explosion, dealing massive <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Ultimate: Musou Aratama",
+          "Desc": "When Decibel Rating is at <color=#FFFFFF>Maximum</color>, press <IconMap:Icon_UltimateReady> to activate:\nJump into the air and deliver a falling slash at enemies in front, followed by an explosion, dealing massive <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Chain Attack: Blazing Eruption",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1441018, Prop:1001}",
+              "Param": {
+                "1441018": {
+                  "Main": 48330,
+                  "Growth": 4400,
+                  "Format": "%",
+                  "DamagePercentage": 48330,
+                  "DamagePercentageGrowth": 4400,
+                  "StunRatio": 20510,
+                  "StunRatioGrowth": 940,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 2392775,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 40450,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 20501
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1441018, Prop:1002}",
+              "Param": {
+                "1441018": {
+                  "Main": 20510,
+                  "Growth": 940,
+                  "Format": "%",
+                  "DamagePercentage": 48330,
+                  "DamagePercentageGrowth": 4400,
+                  "StunRatio": 20510,
+                  "StunRatioGrowth": 940,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 2392775,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 40450,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 20501
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Ultimate: Musou Aratama",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1441019, Prop:1001}",
+              "Param": {
+                "1441019": {
+                  "Main": 156230,
+                  "Growth": 14210,
+                  "Format": "%",
+                  "DamagePercentage": 156230,
+                  "DamagePercentageGrowth": 14210,
+                  "StunRatio": 34840,
+                  "StunRatioGrowth": 1590,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 34833,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 84834
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1441019, Prop:1002}",
+              "Param": {
+                "1441019": {
+                  "Main": 34840,
+                  "Growth": 1590,
+                  "Format": "%",
+                  "DamagePercentage": 156230,
+                  "DamagePercentageGrowth": 14210,
+                  "StunRatio": 34840,
+                  "StunRatioGrowth": 1590,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 34833,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 84834
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100111": 2 },
+        "2": { "10": 3000, "100111": 3 },
+        "3": { "10": 6000, "100121": 2 },
+        "4": { "10": 9000, "100121": 3 },
+        "5": { "10": 12000, "100121": 4 },
+        "6": { "10": 18000, "100121": 6 },
+        "7": { "10": 45000, "100131": 5 },
+        "8": { "10": 67500, "100131": 8 },
+        "9": { "10": 90000, "100131": 10 },
+        "10": { "10": 112500, "100131": 12 },
+        "11": { "10": 135000, "100131": 15, "100941": 1 },
+        "12": {}
+      }
+    },
+    "Assist": {
+      "Description": [
+        {
+          "Name": "Quick Assist: Lone Shadow - Regroup",
+          "Desc": "When the active character is launched, press <IconMap:Icon_Switch> to activate:\nSlashes and punches enemies in front, dealing <color=#FF5521>Fire DMG</color>.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Defensive Assist: Lone Shadow - Mountain Stand",
+          "Desc": "When the on-field character is about to be attacked, press <IconMap:Icon_Switch> to activate:\nParries the enemy's attack, inflicting massive Daze and dealing <color=#FF5521>Fire DMG</color>.\nGain 75 <color=#FFFFFF>Blazing Heart</color> upon activating this skill.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Assist Follow-Up: Lone Shadow - Breaking Fang",
+          "Desc": "Press <IconMap:Icon_Normal> after a <color=#FFFFFF>Defensive Assist</color> to activate:\nUnleash multiple slashes at enemies ahead, dealing <color=#FF5521>Fire DMG</color>.\nRepeated presses allow up to 7 extra consecutive slashes.\nWhile chaining slashes, if Manato's HP is above 30%, 2% of Max HP is consumed.\nCharacter is invulnerable while using this skill.",
+          "Potential": []
+        },
+        {
+          "Name": "Quick Assist: Lone Shadow - Regroup",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1441020, Prop:1001}",
+              "Param": {
+                "1441020": {
+                  "Main": 9070,
+                  "Growth": 830,
+                  "Format": "%",
+                  "DamagePercentage": 9070,
+                  "DamagePercentageGrowth": 830,
+                  "StunRatio": 5670,
+                  "StunRatioGrowth": 260,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 155925,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 5668,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 17010,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5669
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1441020, Prop:1002}",
+              "Param": {
+                "1441020": {
+                  "Main": 5670,
+                  "Growth": 260,
+                  "Format": "%",
+                  "DamagePercentage": 9070,
+                  "DamagePercentageGrowth": 830,
+                  "StunRatio": 5670,
+                  "StunRatioGrowth": 260,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 155925,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 5668,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 17010,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 5669
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Defensive Assist: Lone Shadow - Mountain Stand",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1441026, Prop:1001}",
+              "Param": {
+                "1441026": {
+                  "Main": 4000,
+                  "Growth": 370,
+                  "Format": "%",
+                  "DamagePercentage": 4000,
+                  "DamagePercentageGrowth": 370,
+                  "StunRatio": 0,
+                  "StunRatioGrowth": 0,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 0
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Light Defensive Daze Multiplier",
+              "Desc": "{Skill:1441021, Prop:1002}",
+              "Param": {
+                "1441021": {
+                  "Main": 24670,
+                  "Growth": 1130,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 24670,
+                  "StunRatioGrowth": 1130,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 36664
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Heavy Defensive Daze Multiplier",
+              "Desc": "{Skill:1441022, Prop:1002}",
+              "Param": {
+                "1441022": {
+                  "Main": 31170,
+                  "Growth": 1420,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 31170,
+                  "StunRatioGrowth": 1420,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 41664
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Chain Defensive Daze Multiplier",
+              "Desc": "{Skill:1441023, Prop:1002}",
+              "Param": {
+                "1441023": {
+                  "Main": 15170,
+                  "Growth": 690,
+                  "Format": "%",
+                  "DamagePercentage": 0,
+                  "DamagePercentageGrowth": 0,
+                  "StunRatio": 15170,
+                  "StunRatioGrowth": 690,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 0,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 0,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 0,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 11664
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        },
+        {
+          "Name": "Assist Follow-Up: Lone Shadow - Breaking Fang",
+          "Param": [
+            {
+              "Name": "DMG Multiplier",
+              "Desc": "{Skill:1441024, Prop:1001}",
+              "Param": {
+                "1441024": {
+                  "Main": 16670,
+                  "Growth": 1520,
+                  "Format": "%",
+                  "DamagePercentage": 16670,
+                  "DamagePercentageGrowth": 1520,
+                  "StunRatio": 27090,
+                  "StunRatioGrowth": 1240,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 573100,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 20833,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 46880,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 20834
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Daze Multiplier",
+              "Desc": "{Skill:1441024, Prop:1002}",
+              "Param": {
+                "1441024": {
+                  "Main": 27090,
+                  "Growth": 1240,
+                  "Format": "%",
+                  "DamagePercentage": 16670,
+                  "DamagePercentageGrowth": 1520,
+                  "StunRatio": 27090,
+                  "StunRatioGrowth": 1240,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 573100,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 20833,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 46880,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 20834
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Combo Maximum DMG Multiplier",
+              "Desc": "{Skill:1441024, Prop:1001}+{Skill:1441025, Prop:1001}",
+              "Param": {
+                "1441024": {
+                  "Main": 16670,
+                  "Growth": 1520,
+                  "Format": "%",
+                  "DamagePercentage": 16670,
+                  "DamagePercentageGrowth": 1520,
+                  "StunRatio": 27090,
+                  "StunRatioGrowth": 1240,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 573100,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 20833,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 46880,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 20834
+                },
+                "1441025": {
+                  "Main": 40340,
+                  "Growth": 3670,
+                  "Format": "%",
+                  "DamagePercentage": 40340,
+                  "DamagePercentageGrowth": 3670,
+                  "StunRatio": 21000,
+                  "StunRatioGrowth": 960,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 577500,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 21000,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 78630,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 21000
+                }
+              },
+              "Potential": []
+            },
+            {
+              "Name": "Combo Maximum Daze Multiplier",
+              "Desc": "{Skill:1441024, Prop:1002}+{Skill:1441025, Prop:1002}",
+              "Param": {
+                "1441024": {
+                  "Main": 27090,
+                  "Growth": 1240,
+                  "Format": "%",
+                  "DamagePercentage": 16670,
+                  "DamagePercentageGrowth": 1520,
+                  "StunRatio": 27090,
+                  "StunRatioGrowth": 1240,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 573100,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 20833,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 46880,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 20834
+                },
+                "1441025": {
+                  "Main": 21000,
+                  "Growth": 960,
+                  "Format": "%",
+                  "DamagePercentage": 40340,
+                  "DamagePercentageGrowth": 3670,
+                  "StunRatio": 21000,
+                  "StunRatioGrowth": 960,
+                  "SpRecovery": 0,
+                  "SpRecoveryGrowth": 0,
+                  "FeverRecovery": 577500,
+                  "FeverRecoveryGrowth": 0,
+                  "AttributeInfliction": 21000,
+                  "SpConsume": 0,
+                  "AttackData": [],
+                  "RpRecovery": 78630,
+                  "RpRecoveryGrowth": 0,
+                  "EtherPurify": 21000
+                }
+              },
+              "Potential": []
+            }
+          ],
+          "Potential": []
+        }
+      ],
+      "Material": {
+        "1": { "10": 2000, "100111": 2 },
+        "2": { "10": 3000, "100111": 3 },
+        "3": { "10": 6000, "100121": 2 },
+        "4": { "10": 9000, "100121": 3 },
+        "5": { "10": 12000, "100121": 4 },
+        "6": { "10": 18000, "100121": 6 },
+        "7": { "10": 45000, "100131": 5 },
+        "8": { "10": 67500, "100131": 8 },
+        "9": { "10": 90000, "100131": 10 },
+        "10": { "10": 112500, "100131": 12 },
+        "11": { "10": 135000, "100131": 15, "100941": 1 },
+        "12": {}
+      }
+    }
+  },
+  "SkillList": {
+    "1441001": {
+      "Name": "Basic Attack: Blazing Wind Slash",
+      "Desc": "<IconMap:Icon_Normal> ; <IconMap:Icon_Normal> ; <IconMap:Icon_Normal>",
+      "ElementType": 200,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1441002": {
+      "Name": "Basic Attack: Blazing Wind - Misty Slash",
+      "Desc": "<IconMap:Icon_Normal> ; <IconMap:Icon_Normal> ; <IconMap:Icon_Normal> ; <IconMap:Icon_Normal> (During Molten Edge)",
+      "ElementType": 201,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1441003": {
+      "Name": "Special Attack: Return to Ashes",
+      "Desc": "<IconMap:Icon_Special>",
+      "ElementType": 201,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1441004": {
+      "Name": "Special Attack: Return to Ashes - Sacrifice",
+      "Desc": "<IconMap:Icon_Special> (Hold)",
+      "ElementType": 201,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1441005": {
+      "Name": "EX Special Attack: Return to Ashes - Fall",
+      "Desc": "<IconMap:Icon_SpecialReady_Rp> (During Molten Edge)",
+      "ElementType": 201,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1441006": {
+      "Name": "Dodge: Radiant Blade",
+      "Desc": "<IconMap:Icon_Evade>",
+      "ElementType": 201,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1441007": {
+      "Name": "Dash Attack: Radiant Blade - Zanshin",
+      "Desc": "<IconMap:Icon_Evade> ; <IconMap:Icon_Normal>",
+      "ElementType": 200,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1441008": {
+      "Name": "Dodge Counter: Radiant Blade - Battle Sweep",
+      "Desc": "<IconMap:Icon_Evade> (Perfect) ; <IconMap:Icon_Normal>",
+      "ElementType": 201,
+      "HitType": 102,
+      "Potential": []
+    },
+    "1441009": {
+      "Name": "Chain Attack: Blazing Eruption",
+      "Desc": "<IconMap:Icon_QTE>",
+      "ElementType": 201,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1441010": {
+      "Name": "Ultimate: Musou Aratama",
+      "Desc": "<IconMap:Icon_UltimateReady>",
+      "ElementType": 201,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1441011": {
+      "Name": "Quick Assist: Lone Shadow - Regroup",
+      "Desc": "<IconMap:Icon_Switch> (When Triggering Quick Assist)",
+      "ElementType": 201,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1441012": {
+      "Name": "Defensive Assist: Lone Shadow - Mountain Stand",
+      "Desc": "<IconMap:Icon_Switch> (When Triggering Defensive Assist)",
+      "ElementType": 201,
+      "HitType": 101,
+      "Potential": []
+    },
+    "1441013": {
+      "Name": "Assist Follow-Up: Lone Shadow - Breaking Fang",
+      "Desc": "<IconMap:Icon_Normal> (Can Press Repeatedly) (After Defensive Assist)",
+      "ElementType": 201,
+      "HitType": 101,
+      "Potential": []
+    }
+  },
+  "Passive": {
+    "Level": {
+      "1441501": {
+        "Level": 1,
+        "Id": 1441501,
+        "Name": [
+          "Core Passive: Mighty Molten Edge",
+          "Additional Ability: Rekindled Heart"
+        ],
+        "Desc": [
+          "Manato gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Manato deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Manato uses <color=#FFFFFF>Special Attack: Return to Ashes - Sacrifice</color> or a <color=#FFFFFF>Defensive Assist</color>, he accumulates <color=#FFFFFF>Blazing Heart</color>, up to a maximum of 100 points. At 75 <color=#FFFFFF>Blazing Heart</color>, Manato enters the <color=#FFFFFF>Molten Edge</color> state. While in the <color=#FFFFFF>Molten Edge</color> state, Manato consumes 3.3 <color=#FFFFFF>Blazing Heart</color> per second. When <color=#FFFFFF>Blazing Heart</color> is fully depleted, he exits <color=#FFFFFF>Molten Edge</color>.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's <color=#FFFFFF>Basic Attacks</color> are enhanced, and he can use <color=#FFFFFF>EX Special Attack: Return to Ashes - Fall</color>.\nWhen consuming HP during <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes from an <color=#FFFFFF>Assist Follow-Up</color>, that attack's CRIT DMG increases by <color=#2BAD00>25%</color>, and the Adrenaline Generation Rate increases by 100%.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's CRIT Rate increases by 10%, and his <color=#FF5521>Fire DMG</color> increases by <color=#2BAD00>10%</color>.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhen Manato uses his Ultimate, he gains 8 stacks of Remnant Flame, and when using a Chain Attack, he gains 4 stacks of Remnant Flame, lasting 60s, stacking up to 20 times. Repeated triggers reset the duration. While launching <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes of an <color=#FFFFFF>Assist Follow-Up</color>, if his HP is below 100% of Max HP, one stack of Remnant Flame is consumed to restore 2% of his Max HP."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1441502": {
+        "Level": 2,
+        "Id": 1441502,
+        "Name": [
+          "Core Passive: Mighty Molten Edge",
+          "Additional Ability: Rekindled Heart"
+        ],
+        "Desc": [
+          "Manato gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Manato deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Manato uses <color=#FFFFFF>Special Attack: Return to Ashes - Sacrifice</color> or a <color=#FFFFFF>Defensive Assist</color>, he accumulates <color=#FFFFFF>Blazing Heart</color>, up to a maximum of 100 points. At 75 <color=#FFFFFF>Blazing Heart</color>, Manato enters the <color=#FFFFFF>Molten Edge</color> state. While in the <color=#FFFFFF>Molten Edge</color> state, Manato consumes 3.3 <color=#FFFFFF>Blazing Heart</color> per second. When <color=#FFFFFF>Blazing Heart</color> is fully depleted, he exits <color=#FFFFFF>Molten Edge</color>.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's <color=#FFFFFF>Basic Attacks</color> are enhanced, and he can use <color=#FFFFFF>EX Special Attack: Return to Ashes - Fall</color>.\nWhen consuming HP during <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes from an <color=#FFFFFF>Assist Follow-Up</color>, that attack's CRIT DMG increases by <color=#2BAD00>29.2%</color>, and the Adrenaline Generation Rate increases by 100%.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's CRIT Rate increases by 10%, and his <color=#FF5521>Fire DMG</color> increases by <color=#2BAD00>11.7%</color>.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhen Manato uses his Ultimate, he gains 8 stacks of Remnant Flame, and when using a Chain Attack, he gains 4 stacks of Remnant Flame, lasting 60s, stacking up to 20 times. Repeated triggers reset the duration. While launching <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes of an <color=#FFFFFF>Assist Follow-Up</color>, if his HP is below 100% of Max HP, one stack of Remnant Flame is consumed to restore 2% of his Max HP."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1441503": {
+        "Level": 3,
+        "Id": 1441503,
+        "Name": [
+          "Core Passive: Mighty Molten Edge",
+          "Additional Ability: Rekindled Heart"
+        ],
+        "Desc": [
+          "Manato gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Manato deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Manato uses <color=#FFFFFF>Special Attack: Return to Ashes - Sacrifice</color> or a <color=#FFFFFF>Defensive Assist</color>, he accumulates <color=#FFFFFF>Blazing Heart</color>, up to a maximum of 100 points. At 75 <color=#FFFFFF>Blazing Heart</color>, Manato enters the <color=#FFFFFF>Molten Edge</color> state. While in the <color=#FFFFFF>Molten Edge</color> state, Manato consumes 3.3 <color=#FFFFFF>Blazing Heart</color> per second. When <color=#FFFFFF>Blazing Heart</color> is fully depleted, he exits <color=#FFFFFF>Molten Edge</color>.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's <color=#FFFFFF>Basic Attacks</color> are enhanced, and he can use <color=#FFFFFF>EX Special Attack: Return to Ashes - Fall</color>.\nWhen consuming HP during <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes from an <color=#FFFFFF>Assist Follow-Up</color>, that attack's CRIT DMG increases by <color=#2BAD00>33.3%</color>, and the Adrenaline Generation Rate increases by 100%.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's CRIT Rate increases by 10%, and his <color=#FF5521>Fire DMG</color> increases by <color=#2BAD00>13.3%</color>.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhen Manato uses his Ultimate, he gains 8 stacks of Remnant Flame, and when using a Chain Attack, he gains 4 stacks of Remnant Flame, lasting 60s, stacking up to 20 times. Repeated triggers reset the duration. While launching <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes of an <color=#FFFFFF>Assist Follow-Up</color>, if his HP is below 100% of Max HP, one stack of Remnant Flame is consumed to restore 2% of his Max HP."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1441504": {
+        "Level": 4,
+        "Id": 1441504,
+        "Name": [
+          "Core Passive: Mighty Molten Edge",
+          "Additional Ability: Rekindled Heart"
+        ],
+        "Desc": [
+          "Manato gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Manato deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Manato uses <color=#FFFFFF>Special Attack: Return to Ashes - Sacrifice</color> or a <color=#FFFFFF>Defensive Assist</color>, he accumulates <color=#FFFFFF>Blazing Heart</color>, up to a maximum of 100 points. At 75 <color=#FFFFFF>Blazing Heart</color>, Manato enters the <color=#FFFFFF>Molten Edge</color> state. While in the <color=#FFFFFF>Molten Edge</color> state, Manato consumes 3.3 <color=#FFFFFF>Blazing Heart</color> per second. When <color=#FFFFFF>Blazing Heart</color> is fully depleted, he exits <color=#FFFFFF>Molten Edge</color>.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's <color=#FFFFFF>Basic Attacks</color> are enhanced, and he can use <color=#FFFFFF>EX Special Attack: Return to Ashes - Fall</color>.\nWhen consuming HP during <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes from an <color=#FFFFFF>Assist Follow-Up</color>, that attack's CRIT DMG increases by <color=#2BAD00>37.5%</color>, and the Adrenaline Generation Rate increases by 100%.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's CRIT Rate increases by 10%, and his <color=#FF5521>Fire DMG</color> increases by <color=#2BAD00>15%</color>.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhen Manato uses his Ultimate, he gains 8 stacks of Remnant Flame, and when using a Chain Attack, he gains 4 stacks of Remnant Flame, lasting 60s, stacking up to 20 times. Repeated triggers reset the duration. While launching <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes of an <color=#FFFFFF>Assist Follow-Up</color>, if his HP is below 100% of Max HP, one stack of Remnant Flame is consumed to restore 2% of his Max HP."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1441505": {
+        "Level": 5,
+        "Id": 1441505,
+        "Name": [
+          "Core Passive: Mighty Molten Edge",
+          "Additional Ability: Rekindled Heart"
+        ],
+        "Desc": [
+          "Manato gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Manato deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Manato uses <color=#FFFFFF>Special Attack: Return to Ashes - Sacrifice</color> or a <color=#FFFFFF>Defensive Assist</color>, he accumulates <color=#FFFFFF>Blazing Heart</color>, up to a maximum of 100 points. At 75 <color=#FFFFFF>Blazing Heart</color>, Manato enters the <color=#FFFFFF>Molten Edge</color> state. While in the <color=#FFFFFF>Molten Edge</color> state, Manato consumes 3.3 <color=#FFFFFF>Blazing Heart</color> per second. When <color=#FFFFFF>Blazing Heart</color> is fully depleted, he exits <color=#FFFFFF>Molten Edge</color>.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's <color=#FFFFFF>Basic Attacks</color> are enhanced, and he can use <color=#FFFFFF>EX Special Attack: Return to Ashes - Fall</color>.\nWhen consuming HP during <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes from an <color=#FFFFFF>Assist Follow-Up</color>, that attack's CRIT DMG increases by <color=#2BAD00>41.7%</color>, and the Adrenaline Generation Rate increases by 100%.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's CRIT Rate increases by 10%, and his <color=#FF5521>Fire DMG</color> increases by <color=#2BAD00>16.7%</color>.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhen Manato uses his Ultimate, he gains 8 stacks of Remnant Flame, and when using a Chain Attack, he gains 4 stacks of Remnant Flame, lasting 60s, stacking up to 20 times. Repeated triggers reset the duration. While launching <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes of an <color=#FFFFFF>Assist Follow-Up</color>, if his HP is below 100% of Max HP, one stack of Remnant Flame is consumed to restore 2% of his Max HP."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1441506": {
+        "Level": 6,
+        "Id": 1441506,
+        "Name": [
+          "Core Passive: Mighty Molten Edge",
+          "Additional Ability: Rekindled Heart"
+        ],
+        "Desc": [
+          "Manato gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Manato deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Manato uses <color=#FFFFFF>Special Attack: Return to Ashes - Sacrifice</color> or a <color=#FFFFFF>Defensive Assist</color>, he accumulates <color=#FFFFFF>Blazing Heart</color>, up to a maximum of 100 points. At 75 <color=#FFFFFF>Blazing Heart</color>, Manato enters the <color=#FFFFFF>Molten Edge</color> state. While in the <color=#FFFFFF>Molten Edge</color> state, Manato consumes 3.3 <color=#FFFFFF>Blazing Heart</color> per second. When <color=#FFFFFF>Blazing Heart</color> is fully depleted, he exits <color=#FFFFFF>Molten Edge</color>.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's <color=#FFFFFF>Basic Attacks</color> are enhanced, and he can use <color=#FFFFFF>EX Special Attack: Return to Ashes - Fall</color>.\nWhen consuming HP during <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes from an <color=#FFFFFF>Assist Follow-Up</color>, that attack's CRIT DMG increases by <color=#2BAD00>45.8%</color>, and the Adrenaline Generation Rate increases by 100%.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's CRIT Rate increases by 10%, and his <color=#FF5521>Fire DMG</color> increases by <color=#2BAD00>18.3%</color>.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhen Manato uses his Ultimate, he gains 8 stacks of Remnant Flame, and when using a Chain Attack, he gains 4 stacks of Remnant Flame, lasting 60s, stacking up to 20 times. Repeated triggers reset the duration. While launching <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes of an <color=#FFFFFF>Assist Follow-Up</color>, if his HP is below 100% of Max HP, one stack of Remnant Flame is consumed to restore 2% of his Max HP."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      },
+      "1441507": {
+        "Level": 7,
+        "Id": 1441507,
+        "Name": [
+          "Core Passive: Mighty Molten Edge",
+          "Additional Ability: Rekindled Heart"
+        ],
+        "Desc": [
+          "Manato gains extra Sheer Force based on his Max HP, with every 1 point of Max HP increasing Sheer Force by 0.1.\nAll <color=#FF5521>Fire DMG</color> Manato deals is Sheer DMG, ignoring enemy DEF and using his Sheer Force stat as the DMG Multiplier.\nWhen Manato uses <color=#FFFFFF>Special Attack: Return to Ashes - Sacrifice</color> or a <color=#FFFFFF>Defensive Assist</color>, he accumulates <color=#FFFFFF>Blazing Heart</color>, up to a maximum of 100 points. At 75 <color=#FFFFFF>Blazing Heart</color>, Manato enters the <color=#FFFFFF>Molten Edge</color> state. While in the <color=#FFFFFF>Molten Edge</color> state, Manato consumes 3.3 <color=#FFFFFF>Blazing Heart</color> per second. When <color=#FFFFFF>Blazing Heart</color> is fully depleted, he exits <color=#FFFFFF>Molten Edge</color>.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's <color=#FFFFFF>Basic Attacks</color> are enhanced, and he can use <color=#FFFFFF>EX Special Attack: Return to Ashes - Fall</color>.\nWhen consuming HP during <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes from an <color=#FFFFFF>Assist Follow-Up</color>, that attack's CRIT DMG increases by <color=#2BAD00>50%</color>, and the Adrenaline Generation Rate increases by 100%.\nWhile in the <color=#FFFFFF>Molten Edge</color> state, Manato's CRIT Rate increases by 10%, and his <color=#FF5521>Fire DMG</color> increases by <color=#2BAD00>20%</color>.",
+          "When another character in your squad is a <color=#FFFFFF>Support</color> or <color=#FFFFFF>Stun</color> character:\nWhen Manato uses his Ultimate, he gains 8 stacks of Remnant Flame, and when using a Chain Attack, he gains 4 stacks of Remnant Flame, lasting 60s, stacking up to 20 times. Repeated triggers reset the duration. While launching <color=#FFFFFF>Basic Attack: Blazing Wind - Misty Slash</color> or during the consecutive slashes of an <color=#FFFFFF>Assist Follow-Up</color>, if his HP is below 100% of Max HP, one stack of Remnant Flame is consumed to restore 2% of his Max HP."
+        ],
+        "ExtraProperty": {
+          "111": { "Target": 123, "Value": 1000 },
+          "121": { "Target": 123, "Value": 3000 }
+        },
+        "Potential": []
+      }
+    },
+    "Materials": {
+      "1": { "10": 5000 },
+      "2": { "10": 12000, "110512": 2 },
+      "3": { "10": 28000, "110512": 4 },
+      "4": { "10": 60000, "110007": 2, "110512": 9 },
+      "5": { "10": 100000, "110007": 3, "110512": 15 },
+      "6": { "10": 200000, "110007": 4, "110512": 30 }
+    }
+  },
+  "Talent": {
+    "1": {
+      "Level": 1,
+      "Name": "Drifter's Rules of Survival",
+      "Desc": "Whenever Manato loses HP, the amount of HP lost is tallied. Each 1% of his Max HP tallied increases the <color=#FF5521>Fire DMG</color> of <color=#FFFFFF>Assist Follow-Ups</color> and <color=#FFFFFF>Basic Attacks</color> by 0.4%, up to a max of 20%.",
+      "Desc2": "Unfortunate children are all alike.\nThe once-kind voices, the warm lights, the joyful promises... all vanished without a farewell. Being formless, even the sharpest fangs could not hold them, nor the sharpest claws grasp them.\n\"I can eat just about anything, and I'm not too afraid of the cold — if there's a 'secret to surviving,' maybe it's just that.\""
+    },
+    "2": {
+      "Level": 2,
+      "Name": "Day & Night, Kitchen & Love",
+      "Desc": "While in the <color=#FFFFFF>Molten Edge</color> state, Manato ignores 8% of a target's <color=#FF5521>Fire RES</color>. After being hit by an enemy while using <color=#FFFFFF>Special Attack: Return to Ashes</color> or <color=#FFFFFF>Special Attack: Return to Ashes - Sacrifice</color>, press <IconMap:Icon_Normal> to trigger an <color=#FFFFFF>Assist Follow-Up</color>.",
+      "Desc2": "Perhaps this is what a peaceful family is — Manato, A-Cing, and A-Yuet all think of themselves as the fortunate \"child picked up and brought home.\"\nIf there's anything left worth arguing about, it's probably just \"who should eat the last bit of vegetables.\"\n\"It doesn't taste good? I'll ask at Yum Cha Sin if maybe I made a mistake somewhere...\"\n\"...Trade secret?! But last time... I just stood there and the chef told me everything.\""
+    },
+    "3": {
+      "Level": 3,
+      "Name": "Enter the Realm of Urban Legends",
+      "Desc": "<color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Dodge</color>, <color=#FFFFFF>Assist</color>, <color=#FFFFFF>Special Attack</color>, and <color=#FFFFFF>Chain Attack</color> Lv. +2",
+      "Desc2": "Getting established on a forum starts with a memorable nickname — everyone thinks they're bad at it, but for a dog Thiren who sometimes has to stay back for make-up exams in literature, it's especially tough.\n\"...You already know it, don't you? It's, uh... ahem, SailumeSadLoneGhost\"\n\"—You heard me!\"\n\"Damn it. One of these days, I'm changing it to 'Mention My Old Name Again and I'll See You in the Hollow.'\""
+    },
+    "4": {
+      "Level": 4,
+      "Name": "Childhood Oath",
+      "Desc": "Max HP increases by 8%. During <color=#FFFFFF>Special Attack: Return to Ashes</color> and <color=#FFFFFF>Special Attack: Return to Ashes - Sacrifice</color>, when Manato takes fatal DMG, he remains in battle, with his HP not dropping below 1. This effect can trigger once every 10s.",
+      "Desc2": "Maybe every teenager imagines themselves as a lone wolf with cold eyes... but Manato had an edge in that regard.\nIf not for the drowned ideals, he could have gone on pretending nothing had ever happened, just like everyone else.\n\"Like I said, that was just how I thought when I was eight—\"\n\"So this is what a 'friend' is... You didn't treat me like I was fragile, but sometimes you don't treat me like a person either.\""
+    },
+    "5": {
+      "Level": 5,
+      "Name": "Lone Shadow Returns to the Pack",
+      "Desc": "<color=#FFFFFF>Basic Attack</color>, <color=#FFFFFF>Dodge</color>, <color=#FFFFFF>Assist</color>, <color=#FFFFFF>Special Attack</color>, and <color=#FFFFFF>Chain Attack</color> Lv. +2",
+      "Desc2": "In truth, despite the barrier his appearance put up, Manato was popular with everyone.\nSome made friends with him, some looked to him for protection, and some... tried to rope him into advertising.\n\"Sorry, I'm probably not the right choice to promote your shop.\"\n\"As for 'bench pressing,' I've never done it — unless you're referring to... being pinned by Ethereals and pushing up my greatsword to keep their claws off me?\""
+    },
+    "6": {
+      "Level": 6,
+      "Name": "Beyond Dreams of the Past",
+      "Desc": "When <color=#FFFFFF>Special Attack: Return to Ashes</color> hits a Stunned enemy, Manato gains 75 Blazing Heart and 4 stacks of Remnant Flame, and pressing <IconMap:Icon_Normal> will launch an <color=#FFFFFF>Assist Follow-Up</color>. This Remnant Flame effect can trigger once every 20s. When his <color=#FFFFFF>Assist Follow-Up</color> hits an enemy, Manato's <color=#FF5521>Fire DMG</color> increases by 3% for 8s, stacking up to 5 times. Repeated triggers reset the duration.",
+      "Desc2": "Manato set aside the dream of lone courage and embraced the friends he held dear.\nOf course, these friends could still cause him trouble, like at Waifei Peninsula's specialty soup shop.\n\"When I said I'd cover the rear, I didn't mean while drinking coconut chicken soup.\"\n\"Then how come I'm the one on the front lines when it's scorpion soup?\"\n...But he charged ahead anyway."
+    }
+  },
+  "FairyRecommend": {
+    "Slot4": 33100,
+    "Slot2": 31000,
+    "SlotSub": 32700,
+    "Part4": {
+      "Prop": 20103,
+      "Name": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconCrit.png"
+    },
+    "Part5": {
+      "Prop": 21103,
+      "Name": "CRIT DMG",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconCritDam.png"
+    },
+    "Part6": {
+      "Prop": 11102,
+      "Name": "HP",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconAttribute/UnPacker/Role/IconHpMax.png"
+    },
+    "PartSub": {
+      "Prop": 31603,
+      "Name": "Fire DMG Bonus",
+      "Format": "{0:0.#%}",
+      "Icon": "UI/Sprite/A1DynamicLoad/IconGeneralBuff/Packer/IconFire.png"
+    }
+  },
+  "Potential": [],
+  "PotentialDetail": {}
+}
