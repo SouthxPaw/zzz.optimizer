@@ -1,4 +1,4 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files
 
 # Compiled output
 /dist
@@ -6,10 +6,19 @@
 /out-tsc
 /bazel-out
 
-# Node
+# Node modules and logs
 /node_modules
-npm-debug.log
-yarn-error.log
+npm-debug.log*
+yarn-error.log*
+
+# Angular / build caches
+/.angular/cache
+.sass-cache/
+.connect.lock
+/coverage
+/typings
+/libpeerconnection.log
+testem.log
 
 # IDEs and editors
 .idea/
@@ -20,22 +29,15 @@ yarn-error.log
 .settings/
 *.sublime-workspace
 
-# Visual Studio Code
+# VS Code
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history/*
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
+# Miscellaneous files to ignore
+.claude
 
 # System files
 .DS_Store
