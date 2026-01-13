@@ -6,32 +6,32 @@
       "name": "Anby",
       "breakpoints": {
         "hp": {
-          "min": 9500,
-          "optimal": 9500
+          "min": 7840,
+          "optimal": 7840
         },
         "atk": {
-          "min": 1700,
-          "optimal": 2000
+          "min": 1400,
+          "optimal": 1500
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
-          "min": 169,
-          "optimal": 190
+          "min": 140,
+          "optimal": 140
         },
         "anomalyMastery": {
           "min": 0,
           "optimal": 0
         },
         "critRate": {
-          "min": 50,
-          "optimal": 50
+          "min": 41,
+          "optimal": 41
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 82,
+          "optimal": 90
         },
         "anomalyProficiency": {
           "min": 0,
@@ -80,16 +80,16 @@
       "name": "Nekomata",
       "breakpoints": {
         "hp": {
-          "min": 9500,
-          "optimal": 9500
+          "min": 7840,
+          "optimal": 7840
         },
         "atk": {
-          "min": 2500,
-          "optimal": 3100
+          "min": 2060,
+          "optimal": 2320
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -100,12 +100,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 70,
-          "optimal": 80
+          "min": 58,
+          "optimal": 60
         },
         "critDmg": {
-          "min": 140,
-          "optimal": 160
+          "min": 115,
+          "optimal": 120
         },
         "anomalyProficiency": {
           "min": 0,
@@ -153,16 +153,16 @@
       "name": "Nicole",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 2000,
-          "optimal": 2400
+          "min": 1650,
+          "optimal": 1800
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -181,8 +181,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 200,
-          "optimal": 320
+          "min": 165,
+          "optimal": 240
         },
         "pen": {
           "min": 0,
@@ -225,16 +225,16 @@
       "name": "Soldier 11",
       "breakpoints": {
         "hp": {
-          "min": 9500,
-          "optimal": 9500
+          "min": 7840,
+          "optimal": 7840
         },
         "atk": {
-          "min": 2800,
-          "optimal": 3000
+          "min": 2310,
+          "optimal": 2310
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -245,12 +245,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 80,
-          "optimal": 80
+          "min": 66,
+          "optimal": 66
         },
         "critDmg": {
-          "min": 140,
-          "optimal": 140
+          "min": 115,
+          "optimal": 115
         },
         "anomalyProficiency": {
           "min": 0,
@@ -298,8 +298,8 @@
       "name": "Yidhari",
       "breakpoints": {
         "hp": {
-          "min": 18000,
-          "optimal": 20000
+          "min": 14850,
+          "optimal": 15000
         },
         "atk": {
           "min": 0,
@@ -318,12 +318,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 58,
-          "optimal": 65
+          "min": 48,
+          "optimal": 49
         },
         "critDmg": {
-          "min": 120,
-          "optimal": 150
+          "min": 99,
+          "optimal": 110
         },
         "anomalyProficiency": {
           "min": 0,
@@ -372,16 +372,16 @@
       "name": "Corin",
       "breakpoints": {
         "hp": {
-          "min": 9000,
-          "optimal": 9000
+          "min": 7420,
+          "optimal": 7420
         },
         "atk": {
-          "min": 2400,
-          "optimal": 3000
+          "min": 1980,
+          "optimal": 2250
         },
         "def": {
-          "min": 800,
-          "optimal": 850
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -392,12 +392,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 70,
-          "optimal": 80
+          "min": 58,
+          "optimal": 60
         },
         "critDmg": {
-          "min": 140,
-          "optimal": 160
+          "min": 115,
+          "optimal": 120
         },
         "anomalyProficiency": {
           "min": 0,
@@ -445,36 +445,36 @@
       "name": "Caesar",
       "breakpoints": {
         "hp": {
-          "min": 12000,
-          "optimal": 12000
+          "min": 9900,
+          "optimal": 9900
         },
         "atk": {
-          "min": 1400,
-          "optimal": 2000
+          "min": 1160,
+          "optimal": 1500
         },
         "def": {
-          "min": 1000,
-          "optimal": 1000
+          "min": 825,
+          "optimal": 825
         },
         "impact": {
-          "min": 145,
-          "optimal": 170
+          "min": 120,
+          "optimal": 130
         },
         "anomalyMastery": {
-          "min": 87,
-          "optimal": 87
+          "min": 72,
+          "optimal": 72
         },
         "critRate": {
-          "min": 50,
-          "optimal": 60
+          "min": 41,
+          "optimal": 45
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 82,
+          "optimal": 90
         },
         "anomalyProficiency": {
-          "min": 250,
-          "optimal": 330
+          "min": 205,
+          "optimal": 250
         },
         "pen": {
           "min": 0,
@@ -520,16 +520,16 @@
       "name": "Billy",
       "breakpoints": {
         "hp": {
-          "min": 9000,
-          "optimal": 9000
+          "min": 7420,
+          "optimal": 7420
         },
         "atk": {
-          "min": 2400,
-          "optimal": 2800
+          "min": 1980,
+          "optimal": 2100
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -540,12 +540,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 70,
-          "optimal": 80
+          "min": 58,
+          "optimal": 60
         },
         "critDmg": {
-          "min": 140,
-          "optimal": 160
+          "min": 115,
+          "optimal": 120
         },
         "anomalyProficiency": {
           "min": 0,
@@ -593,15 +593,15 @@
       "name": "Miyabi",
       "breakpoints": {
         "hp": {
-          "min": 10000,
+          "min": 9000,
           "optimal": 10000
         },
         "atk": {
-          "min": 2500,
-          "optimal": 3600
+          "min": 2000,
+          "optimal": 2700
         },
         "def": {
-          "min": 800,
+          "min": 700,
           "optimal": 800
         },
         "impact": {
@@ -613,16 +613,16 @@
           "optimal": 116
         },
         "critRate": {
-          "min": 75,
-          "optimal": 95
+          "min": 70,
+          "optimal": 85
         },
         "critDmg": {
-          "min": 150,
-          "optimal": 190
+          "min": 140,
+          "optimal": 200
         },
         "anomalyProficiency": {
-          "min": 240,
-          "optimal": 240
+          "min": 150,
+          "optimal": 200
         },
         "pen": {
           "min": 0,
@@ -668,16 +668,16 @@
       "name": "Anton",
       "breakpoints": {
         "hp": {
-          "min": 9000,
-          "optimal": 9000
+          "min": 7420,
+          "optimal": 7420
         },
         "atk": {
-          "min": 2300,
-          "optimal": 2800
+          "min": 1900,
+          "optimal": 2100
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -688,12 +688,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 70,
-          "optimal": 100
+          "min": 58,
+          "optimal": 75
         },
         "critDmg": {
-          "min": 120,
-          "optimal": 160
+          "min": 99,
+          "optimal": 120
         },
         "anomalyProficiency": {
           "min": 0,
@@ -741,16 +741,16 @@
       "name": "Ben",
       "breakpoints": {
         "hp": {
-          "min": 11500,
-          "optimal": 11500
+          "min": 9490,
+          "optimal": 9490
         },
         "atk": {
-          "min": 2700,
-          "optimal": 3600
+          "min": 2230,
+          "optimal": 2700
         },
         "def": {
-          "min": 1400,
-          "optimal": 2600
+          "min": 1160,
+          "optimal": 1950
         },
         "impact": {
           "min": 0,
@@ -761,12 +761,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 50,
-          "optimal": 60
+          "min": 41,
+          "optimal": 45
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 82,
+          "optimal": 90
         },
         "anomalyProficiency": {
           "min": 0,
@@ -815,16 +815,16 @@
       "name": "Soukaku",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 2500,
-          "optimal": 2777
+          "min": 2060,
+          "optimal": 2080
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -835,12 +835,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 50,
-          "optimal": 60
+          "min": 41,
+          "optimal": 45
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 82,
+          "optimal": 90
         },
         "anomalyProficiency": {
           "min": 0,
@@ -885,32 +885,32 @@
       "name": "Lighter",
       "breakpoints": {
         "hp": {
-          "min": 10500,
-          "optimal": 10500
+          "min": 8660,
+          "optimal": 8660
         },
         "atk": {
-          "min": 1700,
-          "optimal": 2000
+          "min": 1400,
+          "optimal": 1500
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
-          "min": 170,
-          "optimal": 195
+          "min": 140,
+          "optimal": 145
         },
         "anomalyMastery": {
           "min": 0,
           "optimal": 0
         },
         "critRate": {
-          "min": 50,
-          "optimal": 50
+          "min": 41,
+          "optimal": 41
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 82,
+          "optimal": 90
         },
         "anomalyProficiency": {
           "min": 0,
@@ -959,16 +959,16 @@
       "name": "Harumasa",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 2600,
-          "optimal": 3400
+          "min": 2140,
+          "optimal": 2550
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -979,12 +979,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 75,
-          "optimal": 75
+          "min": 62,
+          "optimal": 62
         },
         "critDmg": {
-          "min": 150,
-          "optimal": 190
+          "min": 125,
+          "optimal": 140
         },
         "anomalyProficiency": {
           "min": 0,
@@ -1031,16 +1031,16 @@
       "name": "Rina",
       "breakpoints": {
         "hp": {
-          "min": 10500,
-          "optimal": 10500
+          "min": 8660,
+          "optimal": 8660
         },
         "atk": {
-          "min": 2000,
-          "optimal": 2600
+          "min": 1650,
+          "optimal": 1950
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -1059,16 +1059,16 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 200,
-          "optimal": 300
+          "min": 165,
+          "optimal": 225
         },
         "pen": {
           "min": 0,
           "optimal": 0
         },
         "penRatio": {
-          "min": 38,
-          "optimal": 72
+          "min": 31,
+          "optimal": 54
         },
         "energyRegen": {
           "min": 0,
@@ -1105,16 +1105,16 @@
       "name": "Zhu Yuan",
       "breakpoints": {
         "hp": {
-          "min": 9500,
-          "optimal": 950
+          "min": 7840,
+          "optimal": 7840
         },
         "atk": {
-          "min": 3000,
-          "optimal": 3000
+          "min": 2480,
+          "optimal": 2480
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -1125,12 +1125,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 60,
-          "optimal": 70
+          "min": 50,
+          "optimal": 52
         },
         "critDmg": {
-          "min": 160,
-          "optimal": 180
+          "min": 130,
+          "optimal": 135
         },
         "anomalyProficiency": {
           "min": 0,
@@ -1178,32 +1178,32 @@
       "name": "Qingyi",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 15000
+          "min": 8250,
+          "optimal": 11250
         },
         "atk": {
-          "min": 1800,
-          "optimal": 2000
+          "min": 1480,
+          "optimal": 1500
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
-          "min": 169,
-          "optimal": 193
+          "min": 140,
+          "optimal": 145
         },
         "anomalyMastery": {
           "min": 0,
           "optimal": 0
         },
         "critRate": {
-          "min": 50,
-          "optimal": 50
+          "min": 41,
+          "optimal": 41
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 82,
+          "optimal": 90
         },
         "anomalyProficiency": {
           "min": 0,
@@ -1252,24 +1252,24 @@
       "name": "Jane",
       "breakpoints": {
         "hp": {
-          "min": 9000,
-          "optimal": 10000
+          "min": 7420,
+          "optimal": 7500
         },
         "atk": {
-          "min": 2300,
-          "optimal": 2800
+          "min": 1900,
+          "optimal": 2100
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 192,
-          "optimal": 192
+          "min": 160,
+          "optimal": 160
         },
         "critRate": {
           "min": 0,
@@ -1280,8 +1280,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 375,
-          "optimal": 420
+          "min": 310,
+          "optimal": 315
         },
         "pen": {
           "min": 0,
@@ -1324,24 +1324,24 @@
       "name": "Piper",
       "breakpoints": {
         "hp": {
-          "min": 9000,
-          "optimal": 9000
+          "min": 7420,
+          "optimal": 7420
         },
         "atk": {
-          "min": 2500,
-          "optimal": 2800
+          "min": 2060,
+          "optimal": 2100
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 150,
-          "optimal": 150
+          "min": 125,
+          "optimal": 125
         },
         "critRate": {
           "min": 0,
@@ -1352,8 +1352,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 350,
-          "optimal": 450
+          "min": 290,
+          "optimal": 340
         },
         "pen": {
           "min": 0,
@@ -1397,16 +1397,16 @@
       "name": "Evelyn",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 2600,
-          "optimal": 3400
+          "min": 2140,
+          "optimal": 2550
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -1417,12 +1417,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 80,
-          "optimal": 100
+          "min": 66,
+          "optimal": 75
         },
         "critDmg": {
-          "min": 160,
-          "optimal": 200
+          "min": 130,
+          "optimal": 150
         },
         "anomalyProficiency": {
           "min": 0,
@@ -1470,24 +1470,24 @@
       "name": "Vivian",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 2000,
-          "optimal": 24000
+          "min": 1650,
+          "optimal": 18000
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 198,
-          "optimal": 198
+          "min": 165,
+          "optimal": 165
         },
         "critRate": {
           "min": 0,
@@ -1498,8 +1498,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 380,
-          "optimal": 450
+          "min": 315,
+          "optimal": 340
         },
         "pen": {
           "min": 0,
@@ -1543,32 +1543,32 @@
       "name": "Trigger",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 1700,
-          "optimal": 2200
+          "min": 1400,
+          "optimal": 1650
         },
         "def": {
-          "min": 750,
-          "optimal": 750
+          "min": 620,
+          "optimal": 620
         },
         "impact": {
-          "min": 162,
-          "optimal": 186
+          "min": 135,
+          "optimal": 140
         },
         "anomalyMastery": {
           "min": 0,
           "optimal": 0
         },
         "critRate": {
-          "min": 60,
-          "optimal": 90
+          "min": 50,
+          "optimal": 68
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 82,
+          "optimal": 90
         },
         "anomalyProficiency": {
           "min": 0,
@@ -1616,16 +1616,16 @@
       "name": "Yixuan",
       "breakpoints": {
         "hp": {
-          "min": 16000,
-          "optimal": 18000
+          "min": 13200,
+          "optimal": 13500
         },
         "atk": {
-          "min": 1800,
-          "optimal": 2000
+          "min": 1480,
+          "optimal": 1500
         },
         "def": {
-          "min": 600,
-          "optimal": 600
+          "min": 495,
+          "optimal": 495
         },
         "impact": {
           "min": 0,
@@ -1636,12 +1636,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 80,
-          "optimal": 90
+          "min": 66,
+          "optimal": 68
         },
         "critDmg": {
-          "min": 140,
-          "optimal": 160
+          "min": 115,
+          "optimal": 120
         },
         "anomalyProficiency": {
           "min": 0,
@@ -1689,28 +1689,28 @@
       "name": "Ju Fufu",
       "breakpoints": {
         "hp": {
-          "min": 11000,
-          "optimal": 11000
+          "min": 9080,
+          "optimal": 9080
         },
         "atk": {
-          "min": 3100,
-          "optimal": 3400
+          "min": 2560,
+          "optimal": 2560
         },
         "def": {
-          "min": 850,
-          "optimal": 850
+          "min": 700,
+          "optimal": 700
         },
         "impact": {
-          "min": 139,
-          "optimal": 160
+          "min": 115,
+          "optimal": 120
         },
         "anomalyMastery": {
           "min": 0,
           "optimal": 0
         },
         "critRate": {
-          "min": 50,
-          "optimal": 50
+          "min": 41,
+          "optimal": 41
         },
         "critDmg": {
           "min": 0,
@@ -1763,24 +1763,24 @@
       "name": "Alice",
       "breakpoints": {
         "hp": {
-          "min": 9500,
-          "optimal": 9500
+          "min": 7840,
+          "optimal": 7840
         },
         "atk": {
-          "min": 2600,
-          "optimal": 2900
+          "min": 2140,
+          "optimal": 2180
         },
         "def": {
-          "min": 750,
-          "optimal": 750
+          "min": 620,
+          "optimal": 620
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 184,
-          "optimal": 184
+          "min": 150,
+          "optimal": 150
         },
         "critRate": {
           "min": 0,
@@ -1791,8 +1791,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 330,
-          "optimal": 420
+          "min": 270,
+          "optimal": 315
         },
         "pen": {
           "min": 0,
@@ -1835,24 +1835,24 @@
       "name": "Yuzuha",
       "breakpoints": {
         "hp": {
-          "min": 11000,
-          "optimal": 11000
+          "min": 9080,
+          "optimal": 9080
         },
         "atk": {
-          "min": 3000,
-          "optimal": 3000
+          "min": 2480,
+          "optimal": 2480
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 171,
-          "optimal": 171
+          "min": 140,
+          "optimal": 140
         },
         "critRate": {
           "min": 0,
@@ -1863,8 +1863,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 200,
-          "optimal": 200
+          "min": 165,
+          "optimal": 165
         },
         "pen": {
           "min": 0,
@@ -1879,7 +1879,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["Anomaly_Mastery", "Anomaly_Proficiency", "PEN", "PEN_Ratio", "ATK", "ATK%"],
+      "priorityStats": [
+        "Anomaly_Mastery",
+        "Anomaly_Proficiency",
+        "PEN",
+        "PEN_Ratio",
+        "ATK",
+        "ATK%"
+      ],
       "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
@@ -1902,16 +1909,16 @@
       "name": "Pan Yinhu",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 3000,
-          "optimal": 3000
+          "min": 2480,
+          "optimal": 2480
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -1974,16 +1981,16 @@
       "name": "Ye Shunguang",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 3000,
-          "optimal": 3000
+          "min": 2480,
+          "optimal": 2480
         },
         "def": {
-          "min": 600,
-          "optimal": 600
+          "min": 495,
+          "optimal": 495
         },
         "impact": {
           "min": 0,
@@ -1994,12 +2001,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 80,
-          "optimal": 100
+          "min": 66,
+          "optimal": 75
         },
         "critDmg": {
-          "min": 180,
-          "optimal": 200
+          "min": 150,
+          "optimal": 150
         },
         "anomalyProficiency": {
           "min": 0,
@@ -2047,16 +2054,16 @@
       "name": "Lucia",
       "breakpoints": {
         "hp": {
-          "min": 22000,
-          "optimal": 24000
+          "min": 18150,
+          "optimal": 18150
         },
         "atk": {
-          "min": 1800,
-          "optimal": 1800
+          "min": 1480,
+          "optimal": 1480
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -2091,7 +2098,12 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["HP","HP%","CRIT_DMG","CRIT_Rate"],
+      "priorityStats": [
+        "HP",
+        "HP%",
+        "CRIT_DMG",
+        "CRIT_Rate"
+      ],
       "statWeights": {
         "CRIT_Rate": 1.5,
         "CRIT_DMG": 1.5,
@@ -2114,16 +2126,16 @@
       "name": "Seed",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 2700,
-          "optimal": 3000
+          "min": 2230,
+          "optimal": 2250
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -2134,12 +2146,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 75,
-          "optimal": 90
+          "min": 62,
+          "optimal": 68
         },
         "critDmg": {
-          "min": 110,
-          "optimal": 140
+          "min": 91,
+          "optimal": 105
         },
         "anomalyProficiency": {
           "min": 0,
@@ -2187,16 +2199,16 @@
       "name": "Banyue",
       "breakpoints": {
         "hp": {
-          "min": 18000,
-          "optimal": 18000
+          "min": 14850,
+          "optimal": 14850
         },
         "atk": {
-          "min": 1800,
-          "optimal": 2000
+          "min": 1480,
+          "optimal": 1500
         },
         "def": {
-          "min": 600,
-          "optimal": 600
+          "min": 495,
+          "optimal": 495
         },
         "impact": {
           "min": 0,
@@ -2207,12 +2219,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 90,
-          "optimal": 100
+          "min": 74,
+          "optimal": 75
         },
         "critDmg": {
-          "min": 120,
-          "optimal": 150
+          "min": 99,
+          "optimal": 110
         },
         "anomalyProficiency": {
           "min": 0,
@@ -2259,32 +2271,32 @@
       "name": "Koleda",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 1700,
-          "optimal": 2000
+          "min": 1400,
+          "optimal": 1500
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
-          "min": 166,
-          "optimal": 190
+          "min": 135,
+          "optimal": 140
         },
         "anomalyMastery": {
           "min": 0,
           "optimal": 0
         },
         "critRate": {
-          "min": 50,
-          "optimal": 50
+          "min": 41,
+          "optimal": 41
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 82,
+          "optimal": 90
         },
         "anomalyProficiency": {
           "min": 0,
@@ -2303,7 +2315,13 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["CRIT_DMG", "CRIT_Rate", "ATK%", "PEN", "ATK"],
+      "priorityStats": [
+        "CRIT_DMG",
+        "CRIT_Rate",
+        "ATK%",
+        "PEN",
+        "ATK"
+      ],
       "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 0.5,
@@ -2323,32 +2341,32 @@
       "name": "Lycaon",
       "breakpoints": {
         "hp": {
-          "min": 10500,
-          "optimal": 10500
+          "min": 8660,
+          "optimal": 8660
         },
         "atk": {
-          "min": 2000,
-          "optimal": 2200
+          "min": 1650,
+          "optimal": 1650
         },
         "def": {
-          "min": 850,
-          "optimal": 850
+          "min": 700,
+          "optimal": 700
         },
         "impact": {
-          "min": 169,
-          "optimal": 190
+          "min": 140,
+          "optimal": 140
         },
         "anomalyMastery": {
           "min": 0,
           "optimal": 0
         },
         "critRate": {
-          "min": 50,
-          "optimal": 50
+          "min": 41,
+          "optimal": 41
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 82,
+          "optimal": 90
         },
         "anomalyProficiency": {
           "min": 0,
@@ -2398,16 +2416,16 @@
       "name": "Lucy",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 1925,
-          "optimal": 2500
+          "min": 1590,
+          "optimal": 1880
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -2418,12 +2436,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 40,
-          "optimal": 60
+          "min": 33,
+          "optimal": 45
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 82,
+          "optimal": 90
         },
         "anomalyProficiency": {
           "min": 0,
@@ -2442,7 +2460,13 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["CRIT_DMG","CRIT_Rate","ATK%","ATK","PEN"],
+      "priorityStats": [
+        "CRIT_DMG",
+        "CRIT_Rate",
+        "ATK%",
+        "ATK",
+        "PEN"
+      ],
       "statWeights": {
         "CRIT_Rate": 1,
         "CRIT_DMG": 1,
@@ -2450,7 +2474,7 @@
         "HP%": 0,
         "HP": 0,
         "DEF%": 0,
-        "DEF":0,
+        "DEF": 0,
         "PEN_Ratio": 2,
         "Energy_Regen": 1.2,
         "Anomaly_Proficiency": 0.15,
@@ -2464,24 +2488,24 @@
       "name": "Burnice",
       "breakpoints": {
         "hp": {
-          "min": 9500,
-          "optimal": 10000
+          "min": 7840,
+          "optimal": 7840
         },
         "atk": {
-          "min": 2500,
-          "optimal": 3200
+          "min": 2060,
+          "optimal": 2400
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 153,
-          "optimal": 153
+          "min": 125,
+          "optimal": 125
         },
         "critRate": {
           "min": 0,
@@ -2492,8 +2516,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 350,
-          "optimal": 400
+          "min": 290,
+          "optimal": 300
         },
         "pen": {
           "min": 0,
@@ -2508,7 +2532,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["Anomaly_Mastery","Anomaly_Proficiency","ATK%","ATK","PEN","PEN_Ratio"],
+      "priorityStats": [
+        "Anomaly_Mastery",
+        "Anomaly_Proficiency",
+        "ATK%",
+        "ATK",
+        "PEN",
+        "PEN_Ratio"
+      ],
       "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
@@ -2516,7 +2547,7 @@
         "HP%": 0,
         "HP": 0,
         "DEF%": 0,
-        "DEF":0,
+        "DEF": 0,
         "PEN_Ratio": 0.5,
         "Energy_Regen": 0,
         "Anomaly_Proficiency": 2,
@@ -2530,24 +2561,24 @@
       "name": "Grace",
       "breakpoints": {
         "hp": {
-          "min": 9500,
-          "optimal": 9500
+          "min": 7840,
+          "optimal": 7840
         },
         "atk": {
-          "min": 2300,
-          "optimal": 3000
+          "min": 1900,
+          "optimal": 2250
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 150,
-          "optimal": 190
+          "min": 125,
+          "optimal": 140
         },
         "critRate": {
           "min": 0,
@@ -2558,8 +2589,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 350,
-          "optimal": 450
+          "min": 290,
+          "optimal": 340
         },
         "pen": {
           "min": 0,
@@ -2589,7 +2620,7 @@
         "HP%": 0,
         "HP": 0,
         "DEF%": 0,
-        "DEF":0,
+        "DEF": 0,
         "PEN_Ratio": 0.5,
         "Energy_Regen": 0,
         "Anomaly_Proficiency": 2,
@@ -2603,16 +2634,16 @@
       "name": "Ellen",
       "breakpoints": {
         "hp": {
-          "min": 9500,
-          "optimal": 9500
+          "min": 7840,
+          "optimal": 7840
         },
         "atk": {
-          "min": 2600,
-          "optimal": 3000
+          "min": 2140,
+          "optimal": 2250
         },
         "def": {
-          "min": 780,
-          "optimal": 780
+          "min": 645,
+          "optimal": 645
         },
         "impact": {
           "min": 0,
@@ -2623,12 +2654,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 90,
-          "optimal": 100
+          "min": 74,
+          "optimal": 75
         },
         "critDmg": {
-          "min": 120,
-          "optimal": 180
+          "min": 99,
+          "optimal": 135
         },
         "anomalyProficiency": {
           "min": 0,
@@ -2647,7 +2678,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["CRIT_DMG","CRIT_Rate","ATK%","ATK","PEN","PEN_Ratio"],
+      "priorityStats": [
+        "CRIT_DMG",
+        "CRIT_Rate",
+        "ATK%",
+        "ATK",
+        "PEN",
+        "PEN_Ratio"
+      ],
       "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
@@ -2670,24 +2708,24 @@
       "name": "Yanagi",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 2600,
-          "optimal": 3400
+          "min": 2140,
+          "optimal": 2550
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 148,
-          "optimal": 190
+          "min": 120,
+          "optimal": 140
         },
         "critRate": {
           "min": 0,
@@ -2698,8 +2736,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 350,
-          "optimal": 450
+          "min": 290,
+          "optimal": 340
         },
         "pen": {
           "min": 0,
@@ -2714,7 +2752,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["Anomaly_Mastery","Anomaly_Proficiency","ATK","ATK%","PEN_Ratio","PEN"],
+      "priorityStats": [
+        "Anomaly_Mastery",
+        "Anomaly_Proficiency",
+        "ATK",
+        "ATK%",
+        "PEN_Ratio",
+        "PEN"
+      ],
       "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
@@ -2737,16 +2782,16 @@
       "name": "Seth",
       "breakpoints": {
         "hp": {
-          "min": 11000,
-          "optimal": 11000
+          "min": 9080,
+          "optimal": 9080
         },
         "atk": {
-          "min": 2600,
-          "optimal": 3200
+          "min": 2140,
+          "optimal": 2400
         },
         "def": {
-          "min": 900,
-          "optimal": 900
+          "min": 740,
+          "optimal": 740
         },
         "impact": {
           "min": 0,
@@ -2765,8 +2810,8 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 200,
-          "optimal": 300
+          "min": 165,
+          "optimal": 225
         },
         "pen": {
           "min": 0,
@@ -2781,7 +2826,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["ATK%", "ATK", "Anomaly_Proficiency", "PEN","Anomaly_Mastery","Energy_Regen"],
+      "priorityStats": [
+        "ATK%",
+        "ATK",
+        "Anomaly_Proficiency",
+        "PEN",
+        "Anomaly_Mastery",
+        "Energy_Regen"
+      ],
       "statWeights": {
         "CRIT_Rate": 0,
         "CRIT_DMG": 0,
@@ -2804,16 +2856,16 @@
       "name": "Hugo",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 2600,
-          "optimal": 3000
+          "min": 2140,
+          "optimal": 2250
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -2824,12 +2876,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 70,
-          "optimal": 88
+          "min": 58,
+          "optimal": 66
         },
         "critDmg": {
-          "min": 160,
-          "optimal": 200
+          "min": 130,
+          "optimal": 150
         },
         "anomalyProficiency": {
           "min": 0,
@@ -2848,7 +2900,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["CRIT_DMG", "CRIT_Rate", "ATK%", "PEN_Ratio", "PEN", "ATK"],
+      "priorityStats": [
+        "CRIT_DMG",
+        "CRIT_Rate",
+        "ATK%",
+        "PEN_Ratio",
+        "PEN",
+        "ATK"
+      ],
       "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
@@ -2871,16 +2930,16 @@
       "name": "Orphie & Magus",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 2500,
-          "optimal": 2700
+          "min": 2060,
+          "optimal": 2060
         },
         "def": {
-          "min": 900,
-          "optimal": 900
+          "min": 740,
+          "optimal": 740
         },
         "impact": {
           "min": 0,
@@ -2891,12 +2950,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 90,
-          "optimal": 100
+          "min": 74,
+          "optimal": 75
         },
         "critDmg": {
-          "min": 120,
-          "optimal": 120
+          "min": 99,
+          "optimal": 99
         },
         "anomalyProficiency": {
           "min": 0,
@@ -2911,11 +2970,19 @@
           "optimal": 0
         },
         "energyRegen": {
-          "min": 80,
-          "optimal": 80
+          "min": 66,
+          "optimal": 66
         }
       },
-      "priorityStats": ["CRIT_DMG", "CRIT_Rate", "ATK%", "ATK","Energy_Regen","PEN","PEN_Ratio"],
+      "priorityStats": [
+        "CRIT_DMG",
+        "CRIT_Rate",
+        "ATK%",
+        "ATK",
+        "Energy_Regen",
+        "PEN",
+        "PEN_Ratio"
+      ],
       "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
@@ -2938,16 +3005,16 @@
       "name": "Astra Yao",
       "breakpoints": {
         "hp": {
-          "min": 10500,
-          "optimal": 10500
+          "min": 8660,
+          "optimal": 8660
         },
         "atk": {
-          "min": 3430,
-          "optimal": 3430
+          "min": 2830,
+          "optimal": 2830
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -2982,7 +3049,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["ATK","ATK%","Energy_Regen","Anomaly_Proficiency","CRIT_DMG","CRIT_Rate"],
+      "priorityStats": [
+        "ATK",
+        "ATK%",
+        "Energy_Regen",
+        "Anomaly_Proficiency",
+        "CRIT_DMG",
+        "CRIT_Rate"
+      ],
       "statWeights": {
         "CRIT_Rate": 0.5,
         "CRIT_DMG": 0.5,
@@ -3005,16 +3079,16 @@
       "name": "Zhao",
       "breakpoints": {
         "hp": {
-          "min": 25000,
-          "optimal": 25000
+          "min": 20620,
+          "optimal": 20620
         },
         "atk": {
-          "min": 1900,
-          "optimal": 1900
+          "min": 1570,
+          "optimal": 1570
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -3025,12 +3099,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 30,
-          "optimal": 30
+          "min": 25,
+          "optimal": 25
         },
         "critDmg": {
-          "min": 50,
-          "optimal": 50
+          "min": 41,
+          "optimal": 41
         },
         "anomalyProficiency": {
           "min": 0,
@@ -3049,7 +3123,15 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["CRIT_DMG","CRIT_Rate","ATK","ATK%","HP","HP%","Energy_Regen"],
+      "priorityStats": [
+        "CRIT_DMG",
+        "CRIT_Rate",
+        "ATK",
+        "ATK%",
+        "HP",
+        "HP%",
+        "Energy_Regen"
+      ],
       "statWeights": {
         "CRIT_Rate": 1.0,
         "CRIT_DMG": 1.0,
@@ -3072,36 +3154,36 @@
       "name": "Pulchra",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 1800,
-          "optimal": 2200
+          "min": 1480,
+          "optimal": 1650
         },
         "def": {
-          "min": 850,
-          "optimal": 850
+          "min": 700,
+          "optimal": 700
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 92,
-          "optimal": 92
+          "min": 76,
+          "optimal": 76
         },
         "critRate": {
-          "min": 50,
-          "optimal": 60
+          "min": 41,
+          "optimal": 45
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 82,
+          "optimal": 90
         },
         "anomalyProficiency": {
-          "min": 250,
-          "optimal": 300
+          "min": 205,
+          "optimal": 225
         },
         "pen": {
           "min": 0,
@@ -3116,7 +3198,16 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["CRIT_DMG", "Impact", "CRIT_Rate","Anomaly_Mastery","Anomaly_Proficiency","PEN","ATK","ATK%"],
+      "priorityStats": [
+        "CRIT_DMG",
+        "Impact",
+        "CRIT_Rate",
+        "Anomaly_Mastery",
+        "Anomaly_Proficiency",
+        "PEN",
+        "ATK",
+        "ATK%"
+      ],
       "statWeights": {
         "CRIT_Rate": 1.5,
         "CRIT_DMG": 1.5,
@@ -3139,16 +3230,16 @@
       "name": "Soldier 0 - Anby",
       "breakpoints": {
         "hp": {
-          "min": 10000,
-          "optimal": 10000
+          "min": 8250,
+          "optimal": 8250
         },
         "atk": {
-          "min": 2800,
-          "optimal": 3200
+          "min": 2310,
+          "optimal": 2400
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -3159,12 +3250,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 58,
-          "optimal": 78
+          "min": 48,
+          "optimal": 58
         },
         "critDmg": {
-          "min": 160,
-          "optimal": 200
+          "min": 130,
+          "optimal": 150
         },
         "anomalyProficiency": {
           "min": 0,
@@ -3183,7 +3274,13 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["CRIT_DMG","CRIT_Rate","ATK","ATK%","PEN"],
+      "priorityStats": [
+        "CRIT_DMG",
+        "CRIT_Rate",
+        "ATK",
+        "ATK%",
+        "PEN"
+      ],
       "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 2,
@@ -3206,16 +3303,16 @@
       "name": "Manato",
       "breakpoints": {
         "hp": {
-          "min": 18000,
-          "optimal": 18000
+          "min": 14850,
+          "optimal": 14850
         },
         "atk": {
-          "min": 1800,
-          "optimal": 1800
+          "min": 1480,
+          "optimal": 1480
         },
         "def": {
-          "min": 600,
-          "optimal": 600
+          "min": 495,
+          "optimal": 495
         },
         "impact": {
           "min": 0,
@@ -3226,12 +3323,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 90,
-          "optimal": 100
+          "min": 74,
+          "optimal": 75
         },
         "critDmg": {
-          "min": 120,
-          "optimal": 150
+          "min": 99,
+          "optimal": 110
         },
         "anomalyProficiency": {
           "min": 0,
@@ -3250,7 +3347,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["CRIT_DMG","CRIT_Rate","HP","HP%","ATK","ATK%"],
+      "priorityStats": [
+        "CRIT_DMG",
+        "CRIT_Rate",
+        "HP",
+        "HP%",
+        "ATK",
+        "ATK%"
+      ],
       "statWeights": {
         "CRIT_Rate": 1.5,
         "CRIT_DMG": 1.5,
@@ -3273,16 +3377,16 @@
       "name": "Dialyn",
       "breakpoints": {
         "hp": {
-          "min": 9500,
-          "optimal": 9500
+          "min": 7840,
+          "optimal": 7840
         },
         "atk": {
-          "min": 2400,
-          "optimal": 2400
+          "min": 1980,
+          "optimal": 1980
         },
         "def": {
-          "min": 800,
-          "optimal": 800
+          "min": 660,
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -3293,12 +3397,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 80,
-          "optimal": 100
+          "min": 66,
+          "optimal": 75
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 100
+          "min": 82,
+          "optimal": 82
         },
         "anomalyProficiency": {
           "min": 0,
@@ -3317,7 +3421,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": ["CRIT_Rate","CRIT_DMG","ATK%","ATK","PEN","PEN_Ratio"],
+      "priorityStats": [
+        "CRIT_Rate",
+        "CRIT_DMG",
+        "ATK%",
+        "ATK",
+        "PEN",
+        "PEN_Ratio"
+      ],
       "statWeights": {
         "CRIT_Rate": 2,
         "CRIT_DMG": 1.5,
