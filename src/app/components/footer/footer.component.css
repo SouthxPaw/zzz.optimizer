@@ -11,15 +11,9 @@
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 20px;
-}
-
-.footer-left,
-.footer-center,
-.footer-right {
-  flex: 1;
+  gap: 40px;
 }
 
 .footer-left {
@@ -28,10 +22,7 @@
 
 .footer-center {
   text-align: center;
-}
-
-.footer-right {
-  text-align: right;
+  flex: 1;
 }
 
 .version {

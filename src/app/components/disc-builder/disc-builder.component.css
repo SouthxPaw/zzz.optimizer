@@ -165,6 +165,14 @@ input[type="checkbox"] {
   padding: 2px 4px;
 }
 
+.disc-substats .roll-count {
+  font-size: 0.85em;
+  color: #00d9ff;
+  margin-left: 4px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
 .roll-count {
   font-size: 0.7em;
   color: #ffd700;

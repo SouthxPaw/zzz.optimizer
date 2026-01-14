@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DbService } from './db.service';
 import { StatCalculatorService } from './stat-calculator.service';
+import { ScoringService } from './scoring.service';
 import { Agent, BaseStats } from '../models/agent.model';
 import { WEngine } from '../models/wengine.model';
 import { Disc } from '../models/disc.model';
@@ -40,6 +41,7 @@ export class BuildService {
   constructor(
     private db: DbService,
     private statCalculator: StatCalculatorService,
+    private scoringService: ScoringService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.loadBuilds();
@@ -203,6 +205,22 @@ export class BuildService {
       build.mindscapeLevel,
       build.wEngineRefinement
     );
+
+    // Calculate and save build score
+    const equippedDiscsArray = Object.values(build.equippedDiscs).filter(d => d !== undefined);
+    const scoreResult = this.scoringService.calculateCompositeBuildScore(
+      build.agentId,
+      build.calculatedStats,
+      equippedDiscsArray,
+      build.equippedWEngine,
+      build.wEngineRefinement || 1,
+      build.mindscapeLevel || 0,
+      agent.name,
+      agent.specialty,
+      agent.element,
+      build.level
+    );
+    build.score = scoreResult.score;
   }
 
   /**
@@ -316,6 +334,32 @@ export class BuildService {
    */
   async getAllBuilds(): Promise<AgentBuild[]> {
     return this.buildsSubject.value;
+  }
+
+  /**
+   * Recalculate stats for all builds
+   * Useful after reloading reference data to ensure all builds use updated agent base stats
+   */
+  async recalculateAllBuilds(): Promise<void> {
+    const builds = this.buildsSubject.value;
+    console.log(`Recalculating stats for ${builds.length} builds...`);
+
+    for (const build of builds) {
+      await this.recalculateStats(build);
+    }
+
+    await this.saveBuilds(builds);
+
+    // Update selected build if needed
+    const selectedId = this.selectedBuildSubject.value?.id;
+    if (selectedId) {
+      const updatedBuild = builds.find(b => b.id === selectedId);
+      if (updatedBuild) {
+        this.selectedBuildSubject.next(updatedBuild);
+      }
+    }
+
+    console.log('All builds recalculated successfully');
   }
 
   /**
