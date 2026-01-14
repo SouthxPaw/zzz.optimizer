@@ -501,12 +501,11 @@ export class DataTransformerService {
   }
 
   /**
-   * Transform a single agent with enhanced stats from detailed character JSON
-   * This method merges data from agents.json with character/{id}.json for accurate stats
+   * Transform a single agent with enhanced stats from agents.json
+   * Icon field is now included in agents.json, no need for separate character files
    */
-  transformAgentWithDetailedStats(id: string, basicAgent: any, detailedData: any): Agent {
+  transformAgentWithDetailedStats(id: string, basicAgent: any): Agent {
     // Use detailed stats if available, otherwise fall back to extractLevel60Stats
-    // Temporarily add id to basicAgent for debug logging
     const lvl60Stats = this.extractLevel60Stats(basicAgent);
 
     if (!lvl60Stats) {
@@ -519,13 +518,13 @@ export class DataTransformerService {
     const element = this.mappingService.getElement(basicAgent.element?.id || basicAgent.element);
     const specialty = this.mappingService.getSpecialty(basicAgent.specialty?.id || basicAgent.type);
 
-    // Extract icon from detailedData (character/{id}.json has Icon field like "IconRole11")
+    // Extract icon from basicAgent (agents.json now has Icon field like "IconRole11")
     let icon: string | undefined;
     let iconNumber: string | undefined;
 
-    if (detailedData.Icon) {
+    if (basicAgent.Icon) {
       // Extract number from IconRole format (e.g., "IconRole11" -> "11")
-      const match = detailedData.Icon.match(/IconRole(\d+)/);
+      const match = basicAgent.Icon.match(/IconRole(\d+)/);
       if (match) {
         iconNumber = match[1];
         icon = `assets/data/images/agents/IconRole${iconNumber}.webp`;
