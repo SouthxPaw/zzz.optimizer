@@ -169,8 +169,12 @@ export class BuildService {
       delete builds[index].equippedWEngine;
     }
 
-    // Recalculate stats if equipment or refinement changed
-    if (updates.equippedWEngine !== undefined || updates.equippedDiscs !== undefined || 'equippedWEngine' in updates || updates.wEngineRefinement !== undefined) {
+    // Recalculate stats if equipment, refinement, or mindscape changed
+    if (updates.equippedWEngine !== undefined ||
+        updates.equippedDiscs !== undefined ||
+        'equippedWEngine' in updates ||
+        updates.wEngineRefinement !== undefined ||
+        updates.mindscapeLevel !== undefined) {
       await this.recalculateStats(builds[index]);
     }
 

@@ -273,18 +273,9 @@ export class DataImportService {
 
       console.log(`Found ${agentIds.length} agents, ${wEngineIds.length} W-Engines, and ${DISC_SET_EQUIPMENT_IDS.length} disc sets`);
 
-      // Load all agent detail files
+      // Transform all agents directly from agents.json (now includes Icon field)
       const agentPromises = agentIds.map(async (id) => {
-        try {
-          const detailData = await firstValueFrom(
-            this.http.get<any>(`assets/data/character/${id}.json`)
-          );
-          // Transform using the detailed data
-          return this.transformer.transformAgentWithDetailedStats(id, agentsIndex[id], detailData);
-        } catch (error) {
-          console.warn(`Failed to load detailed data for agent ${id}, using basic transform`);
-          return this.transformer.transformSingleAgent(id, agentsIndex[id]);
-        }
+        return this.transformer.transformAgentWithDetailedStats(id, agentsIndex[id]);
       });
 
       // Load W-Engines from wengines.json (already has correct level 60 stats and Effect.Properties)
