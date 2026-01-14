@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DbService } from './db.service';
 import { StatCalculatorService } from './stat-calculator.service';
+import { ScoringService } from './scoring.service';
 import { Agent, BaseStats } from '../models/agent.model';
 import { WEngine } from '../models/wengine.model';
 import { Disc } from '../models/disc.model';
@@ -40,6 +41,7 @@ export class BuildService {
   constructor(
     private db: DbService,
     private statCalculator: StatCalculatorService,
+    private scoringService: ScoringService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.loadBuilds();
@@ -203,6 +205,22 @@ export class BuildService {
       build.mindscapeLevel,
       build.wEngineRefinement
     );
+
+    // Calculate and save build score
+    const equippedDiscsArray = Object.values(build.equippedDiscs).filter(d => d !== undefined);
+    const scoreResult = this.scoringService.calculateCompositeBuildScore(
+      build.agentId,
+      build.calculatedStats,
+      equippedDiscsArray,
+      build.equippedWEngine,
+      build.wEngineRefinement || 1,
+      build.mindscapeLevel || 0,
+      agent.name,
+      agent.specialty,
+      agent.element,
+      build.level
+    );
+    build.score = scoreResult.score;
   }
 
   /**
