@@ -342,7 +342,7 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
     return slot;
   }
 
-  trackBySubStatIndex(index: number, subStat: any): number {
+  trackBySubStatIndex(index: number, _subStat: unknown): number {
     return index;
   }
 
