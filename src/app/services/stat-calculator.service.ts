@@ -91,6 +91,17 @@ export class StatCalculatorService {
     // Start with base stats at level 60
     const stats: BaseStats = { ...agent.lvl60Stats };
 
+    // Debug logging for Miyabi (ID 1091)
+    if (agent.id === '1091') {
+      console.log('Miyabi base stats from agent.lvl60Stats:', {
+        hp: agent.lvl60Stats.hp,
+        atk: agent.lvl60Stats.atk,
+        def: agent.lvl60Stats.def,
+        anomalyProficiency: agent.lvl60Stats.anomalyProficiency,
+        anomalyMastery: agent.lvl60Stats.anomalyMastery
+      });
+    }
+
     // Apply W-Engine stats
     if (wEngine) {
       this.applyWEngineStats(stats, wEngine, agent, wEngineRefinement);
@@ -107,12 +118,8 @@ export class StatCalculatorService {
     // Apply disc substats
     this.applyDiscSubStats(stats, discs, agent);
 
-    // Apply set bonuses
-    this.applySetBonuses(stats, discs, agent);
-
-    // Convert flat PEN to PEN Ratio (using 800 as baseline enemy DEF)
-    const penRatioFromFlat = (stats.pen / 800) * 100;
-    const totalPenRatio = stats.penRatio + penRatioFromFlat;
+    // Apply set bonuses (this applies percentage bonuses to HP/ATK/DEF)
+    this.applySetBonuses(stats, discs, agent, wEngine);
 
     // Round all stats to avoid decimals
     return {
@@ -128,7 +135,7 @@ export class StatCalculatorService {
       critDmg: Math.round(stats.critDmg * 10) / 10,
       anomalyProficiency: Math.round(stats.anomalyProficiency),
       pen: Math.round(stats.pen),
-      penRatio: Math.round(totalPenRatio * 10) / 10,
+      penRatio: Math.round(stats.penRatio * 10) / 10,
       energyRegen: Math.round(stats.energyRegen * 10) / 10
     };
   }
@@ -391,7 +398,8 @@ export class StatCalculatorService {
   private applySetBonuses(
     stats: BaseStats,
     discs: { [key in DiscSlot]?: Disc },
-    agent: Agent
+    agent: Agent,
+    wEngine: WEngine | null
   ): void {
     // Count disc sets
     const setCounts = new Map<string, number>();
@@ -419,21 +427,38 @@ export class StatCalculatorService {
       }
     });
 
-    // Apply percentage-based stats to base stats
-    // Important: We need to preserve the flat stats already accumulated (from W-Engine base ATK, disc flat stats)
+    // Apply percentage-based stats according to ZZZ wiki formula:
+    // Final Stat = (Base Value × (1 + Percentage Bonuses %)) + Additive Bonuses
+    //
+    // Where:
+    // - Base Value = Agent base stats + W-Engine base ATK (for ATK only)
+    // - Percentage Bonuses = All %HP, %ATK, %DEF from discs, W-Engine, mindscape, set bonuses
+    // - Additive Bonuses = Flat HP/ATK/DEF from discs ONLY
+
     const baseHP = agent.lvl60Stats.hp;
     const baseATK = agent.lvl60Stats.atk;
     const baseDEF = agent.lvl60Stats.def;
 
-    // Calculate the flat stat bonuses that have been added
-    const flatHPBonus = stats.hp - baseHP;
-    const flatATKBonus = stats.atk - baseATK;
-    const flatDEFBonus = stats.def - baseDEF;
+    // At this point, stats.hp/atk/def contains:
+    // - Agent base stats
+    // - W-Engine base ATK (for ATK only)
+    // - Flat HP/ATK/DEF from discs
+    //
+    // We need to separate flat disc bonuses and apply the ZZZ formula correctly
 
-    // Apply percentage bonuses to base stats, then add back the flat bonuses
-    stats.hp = baseHP * (1 + stats.hppercent / 100) + flatHPBonus;
-    stats.atk = baseATK * (1 + stats.atkpercent / 100) + flatATKBonus;
-    stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFBonus;
+    // Calculate flat disc bonuses by subtracting base values
+    const wEngineBaseATK = wEngine?.baseAtk || 0;
+
+    const flatHPFromDiscs = stats.hp - baseHP;
+    const flatATKFromDiscs = stats.atk - baseATK - wEngineBaseATK;
+    const flatDEFFromDiscs = stats.def - baseDEF;
+
+    // Apply ZZZ formula: Final = (Base × (1 + %)) + Flat Disc Bonuses
+    // Base for HP/DEF = Agent base only
+    // Base for ATK = Agent base + W-Engine base
+    stats.hp = baseHP * (1 + stats.hppercent / 100) + flatHPFromDiscs;
+    stats.atk = (baseATK + wEngineBaseATK) * (1 + stats.atkpercent / 100) + flatATKFromDiscs;
+    stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFFromDiscs;
   }
 
   /**

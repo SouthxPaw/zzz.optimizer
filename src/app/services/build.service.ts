@@ -319,6 +319,32 @@ export class BuildService {
   }
 
   /**
+   * Recalculate stats for all builds
+   * Useful after reloading reference data to ensure all builds use updated agent base stats
+   */
+  async recalculateAllBuilds(): Promise<void> {
+    const builds = this.buildsSubject.value;
+    console.log(`Recalculating stats for ${builds.length} builds...`);
+
+    for (const build of builds) {
+      await this.recalculateStats(build);
+    }
+
+    await this.saveBuilds(builds);
+
+    // Update selected build if needed
+    const selectedId = this.selectedBuildSubject.value?.id;
+    if (selectedId) {
+      const updatedBuild = builds.find(b => b.id === selectedId);
+      if (updatedBuild) {
+        this.selectedBuildSubject.next(updatedBuild);
+      }
+    }
+
+    console.log('All builds recalculated successfully');
+  }
+
+  /**
    * Import a single build
    */
   async importBuild(build: AgentBuild): Promise<void> {

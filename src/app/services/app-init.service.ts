@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { DataImportService } from './data-import.service';
 import { LoadingService } from './loading.service';
 import { NotificationService } from './notification.service';
+import { BuildService } from './build.service';
 
 /**
  * Service to handle app initialization
@@ -18,6 +19,7 @@ export class AppInitService {
     private dataImport: DataImportService,
     private loadingService: LoadingService,
     private notificationService: NotificationService,
+    private buildService: BuildService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -94,8 +96,26 @@ export class AppInitService {
    * Force reload reference data (useful for updates)
    */
   async reloadReferenceData(): Promise<void> {
+    console.log('Force reloading reference data...');
+    this.loadingService.show('Clearing old data...');
+
+    // Clear existing reference data
     await this.dataImport.clearReferenceData();
     this.initialized = false;
-    await this.initialize();
+
+    // Force reload from assets (bypass the hasData check)
+    this.loadingService.show('Loading fresh data from assets...');
+    await this.loadReferenceData();
+
+    this.initialized = true;
+    this.notificationService.success('Reference data reloaded successfully!');
+
+    // Recalculate all existing builds to use updated agent base stats
+    console.log('Recalculating all builds with updated reference data...');
+    this.loadingService.show('Recalculating builds...');
+    await this.buildService.recalculateAllBuilds();
+
+    this.loadingService.hide();
+    this.notificationService.success('All builds updated with new data!');
   }
 }
