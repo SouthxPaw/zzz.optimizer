@@ -210,7 +210,7 @@ export class OptimizerComponent implements OnInit {
     return setName;
   }
 
-  trackBySubStatIndex(index: number, subStat: any): number {
+  trackBySubStatIndex(index: number, _subStat: unknown): number {
     return index;
   }
 
