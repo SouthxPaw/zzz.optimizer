@@ -56,24 +56,10 @@
         "ATK%",
         "ATK",
         "PEN_Ratio",
-        "Impact"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1,
-        "CRIT_DMG": 1,
-        "ATK%": 0.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 2,
-        "PEN": 0
-      }
+        "PEN",
+        "Impact",
+        "Element_DMG"
+      ]
     },
     "1021": {
       "comment": "Nekomata",
@@ -129,24 +115,10 @@
         "CRIT_Rate",
         "ATK%",
         "PEN_Ratio",
-        "ATK"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN",
+        "ATK",
+        "Element_DMG"
+      ]
     },
     "1031": {
       "comment": "Nicole",
@@ -201,24 +173,9 @@
         "ATK",
         "ATK%",
         "Anomaly_Proficiency",
-        "Energy_Regen"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0,
-        "CRIT_DMG": 0,
-        "ATK%": 2,
-        "ATK": 0,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "Energy_Regen",
+        "Element_DMG"
+      ]
     },
     "1041": {
       "comment": "Soldier 11",
@@ -274,24 +231,9 @@
         "CRIT_Rate",
         "ATK%",
         "ATK",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0.5,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     },
     "1051": {
       "comment": "Yidhari",
@@ -348,24 +290,9 @@
         "ATK%",
         "ATK",
         "HP",
-        "HP%"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1.5,
-        "CRIT_DMG": 1.5,
-        "ATK%": 0.5,
-        "ATK": 0.5,
-        "HP%": 2,
-        "HP": 0.5,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "HP%",
+        "Element_DMG"
+      ]
     },
     "1061": {
       "comment": "Corin",
@@ -421,24 +348,9 @@
         "CRIT_DMG",
         "ATK%",
         "ATK",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 1,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     },
     "1071": {
       "comment": "Caesar",
@@ -496,24 +408,10 @@
         "ATK%",
         "ATK",
         "PEN_Ratio",
-        "Impact"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1.5,
-        "CRIT_DMG": 1.5,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 1.5,
-        "Anomaly_Mastery": 0,
-        "Impact": 2,
-        "PEN": 0
-      }
+        "PEN",
+        "Impact",
+        "Element_DMG"
+      ]
     },
     "1081": {
       "comment": "Billy",
@@ -569,24 +467,10 @@
         "CRIT_DMG",
         "ATK%",
         "PEN_Ratio",
-        "ATK"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 2,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN",
+        "ATK",
+        "Element_DMG"
+      ]
     },
     "1091": {
       "comment": "Miyabi",
@@ -645,24 +529,9 @@
         "ATK%",
         "ATK",
         "PEN_Ratio",
-        "PEN"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 1.5,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN",
+        "Element_DMG"
+      ]
     },
     "1111": {
       "comment": "Anton",
@@ -718,24 +587,9 @@
         "CRIT_Rate",
         "ATK%",
         "ATK",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     },
     "1121": {
       "comment": "Ben",
@@ -792,24 +646,10 @@
         "DEF%",
         "DEF",
         "PEN_Ratio",
-        "Energy_Regen"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1,
-        "CRIT_DMG": 1,
-        "ATK%": 0.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 2,
-        "DEF": 2,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0.5,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN",
+        "Energy_Regen",
+        "Element_DMG"
+      ]
     },
     "1131": {
       "comment": "Soukaku",
@@ -862,24 +702,9 @@
       },
       "priorityStats": [
         "ATK%",
-        "ATK"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1,
-        "CRIT_DMG": 1,
-        "ATK%": 2,
-        "ATK": 2,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "ATK",
+        "Element_DMG"
+      ]
     },
     "1161": {
       "comment": "Lighter",
@@ -936,24 +761,10 @@
         "CRIT_Rate",
         "ATK%",
         "PEN_Ratio",
-        "ATK"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 2,
-        "PEN": 0
-      }
+        "PEN",
+        "ATK",
+        "Element_DMG"
+      ]
     },
     "1201": {
       "comment": "Harumasa",
@@ -1008,24 +819,9 @@
         "CRIT_DMG",
         "CRIT_Rate",
         "ATK%",
-        "ATK"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 2,
-        "ATK": 1,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "ATK",
+        "Element_DMG"
+      ]
     },
     "1211": {
       "comment": "Rina",
@@ -1082,24 +878,9 @@
         "Anomaly_Proficiency",
         "PEN_Ratio",
         "PEN",
-        "Energy_Regen"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0,
-        "CRIT_DMG": 0,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN": 0.5,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0.5,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 0,
-        "Impact": 0
-      }
+        "Energy_Regen",
+        "Element_DMG"
+      ]
     },
     "1241": {
       "comment": "Zhu Yuan",
@@ -1154,25 +935,11 @@
         "CRIT_DMG",
         "CRIT_Rate",
         "PEN_Ratio",
+        "PEN",
         "ATK%",
-        "ATK"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "ATK",
+        "Element_DMG"
+      ]
     },
     "1251": {
       "comment": "Qingyi",
@@ -1229,24 +996,9 @@
         "ATK%",
         "Impact",
         "ATK",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1.5,
-        "CRIT_DMG": 1.5,
-        "ATK%": 1.5,
-        "ATK": 1,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 2,
-        "PEN": 0
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     },
     "1261": {
       "comment": "Jane",
@@ -1301,24 +1053,9 @@
         "Anomaly_Proficiency",
         "Anomaly_Mastery",
         "ATK%",
-        "ATK"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0,
-        "CRIT_DMG": 0,
-        "ATK%": 1.5,
-        "ATK": 1,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 2,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "ATK",
+        "Element_DMG"
+      ]
     },
     "1281": {
       "comment": "Piper",
@@ -1374,24 +1111,9 @@
         "ATK%",
         "Anomaly_Mastery",
         "Anomaly_Proficiency",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0,
-        "CRIT_DMG": 0,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 1.5,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     },
     "1321": {
       "comment": "Evelyn",
@@ -1447,24 +1169,9 @@
         "CRIT_Rate",
         "ATK%",
         "ATK",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     },
     "1331": {
       "comment": "Vivian",
@@ -1519,25 +1226,11 @@
         "Anomaly_Mastery",
         "Anomaly_Proficiency",
         "PEN_Ratio",
+        "PEN",
         "ATK%",
-        "ATK"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0,
-        "CRIT_DMG": 0,
-        "ATK%": 1,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 1.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 2,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "ATK",
+        "Element_DMG"
+      ]
     },
     "1361": {
       "comment": "Trigger",
@@ -1593,24 +1286,9 @@
         "CRIT_Rate",
         "ATK%",
         "ATK",
-        "Impact"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 1.5,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 1.5,
-        "PEN": 0
-      }
+        "Impact",
+        "Element_DMG"
+      ]
     },
     "1371": {
       "comment": "Yixuan",
@@ -1666,24 +1344,9 @@
         "CRIT_Rate",
         "HP",
         "HP%",
-        "ATK%"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 0.5,
-        "ATK": 0,
-        "HP%": 1.5,
-        "HP": 1,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "ATK%",
+        "Element_DMG"
+      ]
     },
     "1391": {
       "comment": "Ju Fufu",
@@ -1740,24 +1403,10 @@
         "ATK",
         "CRIT_DMG",
         "PEN_Ratio",
-        "Impact"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1.5,
-        "CRIT_DMG": 0.5,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 2,
-        "PEN": 0
-      }
+        "PEN",
+        "Impact",
+        "Element_DMG"
+      ]
     },
     "1401": {
       "comment": "Alice",
@@ -1812,24 +1461,10 @@
         "Anomaly_Proficiency",
         "Anomaly_Mastery",
         "PEN_Ratio",
-        "ATK%"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0,
-        "CRIT_DMG": 0,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 1,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 2,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN",
+        "ATK%",
+        "Element_DMG"
+      ]
     },
     "1411": {
       "comment": "Yuzuha",
@@ -1885,25 +1520,11 @@
         "Anomaly_Proficiency",
         "PEN",
         "PEN_Ratio",
+        "PEN",
         "ATK",
-        "ATK%"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0,
-        "CRIT_DMG": 0,
-        "ATK%": 2,
-        "ATK": 1.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 1.5,
-        "Impact": 0,
-        "PEN": 0.5
-      }
+        "ATK%",
+        "Element_DMG"
+      ]
     },
     "1421": {
       "comment": "Pan Yinhu",
@@ -1958,24 +1579,9 @@
         "CRIT_DMG",
         "CRIT_Rate",
         "ATK%",
-        "ATK"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1,
-        "CRIT_DMG": 1,
-        "ATK%": 2,
-        "ATK": 1.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "ATK",
+        "Element_DMG"
+      ]
     },
     "1431": {
       "comment": "Ye Shunguang",
@@ -2031,24 +1637,9 @@
         "CRIT_Rate",
         "ATK%",
         "ATK",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     },
     "1451": {
       "comment": "Lucia",
@@ -2103,24 +1694,9 @@
         "HP",
         "HP%",
         "CRIT_DMG",
-        "CRIT_Rate"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1.5,
-        "CRIT_DMG": 1.5,
-        "ATK%": 0.5,
-        "ATK": 0.5,
-        "HP%": 2,
-        "HP": 2,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "CRIT_Rate",
+        "Element_DMG"
+      ]
     },
     "1461": {
       "comment": "Seed",
@@ -2176,24 +1752,9 @@
         "CRIT_Rate",
         "ATK%",
         "ATK",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     },
     "1471": {
       "comment": "Banyue",
@@ -2248,24 +1809,9 @@
         "CRIT_DMG",
         "CRIT_Rate",
         "HP",
-        "HP%"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 0.5,
-        "ATK": 0,
-        "HP%": 2,
-        "HP": 1,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "HP%",
+        "Element_DMG"
+      ]
     },
     "1101": {
       "comment": "Koleda",
@@ -2321,21 +1867,9 @@
         "CRIT_Rate",
         "ATK%",
         "PEN",
-        "ATK"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 0.5,
-        "ATK%": 0.5,
-        "HP%": 0,
-        "DEF%": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 2,
-        "PEN": 0.5
-      }
+        "ATK",
+        "Element_DMG"
+      ]
     },
     "1141": {
       "comment": "Lycaon",
@@ -2393,24 +1927,9 @@
         "ATK%",
         "PEN_Ratio",
         "PEN",
-        "Impact"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 1,
-        "ATK%": 1,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 2,
-        "PEN": 0.5
-      }
+        "Impact",
+        "Element_DMG"
+      ]
     },
     "1151": {
       "comment": "Lucy",
@@ -2466,23 +1985,9 @@
         "CRIT_Rate",
         "ATK%",
         "ATK",
-        "PEN"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1,
-        "CRIT_DMG": 1,
-        "ATK%": 2,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 2,
-        "Energy_Regen": 1.2,
-        "Anomaly_Proficiency": 0.15,
-        "Anomaly_Mastery": 0.1,
-        "Impact": 0.1,
-        "PEN": 0
-      }
+        "PEN",
+        "Element_DMG"
+      ]
     },
     "1171": {
       "comment": "Burnice",
@@ -2539,23 +2044,9 @@
         "ATK%",
         "ATK",
         "PEN",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0,
-        "CRIT_DMG": 0,
-        "ATK%": 1.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 2,
-        "Impact": 0,
-        "PEN": 0.5
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     },
     "1181": {
       "comment": "Grace",
@@ -2612,23 +2103,9 @@
         "ATK%",
         "ATK",
         "PEN_Ratio",
-        "PEN"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0,
-        "CRIT_DMG": 0,
-        "ATK%": 1.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 2,
-        "Impact": 0,
-        "PEN": 0.5
-      }
+        "PEN",
+        "Element_DMG"
+      ]
     },
     "1191": {
       "comment": "Ellen",
@@ -2685,24 +2162,9 @@
         "ATK%",
         "ATK",
         "PEN",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0.5
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     },
     "1221": {
       "comment": "Yanagi",
@@ -2759,24 +2221,9 @@
         "ATK",
         "ATK%",
         "PEN_Ratio",
-        "PEN"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0,
-        "CRIT_DMG": 0,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 1.5,
-        "Impact": 0,
-        "PEN": 0.5
-      }
+        "PEN",
+        "Element_DMG"
+      ]
     },
     "1271": {
       "comment": "Seth",
@@ -2833,24 +2280,9 @@
         "Anomaly_Proficiency",
         "PEN",
         "Anomaly_Mastery",
-        "Energy_Regen"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0,
-        "CRIT_DMG": 0,
-        "ATK%": 2,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 2,
-        "Anomaly_Mastery": 1.5,
-        "Impact": 0,
-        "PEN": 0.5
-      }
+        "Energy_Regen",
+        "Element_DMG"
+      ]
     },
     "1291": {
       "comment": "Hugo",
@@ -2907,24 +2339,9 @@
         "ATK%",
         "PEN_Ratio",
         "PEN",
-        "ATK"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0.5
-      }
+        "ATK",
+        "Element_DMG"
+      ]
     },
     "1301": {
       "comment": "Orphie & Magus",
@@ -2982,24 +2399,9 @@
         "ATK",
         "Energy_Regen",
         "PEN",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0.5
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     },
     "1311": {
       "comment": "Astra Yao",
@@ -3056,24 +2458,9 @@
         "Energy_Regen",
         "Anomaly_Proficiency",
         "CRIT_DMG",
-        "CRIT_Rate"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 0.5,
-        "CRIT_DMG": 0.5,
-        "ATK%": 2,
-        "ATK": 1.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 1.5,
-        "Anomaly_Proficiency": 0.5,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0.5
-      }
+        "CRIT_Rate",
+        "Element_DMG"
+      ]
     },
     "1341": {
       "comment": "Zhao",
@@ -3131,24 +2518,9 @@
         "ATK%",
         "HP",
         "HP%",
-        "Energy_Regen"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1.0,
-        "CRIT_DMG": 1.0,
-        "ATK%": 0,
-        "ATK": 0,
-        "HP%": 2,
-        "HP": 1.5,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "Energy_Regen",
+        "Element_DMG"
+      ]
     },
     "1351": {
       "comment": "Pulchra",
@@ -3207,24 +2579,9 @@
         "Anomaly_Proficiency",
         "PEN",
         "ATK",
-        "ATK%"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1.5,
-        "CRIT_DMG": 1.5,
-        "ATK%": 1,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 1.5,
-        "Anomaly_Mastery": 1.5,
-        "Impact": 2,
-        "PEN": 0.5
-      }
+        "ATK%",
+        "Element_DMG"
+      ]
     },
     "1381": {
       "comment": "Soldier 0 - Anby",
@@ -3280,24 +2637,9 @@
         "CRIT_Rate",
         "ATK",
         "ATK%",
-        "PEN"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 2,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0.5
-      }
+        "PEN",
+        "Element_DMG"
+      ]
     },
     "1441": {
       "comment": "Manato",
@@ -3354,24 +2696,9 @@
         "HP",
         "HP%",
         "ATK",
-        "ATK%"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 1.5,
-        "CRIT_DMG": 1.5,
-        "ATK%": 0.5,
-        "ATK": 0.5,
-        "HP%": 2,
-        "HP": 1.5,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0
-      }
+        "ATK%",
+        "Element_DMG"
+      ]
     },
     "1481": {
       "comment": "Dialyn",
@@ -3428,24 +2755,9 @@
         "ATK%",
         "ATK",
         "PEN",
-        "PEN_Ratio"
-      ],
-      "statWeights": {
-        "CRIT_Rate": 2,
-        "CRIT_DMG": 1.5,
-        "ATK%": 1.5,
-        "ATK": 0.5,
-        "HP%": 0,
-        "HP": 0,
-        "DEF%": 0,
-        "DEF": 0,
-        "PEN_Ratio": 0.5,
-        "Energy_Regen": 0,
-        "Anomaly_Proficiency": 0,
-        "Anomaly_Mastery": 0,
-        "Impact": 0,
-        "PEN": 0.5
-      }
+        "PEN_Ratio",
+        "Element_DMG"
+      ]
     }
   }
 }

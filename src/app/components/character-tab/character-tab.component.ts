@@ -71,6 +71,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private debouncedDiscSearch = '';
   private debouncedDiscEffectSearch = '';
 
+  // Cached filtered results to avoid re-filtering on every change detection
+  cachedFilteredDiscSets: DiscSet[] = [];
+  cachedFilteredDiscs: Disc[] = [];
+
   // W-Engine picker
   showWEnginePicker = false;
   wengineSearchTerm = '';
@@ -99,6 +103,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private previouslyFocusedElement: HTMLElement | null = null;
+
+  // Click guard flags to prevent double-clicking
+  private isProcessingDiscAction = false;
+  private isProcessingWEngineAction = false;
+  private isProcessingAgentAction = false;
 
   constructor(
     private buildService: BuildService,
@@ -155,6 +164,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(discSets => {
         this.referenceDiscSets = discSets;
+        // Initialize cached filtered disc sets
+        this.updateFilteredDiscSets();
         // Preload disc set images
         this.preloadDiscSetImages(discSets);
       });
@@ -164,6 +175,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(discs => {
         this.allDiscs = discs;
+        // Update cached filtered discs whenever inventory changes
+        this.updateFilteredDiscs();
       });
 
     // Set up debounced search for disc set name
@@ -175,6 +188,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       )
       .subscribe(searchTerm => {
         this.debouncedDiscSearch = searchTerm;
+        this.updateFilteredDiscSets();
+        this.cdr.markForCheck();
       });
 
     // Set up debounced search for disc effects
@@ -186,6 +201,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       )
       .subscribe(searchTerm => {
         this.debouncedDiscEffectSearch = searchTerm;
+        this.updateFilteredDiscSets();
+        this.cdr.markForCheck();
       });
   }
 
@@ -226,8 +243,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   async addAgentBuild() {
-    if (!this.selectedAgentForAdd) {
-      alert('Please select an agent');
+    if (!this.selectedAgentForAdd || this.isProcessingAgentAction) {
       return;
     }
 
@@ -238,6 +254,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.isProcessingAgentAction = true;
+    this.cdr.markForCheck();
+
     try {
       const newBuild = await this.buildService.createBuild(this.selectedAgentForAdd, 0);
       this.closeAddAgentModal();
@@ -245,6 +264,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error creating build:', error);
       alert('Error creating build');
+    } finally {
+      this.isProcessingAgentAction = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -287,29 +309,37 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   async onWEngineSelect(wEngineId: string) {
-    if (!this.selectedBuild) return;
+    if (!this.selectedBuild || this.isProcessingWEngineAction) return;
 
-    if (!wEngineId || wEngineId === '') {
-      // Unequip if empty value selected
-      console.log('Unequipping W-Engine from build:', this.selectedBuild.id);
-      console.log('W-Engine before unequip:', this.selectedBuild.equippedWEngine);
+    this.isProcessingWEngineAction = true;
+    this.cdr.markForCheck();
 
-      await this.buildService.unequipWEngine(this.selectedBuild.id);
+    try {
+      if (!wEngineId || wEngineId === '') {
+        // Unequip if empty value selected
+        console.log('Unequipping W-Engine from build:', this.selectedBuild.id);
+        console.log('W-Engine before unequip:', this.selectedBuild.equippedWEngine);
 
-      // Wait a tick for the subscription to update
-      await new Promise(resolve => setTimeout(resolve, 50));
+        await this.buildService.unequipWEngine(this.selectedBuild.id);
 
-      console.log('W-Engine after unequip:', this.selectedBuild.equippedWEngine);
-      console.log('Updated build stats:', this.selectedBuild.calculatedStats);
+        // Wait a tick for the subscription to update
+        await new Promise(resolve => setTimeout(resolve, 50));
 
-      this.showWEnginePicker = false;
-      return;
-    }
+        console.log('W-Engine after unequip:', this.selectedBuild.equippedWEngine);
+        console.log('Updated build stats:', this.selectedBuild.calculatedStats);
 
-    const wEngine = this.referenceWEngines.find(w => w.id === wEngineId);
-    if (wEngine) {
-      await this.equipWEngine(wEngine);
-      this.showWEnginePicker = false;
+        this.showWEnginePicker = false;
+        return;
+      }
+
+      const wEngine = this.referenceWEngines.find(w => w.id === wEngineId);
+      if (wEngine) {
+        await this.equipWEngine(wEngine);
+        this.showWEnginePicker = false;
+      }
+    } finally {
+      this.isProcessingWEngineAction = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -564,6 +594,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     if (!this.selectedBuild) return;
     this.selectedDiscSlot = slot;
     this.showDiscPicker = true;
+    // Update filtered disc sets and discs when opening picker
+    this.updateFilteredDiscSets();
+    this.updateFilteredDiscs();
   }
 
   openDiscEdit(slot: DiscSlot, event?: Event) {
@@ -645,7 +678,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   // Disc picker methods
-  getFilteredDiscSets(): DiscSet[] {
+
+  /**
+   * Updates the cached filtered disc sets based on current filter criteria
+   * Called when filters change (debounced search terms)
+   */
+  private updateFilteredDiscSets(): void {
     let filtered = this.referenceDiscSets;
 
     // Filter by set name
@@ -670,10 +708,22 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       });
     }
 
-    return filtered;
+    this.cachedFilteredDiscSets = filtered;
   }
 
-  getFilteredDiscs(): Disc[] {
+  /**
+   * Returns cached filtered disc sets (used in template)
+   * This is fast because it just returns the pre-computed array
+   */
+  getFilteredDiscSets(): DiscSet[] {
+    return this.cachedFilteredDiscSets;
+  }
+
+  /**
+   * Updates the cached filtered discs based on current filter criteria
+   * Called when filters change
+   */
+  private updateFilteredDiscs(): void {
     let filtered = this.allDiscs;
 
     // Filter by selected slot (only show discs that match the slot being filled)
@@ -697,11 +747,22 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       filtered = filtered.filter(d => !d.equippedBy);
     }
 
-    return filtered;
+    this.cachedFilteredDiscs = filtered;
+  }
+
+  /**
+   * Returns cached filtered discs (used in template)
+   * This is fast because it just returns the pre-computed array
+   */
+  getFilteredDiscs(): Disc[] {
+    return this.cachedFilteredDiscs;
   }
 
   async equipDiscToBuild(disc: Disc) {
-    if (!this.selectedBuild || !this.selectedDiscSlot) return;
+    if (!this.selectedBuild || !this.selectedDiscSlot || this.isProcessingDiscAction) return;
+
+    this.isProcessingDiscAction = true;
+    this.cdr.markForCheck();
 
     try {
       await this.buildService.equipDisc(this.selectedBuild.id, disc);
@@ -709,10 +770,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error equipping disc:', error);
       alert('Error equipping disc');
+    } finally {
+      this.isProcessingDiscAction = false;
+      this.cdr.markForCheck();
     }
   }
 
   selectDiscSet(discSet: DiscSet) {
+    if (this.isProcessingDiscAction) return;
+
     this.selectedDiscSetForCreation = discSet;
     this.showDiscPicker = false;
     this.showDiscForm = true;
@@ -751,7 +817,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   async createAndEquipDisc() {
-    if (!this.selectedBuild || !this.selectedDiscSlot || !this.selectedDiscSetForCreation) return;
+    if (!this.selectedBuild || !this.selectedDiscSlot || !this.selectedDiscSetForCreation || this.isProcessingDiscAction) return;
+
+    this.isProcessingDiscAction = true;
+    this.cdr.markForCheck();
 
     // For slots 1-3, use fixed values. For slots 4-6, use user input
     let mainStatType: any;
@@ -827,6 +896,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error creating/updating disc:', error);
       alert(this.isEditMode ? 'Error updating disc' : 'Error creating disc');
+    } finally {
+      this.isProcessingDiscAction = false;
+      this.cdr.markForCheck();
     }
   }
 
