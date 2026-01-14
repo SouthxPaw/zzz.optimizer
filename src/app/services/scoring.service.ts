@@ -424,30 +424,14 @@ export class ScoringService {
       details: [] as Array<{ stat: string, value: number, points: number, rolls: number }>
     };
 
-    // Use agent-specific weights directly from breakpoints
-    let weights: { [key: string]: number } = {};
+    // Use agent-specific priority stats list (fribbels approach)
+    let priorityStats: string[] = [];
 
-    if (agentId && this.agentBreakpoints[agentId]?.statWeights) {
-      // Check if this is a hybrid agent and we have equipped discs to analyze
-      const detectedBuild = equippedDiscs ? this.detectBuildType(equippedDiscs) : null;
-
-      if (detectedBuild) {
-        const hybridWeights = this.getHybridBuildWeights(agentId, detectedBuild);
-        if (hybridWeights) {
-          // Use detected build-specific weights directly
-          weights = hybridWeights;
-          breakdown.detectedBuild = detectedBuild;
-        } else {
-          // Not a hybrid agent, use standard agent weights directly
-          weights = this.agentBreakpoints[agentId].statWeights;
-        }
-      } else {
-        // Use standard agent weights directly
-        weights = this.agentBreakpoints[agentId].statWeights;
-      }
+    if (agentId && this.agentBreakpoints[agentId]?.priorityStats) {
+      priorityStats = this.agentBreakpoints[agentId].priorityStats;
     } else {
-      // No agent specified - use default weights from SUBSTAT_WEIGHTS as fallback
-      weights = SUBSTAT_WEIGHTS;
+      // No agent specified - all stats are considered (fallback)
+      priorityStats = ['CRIT_Rate', 'CRIT_DMG', 'ATK%', 'HP%', 'DEF%', 'Anomaly_Proficiency', 'Anomaly_Mastery', 'Energy_Regen', 'Impact', 'PEN', 'PEN_Ratio'];
     }
 
     // Award points for optimal main stat
@@ -455,38 +439,117 @@ export class ScoringService {
     breakdown.mainStatPoints = mainStatBonus;
     totalPoints += mainStatBonus;
 
-    // Calculate points from substats using agent-specific weights
-    disc.subStats.forEach(substat => {
-      const weight = weights[substat.type] || 0;
-      const points = substat.value * weight;
+    // Score based on roll quality (fribbels approach)
+    // Formula: count total rolls into priority stats only
+    let totalRollsInPriorityStats = 0;
+    let priorityStatCount = 0;
+    let maxRollCount = 0; // Count of substats with 5-6 rolls
 
+    disc.subStats.forEach(substat => {
       // Calculate roll count for this substat
       const rolls = calculateRollCount(substat.type, substat.value);
       breakdown.totalRolls += rolls;
 
-      breakdown.subStatPoints += points;
-      breakdown.details.push({
-        stat: substat.type,
-        value: substat.value,
-        points: points,
-        rolls: rolls
-      });
+      // Check if this stat is in the agent's priority list
+      const isPriorityStat = priorityStats.includes(substat.type);
 
-      totalPoints += points;
+      // Only score stats that are in the agent's priority list
+      if (isPriorityStat) {
+        // Just count the rolls - no multipliers
+        totalRollsInPriorityStats += rolls;
+        priorityStatCount++;
+
+        // Track high-roll substats for bonus
+        if (rolls >= 5) {
+          maxRollCount++;
+        }
+
+        breakdown.subStatPoints += rolls;
+        breakdown.details.push({
+          stat: substat.type,
+          value: substat.value,
+          points: rolls,
+          rolls: rolls
+        });
+      } else {
+        // Show wasted stats with 0 contribution
+        breakdown.details.push({
+          stat: substat.type + ' (wasted)',
+          value: substat.value,
+          points: 0,
+          rolls: rolls
+        });
+      }
     });
 
-    // Apply penalty for multiple "bad" flat stats (HP, ATK, DEF)
-    const badFlatCount = disc.subStats.filter(sub => BAD_FLAT_STATS.includes(sub.type)).length;
-    if (badFlatCount > 1) {
-      const penalty = (badFlatCount - 1) * FLAT_STAT_PENALTY_PER_ADDITIONAL;
-      totalPoints -= penalty;
+    // Bonus for having multiple priority stats
+    // This rewards good substat selection - having the RIGHT stats matters more than roll counts
+    let substatBonus = 0;
+    if (priorityStatCount === 4) {
+      // Perfect: all 4 substats are priority stats
+      // Bonus: +12 rolls worth - this is huge because it means NO wasted stats
+      substatBonus = 12;
       breakdown.details.push({
-        stat: 'Bad Flat Penalty',
-        value: badFlatCount,
-        points: -penalty,
+        stat: 'Perfect Substats (4/4)',
+        value: 4,
+        points: substatBonus,
+        rolls: 0
+      });
+    } else if (priorityStatCount === 3) {
+      // Excellent: 3/4 substats are priority stats (only 1 wasted)
+      // Bonus: +8 rolls worth
+      substatBonus = 8;
+      breakdown.details.push({
+        stat: 'Excellent Substats (3/4)',
+        value: 3,
+        points: substatBonus,
         rolls: 0
       });
     }
+
+    // Bonus for high-roll substats (5-6 rolls)
+    // Rewards discs with maxed or near-maxed priority stats
+    let highRollBonus = 0;
+    if (maxRollCount >= 2) {
+      // 2+ substats with 5-6 rolls = excellent rolls
+      highRollBonus = maxRollCount * 4; // 4 bonus rolls per high-roll stat (increased from 3)
+      breakdown.details.push({
+        stat: `High Roll Bonus (${maxRollCount} substats)`,
+        value: maxRollCount,
+        points: highRollBonus,
+        rolls: 0
+      });
+    } else if (maxRollCount === 1) {
+      // 1 substat with 5-6 rolls = very good
+      highRollBonus = 5; // 5 bonus rolls (increased from 4)
+      breakdown.details.push({
+        stat: 'High Roll Bonus (1 substat)',
+        value: 1,
+        points: highRollBonus,
+        rolls: 0
+      });
+    }
+
+    // Total effective rolls with all bonuses
+    const totalEffectiveRolls = totalRollsInPriorityStats + substatBonus + highRollBonus;
+
+    // Convert to 0-100 scale
+    // Max theoretical adjusted: use 24 as baseline (4 stats × 6 rolls)
+    // This makes the scale more generous to match Interknot Network expectations
+    const maxTheoretical = 24;
+    let finalScore = (totalEffectiveRolls / maxTheoretical) * 100;
+
+    // Don't cap at 100 - let god rolls exceed it
+    finalScore = Math.round(finalScore * 10) / 10;
+
+    breakdown.details.push({
+      stat: 'Total Effective Rolls',
+      value: totalEffectiveRolls,
+      points: finalScore,
+      rolls: breakdown.totalRolls
+    });
+
+    totalPoints = finalScore;
 
     // Determine rating based on total points
     const rating = this.getDiscRating(totalPoints);
@@ -587,13 +650,33 @@ export class ScoringService {
           });
         }
 
-        // Award points based on meeting breakpoints
-        // Priority stats are weighted more heavily
-        if (metOptimal) {
-          breakdown.metBreakpoints += isPriority ? 1.5 : 1.0;
-        } else if (metMin) {
-          breakdown.metBreakpoints += isPriority ? 0.75 : 0.5;
+        // Award points based on meeting breakpoints with progressive scoring
+        // This gives partial credit for being between min and optimal
+        let points = 0;
+
+        if (adjustedValue >= breakpoint.optimal) {
+          // Met optimal - full points
+          points = isPriority ? 1.5 : 1.0;
+        } else if (adjustedValue >= breakpoint.min) {
+          // Between min and optimal - progressive scaling
+          // Calculate how far between min and optimal (0.0 to 1.0)
+          const range = breakpoint.optimal - breakpoint.min;
+          const progress = range > 0 ? (adjustedValue - breakpoint.min) / range : 0;
+
+          // Scale from 50% to 100% of full points based on progress
+          // This ensures meeting min gives you 50% credit, and you get more as you approach optimal
+          const scaleFactor = 0.5 + (progress * 0.5); // 0.5 to 1.0
+          points = (isPriority ? 1.5 : 1.0) * scaleFactor;
+        } else {
+          // Below min - small credit for having ANY value in priority stats
+          if (isPriority && adjustedValue > 0) {
+            // Give up to 25% credit for priority stats even below min
+            const percentOfMin = Math.min(adjustedValue / breakpoint.min, 1.0);
+            points = (isPriority ? 1.5 : 1.0) * 0.25 * percentOfMin;
+          }
         }
+
+        breakdown.metBreakpoints += points;
 
         breakdown.statDetails.push({
           stat: statKey,
