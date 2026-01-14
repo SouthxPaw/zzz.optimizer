@@ -5,7 +5,7 @@ export type DiscSlot = 'Drive1' | 'Drive2' | 'Drive3' | 'Drive4' | 'Drive5' | 'D
 
 export interface BaseStats {
   hp: number;
-  hppercent:number;
+  hppercent: number;
   atk: number;
   atkpercent: number;
   def: number;
