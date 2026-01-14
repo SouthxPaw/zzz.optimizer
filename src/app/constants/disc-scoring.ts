@@ -104,7 +104,8 @@ export const DISC_RATING_THRESHOLDS: DiscRating[] = [
 
 /**
  * Build rating thresholds based on stat breakpoints
- * Updated with normalized grading and breakpoint penalties applied
+ * Balanced to be challenging yet achievable with good disc farming
+ * These thresholds reward quality builds while maintaining meaningful progression
  */
 export interface BuildRating {
   grade: 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
@@ -114,12 +115,12 @@ export interface BuildRating {
 }
 
 export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
-  { grade: 'SSS', breakpointsMetPercentage: 85, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
-  { grade: 'SS', breakpointsMetPercentage: 76, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
-  { grade: 'S', breakpointsMetPercentage: 68, color: '#FFD93D', description: 'Very Good - Strong build with good discs' },
-  { grade: 'A', breakpointsMetPercentage: 58, color: '#6BCF7F', description: 'Good - Solid build with decent discs' },
-  { grade: 'B', breakpointsMetPercentage: 45, color: '#4D96FF', description: 'Decent - Room for improvement' },
+  { grade: 'SSS', breakpointsMetPercentage: 78, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
+  { grade: 'SS', breakpointsMetPercentage: 70, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
+  { grade: 'S', breakpointsMetPercentage: 64, color: '#FFD93D', description: 'Very Good - Strong build with good discs' },
+  { grade: 'A', breakpointsMetPercentage: 55, color: '#6BCF7F', description: 'Good - Solid build with decent discs' },
+  { grade: 'B', breakpointsMetPercentage: 43, color: '#4D96FF', description: 'Decent - Room for improvement' },
   { grade: 'C', breakpointsMetPercentage: 30, color: '#A0A0A0', description: 'Below Average - Missing key stats' },
-  { grade: 'D', breakpointsMetPercentage: 15, color: '#808080', description: 'Poor - Major gaps in stats' },
+  { grade: 'D', breakpointsMetPercentage: 18, color: '#808080', description: 'Poor - Major gaps in stats' },
   { grade: 'F', breakpointsMetPercentage: 0, color: '#606060', description: 'Unoptimized - Needs complete rework' },
 ];

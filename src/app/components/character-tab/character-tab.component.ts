@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -21,7 +21,8 @@ import { DiscRating, BuildRating } from '../../constants/disc-scoring';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './character-tab.component.html',
-  styleUrls: ['./character-tab.component.css']
+  styleUrls: ['./character-tab.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CharacterTabComponent implements OnInit, OnDestroy {
   // User builds (not reference data!)
@@ -74,11 +75,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   showWEnginePicker = false;
   wengineSearchTerm = '';
   wengineSpecialtyFilter = '';
+  wengineRarityFilter = '';
   wengineSortBy = 'name';
 
   // Agent picker filters
   agentElementFilter = '';
   agentSpecialtyFilter = '';
+  agentRarityFilter = '';
   agentSortBy = 'name';
 
   // Assumptions notice
@@ -106,7 +109,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private statCalculator: StatCalculatorService,
     private scoringService: ScoringService,
     private imagePreloader: ImagePreloaderService,
-    private dataMappingService: DataMappingService
+    private dataMappingService: DataMappingService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -352,6 +356,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       filtered = filtered.filter(a => a.specialty === this.agentSpecialtyFilter);
     }
 
+    // Filter by rarity
+    if (this.agentRarityFilter) {
+      filtered = filtered.filter(a => a.rarity === this.agentRarityFilter);
+    }
+
     // Sort
     return this.sortAgents(filtered);
   }
@@ -386,6 +395,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Filter by specialty
     if (this.wengineSpecialtyFilter) {
       filtered = filtered.filter(w => w.specialty === this.wengineSpecialtyFilter);
+    }
+
+    // Filter by rarity
+    if (this.wengineRarityFilter) {
+      filtered = filtered.filter(w => w.rarity === this.wengineRarityFilter);
     }
 
     // Filter by search term
@@ -1065,5 +1079,38 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         event.preventDefault();
       }
     }
+  }
+
+  // TrackBy functions for performance optimization
+  trackByBuildId(index: number, build: AgentBuild): string {
+    return build.id;
+  }
+
+  trackByMindscapeLevel(index: number, level: number): number {
+    return level;
+  }
+
+  trackByAgentId(index: number, agent: Agent): string {
+    return agent.id;
+  }
+
+  trackByWEngineId(index: number, wEngine: WEngine): string {
+    return wEngine.id;
+  }
+
+  trackByDiscSlot(index: number, slot: DiscSlot): string {
+    return slot;
+  }
+
+  trackByDiscSetName(index: number, discSet: DiscSet): string {
+    return discSet.name;
+  }
+
+  trackBySubStatIndex(index: number, subStat: any): number {
+    return index;
+  }
+
+  trackByBonusIndex(index: number, bonus: any): number {
+    return index;
   }
 }
