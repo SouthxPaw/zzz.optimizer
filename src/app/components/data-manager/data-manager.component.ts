@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataImportService } from '../../services/data-import.service';
@@ -10,7 +10,8 @@ import { BuildImportExportService } from '../../services/build-import-export.ser
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './data-manager.component.html',
-  styleUrls: ['./data-manager.component.css']
+  styleUrls: ['./data-manager.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataManagerComponent {
   isLoading = false;

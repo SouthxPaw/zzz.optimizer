@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { Agent, DiscSlot } from '../../models/agent.model';
 import { WEngine } from '../../models/wengine.model';
-import { Disc } from '../../models/disc.model';
+import { Disc, MainStatType, SubStatType } from '../../models/disc.model';
 import { AgentService } from '../../services/agent.service';
 import { WEngineService } from '../../services/wengine.service';
 import { DiscService } from '../../services/disc.service';
@@ -317,9 +317,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     try {
       if (!wEngineId || wEngineId === '') {
         // Unequip if empty value selected
-        console.log('Unequipping W-Engine from build:', this.selectedBuild.id);
-        console.log('W-Engine before unequip:', this.selectedBuild.equippedWEngine);
-
         await this.buildService.unequipWEngine(this.selectedBuild.id);
 
         // Wait a tick for the subscription to update
@@ -823,7 +820,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
 
     // For slots 1-3, use fixed values. For slots 4-6, use user input
-    let mainStatType: any;
+    let mainStatType: MainStatType;
     let mainStatValue: number;
 
     if (this.selectedDiscSlot === 'Drive1' || this.selectedDiscSlot === 'Drive2' || this.selectedDiscSlot === 'Drive3') {
@@ -832,7 +829,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       mainStatValue = this.getMainStatValueForSlot(this.selectedDiscSlot);
     } else {
       // User input for slots 4-6
-      mainStatType = this.discFormData.mainStatType;
+      mainStatType = this.discFormData.mainStatType as MainStatType;
       // Convert string to number if needed
       mainStatValue = typeof this.discFormData.mainStatValue === 'string'
         ? parseFloat(this.discFormData.mainStatValue) || 0
@@ -849,7 +846,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
             value: mainStatValue
           },
           subStats: this.discFormData.subStats.map(s => ({
-            type: s.type as any,
+            type: s.type as SubStatType,
             value: typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value
           }))
         };
@@ -880,7 +877,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
             value: mainStatValue
           },
           subStats: this.discFormData.subStats.map(s => ({
-            type: s.type as any,
+            type: s.type as SubStatType,
             value: typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value
           })),
           lock: false
@@ -902,9 +899,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
   }
 
-  getDefaultMainStatForSlot(slot: DiscSlot): any {
+  getDefaultMainStatForSlot(slot: DiscSlot): MainStatType {
     // Discs 1-3 have fixed main stats, 4-6 are flexible
-    const defaults: { [key in DiscSlot]: any } = {
+    const defaults: { [key in DiscSlot]: MainStatType } = {
       'Drive1': 'HP',
       'Drive2': 'ATK',
       'Drive3': 'DEF',
@@ -1154,35 +1151,35 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   // TrackBy functions for performance optimization
-  trackByBuildId(index: number, build: AgentBuild): string {
+  trackByBuildId(_index: number, build: AgentBuild): string {
     return build.id;
   }
 
-  trackByMindscapeLevel(index: number, level: number): number {
+  trackByMindscapeLevel(_index: number, level: number): number {
     return level;
   }
 
-  trackByAgentId(index: number, agent: Agent): string {
+  trackByAgentId(_index: number, agent: Agent): string {
     return agent.id;
   }
 
-  trackByWEngineId(index: number, wEngine: WEngine): string {
+  trackByWEngineId(_index: number, wEngine: WEngine): string {
     return wEngine.id;
   }
 
-  trackByDiscSlot(index: number, slot: DiscSlot): string {
+  trackByDiscSlot(_index: number, slot: DiscSlot): string {
     return slot;
   }
 
-  trackByDiscSetName(index: number, discSet: DiscSet): string {
+  trackByDiscSetName(_index: number, discSet: DiscSet): string {
     return discSet.name;
   }
 
-  trackBySubStatIndex(index: number, subStat: any): number {
+  trackBySubStatIndex(index: number, _subStat: unknown): number {
     return index;
   }
 
-  trackByBonusIndex(index: number, bonus: any): number {
+  trackByBonusIndex(index: number, _bonus: unknown): number {
     return index;
   }
 }
