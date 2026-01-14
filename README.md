@@ -2,7 +2,7 @@
 
 A comprehensive build optimizer and character builder for **Zenless Zone Zero** (ZZZ). Manage your agents, W-Engines, disc sets, and calculate optimal builds with real-time stat calculations and scoring.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.5.0-blue.svg)
 ![Angular](https://img.shields.io/badge/Angular-19.2-red.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -36,6 +36,7 @@ A comprehensive build optimizer and character builder for **Zenless Zone Zero** 
   - Merge or replace existing data
 
 - **Persistent Storage**: All data stored locally in IndexedDB (no server required)
+- **Mobile Responsive**: Fully optimized for mobile devices
 
 ## Live Demo
 
