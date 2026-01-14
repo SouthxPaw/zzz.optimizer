@@ -985,8 +985,92 @@
 }
 
 @media (max-width: 768px) {
+  .character-tab {
+    padding: 10px;
+  }
+
+  .content-grid {
+    gap: 15px;
+  }
+
   .disc-grid {
     grid-template-columns: 1fr;
+  }
+
+  .disc-picker-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  .wengine-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .disc-set-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .substat-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .substat-label {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .character-tab {
+    padding: 8px;
+  }
+
+  .section {
+    padding: 12px;
+  }
+
+  .section h2,
+  .section h3 {
+    font-size: 1.1em;
+  }
+
+  .disc-picker-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .refinement-buttons {
+    gap: 6px;
+  }
+
+  .refinement-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9em;
+  }
+
+  .build-rating-badge .rating-grade-large {
+    font-size: 2em;
+  }
+
+  .build-rating-badge .rating-score-large {
+    font-size: 1em;
+  }
+
+  .wengine-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .wengine-thumbnail {
+    width: 40px;
+    height: 40px;
+  }
+
+  .disc-set-icon {
+    width: 40px;
+    height: 40px;
   }
 }
 

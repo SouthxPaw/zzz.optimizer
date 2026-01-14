@@ -66,6 +66,7 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
       }));
       this.applyFilters();
       this.isLoading = false;
+      this.cdr.markForCheck();
     });
 
     // Debounce the set filter input
@@ -171,6 +172,7 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
     this.paginatedDiscs = this.filteredDiscs.slice(start, end);
+    this.cdr.markForCheck();
   }
 
   changePage(page: number) {
@@ -260,16 +262,19 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
     } else {
       this.selectedDiscUids.add(uid);
     }
+    this.cdr.markForCheck();
   }
 
   selectAllVisible() {
     this.paginatedDiscs.forEach(disc => {
       this.selectedDiscUids.add(disc.uid);
     });
+    this.cdr.markForCheck();
   }
 
   deselectAll() {
     this.selectedDiscUids.clear();
+    this.cdr.markForCheck();
   }
 
   async bulkDelete() {
