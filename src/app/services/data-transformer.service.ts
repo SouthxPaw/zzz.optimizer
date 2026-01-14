@@ -507,7 +507,6 @@ export class DataTransformerService {
   transformAgentWithDetailedStats(id: string, basicAgent: any, detailedData: any): Agent {
     // Use detailed stats if available, otherwise fall back to extractLevel60Stats
     // Temporarily add id to basicAgent for debug logging
-    const basicAgentWithId = { ...basicAgent, id: id };
     const lvl60Stats = this.extractLevel60Stats(basicAgent);
 
     if (!lvl60Stats) {
