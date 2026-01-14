@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, RouterLinkActive } from '@angular/router';
 
@@ -7,7 +7,8 @@ import { RouterModule, RouterLinkActive } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule, RouterLinkActive],
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.css']
+  styleUrls: ['./navigation.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavigationComponent {
 }
