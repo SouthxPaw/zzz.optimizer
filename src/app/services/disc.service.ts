@@ -124,21 +124,22 @@ export class DiscService {
   }
 
   private normalizeSubstatValue(subStat: SubStat): number {
-    // Max roll values for substats (approximate)
+    // Max roll values for substats (6 rolls: 1 initial + 5 upgrades)
+    // Values from: https://www.prydwen.gg/zenless/guides/disk-drives-stats/
     const maxRolls: Record<SubStatType, number> = {
-      HP: 337,
-      'HP%': 4.8,
-      ATK: 19,
-      'ATK%': 4.8,
-      DEF: 16,
-      'DEF%': 6.0,
-      CRIT_Rate: 3.2,
-      CRIT_DMG: 6.4,
-      Anomaly_Proficiency: 9,
-      Anomaly_Mastery: 9,
-      PEN: 4.8,
-      Impact: 4.8,
-      Energy_Regen: 4.8,
+      HP: 672,                // 112 × 6 rolls
+      'HP%': 18.0,            // 3.0% × 6 rolls
+      ATK: 114,               // 19 × 6 rolls
+      'ATK%': 18.0,           // 3.0% × 6 rolls
+      DEF: 96,                // 16 × 6 rolls (estimated)
+      'DEF%': 28.8,           // 4.8% × 6 rolls
+      CRIT_Rate: 14.4,        // 2.4% × 6 rolls
+      CRIT_DMG: 28.8,         // 4.8% × 6 rolls
+      Anomaly_Proficiency: 54, // 9 × 6 rolls
+      Anomaly_Mastery: 54,    // 9 × 6 rolls (estimated)
+      PEN: 54,                // 9 × 6 rolls
+      Impact: 54,             // 9 × 6 rolls (estimated)
+      Energy_Regen: 28.8,     // 4.8% × 6 rolls (estimated)
     };
 
     const maxRoll = maxRolls[subStat.type] || 1;

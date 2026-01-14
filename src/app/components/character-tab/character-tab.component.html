@@ -222,6 +222,10 @@
             <span class="stat-value">{{selectedBuild.calculatedStats.penRatio}}%</span>
           </div>
           <div class="stat-row">
+            <span class="stat-label">PEN:</span>
+            <span class="stat-value">{{selectedBuild.calculatedStats.pen}}</span>
+          </div>
+          <div class="stat-row">
             <span class="stat-label">CRIT Rate:</span>
             <span class="stat-value">{{selectedBuild.calculatedStats.critRate}}%</span>
           </div>
@@ -274,6 +278,39 @@
             </ng-template>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="section summary-panel" *ngIf="selectedBuild">
+      <h2>Build Summary</h2>
+      <div class="summary-content">
+        <div class="summary-item build-rating-display" *ngIf="getBuildScore() as buildScore">
+          <strong data-tooltip="Overall rating of your build based on disc quality and optimization for this agent">Build Rating:</strong>
+          <div class="build-rating-badge"
+               [ngClass]="getBuildRatingClass(buildScore.rating)"
+               [title]="buildScore.rating.description">
+            <span class="rating-grade-large">{{buildScore.rating.grade}}</span>
+            <span class="rating-score-large">{{buildScore.score.toFixed(1)}}%</span>
+          </div>
+          <p class="rating-description">{{buildScore.rating.description}}</p>
+        </div>
+        <div class="summary-item">
+          <strong>Level:</strong> {{selectedBuild.level}}
+        </div>
+        <div class="summary-item">
+          <strong>Mindscape:</strong> M{{selectedBuild.mindscapeLevel}}
+        </div>
+        <div class="summary-item" *ngIf="selectedBuild.equippedWEngine">
+          <strong>W-Engine:</strong> {{selectedBuild.equippedWEngine.name}}
+        </div>
+        <div class="summary-item">
+          <strong>Disc Sets:</strong> {{getEquippedDiscsCount(selectedBuild)}}/6 equipped
+        </div>
+        <div class="summary-item">
+          <strong>Created:</strong> {{selectedBuild.createdAt | date:'short'}}
+        </div>
+
         <!-- W-Engine Stat Bonuses -->
         <div *ngIf="selectedBuild.equippedWEngine" class="wengine-active-effect">
           <h4>W-Engine Bonuses:</h4>
@@ -325,38 +362,6 @@
           <div *ngFor="let bonus of get4pcEffectBonuses()" class="set-bonus">
             {{bonus}}
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Summary -->
-    <div class="section summary-panel" *ngIf="selectedBuild">
-      <h2>Build Summary</h2>
-      <div class="summary-content">
-        <div class="summary-item build-rating-display" *ngIf="getBuildScore() as buildScore">
-          <strong data-tooltip="Overall rating of your build based on disc quality and optimization for this agent">Build Rating:</strong>
-          <div class="build-rating-badge"
-               [ngClass]="getBuildRatingClass(buildScore.rating)"
-               [title]="buildScore.rating.description">
-            <span class="rating-grade-large">{{buildScore.rating.grade}}</span>
-            <span class="rating-score-large">{{buildScore.score.toFixed(1)}}%</span>
-          </div>
-          <p class="rating-description">{{buildScore.rating.description}}</p>
-        </div>
-        <div class="summary-item">
-          <strong>Level:</strong> {{selectedBuild.level}}
-        </div>
-        <div class="summary-item">
-          <strong>Mindscape:</strong> M{{selectedBuild.mindscapeLevel}}
-        </div>
-        <div class="summary-item" *ngIf="selectedBuild.equippedWEngine">
-          <strong>W-Engine:</strong> {{selectedBuild.equippedWEngine.name}}
-        </div>
-        <div class="summary-item">
-          <strong>Disc Sets:</strong> {{getEquippedDiscsCount(selectedBuild)}}/6 equipped
-        </div>
-        <div class="summary-item">
-          <strong>Created:</strong> {{selectedBuild.createdAt | date:'short'}}
         </div>
       </div>
     </div>

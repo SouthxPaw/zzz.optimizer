@@ -19,14 +19,31 @@ export class DataTransformerService {
   transformAgents(rawData: any): Agent[] {
     const agents: Agent[] = [];
 
-    for (const [id, rawAgent] of Object.entries(rawData)) {
-      try {
-        const agent = this.transformSingleAgent(id, rawAgent as any);
-        if (agent) {
-          agents.push(agent);
+    // Handle both array format (agents.json) and object format (legacy)
+    if (Array.isArray(rawData)) {
+      // Array format: agents.json has array of agent objects
+      for (const rawAgent of rawData) {
+        try {
+          const id = String(rawAgent.id);
+          const agent = this.transformSingleAgent(id, rawAgent);
+          if (agent) {
+            agents.push(agent);
+          }
+        } catch (error) {
+          console.warn(`Failed to transform agent ${rawAgent.id}:`, error);
         }
-      } catch (error) {
-        console.warn(`Failed to transform agent ${id}:`, error);
+      }
+    } else {
+      // Object format: legacy format with numeric keys
+      for (const [id, rawAgent] of Object.entries(rawData)) {
+        try {
+          const agent = this.transformSingleAgent(id, rawAgent as any);
+          if (agent) {
+            agents.push(agent);
+          }
+        } catch (error) {
+          console.warn(`Failed to transform agent ${id}:`, error);
+        }
       }
     }
 
@@ -489,7 +506,8 @@ export class DataTransformerService {
    */
   transformAgentWithDetailedStats(id: string, basicAgent: any, detailedData: any): Agent {
     // Use detailed stats if available, otherwise fall back to extractLevel60Stats
-    const lvl60Stats = this.extractLevel60Stats(detailedData) || this.extractLevel60Stats(basicAgent);
+    // Temporarily add id to basicAgent for debug logging
+    const lvl60Stats = this.extractLevel60Stats(basicAgent);
 
     if (!lvl60Stats) {
       throw new Error(`Failed to extract stats for agent ${id}`);
@@ -537,9 +555,9 @@ export class DataTransformerService {
     // Extract mindscape effects from basicAgent (agents.json has mindscape_cinemas)
     const mindscapeEffects = this.extractMindscapeEffects(basicAgent.mindscape_cinemas || []);
 
-    return {
+    const agent = {
       id: id,
-      name: basicAgent.EN || detailedData.Name || 'Unknown',
+      name: basicAgent.name || basicAgent.EN || basicAgent.Name || 'Unknown',
       rarity: rarity,
       element: element,
       specialty: specialty,
@@ -550,6 +568,8 @@ export class DataTransformerService {
       specialtyIcon: specialtyIcon,
       mindscapeEffects: mindscapeEffects.length > 0 ? mindscapeEffects : undefined
     };
+
+    return agent;
   }
 
   /**
