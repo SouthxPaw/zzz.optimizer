@@ -457,6 +457,52 @@
   }
 }
 
+@media (max-width: 768px) {
+  .optimizer {
+    padding: 10px;
+  }
+
+  .header h1 {
+    font-size: 1.8em;
+  }
+
+  .section {
+    padding: 15px;
+  }
+
+  .filter-group label {
+    font-size: 0.9em;
+  }
+
+  .select-input,
+  .text-input {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .optimizer {
+    padding: 8px;
+  }
+
+  .header h1 {
+    font-size: 1.5em;
+  }
+
+  .subtitle {
+    font-size: 0.9em;
+  }
+
+  .section {
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .section h2 {
+    font-size: 1.2em;
+  }
+}
+
 /* Scrollbar Styling */
 .section::-webkit-scrollbar {
   width: 8px;

@@ -395,3 +395,147 @@ input[type="checkbox"] {
   height: 16px;
   width: 90%;
 }
+
+/* Mobile Responsive Styles */
+@media screen and (max-width: 1200px) {
+  .main-content {
+    grid-template-columns: 250px 1fr 300px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .main-content {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .section {
+    max-height: none;
+  }
+
+  .filters-section {
+    order: 1;
+  }
+
+  .disc-list-section {
+    order: 2;
+  }
+
+  .disc-details-section {
+    order: 3;
+  }
+
+  .disc-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .disc-builder {
+    padding: 10px;
+  }
+
+  .header h1 {
+    font-size: 1.5em;
+  }
+
+  .section {
+    padding: 15px;
+  }
+
+  .disc-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .bulk-selection-controls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .sort-controls {
+    width: 100%;
+  }
+
+  .sort-controls select {
+    width: 100%;
+  }
+
+  .potential-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .disc-builder {
+    padding: 8px;
+  }
+
+  .header h1 {
+    font-size: 1.3em;
+  }
+
+  .section {
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .disc-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
+
+  .disc-card {
+    padding: 8px;
+    font-size: 0.9em;
+  }
+
+  .disc-header {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .disc-slot,
+  .disc-rank,
+  .disc-level {
+    font-size: 0.75em;
+  }
+
+  .disc-set {
+    font-size: 0.85em;
+  }
+
+  .disc-main-stat {
+    font-size: 0.85em;
+  }
+
+  .disc-substats .substat {
+    font-size: 0.75em;
+  }
+
+  .bulk-selection-controls {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .btn-sm {
+    padding: 4px 8px;
+    font-size: 0.8em;
+  }
+
+  .pagination {
+    gap: 8px;
+  }
+
+  .btn-secondary {
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
+}
