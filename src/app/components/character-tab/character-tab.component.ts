@@ -100,6 +100,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private previouslyFocusedElement: HTMLElement | null = null;
 
+  // Click guard flags to prevent double-clicking
+  private isProcessingDiscAction = false;
+  private isProcessingWEngineAction = false;
+
   constructor(
     private buildService: BuildService,
     private agentService: AgentService,
@@ -287,29 +291,35 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   async onWEngineSelect(wEngineId: string) {
-    if (!this.selectedBuild) return;
+    if (!this.selectedBuild || this.isProcessingWEngineAction) return;
 
-    if (!wEngineId || wEngineId === '') {
-      // Unequip if empty value selected
-      console.log('Unequipping W-Engine from build:', this.selectedBuild.id);
-      console.log('W-Engine before unequip:', this.selectedBuild.equippedWEngine);
+    this.isProcessingWEngineAction = true;
 
-      await this.buildService.unequipWEngine(this.selectedBuild.id);
+    try {
+      if (!wEngineId || wEngineId === '') {
+        // Unequip if empty value selected
+        console.log('Unequipping W-Engine from build:', this.selectedBuild.id);
+        console.log('W-Engine before unequip:', this.selectedBuild.equippedWEngine);
 
-      // Wait a tick for the subscription to update
-      await new Promise(resolve => setTimeout(resolve, 50));
+        await this.buildService.unequipWEngine(this.selectedBuild.id);
 
-      console.log('W-Engine after unequip:', this.selectedBuild.equippedWEngine);
-      console.log('Updated build stats:', this.selectedBuild.calculatedStats);
+        // Wait a tick for the subscription to update
+        await new Promise(resolve => setTimeout(resolve, 50));
 
-      this.showWEnginePicker = false;
-      return;
-    }
+        console.log('W-Engine after unequip:', this.selectedBuild.equippedWEngine);
+        console.log('Updated build stats:', this.selectedBuild.calculatedStats);
 
-    const wEngine = this.referenceWEngines.find(w => w.id === wEngineId);
-    if (wEngine) {
-      await this.equipWEngine(wEngine);
-      this.showWEnginePicker = false;
+        this.showWEnginePicker = false;
+        return;
+      }
+
+      const wEngine = this.referenceWEngines.find(w => w.id === wEngineId);
+      if (wEngine) {
+        await this.equipWEngine(wEngine);
+        this.showWEnginePicker = false;
+      }
+    } finally {
+      this.isProcessingWEngineAction = false;
     }
   }
 
@@ -701,7 +711,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   async equipDiscToBuild(disc: Disc) {
-    if (!this.selectedBuild || !this.selectedDiscSlot) return;
+    if (!this.selectedBuild || !this.selectedDiscSlot || this.isProcessingDiscAction) return;
+
+    this.isProcessingDiscAction = true;
 
     try {
       await this.buildService.equipDisc(this.selectedBuild.id, disc);
@@ -709,10 +721,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error equipping disc:', error);
       alert('Error equipping disc');
+    } finally {
+      this.isProcessingDiscAction = false;
     }
   }
 
   selectDiscSet(discSet: DiscSet) {
+    if (this.isProcessingDiscAction) return;
+
     this.selectedDiscSetForCreation = discSet;
     this.showDiscPicker = false;
     this.showDiscForm = true;
@@ -751,7 +767,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   async createAndEquipDisc() {
-    if (!this.selectedBuild || !this.selectedDiscSlot || !this.selectedDiscSetForCreation) return;
+    if (!this.selectedBuild || !this.selectedDiscSlot || !this.selectedDiscSetForCreation || this.isProcessingDiscAction) return;
+
+    this.isProcessingDiscAction = true;
 
     // For slots 1-3, use fixed values. For slots 4-6, use user input
     let mainStatType: any;
@@ -827,6 +845,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error creating/updating disc:', error);
       alert(this.isEditMode ? 'Error updating disc' : 'Error creating disc');
+    } finally {
+      this.isProcessingDiscAction = false;
     }
   }
 

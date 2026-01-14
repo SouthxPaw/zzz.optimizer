@@ -54,29 +54,30 @@ export const BUILD_SCORE_WEIGHTS = {
 /**
  * Main stat point bonuses
  * Gets bonus points for having optimal main stat for the slot
+ * All viable main stats weighted equally at 3 points
  */
 export const MAIN_STAT_BONUS: { [slot: string]: { [stat: string]: number } } = {
   'Drive4': {
     'CRIT_Rate': 3,
     'CRIT_DMG': 3,
-    'ATK%': 2,
-    'Anomaly_Proficiency': 2,
-    'Impact': 2,
+    'ATK%': 3,
+    'Anomaly_Proficiency': 3,
+    'Impact': 3,
     'PEN_Ratio': 3,
   },
   'Drive5': {
-    'ATK%': 2,
-    'HP%': 2,
-    'DEF%': 2,
+    'ATK%': 3,
+    'HP%': 3,
+    'DEF%': 3,
     'PEN_Ratio': 3,
-    'Element_DMG': 2,  // Element DMG on slot 5 is decent (middle of the road)
+    'Element_DMG': 3,
   },
   'Drive6': {
-    'ATK%': 2,
-    'Anomaly_Proficiency': 2,
-    'Anomaly_Mastery': 2,
-    'Energy_Regen': 2,
-    'Impact': 2,
+    'ATK%': 3,
+    'Anomaly_Proficiency': 3,
+    'Anomaly_Mastery': 3,
+    'Energy_Regen': 3,
+    'Impact': 3,
   }
 };
 
