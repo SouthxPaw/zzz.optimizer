@@ -87,7 +87,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
 }
 
 .notice-close-btn:hover {
@@ -107,7 +107,7 @@
   cursor: pointer;
   font-size: 0.95em;
   font-weight: bold;
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 
 .btn-primary {
@@ -191,7 +191,7 @@
   cursor: pointer;
   border-radius: 8px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.15s ease;
   border: 3px solid transparent;
   position: relative;
   background: #151515;
@@ -321,7 +321,7 @@
   cursor: pointer;
   border-radius: 8px;
   overflow: hidden;
-  transition: all 0.2s;
+  transition: all 0.1s;
   border: 2px solid transparent;
   position: relative;
 }
@@ -343,7 +343,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.1s;
   opacity: 0;
 }
 
@@ -417,7 +417,7 @@
   color: #aaa;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.1s;
   font-weight: bold;
 }
 
@@ -583,7 +583,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 
 .close-btn:hover {
@@ -641,7 +641,7 @@
   cursor: pointer;
   border-radius: 8px;
   overflow: hidden;
-  transition: all 0.2s;
+  transition: all 0.1s;
   border: 2px solid transparent;
   background: #1a1a1a;
 }
@@ -709,7 +709,7 @@
   background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   padding: 4px;
-  transition: transform 0.2s;
+  transition: transform 0.1s;
 }
 
 .element-badge:hover,
@@ -759,7 +759,7 @@
   border-radius: 8px;
   border: 2px solid #0a0a0a;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.1s;
   position: relative;
   min-height: 180px;
 }
@@ -936,7 +936,7 @@
   line-height: 1;
   padding: 0;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.1s;
 }
 
 .disc-slot:hover .unequip-btn {
@@ -1140,7 +1140,7 @@
   border-radius: 8px;
   padding: 12px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 
 .disc-picker-card:hover {
@@ -1284,7 +1284,7 @@
   border-radius: 8px;
   padding: 15px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 
 .disc-set-card:hover {
@@ -1369,7 +1369,7 @@
   border-radius: 6px;
   margin-bottom: 8px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 
 /* Rarity-based backgrounds for W-Engine list items */
@@ -1467,7 +1467,7 @@
   font-size: 1em;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 
 .refinement-btn:hover {
@@ -1712,7 +1712,7 @@
   background: rgba(244, 185, 66, 0.05);
   border: 1px solid rgba(244, 185, 66, 0.2);
   border-radius: 6px;
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
 }
 
 .substat-row:hover {
@@ -1735,7 +1735,7 @@
   color: #eee;
   font-size: 0.9em;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
 }
 
 .substat-type-select:hover {
@@ -1757,7 +1757,7 @@
   border-radius: 6px;
   color: #eee;
   font-size: 0.9em;
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
 }
 
 .substat-value-input:hover {
@@ -1784,7 +1784,7 @@
   border-radius: 6px;
   color: #eee;
   font-size: 0.9em;
-  transition: all 0.2s ease;
+  transition: all 0.1s ease;
 }
 
 .stat-input:hover {
@@ -1832,7 +1832,7 @@
   font-weight: 600;
   font-size: 0.95em;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 
 .btn-danger:hover {

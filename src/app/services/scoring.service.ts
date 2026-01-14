@@ -48,7 +48,6 @@ interface AgentBreakpoints {
     energyRegen: AgentBreakpoint;
   };
   priorityStats: string[];
-  statWeights: { [statType: string]: number };
 }
 
 interface DiscSetData {
@@ -902,7 +901,6 @@ export class ScoringService {
     Object.keys(breakpoints.breakpoints).forEach(statKey => {
       const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
       const currentValue = statMapping[statKey] || 0;
-      const weight = breakpoints.statWeights[statKey] || 0;
 
       if (breakpoint.optimal > 0) {
         // Stat matters - check if we exceed optimal
@@ -917,13 +915,8 @@ export class ScoringService {
             efficiencyScore += 5 + 3 + (excessPercentage - 20) * 0.1;
           }
         }
-      } else {
-        // Stat doesn't matter (optimal = 0) - penalize heavy investment
-        if (weight === 0 && currentValue > 0) {
-          // Heavy penalty for investing in completely useless stats
-          efficiencyScore -= Math.min(10, currentValue * 0.1);
-        }
       }
+      // No penalty for investing in low-priority stats - let priorityStats handle it
     });
 
     // Clamp between 0-100
@@ -984,11 +977,14 @@ export class ScoringService {
           const statKey = this.mapStatNameToBreakpointKey(prop.Name);
           if (statKey) {
             const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
-            const weight = breakpoints.statWeights[statKey] || 0;
+            // Check if this stat is in priority list
+            const isPriority = breakpoints.priorityStats.some(stat =>
+              stat.toLowerCase().includes(statKey.toLowerCase())
+            );
 
-            if (breakpoint && breakpoint.optimal > 0 && weight > 0) {
+            if (breakpoint && breakpoint.optimal > 0 && isPriority) {
               // Good set effect - aligns with agent needs
-              setBonusScore += weight * 10; // Scale by weight
+              setBonusScore += 10;
             } else if (breakpoint && breakpoint.optimal === 0) {
               // Bad set effect - doesn't align with agent needs
               setBonusScore -= 5;
