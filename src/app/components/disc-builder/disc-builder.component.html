@@ -11,7 +11,7 @@
       <div class="filter-group">
         <label>Score for Agent:</label>
         <select [(ngModel)]="selectedAgentForScoring" (change)="onScoringAgentChange()" class="select-input">
-          <option [ngValue]="null">All Characters</option>
+          <option [ngValue]="null">All Agents</option>
           <option *ngFor="let agent of agents; trackBy: trackByAgentId" [ngValue]="agent">
             {{agent.name}} ({{agent.specialty}})
           </option>
