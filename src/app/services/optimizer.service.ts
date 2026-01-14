@@ -134,44 +134,54 @@ export class OptimizerService {
   ): void {
     const slots: DiscSlot[] = ['Drive1', 'Drive2', 'Drive3', 'Drive4', 'Drive5', 'Drive6'];
 
-    // Recursive combination generator
-    const generate = (
-      slotIndex: number,
-      currentDiscs: { [key in DiscSlot]?: Disc }
-    ) => {
-      if (slotIndex >= slots.length) {
-        // We have a complete build, evaluate it
-        const build = this.evaluateBuild(
-          currentDiscs,
-          agent,
-          level,
-          wEngine,
-          mindscapeLevel,
-          algorithm
-        );
+    // Iterative combination generator with backtracking (replaces recursive approach)
+    // This prevents stack overflow and eliminates unnecessary object spreading
+    const currentDiscs: { [key in DiscSlot]?: Disc } = {};
+    const indices: number[] = new Array(slots.length).fill(0);
+    let slotIndex = 0;
 
-        if (this.meetsConstraints(build, constraints)) {
-          onBuild(build);
-        }
-        return;
-      }
-
+    while (slotIndex >= 0) {
       const currentSlot = slots[slotIndex];
       const availableDiscs = discsBySlot[currentSlot];
 
-      // Try each disc in this slot
-      for (const disc of availableDiscs) {
-        currentDiscs[currentSlot] = disc;
-        generate(slotIndex + 1, { ...currentDiscs });
+      if (indices[slotIndex] < availableDiscs.length) {
+        // Try next disc in this slot
+        currentDiscs[currentSlot] = availableDiscs[indices[slotIndex]];
+
+        if (slotIndex === slots.length - 1) {
+          // We have a complete build, evaluate it
+          const build = this.evaluateBuild(
+            currentDiscs,
+            agent,
+            level,
+            wEngine,
+            mindscapeLevel,
+            algorithm
+          );
+
+          if (this.meetsConstraints(build, constraints)) {
+            onBuild(build);
+          }
+
+          // Move to next disc in current slot
+          indices[slotIndex]++;
+        } else {
+          // Move to next slot
+          slotIndex++;
+          indices[slotIndex] = 0;
+        }
+      } else {
+        // Backtrack: exhausted all discs in current slot
+        delete currentDiscs[currentSlot];
+        indices[slotIndex] = 0;
+        slotIndex--;
+
+        // If we backtracked, increment previous slot's index
+        if (slotIndex >= 0) {
+          indices[slotIndex]++;
+        }
       }
-
-      // Also try no disc in this slot (optional)
-      // Uncomment if you want to allow incomplete builds
-      // delete currentDiscs[currentSlot];
-      // generate(slotIndex + 1, { ...currentDiscs });
-    };
-
-    generate(0, {});
+    }
   }
 
   private evaluateBuild(

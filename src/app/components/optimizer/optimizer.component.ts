@@ -1,5 +1,5 @@
 // optimizer.component.ts - Updated version
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AgentService } from '../../services/agent.service';
@@ -9,13 +9,15 @@ import { OptimizerService, OptimizedBuild, OptimizerConstraints } from '../../se
 import { Agent, DiscSlot } from '../../models/agent.model';
 import { WEngine } from '../../models/wengine.model';
 import { SCORING_PRESETS } from '../../constants/scoring-presets';
+import { Disc } from '../../models/disc.model';
 
 @Component({
   selector: 'app-optimizer',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './optimizer.component.html',
-  styleUrls: ['./optimizer.component.css']
+  styleUrls: ['./optimizer.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OptimizerComponent implements OnInit {
   agents: Agent[] = [];
@@ -47,7 +49,8 @@ export class OptimizerComponent implements OnInit {
     private agentService: AgentService,
     private discService: DiscService,
     private wEngineService: WEngineService,
-    private optimizerService: OptimizerService
+    private optimizerService: OptimizerService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -184,5 +187,38 @@ export class OptimizerComponent implements OnInit {
     let formatted = statType.replace(/_/g, ' ');
 
     return formatted;
+  }
+
+  // TrackBy functions for performance optimization
+  trackByAgentId(index: number, agent: Agent): string {
+    return agent.id;
+  }
+
+  trackByWEngineId(index: number, wEngine: WEngine): string {
+    return wEngine.id;
+  }
+
+  trackByBuildIndex(index: number, build: OptimizedBuild): number {
+    return index;
+  }
+
+  trackByDiscSlot(index: number, slot: DiscSlot): string {
+    return slot;
+  }
+
+  trackBySetName(index: number, setName: string): string {
+    return setName;
+  }
+
+  trackBySubStatIndex(index: number, subStat: any): number {
+    return index;
+  }
+
+  trackByBonusIndex(index: number, bonus: string): number {
+    return index;
+  }
+
+  trackByMindscapeLevel(index: number, level: number): number {
+    return level;
   }
 }

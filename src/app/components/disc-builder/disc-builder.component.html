@@ -12,7 +12,7 @@
         <label>Score for Agent:</label>
         <select [(ngModel)]="selectedAgentForScoring" (change)="onScoringAgentChange()" class="select-input">
           <option [ngValue]="null">All Characters</option>
-          <option *ngFor="let agent of agents" [ngValue]="agent">
+          <option *ngFor="let agent of agents; trackBy: trackByAgentId" [ngValue]="agent">
             {{agent.name}} ({{agent.specialty}})
           </option>
         </select>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="weights-display" *ngIf="showWeights">
-          <div *ngFor="let stat of getWeightedStats()" class="weight-item">
+          <div *ngFor="let stat of getWeightedStats(); trackBy: trackBySubStatIndex" class="weight-item">
             <span>{{stat.name}}:</span>
             <span class="weight-value">{{stat.weight}}</span>
           </div>
@@ -123,7 +123,7 @@
 
       <!-- Skeleton Loaders -->
       <div class="disc-grid" *ngIf="isLoading">
-        <div *ngFor="let i of [1,2,3,4,5,6,7,8]" class="disc-card skeleton-card">
+        <div *ngFor="let i of [1,2,3,4,5,6,7,8]; trackBy: trackByPageNumber" class="disc-card skeleton-card">
           <div class="skeleton skeleton-header"></div>
           <div class="skeleton skeleton-set"></div>
           <div class="skeleton skeleton-main-stat"></div>
@@ -136,7 +136,7 @@
       <!-- Actual Disc Grid -->
       <div class="disc-grid" *ngIf="!isLoading">
         <div
-          *ngFor="let disc of paginatedDiscs"
+          *ngFor="let disc of paginatedDiscs; trackBy: trackByDiscUid"
           class="disc-card"
           [class.locked]="disc.lock"
           [class.equipped]="disc.equippedBy"
@@ -164,7 +164,7 @@
           </div>
 
           <div class="disc-substats">
-            <div *ngFor="let sub of disc.subStats" class="substat">
+            <div *ngFor="let sub of disc.subStats; trackBy: trackBySubStatIndex" class="substat">
               <span class="substat-type">{{formatStatType(sub.type)}}</span>
               <span class="substat-value">
                 {{sub.value}}

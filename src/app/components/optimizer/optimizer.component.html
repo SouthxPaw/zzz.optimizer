@@ -13,7 +13,7 @@
         <label>Select Agent:</label>
         <select [(ngModel)]="selectedAgent" (change)="onAgentChange()" class="select-input">
           <option [ngValue]="null">Choose an agent...</option>
-          <option *ngFor="let agent of agents" [ngValue]="agent">
+          <option *ngFor="let agent of agents; trackBy: trackByAgentId" [ngValue]="agent">
             {{agent.name}} ({{agent.specialty}})
           </option>
         </select>
@@ -35,7 +35,7 @@
           <label>W-Engine:</label>
           <select [(ngModel)]="selectedWEngine" class="select-input">
             <option [ngValue]="null">None</option>
-            <option *ngFor="let wEngine of availableWEngines" [ngValue]="wEngine">
+            <option *ngFor="let wEngine of availableWEngines; trackBy: trackByWEngineId" [ngValue]="wEngine">
               {{wEngine.name}} ({{wEngine.rarity}}-Rank)
             </option>
           </select>
@@ -53,7 +53,7 @@
           <label>Mindscape Level:</label>
           <div class="mindscape-buttons">
             <button
-              *ngFor="let m of [0,1,2,3,4,5,6]"
+              *ngFor="let m of [0,1,2,3,4,5,6]; trackBy: trackByMindscapeLevel"
               [class.active]="mindscapeLevel === m"
               (click)="mindscapeLevel = m"
               class="mindscape-btn">
@@ -148,7 +148,7 @@
 
       <div class="results-list" *ngIf="results.length > 0">
         <div
-          *ngFor="let build of results; let i = index"
+          *ngFor="let build of results; let i = index; trackBy: trackByBuildIndex"
           class="result-card"
           [class.selected]="selectedResult === build"
           (click)="selectResult(build)">
@@ -174,7 +174,7 @@
           </div>
 
           <div class="set-bonuses" *ngIf="build.setBonus.length > 0">
-            <div *ngFor="let bonus of build.setBonus" class="set-badge">
+            <div *ngFor="let bonus of build.setBonus; trackBy: trackByBonusIndex" class="set-badge">
               {{bonus}}
             </div>
           </div>
@@ -231,7 +231,7 @@
       <div class="disc-breakdown">
         <h3>Equipped Discs</h3>
         <div class="disc-list-details">
-          <div *ngFor="let slot of allSlots" class="disc-detail-item">
+          <div *ngFor="let slot of allSlots; trackBy: trackByDiscSlot" class="disc-detail-item">
             <div class="slot-label">{{slot.replace('Drive', 'Slot ')}}:</div>
             <div class="disc-info">{{getDiscInSlot(slot)}}</div>
           </div>
@@ -240,7 +240,7 @@
 
       <div class="set-bonuses-detail" *ngIf="selectedResult.setBonus.length > 0">
         <h3>Active Set Bonuses</h3>
-        <div *ngFor="let bonus of selectedResult.setBonus" class="bonus-item">
+        <div *ngFor="let bonus of selectedResult.setBonus; trackBy: trackByBonusIndex" class="bonus-item">
           ✓ {{bonus}}
         </div>
       </div>

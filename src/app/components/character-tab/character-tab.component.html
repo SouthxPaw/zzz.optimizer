@@ -33,7 +33,7 @@
 
       <!-- Empty State -->
       <div *ngIf="builds.length === 0" class="empty-state">
-        <img src="assets/data/images/page-icons/avatar_default.webp" alt="No builds" class="empty-icon-img">
+        <img src="assets/data/images/page-icons/avatar_default.webp" alt="No builds" class="empty-icon-img" loading="lazy">
         <h3>No Builds Yet</h3>
         <p>Click "+ Add Agent" in the top right to create your first build.</p>
       </div>
@@ -41,7 +41,7 @@
       <!-- Builds Grid -->
       <div class="builds-grid" *ngIf="builds.length > 0">
         <div
-          *ngFor="let build of builds"
+          *ngFor="let build of builds; trackBy: trackByBuildId"
           class="build-card"
           [class.selected]="selectedBuild?.id === build.id"
           [class.s-rank]="getAgentRarity(build.agentId) === 'S'"
@@ -52,7 +52,8 @@
             <img *ngIf="getAgentIcon(build.agentId)"
                  [src]="getAgentIcon(build.agentId)"
                  [alt]="build.name"
-                 class="agent-icon">
+                 class="agent-icon"
+                 loading="lazy">
             <span *ngIf="!getAgentIcon(build.agentId)" class="build-name">{{build.name}}</span>
           </div>
           <div class="build-info">
@@ -75,7 +76,7 @@
         <h3 data-tooltip="Agent duplication level (constellations/eidolons)">Mindscape Cinema</h3>
         <div class="mindscape-toggles">
           <button
-            *ngFor="let m of [1,2,3,4,5,6]"
+            *ngFor="let m of [1,2,3,4,5,6]; trackBy: trackByMindscapeLevel"
             class="mindscape-btn"
             [class.active]="selectedBuild.mindscapeLevel >= m"
             (click)="toggleMindscape(m)">
@@ -114,6 +115,15 @@
               </select>
             </div>
             <div class="filter-group">
+              <label>Rank:</label>
+              <select [(ngModel)]="wengineRarityFilter" class="filter-select">
+                <option value="">All Ranks</option>
+                <option value="S">S-Rank</option>
+                <option value="A">A-Rank</option>
+                <option value="B">B-Rank</option>
+              </select>
+            </div>
+            <div class="filter-group">
               <label>Sort By:</label>
               <select [(ngModel)]="wengineSortBy" class="filter-select">
                 <option value="name">Name</option>
@@ -128,7 +138,7 @@
               <span class="wengine-list-name">None</span>
             </div>
             <div
-              *ngFor="let engine of getFilteredWEngines()"
+              *ngFor="let engine of getFilteredWEngines(); trackBy: trackByWEngineId"
               class="wengine-list-item"
               [class.s-rank]="engine.rarity === 'S'"
               [class.a-rank]="engine.rarity === 'A'"
@@ -138,7 +148,8 @@
               <img *ngIf="engine.icon"
                    [src]="engine.icon"
                    [alt]="engine.name"
-                   class="wengine-thumbnail">
+                   class="wengine-thumbnail"
+                   loading="lazy">
               <div class="wengine-list-info">
                 <span class="wengine-list-name">{{engine.name}}</span>
                 <span class="wengine-list-rarity">
@@ -149,7 +160,8 @@
                 [src]="getSpecialtyIcon(engine.specialty)"
                 [alt]="engine.specialty"
                 class="wengine-specialty-icon"
-                [title]="engine.specialty">
+                [title]="engine.specialty"
+                loading="lazy">
             </div>
           </div>
         </div>
@@ -159,7 +171,8 @@
             <img *ngIf="selectedBuild.equippedWEngine.icon"
                  [src]="selectedBuild.equippedWEngine.icon"
                  [alt]="selectedBuild.equippedWEngine.name"
-                 class="wengine-icon">
+                 class="wengine-icon"
+                 loading="lazy">
             <div class="wengine-info">
               <h4>{{selectedBuild.equippedWEngine.name}}</h4>
               <p class="wengine-rarity">{{selectedBuild.equippedWEngine.rarity}}-Rank</p>
@@ -171,7 +184,7 @@
             <label><strong>Refinement (Copies):</strong></label>
             <div class="refinement-buttons">
               <button
-                *ngFor="let level of [1, 2, 3, 4, 5]"
+                *ngFor="let level of [1, 2, 3, 4, 5]; trackBy: trackByMindscapeLevel"
                 class="refinement-btn"
                 [class.active]="selectedBuild.wEngineRefinement === level"
                 (click)="setWEngineRefinement(level)">
@@ -244,7 +257,7 @@
         <h3>Disc Drives ({{getEquippedDiscsCount(selectedBuild)}}/6)</h3>
         <div class="disc-grid">
           <div
-            *ngFor="let slot of discSlots"
+            *ngFor="let slot of discSlots; trackBy: trackByDiscSlot"
             class="disc-slot"
             [class.equipped]="selectedBuild.equippedDiscs[slot]">
             <div *ngIf="selectedBuild.equippedDiscs[slot]; else emptySlot" class="disc-card" (click)="openDiscEdit(slot)">
@@ -264,7 +277,7 @@
                 <span class="stat-value">{{selectedBuild.equippedDiscs[slot]!.mainStat.value}}</span>
               </div>
               <div class="disc-substats">
-                <div *ngFor="let subStat of selectedBuild.equippedDiscs[slot]!.subStats" class="substat">
+                <div *ngFor="let subStat of selectedBuild.equippedDiscs[slot]!.subStats; trackBy: trackBySubStatIndex" class="substat">
                   {{formatStatType(subStat.type)}} +{{subStat.value}}
                 </div>
               </div>
@@ -320,7 +333,7 @@
             <!-- Show refinement bonuses if specialty matches -->
             <div *ngIf="isWEngineSpecialtyMatch() && selectedBuild.equippedWEngine.effect.properties && selectedBuild.equippedWEngine.effect.properties.length > 0">
               <p class="effect-match">✓ Specialty matches - applying bonuses:</p>
-              <div *ngFor="let prop of getWEngineRefinementBonuses()" class="bonus-stat">
+              <div *ngFor="let prop of getWEngineRefinementBonuses(); trackBy: trackByBonusIndex" class="bonus-stat">
                 {{prop.name}}: +{{prop.value}}{{prop.isPercent ? '%' : ''}}
               </div>
             </div>
@@ -342,10 +355,10 @@
           <h4>Mindscape Bonuses:</h4>
           <div class="mindscape-effect-box">
             <p class="effect-name">M{{selectedBuild.mindscapeLevel}} Active</p>
-            <div *ngFor="let bonus of getMindscapeBonuses()" class="bonus-stat">
+            <div *ngFor="let bonus of getMindscapeBonuses(); trackBy: trackByBonusIndex" class="bonus-stat">
               <span class="mindscape-label">M{{bonus.level}} - {{bonus.name}}:</span>
               <span class="mindscape-stats">
-                <span *ngFor="let stat of bonus.stats; let last = last">
+                <span *ngFor="let stat of bonus.stats; let last = last; trackBy: trackByBonusIndex">
                   {{stat.name}}: +{{stat.value}}{{stat.isPercent ? '%' : ''}}{{!last ? ', ' : ''}}
                 </span>
               </span>
@@ -356,10 +369,10 @@
         <!-- Disc Set Bonuses (includes 2pc and 4pc effects) -->
         <div *ngIf="getSetBonuses().length > 0 || get4pcEffectBonuses().length > 0" class="set-bonuses">
           <h4>Active Set Bonuses:</h4>
-          <div *ngFor="let bonus of getSetBonuses()" class="set-bonus">
+          <div *ngFor="let bonus of getSetBonuses(); trackBy: trackByBonusIndex" class="set-bonus">
             {{bonus}}
           </div>
-          <div *ngFor="let bonus of get4pcEffectBonuses()" class="set-bonus">
+          <div *ngFor="let bonus of get4pcEffectBonuses(); trackBy: trackByBonusIndex" class="set-bonus">
             {{bonus}}
           </div>
         </div>
@@ -404,6 +417,14 @@
           </select>
         </div>
         <div class="filter-group">
+          <label>Rank:</label>
+          <select [(ngModel)]="agentRarityFilter" class="filter-select">
+            <option value="">All Ranks</option>
+            <option value="S">S-Rank</option>
+            <option value="A">A-Rank</option>
+          </select>
+        </div>
+        <div class="filter-group">
           <label>Sort By:</label>
           <select [(ngModel)]="agentSortBy" class="filter-select">
             <option value="name">Name</option>
@@ -417,7 +438,7 @@
       <!-- Agent Selection Grid -->
       <div class="agent-select-grid scrollable">
         <div
-          *ngFor="let agent of getFilteredAgents()"
+          *ngFor="let agent of getFilteredAgents(); trackBy: trackByAgentId"
           class="agent-select-card"
           [class.selected]="selectedAgentForAdd?.id === agent.id"
           [class.s-rank]="agent.rarity === 'S'"
@@ -427,7 +448,8 @@
             <img *ngIf="agent.icon"
                  [src]="agent.icon"
                  [alt]="agent.name"
-                 class="agent-icon">
+                 class="agent-icon"
+                 loading="lazy">
             <span *ngIf="!agent.icon" class="agent-name">{{agent.name}}</span>
           </div>
           <div class="agent-info">
@@ -437,12 +459,14 @@
                    [src]="getAgentElementIcon(agent.id)"
                    [alt]="agent.element"
                    class="element-badge"
-                   [title]="agent.element">
+                   [title]="agent.element"
+                   loading="lazy">
               <img *ngIf="agent.specialtyIcon"
                    [src]="agent.specialtyIcon"
                    [alt]="agent.specialty"
                    class="specialty-badge"
-                   [title]="agent.specialty">
+                   [title]="agent.specialty"
+                   loading="lazy">
             </div>
           </div>
         </div>
@@ -486,18 +510,19 @@
 
       <div class="disc-set-grid">
         <div
-          *ngFor="let discSet of getFilteredDiscSets()"
+          *ngFor="let discSet of getFilteredDiscSets(); trackBy: trackByDiscSetName"
           class="disc-set-card"
           (click)="selectDiscSet(discSet)">
           <div class="disc-set-header">
             <img *ngIf="discSet.icon"
                  [src]="discSet.icon"
                  [alt]="discSet.name"
-                 class="disc-set-icon">
+                 class="disc-set-icon"
+                 loading="lazy">
             <div class="disc-set-name">{{discSet.name}}</div>
           </div>
           <div class="disc-set-bonuses">
-            <div *ngFor="let bonus of discSet.bonuses" class="bonus-line">
+            <div *ngFor="let bonus of discSet.bonuses; trackBy: trackByBonusIndex" class="bonus-line">
               <strong>{{bonus.pieces}}-Piece:</strong> {{bonus.description}}
             </div>
           </div>
@@ -558,7 +583,7 @@
       <div class="form-section">
         <label class="section-label">Sub Stats:</label>
         <div class="substats-list">
-          <div *ngFor="let subStat of discFormData.subStats; let i = index" class="substat-row">
+          <div *ngFor="let subStat of discFormData.subStats; let i = index; trackBy: trackBySubStatIndex" class="substat-row">
             <label class="substat-label">Substat {{i + 1}}:</label>
             <select [(ngModel)]="subStat.type" class="substat-type-select">
               <option value="HP">HP</option>
