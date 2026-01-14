@@ -1,0 +1,36 @@
+
+> zzz.optimizer@1.3.3 build
+> ng build
+
+[33m❯[39m Building...
+[32m✔[39m Building...
+Application bundle generation failed. [3.143 seconds]
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../constants/disc-scoring"' has no exported member 'SUBSTAT_WEIGHTS'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/scoring.service.ts:7:2:
+[37m      7 │   [32mSUBSTAT_WEIGHTS[37m,
+        ╵   [32m~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../constants/disc-scoring"' has no exported member 'ROLE_WEIGHT_MULTIPLIERS'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/scoring.service.ts:8:2:
+[37m      8 │   [32mROLE_WEIGHT_MULTIPLIERS[37m,
+        ╵   [32m~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../constants/disc-scoring"' has no exported member 'BAD_FLAT_STATS'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/scoring.service.ts:12:2:
+[37m      12 │   [32mBAD_FLAT_STATS[37m,
+         ╵   [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../constants/disc-scoring"' has no exported member 'FLAT_STAT_PENALTY_PER_ADDITIONAL'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/services/scoring.service.ts:13:2:
+[37m      13 │   [32mFLAT_STAT_PENALTY_PER_ADDITIONAL[37m,
+         ╵   [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m

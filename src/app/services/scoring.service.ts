@@ -4,13 +4,9 @@ import { firstValueFrom } from 'rxjs';
 import { Disc } from '../models/disc.model';
 import { BaseStats, WEngine } from '../models/agent.model';
 import {
-  SUBSTAT_WEIGHTS,
-  ROLE_WEIGHT_MULTIPLIERS,
   MAIN_STAT_BONUS,
   DISC_RATING_THRESHOLDS,
   BUILD_RATING_THRESHOLDS,
-  BAD_FLAT_STATS,
-  FLAT_STAT_PENALTY_PER_ADDITIONAL,
   EXTERNAL_STAT_WEIGHTS,
   BUILD_SCORE_WEIGHTS,
   DIMINISHING_RETURNS,
@@ -22,8 +18,7 @@ import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
 import { calculateRollCount } from '../constants/substat-rolls';
 import {
   estimateDamage,
-  calculateStatusDamage,
-  STATUS_EFFECT_MULTIPLIERS
+  calculateStatusDamage
 } from '../constants/damage-formulas';
 import {
   getAgentSkillMultiplier,
@@ -92,7 +87,6 @@ export class ScoringService {
   private breakpointsLoaded = false;
   private discSetData: { [setId: string]: DiscSetData } = {};
   private mindscapeData: MindscapeData | null = null;
-  private dataLoaded = false;
 
   constructor(
     private http: HttpClient,
@@ -111,7 +105,6 @@ export class ScoringService {
       this.loadMindscapeData(),
       this.loadSkillMultipliers()
     ]);
-    this.dataLoaded = true;
   }
 
   /**
@@ -887,7 +880,6 @@ export class ScoringService {
    * Penalizes investment in stats with 0 optimal value
    */
   private calculateStatEfficiencyScore(
-    agentId: string,
     stats: BaseStats,
     breakpoints: AgentBreakpoints
   ): number {
@@ -1229,7 +1221,6 @@ export class ScoringService {
     const discQualityScore = this.calculateDiscQualityScore(equippedDiscs, agentId); // 0-100
 
     const statEfficiencyScore = this.calculateStatEfficiencyScore(
-      agentId,
       weightedStats,
       breakpoints
     ); // 0-100

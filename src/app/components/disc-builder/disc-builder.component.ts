@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
@@ -17,6 +17,7 @@ import { calculateRollCount } from '../../constants/substat-rolls';
   imports: [CommonModule, FormsModule],
   templateUrl: './disc-builder.component.html',
   styleUrls: ['./disc-builder.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DiscBuilderComponent implements OnInit, OnDestroy {
   discs: Disc[] = [];
@@ -48,7 +49,8 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
 
   constructor(
     private discService: DiscService,
-    private agentService: AgentService
+    private agentService: AgentService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -320,5 +322,26 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
       console.error('Error unlocking discs:', error);
       alert('Error unlocking some discs');
     }
+  }
+
+  // TrackBy functions for performance optimization
+  trackByDiscUid(index: number, disc: Disc): string {
+    return disc.uid;
+  }
+
+  trackByAgentId(index: number, agent: Agent): string {
+    return agent.id;
+  }
+
+  trackBySlotIndex(index: number, slot: DiscSlot): string {
+    return slot;
+  }
+
+  trackBySubStatIndex(index: number, subStat: any): number {
+    return index;
+  }
+
+  trackByPageNumber(index: number, page: number): number {
+    return page;
   }
 }
