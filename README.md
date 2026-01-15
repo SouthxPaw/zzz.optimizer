@@ -22,7 +22,8 @@ A comprehensive build optimizer and character builder for **Zenless Zone Zero** 
   - Create and manage your disc inventory
   - Filter discs by set, slot, and equipped status
   - Real-time disc scoring based on agent preferences
-  - Quality ratings (SSS, SS, S, A, B, C, D, F)
+  - Quality ratings from VOID HUNTER (absolute perfection) to F (fodder)
+  - Elite tiers: VOID HUNTER, LEGENDARY, SSS, SS, S, A, B, C, D, F
 
 - **Build Scoring & Optimization**:
   - Agent-specific scoring algorithms
@@ -73,6 +74,7 @@ Visit the live site: [ZZZ Optimizer](https://southxpaw.github.io/zzz.optimizer/)
 This tool uses game data from:
 - [Prydwen.gg](https://www.prydwen.gg/zenless/) - Character guides and analysis
 - [Hakushin](https://zzz3.hakush.in/) - Game data
+- [Enka Network](https://enka.network) - API for validating disc scoring thresholds against real player data
 - Official game assets and calculations
 
 ## Assumptions
@@ -105,5 +107,6 @@ MIT License - See LICENSE file for details
 
 - **HoYoverse** - For creating Zenless Zone Zero
 - **Prydwen.gg** - For community resources and guides
+- **Enka Network** - For their API enabling data-driven disc scoring validation
 - **ZZZ Community** - For support and feedback
 - [**Fribbels HSR Optimizer**](https://fribbels.github.io/hsr-optimizer) - For the idea of doing this for ZZZ
