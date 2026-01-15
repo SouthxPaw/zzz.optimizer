@@ -59,7 +59,14 @@
         "PEN",
         "Impact",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "ATK%": 0.85,
+        "ATK": 0.75,
+        "PEN": 0.75
+      }
     },
     "1021": {
       "comment": "Nekomata",
@@ -118,7 +125,14 @@
         "PEN",
         "ATK",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "ATK%": 0.85,
+        "ATK": 0.6,
+        "PEN": 0.75
+      }
     },
     "1031": {
       "comment": "Nicole",
@@ -175,7 +189,13 @@
         "Anomaly_Proficiency",
         "Energy_Regen",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.0,
+        "ATK%": 1,
+        "ATK": 0.75,
+        "PEN": 0.85
+      }
     },
     "1041": {
       "comment": "Soldier 11",
@@ -233,7 +253,15 @@
         "ATK",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "ATK%": 0.85,
+        "Anomaly_Proficiency": 0.75,
+        "ATK": 0.6,
+        "PEN": 0.65
+      }
     },
     "1051": {
       "comment": "Yidhari",
@@ -292,7 +320,14 @@
         "HP",
         "HP%",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "HP%": 0.85,
+        "HP": 0.75,
+        "ATK%": 0.75
+      }
     },
     "1061": {
       "comment": "Corin",
@@ -350,7 +385,14 @@
         "ATK",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "ATK": 0.75,
+        "PEN": 0.75,
+        "ATK%": 0.85
+      }
     },
     "1071": {
       "comment": "Caesar",
@@ -411,7 +453,15 @@
         "PEN",
         "Impact",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "Anomaly_Proficiency": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.6,
+        "ATK%": 0.85
+      }
     },
     "1081": {
       "comment": "Billy",
@@ -470,7 +520,14 @@
         "PEN",
         "ATK",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "ATK%": 0.85,
+        "ATK": 0.75,
+        "PEN": 0.75
+      }
     },
     "1091": {
       "comment": "Miyabi",
@@ -531,7 +588,15 @@
         "PEN_Ratio",
         "PEN",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 0.85,
+        "CRIT_Rate": 1.0,
+        "Anomaly_Proficiency": 0.75,
+        "ATK": 0.6,
+        "PEN": 0.6,
+        "ATK%": 0.85
+      }
     },
     "1111": {
       "comment": "Anton",
@@ -589,7 +654,14 @@
         "ATK",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "ATK": 0.75,
+        "PEN": 0.75,
+        "ATK%": 0.85
+      }
     },
     "1121": {
       "comment": "Ben",
@@ -649,7 +721,14 @@
         "PEN",
         "Energy_Regen",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "DEF%": 1.0,
+        "CRIT_Rate": 0.85,
+        "CRIT_DMG": 0.85,
+        "PEN": 0.6,
+        "DEF": 0.75
+      }
     },
     "1131": {
       "comment": "Soukaku",
@@ -700,11 +779,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": [
-        "ATK%",
-        "ATK",
-        "Element_DMG"
-      ]
+      "priorityStats": ["ATK%", "ATK", "Element_DMG"],
+      "statWeights": {
+        "CRIT_DMG": 0.85,
+        "CRIT_Rate": 0.85,
+        "PEN": 0.75,
+        "ATK": 0.75,
+        "ATK%": 1.0
+      }
     },
     "1161": {
       "comment": "Lighter",
@@ -764,7 +846,14 @@
         "PEN",
         "ATK",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 0.85,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.6,
+        "ATK": 0.6,
+        "ATK%": 0.75
+      }
     },
     "1201": {
       "comment": "Harumasa",
@@ -815,13 +904,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": [
-        "CRIT_DMG",
-        "CRIT_Rate",
-        "ATK%",
-        "ATK",
-        "Element_DMG"
-      ]
+      "priorityStats": ["CRIT_DMG", "CRIT_Rate", "ATK%", "ATK", "Element_DMG"],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.85,
+        "ATK": 0.85,
+        "ATK%": 1.0
+      }
     },
     "1211": {
       "comment": "Rina",
@@ -880,7 +970,14 @@
         "PEN",
         "Energy_Regen",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.0,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.85,
+        "ATK": 0.85,
+        "ATK%": 0.85
+      }
     },
     "1241": {
       "comment": "Zhu Yuan",
@@ -939,7 +1036,14 @@
         "ATK%",
         "ATK",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.85,
+        "ATK": 0.75,
+        "ATK%": 1.0
+      }
     },
     "1251": {
       "comment": "Qingyi",
@@ -998,7 +1102,14 @@
         "ATK",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 0.85,
+        "CRIT_Rate": 1.0,
+        "ATK": 0.6,
+        "PEN": 0.6,
+        "ATK%": 0.75
+      }
     },
     "1261": {
       "comment": "Jane",
@@ -1055,7 +1166,13 @@
         "ATK%",
         "ATK",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.6,
+        "ATK%": 0.85
+      }
     },
     "1281": {
       "comment": "Piper",
@@ -1113,7 +1230,13 @@
         "Anomaly_Proficiency",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.75,
+        "ATK%": 0.85
+      }
     },
     "1321": {
       "comment": "Evelyn",
@@ -1171,7 +1294,14 @@
         "ATK",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 0.85,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.6,
+        "ATK": 0.6,
+        "ATK%": 0.75
+      }
     },
     "1331": {
       "comment": "Vivian",
@@ -1230,7 +1360,13 @@
         "ATK%",
         "ATK",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.75,
+        "ATK%": 0.85
+      }
     },
     "1361": {
       "comment": "Trigger",
@@ -1288,7 +1424,14 @@
         "ATK",
         "Impact",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 0.85,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.6,
+        "ATK": 0.6,
+        "ATK%": 0.75
+      }
     },
     "1371": {
       "comment": "Yixuan",
@@ -1346,7 +1489,14 @@
         "HP%",
         "ATK%",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "HP%": 0.85,
+        "HP": 0.6,
+        "ATK%": 0.75
+      }
     },
     "1391": {
       "comment": "Ju Fufu",
@@ -1406,7 +1556,14 @@
         "PEN",
         "Impact",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 0.75,
+        "CRIT_Rate": 1.0,
+        "ATK": 0.85,
+        "PEN": 0.6,
+        "ATK%": 0.85
+      }
     },
     "1401": {
       "comment": "Alice",
@@ -1464,7 +1621,13 @@
         "PEN",
         "ATK%",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.6,
+        "ATK%": 0.85
+      }
     },
     "1411": {
       "comment": "Yuzuha",
@@ -1524,7 +1687,15 @@
         "ATK",
         "ATK%",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 0.75,
+        "CRIT_Rate": 0.75,
+        "Anomaly_Proficiency": 0.85,
+        "PEN": 0.6,
+        "ATK%": 1.0,
+        "ATK": 1.0
+      }
     },
     "1421": {
       "comment": "Pan Yinhu",
@@ -1575,13 +1746,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": [
-        "CRIT_DMG",
-        "CRIT_Rate",
-        "ATK%",
-        "ATK",
-        "Element_DMG"
-      ]
+      "priorityStats": ["CRIT_DMG", "CRIT_Rate", "ATK%", "ATK", "Element_DMG"],
+      "statWeights": {
+        "CRIT_DMG": 0.85,
+        "CRIT_Rate": 0.85,
+        "PEN": 0.75,
+        "ATK%": 1.0,
+        "ATK": 1.0
+      }
     },
     "1431": {
       "comment": "Ye Shunguang",
@@ -1639,7 +1811,14 @@
         "ATK",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.6,
+        "ATK%": 0.85
+      }
     },
     "1451": {
       "comment": "Lucia",
@@ -1690,13 +1869,13 @@
           "optimal": 0
         }
       },
-      "priorityStats": [
-        "HP",
-        "HP%",
-        "CRIT_DMG",
-        "CRIT_Rate",
-        "Element_DMG"
-      ]
+      "priorityStats": ["HP", "HP%", "CRIT_DMG", "CRIT_Rate", "Element_DMG"],
+      "statWeights": {
+        "CRIT_DMG": 0.75,
+        "CRIT_Rate": 0.75,
+        "HP%": 1.0,
+        "HP": 0.85
+      }
     },
     "1461": {
       "comment": "Seed",
@@ -1754,7 +1933,14 @@
         "ATK",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.6,
+        "ATK%": 0.85
+      }
     },
     "1471": {
       "comment": "Banyue",
@@ -1805,13 +1991,14 @@
           "optimal": 0
         }
       },
-      "priorityStats": [
-        "CRIT_DMG",
-        "CRIT_Rate",
-        "HP",
-        "HP%",
-        "Element_DMG"
-      ]
+      "priorityStats": ["CRIT_DMG", "CRIT_Rate", "HP", "HP%", "Element_DMG"],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "ATK%": 0.75,
+        "HP": 0.6,
+        "HP%": 0.85
+      }
     },
     "1101": {
       "comment": "Koleda",
@@ -1869,7 +2056,14 @@
         "PEN",
         "ATK",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 0.85,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.6,
+        "ATK": 0.6,
+        "ATK%": 0.75
+      }
     },
     "1141": {
       "comment": "Lycaon",
@@ -1929,7 +2123,14 @@
         "PEN",
         "Impact",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.75,
+        "ATK%": 0.85
+      }
     },
     "1151": {
       "comment": "Lucy",
@@ -1987,7 +2188,14 @@
         "ATK",
         "PEN",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 0.85,
+        "CRIT_Rate": 0.85,
+        "PEN": 0.75,
+        "ATK": 0.75,
+        "ATK%": 1.0
+      }
     },
     "1171": {
       "comment": "Burnice",
@@ -2046,7 +2254,13 @@
         "PEN",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.6,
+        "ATK%": 0.85
+      }
     },
     "1181": {
       "comment": "Grace",
@@ -2105,7 +2319,13 @@
         "PEN_Ratio",
         "PEN",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.6,
+        "ATK%": 0.85
+      }
     },
     "1191": {
       "comment": "Ellen",
@@ -2164,7 +2384,14 @@
         "PEN",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 0.85,
+        "PEN": 0.6,
+        "ATK": 0.6,
+        "ATK%": 0.75
+      }
     },
     "1221": {
       "comment": "Yanagi",
@@ -2223,7 +2450,13 @@
         "PEN_Ratio",
         "PEN",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.75,
+        "ATK%": 0.85
+      }
     },
     "1271": {
       "comment": "Seth",
@@ -2282,7 +2515,13 @@
         "Anomaly_Mastery",
         "Energy_Regen",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 0.85,
+        "PEN": 0.6,
+        "ATK": 0.75,
+        "ATK%": 1.0
+      }
     },
     "1291": {
       "comment": "Hugo",
@@ -2341,7 +2580,14 @@
         "PEN",
         "ATK",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 0.85,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.6,
+        "ATK": 0.65,
+        "ATK%": 0.75
+      }
     },
     "1301": {
       "comment": "Orphie & Magus",
@@ -2401,7 +2647,14 @@
         "PEN",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.6,
+        "ATK%": 0.85
+      }
     },
     "1311": {
       "comment": "Astra Yao",
@@ -2460,7 +2713,15 @@
         "CRIT_DMG",
         "CRIT_Rate",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 0.75,
+        "CRIT_Rate": 0.75,
+        "Anomaly_Proficiency": 0.75,
+        "PEN": 0.6,
+        "ATK": 0.85,
+        "ATK%": 1.0
+      }
     },
     "1341": {
       "comment": "Zhao",
@@ -2520,7 +2781,13 @@
         "HP%",
         "Energy_Regen",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "HP%": 1.0,
+        "CRIT_Rate": 0.75,
+        "CRIT_DMG": 0.75,
+        "HP": 0.85
+      }
     },
     "1351": {
       "comment": "Pulchra",
@@ -2581,7 +2848,15 @@
         "ATK",
         "ATK%",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "Anomaly_Proficiency": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.6,
+        "ATK%": 0.85
+      }
     },
     "1381": {
       "comment": "Soldier 0 - Anby",
@@ -2639,7 +2914,14 @@
         "ATK%",
         "PEN",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "PEN": 0.75,
+        "ATK": 0.75,
+        "ATK%": 0.85
+      }
     },
     "1441": {
       "comment": "Manato",
@@ -2698,7 +2980,15 @@
         "ATK",
         "ATK%",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 1.0,
+        "HP": 0.75,
+        "ATK%": 0.65,
+        "ATK": 0.6,
+        "HP%": 0.85
+      }
     },
     "1481": {
       "comment": "Dialyn",
@@ -2757,7 +3047,14 @@
         "PEN",
         "PEN_Ratio",
         "Element_DMG"
-      ]
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1.0,
+        "CRIT_Rate": 0.85,
+        "PEN": 0.75,
+        "ATK": 0.6,
+        "ATK%": 0.85
+      }
     }
   }
 }
