@@ -10,7 +10,7 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
       CRIT_DMG: 1.0,
       'ATK%': 1.5,
       ATK: 0.5,
-      Pen_Ratio: 1.2,
+      PEN: 1.2,
     },
     mainStatPreferences: {
       Drive4: ['CRIT_Rate', 'CRIT_DMG', 'ATK%'],
@@ -24,7 +24,7 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
       Anomaly_Proficiency: 2.0,
       'ATK%': 1.5,
       ATK: 0.5,
-      Pen_Ratio: 0.5,
+      PEN: 0.5,
       CRIT_Rate: 0.0,
       CRIT_DMG: 0.0,
     },
@@ -53,7 +53,7 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
     name: 'Support Build',
     weights: {
       Energy_Regen: 1.0,
-      'Pen_Ratio': 1.0,
+      'PEN': 1.0,
       'HP%': 0.5,
       'DEF%': 0.5,
       'ATK%': 2.0,

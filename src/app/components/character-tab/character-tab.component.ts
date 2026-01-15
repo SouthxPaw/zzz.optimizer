@@ -15,11 +15,12 @@ import { ScoringService } from '../../services/scoring.service';
 import { ImagePreloaderService } from '../../services/image-preloader.service';
 import { DataMappingService } from '../../services/data-mapping.service';
 import { DiscRating, BuildRating } from '../../constants/disc-scoring';
+import { OptimizerComponent } from '../optimizer/optimizer.component';
 
 @Component({
   selector: 'app-character-tab',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, OptimizerComponent],
   templateUrl: './character-tab.component.html',
   styleUrls: ['./character-tab.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -28,6 +29,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   // User builds (not reference data!)
   builds: AgentBuild[] = [];
   selectedBuild: AgentBuild | null = null;
+
+  // Active tab
+  activeTab: 'builds' | 'optimizer' = 'builds';
 
   // Reference data for adding new builds
   referenceAgents: Agent[] = [];

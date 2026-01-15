@@ -33,6 +33,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/zzz.optimizer/",
               "budgets": [
                 {
                   "type": "initial",
@@ -58,7 +59,8 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "baseHref": "/"
             },
             "github-pages": {
               "baseHref": "/zzz.optimizer/",
