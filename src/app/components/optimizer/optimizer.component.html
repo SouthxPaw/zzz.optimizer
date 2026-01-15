@@ -146,39 +146,41 @@
         <p>Click "Start Optimization" to find builds</p>
       </div>
 
-      <div class="results-list" *ngIf="results.length > 0">
-        <div
-          *ngFor="let build of results; let i = index; trackBy: trackByBuildIndex"
-          class="result-card"
-          [class.selected]="selectedResult === build"
-          (click)="selectResult(build)">
+      <div class="results-list" *ngIf="resultsViewModel.length > 0">
+        <cdk-virtual-scroll-viewport itemSize="150" class="results-viewport">
+          <div
+            *cdkVirtualFor="let item of resultsViewModel; trackBy: trackByBuildIndex"
+            class="result-card"
+            [class.selected]="selectedResult === item.build"
+            (click)="selectResult(item.build)">
 
-          <div class="result-header">
-            <span class="rank">#{{i + 1}}</span>
-            <span class="score">Score: {{build.score.toFixed(2)}}</span>
-          </div>
+            <div class="result-header">
+              <span class="rank">#{{item.rank}}</span>
+              <span class="score">Score: {{item.scoreFormatted}}</span>
+            </div>
 
-          <div class="result-stats">
-            <div class="stat-item">
-              <span>ATK:</span>
-              <span>{{build.stats.atk.toFixed(0)}}</span>
+            <div class="result-stats">
+              <div class="stat-item">
+                <span>ATK:</span>
+                <span>{{item.atkFormatted}}</span>
+              </div>
+              <div class="stat-item">
+                <span>CRIT Rate:</span>
+                <span>{{item.critRateFormatted}}%</span>
+              </div>
+              <div class="stat-item">
+                <span>CRIT DMG:</span>
+                <span>{{item.critDmgFormatted}}%</span>
+              </div>
             </div>
-            <div class="stat-item">
-              <span>CRIT Rate:</span>
-              <span>{{build.stats.critRate.toFixed(1)}}%</span>
-            </div>
-            <div class="stat-item">
-              <span>CRIT DMG:</span>
-              <span>{{build.stats.critDmg.toFixed(1)}}%</span>
-            </div>
-          </div>
 
-          <div class="set-bonuses" *ngIf="build.setBonus.length > 0">
-            <div *ngFor="let bonus of build.setBonus; trackBy: trackByBonusIndex" class="set-badge">
-              {{bonus}}
+            <div class="set-bonuses" *ngIf="item.build.setBonus.length > 0">
+              <div *ngFor="let bonus of item.build.setBonus; trackBy: trackByBonusIndex" class="set-badge">
+                {{bonus}}
+              </div>
             </div>
           </div>
-        </div>
+        </cdk-virtual-scroll-viewport>
       </div>
     </div>
 

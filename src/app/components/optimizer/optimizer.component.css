@@ -40,6 +40,16 @@
   overflow-y: auto;
 }
 
+/* Virtual scroll viewport */
+.results-viewport {
+  height: calc(100vh - 250px);
+  width: 100%;
+}
+
+.results-viewport .cdk-virtual-scroll-content-wrapper {
+  width: 100%;
+}
+
 .section h2 {
   color: #00d9ff;
   margin-top: 0;

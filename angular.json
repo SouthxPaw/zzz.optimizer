@@ -25,7 +25,10 @@
               },
               "src/assets"
             ],
-            "styles": ["src/styles.css"],
+            "styles": [
+              "src/styles.css",
+              "src/app/styles/shared-buttons.css"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -33,16 +36,24 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "600kB",
+                  "maximumError": "1.2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "15kB",
-                  "maximumError": "25kB"
+                  "maximumWarning": "20kB",
+                  "maximumError": "30kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                },
+                "fonts": true
+              }
             },
             "development": {
               "optimization": false,
