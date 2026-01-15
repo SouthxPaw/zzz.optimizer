@@ -946,7 +946,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   getDiscRatingClass(rating: DiscRating): string {
-    return `rating-${rating.grade.toLowerCase()}`;
+    return `rating-${rating.grade.toLowerCase().replace(/\s+/g, '-')}`;
   }
 
   // Build scoring methods
@@ -985,7 +985,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   getBuildRatingClass(rating: BuildRating): string {
-    return `rating-${rating.grade.toLowerCase()}`;
+    return `rating-${rating.grade.toLowerCase().replace(/\s+/g, '-')}`;
   }
 
   // Input validation and formatting methods

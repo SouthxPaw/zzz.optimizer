@@ -1639,7 +1639,23 @@
   font-style: italic;
 }
 
-/* Rating Colors (SSS to F) - Gold -> Green -> Blue -> Orange -> Red */
+/* Rating Colors (VOID HUNTER to F) - Opal -> Platinum/Gold/Diamond -> Gold -> Green -> Blue -> Orange -> Red */
+.rating-void-hunter {
+  background: linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%);
+  color: #0a0a0a;
+  box-shadow: 0 4px 12px rgba(224, 187, 228, 0.6);
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.rating-legendary {
+  background: linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%);
+  color: #0a0a0a;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.6);
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
 .rating-sss {
   background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
   color: #0a0a0a;
