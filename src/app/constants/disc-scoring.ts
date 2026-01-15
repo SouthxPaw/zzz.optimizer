@@ -93,9 +93,9 @@ export interface DiscRating {
 }
 
 export const DISC_RATING_THRESHOLDS: DiscRating[] = [
-  { grade: 'VOID HUNTER', minPoints: 95, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection (maximum rolls with optimal distribution)' },
-  { grade: 'LEGENDARY', minPoints: 91, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-flawless with exceptional roll quality' },
-  { grade: 'SSS', minPoints: 87, color: '#FF6B9D', description: 'Perfect - God roll (balanced high rolls across substats)' },
+  { grade: 'VOID HUNTER', minPoints: 104, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection (maximum rolls on all priority stats)' },
+  { grade: 'LEGENDARY', minPoints: 87, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-flawless with exceptional roll quality' },
+  { grade: 'SSS', minPoints: 83, color: '#FF6B9D', description: 'Perfect - God roll (near-perfect rolls)' },
   { grade: 'SS', minPoints: 70, color: '#FF8C42', description: 'Excellent - Amazing substats with high rolls' },
   { grade: 'S', minPoints: 50, color: '#FFD93D', description: 'Very Good - Great substats with good rolls' },
   { grade: 'A', minPoints: 35, color: '#6BCF7F', description: 'Good - Solid substats' },
@@ -118,9 +118,9 @@ export interface BuildRating {
 }
 
 export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
-  { grade: 'VOID HUNTER', breakpointsMetPercentage: 75, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
-  { grade: 'LEGENDARY', breakpointsMetPercentage: 70, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs' },
-  { grade: 'SSS', breakpointsMetPercentage: 65, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
+  { grade: 'VOID HUNTER', breakpointsMetPercentage: 70, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
+  { grade: 'LEGENDARY', breakpointsMetPercentage: 65, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs' },
+  { grade: 'SSS', breakpointsMetPercentage: 60, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
   { grade: 'SS', breakpointsMetPercentage: 55, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
   { grade: 'S', breakpointsMetPercentage: 50, color: '#FFD93D', description: 'Very Good - Strong build with good discs' },
   { grade: 'A', breakpointsMetPercentage: 45, color: '#6BCF7F', description: 'Good - Solid build with decent discs' },

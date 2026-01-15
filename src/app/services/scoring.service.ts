@@ -500,11 +500,11 @@ export class ScoringService {
     }
 
     // Bonus for high-roll substats (5-6 rolls)
-    // Reduced to align with Interknot Network philosophy (balanced distribution > concentration)
+    // Rewards discs with maxed or near-maxed priority stats
     let highRollBonus = 0;
     if (maxRollCount >= 2) {
       // 2+ substats with 5-6 rolls = excellent rolls
-      highRollBonus = maxRollCount * 2; // Reduced from 4 to 2
+      highRollBonus = maxRollCount * 4; // 4 bonus rolls per high-roll stat
       breakdown.details.push({
         stat: `High Roll Bonus (${maxRollCount} substats)`,
         value: maxRollCount,
@@ -513,7 +513,7 @@ export class ScoringService {
       });
     } else if (maxRollCount === 1) {
       // 1 substat with 5-6 rolls = very good
-      highRollBonus = 2; // Reduced from 5 to 2
+      highRollBonus = 5; // 5 bonus rolls
       breakdown.details.push({
         stat: 'High Roll Bonus (1 substat)',
         value: 1,
