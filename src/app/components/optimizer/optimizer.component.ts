@@ -1,7 +1,8 @@
-// optimizer.component.ts - Updated version
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+// optimizer.component.ts - Updated version with Web Worker
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AgentService } from '../../services/agent.service';
 import { DiscService } from '../../services/disc.service';
 import { WEngineService } from '../../services/wengine.service';
@@ -11,15 +12,24 @@ import { WEngine } from '../../models/wengine.model';
 import { SCORING_PRESETS } from '../../constants/scoring-presets';
 import { Disc } from '../../models/disc.model';
 
+interface BuildViewModel {
+  build: OptimizedBuild;
+  rank: number;
+  scoreFormatted: string;
+  atkFormatted: string;
+  critRateFormatted: string;
+  critDmgFormatted: string;
+}
+
 @Component({
   selector: 'app-optimizer',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ScrollingModule],
   templateUrl: './optimizer.component.html',
   styleUrls: ['./optimizer.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OptimizerComponent implements OnInit {
+export class OptimizerComponent implements OnInit, OnDestroy {
   agents: Agent[] = [];
   selectedAgent: Agent | null = null;
   selectedWEngine: WEngine | null = null;
@@ -31,6 +41,7 @@ export class OptimizerComponent implements OnInit {
   availableWEngines: WEngine[] = [];
 
   results: OptimizedBuild[] = [];
+  resultsViewModel: BuildViewModel[] = [];
   selectedResult: OptimizedBuild | null = null;
   isOptimizing = false;
   progress = 0;
@@ -44,6 +55,8 @@ export class OptimizerComponent implements OnInit {
   preferredSets: string[] = [];
   maxResults = 100;
   useEfficientMode = true; // Use optimized algorithm by default
+
+  private worker: Worker | null = null;
 
   constructor(
     private agentService: AgentService,
@@ -93,9 +106,11 @@ export class OptimizerComponent implements OnInit {
 
     this.isOptimizing = true;
     this.results = [];
+    this.resultsViewModel = [];
     this.selectedResult = null;
     this.progress = 0;
     this.progressText = 'Starting optimization...';
+    this.cdr.markForCheck();
 
     const algorithm = SCORING_PRESETS[this.selectedAgent.specialty];
 
@@ -109,7 +124,75 @@ export class OptimizerComponent implements OnInit {
       maxResults: this.maxResults
     };
 
-    // Use setTimeout to allow UI to update
+    // Check if Web Workers are supported
+    if (typeof Worker !== 'undefined') {
+      this.optimizeWithWorker(algorithm, constraints);
+    } else {
+      // Fallback to synchronous optimization
+      this.optimizeSync(algorithm, constraints);
+    }
+  }
+
+  private optimizeWithWorker(algorithm: any, constraints: OptimizerConstraints) {
+    // Create a new worker
+    this.worker = new Worker(new URL('../../workers/optimizer.worker', import.meta.url), { type: 'module' });
+
+    this.worker.onmessage = ({ data }) => {
+      if (data.type === 'progress') {
+        this.progress = data.progress;
+        this.progressText = data.text;
+        this.cdr.markForCheck();
+      } else if (data.type === 'complete') {
+        this.results = data.builds;
+        this.buildViewModel();
+        this.progress = 100;
+        this.progressText = `Complete! Found ${this.results.length} builds.`;
+
+        if (this.results.length > 0) {
+          this.selectResult(this.results[0]);
+        }
+
+        this.isOptimizing = false;
+        this.cdr.markForCheck();
+        this.worker?.terminate();
+        this.worker = null;
+      } else if (data.type === 'error') {
+        console.error('Optimization error:', data.error);
+        this.progressText = 'Error during optimization. Check console.';
+        this.isOptimizing = false;
+        this.cdr.markForCheck();
+        this.worker?.terminate();
+        this.worker = null;
+      }
+    };
+
+    this.worker.onerror = (error) => {
+      console.error('Worker error:', error);
+      this.progressText = 'Worker error. Falling back to sync optimization.';
+      this.cdr.markForCheck();
+      this.worker?.terminate();
+      this.worker = null;
+      // Fallback to synchronous
+      this.optimizeSync(algorithm, constraints);
+    };
+
+    // Get all unequipped discs
+    const allDiscs = this.discService.getUnequippedDiscs();
+
+    // Send data to worker
+    this.worker.postMessage({
+      agent: this.selectedAgent,
+      level: this.agentLevel,
+      wEngine: this.selectedWEngine,
+      mindscapeLevel: this.mindscapeLevel,
+      algorithm,
+      constraints,
+      allDiscs,
+      useEfficientMode: this.useEfficientMode
+    });
+  }
+
+  private optimizeSync(algorithm: any, constraints: OptimizerConstraints) {
     setTimeout(() => {
       try {
         const optimizeMethod = this.useEfficientMode
@@ -126,9 +209,11 @@ export class OptimizerComponent implements OnInit {
           (progress, text) => {
             this.progress = progress;
             this.progressText = text;
+            this.cdr.markForCheck();
           }
         );
 
+        this.buildViewModel();
         this.progress = 100;
         this.progressText = `Complete! Found ${this.results.length} builds.`;
 
@@ -140,8 +225,27 @@ export class OptimizerComponent implements OnInit {
         this.progressText = 'Error during optimization. Check console.';
       } finally {
         this.isOptimizing = false;
+        this.cdr.markForCheck();
       }
     }, 100);
+  }
+
+  private buildViewModel() {
+    this.resultsViewModel = this.results.map((build, index) => ({
+      build,
+      rank: index + 1,
+      scoreFormatted: build.score.toFixed(2),
+      atkFormatted: build.stats.atk.toFixed(0),
+      critRateFormatted: build.stats.critRate.toFixed(1),
+      critDmgFormatted: build.stats.critDmg.toFixed(1)
+    }));
+  }
+
+  ngOnDestroy() {
+    if (this.worker) {
+      this.worker.terminate();
+      this.worker = null;
+    }
   }
 
   selectResult(build: OptimizedBuild) {
@@ -198,8 +302,8 @@ export class OptimizerComponent implements OnInit {
     return wEngine.id;
   }
 
-  trackByBuildIndex(index: number, build: OptimizedBuild): number {
-    return index;
+  trackByBuildIndex(index: number, item: BuildViewModel): number {
+    return item.rank;
   }
 
   trackByDiscSlot(index: number, slot: DiscSlot): string {

@@ -1,12 +1,18 @@
 import { Routes } from '@angular/router';
-import { CharacterTabComponent } from './components/character-tab/character-tab.component';
-import { DataManagerComponent } from './components/data-manager/data-manager.component';
-import { CreditsComponent } from './components/credits/credits.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/characters', pathMatch: 'full' },
-  { path: 'characters', component: CharacterTabComponent },
-  { path: 'data-manager', component: DataManagerComponent },
-  { path: 'credits', component: CreditsComponent },
+  {
+    path: 'characters',
+    loadComponent: () => import('./components/character-tab/character-tab.component').then(m => m.CharacterTabComponent)
+  },
+  {
+    path: 'data-manager',
+    loadComponent: () => import('./components/data-manager/data-manager.component').then(m => m.DataManagerComponent)
+  },
+  {
+    path: 'credits',
+    loadComponent: () => import('./components/credits/credits.component').then(m => m.CreditsComponent)
+  },
   { path: '**', redirectTo: '/characters' }
 ];

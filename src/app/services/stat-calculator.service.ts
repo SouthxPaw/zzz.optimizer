@@ -44,6 +44,10 @@ export class StatCalculatorService {
   private dataLoaded = false;
   private dataLoadPromise: Promise<void>;
 
+  // Memoization cache for stat calculations
+  private statCache = new Map<string, BaseStats>();
+  private readonly CACHE_SIZE_LIMIT = 1000;
+
   constructor(private http: HttpClient) {
     this.dataLoadPromise = this.loadDiscSetEquipmentData();
   }
@@ -88,6 +92,15 @@ export class StatCalculatorService {
     mindscapeLevel: number = 0,
     wEngineRefinement: number = 1
   ): BaseStats {
+    // Generate cache key
+    const cacheKey = this.generateCacheKey(agent.id, level, wEngine?.id, discs, mindscapeLevel, wEngineRefinement);
+
+    // Check cache
+    const cached = this.statCache.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     // Start with base stats at level 60
     const stats: BaseStats = { ...agent.lvl60Stats };
 
@@ -122,7 +135,7 @@ export class StatCalculatorService {
     this.applySetBonuses(stats, discs, agent, wEngine);
 
     // Round all stats to avoid decimals
-    return {
+    const finalStats: BaseStats = {
       hp: Math.round(stats.hp),
       hppercent: Math.round(stats.hppercent * 10) / 10, // Round to 1 decimal
       atk: Math.round(stats.atk),
@@ -138,6 +151,44 @@ export class StatCalculatorService {
       penRatio: Math.round(stats.penRatio * 10) / 10,
       energyRegen: Math.round(stats.energyRegen * 10) / 10
     };
+
+    // Store in cache
+    this.addToCache(cacheKey, finalStats);
+
+    return finalStats;
+  }
+
+  private generateCacheKey(
+    agentId: string,
+    level: number,
+    wEngineId: string | undefined,
+    discs: { [key in DiscSlot]?: Disc },
+    mindscapeLevel: number,
+    wEngineRefinement: number
+  ): string {
+    // Create a deterministic key from disc UIDs
+    const discIds = Object.entries(discs)
+      .filter(([_, disc]) => disc !== undefined)
+      .map(([slot, disc]) => `${slot}:${disc!.uid}`)
+      .sort()
+      .join('|');
+
+    return `${agentId}:${level}:${wEngineId || 'none'}:${mindscapeLevel}:${wEngineRefinement}:${discIds}`;
+  }
+
+  private addToCache(key: string, stats: BaseStats): void {
+    // Simple LRU-like cache: remove oldest entries when limit is reached
+    if (this.statCache.size >= this.CACHE_SIZE_LIMIT) {
+      const firstKey = this.statCache.keys().next().value;
+      if (firstKey) {
+        this.statCache.delete(firstKey);
+      }
+    }
+    this.statCache.set(key, stats);
+  }
+
+  clearCache(): void {
+    this.statCache.clear();
   }
 
   private applyWEngineStats(stats: BaseStats, wEngine: WEngine, agent: Agent, refinement: number = 1): void {
