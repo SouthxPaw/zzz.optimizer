@@ -1,9 +1,27 @@
 <div class="character-tab">
   <div class="header">
-    <h1>My Builds</h1>
+    <h1>Agents & Optimizer</h1>
   </div>
 
-  <!-- Important Assumptions Notice -->
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <button
+      class="tab-btn"
+      [class.active]="activeTab === 'builds'"
+      (click)="activeTab = 'builds'">
+      My Builds
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab === 'optimizer'"
+      (click)="activeTab = 'optimizer'">
+      How Scoring Works
+    </button>
+  </div>
+
+  <!-- Builds Tab -->
+  <div *ngIf="activeTab === 'builds'" class="tab-content">
+    <!-- Important Assumptions Notice -->
   <div *ngIf="showAssumptionsNotice" class="assumptions-notice">
     <div class="notice-icon">ℹ️</div>
     <div class="notice-content">
@@ -616,7 +634,7 @@
       </div>
     </div>
   </div>
-</div>
+  </div> <!-- End Builds Tab -->
 
 <!-- Confirmation Dialog Modal -->
 <div class="modal-overlay" *ngIf="showConfirmDialog" (click)="closeConfirmDialog()" role="alertdialog" aria-labelledby="confirm-dialog-title" aria-describedby="confirm-dialog-message" aria-modal="true">
@@ -634,3 +652,10 @@
     </div>
   </div>
 </div>
+
+  <!-- Optimizer Tab -->
+  <div *ngIf="activeTab === 'optimizer'" class="tab-content optimizer-tab">
+    <app-optimizer></app-optimizer>
+  </div>
+
+</div> <!-- End character-tab -->

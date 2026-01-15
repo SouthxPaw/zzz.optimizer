@@ -293,41 +293,41 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
     }
   }
 
-  async bulkLock() {
-    if (this.selectedDiscUids.size === 0) return;
+  // async bulkLock() {
+  //   if (this.selectedDiscUids.size === 0) return;
 
-    try {
-      for (const uid of this.selectedDiscUids) {
-        const disc = this.discs.find(d => d.uid === uid);
-        if (disc && !disc.locked) {
-          await this.discService.toggleDiscLock(uid);
-        }
-      }
-      this.selectedDiscUids.clear();
-      this.bulkSelectionMode = false;
-    } catch (error) {
-      console.error('Error locking discs:', error);
-      alert('Error locking some discs');
-    }
-  }
+  //   try {
+  //     for (const uid of this.selectedDiscUids) {
+  //       const disc = this.discs.find(d => d.uid === uid);
+  //       // if (disc && !disc.locked) {
+  //       //   await this.discService.toggleDiscLock(uid);
+  //       // }
+  //     }
+  //     this.selectedDiscUids.clear();
+  //     this.bulkSelectionMode = false;
+  //   } catch (error) {
+  //     console.error('Error locking discs:', error);
+  //     alert('Error locking some discs');
+  //   }
+  // }
 
-  async bulkUnlock() {
-    if (this.selectedDiscUids.size === 0) return;
+  // async bulkUnlock() {
+  //   if (this.selectedDiscUids.size === 0) return;
 
-    try {
-      for (const uid of this.selectedDiscUids) {
-        const disc = this.discs.find(d => d.uid === uid);
-        if (disc && disc.locked) {
-          await this.discService.toggleDiscLock(uid);
-        }
-      }
-      this.selectedDiscUids.clear();
-      this.bulkSelectionMode = false;
-    } catch (error) {
-      console.error('Error unlocking discs:', error);
-      alert('Error unlocking some discs');
-    }
-  }
+  //   try {
+  //     for (const uid of this.selectedDiscUids) {
+  //       const disc = this.discs.find(d => d.uid === uid);
+  //       // if (disc && disc.locked) {
+  //       //   await this.discService.toggleDiscLock(uid);
+  //       // }
+  //     }
+  //     this.selectedDiscUids.clear();
+  //     this.bulkSelectionMode = false;
+  //   } catch (error) {
+  //     console.error('Error unlocking discs:', error);
+  //     alert('Error unlocking some discs');
+  //   }
+  // }
 
   // TrackBy functions for performance optimization
   trackByDiscUid(index: number, disc: Disc): string {
