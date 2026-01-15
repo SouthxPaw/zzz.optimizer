@@ -911,7 +911,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       'Drive3': 'DEF',
       'Drive4': 'ATK%',
       'Drive5': 'Element_DMG',
-      'Drive6': 'CRIT_Rate'
+      'Drive6': 'ATK%'
     };
     return defaults[slot] || 'ATK%';
   }

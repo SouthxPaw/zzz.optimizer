@@ -12,20 +12,22 @@ import {
   DIMINISHING_RETURNS,
   BREAKPOINT_PENALTIES,
   DiscRating,
-  BuildRating
+  BuildRating,
 } from '../constants/disc-scoring';
 import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
 import { calculateRollCount } from '../constants/substat-rolls';
 import {
   estimateDamage,
-  calculateStatusDamage
+  calculateStatusDamage,
 } from '../constants/damage-formulas';
 import {
   getAgentSkillMultiplier,
   getAgentDamageType,
-  getStatusEffectType
+  getStatusEffectType,
 } from '../constants/agent-skills';
 import { SkillParserService } from './skill-parser.service';
+import { L } from '@angular/cdk/keycodes';
+import { Console } from 'console';
 
 interface AgentBreakpoint {
   min: number;
@@ -48,6 +50,7 @@ interface AgentBreakpoints {
     energyRegen: AgentBreakpoint;
   };
   priorityStats: string[];
+  statWeights?: { [stat: string]: number };
 }
 
 interface DiscSetData {
@@ -79,7 +82,7 @@ interface MindscapeData {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ScoringService {
   private agentBreakpoints: { [agentId: string]: AgentBreakpoints } = {};
@@ -102,7 +105,7 @@ export class ScoringService {
       this.loadAgentBreakpoints(),
       this.loadDiscSetData(),
       this.loadMindscapeData(),
-      this.loadSkillMultipliers()
+      this.loadSkillMultipliers(),
     ]);
   }
 
@@ -116,9 +119,25 @@ export class ScoringService {
       if (agentIds.length === 0) {
         // If breakpoints not loaded yet, use common agent IDs
         const commonAgentIds = [
-          '1011', '1021', '1031', '1041', '1081', '1091', '1101', '1111',
-          '1121', '1131', '1141', '1151', '1161', '1181', '1191', '1211',
-          '1241', '1251', '1281'
+          '1011',
+          '1021',
+          '1031',
+          '1041',
+          '1081',
+          '1091',
+          '1101',
+          '1111',
+          '1121',
+          '1131',
+          '1141',
+          '1151',
+          '1161',
+          '1181',
+          '1191',
+          '1211',
+          '1241',
+          '1251',
+          '1281',
         ];
         await this.skillParserService.loadSkillMultipliers(commonAgentIds);
       } else {
@@ -150,10 +169,11 @@ export class ScoringService {
    */
   private async loadDiscSetData() {
     try {
-      const promises = DISC_SET_EQUIPMENT_IDS.map(id =>
-        firstValueFrom(
-          this.http.get<DiscSetData>(`assets/data/equipment/${id}.json`)
-        ).catch(() => null) // Ignore errors for missing files
+      const promises = DISC_SET_EQUIPMENT_IDS.map(
+        (id) =>
+          firstValueFrom(
+            this.http.get<DiscSetData>(`assets/data/equipment/${id}.json`)
+          ).catch(() => null) // Ignore errors for missing files
       );
 
       const results = await Promise.all(promises);
@@ -198,7 +218,10 @@ export class ScoringService {
     optimalValue: number
   ): number {
     // If no optimal defined or value is at/below threshold, no penalty
-    if (optimalValue <= 0 || rawValue <= optimalValue * DIMINISHING_RETURNS.THRESHOLD_PERCENT) {
+    if (
+      optimalValue <= 0 ||
+      rawValue <= optimalValue * DIMINISHING_RETURNS.THRESHOLD_PERCENT
+    ) {
       return rawValue;
     }
 
@@ -206,9 +229,10 @@ export class ScoringService {
     const excess = rawValue - threshold;
 
     // Determine power based on stat type
-    const power = statType === 'energyRegen'
-      ? DIMINISHING_RETURNS.POWER.ENERGY
-      : DIMINISHING_RETURNS.POWER.STANDARD;
+    const power =
+      statType === 'energyRegen'
+        ? DIMINISHING_RETURNS.POWER.ENERGY
+        : DIMINISHING_RETURNS.POWER.STANDARD;
 
     // Apply power function to excess
     const diminishedExcess = Math.pow(excess, power);
@@ -253,64 +277,144 @@ export class ScoringService {
   /**
    * Calculate disc score based on substats and main stat
    * Uses agent-specific weights from breakpoints config
-   * For hybrid agents, detects build type from equippedDiscs
+   * Combines stat importance weights with roll quality multiplier
+   *
+   * BACKWARD COMPATIBLE:
+   * - Old agents use priorityStats: ['CRIT_Rate', 'CRIT_DMG'] (all weighted 1.0)
+   * - New agents use statWeights: { 'CRIT_Rate': 1.0, 'CRIT_DMG': 0.85 }
    */
-  calculateDiscScore(disc: Disc, agentId?: string, equippedDiscs?: Disc[]): { score: number, rating: DiscRating, breakdown: any } {
+  calculateDiscScore(
+    disc: Disc,
+    agentId?: string,
+    equippedDiscs?: Disc[]
+  ): { score: number; rating: DiscRating; breakdown: any } {
     let totalPoints = 0;
     const breakdown = {
       mainStatPoints: 0,
       subStatPoints: 0,
       detectedBuild: null as string | null,
       totalRolls: 0,
-      details: [] as Array<{ stat: string, value: number, points: number, rolls: number }>
+      details: [] as Array<{
+        stat: string;
+        value: number;
+        points: number;
+        rolls: number;
+      }>,
     };
 
-    // Use agent-specific priority stats list (fribbels approach)
-    let priorityStats: string[] = [];
+    // Use agent-specific stat weights (0.7-1.0 range)
+    // Falls back to priorityStats array if statWeights not defined
+    let statWeights: { [stat: string]: number } = {};
 
-    if (agentId && this.agentBreakpoints[agentId]?.priorityStats) {
-      priorityStats = this.agentBreakpoints[agentId].priorityStats;
+    if (agentId && this.agentBreakpoints[agentId]) {
+      const agentConfig = this.agentBreakpoints[agentId];
+
+      if (agentConfig.statWeights) {
+        // New weighted system - use statWeights directly
+        statWeights = agentConfig.statWeights;
+      } else if (agentConfig.priorityStats) {
+        // Old array system - convert to weights (all 1.0)
+        if (Array.isArray(agentConfig.priorityStats)) {
+          statWeights = agentConfig.priorityStats.reduce((acc, stat) => {
+            acc[stat] = 1.0;
+            return acc;
+          }, {} as { [stat: string]: number });
+        } else {
+          // priorityStats is already an object (shouldn't happen, but handle it)
+          statWeights = agentConfig.priorityStats;
+        }
+      }
     } else {
-      // No agent specified - all stats are considered (fallback)
-      priorityStats = ['CRIT_Rate', 'CRIT_DMG', 'ATK%', 'HP%', 'DEF%', 'Anomaly_Proficiency', 'Anomaly_Mastery', 'Energy_Regen', 'Impact', 'PEN', 'PEN_Ratio'];
+      // No agent specified - all stats weighted equally at 1.0
+      statWeights = {
+        CRIT_Rate: 1.0,
+        CRIT_DMG: 1.0,
+        'ATK%': 1.0,
+        'HP%': 1.0,
+        'DEF%': 1.0,
+        Anomaly_Proficiency: 1.0,
+        Anomaly_Mastery: 1.0,
+        Energy_Regen: 1.0,
+        Impact: 1.0,
+        PEN: 1.0,
+        PEN_Ratio: 1.0,
+      };
     }
 
-    // Award points for optimal main stat
-    const mainStatBonus = MAIN_STAT_BONUS[disc.slot]?.[disc.mainStat.type] || 0;
+    // Award points for optimal main stat - only if it's a priority stat for this agent
+    let mainStatBonus = 0;
+    const baseMainStatBonus = MAIN_STAT_BONUS[disc.slot]?.[disc.mainStat.type] || 0;
+
+    // Check if the main stat is in the agent's priority stats (not statWeights, which is for substats only)
+    if (baseMainStatBonus > 0 && agentId && this.agentBreakpoints[agentId]) {
+      const agentConfig = this.agentBreakpoints[agentId];
+      if (agentConfig.priorityStats && Array.isArray(agentConfig.priorityStats)) {
+        // Check if main stat appears in priorityStats array
+        if (agentConfig.priorityStats.includes(disc.mainStat.type)) {
+          mainStatBonus = baseMainStatBonus;
+        }
+      }
+    } else if (!agentId) {
+      // No agent specified - award bonus for any valid main stat
+      mainStatBonus = baseMainStatBonus;
+    }
+
     breakdown.mainStatPoints = mainStatBonus;
     totalPoints += mainStatBonus;
 
-    // Score based on roll quality (fribbels approach)
-    // Formula: count total rolls into priority stats only
-    let totalRollsInPriorityStats = 0;
+    // Score substats with: roll count × stat weight × quality multiplier
+    // Note: Each disc has 3-4 initial substats + 5 upgrade rolls
+    let totalWeightedRolls = 0;
     let priorityStatCount = 0;
-    let maxRollCount = 0; // Count of substats with 5-6 rolls
+    let maxRollCount = 0; // Count of substats with 4+ rolls
+    let totalUpgradeRolls = 0; // Track total upgrade rolls (should be ~5)
+    let upgradeRollsInPriorityStats = 0; // Track upgrades that went to priority stats
 
-    disc.subStats.forEach(substat => {
-      // Calculate roll count for this substat
+    disc.subStats.forEach((substat) => {
+      // Calculate total roll count for this substat (initial + upgrades)
       const rolls = calculateRollCount(substat.type, substat.value);
       breakdown.totalRolls += rolls;
 
-      // Check if this stat is in the agent's priority list
-      const isPriorityStat = priorityStats.includes(substat.type);
+      // Estimate upgrade rolls: total rolls - 1 (subtract initial roll)
+      // Each substat starts with 1 roll, then gets 0-5 upgrade rolls
+      const upgradeRolls = Math.max(0, rolls - 1);
+      totalUpgradeRolls += upgradeRolls;
+
+      // Get stat weight (0.7-1.0 range, or undefined if not a priority stat)
+      const statWeight = statWeights[substat.type];
 
       // Only score stats that are in the agent's priority list
-      if (isPriorityStat) {
-        // Just count the rolls - no multipliers
-        totalRollsInPriorityStats += rolls;
+      if (statWeight !== undefined && statWeight > 0) {
+        upgradeRollsInPriorityStats += upgradeRolls;
+
+        // Calculate quality multiplier based on roll count
+        // Higher rolls into priority stats = better quality
+        // Max realistic: 6 rolls (1 initial + 5 upgrades all into one stat)
+        const rollQuality = Math.min(rolls / 6, 1.0);
+
+        // Quality multiplier: 0.7 base + up to 0.3 bonus for high rolls
+        // 1 roll = 0.77x, 3 rolls = 0.85x, 6 rolls = 1.0x
+        const qualityMultiplier = 0.7 + rollQuality * 0.3;
+
+        // Final weighted score: rolls × stat importance × roll quality
+        const weightedScore = rolls * statWeight * qualityMultiplier;
+
+        totalWeightedRolls += weightedScore;
         priorityStatCount++;
 
-        // Track high-roll substats for bonus
-        if (rolls >= 5) {
+        // Track high-roll substats for bonus (4+ rolls = at least 3 upgrades)
+        if (rolls >= 4) {
           maxRollCount++;
         }
 
-        breakdown.subStatPoints += rolls;
+        breakdown.subStatPoints += weightedScore;
         breakdown.details.push({
-          stat: substat.type,
+          stat: `${substat.type} (×${statWeight}, ${(
+            qualityMultiplier * 100
+          ).toFixed(0)}% quality)`,
           value: substat.value,
-          points: rolls,
-          rolls: rolls
+          points: Math.round(weightedScore * 10) / 10,
+          rolls: rolls,
         });
       } else {
         // Show wasted stats with 0 contribution
@@ -318,66 +422,99 @@ export class ScoringService {
           stat: substat.type + ' (wasted)',
           value: substat.value,
           points: 0,
-          rolls: rolls
+          rolls: rolls,
         });
       }
     });
 
+    // Calculate upgrade roll efficiency (what % of the 5 upgrades went to priority stats)
+    const upgradeEfficiency =
+      totalUpgradeRolls > 0
+        ? upgradeRollsInPriorityStats / totalUpgradeRolls
+        : 0;
+
     // Bonus for having multiple priority stats
-    // This rewards good substat selection - having the RIGHT stats matters more than roll counts
+    // This rewards good substat selection - having the RIGHT stats matters
     let substatBonus = 0;
     if (priorityStatCount === 4) {
       // Perfect: all 4 substats are priority stats
-      // Bonus: +12 rolls worth - this is huge because it means NO wasted stats
+      // Bonus: +12 effective rolls - NO wasted stats
       substatBonus = 12;
       breakdown.details.push({
         stat: 'Perfect Substats (4/4)',
         value: 4,
         points: substatBonus,
-        rolls: 0
+        rolls: 0,
       });
     } else if (priorityStatCount === 3) {
       // Excellent: 3/4 substats are priority stats (only 1 wasted)
-      // Bonus: +8 rolls worth
+      // Bonus: +8 effective rolls
       substatBonus = 8;
       breakdown.details.push({
         stat: 'Excellent Substats (3/4)',
         value: 3,
         points: substatBonus,
-        rolls: 0
+        rolls: 0,
       });
     }
 
-    // Bonus for high-roll substats (5-6 rolls)
+    // Bonus for upgrade roll efficiency
+    // Rewards discs where the 5 upgrade rolls went to priority stats instead of being wasted
+    let upgradeEfficiencyBonus = 0;
+    if (upgradeEfficiency >= 0.8) {
+      // 80%+ of upgrades went to priority stats (4+ out of 5)
+      upgradeEfficiencyBonus = 10;
+      breakdown.details.push({
+        stat: `Upgrade Efficiency (${Math.round(upgradeEfficiency * 100)}%)`,
+        value: upgradeRollsInPriorityStats,
+        points: upgradeEfficiencyBonus,
+        rolls: totalUpgradeRolls,
+      });
+    } else if (upgradeEfficiency >= 0.6) {
+      // 60%+ of upgrades went to priority stats (3+ out of 5)
+      upgradeEfficiencyBonus = 6;
+      breakdown.details.push({
+        stat: `Upgrade Efficiency (${Math.round(upgradeEfficiency * 100)}%)`,
+        value: upgradeRollsInPriorityStats,
+        points: upgradeEfficiencyBonus,
+        rolls: totalUpgradeRolls,
+      });
+    }
+
+    // Bonus for high-roll substats (4+ rolls = 3+ upgrades into one stat)
     // Rewards discs with maxed or near-maxed priority stats
     let highRollBonus = 0;
     if (maxRollCount >= 2) {
-      // 2+ substats with 5-6 rolls = excellent rolls
+      // 2+ substats with 4+ rolls = excellent concentration
       highRollBonus = maxRollCount * 4; // 4 bonus rolls per high-roll stat
       breakdown.details.push({
         stat: `High Roll Bonus (${maxRollCount} substats)`,
         value: maxRollCount,
         points: highRollBonus,
-        rolls: 0
+        rolls: 0,
       });
     } else if (maxRollCount === 1) {
-      // 1 substat with 5-6 rolls = very good
+      // 1 substat with 4+ rolls = very good
       highRollBonus = 5; // 5 bonus rolls
       breakdown.details.push({
         stat: 'High Roll Bonus (1 substat)',
         value: 1,
         points: highRollBonus,
-        rolls: 0
+        rolls: 0,
       });
     }
 
     // Total effective rolls with all bonuses
-    const totalEffectiveRolls = totalRollsInPriorityStats + substatBonus + highRollBonus;
+    const totalEffectiveRolls =
+      totalWeightedRolls +
+      substatBonus +
+      upgradeEfficiencyBonus +
+      highRollBonus;
 
     // Convert to 0-100 scale
-    // Max theoretical adjusted: use 24 as baseline (4 stats × 6 rolls)
-    // This makes the scale more generous to match Interknot Network expectations
-    const maxTheoretical = 24;
+    // Max theoretical weighted: 4 stats × 5 rolls × 1.0 weight × 1.0 quality = 20 base
+    // With bonuses (perfect substats +12, high rolls), god rolls can exceed 100
+    const maxTheoretical = 20;
     let finalScore = (totalEffectiveRolls / maxTheoretical) * 100;
 
     // Don't cap at 100 - let god rolls exceed it
@@ -385,12 +522,12 @@ export class ScoringService {
 
     breakdown.details.push({
       stat: 'Total Effective Rolls',
-      value: totalEffectiveRolls,
+      value: Math.round(totalEffectiveRolls * 10) / 10,
       points: finalScore,
-      rolls: breakdown.totalRolls
+      rolls: breakdown.totalRolls,
     });
 
-    totalPoints = finalScore;
+    totalPoints = finalScore + mainStatBonus;
 
     // Determine rating based on total points
     const rating = this.getDiscRating(totalPoints);
@@ -398,7 +535,7 @@ export class ScoringService {
     return {
       score: Math.round(totalPoints * 10) / 10,
       rating: rating,
-      breakdown: breakdown
+      breakdown: breakdown,
     };
   }
 
@@ -420,7 +557,10 @@ export class ScoringService {
    * Calculate build score based on stat breakpoints
    * Compares build stats against agent-specific optimal targets
    */
-  calculateBuildScore(agentId: string, stats: BaseStats): { score: number, rating: BuildRating, breakdown: any } {
+  calculateBuildScore(
+    agentId: string,
+    stats: BaseStats
+  ): { score: number; rating: BuildRating; breakdown: any } {
     const breakpoints = this.agentBreakpoints[agentId];
 
     if (!breakpoints) {
@@ -428,7 +568,7 @@ export class ScoringService {
       return {
         score: 0,
         rating: BUILD_RATING_THRESHOLDS[BUILD_RATING_THRESHOLDS.length - 1],
-        breakdown: { message: 'No breakpoints defined for this agent' }
+        breakdown: { message: 'No breakpoints defined for this agent' },
       };
     }
 
@@ -436,60 +576,76 @@ export class ScoringService {
       totalBreakpoints: 0,
       metBreakpoints: 0,
       statDetails: [] as Array<{
-        stat: string,
-        current: number,
-        min: number,
-        optimal: number,
-        metMin: boolean,
-        metOptimal: boolean,
-        isPriority: boolean
-      }>
+        stat: string;
+        current: number;
+        min: number;
+        optimal: number;
+        metMin: boolean;
+        metOptimal: boolean;
+        isPriority: boolean;
+      }>,
     };
 
     // Map BaseStats to breakpoint keys
     const statMapping: { [key: string]: number } = {
-      'hp': stats.hp,
-      'atk': stats.atk,
-      'def': stats.def,
-      'impact': stats.impact,
-      'anomalyMastery': stats.anomalyMastery,
-      'critRate': stats.critRate,
-      'critDmg': stats.critDmg,
-      'anomalyProficiency': stats.anomalyProficiency,
-      'pen': stats.pen,
-      'penRatio': stats.penRatio,
-      'energyRegen': stats.energyRegen
+      hp: stats.hp,
+      atk: stats.atk,
+      def: stats.def,
+      impact: stats.impact,
+      anomalyMastery: stats.anomalyMastery,
+      critRate: stats.critRate,
+      critDmg: stats.critDmg,
+      anomalyProficiency: stats.anomalyProficiency,
+      pen: stats.pen,
+      penRatio: stats.penRatio,
+      energyRegen: stats.energyRegen,
     };
 
     let totalPenaltyMultiplier = 1.0; // Start with no penalty
-    const penaltyDetails: Array<{stat: string, penalty: number}> = [];
+    const penaltyDetails: Array<{ stat: string; penalty: number }> = [];
 
     // Check each breakpoint with diminishing returns and penalties
-    Object.keys(breakpoints.breakpoints).forEach(statKey => {
-      const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
+    Object.keys(breakpoints.breakpoints).forEach((statKey) => {
+      const breakpoint =
+        breakpoints.breakpoints[
+          statKey as keyof typeof breakpoints.breakpoints
+        ];
       const rawValue = statMapping[statKey] || 0;
-      const isPriority = breakpoints.priorityStats.includes(statKey);
+      const isPriority = this.isPriorityStat(statKey, breakpoints);
 
       // Only count breakpoints where optimal > 0 (meaning this stat matters)
       if (breakpoint.optimal > 0) {
         breakdown.totalBreakpoints++;
 
-        // Apply diminishing returns to value
-        const adjustedValue = this.applyDiminishingReturns(statKey, rawValue, breakpoint.optimal);
+        // Use raw value - no diminishing returns needed
+        // The penalty system already handles missing breakpoints
+        // Stats above optimal continue to contribute at full value
+        const adjustedValue = rawValue;
 
         const metMin = adjustedValue >= breakpoint.min;
         const metOptimal = adjustedValue >= breakpoint.optimal;
 
+        console.log('ADJUSTED VALUE: ' + adjustedValue);
+        console.log('BREAKPOINT MIN: ' + breakpoint.min);
+        console.log('MET MIN:' + metMin);
+        console.log('BREAKPOINT OPTIMAL: ' + breakpoint.optimal);
+        console.log('MET OPTIMAL: ' + metOptimal);
+
         // Calculate breakpoint penalty for this stat
-        const penaltyMultiplier = this.calculateBreakpointPenalty(adjustedValue, breakpoint);
+        const penaltyMultiplier = this.calculateBreakpointPenalty(
+          adjustedValue,
+          breakpoint
+        );
         if (penaltyMultiplier < 1.0 && isPriority) {
           // Only apply penalty multiplier to priority stats (more strict)
           totalPenaltyMultiplier *= penaltyMultiplier;
           penaltyDetails.push({
             stat: statKey,
-            penalty: (1.0 - penaltyMultiplier) * 100 // Convert to percentage
+            penalty: (1.0 - penaltyMultiplier) * 100, // Convert to percentage
           });
         }
+
+        console.log('PENALTY MULTI: ' + penaltyMultiplier);
 
         // Award points based on meeting breakpoints with progressive scoring
         // This gives partial credit for being between min and optimal
@@ -502,11 +658,12 @@ export class ScoringService {
           // Between min and optimal - progressive scaling
           // Calculate how far between min and optimal (0.0 to 1.0)
           const range = breakpoint.optimal - breakpoint.min;
-          const progress = range > 0 ? (adjustedValue - breakpoint.min) / range : 0;
+          const progress =
+            range > 0 ? (adjustedValue - breakpoint.min) / range : 0;
 
           // Scale from 50% to 100% of full points based on progress
           // This ensures meeting min gives you 50% credit, and you get more as you approach optimal
-          const scaleFactor = 0.5 + (progress * 0.5); // 0.5 to 1.0
+          const scaleFactor = 0.5 + progress * 0.5; // 0.5 to 1.0
           points = (isPriority ? 1.5 : 1.0) * scaleFactor;
         } else {
           // Below min - small credit for having ANY value in priority stats
@@ -517,6 +674,8 @@ export class ScoringService {
           }
         }
 
+        console.log('POINTS: ' + points);
+
         breakdown.metBreakpoints += points;
 
         breakdown.statDetails.push({
@@ -526,21 +685,27 @@ export class ScoringService {
           optimal: breakpoint.optimal,
           metMin: metMin,
           metOptimal: metOptimal,
-          isPriority: isPriority
+          isPriority: isPriority,
         });
       }
     });
 
     // Calculate percentage of breakpoints met
-    let breakpointsMetPercentage = breakdown.totalBreakpoints > 0
-      ? (breakdown.metBreakpoints / breakdown.totalBreakpoints) * 100
-      : 0;
+    let breakpointsMetPercentage =
+      breakdown.totalBreakpoints > 0
+        ? (breakdown.metBreakpoints / breakdown.totalBreakpoints) * 100
+        : 0;
 
     // Apply accumulated breakpoint penalties to final score
     breakpointsMetPercentage *= totalPenaltyMultiplier;
 
+    console.log('BREAKPOINTS MET PERCENT: ' + breakpointsMetPercentage);
+
     // Determine rating based on percentage
     const rating = this.getBuildRating(breakpointsMetPercentage);
+
+    console.log('RATING: ' + rating.breakpointsMetPercentage);
+    console.log('RATING: ' + rating.grade);
 
     return {
       score: Math.round(breakpointsMetPercentage * 10) / 10,
@@ -548,8 +713,8 @@ export class ScoringService {
       breakdown: {
         ...breakdown,
         penaltyMultiplier: Math.round(totalPenaltyMultiplier * 1000) / 1000,
-        penalties: penaltyDetails
-      }
+        penalties: penaltyDetails,
+      },
     };
   }
 
@@ -641,9 +806,10 @@ export class ScoringService {
     }
 
     // For hybrid agents (Stun), use whichever is higher
-    const totalDamage = damageType === 'hybrid'
-      ? Math.max(directDamage, statusDamage)
-      : directDamage + statusDamage;
+    const totalDamage =
+      damageType === 'hybrid'
+        ? Math.max(directDamage, statusDamage)
+        : directDamage + statusDamage;
 
     return {
       directDamage: Math.round(directDamage),
@@ -663,11 +829,11 @@ export class ScoringService {
    */
   private normalizeDamageScore(damage: number, role: string): number {
     const DAMAGE_BENCHMARKS: { [key: string]: number } = {
-      'Attack': 50000,   // High damage expected
-      'Stun': 30000,     // Moderate damage
-      'Anomaly': 40000,  // Status effect damage (per proc)
-      'Support': 15000,  // Low damage expected
-      'Defense': 20000,  // Low-moderate damage
+      Attack: 50000, // High damage expected
+      Stun: 30000, // Moderate damage
+      Anomaly: 40000, // Status effect damage (per proc)
+      Support: 15000, // Low damage expected
+      Defense: 20000, // Low-moderate damage
     };
 
     const benchmark = DAMAGE_BENCHMARKS[role] || 40000;
@@ -694,25 +860,28 @@ export class ScoringService {
    * Calculate disc quality score (average of all equipped discs)
    * Component 2 of composite build rating (30% weight)
    */
-  private calculateDiscQualityScore(equippedDiscs: Disc[], agentId: string): number {
+  private calculateDiscQualityScore(
+    equippedDiscs: Disc[],
+    agentId: string
+  ): number {
     if (!equippedDiscs || equippedDiscs.length === 0) {
       return 0;
     }
 
     // Convert disc ratings to numeric scores
     const ratingToScore: { [key: string]: number } = {
-      'SSS': 100,
-      'SS': 90,
-      'S': 80,
-      'A': 70,
-      'B': 60,
-      'C': 50,
-      'D': 40,
-      'F': 30
+      SSS: 100,
+      SS: 90,
+      S: 80,
+      A: 70,
+      B: 60,
+      C: 50,
+      D: 40,
+      F: 30,
     };
 
     let totalScore = 0;
-    equippedDiscs.forEach(disc => {
+    equippedDiscs.forEach((disc) => {
       const result = this.calculateDiscScore(disc, agentId, equippedDiscs);
       totalScore += ratingToScore[result.rating.grade] || 0;
     });
@@ -734,27 +903,31 @@ export class ScoringService {
     let efficiencyScore = 50; // Start at 50 (neutral)
 
     const statMapping: { [key: string]: number } = {
-      'hp': stats.hp,
-      'atk': stats.atk,
-      'def': stats.def,
-      'impact': stats.impact,
-      'anomalyMastery': stats.anomalyMastery,
-      'critRate': stats.critRate,
-      'critDmg': stats.critDmg,
-      'anomalyProficiency': stats.anomalyProficiency,
-      'pen': stats.pen,
-      'penRatio': stats.penRatio,
-      'energyRegen': stats.energyRegen
+      hp: stats.hp,
+      atk: stats.atk,
+      def: stats.def,
+      impact: stats.impact,
+      anomalyMastery: stats.anomalyMastery,
+      critRate: stats.critRate,
+      critDmg: stats.critDmg,
+      anomalyProficiency: stats.anomalyProficiency,
+      pen: stats.pen,
+      penRatio: stats.penRatio,
+      energyRegen: stats.energyRegen,
     };
 
-    Object.keys(breakpoints.breakpoints).forEach(statKey => {
-      const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
+    Object.keys(breakpoints.breakpoints).forEach((statKey) => {
+      const breakpoint =
+        breakpoints.breakpoints[
+          statKey as keyof typeof breakpoints.breakpoints
+        ];
       const currentValue = statMapping[statKey] || 0;
 
       if (breakpoint.optimal > 0) {
         // Stat matters - check if we exceed optimal
         if (currentValue > breakpoint.optimal) {
-          const excessPercentage = ((currentValue - breakpoint.optimal) / breakpoint.optimal) * 100;
+          const excessPercentage =
+            ((currentValue - breakpoint.optimal) / breakpoint.optimal) * 100;
           // Diminishing returns: first 10% excess = +5 points, next 10% = +3, next 10% = +1
           if (excessPercentage <= 10) {
             efficiencyScore += excessPercentage * 0.5;
@@ -792,7 +965,7 @@ export class ScoringService {
 
     // Count disc sets
     const setCounts: { [setName: string]: number } = {};
-    equippedDiscs.forEach(disc => {
+    equippedDiscs.forEach((disc) => {
       if (disc.set) {
         setCounts[disc.set] = (setCounts[disc.set] || 0) + 1;
       }
@@ -802,11 +975,13 @@ export class ScoringService {
     let activeSets = 0;
 
     // Check each set for 2pc and 4pc bonuses
-    Object.keys(setCounts).forEach(setName => {
+    Object.keys(setCounts).forEach((setName) => {
       const count = setCounts[setName];
 
       // Find the disc set data by name
-      const setData = Object.values(this.discSetData).find(s => s.Name === setName);
+      const setData = Object.values(this.discSetData).find(
+        (s) => s.Name === setName
+      );
       if (!setData || !setData['4pcEffect']) {
         return;
       }
@@ -821,15 +996,16 @@ export class ScoringService {
           return;
         }
 
-        properties.forEach(prop => {
+        properties.forEach((prop) => {
           // Map property names to breakpoint keys
           const statKey = this.mapStatNameToBreakpointKey(prop.Name);
           if (statKey) {
-            const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
+            const breakpoint =
+              breakpoints.breakpoints[
+                statKey as keyof typeof breakpoints.breakpoints
+              ];
             // Check if this stat is in priority list
-            const isPriority = breakpoints.priorityStats.some(stat =>
-              stat.toLowerCase().includes(statKey.toLowerCase())
-            );
+            const isPriority = this.isPriorityStat(statKey, breakpoints);
 
             if (breakpoint && breakpoint.optimal > 0 && isPriority) {
               // Good set effect - aligns with agent needs
@@ -862,28 +1038,93 @@ export class ScoringService {
   private mapStatNameToBreakpointKey(statName: string): string | null {
     const mapping: { [key: string]: string } = {
       'ATK%': 'atk',
-      'ATK': 'atk',
+      ATK: 'atk',
       'HP%': 'hp',
-      'HP': 'hp',
+      HP: 'hp',
       'DEF%': 'def',
-      'DEF': 'def',
-      'CRIT_Rate': 'critRate',
-      'CRIT_DMG': 'critDmg',
-      'Anomaly_Proficiency': 'anomalyProficiency',
-      'Anomaly_Mastery': 'anomalyMastery',
-      'PEN': 'pen',
-      'PEN_Ratio': 'penRatio',
-      'Impact': 'impact',
-      'Energy_Regen': 'energyRegen'
+      DEF: 'def',
+      CRIT_Rate: 'critRate',
+      CRIT_DMG: 'critDmg',
+      Anomaly_Proficiency: 'anomalyProficiency',
+      Anomaly_Mastery: 'anomalyMastery',
+      PEN: 'pen',
+      PEN_Ratio: 'penRatio',
+      Impact: 'impact',
+      Energy_Regen: 'energyRegen',
     };
 
     return mapping[statName] || null;
   }
 
   /**
+   * Check if a stat is a priority stat for the agent
+   * Handles both old priorityStats array format and new statWeights object format
+   * @param statKey - Breakpoint stat key (e.g., 'critRate', 'anomalyProficiency')
+   * @param breakpoints - Agent breakpoints configuration
+   * @returns true if the stat is a priority stat
+   */
+  private isPriorityStat(
+    statKey: string,
+    breakpoints: AgentBreakpoints
+  ): boolean {
+    // First, check if statWeights is defined (new format)
+    if (breakpoints.statWeights) {
+      // Map breakpoint key back to stat type name for checking statWeights
+      const statTypeMap: { [key: string]: string[] } = {
+        critRate: ['CRIT_Rate'],
+        critDmg: ['CRIT_DMG'],
+        atk: ['ATK%', 'ATK'],
+        hp: ['HP%', 'HP'],
+        def: ['DEF%', 'DEF'],
+        anomalyProficiency: ['Anomaly_Proficiency'],
+        anomalyMastery: ['Anomaly_Mastery'],
+        pen: ['PEN'],
+        penRatio: ['PEN_Ratio'],
+        impact: ['Impact'],
+        energyRegen: ['Energy_Regen'],
+      };
+
+      const possibleStatNames = statTypeMap[statKey] || [];
+      return possibleStatNames.some(
+        (statName) =>
+          breakpoints.statWeights![statName] !== undefined &&
+          breakpoints.statWeights![statName] > 0
+      );
+    }
+
+    // Fall back to old priorityStats array format
+    if (breakpoints.priorityStats && Array.isArray(breakpoints.priorityStats)) {
+      // Map breakpoint key to stat type names that appear in priorityStats
+      const statTypeMap: { [key: string]: string[] } = {
+        critRate: ['CRIT_Rate', 'critRate'],
+        critDmg: ['CRIT_DMG', 'critDmg'],
+        atk: ['ATK%', 'ATK', 'atk'],
+        hp: ['HP%', 'HP', 'hp'],
+        def: ['DEF%', 'DEF', 'def'],
+        anomalyProficiency: ['Anomaly_Proficiency', 'anomalyProficiency'],
+        anomalyMastery: ['Anomaly_Mastery', 'anomalyMastery'],
+        pen: ['PEN', 'pen'],
+        penRatio: ['PEN_Ratio', 'penRatio'],
+        impact: ['Impact', 'impact'],
+        energyRegen: ['Energy_Regen', 'energyRegen'],
+      };
+
+      const possibleStatNames = statTypeMap[statKey] || [];
+      return possibleStatNames.some((statName) =>
+        breakpoints.priorityStats.includes(statName)
+      );
+    }
+
+    return false;
+  }
+
+  /**
    * Get W-Engine stat contributions with reduced weight
    */
-  private getWEngineStatContribution(wEngine?: WEngine, wEngineLevel?: number): Partial<BaseStats> {
+  private getWEngineStatContribution(
+    wEngine?: WEngine,
+    wEngineLevel?: number
+  ): Partial<BaseStats> {
     if (!wEngine) {
       return {};
     }
@@ -936,7 +1177,10 @@ export class ScoringService {
   /**
    * Get Mindscape stat contributions with reduced weight
    */
-  private getMindscapeStatContribution(agentId: string, mindscapeLevel: number): Partial<BaseStats> {
+  private getMindscapeStatContribution(
+    agentId: string,
+    mindscapeLevel: number
+  ): Partial<BaseStats> {
     if (!this.mindscapeData || mindscapeLevel === 0) {
       return {};
     }
@@ -953,7 +1197,7 @@ export class ScoringService {
     for (let level = 1; level <= mindscapeLevel; level++) {
       const bonuses = agentMindscapes[level];
       if (bonuses) {
-        bonuses.forEach(bonus => {
+        bonuses.forEach((bonus) => {
           const value = bonus.value * weight;
 
           switch (bonus.type) {
@@ -976,16 +1220,19 @@ export class ScoringService {
               contribution.penRatio = (contribution.penRatio || 0) + value;
               break;
             case 'Energy_Regen':
-              contribution.energyRegen = (contribution.energyRegen || 0) + value;
+              contribution.energyRegen =
+                (contribution.energyRegen || 0) + value;
               break;
             case 'Impact':
               contribution.impact = (contribution.impact || 0) + value;
               break;
             case 'Anomaly_Proficiency':
-              contribution.anomalyProficiency = (contribution.anomalyProficiency || 0) + value;
+              contribution.anomalyProficiency =
+                (contribution.anomalyProficiency || 0) + value;
               break;
             case 'Anomaly_Mastery':
-              contribution.anomalyMastery = (contribution.anomalyMastery || 0) + value;
+              contribution.anomalyMastery =
+                (contribution.anomalyMastery || 0) + value;
               break;
           }
         });
@@ -1006,15 +1253,17 @@ export class ScoringService {
     const weightedStats: BaseStats = { ...baseStats };
 
     // Apply W-Engine contributions
-    Object.keys(wEngineContribution).forEach(key => {
+    Object.keys(wEngineContribution).forEach((key) => {
       const statKey = key as keyof BaseStats;
-      weightedStats[statKey] = (weightedStats[statKey] || 0) + (wEngineContribution[statKey] || 0);
+      weightedStats[statKey] =
+        (weightedStats[statKey] || 0) + (wEngineContribution[statKey] || 0);
     });
 
     // Apply Mindscape contributions
-    Object.keys(mindscapeContribution).forEach(key => {
+    Object.keys(mindscapeContribution).forEach((key) => {
       const statKey = key as keyof BaseStats;
-      weightedStats[statKey] = (weightedStats[statKey] || 0) + (mindscapeContribution[statKey] || 0);
+      weightedStats[statKey] =
+        (weightedStats[statKey] || 0) + (mindscapeContribution[statKey] || 0);
     });
 
     return weightedStats;
@@ -1041,29 +1290,46 @@ export class ScoringService {
     agentRole?: string,
     agentElement?: string,
     agentLevel?: number
-  ): { score: number, rating: BuildRating, breakdown: any } {
+  ): { score: number; rating: BuildRating; breakdown: any } {
     const breakpoints = this.agentBreakpoints[agentId];
 
     if (!breakpoints) {
       return {
         score: 0,
         rating: BUILD_RATING_THRESHOLDS[BUILD_RATING_THRESHOLDS.length - 1],
-        breakdown: { message: 'No breakpoints defined for this agent' }
+        breakdown: { message: 'No breakpoints defined for this agent' },
       };
     }
 
     // Calculate weighted contributions from W-Engine and Mindscape
-    const wEngineContribution = this.getWEngineStatContribution(wEngine, wEngineLevel);
-    const mindscapeContribution = this.getMindscapeStatContribution(agentId, mindscapeLevel);
+    const wEngineContribution = this.getWEngineStatContribution(
+      wEngine,
+      wEngineLevel
+    );
+    const mindscapeContribution = this.getMindscapeStatContribution(
+      agentId,
+      mindscapeLevel
+    );
 
     // Apply weighted external stats to base stats
-    const weightedStats = this.applyWeightedStats(stats, wEngineContribution, mindscapeContribution);
+    const weightedStats = this.applyWeightedStats(
+      stats,
+      wEngineContribution,
+      mindscapeContribution
+    );
 
+    console.log('----- BUILD SCORE RUNNING-----');
     // Calculate each component using weighted stats
     const breakpointResult = this.calculateBuildScore(agentId, weightedStats);
     const breakpointScore = breakpointResult.score; // 0-100 percentage
+    console.log('-----BUILD SCORE RAN-----');
+    const discQualityScore = this.calculateDiscQualityScore(
+      equippedDiscs,
+      agentId
+    ); // 0-100
 
-    const discQualityScore = this.calculateDiscQualityScore(equippedDiscs, agentId); // 0-100
+    console.log(discQualityScore);
+    console.log(breakpointResult);
 
     const statEfficiencyScore = this.calculateStatEfficiencyScore(
       weightedStats,
@@ -1079,7 +1345,7 @@ export class ScoringService {
     if (agentName && agentRole && agentElement) {
       // Calculate elemental DMG% from equipped discs (slot 5 main stat)
       let elementalDMGBonus = 0;
-      const slot5Disc = equippedDiscs.find(d => d.slot === 'Drive5');
+      const slot5Disc = equippedDiscs.find((d) => d.slot === 'Drive5');
       if (slot5Disc?.mainStat.type.includes('DMG')) {
         elementalDMGBonus = slot5Disc.mainStat.value / 100; // Convert % to decimal
       }
@@ -1104,7 +1370,10 @@ export class ScoringService {
       );
 
       // Normalize damage to 0-100 score
-      damageScore = this.normalizeDamageScore(damageEstimate.totalDamage, agentRole);
+      damageScore = this.normalizeDamageScore(
+        damageEstimate.totalDamage,
+        agentRole
+      );
     }
 
     // Combine with weights
@@ -1126,12 +1395,13 @@ export class ScoringService {
         discQualityScore: Math.round(discQualityScore * 10) / 10,
         statEfficiencyScore: Math.round(statEfficiencyScore * 10) / 10,
         setBonusScore: Math.round(setBonusScore * 10) / 10,
-        damageScore: damageScore > 0 ? Math.round(damageScore * 10) / 10 : undefined,
+        damageScore:
+          damageScore > 0 ? Math.round(damageScore * 10) / 10 : undefined,
         damageEstimate: damageEstimate,
         wEngineContribution: wEngineContribution,
         mindscapeContribution: mindscapeContribution,
-        componentWeights: BUILD_SCORE_WEIGHTS
-      }
+        componentWeights: BUILD_SCORE_WEIGHTS,
+      },
     };
   }
 }

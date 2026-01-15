@@ -9,12 +9,12 @@ export const DIMINISHING_RETURNS = {
   // Power function exponents for different stat types
   // Lower = more aggressive diminishing returns
   POWER: {
-    STANDARD: 0.25,  // CRIT Rate, CRIT DMG, ATK%, etc. (mild diminishing)
-    ENERGY: 0.20,    // Energy Regen (moderate diminishing)
+    STANDARD: 0.5,   // CRIT Rate, CRIT DMG, ATK%, etc. (mild diminishing)
+    ENERGY: 0.4,     // Energy Regen (moderate diminishing)
   },
   // Threshold percentage - stats below this don't get diminishing returns
-  // e.g., 0.80 = only apply diminishing returns if stat is above 80% of optimal
-  THRESHOLD_PERCENT: 0.80,
+  // 1.0 = only apply diminishing returns if stat is ABOVE optimal (at or below = no penalty)
+  THRESHOLD_PERCENT: 1.0,
 };
 
 /**
@@ -93,16 +93,16 @@ export interface DiscRating {
 }
 
 export const DISC_RATING_THRESHOLDS: DiscRating[] = [
-  { grade: 'VOID HUNTER', minPoints: 104, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection (maximum rolls on all priority stats)' },
-  { grade: 'LEGENDARY', minPoints: 87, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-flawless with exceptional roll quality' },
-  { grade: 'SSS', minPoints: 83, color: '#FF6B9D', description: 'Perfect - God roll (near-perfect rolls)' },
-  { grade: 'SS', minPoints: 70, color: '#FF8C42', description: 'Excellent - Amazing substats with high rolls' },
-  { grade: 'S', minPoints: 50, color: '#FFD93D', description: 'Very Good - Great substats with good rolls' },
-  { grade: 'A', minPoints: 35, color: '#6BCF7F', description: 'Good - Solid substats' },
-  { grade: 'B', minPoints: 20, color: '#4D96FF', description: 'Decent - Okay substats' },
-  { grade: 'C', minPoints: 10, color: '#A0A0A0', description: 'Below Average - Mediocre substats' },
-  { grade: 'D', minPoints: 5, color: '#808080', description: 'Poor - Mostly wasted substats' },
-  { grade: 'F', minPoints: 0, color: '#606060', description: 'Unusable - All wasted substats (fodder)' },
+  { grade: 'VOID HUNTER', minPoints: 151, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection (top 3% globally)' },
+  { grade: 'LEGENDARY', minPoints: 148, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-perfect disc (top 5%)' },
+  { grade: 'SSS', minPoints: 145, color: '#FF6B9D', description: 'Perfect - Outstanding disc (top 10%)' },
+  { grade: 'SS', minPoints: 137, color: '#FF8C42', description: 'Excellent - Great disc (top 25%)' },
+  { grade: 'S', minPoints: 117, color: '#FFD93D', description: 'Very Good - Above average disc (top 35%)' },
+  { grade: 'A', minPoints: 98, color: '#6BCF7F', description: 'Good - Decent disc (top 60%)' },
+  { grade: 'B', minPoints: 69, color: '#4D96FF', description: 'Average - Usable disc (top 80%)' },
+  { grade: 'C', minPoints: 41, color: '#A0A0A0', description: 'Below Average - Needs upgrading (top 90%)' },
+  { grade: 'D', minPoints: 13, color: '#808080', description: 'Poor - Consider replacing (top 95%)' },
+  { grade: 'F', minPoints: 0, color: '#606060', description: 'Unusable - Immediate fodder' },
 ];
 
 /**
@@ -118,14 +118,14 @@ export interface BuildRating {
 }
 
 export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
-  { grade: 'VOID HUNTER', breakpointsMetPercentage: 70, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
-  { grade: 'LEGENDARY', breakpointsMetPercentage: 65, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs' },
-  { grade: 'SSS', breakpointsMetPercentage: 60, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
-  { grade: 'SS', breakpointsMetPercentage: 55, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
-  { grade: 'S', breakpointsMetPercentage: 50, color: '#FFD93D', description: 'Very Good - Strong build with good discs' },
-  { grade: 'A', breakpointsMetPercentage: 45, color: '#6BCF7F', description: 'Good - Solid build with decent discs' },
-  { grade: 'B', breakpointsMetPercentage: 40, color: '#4D96FF', description: 'Decent - Room for improvement' },
-  { grade: 'C', breakpointsMetPercentage: 35, color: '#A0A0A0', description: 'Below Average - Missing key stats' },
-  { grade: 'D', breakpointsMetPercentage: 20, color: '#808080', description: 'Poor - Major gaps in stats' },
+  { grade: 'VOID HUNTER', breakpointsMetPercentage: 96, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs (top 3%)' },
+  { grade: 'LEGENDARY', breakpointsMetPercentage: 94, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs (top 5%)' },
+  { grade: 'SSS', breakpointsMetPercentage: 91, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs (top 10%)' },
+  { grade: 'SS', breakpointsMetPercentage: 84, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs (top 25%)' },
+  { grade: 'S', breakpointsMetPercentage: 72, color: '#FFD93D', description: 'Very Good - Strong build with good discs (top 50%)' },
+  { grade: 'A', breakpointsMetPercentage: 66, color: '#6BCF7F', description: 'Good - Solid build with decent discs (top 60%)' },
+  { grade: 'B', breakpointsMetPercentage: 56, color: '#4D96FF', description: 'Decent - Room for improvement (top 80%)' },
+  { grade: 'C', breakpointsMetPercentage: 38, color: '#A0A0A0', description: 'Below Average - Missing key stats (top 90%)' },
+  { grade: 'D', breakpointsMetPercentage: 30, color: '#808080', description: 'Poor - Major gaps in stats (top 95%)' },
   { grade: 'F', breakpointsMetPercentage: 0, color: '#606060', description: 'Unoptimized - Needs complete rework' },
 ];
