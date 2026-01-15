@@ -86,14 +86,16 @@ export const MAIN_STAT_BONUS: { [slot: string]: { [stat: string]: number } } = {
  * Updated with normalized grading (relative to realistic benchmarks)
  */
 export interface DiscRating {
-  grade: 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: 'VOID HUNTER' | 'LEGENDARY' | 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
   minPoints: number;
   color: string;
   description: string;
 }
 
 export const DISC_RATING_THRESHOLDS: DiscRating[] = [
-  { grade: 'SSS', minPoints: 90, color: '#FF6B9D', description: 'Perfect - God roll (near-perfect rolls)' },
+  { grade: 'VOID HUNTER', minPoints: 105, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection (maximum rolls on all priority stats)' },
+  { grade: 'LEGENDARY', minPoints: 95, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-flawless with exceptional roll quality' },
+  { grade: 'SSS', minPoints: 84, color: '#FF6B9D', description: 'Perfect - God roll (near-perfect rolls)' },
   { grade: 'SS', minPoints: 70, color: '#FF8C42', description: 'Excellent - Amazing substats with high rolls' },
   { grade: 'S', minPoints: 50, color: '#FFD93D', description: 'Very Good - Great substats with good rolls' },
   { grade: 'A', minPoints: 35, color: '#6BCF7F', description: 'Good - Solid substats' },
@@ -109,19 +111,21 @@ export const DISC_RATING_THRESHOLDS: DiscRating[] = [
  * These thresholds reward quality builds while maintaining meaningful progression
  */
 export interface BuildRating {
-  grade: 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: 'VOID HUNTER' | 'LEGENDARY' | 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
   breakpointsMetPercentage: number;  // Percentage of optimal breakpoints met
   color: string;
   description: string;
 }
 
 export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
-  { grade: 'SSS', breakpointsMetPercentage: 75, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
-  { grade: 'SS', breakpointsMetPercentage: 69, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
-  { grade: 'S', breakpointsMetPercentage: 60, color: '#FFD93D', description: 'Very Good - Strong build with good discs' },
-  { grade: 'A', breakpointsMetPercentage: 55, color: '#6BCF7F', description: 'Good - Solid build with decent discs' },
-  { grade: 'B', breakpointsMetPercentage: 43, color: '#4D96FF', description: 'Decent - Room for improvement' },
-  { grade: 'C', breakpointsMetPercentage: 30, color: '#A0A0A0', description: 'Below Average - Missing key stats' },
+  { grade: 'VOID HUNTER', breakpointsMetPercentage: 70, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
+  { grade: 'LEGENDARY', breakpointsMetPercentage: 65, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs' },
+  { grade: 'SSS', breakpointsMetPercentage: 60, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
+  { grade: 'SS', breakpointsMetPercentage: 55, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
+  { grade: 'S', breakpointsMetPercentage: 50, color: '#FFD93D', description: 'Very Good - Strong build with good discs' },
+  { grade: 'A', breakpointsMetPercentage: 45, color: '#6BCF7F', description: 'Good - Solid build with decent discs' },
+  { grade: 'B', breakpointsMetPercentage: 40, color: '#4D96FF', description: 'Decent - Room for improvement' },
+  { grade: 'C', breakpointsMetPercentage: 35, color: '#A0A0A0', description: 'Below Average - Missing key stats' },
   { grade: 'D', breakpointsMetPercentage: 20, color: '#808080', description: 'Poor - Major gaps in stats' },
   { grade: 'F', breakpointsMetPercentage: 0, color: '#606060', description: 'Unoptimized - Needs complete rework' },
 ];

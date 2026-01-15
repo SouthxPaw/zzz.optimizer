@@ -41,6 +41,10 @@ testem.log
 *.md
 !README.md
 
+# Scripts folder (contains sensitive UIDs and analysis data)
+/scripts
+
 # System files
 .DS_Store
 Thumbs.db
+nul
