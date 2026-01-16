@@ -13,6 +13,7 @@ import {
   BREAKPOINT_PENALTIES,
   DiscRating,
   BuildRating,
+  FeedbackItem,
 } from '../constants/disc-scoring';
 import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
 import { calculateRollCount } from '../constants/substat-rolls';
@@ -1109,6 +1110,100 @@ export class ScoringService {
   }
 
   /**
+   * Get human-readable priority stat names for feedback messages
+   */
+  private getPriorityStatDisplayNames(breakpoints: AgentBreakpoints): string[] {
+    const displayNames: string[] = [];
+
+    // Map internal stat names to display names
+    const statDisplayMap: { [key: string]: string } = {
+      'CRIT_Rate': 'CRIT Rate',
+      'CRIT_DMG': 'CRIT DMG',
+      'ATK%': 'ATK%',
+      'ATK': 'ATK',
+      'HP%': 'HP%',
+      'HP': 'HP',
+      'DEF%': 'DEF%',
+      'DEF': 'DEF',
+      'Anomaly_Proficiency': 'Anomaly Prof',
+      'Anomaly_Mastery': 'Anomaly Mastery',
+      'PEN': 'PEN',
+      'PEN_Ratio': 'PEN Ratio',
+      'Impact': 'Impact',
+      'Energy_Regen': 'Energy Regen',
+    };
+
+    // Check statWeights first (new format)
+    if (breakpoints.statWeights) {
+      // Sort by weight (highest first) and take top stats
+      const sortedStats = Object.entries(breakpoints.statWeights)
+        .filter(([_, weight]) => weight > 0)
+        .sort((a, b) => b[1] - a[1]);
+
+      sortedStats.forEach(([stat, _]) => {
+        const displayName = statDisplayMap[stat];
+        if (displayName && !displayNames.includes(displayName)) {
+          displayNames.push(displayName);
+        }
+      });
+    }
+    // Fall back to priorityStats array (old format)
+    else if (breakpoints.priorityStats && Array.isArray(breakpoints.priorityStats)) {
+      breakpoints.priorityStats.forEach(stat => {
+        const displayName = statDisplayMap[stat];
+        if (displayName && !displayNames.includes(displayName)) {
+          displayNames.push(displayName);
+        }
+      });
+    }
+
+    return displayNames;
+  }
+
+  /**
+   * Get the weight for a stat from breakpoints config
+   * Returns 1.0 if stat is in priorityStats, or the actual weight from statWeights
+   */
+  private getStatWeight(statKey: string, breakpoints: AgentBreakpoints): number {
+    // Map breakpoint key to statWeights key
+    const statKeyMap: { [key: string]: string[] } = {
+      critRate: ['CRIT_Rate'],
+      critDmg: ['CRIT_DMG'],
+      atk: ['ATK%', 'ATK'],
+      hp: ['HP%', 'HP'],
+      def: ['DEF%', 'DEF'],
+      anomalyProficiency: ['Anomaly_Proficiency'],
+      anomalyMastery: ['Anomaly_Mastery'],
+      pen: ['PEN'],
+      penRatio: ['PEN_Ratio'],
+      impact: ['Impact'],
+      energyRegen: ['Energy_Regen'],
+    };
+
+    const possibleKeys = statKeyMap[statKey] || [];
+
+    // Check statWeights first
+    if (breakpoints.statWeights) {
+      for (const key of possibleKeys) {
+        if (breakpoints.statWeights[key] !== undefined) {
+          return breakpoints.statWeights[key];
+        }
+      }
+    }
+
+    // Fall back to priorityStats (all weighted 1.0)
+    if (breakpoints.priorityStats && Array.isArray(breakpoints.priorityStats)) {
+      for (const key of possibleKeys) {
+        if (breakpoints.priorityStats.includes(key)) {
+          return 1.0;
+        }
+      }
+    }
+
+    return 0;
+  }
+
+  /**
    * Get W-Engine stat contributions with reduced weight
    */
   private getWEngineStatContribution(
@@ -1389,5 +1484,383 @@ export class ScoringService {
         componentWeights: BUILD_SCORE_WEIGHTS,
       },
     };
+  }
+
+  /**
+   * Generate actionable feedback for improving a build
+   * Returns prioritized suggestions based on what would have the most impact
+   */
+  generateBuildFeedback(
+    agentId: string,
+    stats: BaseStats,
+    equippedDiscs: { [slot: string]: Disc | undefined },
+    hasWEngine: boolean,
+    isWEngineSpecialtyMatch: boolean
+  ): FeedbackItem[] {
+    const feedback: FeedbackItem[] = [];
+    const breakpoints = this.agentBreakpoints[agentId];
+
+    // If no breakpoints defined, we can't give stat-specific feedback
+    if (!breakpoints) {
+      feedback.push({
+        priority: 'low',
+        category: 'stat',
+        message: 'No optimization data available for this agent yet',
+      });
+      return feedback;
+    }
+
+    // Check for missing W-Engine (high priority)
+    if (!hasWEngine) {
+      feedback.push({
+        priority: 'high',
+        category: 'wengine',
+        message: 'Equip a W-Engine to boost your stats',
+      });
+    } else if (!isWEngineSpecialtyMatch) {
+      feedback.push({
+        priority: 'medium',
+        category: 'wengine',
+        message: 'W-Engine specialty does not match agent - consider switching for full bonuses',
+      });
+    }
+
+    // Check for empty disc slots (high priority)
+    const discSlots = ['Drive1', 'Drive2', 'Drive3', 'Drive4', 'Drive5', 'Drive6'];
+    const emptySlots = discSlots.filter(slot => !equippedDiscs[slot]);
+
+    if (emptySlots.length > 0) {
+      const slotNames = emptySlots.map(s => s.replace('Drive', 'Drive ')).join(', ');
+      feedback.push({
+        priority: 'high',
+        category: 'disc',
+        message: `Equip discs in empty slots: ${slotNames}`,
+      });
+    }
+
+    // Check disc quality and find worst discs
+    const discScores: Array<{ slot: string; score: number; grade: string }> = [];
+    discSlots.forEach(slot => {
+      const disc = equippedDiscs[slot];
+      if (disc) {
+        const scoreResult = this.calculateDiscScore(disc, agentId);
+        discScores.push({
+          slot,
+          score: scoreResult.score,
+          grade: scoreResult.rating.grade,
+        });
+      }
+    });
+
+    // Check stat breakpoints and build a list of stats that need improvement
+    const statMapping: { [key: string]: { value: number; label: string; unit: string; substatName: string } } = {
+      hp: { value: stats.hp, label: 'HP', unit: '', substatName: 'HP%' },
+      atk: { value: stats.atk, label: 'ATK', unit: '', substatName: 'ATK%' },
+      def: { value: stats.def, label: 'DEF', unit: '', substatName: 'DEF%' },
+      impact: { value: stats.impact, label: 'Impact', unit: '', substatName: 'Impact' },
+      anomalyMastery: { value: stats.anomalyMastery, label: 'Anomaly Mastery', unit: '', substatName: 'Anomaly Mastery' },
+      critRate: { value: stats.critRate, label: 'CRIT Rate', unit: '%', substatName: 'CRIT Rate' },
+      critDmg: { value: stats.critDmg, label: 'CRIT DMG', unit: '%', substatName: 'CRIT DMG' },
+      anomalyProficiency: { value: stats.anomalyProficiency, label: 'Anomaly Proficiency', unit: '', substatName: 'Anomaly Prof' },
+      pen: { value: stats.pen, label: 'PEN', unit: '', substatName: 'PEN' },
+      penRatio: { value: stats.penRatio, label: 'PEN Ratio', unit: '%', substatName: 'PEN Ratio' },
+      energyRegen: { value: stats.energyRegen, label: 'Energy Regen', unit: '%', substatName: 'Energy Regen' },
+    };
+
+    // Check for CRIT Rate overcap (warn if over 100%)
+    if (stats.critRate > 100) {
+      feedback.push({
+        priority: 'medium',
+        category: 'stat',
+        message: `CRIT Rate is ${Math.round(stats.critRate)}% - overcapped! You're wasting ${Math.round(stats.critRate - 100)}% CRIT Rate`,
+        stat: 'critRate',
+        currentValue: stats.critRate,
+        targetValue: 100,
+      });
+    }
+
+    // Build list of stats that need improvement (for disc suggestions)
+    const statsNeedingImprovement: Array<{ stat: string; substatName: string; deficit: number; weight: number }> = [];
+
+    Object.keys(breakpoints.breakpoints).forEach(statKey => {
+      const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
+      const statInfo = statMapping[statKey];
+      if (!statInfo || breakpoint.optimal === 0) return;
+
+      const isPriority = this.isPriorityStat(statKey, breakpoints);
+      const current = statInfo.value;
+      const optimal = breakpoint.optimal;
+
+      // Skip CRIT Rate if already at or above 100%
+      if (statKey === 'critRate' && current >= 100) return;
+
+      // Calculate how far below optimal we are
+      if (current < optimal && isPriority) {
+        const deficit = optimal - current;
+        const deficitPercent = deficit / optimal;
+        // Get weight from statWeights if available
+        const weight = this.getStatWeight(statKey, breakpoints);
+        statsNeedingImprovement.push({
+          stat: statKey,
+          substatName: statInfo.substatName,
+          deficit: deficitPercent,
+          weight: weight,
+        });
+      }
+    });
+
+    // Sort by weight * deficit (highest priority improvements first)
+    statsNeedingImprovement.sort((a, b) => (b.weight * b.deficit) - (a.weight * a.deficit));
+
+    // Generate smart stat suggestions for disc feedback
+    // If no stats need improvement (all at optimal), use priority stats from statWeights
+    let neededSubstats = statsNeedingImprovement
+      .slice(0, 3)
+      .map(s => s.substatName);
+
+    // Fallback: if stats are all at optimal, suggest priority stats anyway for disc upgrades
+    if (neededSubstats.length === 0 && breakpoints.statWeights) {
+      const priorityStatSubstats: { [key: string]: string } = {
+        'CRIT_Rate': 'CRIT Rate',
+        'CRIT_DMG': 'CRIT DMG',
+        'ATK%': 'ATK%',
+        'ATK': 'ATK',
+        'HP%': 'HP%',
+        'HP': 'HP',
+        'DEF%': 'DEF%',
+        'DEF': 'DEF',
+        'PEN': 'PEN',
+        'PEN_Ratio': 'PEN Ratio',
+        'Anomaly_Proficiency': 'Anomaly Prof',
+        'Anomaly_Mastery': 'Anomaly Mastery',
+        'Impact': 'Impact',
+        'Energy_Regen': 'Energy Regen',
+      };
+
+      // Get top 3 priority stats by weight (skip CRIT Rate if overcapped)
+      const sortedWeights = Object.entries(breakpoints.statWeights)
+        .filter(([stat, weight]) => {
+          if (weight <= 0) return false;
+          // Skip CRIT Rate if already at 100%+
+          if (stat === 'CRIT_Rate' && stats.critRate >= 100) return false;
+          return true;
+        })
+        .sort((a, b) => b[1] - a[1]);
+
+      neededSubstats = sortedWeights
+        .slice(0, 3)
+        .map(([stat]) => priorityStatSubstats[stat])
+        .filter(Boolean);
+    }
+
+    const statSuggestion = neededSubstats.length > 0
+      ? ` - look for ${neededSubstats.join(', ')} substats`
+      : '';
+
+    // Analyze disc substats to find wasted rolls and give specific feedback
+    // Map substat types to their weight key names
+    const substatToWeightKey: { [key: string]: string } = {
+      'HP': 'HP',
+      'HP%': 'HP%',
+      'ATK': 'ATK',
+      'ATK%': 'ATK%',
+      'DEF': 'DEF',
+      'DEF%': 'DEF%',
+      'CRIT_Rate': 'CRIT_Rate',
+      'CRIT_DMG': 'CRIT_DMG',
+      'PEN': 'PEN',
+      'Anomaly_Proficiency': 'Anomaly_Proficiency',
+      'Anomaly_Mastery': 'Anomaly_Mastery',
+      'Impact': 'Impact',
+      'Energy_Regen': 'Energy_Regen',
+    };
+
+    // Analyze each disc's substats for wasted rolls
+    const discAnalysis: Array<{
+      slot: string;
+      grade: string;
+      score: number;
+      wastedStats: string[];
+      missingPriorityStats: string[];
+    }> = [];
+
+    discSlots.forEach(slot => {
+      const disc = equippedDiscs[slot];
+      if (!disc) return;
+
+      const scoreResult = discScores.find(d => d.slot === slot);
+      if (!scoreResult) return;
+
+      const wastedStats: string[] = [];
+      const presentStats: string[] = [];
+
+      // Check each substat
+      disc.subStats.forEach(sub => {
+        const weightKey = substatToWeightKey[sub.type];
+        presentStats.push(weightKey);
+
+        // Get weight for this substat (0 = not valuable for this agent)
+        let weight = 0;
+        if (breakpoints.statWeights && weightKey) {
+          weight = breakpoints.statWeights[weightKey] || 0;
+        } else if (breakpoints.priorityStats) {
+          weight = breakpoints.priorityStats.includes(weightKey) ? 1 : 0;
+        }
+
+        // Skip CRIT Rate check if overcapped - it's now a wasted stat
+        if (sub.type === 'CRIT_Rate' && stats.critRate >= 100) {
+          wastedStats.push('CRIT Rate');
+        } else if (weight === 0) {
+          // This substat has no value for this agent
+          const displayName = sub.type.replace('_', ' ').replace('%', '%');
+          wastedStats.push(displayName);
+        }
+      });
+
+      // Find which priority stats are missing from this disc
+      const missingPriorityStats: string[] = [];
+      if (breakpoints.statWeights) {
+        Object.entries(breakpoints.statWeights)
+          .filter(([stat, weight]) => weight > 0)
+          .filter(([stat]) => {
+            // Skip CRIT Rate if overcapped
+            if (stat === 'CRIT_Rate' && stats.critRate >= 100) return false;
+            return true;
+          })
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 4)
+          .forEach(([stat]) => {
+            if (!presentStats.includes(stat)) {
+              const displayName = stat.replace('_', ' ').replace('%', '%');
+              missingPriorityStats.push(displayName);
+            }
+          });
+      }
+
+      discAnalysis.push({
+        slot,
+        grade: scoreResult.grade,
+        score: scoreResult.score,
+        wastedStats,
+        missingPriorityStats,
+      });
+    });
+
+    // Get top 3 priority stats for suggestions (used for all disc feedback)
+    let topPriorityStats: string[] = [];
+    if (breakpoints.statWeights) {
+      topPriorityStats = Object.entries(breakpoints.statWeights)
+        .filter(([stat, weight]) => {
+          if (weight <= 0) return false;
+          // Skip CRIT Rate if overcapped
+          if (stat === 'CRIT_Rate' && stats.critRate >= 100) return false;
+          return true;
+        })
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([stat]) => stat.replace('_', ' '));
+    }
+
+    // Find discs rated D or F (high priority to replace)
+    const terribleDiscs = discAnalysis.filter(d => d.grade === 'D' || d.grade === 'F');
+    terribleDiscs.sort((a, b) => a.score - b.score);
+
+    // Show up to 2 terrible discs with specific feedback
+    terribleDiscs.slice(0, 2).forEach(disc => {
+      let message = `Replace ${disc.slot.replace('Drive', 'Drive ')} disc (rated ${disc.grade})`;
+
+      // Always suggest the top priority stats to look for
+      if (topPriorityStats.length > 0) {
+        message += ` - look for ${topPriorityStats.join(', ')}`;
+      } else if (neededSubstats.length > 0) {
+        message += statSuggestion;
+      }
+
+      feedback.push({
+        priority: 'high',
+        category: 'disc',
+        message,
+      });
+    });
+
+    // Find discs rated C (medium priority) - only if no terrible discs
+    const poorDiscs = discAnalysis.filter(d => d.grade === 'C');
+    if (poorDiscs.length > 0 && terribleDiscs.length === 0) {
+      poorDiscs.sort((a, b) => a.score - b.score);
+
+      // Give specific feedback for C-rated discs
+      poorDiscs.slice(0, 2).forEach(disc => {
+        let message = `Upgrade ${disc.slot.replace('Drive', 'Drive ')} (rated C)`;
+
+        // Always suggest the top priority stats to look for
+        if (topPriorityStats.length > 0) {
+          message += ` - look for ${topPriorityStats.join(', ')}`;
+        } else if (neededSubstats.length > 0) {
+          message += statSuggestion;
+        }
+
+        feedback.push({
+          priority: 'medium',
+          category: 'disc',
+          message,
+        });
+      });
+    }
+
+    // Check priority stats first (they matter more)
+    Object.keys(breakpoints.breakpoints).forEach(statKey => {
+      const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
+      const statInfo = statMapping[statKey];
+
+      if (!statInfo || breakpoint.optimal === 0) return;
+
+      const isPriority = this.isPriorityStat(statKey, breakpoints);
+      const current = statInfo.value;
+      const min = breakpoint.min;
+      const optimal = breakpoint.optimal;
+
+      // Below minimum (high priority for priority stats)
+      if (current < min && isPriority) {
+        const deficit = Math.round(min - current);
+        feedback.push({
+          priority: 'high',
+          category: 'stat',
+          message: `${statInfo.label} is ${Math.round(current)}${statInfo.unit} (need ${min}${statInfo.unit}) - ${deficit}${statInfo.unit} below minimum`,
+          stat: statKey,
+          currentValue: current,
+          targetValue: min,
+        });
+      }
+      // Between min and optimal (medium priority for priority stats)
+      else if (current < optimal && current >= min && isPriority) {
+        const deficit = Math.round(optimal - current);
+        feedback.push({
+          priority: 'medium',
+          category: 'stat',
+          message: `${statInfo.label} is ${Math.round(current)}${statInfo.unit} (optimal: ${optimal}${statInfo.unit}) - ${deficit}${statInfo.unit} to go`,
+          stat: statKey,
+          currentValue: current,
+          targetValue: optimal,
+        });
+      }
+      // Below minimum for non-priority stats (low priority)
+      else if (current < min && !isPriority) {
+        feedback.push({
+          priority: 'low',
+          category: 'stat',
+          message: `${statInfo.label} is below target (${Math.round(current)}${statInfo.unit} / ${min}${statInfo.unit})`,
+          stat: statKey,
+          currentValue: current,
+          targetValue: min,
+        });
+      }
+    });
+
+    // Sort by priority: high first, then medium, then low
+    const priorityOrder = { high: 0, medium: 1, low: 2 };
+    feedback.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+
+    // Limit to top 5 suggestions to avoid overwhelming the user
+    return feedback.slice(0, 5);
   }
 }

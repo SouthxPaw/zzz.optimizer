@@ -326,6 +326,26 @@
           </div>
           <p class="rating-description">{{buildScore.rating.description}}</p>
         </div>
+
+        <!-- Build Feedback Section -->
+        <div class="build-feedback-section" *ngIf="getBuildFeedback().length > 0">
+          <h4>How to Improve</h4>
+          <div class="feedback-list">
+            <div *ngFor="let item of getBuildFeedback(); trackBy: trackByFeedbackIndex"
+                 class="feedback-item"
+                 [ngClass]="'priority-' + item.priority">
+              <span class="feedback-icon" [ngSwitch]="item.category">
+                <ng-container *ngSwitchCase="'stat'">&#9650;</ng-container>
+                <ng-container *ngSwitchCase="'disc'">&#9673;</ng-container>
+                <ng-container *ngSwitchCase="'wengine'">&#9876;</ng-container>
+                <ng-container *ngSwitchCase="'set'">&#10022;</ng-container>
+                <ng-container *ngSwitchDefault>&#8226;</ng-container>
+              </span>
+              <span class="feedback-message">{{item.message}}</span>
+            </div>
+          </div>
+        </div>
+
         <div class="summary-item">
           <strong>Level:</strong> {{selectedBuild.level}}
         </div>
