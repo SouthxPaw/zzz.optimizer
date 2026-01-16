@@ -129,3 +129,15 @@ export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
   { grade: 'D', breakpointsMetPercentage: 30, color: '#808080', description: 'Poor - Major gaps in stats (top 95%)' },
   { grade: 'F', breakpointsMetPercentage: 0, color: '#606060', description: 'Unoptimized - Needs complete rework' },
 ];
+
+/**
+ * Feedback item for build improvement suggestions
+ */
+export interface FeedbackItem {
+  priority: 'high' | 'medium' | 'low';
+  category: 'stat' | 'disc' | 'set' | 'wengine';
+  message: string;
+  stat?: string;
+  currentValue?: number;
+  targetValue?: number;
+}
