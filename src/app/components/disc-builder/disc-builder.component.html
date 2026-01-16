@@ -103,8 +103,6 @@
           <span class="selection-count">{{selectedDiscUids.size}} selected</span>
           <button class="btn-secondary btn-sm" (click)="selectAllVisible()">Select All</button>
           <button class="btn-secondary btn-sm" (click)="deselectAll()">Deselect All</button>
-          <!-- <button class="btn-secondary btn-sm" (click)="bulkLock()" [disabled]="selectedDiscUids.size === 0">Lock</button> -->
-          <!-- <button class="btn-secondary btn-sm" (click)="bulkUnlock()" [disabled]="selectedDiscUids.size === 0">Unlock</button> -->
           <button class="btn-danger btn-sm" (click)="bulkDelete()" [disabled]="selectedDiscUids.size === 0">Delete</button>
           <button class="btn-secondary btn-sm" (click)="toggleBulkSelectionMode()">Cancel</button>
         </div>
