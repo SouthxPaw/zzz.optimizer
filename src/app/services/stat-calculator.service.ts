@@ -104,17 +104,6 @@ export class StatCalculatorService {
     // Start with base stats at level 60
     const stats: BaseStats = { ...agent.lvl60Stats };
 
-    // Debug logging for Miyabi (ID 1091)
-    if (agent.id === '1091') {
-      console.log('Miyabi base stats from agent.lvl60Stats:', {
-        hp: agent.lvl60Stats.hp,
-        atk: agent.lvl60Stats.atk,
-        def: agent.lvl60Stats.def,
-        anomalyProficiency: agent.lvl60Stats.anomalyProficiency,
-        anomalyMastery: agent.lvl60Stats.anomalyMastery
-      });
-    }
-
     // Apply W-Engine stats
     if (wEngine) {
       this.applyWEngineStats(stats, wEngine, agent, wEngineRefinement);

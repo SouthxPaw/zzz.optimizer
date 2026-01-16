@@ -320,8 +320,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         // Wait a tick for the subscription to update
         await new Promise(resolve => setTimeout(resolve, 50));
 
-        console.log('W-Engine after unequip:', this.selectedBuild.equippedWEngine);
-        console.log('Updated build stats:', this.selectedBuild.calculatedStats);
 
         this.showWEnginePicker = false;
         return;
