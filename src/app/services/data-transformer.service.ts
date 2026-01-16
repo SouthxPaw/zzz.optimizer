@@ -136,6 +136,13 @@ export class DataTransformerService {
       const lvl60 = rawAgent.lvl60_stats;
       const stats = rawAgent.stats || rawAgent.Stats;
 
+      if (rawAgent.name === "Ye Shunguang" || rawAgent.ID === 1431)
+      {
+        console.log("YSG ID:" + rawAgent.ID)
+        console.log("CRIT RATE: " + (lvl60.Crit || 500) / 100)
+        console.log("CRIT DMG: " + (lvl60.CritDamage || 5000) / 100)
+      }
+
       return {
         hp: Math.round(lvl60.HpMax || 0),
         hppercent: 0,
