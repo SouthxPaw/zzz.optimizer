@@ -14,7 +14,7 @@ import { StatCalculatorService } from '../../services/stat-calculator.service';
 import { ScoringService } from '../../services/scoring.service';
 import { ImagePreloaderService } from '../../services/image-preloader.service';
 import { DataMappingService } from '../../services/data-mapping.service';
-import { DiscRating, BuildRating } from '../../constants/disc-scoring';
+import { DiscRating, BuildRating, FeedbackItem } from '../../constants/disc-scoring';
 import { OptimizerComponent } from '../optimizer/optimizer.component';
 
 @Component({
@@ -214,6 +214,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   selectBuild(build: AgentBuild) {
     this.buildService.selectBuild(build);
+    this.clearFeedbackCache();
   }
 
   openAddAgentModal() {
@@ -979,6 +980,51 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return `rating-${rating.grade.toLowerCase().replace(/\s+/g, '-')}`;
   }
 
+  // Cached feedback to avoid recalculating on every change detection
+  private cachedFeedback: FeedbackItem[] | null = null;
+  private lastFeedbackBuildHash: string | null = null;
+
+  // Generate a simple hash of build state to detect changes
+  private getBuildHash(): string {
+    if (!this.selectedBuild) return '';
+    const discCount = Object.values(this.selectedBuild.equippedDiscs).filter(d => d).length;
+    const wEngineId = this.selectedBuild.equippedWEngine?.id || 'none';
+    const stats = this.selectedBuild.calculatedStats;
+    return `${this.selectedBuild.id}-${discCount}-${wEngineId}-${stats.atk}-${stats.critRate}-${stats.critDmg}`;
+  }
+
+  getBuildFeedback(): FeedbackItem[] {
+    if (!this.selectedBuild) return [];
+
+    // Wait for scoring service to load data
+    if (!this.scoringService.areBreakpointsLoaded()) {
+      return [];
+    }
+
+    // Return cached result if build state hasn't changed
+    const currentHash = this.getBuildHash();
+    if (this.cachedFeedback && this.lastFeedbackBuildHash === currentHash) {
+      return this.cachedFeedback;
+    }
+
+    this.cachedFeedback = this.scoringService.generateBuildFeedback(
+      this.selectedBuild.agentId,
+      this.selectedBuild.calculatedStats,
+      this.selectedBuild.equippedDiscs,
+      !!this.selectedBuild.equippedWEngine,
+      this.isWEngineSpecialtyMatch()
+    );
+    this.lastFeedbackBuildHash = currentHash;
+
+    return this.cachedFeedback;
+  }
+
+  // Clear feedback cache when build changes
+  clearFeedbackCache(): void {
+    this.cachedFeedback = null;
+    this.lastFeedbackBuildHash = null;
+  }
+
   // Input validation and formatting methods
   validateAndFormatMainStat(): void {
     const value = this.discFormData.mainStatValue;
@@ -1171,6 +1217,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   trackByBonusIndex(index: number, _bonus: unknown): number {
+    return index;
+  }
+
+  trackByFeedbackIndex(index: number, _item: FeedbackItem): number {
     return index;
   }
 }
