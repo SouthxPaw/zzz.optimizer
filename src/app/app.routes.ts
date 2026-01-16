@@ -14,5 +14,9 @@ export const routes: Routes = [
     path: 'credits',
     loadComponent: () => import('./components/credits/credits.component').then(m => m.CreditsComponent)
   },
+  {
+    path: 'privacy-policy',
+    loadComponent: () => import('./components/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent)
+  },
   { path: '**', redirectTo: '/characters' }
 ];
