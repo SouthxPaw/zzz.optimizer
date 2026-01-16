@@ -625,11 +625,6 @@ export class ScoringService {
         const metMin = adjustedValue >= breakpoint.min;
         const metOptimal = adjustedValue >= breakpoint.optimal;
 
-        console.log('ADJUSTED VALUE: ' + adjustedValue);
-        console.log('BREAKPOINT MIN: ' + breakpoint.min);
-        console.log('MET MIN:' + metMin);
-        console.log('BREAKPOINT OPTIMAL: ' + breakpoint.optimal);
-        console.log('MET OPTIMAL: ' + metOptimal);
 
         // Calculate breakpoint penalty for this stat
         const penaltyMultiplier = this.calculateBreakpointPenalty(
@@ -645,7 +640,6 @@ export class ScoringService {
           });
         }
 
-        console.log('PENALTY MULTI: ' + penaltyMultiplier);
 
         // Award points based on meeting breakpoints with progressive scoring
         // This gives partial credit for being between min and optimal
@@ -674,7 +668,6 @@ export class ScoringService {
           }
         }
 
-        console.log('POINTS: ' + points);
 
         breakdown.metBreakpoints += points;
 
@@ -699,13 +692,10 @@ export class ScoringService {
     // Apply accumulated breakpoint penalties to final score
     breakpointsMetPercentage *= totalPenaltyMultiplier;
 
-    console.log('BREAKPOINTS MET PERCENT: ' + breakpointsMetPercentage);
 
     // Determine rating based on percentage
     const rating = this.getBuildRating(breakpointsMetPercentage);
 
-    console.log('RATING: ' + rating.breakpointsMetPercentage);
-    console.log('RATING: ' + rating.grade);
 
     return {
       score: Math.round(breakpointsMetPercentage * 10) / 10,
@@ -1318,18 +1308,14 @@ export class ScoringService {
       mindscapeContribution
     );
 
-    console.log('----- BUILD SCORE RUNNING-----');
     // Calculate each component using weighted stats
     const breakpointResult = this.calculateBuildScore(agentId, weightedStats);
     const breakpointScore = breakpointResult.score; // 0-100 percentage
-    console.log('-----BUILD SCORE RAN-----');
     const discQualityScore = this.calculateDiscQualityScore(
       equippedDiscs,
       agentId
     ); // 0-100
 
-    console.log(discQualityScore);
-    console.log(breakpointResult);
 
     const statEfficiencyScore = this.calculateStatEfficiencyScore(
       weightedStats,
