@@ -4,6 +4,7 @@ import { Agent, BaseStats, DiscSlot } from '../models/agent.model';
 import { Disc } from '../models/disc.model';
 import { WEngine } from '../models/wengine.model';
 import { ScoringAlgorithm } from '../models/scoring.model';
+import { calculateWeightedBuildScore } from '../utils/build-scoring.util';
 
 export interface OptimizedBuild {
   discs: { [key in DiscSlot]?: Disc };
@@ -224,7 +225,7 @@ function evaluateBuild(
   algorithm: ScoringAlgorithm
 ): OptimizedBuild {
   const stats = calculateFinalStats(agent, level, wEngine, discs, mindscapeLevel);
-  const score = calculateBuildScore(stats, discs, algorithm);
+  const score = calculateWeightedBuildScore(stats, discs, algorithm, getSetBonuses);
   const setBonus = getSetBonuses(discs);
 
   return { discs, stats, score, setBonus };
@@ -389,44 +390,6 @@ function applySetBonuses(
   stats.hp = baseHP * (1 + stats.hppercent / 100) + flatHPFromDiscs;
   stats.atk = (baseATK + wEngineBaseATK) * (1 + stats.atkpercent / 100) + flatATKFromDiscs;
   stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFFromDiscs;
-}
-
-function calculateBuildScore(
-  stats: BaseStats,
-  discs: { [key in DiscSlot]?: Disc },
-  algorithm: ScoringAlgorithm
-): number {
-  let score = 0;
-
-  Object.entries(algorithm.weights).forEach(([statType, weight]) => {
-    const statValue = getStatValue(stats, statType);
-    score += statValue * weight;
-  });
-
-  const setBonus = getSetBonuses(discs);
-  if (setBonus.some(b => b.includes('(4)'))) {
-    score *= 1.15;
-  }
-
-  return score;
-}
-
-function getStatValue(stats: BaseStats, statType: string): number {
-  switch(statType) {
-    case 'HP': return stats.hp;
-    case 'HP%': return stats.hppercent;
-    case 'ATK': return stats.atk;
-    case 'ATK%': return stats.atkpercent;
-    case 'DEF': return stats.def;
-    case 'DEF%': return stats.defpercent;
-    case 'CRIT_Rate': return stats.critRate;
-    case 'CRIT_DMG': return stats.critDmg;
-    case 'Anomaly_Proficiency': return stats.anomalyProficiency;
-    case 'Pen_Ratio': return stats.penRatio;
-    case 'Impact': return stats.impact;
-    case 'Energy_Regen': return stats.energyRegen;
-    default: return 0;
-  }
 }
 
 function meetsConstraints(build: OptimizedBuild, constraints: OptimizerConstraints): boolean {
