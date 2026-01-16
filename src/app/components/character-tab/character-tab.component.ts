@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -22,8 +22,8 @@ import { OptimizerComponent } from '../optimizer/optimizer.component';
   standalone: true,
   imports: [CommonModule, FormsModule, OptimizerComponent],
   templateUrl: './character-tab.component.html',
-  styleUrls: ['./character-tab.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./character-tab.component.css']
+  // Using Default change detection due to many imperative updates
 })
 export class CharacterTabComponent implements OnInit, OnDestroy {
   // User builds (not reference data!)
@@ -122,8 +122,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private statCalculator: StatCalculatorService,
     private scoringService: ScoringService,
     private imagePreloader: ImagePreloaderService,
-    private dataMappingService: DataMappingService,
-    private cdr: ChangeDetectorRef
+    private dataMappingService: DataMappingService
   ) {}
 
   ngOnInit() {
@@ -193,7 +192,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .subscribe(searchTerm => {
         this.debouncedDiscSearch = searchTerm;
         this.updateFilteredDiscSets();
-        this.cdr.markForCheck();
       });
 
     // Set up debounced search for disc effects
@@ -206,7 +204,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .subscribe(searchTerm => {
         this.debouncedDiscEffectSearch = searchTerm;
         this.updateFilteredDiscSets();
-        this.cdr.markForCheck();
       });
   }
 
@@ -259,7 +256,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     this.isProcessingAgentAction = true;
-    this.cdr.markForCheck();
 
     try {
       const newBuild = await this.buildService.createBuild(this.selectedAgentForAdd, 0);
@@ -270,7 +266,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       alert('Error creating build');
     } finally {
       this.isProcessingAgentAction = false;
-      this.cdr.markForCheck();
     }
   }
 
@@ -316,7 +311,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     if (!this.selectedBuild || this.isProcessingWEngineAction) return;
 
     this.isProcessingWEngineAction = true;
-    this.cdr.markForCheck();
 
     try {
       if (!wEngineId || wEngineId === '') {
@@ -326,8 +320,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         // Wait a tick for the subscription to update
         await new Promise(resolve => setTimeout(resolve, 50));
 
-        console.log('W-Engine after unequip:', this.selectedBuild.equippedWEngine);
-        console.log('Updated build stats:', this.selectedBuild.calculatedStats);
 
         this.showWEnginePicker = false;
         return;
@@ -340,7 +332,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       }
     } finally {
       this.isProcessingWEngineAction = false;
-      this.cdr.markForCheck();
     }
   }
 
@@ -763,7 +754,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     if (!this.selectedBuild || !this.selectedDiscSlot || this.isProcessingDiscAction) return;
 
     this.isProcessingDiscAction = true;
-    this.cdr.markForCheck();
 
     try {
       await this.buildService.equipDisc(this.selectedBuild.id, disc);
@@ -773,7 +763,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       alert('Error equipping disc');
     } finally {
       this.isProcessingDiscAction = false;
-      this.cdr.markForCheck();
     }
   }
 
@@ -821,7 +810,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     if (!this.selectedBuild || !this.selectedDiscSlot || !this.selectedDiscSetForCreation || this.isProcessingDiscAction) return;
 
     this.isProcessingDiscAction = true;
-    this.cdr.markForCheck();
 
     // For slots 1-3, use fixed values. For slots 4-6, use user input
     let mainStatType: MainStatType;
@@ -899,7 +887,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       alert(this.isEditMode ? 'Error updating disc' : 'Error creating disc');
     } finally {
       this.isProcessingDiscAction = false;
-      this.cdr.markForCheck();
     }
   }
 
