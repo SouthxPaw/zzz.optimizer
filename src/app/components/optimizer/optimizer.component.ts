@@ -1,5 +1,5 @@
 // optimizer.component.ts - Updated version with Web Worker
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -26,8 +26,8 @@ interface BuildViewModel {
   standalone: true,
   imports: [CommonModule, FormsModule, ScrollingModule],
   templateUrl: './optimizer.component.html',
-  styleUrls: ['./optimizer.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./optimizer.component.css']
+  // Using Default change detection due to imperative updates
 })
 export class OptimizerComponent implements OnInit, OnDestroy {
   agents: Agent[] = [];
@@ -62,8 +62,7 @@ export class OptimizerComponent implements OnInit, OnDestroy {
     private agentService: AgentService,
     private discService: DiscService,
     private wEngineService: WEngineService,
-    private optimizerService: OptimizerService,
-    private cdr: ChangeDetectorRef
+    private optimizerService: OptimizerService
   ) {}
 
   ngOnInit() {
@@ -110,7 +109,6 @@ export class OptimizerComponent implements OnInit, OnDestroy {
     this.selectedResult = null;
     this.progress = 0;
     this.progressText = 'Starting optimization...';
-    this.cdr.markForCheck();
 
     const algorithm = SCORING_PRESETS[this.selectedAgent.specialty];
 
@@ -141,7 +139,6 @@ export class OptimizerComponent implements OnInit, OnDestroy {
       if (data.type === 'progress') {
         this.progress = data.progress;
         this.progressText = data.text;
-        this.cdr.markForCheck();
       } else if (data.type === 'complete') {
         this.results = data.builds;
         this.buildViewModel();
@@ -153,14 +150,12 @@ export class OptimizerComponent implements OnInit, OnDestroy {
         }
 
         this.isOptimizing = false;
-        this.cdr.markForCheck();
         this.worker?.terminate();
         this.worker = null;
       } else if (data.type === 'error') {
         console.error('Optimization error:', data.error);
         this.progressText = 'Error during optimization. Check console.';
         this.isOptimizing = false;
-        this.cdr.markForCheck();
         this.worker?.terminate();
         this.worker = null;
       }
@@ -169,7 +164,6 @@ export class OptimizerComponent implements OnInit, OnDestroy {
     this.worker.onerror = (error) => {
       console.error('Worker error:', error);
       this.progressText = 'Worker error. Falling back to sync optimization.';
-      this.cdr.markForCheck();
       this.worker?.terminate();
       this.worker = null;
       // Fallback to synchronous
@@ -209,7 +203,6 @@ export class OptimizerComponent implements OnInit, OnDestroy {
           (progress, text) => {
             this.progress = progress;
             this.progressText = text;
-            this.cdr.markForCheck();
           }
         );
 
@@ -225,7 +218,6 @@ export class OptimizerComponent implements OnInit, OnDestroy {
         this.progressText = 'Error during optimization. Check console.';
       } finally {
         this.isOptimizing = false;
-        this.cdr.markForCheck();
       }
     }, 100);
   }
