@@ -138,4 +138,18 @@ export const DISC_SETS: DiscSet[] = [
       },
     ],
   },
+  {
+    id: 'phaethons_melody',
+    name: "Phaethon's Melody",
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'Anomaly Mastery +8%',
+      },
+      {
+        pieces: 4,
+        description: 'When any squad member uses an EX Special Attack, the equipper\'s Anomaly Proficiency increases by 45 for 8s. If the character using the EX Special Attack is not the equipper, the equipper\'s Ether DMG is increased by 25%.',
+      },
+    ],
+  },
 ];

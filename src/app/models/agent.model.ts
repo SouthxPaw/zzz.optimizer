@@ -12,6 +12,7 @@ export interface BaseStats {
   defpercent: number;
   impact: number;
   anomalyMastery: number;
+  anomalyMasteryPercent: number;  // Percentage bonuses (disc 6 main stat, set bonuses)
   critRate: number;
   critDmg: number;
   anomalyProficiency: number;
