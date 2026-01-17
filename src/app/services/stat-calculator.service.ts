@@ -103,7 +103,8 @@ export class StatCalculatorService {
     }
 
     // Start with base stats at level 60
-    const stats: BaseStats = { ...agent.lvl60Stats };
+    // Initialize anomalyMasteryPercent to 0 since it may not exist in older data
+    const stats: BaseStats = { ...agent.lvl60Stats, anomalyMasteryPercent: 0 };
 
     // Apply W-Engine stats
     if (wEngine) {
@@ -134,6 +135,7 @@ export class StatCalculatorService {
       defpercent: Math.round(stats.defpercent * 10) / 10,
       impact: Math.round(stats.impact),
       anomalyMastery: Math.round(stats.anomalyMastery),
+      anomalyMasteryPercent: Math.round(stats.anomalyMasteryPercent * 10) / 10,
       critRate: Math.round(stats.critRate * 10) / 10,
       critDmg: Math.round(stats.critDmg * 10) / 10,
       anomalyProficiency: Math.round(stats.anomalyProficiency),
@@ -367,7 +369,8 @@ export class StatCalculatorService {
           stats.anomalyProficiency += mainStat.value;
           break;
         case 'Anomaly_Mastery':
-          stats.anomalyMastery += mainStat.value;
+          // Disc 6 Anomaly Mastery is a percentage bonus (30%)
+          stats.anomalyMasteryPercent += mainStat.value;
           break;
         case 'Pen_Ratio':
           stats.penRatio += mainStat.value;
@@ -480,6 +483,7 @@ export class StatCalculatorService {
     const baseHP = agent.lvl60Stats.hp;
     const baseATK = agent.lvl60Stats.atk;
     const baseDEF = agent.lvl60Stats.def;
+    const baseAnomalyMastery = agent.lvl60Stats.anomalyMastery;
 
     // At this point, stats.hp/atk/def contains:
     // - Agent base stats
@@ -495,12 +499,22 @@ export class StatCalculatorService {
     const flatATKFromDiscs = stats.atk - baseATK - wEngineBaseATK;
     const flatDEFFromDiscs = stats.def - baseDEF;
 
-    // Apply ZZZ formula: Final = (Base × (1 + %)) + Flat Disc Bonuses
+    // For Anomaly Mastery, flat bonuses come from mindscape effects only
+    // (there are no flat Anomaly Mastery substats or W-Engine bonuses)
+    const flatAnomalyMasteryBonuses = stats.anomalyMastery - baseAnomalyMastery;
+
+    // Apply ZZZ formula: Final = (Base × (1 + %)) + Flat Bonuses
     // Base for HP/DEF = Agent base only
     // Base for ATK = Agent base + W-Engine base
     stats.hp = baseHP * (1 + stats.hppercent / 100) + flatHPFromDiscs;
     stats.atk = (baseATK + wEngineBaseATK) * (1 + stats.atkpercent / 100) + flatATKFromDiscs;
     stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFFromDiscs;
+
+    // Apply Anomaly Mastery percentage formula:
+    // Final = Base × (1 + Anomaly Mastery%) + Flat Bonuses
+    // Percentage sources: Disc 6 main stat (30%), Set bonuses (e.g., Phaethon 2pc 8%)
+    // Flat sources: Mindscape effects
+    stats.anomalyMastery = baseAnomalyMastery * (1 + stats.anomalyMasteryPercent / 100) + flatAnomalyMasteryBonuses;
   }
 
   /**
@@ -622,7 +636,8 @@ export class StatCalculatorService {
           stats.anomalyProficiency += value;
           break;
         case 'Anomaly_Mastery':
-          stats.anomalyMastery += value;
+          // Anomaly Mastery from 4pc effects is percentage-based
+          stats.anomalyMasteryPercent += value;
           break;
         case 'ATK':
           stats.atk += value;
@@ -644,9 +659,10 @@ export class StatCalculatorService {
    * Parse bonus description and apply stat changes
    */
   private parseAndApplyBonus(description: string, stats: BaseStats): void {
-    // Match patterns like "ATK +10%" or "CRIT Rate +8%" or "Anomaly Proficiency +30"
-    const percentMatch = description.match(/(ATK|HP|DEF|CRIT Rate|CRIT DMG|PEN Ratio|Energy Regen|Impact)\s*\+(\d+(?:\.\d+)?)%/i);
-    const flatMatch = description.match(/(Anomaly Proficiency|Anomaly Mastery)\s*\+(\d+)/i);
+    // Match patterns like "ATK +10%" or "CRIT Rate +8%" or "Anomaly Mastery +8%"
+    const percentMatch = description.match(/(ATK|HP|DEF|CRIT Rate|CRIT DMG|PEN Ratio|Energy Regen|Impact|Anomaly Mastery)\s*\+(\d+(?:\.\d+)?)%/i);
+    // Match flat stat patterns like "Anomaly Proficiency +30"
+    const flatMatch = description.match(/(Anomaly Proficiency)\s*\+(\d+)/i);
 
     if (percentMatch) {
       const [, stat, value] = percentMatch;
@@ -677,6 +693,10 @@ export class StatCalculatorService {
         case 'IMPACT':
           stats.impact += numValue;
           break;
+        case 'ANOMALY MASTERY':
+          // Anomaly Mastery from set bonuses is percentage-based
+          stats.anomalyMasteryPercent += numValue;
+          break;
       }
     } else if (flatMatch) {
       const [, stat, value] = flatMatch;
@@ -684,8 +704,6 @@ export class StatCalculatorService {
 
       if (stat.includes('Proficiency')) {
         stats.anomalyProficiency += numValue;
-      } else if (stat.includes('Mastery')) {
-        stats.anomalyMastery += numValue;
       }
     }
   }

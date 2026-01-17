@@ -238,7 +238,8 @@ function calculateFinalStats(
   discs: { [key in DiscSlot]?: Disc },
   mindscapeLevel: number = 0
 ): BaseStats {
-  const stats: BaseStats = { ...agent.lvl60Stats };
+  // Initialize anomalyMasteryPercent to 0 since it may not exist in older data
+  const stats: BaseStats = { ...agent.lvl60Stats, anomalyMasteryPercent: 0 };
 
   // Apply W-Engine stats
   if (wEngine) {
@@ -302,7 +303,7 @@ function calculateFinalStats(
       case 'CRIT_Rate': stats.critRate += mainStat.value; break;
       case 'CRIT_DMG': stats.critDmg += mainStat.value; break;
       case 'Anomaly_Proficiency': stats.anomalyProficiency += mainStat.value; break;
-      case 'Anomaly_Mastery': stats.anomalyMastery += mainStat.value; break;
+      case 'Anomaly_Mastery': stats.anomalyMasteryPercent += mainStat.value; break;
       case 'Pen_Ratio': stats.penRatio += mainStat.value; break;
       case 'Impact': stats.impact += mainStat.value; break;
       case 'Energy_Regen': stats.energyRegen += mainStat.value; break;
@@ -343,6 +344,7 @@ function calculateFinalStats(
     defpercent: Math.round(stats.defpercent * 10) / 10,
     impact: Math.round(stats.impact),
     anomalyMastery: Math.round(stats.anomalyMastery),
+    anomalyMasteryPercent: Math.round(stats.anomalyMasteryPercent * 10) / 10,
     critRate: Math.round(stats.critRate * 10) / 10,
     critDmg: Math.round(stats.critDmg * 10) / 10,
     anomalyProficiency: Math.round(stats.anomalyProficiency),
@@ -381,15 +383,23 @@ function applySetBonuses(
   const baseHP = agent.lvl60Stats.hp;
   const baseATK = agent.lvl60Stats.atk;
   const baseDEF = agent.lvl60Stats.def;
+  const baseAnomalyMastery = agent.lvl60Stats.anomalyMastery;
   const wEngineBaseATK = wEngine?.baseAtk || 0;
 
   const flatHPFromDiscs = stats.hp - baseHP;
   const flatATKFromDiscs = stats.atk - baseATK - wEngineBaseATK;
   const flatDEFFromDiscs = stats.def - baseDEF;
 
+  // For Anomaly Mastery, flat bonuses come from mindscape effects only
+  const flatAnomalyMasteryBonuses = stats.anomalyMastery - baseAnomalyMastery;
+
   stats.hp = baseHP * (1 + stats.hppercent / 100) + flatHPFromDiscs;
   stats.atk = (baseATK + wEngineBaseATK) * (1 + stats.atkpercent / 100) + flatATKFromDiscs;
   stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFFromDiscs;
+
+  // Apply Anomaly Mastery percentage formula:
+  // Final = Base × (1 + Anomaly Mastery%) + Flat Bonuses
+  stats.anomalyMastery = baseAnomalyMastery * (1 + stats.anomalyMasteryPercent / 100) + flatAnomalyMasteryBonuses;
 }
 
 function meetsConstraints(build: OptimizedBuild, constraints: OptimizerConstraints): boolean {
