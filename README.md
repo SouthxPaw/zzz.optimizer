@@ -92,7 +92,7 @@ This tool provides **estimates only** and is not indicative of your skill or the
 
 ## Contributing
 
-Contributions are welcome! Please reach out to me on discord - notsouthpaw.
+Contributions are welcome! Please reach out to me on twitter - [@Southofpaw](https://x.com/Southofpaw).
 Would love any suggestions, improvements, or feedback.
 
 ## Disclaimer
