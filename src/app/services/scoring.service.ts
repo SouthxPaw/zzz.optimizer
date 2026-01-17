@@ -29,6 +29,7 @@ import {
 import { SkillParserService } from './skill-parser.service';
 import { L } from '@angular/cdk/keycodes';
 import { Console } from 'console';
+import { versionedUrl } from '../utils/versioned-url';
 
 interface AgentBreakpoint {
   min: number;
@@ -155,7 +156,7 @@ export class ScoringService {
   private async loadAgentBreakpoints() {
     try {
       const data = await firstValueFrom(
-        this.http.get<any>('assets/data/agent-breakpoints.json')
+        this.http.get<any>(versionedUrl('assets/data/agent-breakpoints.json'))
       );
       this.agentBreakpoints = data.agents || {};
       this.breakpointsLoaded = true;
@@ -173,7 +174,7 @@ export class ScoringService {
       const promises = DISC_SET_EQUIPMENT_IDS.map(
         (id) =>
           firstValueFrom(
-            this.http.get<DiscSetData>(`assets/data/equipment/${id}.json`)
+            this.http.get<DiscSetData>(versionedUrl(`assets/data/equipment/${id}.json`))
           ).catch(() => null) // Ignore errors for missing files
       );
 
@@ -196,7 +197,7 @@ export class ScoringService {
   private async loadMindscapeData() {
     try {
       this.mindscapeData = await firstValueFrom(
-        this.http.get<MindscapeData>('assets/data/mindscape-stats.json')
+        this.http.get<MindscapeData>(versionedUrl('assets/data/mindscape-stats.json'))
       );
       console.log('Loaded mindscape data for scoring');
     } catch (error) {

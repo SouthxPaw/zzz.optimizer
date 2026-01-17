@@ -10,6 +10,7 @@ import { Agent } from '../models/agent.model';
 import { WEngine } from '../models/wengine.model';
 import { Disc } from '../models/disc.model';
 import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
+import { versionedUrl } from '../utils/versioned-url';
 
 /**
  * Data Import/Export Service
@@ -54,7 +55,7 @@ export class DataImportService {
       // Use relative path (without leading /) to work with baseHref
       const relativePath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
       console.log(`Attempting to load agents from: ${relativePath}`);
-      const rawData = await firstValueFrom(this.http.get<any>(relativePath));
+      const rawData = await firstValueFrom(this.http.get<any>(versionedUrl(relativePath)));
 
       let agents: Agent[];
 
@@ -93,7 +94,7 @@ export class DataImportService {
     try {
       // Use relative path (without leading /) to work with baseHref
       const relativePath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
-      const rawData = await firstValueFrom(this.http.get<any>(relativePath));
+      const rawData = await firstValueFrom(this.http.get<any>(versionedUrl(relativePath)));
 
       let wEngines: WEngine[];
 
@@ -131,7 +132,7 @@ export class DataImportService {
     try {
       // Use relative path (without leading /) to work with baseHref
       const relativePath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
-      const data = await firstValueFrom(this.http.get<any>(relativePath));
+      const data = await firstValueFrom(this.http.get<any>(versionedUrl(relativePath)));
 
       // Handle both array format and object with 'discs' property
       const discs: Disc[] = Array.isArray(data) ? data : data.discs || [];
@@ -248,8 +249,8 @@ export class DataImportService {
 
     try {
       // Load the index files to get IDs
-      const agentsData = await firstValueFrom(this.http.get<any>('assets/data/agents.json'));
-      const wEnginesIndex = await firstValueFrom(this.http.get<any>('assets/data/wengines.json'));
+      const agentsData = await firstValueFrom(this.http.get<any>(versionedUrl('assets/data/agents.json')));
+      const wEnginesIndex = await firstValueFrom(this.http.get<any>(versionedUrl('assets/data/wengines.json')));
 
       // Handle both array and object formats for agents
       let agentIds: string[];
@@ -289,7 +290,7 @@ export class DataImportService {
       const discSetPromises = DISC_SET_EQUIPMENT_IDS.map(async (id) => {
         try {
           const discSetData = await firstValueFrom(
-            this.http.get<any>(`assets/data/equipment/${id}.json`)
+            this.http.get<any>(versionedUrl(`assets/data/equipment/${id}.json`))
           );
           // Transform disc set data
           const transformed = this.transformer.transformDiscSets({ [id]: discSetData });

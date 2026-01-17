@@ -7,6 +7,7 @@ import { Disc, SubStatType } from '../models/disc.model';
 import { WEngine } from '../models/wengine.model';
 import { DISC_SETS } from '../constants/disc-sets';
 import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
+import { versionedUrl } from '../utils/versioned-url';
 
 interface DiscSetEquipmentData {
   Id: number;
@@ -66,7 +67,7 @@ export class StatCalculatorService {
     try {
       const promises = DISC_SET_EQUIPMENT_IDS.map(id =>
         firstValueFrom(
-          this.http.get<DiscSetEquipmentData>(`assets/data/equipment/${id}.json`)
+          this.http.get<DiscSetEquipmentData>(versionedUrl(`assets/data/equipment/${id}.json`))
         ).catch(() => null)
       );
 

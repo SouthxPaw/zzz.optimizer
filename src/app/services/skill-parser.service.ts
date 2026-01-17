@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { versionedUrl } from '../utils/versioned-url';
 
 /**
  * Service to parse agent skill multipliers from character JSON files
@@ -45,7 +46,7 @@ export class SkillParserService {
   private async parseAgentSkills(agentId: string): Promise<void> {
     try {
       const characterData: any = await firstValueFrom(
-        this.http.get(`assets/data/character/${agentId}.json`)
+        this.http.get(versionedUrl(`assets/data/character/${agentId}.json`))
       );
 
       // Extract skill multipliers
