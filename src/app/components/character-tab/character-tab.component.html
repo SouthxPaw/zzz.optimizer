@@ -595,26 +595,11 @@
       <div class="form-section" *ngIf="selectedDiscSlot && selectedDiscSlot !== 'Drive1' && selectedDiscSlot !== 'Drive2' && selectedDiscSlot !== 'Drive3'">
         <label class="section-label">Main Stat:</label>
         <div class="substat-row">
-          <select [(ngModel)]="discFormData.mainStatType" class="substat-type-select">
+          <select [(ngModel)]="discFormData.mainStatType" (ngModelChange)="onMainStatTypeChange()" class="substat-type-select">
             <option value="">Select main stat...</option>
-            <option value="HP%">HP%</option>
-            <option value="ATK%">ATK%</option>
-            <option value="DEF%">DEF%</option>
-            <option value="CRIT_Rate">CRIT Rate</option>
-            <option value="CRIT_DMG">CRIT DMG</option>
-            <option value="Anomaly_Proficiency">Anomaly Proficiency</option>
-            <option value="Pen_Ratio">PEN Ratio</option>
-            <option value="Element_DMG">Element DMG</option>
-            <option value="Impact">Impact</option>
-            <option value="Energy_Regen">Energy Regen</option>
-            <option value="Anomaly_Mastery">Anomaly Mastery</option>
+            <option *ngFor="let stat of getMainStatOptionsForSlot()" [value]="stat">{{formatStatType(stat)}}</option>
           </select>
-          <input
-            type="text"
-            [(ngModel)]="discFormData.mainStatValue"
-            (blur)="validateAndFormatMainStat()"
-            placeholder="Value"
-            class="substat-value-input">
+          <span class="main-stat-value" *ngIf="discFormData.mainStatType">{{discFormData.mainStatValue}}</span>
         </div>
       </div>
 

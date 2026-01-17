@@ -15,6 +15,7 @@ import { ScoringService } from '../../services/scoring.service';
 import { ImagePreloaderService } from '../../services/image-preloader.service';
 import { DataMappingService } from '../../services/data-mapping.service';
 import { DiscRating, BuildRating, FeedbackItem } from '../../constants/disc-scoring';
+import { DISC_MAIN_STAT_MAX, MAIN_STAT_BY_SLOT } from '../../constants/main-stat-possibilities';
 import { OptimizerComponent } from '../optimizer/optimizer.component';
 
 @Component({
@@ -849,6 +850,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
         // Get the updated disc from inventory
         const updatedDisc = this.discService.getDiscById(this.editingDiscUid);
+
         if (updatedDisc) {
           // Update the build's equippedDiscs with the updated disc
           const currentDiscs = { ...this.selectedBuild.equippedDiscs };
@@ -1040,6 +1042,31 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         this.discFormData.mainStatValue = Math.round(parsed * 10) / 10;
       }
     }
+  }
+
+  // Auto-fill main stat value when user selects a main stat type for slots 4-6
+  onMainStatTypeChange(): void {
+    // Clear value first
+    this.discFormData.mainStatValue = 0;
+
+    // Exit if no slot or no main stat selected
+    if (!this.selectedDiscSlot || !this.discFormData.mainStatType) {
+      return;
+    }
+
+    // Only auto-fill for slots 4-6
+    if (this.selectedDiscSlot === 'Drive4' || this.selectedDiscSlot === 'Drive5' || this.selectedDiscSlot === 'Drive6') {
+      const maxValues = DISC_MAIN_STAT_MAX[this.selectedDiscSlot];
+      if (maxValues && maxValues[this.discFormData.mainStatType] !== undefined) {
+        this.discFormData.mainStatValue = maxValues[this.discFormData.mainStatType];
+      }
+    }
+  }
+
+  // Get available main stat options for the current disc slot
+  getMainStatOptionsForSlot(): string[] {
+    if (!this.selectedDiscSlot) return [];
+    return MAIN_STAT_BY_SLOT[this.selectedDiscSlot] || [];
   }
 
   validateAndFormatSubStat(index: number): void {

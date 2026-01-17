@@ -156,14 +156,15 @@ export class StatCalculatorService {
     mindscapeLevel: number,
     wEngineRefinement: number
   ): string {
-    // Create a deterministic key from disc UIDs
-    const discIds = Object.entries(discs)
+    // Create a deterministic key from disc UIDs and their stats
+    // Include main stat type/value to invalidate cache when disc is edited
+    const discInfo = Object.entries(discs)
       .filter(([_, disc]) => disc !== undefined)
-      .map(([slot, disc]) => `${slot}:${disc!.uid}`)
+      .map(([slot, disc]) => `${slot}:${disc!.uid}:${disc!.mainStat.type}:${disc!.mainStat.value}`)
       .sort()
       .join('|');
 
-    return `${agentId}:${level}:${wEngineId || 'none'}:${mindscapeLevel}:${wEngineRefinement}:${discIds}`;
+    return `${agentId}:${level}:${wEngineId || 'none'}:${mindscapeLevel}:${wEngineRefinement}:${discInfo}`;
   }
 
   private addToCache(key: string, stats: BaseStats): void {

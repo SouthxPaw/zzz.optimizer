@@ -229,9 +229,12 @@
 .rating-d{background:linear-gradient(135deg,#CD5C5C,#8B0000);color:#fff;box-shadow:0 4px 12px rgba(205,92,92,.5)}
 .rating-f{background:linear-gradient(135deg,#8B0000,#4B0000);color:#fff;box-shadow:0 4px 12px rgba(139,0,0,.5)}
 .section-label{display:block;color:var(--gold);font-size:1em;font-weight:600;margin-bottom:12px}
+.form-section{margin-bottom:20px}
+.form-section:last-child{margin-bottom:0}
 .substats-list{display:flex;flex-direction:column;gap:12px}
 .substat-row{display:grid;grid-template-columns:auto 1fr 120px;gap:10px;align-items:center;padding:10px;background:rgba(244,185,66,.05);border:1px solid rgba(244,185,66,.2);border-radius:6px;transition:all .1s}
 .substat-row:hover{background:rgba(244,185,66,.08);border-color:rgba(244,185,66,.3)}
+.main-stat-value{color:var(--gold);font-weight:bold;font-size:1.1em;padding:8px 16px;background:rgba(244,185,66,.1);border-radius:6px;border:1px solid rgba(244,185,66,.3)}
 .substat-label{color:#ddd;font-size:.9em;font-weight:500;min-width:80px}
 .confirm-dialog-modal{max-width:450px}
 .confirm-dialog-modal .modal-body{padding:24px}
