@@ -1017,8 +1017,8 @@ export class ScoringService {
     // These are based on "optimal build" expectations per role
     const DAMAGE_BENCHMARKS: { [key: string]: number } = {
       Attack: 50000,    // High burst damage per hit
-      Anomaly: 40000,   // Status effect damage (per proc)
-      Rupture: 35000,   // Sheer Force damage (ignores DEF but lower multiplier)
+      Anomaly: 45000,   // Status effect damage (per proc)
+      Rupture: 50000,   // Sheer Force damage (ignores DEF but lower multiplier)
       Stun: 30000,      // Moderate direct damage
       Support: 15000,   // Lower expected damage (they contribute buffs instead)
       Defense: 20000,   // Low-moderate damage
@@ -1071,7 +1071,9 @@ export class ScoringService {
 
     // Convert disc ratings to numeric scores
     const ratingToScore: { [key: string]: number } = {
-      SSS: 100,
+      'VOID HUNTER': 110,  // Top 3% globally - exceeds perfection
+      'LEGENDARY': 105,    // Top 5% - near-perfect
+      SSS: 100,            // Top 10% - perfect
       SS: 90,
       S: 80,
       A: 70,
@@ -1622,7 +1624,6 @@ export class ScoringService {
       equippedDiscs,
       agentId
     ); // 0-100
-
 
     const statEfficiencyScore = this.calculateStatEfficiencyScore(
       weightedStats,
