@@ -14,7 +14,11 @@ export interface ExportData {
   providedIn: 'root'
 })
 export class BuildImportExportService {
-  private readonly EXPORT_VERSION = '1.0';
+  private readonly EXPORT_VERSION = '2.0';  // Updated for W-Engine refinement properties & mindscape effects
+
+  // Version history:
+  // 1.0 - Initial version (basic builds and discs)
+  // 2.0 - Added W-Engine refinement properties, mindscape effects, icons
 
   constructor(
     private buildService: BuildService,
@@ -63,14 +67,37 @@ export class BuildImportExportService {
       const data: ExportData = JSON.parse(jsonData);
 
       // Validate data structure
-      if (!data.version || !data.builds || !data.discs) {
+      const validation = this.validateImportData(data);
+      if (!validation.valid) {
         return {
           success: false,
-          message: 'Invalid import file format',
+          message: `Invalid import file: ${validation.message}`,
           buildsImported: 0,
           discsImported: 0
         };
       }
+
+      // Check version compatibility
+      const fileVersion = data.version || '1.0';  // Default to 1.0 for old files
+      const compatibilityCheck = this.checkVersionCompatibility(fileVersion);
+
+      if (!compatibilityCheck.compatible) {
+        return {
+          success: false,
+          message: compatibilityCheck.message,
+          buildsImported: 0,
+          discsImported: 0
+        };
+      }
+
+      if (compatibilityCheck.message !== 'Import file version matches current version') {
+        console.log(compatibilityCheck.message);
+      }
+
+      console.log(`Importing data from version ${fileVersion} (current version: ${this.EXPORT_VERSION})`);
+
+      // Migrate data if from older version
+      const migratedData = this.migrateData(data, fileVersion);
 
       // If replacing, clear existing data
       if (replaceExisting) {
@@ -80,7 +107,7 @@ export class BuildImportExportService {
 
       // Import discs first (builds reference them)
       let discsImported = 0;
-      for (const disc of data.discs) {
+      for (const disc of migratedData.discs) {
         try {
           await this.discService.addDisc(disc);
           discsImported++;
@@ -91,7 +118,7 @@ export class BuildImportExportService {
 
       // Import builds
       let buildsImported = 0;
-      for (const build of data.builds) {
+      for (const build of migratedData.builds) {
         try {
           await this.buildService.importBuild(build);
           buildsImported++;
@@ -100,9 +127,13 @@ export class BuildImportExportService {
         }
       }
 
+      const versionWarning = fileVersion !== this.EXPORT_VERSION
+        ? ` (migrated from version ${fileVersion})`
+        : '';
+
       return {
         success: true,
-        message: `Successfully imported ${buildsImported} builds and ${discsImported} discs`,
+        message: `Successfully imported ${buildsImported} builds and ${discsImported} discs${versionWarning}`,
         buildsImported,
         discsImported
       };
@@ -114,6 +145,148 @@ export class BuildImportExportService {
         discsImported: 0
       };
     }
+  }
+
+  /**
+   * Check if the import file version is compatible with the current app version
+   */
+  private checkVersionCompatibility(fileVersion: string): { compatible: boolean; message: string } {
+    const supportedVersions = ['1.0', '2.0'];  // List of versions we can import
+
+    // Parse version numbers for comparison
+    const parseVersion = (version: string): number => {
+      const [major, minor] = version.split('.').map(Number);
+      return major * 100 + (minor || 0);
+    };
+
+    const fileVersionNum = parseVersion(fileVersion);
+    const currentVersionNum = parseVersion(this.EXPORT_VERSION);
+
+    // Check if version is supported
+    if (!supportedVersions.includes(fileVersion)) {
+      // Check if file is from a future version
+      if (fileVersionNum > currentVersionNum) {
+        return {
+          compatible: false,
+          message: `Import file is from a newer version (${fileVersion}). Please update ZZZ Optimizer to import this file.`
+        };
+      }
+
+      // Unknown/unsupported version
+      return {
+        compatible: false,
+        message: `Unsupported import file version (${fileVersion}). Supported versions: ${supportedVersions.join(', ')}`
+      };
+    }
+
+    // File version is supported
+    if (fileVersionNum < currentVersionNum) {
+      // Older version - will be migrated
+      return {
+        compatible: true,
+        message: `Import file will be migrated from version ${fileVersion} to ${this.EXPORT_VERSION}`
+      };
+    }
+
+    // Same version
+    return {
+      compatible: true,
+      message: 'Import file version matches current version'
+    };
+  }
+
+  /**
+   * Validate import data structure
+   */
+  private validateImportData(data: ExportData): { valid: boolean; message: string } {
+    // Check for required fields
+    if (!data.builds) {
+      return { valid: false, message: 'Missing builds data' };
+    }
+
+    if (!data.discs) {
+      return { valid: false, message: 'Missing discs data' };
+    }
+
+    if (!Array.isArray(data.builds)) {
+      return { valid: false, message: 'Builds data must be an array' };
+    }
+
+    if (!Array.isArray(data.discs)) {
+      return { valid: false, message: 'Discs data must be an array' };
+    }
+
+    // Validate each build has required fields
+    for (let i = 0; i < data.builds.length; i++) {
+      const build = data.builds[i];
+      if (!build.id) {
+        return { valid: false, message: `Build at index ${i} missing required field: id` };
+      }
+      if (!build.agentId) {
+        return { valid: false, message: `Build at index ${i} missing required field: agentId` };
+      }
+      if (build.equippedDiscs === undefined) {
+        return { valid: false, message: `Build at index ${i} missing required field: equippedDiscs` };
+      }
+    }
+
+    // Validate each disc has required fields
+    for (let i = 0; i < data.discs.length; i++) {
+      const disc = data.discs[i];
+      if (!disc.uid) {
+        return { valid: false, message: `Disc at index ${i} missing required field: uid` };
+      }
+      if (!disc.slot) {
+        return { valid: false, message: `Disc at index ${i} missing required field: slot` };
+      }
+      if (!disc.set) {
+        return { valid: false, message: `Disc at index ${i} missing required field: set` };
+      }
+    }
+
+    return { valid: true, message: 'Import data is valid' };
+  }
+
+  /**
+   * Migrate data from older versions to current format
+   */
+  private migrateData(data: ExportData, fromVersion: string): ExportData {
+    let migratedData = { ...data };
+
+    // Migrate from version 1.0 to 2.0
+    if (fromVersion === '1.0') {
+      console.log('Migrating data from version 1.0 to 2.0...');
+
+      // Ensure all builds have wEngineRefinement field (default to 1)
+      migratedData.builds = migratedData.builds.map(build => {
+        if (build.wEngineRefinement === undefined) {
+          build.wEngineRefinement = 1;
+        }
+        return build;
+      });
+
+      // Ensure W-Engines have the new properties structure
+      migratedData.builds = migratedData.builds.map(build => {
+        if (build.equippedWEngine && !build.equippedWEngine.effect.properties) {
+          // Old W-Engine format - properties will be added when reference data is loaded
+          console.log(`W-Engine ${build.equippedWEngine.name} will be updated from reference data`);
+        }
+        return build;
+      });
+
+      console.log('Migration from 1.0 to 2.0 complete');
+    }
+
+    // Future migrations can be added here
+    // Example:
+    // if (fromVersion === '2.0' && currentVersion === '3.0') {
+    //   // Migration logic for 2.0 -> 3.0
+    // }
+
+    // Update version to current
+    migratedData.version = this.EXPORT_VERSION;
+
+    return migratedData;
   }
 
   /**
