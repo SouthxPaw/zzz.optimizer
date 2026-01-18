@@ -9,18 +9,6 @@
  */
 
 /**
- * Level coefficient for DEF scaling (LEGACY - kept for reference)
- * Note: The actual ZZZ damage formula uses ATK / (ATK + EffectiveDEF)
- * not the level coefficient approach used in some other games.
- */
-export const LEVEL_COEFFICIENT = {
-  60: 700,
-  70: 800,
-  80: 900,
-  90: 1000,
-};
-
-/**
  * Default enemy stats for damage calculations
  * Using a standardized enemy similar to Fribbels' approach
  */

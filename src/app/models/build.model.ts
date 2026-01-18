@@ -1,4 +1,5 @@
-import { BaseStats, Disc, DiscSlot, WEngine } from "./agent.model";
+import { BaseStats, DiscSlot, WEngine } from "./agent.model";
+import { Disc } from "./disc.model";
 
 // models/build.model.ts
 export interface AgentBuild {

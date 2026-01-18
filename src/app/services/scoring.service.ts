@@ -25,7 +25,6 @@ import {
   calculateAnomalyBuildup,
 } from '../constants/damage-formulas';
 import {
-  ENEMY_PROFILES,
   DEFAULT_ENEMY_PROFILE,
 } from '../constants/enemy-profiles';
 import {
@@ -34,8 +33,6 @@ import {
   getStatusEffectType,
 } from '../constants/agent-skills';
 import { SkillParserService } from './skill-parser.service';
-import { L } from '@angular/cdk/keycodes';
-import { Console } from 'console';
 import { versionedUrl } from '../utils/versioned-url';
 
 interface AgentBreakpoint {
