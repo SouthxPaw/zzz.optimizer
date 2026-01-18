@@ -50,7 +50,7 @@ export class BuildService {
   /**
    * Load all user builds from localStorage
    */
-  private async loadBuilds() {
+  async loadBuilds() {
     // Only run in browser
     if (!isPlatformBrowser(this.platformId)) {
       this.buildsSubject.next([]);
