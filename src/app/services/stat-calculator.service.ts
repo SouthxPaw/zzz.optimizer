@@ -737,10 +737,10 @@ export class StatCalculatorService {
       const discSet = DISC_SETS.find(s => s.name === setName);
       if (!discSet) return;
 
-      // Show all active bonuses with their descriptions
+      // Only show 2pc bonuses here (4pc bonuses are handled by get4pcEffectBonuses)
       discSet.bonuses.forEach(bonus => {
-        if (count >= bonus.pieces) {
-          activeBonuses.push(`${setName} (${bonus.pieces}pc): ${bonus.description}`);
+        if (bonus.pieces === 2 && count >= 2) {
+          activeBonuses.push(`${setName} (2pc): ${bonus.description}`);
         }
       });
     });
