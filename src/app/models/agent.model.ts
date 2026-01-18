@@ -18,7 +18,8 @@ export interface BaseStats {
   anomalyProficiency: number;
   pen: number;  // Flat PEN (converted to penRatio for display)
   penRatio: number;
-  energyRegen: number;
+  energyRegen: number;  // Base energy regen (SpBarPoint) - stored as energy/sec
+  energyRegenPercent: number;  // Percentage bonuses to energy regen
 }
 
 export interface Agent {

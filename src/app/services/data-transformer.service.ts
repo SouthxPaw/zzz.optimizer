@@ -158,7 +158,8 @@ export class DataTransformerService {
         anomalyProficiency: Math.round(lvl60.ElementMystery || stats?.ElementMystery || 0),
         pen: Math.round(lvl60.PenDelta || 0),
         penRatio: (lvl60.PenRate || 0) / 100,
-        energyRegen: (lvl60.SpBarPoint || 12) / 10  // 12 / 10 = 1.2
+        energyRegen: (lvl60.SpBarPoint || 12) / 10,  // 12 / 10 = 1.2
+        energyRegenPercent: 0
       };
     }
 
@@ -230,7 +231,8 @@ export class DataTransformerService {
         anomalyProficiency: Math.round(anomalyProficiency),
         pen: Math.round(stats.PenDelta || 0),
         penRatio: penRatio,
-        energyRegen: energyRegen
+        energyRegen: energyRegen,
+        energyRegenPercent: 0
       };
     }
 
@@ -260,7 +262,8 @@ export class DataTransformerService {
       anomalyProficiency: 0,
       pen: 0,
       penRatio: 0,
-      energyRegen: 1.2
+      energyRegen: 1.2,
+      energyRegenPercent: 0
     };
   }
 
