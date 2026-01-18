@@ -178,15 +178,26 @@ export function calculateFinalDamage(
  * @param skillMultiplier - Skill motion value (default 2.5 = 250% ATK)
  * @param dmgBonuses - Array of damage% bonuses (e.g., [0.30, 0.15] for 30% + 15%)
  * @param defShred - DEF Shred from debuffs as decimal (0.25 = 25%)
+ * @param resShred - RES Shred from debuffs as decimal (0.25 = 25%)
+ * @param enemyDEF - Enemy DEF (defaults to STANDARD_ENEMY if not provided)
+ * @param enemyRES - Enemy RES (defaults to STANDARD_ENEMY if not provided)
  * @returns Estimated damage per hit
  */
-export function estimateDamage(stats: {
-  ATK: number;
-  critRate: number;
-  critDMG: number;
-  penRatio?: number;
-  flatPEN?: number;
-}, skillMultiplier: number = 2.5, dmgBonuses: number[] = [], defShred: number = 0): number {
+export function estimateDamage(
+  stats: {
+    ATK: number;
+    critRate: number;
+    critDMG: number;
+    penRatio?: number;
+    flatPEN?: number;
+  },
+  skillMultiplier: number = 2.5,
+  dmgBonuses: number[] = [],
+  defShred: number = 0,
+  resShred: number = 0,
+  enemyDEF: number = STANDARD_ENEMY.baseDEF,
+  enemyRES: number = STANDARD_ENEMY.attributeRES
+): number {
   // Base damage
   const baseDMG = calculateBaseDamage(skillMultiplier, stats.ATK);
 
@@ -195,18 +206,18 @@ export function estimateDamage(stats: {
 
   // DEF modifier - using ATK / (ATK + EffectiveDEF) formula
   const effectiveDEF = calculateEffectiveDEF(
-    STANDARD_ENEMY.baseDEF,
+    enemyDEF,
     defShred,
     stats.penRatio || 0,
     stats.flatPEN || 0
   );
   const defMod = calculateDEFModifier(stats.ATK, effectiveDEF);
 
-  // RES modifier (assuming no RES reduction/PEN for simplicity)
+  // RES modifier with RES shred applied
   const resMod = calculateRESModifier(
-    STANDARD_ENEMY.attributeRES,
-    STANDARD_ENEMY.allTypeRES,
-    0, // No RES reduction
+    enemyRES,
+    0, // No all-type RES
+    resShred, // RES reduction from debuffs
     0  // No RES PEN
   );
 
@@ -223,21 +234,25 @@ export function estimateDamage(stats: {
  * @param statusType - Type of status effect
  * @param ATK - Character's ATK stat
  * @param dmgBonuses - Applicable damage% bonuses
+ * @param resShred - RES Shred from debuffs as decimal (0.25 = 25%)
+ * @param enemyRES - Enemy RES (defaults to STANDARD_ENEMY if not provided)
  * @returns Status effect damage per proc/tick
  */
 export function calculateStatusDamage(
   statusType: keyof typeof STATUS_EFFECT_MULTIPLIERS,
   ATK: number,
-  dmgBonuses: number[] = []
+  dmgBonuses: number[] = [],
+  resShred: number = 0,
+  enemyRES: number = STANDARD_ENEMY.attributeRES
 ): number {
   const baseDMG = ATK * STATUS_EFFECT_MULTIPLIERS[statusType];
   const dmgMod = calculateDMGModifier(dmgBonuses);
 
   // Status effects bypass DEF but are affected by RES
   const resMod = calculateRESModifier(
-    STANDARD_ENEMY.attributeRES,
-    STANDARD_ENEMY.allTypeRES,
-    0,
+    enemyRES,
+    0, // No all-type RES
+    resShred,
     0
   );
 

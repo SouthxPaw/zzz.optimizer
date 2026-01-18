@@ -56,3 +56,14 @@ export const ENEMY_PROFILES: EnemyProfile[] = [
  * Default enemy profile for scoring (Elite)
  */
 export const DEFAULT_ENEMY_PROFILE = ENEMY_PROFILES[1];
+
+/**
+ * Weighted importance of each enemy type for scoring
+ * Bosses weighted higher since optimization matters most for endgame content
+ */
+export const ENEMY_WEIGHTS = {
+  'Trash Mob': 0.10,      // 10% - Easy content, less important
+  'Elite': 0.25,          // 25% - Moderate content
+  'Boss': 0.40,           // 40% - Most important (Shiyu Defense, etc.)
+  'Miasma Boss': 0.25     // 25% - Endgame content
+};
