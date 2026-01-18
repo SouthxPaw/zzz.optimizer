@@ -17,6 +17,8 @@ import { DataMappingService } from '../../services/data-mapping.service';
 import { DiscRating, BuildRating, FeedbackItem } from '../../constants/disc-scoring';
 import { DISC_MAIN_STAT_MAX, MAIN_STAT_BY_SLOT } from '../../constants/main-stat-possibilities';
 import { OptimizerComponent } from '../optimizer/optimizer.component';
+import { EnkaApiService } from '../../services/enka-api.service';
+import { EnkaImportService } from '../../services/enka-import.service';
 
 @Component({
   selector: 'app-character-tab',
@@ -106,6 +108,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     onConfirm: () => {}
   };
 
+  // Enka UID Import
+  showEnkaImportModal = false;
+  enkaUid = '';
+  isImportingFromEnka = false;
+  enkaImportError = '';
+  enkaImportSuccess = '';
+
   private destroy$ = new Subject<void>();
   private previouslyFocusedElement: HTMLElement | null = null;
 
@@ -123,7 +132,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private statCalculator: StatCalculatorService,
     private scoringService: ScoringService,
     private imagePreloader: ImagePreloaderService,
-    private dataMappingService: DataMappingService
+    private dataMappingService: DataMappingService,
+    private enkaApiService: EnkaApiService,
+    private enkaImportService: EnkaImportService
   ) {}
 
   ngOnInit() {
@@ -1044,6 +1055,30 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Check if a substat type is a priority stat for the selected build's agent
+  isPrioritySubstat(substatType: SubStatType): boolean {
+    if (!this.selectedBuild || !this.scoringService.areBreakpointsLoaded()) {
+      return false;
+    }
+
+    const breakpoints = this.scoringService.getAgentBreakpoints(this.selectedBuild.agentId);
+    if (!breakpoints) {
+      return false;
+    }
+
+    // Check statWeights first (new format)
+    if (breakpoints.statWeights && breakpoints.statWeights[substatType] !== undefined) {
+      return breakpoints.statWeights[substatType] > 0;
+    }
+
+    // Fall back to priorityStats array (old format)
+    if (breakpoints.priorityStats && Array.isArray(breakpoints.priorityStats)) {
+      return breakpoints.priorityStats.includes(substatType);
+    }
+
+    return false;
+  }
+
   // Auto-fill main stat value when user selects a main stat type for slots 4-6
   onMainStatTypeChange(): void {
     // Clear value first
@@ -1249,5 +1284,98 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   trackByFeedbackIndex(index: number, _item: FeedbackItem): number {
     return index;
+  }
+
+  // =====================================
+  // Enka Network UID Import
+  // =====================================
+
+  openEnkaImportModal() {
+    this.showEnkaImportModal = true;
+    this.enkaImportError = '';
+    this.enkaImportSuccess = '';
+    this.enkaUid = '';
+  }
+
+  closeEnkaImportModal() {
+    this.showEnkaImportModal = false;
+    this.enkaUid = '';
+    this.enkaImportError = '';
+    this.enkaImportSuccess = '';
+  }
+
+  async importFromEnka() {
+    if (!this.enkaUid.trim()) {
+      this.enkaImportError = 'Please enter a valid UID';
+      return;
+    }
+
+    this.isImportingFromEnka = true;
+    this.enkaImportError = '';
+    this.enkaImportSuccess = '';
+
+    try {
+      // Fetch data from Enka API
+      console.log(`Fetching Enka data for UID: ${this.enkaUid}`);
+      const enkaResult = await this.enkaApiService.fetchPlayerData(this.enkaUid).toPromise();
+
+      if (!enkaResult) {
+        throw new Error('No data received from Enka Network');
+      }
+
+      console.log(`Received ${enkaResult.builds.length} builds from Enka`);
+
+      // Compare with existing builds
+      const comparison = await this.enkaImportService.compareBuilds(enkaResult.builds);
+
+      console.log('Import comparison:', {
+        new: comparison.newBuilds.length,
+        updated: comparison.updatedBuilds.length,
+        unchanged: comparison.unchangedBuilds.length,
+        discs: comparison.newDiscs.length
+      });
+
+      // Show confirmation dialog if there are changes
+      if (comparison.newBuilds.length > 0 || comparison.updatedBuilds.length > 0) {
+        const summary = this.enkaImportService.generateImportSummary(comparison);
+
+        // Close the Enka import modal before showing confirmation dialog
+        this.closeEnkaImportModal();
+
+        this.showConfirmation(
+          'Import from Enka Network',
+          `Found: ${summary}\n\nDo you want to import these builds?`,
+          async () => {
+            try {
+              const result = await this.enkaImportService.importBuilds(comparison, true);
+
+              // Reload builds to show the imported data
+              await this.buildService.loadBuilds();
+
+              console.log(`Successfully imported ${result.added} new agent(s), updated ${result.updated} build(s), and added ${result.totalDiscs} disc(s)`);
+            } catch (error) {
+              console.error('Import error:', error);
+              // Re-open the Enka modal to show error
+              this.enkaImportError = error instanceof Error ? error.message : 'Failed to import builds';
+              this.openEnkaImportModal();
+            }
+          },
+          'Import',
+          'Cancel'
+        );
+      } else {
+        this.enkaImportSuccess = 'All builds are already up to date!';
+
+        // Close modal after 2 seconds
+        setTimeout(() => {
+          this.closeEnkaImportModal();
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Enka API error:', error);
+      this.enkaImportError = error instanceof Error ? error.message : 'Failed to fetch data from Enka Network';
+    } finally {
+      this.isImportingFromEnka = false;
+    }
   }
 }

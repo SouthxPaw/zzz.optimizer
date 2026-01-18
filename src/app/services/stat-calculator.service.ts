@@ -782,12 +782,11 @@ export class StatCalculatorService {
           // Handle simple format (unconditional)
           if (!Array.isArray(effect)) {
             effect.Properties.forEach(prop => {
-              // If value < 1, it's a decimal percentage that needs to be converted (0.25 → 25%)
-              // If value >= 1, it's a flat value (45 → +45, no % sign)
-              const isDecimalPercent = prop.Value < 1;
-
-              const value = isDecimalPercent ? prop.Value * 100 : prop.Value;
-              const formattedValue = isDecimalPercent ? `${value}%` : value;
+              // Use the Format field to determine if this is a percentage stat
+              // Format contains '%' for percentage stats (e.g., "2800" with Format "%" → 28%)
+              const isPercentage = prop.Format && prop.Format.includes('%');
+              const value = isPercentage ? prop.Value / 100 : prop.Value;
+              const formattedValue = isPercentage ? `${value}%` : `${value}`;
               const formattedStatName = prop.Name2.replace(/_/g, ' ');
               statParts.push(`${formattedStatName}: +${formattedValue}`);
             });
@@ -798,12 +797,11 @@ export class StatCalculatorService {
               // Only include stats if there's no condition OR condition is met
               if (!effectPart.Condition || this.evaluateCondition(effectPart.Condition, currentStats)) {
                 effectPart.Properties.forEach(prop => {
-                  // If value < 1, it's a decimal percentage that needs to be converted (0.25 → 25%)
-                  // If value >= 1, it's a flat value (45 → +45, no % sign)
-                  const isDecimalPercent = prop.Value < 1;
-
-                  const value = isDecimalPercent ? prop.Value * 100 : prop.Value;
-                  const formattedValue = isDecimalPercent ? `${value}%` : value;
+                  // Use the Format field to determine if this is a percentage stat
+                  // Format contains '%' for percentage stats (e.g., "2800" with Format "%" → 28%)
+                  const isPercentage = prop.Format && prop.Format.includes('%');
+                  const value = isPercentage ? prop.Value / 100 : prop.Value;
+                  const formattedValue = isPercentage ? `${value}%` : `${value}`;
                   const formattedStatName = prop.Name2.replace(/_/g, ' ');
                   statParts.push(`${formattedStatName}: +${formattedValue}`);
                 });
