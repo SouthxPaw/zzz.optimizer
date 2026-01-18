@@ -20,7 +20,14 @@ import { calculateRollCount } from '../constants/substat-rolls';
 import {
   estimateDamage,
   calculateStatusDamage,
+  calculateSheerForce,
+  calculateDazeContribution,
+  calculateAnomalyBuildup,
 } from '../constants/damage-formulas';
+import {
+  ENEMY_PROFILES,
+  DEFAULT_ENEMY_PROFILE,
+} from '../constants/enemy-profiles';
 import {
   getAgentSkillMultiplier,
   getAgentDamageType,
@@ -726,35 +733,46 @@ export class ScoringService {
 
   /**
    * Estimate damage output for a build
-   * Returns estimated damage per hit for Attack/Crit agents
-   * or status damage for Anomaly agents
+   * Returns estimated damage per hit for Attack/Crit agents,
+   * status damage for Anomaly agents, Sheer Force for Rupture agents,
+   * or Daze contribution for Stun agents.
    *
    * @param stats - Character stats
    * @param agentName - Name of the agent (for skill multiplier)
-   * @param agentRole - Role of the agent (Attack, Anomaly, etc.)
+   * @param agentRole - Role of the agent (Attack, Anomaly, Rupture, Stun, Support, Defense)
    * @param agentElement - Element of the agent (for status effect type)
    * @param elementalDMGBonus - Elemental DMG% from discs/buffs
+   * @param agentScoring - Agent's scoring buffs/debuffs from agents.json
+   * @param wengineScoring - W-Engine's scoring buffs/debuffs from wengines.json
+   * @param HP - Character's HP (needed for Rupture Sheer Force calculation)
+   * @param impact - Character's Impact stat (needed for Stun daze calculation)
    * @returns Damage estimation object
    */
   estimateBuildDamage(
     stats: {
       ATK: number;
+      HP?: number;
       critRate: number;
       critDMG: number;
       penRatio?: number;
       flatPEN?: number;
       anomalyProficiency?: number;
       anomalyMastery?: number;
+      impact?: number;
       level?: number;
     },
     agentId: string,
     agentName: string,
     agentRole: string,
     agentElement: string,
-    elementalDMGBonus: number = 0
+    elementalDMGBonus: number = 0,
+    agentScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number },
+    wengineScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number }
   ): {
     directDamage: number;
     statusDamage?: number;
+    sheerForceDamage?: number;
+    dazeContribution?: number;
     totalDamage: number;
     damageType: string;
   } {
@@ -769,43 +787,187 @@ export class ScoringService {
     // Common damage bonuses (elemental DMG%, etc.)
     const dmgBonuses = elementalDMGBonus > 0 ? [elementalDMGBonus] : [];
 
-    // Determine damage type based on role
-    const damageType = getAgentDamageType(agentRole);
+    // Apply scoring buffs from Agent and W-Engine
+    let defShred = 0;
+    let resShred = 0;
+    let damageTaken = 0;
+    let stunDMGMult = 0;
+    let dazeBonus = 0;
+
+    // Combine agent and w-engine scoring
+    const allScoringData = [agentScoring, wengineScoring].filter(Boolean);
+
+    allScoringData.forEach((scoring) => {
+      if (!scoring) return;
+
+      // Apply buffs (DMG bonuses, stat bonuses, etc.)
+      if (scoring.buffs) {
+        scoring.buffs.forEach((buff: any) => {
+          const value = parseFloat(buff.value) / 100; // Convert % to decimal
+
+          switch (buff.type) {
+            case 'DMGBonus':
+            case 'ElementDMG':
+              dmgBonuses.push(value);
+              break;
+            case 'SheerForceBonus':
+              if (agentRole === 'Rupture') {
+                dmgBonuses.push(value);
+              }
+              break;
+            case 'ATKBonus':
+              // ATK% buffs are already in stats, don't double-apply
+              break;
+            case 'CRITRateBonus':
+            case 'CRITDMGBonus':
+              // CRIT buffs are already in stats, don't double-apply
+              break;
+          }
+        });
+      }
+
+      // Apply debuffs (enemy-affecting modifiers)
+      if (scoring.debuffs) {
+        scoring.debuffs.forEach((debuff: any) => {
+          const value = parseFloat(debuff.value) / 100; // Convert % to decimal
+
+          switch (debuff.type) {
+            case 'DEFShred':
+              defShred += value;
+              break;
+            case 'RESShred':
+              resShred += value;
+              break;
+            case 'DamageTaken':
+              damageTaken += value;
+              break;
+            case 'StunDMGMult':
+              stunDMGMult += value;
+              break;
+          }
+        });
+      }
+
+      // Apply daze bonuses
+      if (scoring.dazeBonus) {
+        dazeBonus += scoring.dazeBonus;
+      }
+    });
+
+    // Use default enemy profile for calculations
+    const enemy = DEFAULT_ENEMY_PROFILE;
 
     let directDamage = 0;
     let statusDamage = 0;
+    let sheerForceDamage = 0;
+    let dazeContribution = 0;
+    let damageType = 'direct';
 
-    if (damageType === 'status' || damageType === 'hybrid') {
-      // Anomaly agents: Calculate status effect damage
-      const statusType = getStatusEffectType(agentElement);
-      statusDamage = calculateStatusDamage(statusType, stats.ATK, dmgBonuses);
+    // Role-specific damage calculations
+    switch (agentRole) {
+      case 'Rupture':
+        // Rupture agents use Sheer Force - ignores DEF entirely
+        // Formula: (ATK × 0.30) + (HP × 0.10)
+        damageType = 'sheer_force';
+        sheerForceDamage = calculateSheerForce(
+          stats.ATK,
+          stats.HP || 0,
+          dmgBonuses
+        );
+        break;
+
+      case 'Anomaly':
+        // Anomaly agents focus on status effect damage
+        damageType = 'status';
+        const statusType = getStatusEffectType(agentElement);
+        statusDamage = calculateStatusDamage(statusType, stats.ATK, dmgBonuses);
+        break;
+
+      case 'Stun':
+        // Stun agents focus on Daze contribution
+        // Also calculate some direct damage as they do moderate damage
+        damageType = 'daze';
+        dazeContribution = calculateDazeContribution(
+          1.0 * (1 + dazeBonus), // Apply daze bonus from agent/w-engine scoring
+          stats.impact || 0,
+          enemy.dazeGauge
+        );
+        // Stun agents also deal direct damage
+        directDamage = estimateDamage(
+          {
+            ATK: stats.ATK,
+            critRate: stats.critRate / 100,
+            critDMG: stats.critDMG / 100,
+            penRatio: (stats.penRatio || 0) / 100,
+            flatPEN: stats.flatPEN || 0,
+          },
+          skillMultiplier,
+          dmgBonuses,
+          defShred
+        );
+        break;
+
+      case 'Attack':
+        // Attack agents focus on direct CRIT damage
+        damageType = 'direct';
+        directDamage = estimateDamage(
+          {
+            ATK: stats.ATK,
+            critRate: stats.critRate / 100,
+            critDMG: stats.critDMG / 100,
+            penRatio: (stats.penRatio || 0) / 100,
+            flatPEN: stats.flatPEN || 0,
+          },
+          skillMultiplier,
+          dmgBonuses,
+          defShred
+        );
+        break;
+
+      case 'Support':
+      case 'Defense':
+      default:
+        // Support/Defense agents do lower direct damage
+        damageType = 'direct';
+        directDamage = estimateDamage(
+          {
+            ATK: stats.ATK,
+            critRate: stats.critRate / 100,
+            critDMG: stats.critDMG / 100,
+            penRatio: (stats.penRatio || 0) / 100,
+            flatPEN: stats.flatPEN || 0,
+          },
+          skillMultiplier,
+          dmgBonuses,
+          defShred
+        );
+        break;
     }
 
-    if (damageType === 'direct' || damageType === 'hybrid') {
-      // Attack/Stun/Support agents: Calculate direct damage
-      directDamage = estimateDamage(
-        {
-          ATK: stats.ATK,
-          critRate: stats.critRate / 100, // Convert % to decimal
-          critDMG: stats.critDMG / 100,
-          penRatio: (stats.penRatio || 0) / 100,
-          flatPEN: stats.flatPEN || 0,
-          level: stats.level || 60,
-        },
-        skillMultiplier,
-        dmgBonuses
-      );
+    // Calculate total damage based on damage type
+    let totalDamage = 0;
+    if (sheerForceDamage > 0) {
+      totalDamage = sheerForceDamage;
+    } else if (dazeContribution > 0) {
+      // For Stun, use direct damage but also track daze
+      totalDamage = directDamage;
+    } else {
+      totalDamage = directDamage + statusDamage;
     }
 
-    // For hybrid agents (Stun), use whichever is higher
-    const totalDamage =
-      damageType === 'hybrid'
-        ? Math.max(directDamage, statusDamage)
-        : directDamage + statusDamage;
+    // Apply DamageTaken multiplier from agent/w-engine scoring (final multiplier)
+    if (damageTaken > 0) {
+      totalDamage *= (1 + damageTaken);
+      directDamage *= (1 + damageTaken);
+      if (statusDamage > 0) statusDamage *= (1 + damageTaken);
+      if (sheerForceDamage > 0) sheerForceDamage *= (1 + damageTaken);
+    }
 
     return {
       directDamage: Math.round(directDamage),
       statusDamage: statusDamage > 0 ? Math.round(statusDamage) : undefined,
+      sheerForceDamage: sheerForceDamage > 0 ? Math.round(sheerForceDamage) : undefined,
+      dazeContribution: dazeContribution > 0 ? Math.round(dazeContribution * 100) / 100 : undefined,
       totalDamage: Math.round(totalDamage),
       damageType: damageType,
     };
@@ -813,20 +975,41 @@ export class ScoringService {
 
   /**
    * Normalize damage output to 0-100 scale
-   * Uses role-specific benchmarks
+   * Uses role-specific benchmarks where ALL roles can hit 100
    *
    * @param damage - Total damage value
    * @param role - Agent role
+   * @param dazeContribution - Optional daze value for Stun agents
    * @returns Normalized score (0-100)
    */
-  private normalizeDamageScore(damage: number, role: string): number {
+  private normalizeDamageScore(
+    damage: number,
+    role: string,
+    dazeContribution?: number
+  ): number {
+    // Role-specific benchmarks calibrated so all roles can hit 100
+    // These are based on "optimal build" expectations per role
     const DAMAGE_BENCHMARKS: { [key: string]: number } = {
-      Attack: 50000, // High damage expected
-      Stun: 30000, // Moderate damage
-      Anomaly: 40000, // Status effect damage (per proc)
-      Support: 15000, // Low damage expected
-      Defense: 20000, // Low-moderate damage
+      Attack: 50000,    // High burst damage per hit
+      Anomaly: 40000,   // Status effect damage (per proc)
+      Rupture: 35000,   // Sheer Force damage (ignores DEF but lower multiplier)
+      Stun: 30000,      // Moderate direct damage
+      Support: 15000,   // Lower expected damage (they contribute buffs instead)
+      Defense: 20000,   // Low-moderate damage
     };
+
+    // For Stun agents, also factor in Daze contribution
+    // Daze is normalized separately (0-1 scale where 1 = full gauge break)
+    if (role === 'Stun' && dazeContribution !== undefined) {
+      const damageBenchmark = DAMAGE_BENCHMARKS[role] || 30000;
+      const damageScore = (damage / damageBenchmark) * 50; // 50% from damage
+
+      // Daze score: 1.0 = breaks full gauge = perfect
+      // Typical good stun agent hits ~0.5-0.8 per rotation
+      const dazeScore = Math.min(dazeContribution / 0.8, 1.0) * 50; // 50% from daze
+
+      return Math.min(100, damageScore + dazeScore);
+    }
 
     const benchmark = DAMAGE_BENCHMARKS[role] || 40000;
     const normalized = (damage / benchmark) * 100;
@@ -1375,7 +1558,9 @@ export class ScoringService {
     agentName?: string,
     agentRole?: string,
     agentElement?: string,
-    agentLevel?: number
+    agentLevel?: number,
+    agentScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number },
+    wengineScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number }
   ): { score: number; rating: BuildRating; breakdown: any } {
     const breakpoints = this.agentBreakpoints[agentId];
 
@@ -1432,29 +1617,35 @@ export class ScoringService {
         elementalDMGBonus = slot5Disc.mainStat.value / 100; // Convert % to decimal
       }
 
-      // Estimate damage
+      // Estimate damage - pass HP and Impact for Rupture/Stun calculations
       damageEstimate = this.estimateBuildDamage(
         {
           ATK: weightedStats.atk,
+          HP: weightedStats.hp,
           critRate: weightedStats.critRate,
           critDMG: weightedStats.critDmg,
           penRatio: weightedStats.penRatio,
           flatPEN: weightedStats.pen,
           anomalyProficiency: weightedStats.anomalyProficiency,
           anomalyMastery: weightedStats.anomalyMastery,
+          impact: weightedStats.impact,
           level: agentLevel || 60,
         },
         agentId,
         agentName,
         agentRole,
         agentElement,
-        elementalDMGBonus
+        elementalDMGBonus,
+        agentScoring,
+        wengineScoring
       );
 
       // Normalize damage to 0-100 score
+      // Pass dazeContribution for Stun agents
       damageScore = this.normalizeDamageScore(
         damageEstimate.totalDamage,
-        agentRole
+        agentRole,
+        damageEstimate.dazeContribution
       );
     }
 

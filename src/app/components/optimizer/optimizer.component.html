@@ -21,30 +21,7 @@
         <p><strong>Composite Build Score Breakdown:</strong></p>
         <ol>
           <li>
-            <strong>Breakpoint Score (20%):</strong>
-            <ul>
-              <li>
-                Each agent has important stat thresholds (breakpoints) they want
-                to reach
-              </li>
-              <li>Meeting minimum breakpoints grants partial credit (50%+)</li>
-              <li>Meeting optimal breakpoints grants full credit (100%)</li>
-              <li>
-                Exceeding optimal breakpoints continues to contribute at full
-                value
-              </li>
-              <li>
-                Missing breakpoints applies penalties to the overall score
-              </li>
-              <li>
-                Priority stats are weighted 1.5× more
-                heavily than non-priority stats
-              </li>
-            </ul>
-          </li>
-
-          <li>
-            <strong>Disc Quality Score (65%) - MOST IMPORTANT:</strong>
+            <strong>Disc Quality Score (50%) - MOST IMPORTANT:</strong>
             <ul>
               <li>Uses the average disc score of all 6 equipped discs</li>
               <li>
@@ -57,20 +34,65 @@
                 The average of all 6 disc scores determines this component
               </li>
               <li>
-                This is the most impactful component at 65% of total build score
+                This is the most impactful component at 50% of total build score
+              </li>
+              <li>
+                <strong>Diminishing returns:</strong> Stacking too much of one stat (like 50% CRIT Rate) gives less value than spreading stats evenly. A balanced disc with 20% CRIT + 15% ATK% scores better than one with 40% CRIT alone.
               </li>
             </ul>
           </li>
 
           <li>
-            <strong>Stat Efficiency Score (10%):</strong>
+            <strong>Breakpoint Score (20%):</strong>
             <ul>
               <li>
-                Rewards clean, well-balanced stat allocation and prioritizing
+                Each agent has important stat thresholds (breakpoints) they want
+                to reach
+              </li>
+              <li>Meeting minimum breakpoints grants partial credit (50%+)</li>
+              <li>Meeting optimal breakpoints grants full credit (100%)</li>
+              <li>
+                <strong>Missing breakpoints applies penalties</strong> (-30% below min, -15% between min and optimal)
+              </li>
+              <li>
+                Priority stats are weighted 1.5× more heavily than non-priority stats
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            <strong>Stat Efficiency Score (15%):</strong>
+            <ul>
+              <li>
+                Rewards clean, <strong>well-balanced</strong> stat allocation and prioritizing
                 the right substats
               </li>
               <li>
                 Penalizes inefficient or poorly prioritized stat distributions
+              </li>
+              <li>
+                Higher weight than damage because this reflects <strong>your building skill</strong>
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            <strong>Damage Output Score (10%):</strong>
+            <ul>
+              <li>
+                Estimates damage using actual ZZZ damage formulas
+              </li>
+              <li>
+                Includes <strong>agent scoring modifiers</strong> (DEF Shred, RES Shred, DMG bonuses)
+              </li>
+              <li>
+                Includes <strong>W-Engine scoring modifiers</strong> (buffs, debuffs, daze bonuses)
+              </li>
+              <li>
+                Example: Nicole's DEF Shred (40%) + RES Shred (25%) = +100% team damage!
+              </li>
+              <li>
+                <strong>Note:</strong> Mindscape buffs NOT included (keeps focus on disc optimization)
               </li>
             </ul>
           </li>

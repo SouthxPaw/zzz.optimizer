@@ -44,10 +44,10 @@ export const EXTERNAL_STAT_WEIGHTS = {
  */
 export const BUILD_SCORE_WEIGHTS = {
   BREAKPOINT: 0.20,      // 20% - Meeting stat breakpoints with progressive scoring
-  DISC_QUALITY: 0.65,    // 65% - Average disc rating quality (MOST IMPORTANT)
-  STAT_EFFICIENCY: 0.10, // 10% - Stat allocation efficiency
+  DISC_QUALITY: 0.50,    // 50% - Average disc rating quality (MOST IMPORTANT)
+  STAT_EFFICIENCY: 0.15, // 15% - Stat allocation efficiency (rewards smart building)
   SET_BONUS: 0.05,       // 5% - Set effect alignment
-  DAMAGE_OUTPUT: 0.00,   // 0% - REMOVED (too unreliable, especially for supports)
+  DAMAGE_OUTPUT: 0.10,   // 10% - Damage calculation with agent/W-Engine scoring modifiers
 };
 
 

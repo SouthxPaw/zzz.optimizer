@@ -103,8 +103,12 @@ export class StatCalculatorService {
     }
 
     // Start with base stats at level 60
-    // Initialize anomalyMasteryPercent to 0 since it may not exist in older data
-    const stats: BaseStats = { ...agent.lvl60Stats, anomalyMasteryPercent: 0 };
+    // Initialize percent bonuses to 0 since they may not exist in older data
+    const stats: BaseStats = {
+      ...agent.lvl60Stats,
+      anomalyMasteryPercent: 0,
+      energyRegenPercent: 0
+    };
 
     // Apply W-Engine stats
     if (wEngine) {
@@ -125,6 +129,10 @@ export class StatCalculatorService {
     // Apply set bonuses (this applies percentage bonuses to HP/ATK/DEF)
     this.applySetBonuses(stats, discs, agent, wEngine);
 
+    // Calculate final energy regen using correct formula:
+    // Energy/sec = Base × (1 + Σ %bonuses/100)
+    const finalEnergyRegen = stats.energyRegen * (1 + stats.energyRegenPercent / 100);
+
     // Round all stats to avoid decimals
     const finalStats: BaseStats = {
       hp: Math.round(stats.hp),
@@ -141,7 +149,8 @@ export class StatCalculatorService {
       anomalyProficiency: Math.round(stats.anomalyProficiency),
       pen: Math.round(stats.pen),
       penRatio: Math.round(stats.penRatio * 10) / 10,
-      energyRegen: Math.round(stats.energyRegen * 10) / 10
+      energyRegen: Math.round(finalEnergyRegen * 10) / 10,
+      energyRegenPercent: Math.round(stats.energyRegenPercent * 10) / 10
     };
 
     // Store in cache
@@ -212,7 +221,8 @@ export class StatCalculatorService {
         stats.penRatio += subStatValue;
         break;
       case 'Energy_Regen':
-        stats.energyRegen += subStatValue;
+        // W-Engine Energy Regen is a percentage bonus
+        stats.energyRegenPercent += subStatValue;
         break;
       case 'Impact':
         stats.impact += subStatValue;
@@ -261,7 +271,8 @@ export class StatCalculatorService {
           stats.penRatio += value;
           break;
         case 'Energy_Regen':
-          stats.energyRegen += value;
+          // Refinement Energy Regen bonuses are percentage bonuses
+          stats.energyRegenPercent += value;
           break;
         case 'Impact':
           stats.impact += value;
@@ -312,7 +323,8 @@ export class StatCalculatorService {
                 stats.penRatio += value;
                 break;
               case 'Energy_Regen':
-                stats.energyRegen += value;
+                // Mindscape Energy Regen bonuses are percentage bonuses
+                stats.energyRegenPercent += value;
                 break;
               case 'Anomaly_Proficiency':
                 stats.anomalyProficiency += value;
@@ -379,7 +391,8 @@ export class StatCalculatorService {
           stats.impact += mainStat.value;
           break;
         case 'Energy_Regen':
-          stats.energyRegen += mainStat.value;
+          // Disc main stat Energy Regen is a percentage bonus
+          stats.energyRegenPercent += mainStat.value;
           break;
         case 'Element_DMG':
           // Element DMG is typically tracked separately per element
@@ -433,7 +446,8 @@ export class StatCalculatorService {
             stats.impact += subStat.value;
             break;
           case 'Energy_Regen':
-            stats.energyRegen += subStat.value;
+            // Disc substat Energy Regen would be a percentage bonus (though doesn't exist in game)
+            stats.energyRegenPercent += subStat.value;
             break;
         }
       });
@@ -627,7 +641,8 @@ export class StatCalculatorService {
           stats.penRatio += value;
           break;
         case 'Energy_Regen':
-          stats.energyRegen += value;
+          // Set bonus Energy Regen is a percentage bonus
+          stats.energyRegenPercent += value;
           break;
         case 'Impact':
           stats.impact += value;
@@ -688,7 +703,8 @@ export class StatCalculatorService {
           stats.penRatio += numValue;
           break;
         case 'ENERGY REGEN':
-          stats.energyRegen += numValue;
+          // Parsed Energy Regen from descriptions is a percentage bonus
+          stats.energyRegenPercent += numValue;
           break;
         case 'IMPACT':
           stats.impact += numValue;

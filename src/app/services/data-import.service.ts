@@ -315,7 +315,10 @@ export class DataImportService {
       // Store disc sets in IndexedDB
       await this.db.bulkAddDiscSets(discSets);
 
-      console.log('Successfully imported all reference data from individual files');
+      // Save the current app version so we know when data needs to be reloaded
+      await this.db.setStoredDataVersion(this.db.getCurrentAppVersion());
+
+      console.log(`Successfully imported all reference data from individual files (version ${this.db.getCurrentAppVersion()})`);
 
       return {
         agents: agents.length,
@@ -400,5 +403,13 @@ export class DataImportService {
    */
   async hasReferenceData(): Promise<boolean> {
     return await this.db.hasReferenceData();
+  }
+
+  /**
+   * Check if data needs to be reloaded due to version mismatch
+   * This returns true if the app version changed since data was last loaded
+   */
+  async needsDataReload(): Promise<boolean> {
+    return await this.db.needsDataReload();
   }
 }
