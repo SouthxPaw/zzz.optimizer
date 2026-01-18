@@ -56,30 +56,3 @@ export const ENEMY_PROFILES: EnemyProfile[] = [
  * Default enemy profile for scoring (Elite)
  */
 export const DEFAULT_ENEMY_PROFILE = ENEMY_PROFILES[1];
-
-/**
- * RES modifiers based on elemental weakness/resistance
- */
-export const RES_MODIFIERS = {
-  WEAKNESS: -0.20,    // -20% RES (takes 20% more damage)
-  NEUTRAL: 0.00,      // 0% RES (baseline)
-  RESISTANCE: 0.20    // +20% RES (takes 20% less damage)
-};
-
-/**
- * Get enemy profile by name
- */
-export function getEnemyProfile(name: string): EnemyProfile | undefined {
-  return ENEMY_PROFILES.find(p => p.name === name);
-}
-
-/**
- * Calculate effective RES with weakness/resistance modifier
- *
- * @param baseRes - Enemy's base RES (e.g., 0.20 for 20%)
- * @param modifier - Weakness/resistance modifier from RES_MODIFIERS
- * @returns Effective RES
- */
-export function getEffectiveRes(baseRes: number, modifier: number = 0): number {
-  return baseRes + modifier;
-}
