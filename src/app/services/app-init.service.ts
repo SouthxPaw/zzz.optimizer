@@ -94,7 +94,7 @@ export class AppInitService {
       console.log('Loading reference data from individual JSON files...');
       const results = await this.dataImport.importReferenceDataFromIndividualFiles();
 
-      console.log(`✓ Reference data loaded successfully: ${results.agents} agents, ${results.wEngines} W-Engines`);
+      console.log(`✓ Reference data loaded successfully: ${results.agents} agents, ${results.wEngines} W-Engines, ${results.discSets} disc sets`);
     } catch (error) {
       console.error('Error loading reference data:', error);
       throw error;
