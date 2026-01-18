@@ -3,6 +3,12 @@ import Dexie, { Table } from 'dexie';
 import { Agent } from '../models/agent.model';
 import { WEngine } from '../models/wengine.model';
 import { Disc } from '../models/disc.model';
+import { environment } from '../../environments/environment';
+
+interface AppMetadata {
+  key: string;
+  value: string;
+}
 
 /**
  * Database Service
@@ -27,6 +33,9 @@ export class DbService extends Dexie {
   // USER DATA - Created and managed by users
   discs!: Table<Disc, string>;
 
+  // APP METADATA - Stores app version, settings, etc.
+  metadata!: Table<AppMetadata, string>;
+
   constructor() {
     super('ZZZOptimizerDB');
 
@@ -48,6 +57,20 @@ export class DbService extends Dexie {
 
       // User data tables
       discs: 'uid, slot, set, rarity, equippedBy'
+    });
+
+    // Version 3: Add metadata table for version tracking
+    this.version(3).stores({
+      // Reference data tables
+      agents: 'id, name, rarity, element, specialty',
+      wEngines: 'id, name, rarity, specialty',
+      discSets: 'id, name',
+
+      // User data tables
+      discs: 'uid, slot, set, rarity, equippedBy',
+
+      // App metadata
+      metadata: 'key'
     });
   }
 
@@ -162,5 +185,53 @@ export class DbService extends Dexie {
     const wEngineCount = await this.wEngines.count();
     const discSetCount = await this.discSets.count();
     return agentCount > 0 && wEngineCount > 0 && discSetCount > 0;
+  }
+
+  // Version tracking methods
+  async getStoredDataVersion(): Promise<string | null> {
+    try {
+      const record = await this.metadata.get('dataVersion');
+      return record?.value || null;
+    } catch {
+      return null;
+    }
+  }
+
+  async setStoredDataVersion(version: string): Promise<void> {
+    await this.metadata.put({ key: 'dataVersion', value: version });
+  }
+
+  getCurrentAppVersion(): string {
+    return environment.appVersion;
+  }
+
+  /**
+   * Check if reference data needs to be reloaded due to version mismatch
+   * Returns true if:
+   * - No data exists
+   * - Stored version doesn't match current app version
+   */
+  async needsDataReload(): Promise<boolean> {
+    const hasData = await this.hasReferenceData();
+    if (!hasData) {
+      console.log('No reference data found - needs reload');
+      return true;
+    }
+
+    const storedVersion = await this.getStoredDataVersion();
+    const currentVersion = this.getCurrentAppVersion();
+
+    if (!storedVersion) {
+      console.log('No stored version found - needs reload');
+      return true;
+    }
+
+    if (storedVersion !== currentVersion) {
+      console.log(`Version mismatch: stored=${storedVersion}, current=${currentVersion} - needs reload`);
+      return true;
+    }
+
+    console.log(`Data version matches (${currentVersion}) - no reload needed`);
+    return false;
   }
 }

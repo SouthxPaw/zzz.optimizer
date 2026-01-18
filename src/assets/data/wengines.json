@@ -8,7 +8,9 @@
     "Desc3": "A W-Engine that prioritizes damage output over noise reduction. It can indiscriminately deal considerable damage to all units nearby.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_01.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -35,7 +37,9 @@
     "Desc3": "A W-Engine with excellent sonic and thermal energy usage, capable of hitting its target with a double whammy.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_02.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -62,7 +66,9 @@
     "Desc3": "A high-capacity portable W-Engine that can collect dissipated energy from its surroundings, thus enhancing the combat effectiveness of its operator.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_03.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -89,7 +95,9 @@
     "Desc3": "A special W-Engine featuring a built-in sonic generator that boosts its damage output.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_04.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -118,6 +126,17 @@
         }
       ],
       "Desc": "Launching an EX Special Attack increases all squad members' Impact by % for 10s. This effect can trigger once every 20s. Passive effects of the same name do not stack."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ImpactBonus",
+          "value": "1200",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "12005": {
@@ -129,7 +148,9 @@
     "Desc3": "A standardized W-Engine with balanced performance that enhances its owner's and their teammates' combat effectiveness in all aspects.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_05.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -170,6 +191,22 @@
         }
       ],
       "Desc": "Launching an EX Special Attack or Chain Attack increases all squad members' Anomaly Mastery and Anomaly Proficiency by [NUMBER] for 10s. This effect can trigger once every 20s. Passive effects of the same name do not stack."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyMastery",
+          "value": "16",
+          "format": "%"
+        },
+        {
+          "type": "AnomalyProficiency",
+          "value": "16",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "12006": {
@@ -181,7 +218,9 @@
     "Desc3": "A special W-Engine that features motion capture algorithms, which enhance the overall combat competency of your squad.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_06.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -210,6 +249,17 @@
         }
       ],
       "Desc": "Launching a Chain Attack or Ultimate increases all squad members' ATK by % for 10s. This effect can trigger once every 20s. Passive effects of the same name do not stack."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "12",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "12007": {
@@ -221,7 +271,9 @@
     "Desc3": "An energy-storage type W-Engine with a unique operation circuit. It will absorb scattered energy up to a certain amount before unleashing it all at once.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_07.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -248,7 +300,9 @@
     "Desc3": "A tactical W-Engine that locates enemies using high-frequency sound waves. Its aiming aid can make its operator's precision attack more deadly.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_08.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -277,6 +331,17 @@
         }
       ],
       "Desc": "The equipper's attacks inflict 8% more Daze on their main target."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "12",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "12009": {
@@ -288,7 +353,9 @@
     "Desc3": "A frequency-converting W-Engine that can quickly generate excessive power and effectively increase its user's battle prowess.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_09.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -317,6 +384,17 @@
         }
       ],
       "Desc": "Upon becoming the active character in combat, the equipper's Impact increases by % for 10s. This effect can trigger once every 20s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ImpactBonus",
+          "value": "13",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "12010": {
@@ -328,7 +406,9 @@
     "Desc3": "A special W-Engine that can analyze the target's weak spots through real-time calculations.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_10.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -357,6 +437,17 @@
         }
       ],
       "Desc": "Accumulating Anomaly Buildup increases the equipper's Anomaly Mastery by [NUMBER] for 10s. This effect can trigger once every 20s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyMastery",
+          "value": "40",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "12011": {
@@ -368,7 +459,9 @@
     "Desc3": "A damage-type W-Engine that features an enhanced movement detection module that can quickly alter its output intensity to optimize battle efficiency.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_11.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -397,6 +490,17 @@
         }
       ],
       "Desc": "Accumulating Anomaly Buildup increases the equipper's Anomaly Proficiency by [NUMBER] for 10s. This effect can trigger once every 20s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "40",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "12012": {
@@ -408,7 +512,9 @@
     "Desc3": "A high-capacity W-Engine that features a built-in generator, which allows it to keep a stable storage of electrical power.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_12.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -435,7 +541,9 @@
     "Desc3": "A W-Engine with a component structure adjusted according to specific parameters. It can enhance the defensive capabilities of those who have a certain style of combat.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_13.png",
-    "WeaponType": { "5": "Defense" },
+    "WeaponType": {
+      "5": "Defense"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -464,6 +572,17 @@
         }
       ],
       "Desc": "When attacked, the equipper's DEF increases by % for 8s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "DEFBonus",
+          "value": "32",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "12014": {
@@ -475,7 +594,9 @@
     "Desc3": "A functional W-Engine that specializes in energy conversion. It can analyze combat environments and generate special sounds to disrupt the enemy's offense.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_14.png",
-    "WeaponType": { "5": "Defense" },
+    "WeaponType": {
+      "5": "Defense"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -502,7 +623,9 @@
     "Desc3": "A W-Engine with a built-in heating component. When operating at high speeds, it resembles a blazing blue flame.",
     "Rarity": 2,
     "Icon": "Weapon_B_Common_15.png",
-    "WeaponType": { "6": "Rupture" },
+    "WeaponType": {
+      "6": "Rupture"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -531,6 +654,17 @@
         }
       ],
       "Desc": "Upon becoming the active character in combat, the equipper's ATK increases by % for 10s. This effect can trigger once every 20s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "11.5",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13001": {
@@ -542,7 +676,9 @@
     "Desc3": "A custom-made W-Engine designed for urban music lovers. It sacrifices heat dissipation components for improved sound quality.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_01.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -569,7 +705,9 @@
     "Desc3": "A special W-Engine equipped with a high-speed camera module. The best choice for in-Hollow photography enthusiasts.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_02.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -596,7 +734,9 @@
     "Desc3": "A consumer-class W-Engine launched by an exotic pet fan club to promote pet culture. Due to its cute appearance, it was once a very popular model.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_03.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -625,6 +765,17 @@
         }
       ],
       "Desc": "For every 10 Energy consumed, the equipper gains a buff that increases ATK by % for 10s, stacking up to 10 times. The duration of each stack is calculated separately."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "4",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13004": {
@@ -636,7 +787,9 @@
     "Desc3": "A damage-type W-Engine made of special Etheric matter. When its user is attacked, it builds up energy.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_04.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -665,6 +818,17 @@
         }
       ],
       "Desc": "Launching a Dodge Counter or Quick Assist increases the equipper's ATK by 12% for 12s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "19.2",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13005": {
@@ -676,7 +840,9 @@
     "Desc3": "A high-power W-Engine that boasts a cutting-edge energy conversion system. It collects excess heat and supplies it to the steamer.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_05.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -705,6 +871,17 @@
         }
       ],
       "Desc": "For every 10 Energy accumulated, the equipper's Impact is increased by %, stacking up to 8 times. After Energy is consumed, this bonus remains for 8 more seconds. The duration of each stack is calculated separately."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ImpactBonus",
+          "value": "25.6",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13006": {
@@ -716,7 +893,9 @@
     "Desc3": "A special W-Engine whose outer shell is made of composite Etheric matter that effectively absorbs impact, and turns it against the enemy.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_06.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -732,6 +911,11 @@
     "Effect": {
       "Properties": [],
       "Desc": "When the target's HP is no lower than 50%, the equipper inflicts 10% more Daze to the target. When the target's HP is no lower than 75%, this bonus is further increased by 10%."
+    },
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": 0.32
     }
   },
   "13007": {
@@ -743,7 +927,9 @@
     "Desc3": "An epic W-Engine favored by Starlight Knight fans. Its high popularity and scarcity marketing strategy have caused an influx of knock-offs.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_07.png",
-    "WeaponType": { "5": "Defense" },
+    "WeaponType": {
+      "5": "Defense"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -784,6 +970,22 @@
         }
       ],
       "Desc": "Increases Max HP by %. When attacked, the equipper's Impact is increased by % for 12s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "HPBonus",
+          "value": "12.5",
+          "format": "%"
+        },
+        {
+          "type": "ImpactBonus",
+          "value": "16",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13008": {
@@ -795,7 +997,9 @@
     "Desc3": "A W-Engine produced by recycling abandoned Bangboo shells. Its electrode cores made of recycled metals can release high-voltage charges.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_08.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -824,6 +1028,17 @@
         }
       ],
       "Desc": "Whenever a squad member inflicts an Attribute Anomaly on an enemy, the equipper gains a buff that increases Anomaly Proficiency by [NUMBER], stacking up to 4 times. This effect expires when the target recovers from Stun or is defeated. The duration of each stack is calculated separately."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "192",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13009": {
@@ -835,7 +1050,9 @@
     "Desc3": "This damage-type W-Engine boasts a built-in current transformer, and automatically attracts electrically sensitive objects around the operator and deals additional damage to them.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_09.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -864,6 +1081,17 @@
         }
       ],
       "Desc": "When there are enemies inflicted with Attribute Anomaly on the field, the equipper's ATK increases by % and they deal an additional % more DMG to the target."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "192",
+          "format": "flat"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13010": {
@@ -875,7 +1103,9 @@
     "Desc3": "A special W-Engine decorated with a fluffy bunny. However, it is just an imitation of the real animal.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_10.png",
-    "WeaponType": { "5": "Defense" },
+    "WeaponType": {
+      "5": "Defense"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -916,6 +1146,22 @@
         }
       ],
       "Desc": "Increases Max HP by %. Increases the equipper's ATK by % when they are shielded."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "HPBonus",
+          "value": "12.8",
+          "format": "%"
+        },
+        {
+          "type": "ATKBonus",
+          "value": "16",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13011": {
@@ -927,7 +1173,9 @@
     "Desc3": "A special W-Engine equipped with a temperature regulator where residual heat generated by the W-Engine's high frequency is funneled into the hot springs on its surface.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_11.png",
-    "WeaponType": { "5": "Defense" },
+    "WeaponType": {
+      "5": "Defense"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -956,6 +1204,17 @@
         }
       ],
       "Desc": "Reduces DMG taken by %. When attacked, the equipper's Energy Generation Rate increases by % for 12s. When the equipper switches off-field, this buff will be transferred to the new on-field character with its duration refreshed. Passive effects of the same name do not stack."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "EnergyRegenBonus",
+          "value": "16",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13012": {
@@ -967,7 +1226,9 @@
     "Desc3": "The W-Engine, with its bright colors and great performance, saw poor sales at first because it resembled a toy. But with its reasonable price, it slowly gained a positive reputation.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_12.png",
-    "WeaponType": { "6": "Rupture" },
+    "WeaponType": {
+      "6": "Rupture"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -996,6 +1257,17 @@
         }
       ],
       "Desc": "Upon launching an EX Special Attack, the equipper's CRIT DMG increases by % for 12s. Additionally, if the target's current HP is below 50% of their Max HP, EX Special Attack DMG increases by %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMGBonus",
+          "value": "25.6",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13013": {
@@ -1007,7 +1279,9 @@
     "Desc3": "A W-Engine with a grandiose and luxurious appearance equipped with a premium Ether-powered anti-theft device. It's actually used to provide the equipper with energy.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_13.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1036,6 +1310,17 @@
         }
       ],
       "Desc": "ATK increases by %, and DMG dealt by EX Special Attacks increases by %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "9.6",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13014": {
@@ -1047,7 +1332,9 @@
     "Desc3": "Designed for those Hollow-dwelling bards who refuse to listen to the same albums repeatedly, this W-Engine comes equipped with a radio module that can transform Etheric frequencies into melodies.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_14.png",
-    "WeaponType": { "6": "Rupture" },
+    "WeaponType": {
+      "6": "Rupture"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1074,7 +1361,9 @@
     "Desc3": "Gather 'round, mortals! Turn up the music!",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_15.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1103,6 +1392,17 @@
         }
       ],
       "Desc": "When an EX Special Attack or Chain Attack hits an enemy, the equipper's ATK increases by % for 8s. While the target is under an Attribute Anomaly, this effect is increased by an additional %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "19.2",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13016": {
@@ -1114,7 +1414,9 @@
     "Desc3": "Clearly a W-Engine is for sound, and not images. What kind of lunatic genius would insist on stuffing a 16mm film camera into a W-Engine?",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_16.png",
-    "WeaponType": { "5": "Defense" },
+    "WeaponType": {
+      "5": "Defense"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1141,7 +1443,9 @@
     "Desc3": "Countless threads of Sword Will echo through this tiny stretch of sky.",
     "Rarity": 3,
     "Icon": "Weapon_A_Common_19.png",
-    "WeaponType": { "6": "Rupture" },
+    "WeaponType": {
+      "6": "Rupture"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1170,6 +1474,17 @@
         }
       ],
       "Desc": "When the equipper activates an EX Special Attack, they gain 1 stack of a buff. Each stack increases the equipper's DMG by %, up to 3 stacks, and lasting 20s. This effect can trigger once every 0.5s, and repeated triggers reset the duration. At 3 stacks, the equipper's CRIT Rate increases by %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "10.4",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13101": {
@@ -1181,7 +1496,9 @@
     "Desc3": "A customized W-Engine that focuses on energy storage, modified to improve its energy capacity. This model is often used by Anby.",
     "Rarity": 3,
     "Icon": "Weapon_A_1011.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1210,6 +1527,17 @@
         }
       ],
       "Desc": "Increases Electric DMG by %. When the equipper hits an enemy with a Dodge Counter or Assist Attack, their Energy Generation Rate increases by % for 8s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "EnergyRegenBonus",
+          "value": "27.5",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13103": {
@@ -1221,7 +1549,9 @@
     "Desc3": "A cost-effective W-Engine that can store energy, with improvements made to its internal space. This model is often used by Nicole.",
     "Rarity": 3,
     "Icon": "Weapon_A_1031.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1248,7 +1578,9 @@
     "Desc3": "An enhanced W-Engine with a high rotation speed. A chainsaw has been integrated into its shaft. This model is often used by Corin.",
     "Rarity": 3,
     "Icon": "Weapon_A_1061.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1275,7 +1607,9 @@
     "Desc3": "A customized supercomputing W-Engine, specialized in aim support and ballistic calculations. Modified by Billy, it now looks like some sort of knock-off Starlight Knight figurine.",
     "Rarity": 3,
     "Icon": "Weapon_A_1081.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1302,7 +1636,9 @@
     "Desc3": "Originally a rev-enhanced W-Engine, it has been modified by Anton with the most expensive rotary drill parts that allow it to exceed its output limits.",
     "Rarity": 3,
     "Icon": "Weapon_A_1111.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1329,7 +1665,9 @@
     "Desc3": "A powerful protection-type W-Engine, characterized by thick oil cylinders that ceaselessly roar inside it. It can provide sufficient power for heavy machinery.",
     "Rarity": 3,
     "Icon": "Weapon_A_1121.png",
-    "WeaponType": { "5": "Defense" },
+    "WeaponType": {
+      "5": "Defense"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1345,6 +1683,18 @@
     "Effect": {
       "Properties": [],
       "Desc": "Reduces DMG taken by %. After being attacked, the next attack to hit an enemy will trigger a critical hit and deal % of the equipper's DEF as additional DMG. This effect can be triggered once every 7.5s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AdditionalDMG",
+          "value": "960",
+          "format": "%",
+          "note": "% of DEF as additional damage"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13113": {
@@ -1356,7 +1706,9 @@
     "Desc3": "An intricate W-Engine developed by Section 6 and later modified with extra features. It can control Ether particles to form an energy field. This model is favored by Soukaku.",
     "Rarity": 3,
     "Icon": "Weapon_A_1131.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1385,6 +1737,17 @@
         }
       ],
       "Desc": "Increases Ice DMG by %. When launching an EX Special Attack, all squad members' ATK increases by % for 12s, stacking up to 4 times. Repeated triggers reset the duration. Passive effects of the same name do not stack."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "12.8",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13115": {
@@ -1396,7 +1759,9 @@
     "Desc3": "A support W-Engine propelled by jets that is both mobile and impactful, it can traverse the entire battlefield providing combat buffs.",
     "Rarity": 3,
     "Icon": "Weapon_A_1151.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1425,6 +1790,17 @@
         }
       ],
       "Desc": "When any friendly unit in the squad attacks and hits an enemy, all friendly units' ATK increases by % for 8s, stacking up to 4 times. The duration of each stack is calculated separately, and each friendly unit can provide 1 stack of the buff. Passive effects of the same name do not stack."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "16",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13127": {
@@ -1436,7 +1812,9 @@
     "Desc3": "A defensive W-Engine independently researched and created by Public Security which simplifies the offensive components to enhance the energy conversion ability in its shield. ",
     "Rarity": 3,
     "Icon": "Weapon_A_1271.png",
-    "WeaponType": { "5": "Defense" },
+    "WeaponType": {
+      "5": "Defense"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1463,7 +1841,9 @@
     "Desc3": "An energy W-Engine modded from spare parts of a truck's engine. It converts the original cylinder into an energy storage unit, which is highly advantageous.",
     "Rarity": 3,
     "Icon": "Weapon_A_1281.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1504,6 +1884,22 @@
         }
       ],
       "Desc": "When EX Special Attack hits an enemy, one of three possible effects is randomly triggered for 5 seconds. This effect can trigger once every 0.3s. The same types of effects cannot stack. Repeated triggers reset the duration, allowing several effects to be active at once: Increases the equipper's ATK by %, increases the equipper's Anomaly Proficiency by [NUMBER], or increases the equipper's Anomaly Buildup Rate by %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "12.8",
+          "format": "%"
+        },
+        {
+          "type": "AnomalyProficiency",
+          "value": "64",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "13135": {
@@ -1515,7 +1911,9 @@
     "Desc3": "An energy W-Engine modded from spare parts of a truck's engine. It converts the original cylinder into an energy storage unit, which is highly advantageous.",
     "Rarity": 3,
     "Icon": "Weapon_A_1351.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1531,6 +1929,11 @@
     "Effect": {
       "Properties": [],
       "Desc": "Upon launching an Aftershock, the equipper's Physical DMG increases by %, and Daze increases by %, lasting 10s."
+    },
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": 0.16
     }
   },
   "13142": {
@@ -1542,7 +1945,9 @@
     "Desc3": "Pressing acupoints is like cooking. Striking the fatal acupoint is like setting the stove on fire, bringing disaster.",
     "Rarity": 3,
     "Icon": "Assets/NapResources/UI/Sprite/A1DynamicLoad/ItemIconWeapon/UnPacker/Weapon_A_1421.png",
-    "WeaponType": { "5": "Defense" },
+    "WeaponType": {
+      "5": "Defense"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1569,7 +1974,9 @@
     "Desc3": "A flame both fierce and faithful, burning without end.",
     "Rarity": 3,
     "Icon": "Weapon_A_1441.png",
-    "WeaponType": { "6": "Rupture" },
+    "WeaponType": {
+      "6": "Rupture"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1598,6 +2005,17 @@
         }
       ],
       "Desc": "The equipper's Fire DMG increases by %. When the equipper's HP decreases, their CRIT Rate increases by % for 5s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "24",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14001": {
@@ -1609,7 +2027,9 @@
     "Desc3": "A high-performance supercomputing W-Engine, capable of collecting real-time battlefield data and equipped with mini cannons.",
     "Rarity": 3,
     "Icon": "Weapon_S_Common_01.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1638,6 +2058,23 @@
         }
       ],
       "Desc": "Increases ATK by %. Landing a critical hit on an enemy will inflict an additional % of ATK as DMG. This effect can trigger once every 8s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "12",
+          "format": "%"
+        },
+        {
+          "type": "AdditionalDMG",
+          "value": "200",
+          "format": "%",
+          "note": "% of ATK as additional damage"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14002": {
@@ -1649,7 +2086,9 @@
     "Desc3": "A new supercomputing W-Engine, featuring cutting-edge integrated chips that dynamically monitor the battlefield and provide tactical analysis for the user.",
     "Rarity": 3,
     "Icon": "Weapon_S_Common_02.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1678,6 +2117,17 @@
         }
       ],
       "Desc": "Whenever the equipper's attack triggers an Attribute Counter effect, all units' CRIT Rate against the struck enemy increases by % for 12s. Passive effects of the same name do not stack."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "20",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14003": {
@@ -1689,7 +2139,9 @@
     "Desc3": "A special W-Engine modeled after a revolver. It can load bullet-shaped condensed Ether batteries, which release a great amount of power when fired.",
     "Rarity": 3,
     "Icon": "Weapon_S_Common_03.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1705,6 +2157,11 @@
     "Effect": {
       "Properties": [],
       "Desc": "The equipper gains 1 Charge stack every 3s, stacking up to 6 times. When launching an EX Special Attack, consumes all Charge stacks and each stack consumed increases the skill's Daze inflicted by 4%."
+    },
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": 0.384
     }
   },
   "14102": {
@@ -1716,7 +2173,9 @@
     "Desc3": "A supercomputing W-Engine equipped with a motion monitoring feature. Thanks to Nekomata's modifications, it perfectly matches the fast reflexes and combat maneuvers of feline Thirens.",
     "Rarity": 4,
     "Icon": "Weapon_S_1021.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1743,7 +2202,9 @@
     "Desc3": "A W-Engine made for Soldier 11 by Obsidian Division. Its intense heat can be used to clear the entire battlefield.",
     "Rarity": 4,
     "Icon": "Weapon_S_1041.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1772,6 +2233,17 @@
         }
       ],
       "Desc": "Upon hitting an enemy with a Basic Attack, Dash Attack, or Dodge Counter, the equipper's ATK increases by % for 8s, stacking up to 8 times. This effect can trigger once every 0.5s. The duration of each stack is calculated separately."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "28",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14105": {
@@ -1783,7 +2255,9 @@
     "Desc3": "In chasing illusions, she was entranced by the light that pierced through the mist.",
     "Rarity": 4,
     "Icon": "Weapon_S_1051.png",
-    "WeaponType": { "6": "Rupture" },
+    "WeaponType": {
+      "6": "Rupture"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1812,6 +2286,17 @@
         }
       ],
       "Desc": "When the equipper's HP decreases, their Ice Sheer DMG increases by %, stacking up to 3 times and lasting 25s. The duration of each stack is calculated separately. This effect can trigger once every 0.5s. When the equipper's HP falls to 50% of Max HP or below, CRIT Rate increases by %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "20",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14107": {
@@ -1823,7 +2308,9 @@
     "Desc3": "A versatile W-Engine based on a motorcycle tire that Big Daddy made for Caesar.",
     "Rarity": 4,
     "Icon": "Weapon_S_1071.png",
-    "WeaponType": { "5": "Defense" },
+    "WeaponType": {
+      "5": "Defense"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1839,6 +2326,17 @@
     "Effect": {
       "Properties": [],
       "Desc": "The Shield value provided by the equipper increases by 30%. When any squad member triggers Interrupt or Perfect Dodge, all squad members' DMG increases by 18% and Daze dealt increases by 12% for 20s. Passive effects of the same name do not stack."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "DMGBonus",
+          "value": "18",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0.12
     }
   },
   "14109": {
@@ -1850,7 +2348,9 @@
     "Desc3": "Hail falls before the shrine, waking her. The blizzard is coming.",
     "Rarity": 4,
     "Icon": "Weapon_S_1091.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1879,6 +2379,17 @@
         }
       ],
       "Desc": "CRIT DMG increases by %. When using an EX Special Attack or when any squad member applies an Attribute Anomaly to an enemy, the equipper's Ice DMG increases by %, stacking up to 2 times and lasting 15s. The duration of each stack is calculated separately."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMGBonus",
+          "value": "50",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14110": {
@@ -1890,7 +2401,9 @@
     "Desc3": "A functional W-Engine with ultra-high power capacity. Modified by Koleda, its energy level has almost exceeded the safety limit.",
     "Rarity": 4,
     "Icon": "Weapon_S_1101.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1919,6 +2432,17 @@
         }
       ],
       "Desc": "While off-field, the equipper's Energy Regen increases by /s. When using an EX Special Attack, the equipper's Impact is increased by % for 10s, stacking up to 2 times. The duration of each stack is calculated separately."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ImpactBonus",
+          "value": "20",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14114": {
@@ -1930,7 +2454,9 @@
     "Desc3": "A special W-Engine with a powerful temperature control system. Modified by Lycaon, it has the capability to quickly create extremely cold environments.",
     "Rarity": 4,
     "Icon": "Weapon_S_1141.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1957,7 +2483,9 @@
     "Desc3": "A violent W-Engine that can ignite flames with a siphon. It deals simple and crude burn damage, encouraging relentless, bone-crushing follow-up attacks.",
     "Rarity": 4,
     "Icon": "Weapon_S_1161.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -1998,6 +2526,22 @@
         }
       ],
       "Desc": "Upon launching a Quick Assist or Perfect Assist, the equipper's Impact increases by % for 8s. When the equipper launches and hits an enemy with a Basic Attack, apply Wilt to the target for 30s, stacking up to 20 times, repeated triggers reset the duration. When any squad member hits an enemy, for every stack of Wilt applied to the target, the CRIT DMG of the Ice DMG and Fire DMG dealt by that attack increases by %. Only one instance of this effect can exist in the same squad."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ImpactBonus",
+          "value": "25",
+          "format": "%"
+        },
+        {
+          "type": "CRITDMGBonus",
+          "value": "30",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14117": {
@@ -2009,7 +2553,9 @@
     "Desc3": "Modified by Burnice, this W-Engine uses a special fuel as its power source to boost combustion performance to the max.",
     "Rarity": 4,
     "Icon": "Weapon_S_1171.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2038,6 +2584,17 @@
         }
       ],
       "Desc": "While off-field, the equipper's Energy Regen increases by /s. When hitting an enemy with an EX Special Attack or Assist Attack, the equipper's DMG increases by %, stacking up to 10 times and lasting for 6s. This effect can trigger once every 0.3s. While off-field, the stack effect is doubled. Repeated triggers reset the duration. Upon obtaining the DMG increase effect, if the number of current stacks is greater than or equal to 5, then the equipper's Anomaly Proficiency increases by [NUMBER]. This Anomaly Proficiency increase does not stack and lasts for 6s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "50",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14118": {
@@ -2049,7 +2606,9 @@
     "Desc3": "The latest W-Engine that possesses a hypercalculation core. It can compile operational codes for machines at top speed. This model is favored by Grace.",
     "Rarity": 4,
     "Icon": "Weapon_S_1181.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2078,6 +2637,17 @@
         }
       ],
       "Desc": "When using a Special Attack or EX Special Attack, the equipper's Anomaly Proficiency is increased by [NUMBER] for 8s, stacking up to 3 times. The duration of each stack is calculated separately."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "75",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14119": {
@@ -2089,7 +2659,9 @@
     "Desc3": "A high-power W-Engine that possesses efficient freezing capabilities and high damage output. This model is often used by Ellen.",
     "Rarity": 4,
     "Icon": "Weapon_S_1191.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2118,6 +2690,17 @@
         }
       ],
       "Desc": "Increases Ice DMG by %. Upon hitting an enemy with a Basic Attack, the equipper's CRIT Rate increases by % for 8s. When dealing Ice DMG with a Dash Attack, the equipper's CRIT Rate increases by an additional % for 15s. The duration of each effect is calculated separately."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "20",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14120": {
@@ -2129,7 +2712,9 @@
     "Desc3": "Bitterness and pain beget hope, and he devours them all.",
     "Rarity": 4,
     "Icon": "Weapon_S_1201.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2158,6 +2743,17 @@
         }
       ],
       "Desc": "CRIT Rate increases by %. Dash Attack Electric DMG increases by %. When any squad member applies an Attribute Anomaly or Stuns an enemy, the equipper's CRIT Rate increases by an additional % for 15s."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "20",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14121": {
@@ -2169,7 +2765,9 @@
     "Desc3": "A special W-Engine with multiple layers embedded inside. It can quickly recharge \tspecial-model Bangboo and custom-made combat equipment. This model is favored by Rina.",
     "Rarity": 4,
     "Icon": "Weapon_S_1211.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2196,7 +2794,9 @@
     "Desc3": "A new model of supercomputing W-Engine custom-made by HSO Section 6, equipped with the most elite calculation and analysis functions.",
     "Rarity": 4,
     "Icon": "Weapon_S_1221.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2225,6 +2825,17 @@
         }
       ],
       "Desc": "The equipper's Electric Anomaly Buildup Rate increases by %. When Special Attacks or EX Special Attacks hit enemies suffering an Attribute Anomaly, the equipper's Anomaly Proficiency increases by [NUMBER] for 15s. When the equipper's Anomaly Proficiency is greater than or equal to 375, Disorder DMG inflicted by the equipper increases by %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "75",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14124": {
@@ -2236,7 +2847,9 @@
     "Desc3": "The latest tactical W-Engine used by Public Security's elite Hollow squads, possessing a powerful Ether energy source. It's Zhu Yuan's favored model.",
     "Rarity": 4,
     "Icon": "Weapon_S_1241.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2265,6 +2878,17 @@
         }
       ],
       "Desc": "Increases CRIT Rate by %. Launching an EX Special Attack grants the equipper 8 Charge stacks, up to a maximum of 8 stacks. Whenever the equipper's Basic Attack or Dash Attack deals Ether DMG, consumes a Charge stack and increases the skill's DMG by %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "15",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14125": {
@@ -2276,7 +2900,9 @@
     "Desc3": "A custom stun W-Engine made for an Automaton referencing the combat style and abilities of one. Energy is stored within, then lashes outwards upon conversion.",
     "Rarity": 4,
     "Icon": "Weapon_S_1251.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2305,6 +2931,17 @@
         }
       ],
       "Desc": "When a Basic Attack hits an enemy, gain 1 stack of Tea-riffic. Each stack of Tea-riffic increases the user's Impact by %, stacking up to 30 times, and lasting for 8s. The duration of each stack is calculated separately. Upon acquiring Tea-riffic, if the equipper possesses stacks of Tea-riffic greater than or equal to 15, all squad members' DMG is increased by % for 10s. Passive effects of the same name do not stack."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ImpactBonus",
+          "value": "21",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14126": {
@@ -2316,7 +2953,9 @@
     "Desc3": "A deadly W-Engine from unknown sources, modified personally by Jane Doe with the intent to deal severe physical damage and Anomaly.",
     "Rarity": 4,
     "Icon": "Weapon_S_1261.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2343,7 +2982,9 @@
     "Desc3": "Shadowed by darkness at every step, he laid bare his heart to kindle a single, flickering flame.",
     "Rarity": 4,
     "Icon": "Weapon_S_1291.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2372,6 +3013,17 @@
         }
       ],
       "Desc": "Increases CRIT DMG by %. When using an EX Special Attack, Chain Attack, or Ultimate to deal Ice DMG, the equipper gains the Absolute Zero Death Sentence effect for 3s. While Absolute Zero Death Sentence is active, the character ignores % of the enemy's DEF when landing a hit."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMGBonus",
+          "value": "45",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14130": {
@@ -2383,7 +3035,9 @@
     "Desc3": "She lingers by the banks of the Styx, waiting for the tide to extinguish the fury burning in her chamber.",
     "Rarity": 4,
     "Icon": "Weapon_S_1301.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2412,6 +3066,17 @@
         }
       ],
       "Desc": "Increases CRIT Rate by %. When the equipper triggers an Aftershock that deals Fire DMG, their attacks ignore % of the target's DEF for 8s. Can stack once every 3s, up to 2 stacks. Repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "20",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14131": {
@@ -2423,7 +3088,9 @@
     "Desc3": "Underneath the radiant splendor, her genuine self has never been hidden.",
     "Rarity": 4,
     "Icon": "Weapon_S_1311.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2450,7 +3117,9 @@
     "Desc3": "The sound of the strings, sharp as blades, cut through the night, protecting the one.",
     "Rarity": 4,
     "Icon": "Weapon_S_1321.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2479,6 +3148,17 @@
         }
       ],
       "Desc": "CRIT DMG increases by %. When the equipper enters combat, or activates a Chain Attack or Ultimate, they gain 1 stack of Heartstring. Each stack of Heartstring allows the equipper's Chain Attack and Ultimate to ignore % of the target's Fire RES, stacking up to 2 times and lasting 30s. Repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMGBonus",
+          "value": "50",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14133": {
@@ -2490,7 +3170,9 @@
     "Desc3": "A bird landed on the windowsill, scattering starlight from its tail feathers.",
     "Rarity": 4,
     "Icon": "Weapon_S_1331.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2519,6 +3201,17 @@
         }
       ],
       "Desc": "Increases Anomaly Buildup Rate by %. When the equipper deals Ether DMG, their Anomaly Proficiency increases by [NUMBER] for 5s, stacking up to 6 times. This effect can trigger once every 0.5s, and repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "120",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14134": {
@@ -2530,7 +3223,9 @@
     "Desc3": "Not too sweet, and not too cold.",
     "Rarity": 4,
     "Icon": "Weapon_S_1341.png",
-    "WeaponType": { "5": "Defense" },
+    "WeaponType": {
+      "5": "Defense"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2583,6 +3278,27 @@
         }
       ],
       "Desc": "The equipper's Energy Regen increases by /s. All squad members gain % ATK and % Max HP. Only one instance of this effect can exist in the same squad. When the equipper activates or extends an Ether Veil, all squad members gain % CRIT DMG for 60s. Repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "HPBonus",
+          "value": "10",
+          "format": "%"
+        },
+        {
+          "type": "ATKBonus",
+          "value": "10",
+          "format": "%"
+        },
+        {
+          "type": "CRITDMGBonus",
+          "value": "30",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14136": {
@@ -2594,7 +3310,9 @@
     "Desc3": "Broken eyes hold both resilience and vulnerability.",
     "Rarity": 4,
     "Icon": "Weapon_S_1361.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2623,6 +3341,17 @@
         }
       ],
       "Desc": "When the equipper's Aftershock hits an enemy, causing Electric DMG, the target's DEF is reduced by % for 5s. Passive effects of the same name do not stack. When this effect is triggered, if the equipper is not the active character, they gain 1 stack of Spirit Lock, up to a maximum of 3 stacks. This can trigger only once per use of a skill. Each stack of Spirit Lock increases the equipper's Impact by %, lasting 12s. The duration of each stack is calculated separately. At full stacks of Spirit Lock, the equipper's Impact increases by an additional %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ImpactBonus",
+          "value": "20",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14137": {
@@ -2634,7 +3363,9 @@
     "Desc3": "The world is vast and full of change, and fate is unpredictable. But regardless of hardship or lack thereof, one must stay true to one's heart.",
     "Rarity": 4,
     "Icon": "Weapon_S_1371.png",
-    "WeaponType": { "6": "Rupture" },
+    "WeaponType": {
+      "6": "Rupture"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2663,6 +3394,17 @@
         }
       ],
       "Desc": "CRIT Rate increases by %. When the equipper launches an EX Special Attack, the character gains 1 stack of Qingming Companion effect, stacking up to 2 times and lasting 15s. On entering combat, immediately gain 2 stacks. Repeated triggers reset the duration. Each stack of the Qingming Companion effect increases the equipper's Ether DMG by %, and increases Ultimate and EX Special Attack Ether Sheer DMG by %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "20",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14138": {
@@ -2674,7 +3416,9 @@
     "Desc3": "The sheen of silver is not innocence. Can the blades of the past cut through fate's connections?",
     "Rarity": 4,
     "Icon": "Weapon_S_1381.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2703,6 +3447,17 @@
         }
       ],
       "Desc": "CRIT DMG is increased by %. When the equipper lands a hit with a Basic Attack, Special Attack, or Aftershock, they gain 1 stack of a buff. Each stack increases the equipper's CRIT DMG by an additional %, stacking up to 3 times. The effect lasts for 30s, with each stack's duration calculated separately, and can only be triggered once per use of a skill. With all 3 stacks, the equipper's Electric DMG increases by %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMGBonus",
+          "value": "60",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14139": {
@@ -2714,7 +3469,9 @@
     "Desc3": "The warm fire blazes through the long night, casting light on the tiger's roar in my heart.",
     "Rarity": 4,
     "Icon": "Weapon_S_1391.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2730,6 +3487,17 @@
     "Effect": {
       "Properties": [],
       "Desc": "The Daze dealt by the equipper's EX Special Attack, Chain Attack, and Ultimate increases by %. When using a Chain Attack or Ultimate to deal Fire DMG, the DMG dealt by all squad members increases by %, stacking up to 2 times and lasting 30s. The duration of each stack is calculated separately. Triggers once per use of a skill. Only one instance of this effect can exist in the same squad."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "DMGBonus",
+          "value": "10",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0.28
     }
   },
   "14140": {
@@ -2741,7 +3509,9 @@
     "Desc3": "Starlight became her blade, and she held courage and love firmly in her hands.",
     "Rarity": 4,
     "Icon": "Weapon_S_1401.png",
-    "WeaponType": { "3": "Anomaly" },
+    "WeaponType": {
+      "3": "Anomaly"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2770,6 +3540,17 @@
         }
       ],
       "Desc": "The equipper's Anomaly Mastery increases by [NUMBER]. When inflicting Assault, the equipper's Physical DMG increases by % for 20s, stacking up to 2 times. Repeated triggers reset the duration. When the equipper enters combat, immediately gain 2 stacks."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyMastery",
+          "value": "60",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14141": {
@@ -2781,7 +3562,9 @@
     "Desc3": "A masterfully crafted design, infused with the creator's pursuit of beauty.",
     "Rarity": 4,
     "Icon": "Weapon_S_1411.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2822,6 +3605,22 @@
         }
       ],
       "Desc": "When the equipper's EX Special Attack or Ultimate deals Physical DMG, their Anomaly Mastery increases by [NUMBER] for 40s. When the equipper's Aftershock hits an enemy, all squad members' Anomaly Proficiency increases by [NUMBER] for 40s. Only one instance of this effect can exist in the same squad."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyMastery",
+          "value": "30",
+          "format": "%"
+        },
+        {
+          "type": "AnomalyProficiency",
+          "value": "60",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14143": {
@@ -2833,7 +3632,9 @@
     "Desc3": "The world may change, but my heart remains constant, like clouds standing eternal.",
     "Rarity": 4,
     "Icon": "Weapon_S_1431.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2862,6 +3663,17 @@
         }
       ],
       "Desc": "The equipper's DMG ignores % of the target's Physical RES. When the equipper activates an Ether Veil, the equipper's DMG increases by % and CRIT DMG increases by % for 40s. Repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMGBonus",
+          "value": "25",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14145": {
@@ -2873,7 +3685,9 @@
     "Desc3": "After countless years, it remains a silent puzzle.",
     "Rarity": 4,
     "Icon": "Weapon_S_1451.png",
-    "WeaponType": { "4": "Support" },
+    "WeaponType": {
+      "4": "Support"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2902,6 +3716,17 @@
         }
       ],
       "Desc": "The equipper's Energy Regen increases by /s. When the equipper activates Ether Veil or extends its duration, all squad members gain % increased DMG and % increased Max HP for 45s. Repeated triggers reset the duration. Only one instance of this effect can exist in the same squad."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "HPBonus",
+          "value": "15",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14146": {
@@ -2913,7 +3738,9 @@
     "Desc3": "Her journey continues along the long, endless circle.",
     "Rarity": 4,
     "Icon": "Weapon_S_1461.png",
-    "WeaponType": { "1": "Attack" },
+    "WeaponType": {
+      "1": "Attack"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2942,6 +3769,17 @@
         }
       ],
       "Desc": "Increases CRIT Rate by %. When the equipper deals DMG with a Basic Attack or EX Special Attack, they gain 1 stack of a buff. Each stack increases the equipper's Electric DMG by %, up to 2 stacks. Each stack lasts 40s. The duration of each stack is calculated separately. Can trigger once per use of a skill. At 2 stacks, the wearer's Basic Attack and Ultimate DMG ignore % of enemy DEF."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "15",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14147": {
@@ -2953,7 +3791,9 @@
     "Desc3": "The purging flames burned a hundred times, yet never cleansed me.",
     "Rarity": 4,
     "Icon": "Weapon_S_1471.png",
-    "WeaponType": { "6": "Rupture" },
+    "WeaponType": {
+      "6": "Rupture"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -2982,6 +3822,17 @@
         }
       ],
       "Desc": "CRIT Rate increases by %. When the equipper launches an EX Special Attack, their Fire Sheer DMG increases by %, stacking up to 2 times and lasting 20s. The duration of each stack is calculated separately."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "20",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
     }
   },
   "14148": {
@@ -2993,7 +3844,9 @@
     "Desc3": "That call you never picked up... she's the one who answered it.",
     "Rarity": 4,
     "Icon": "Weapon_S_1481.png",
-    "WeaponType": { "2": "Stun" },
+    "WeaponType": {
+      "2": "Stun"
+    },
     "BaseProperty": {
       "Name": "Base ATK",
       "Name2": "Base ATK",
@@ -3022,6 +3875,17 @@
         }
       ],
       "Desc": "While off-field, the equipper's Energy Regen increases by /s. When the equipper deals Physical DMG with an EX Special Attack, the Daze dealt by the equipper's attacks increases by % for 10s, stacking up to 3 times. At 3 stacks, all squad members gain % additional CRIT DMG for 40s. Repeated triggers reset the duration. Only one instance of this CRIT DMG boost effect can exist in the same squad."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMGBonus",
+          "value": "30",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0.09
     }
   }
 }

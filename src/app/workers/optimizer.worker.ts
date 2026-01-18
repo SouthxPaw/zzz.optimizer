@@ -238,8 +238,12 @@ function calculateFinalStats(
   discs: { [key in DiscSlot]?: Disc },
   mindscapeLevel: number = 0
 ): BaseStats {
-  // Initialize anomalyMasteryPercent to 0 since it may not exist in older data
-  const stats: BaseStats = { ...agent.lvl60Stats, anomalyMasteryPercent: 0 };
+  // Initialize percent bonuses to 0 since they may not exist in older data
+  const stats: BaseStats = {
+    ...agent.lvl60Stats,
+    anomalyMasteryPercent: 0,
+    energyRegenPercent: 0
+  };
 
   // Apply W-Engine stats
   if (wEngine) {
@@ -255,7 +259,7 @@ function calculateFinalStats(
       case 'HP%': stats.hppercent += subStatValue; break;
       case 'DEF%': stats.defpercent += subStatValue; break;
       case 'PEN_Ratio': stats.penRatio += subStatValue; break;
-      case 'Energy_Regen': stats.energyRegen += subStatValue; break;
+      case 'Energy_Regen': stats.energyRegenPercent += subStatValue; break;
       case 'Impact': stats.impact += subStatValue; break;
       case 'Anomaly_Proficiency': stats.anomalyProficiency += subStatValue; break;
     }
@@ -277,7 +281,7 @@ function calculateFinalStats(
               case 'CRIT_Rate': stats.critRate += value; break;
               case 'CRIT_DMG': stats.critDmg += value; break;
               case 'PEN_Ratio': stats.penRatio += value; break;
-              case 'Energy_Regen': stats.energyRegen += value; break;
+              case 'Energy_Regen': stats.energyRegenPercent += value; break;
               case 'Anomaly_Proficiency': stats.anomalyProficiency += value; break;
               case 'Anomaly_Mastery': stats.anomalyMastery += value; break;
               case 'Impact': stats.impact += value; break;
@@ -306,7 +310,7 @@ function calculateFinalStats(
       case 'Anomaly_Mastery': stats.anomalyMasteryPercent += mainStat.value; break;
       case 'Pen_Ratio': stats.penRatio += mainStat.value; break;
       case 'Impact': stats.impact += mainStat.value; break;
-      case 'Energy_Regen': stats.energyRegen += mainStat.value; break;
+      case 'Energy_Regen': stats.energyRegenPercent += mainStat.value; break;
     }
   });
 
@@ -327,13 +331,17 @@ function calculateFinalStats(
         case 'Anomaly_Proficiency': stats.anomalyProficiency += subStat.value; break;
         case 'PEN': stats.pen += subStat.value; break;
         case 'Impact': stats.impact += subStat.value; break;
-        case 'Energy_Regen': stats.energyRegen += subStat.value; break;
+        case 'Energy_Regen': stats.energyRegenPercent += subStat.value; break;
       }
     });
   });
 
   // Apply set bonuses
   applySetBonuses(stats, discs, agent, wEngine);
+
+  // Calculate final energy regen using correct formula:
+  // Energy/sec = Base × (1 + Σ %bonuses/100)
+  const finalEnergyRegen = stats.energyRegen * (1 + stats.energyRegenPercent / 100);
 
   return {
     hp: Math.round(stats.hp),
@@ -350,7 +358,8 @@ function calculateFinalStats(
     anomalyProficiency: Math.round(stats.anomalyProficiency),
     pen: Math.round(stats.pen),
     penRatio: Math.round(stats.penRatio * 10) / 10,
-    energyRegen: Math.round(stats.energyRegen * 10) / 10
+    energyRegen: Math.round(finalEnergyRegen * 10) / 10,
+    energyRegenPercent: Math.round(stats.energyRegenPercent * 10) / 10
   };
 }
 
