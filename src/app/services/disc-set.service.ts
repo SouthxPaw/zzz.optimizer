@@ -46,6 +46,14 @@ export class DiscSetService {
     }
   }
 
+  /**
+   * Reload disc sets from database
+   * Called after bulk import to refresh the cache
+   */
+  async reloadDiscSets(): Promise<void> {
+    await this.loadDiscSetsFromDb();
+  }
+
   getDiscSets(): DiscSet[] {
     return this.discSetsSubject.value;
   }
