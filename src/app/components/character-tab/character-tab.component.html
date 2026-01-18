@@ -8,13 +8,15 @@
     <button
       class="tab-btn"
       [class.active]="activeTab === 'builds'"
-      (click)="activeTab = 'builds'">
+      (click)="activeTab = 'builds'"
+    >
       My Builds
     </button>
     <button
       class="tab-btn"
       [class.active]="activeTab === 'optimizer'"
-      (click)="activeTab = 'optimizer'">
+      (click)="activeTab = 'optimizer'"
+    >
       How Scoring Works
     </button>
   </div>
@@ -22,653 +24,1031 @@
   <!-- Builds Tab -->
   <div *ngIf="activeTab === 'builds'" class="tab-content">
     <!-- Important Assumptions Notice -->
-  <div *ngIf="showAssumptionsNotice" class="assumptions-notice">
-    <div class="notice-icon">ℹ️</div>
-    <div class="notice-content">
-      <h3>Important Assumptions</h3>
-      <ul>
-        <li><strong>All Discs:</strong> Assumed to be S-Rank and +15</li>
-        <li><strong>All Agents:</strong> Assumed to be Level 60 with Core Skill/Passive maxed out</li>
-        <li><strong>W-Engine Effects:</strong> Assumed to meet best-case scenario conditions</li>
-      </ul>
-      <p>
-        This tool provides estimates and is not indicative of your skill or build quality. I don't enforce "optimal" W-Engines or disc sets
-        because I believe in player creativity and experimentation. Skill expression is what makes ZZZ awesome - play your way! Check the credits page for more information.
-      </p>
-    </div>
-    <button class="notice-close-btn" (click)="dismissAssumptionsNotice()" title="Dismiss notice">×</button>
-  </div>
-
-  <div class="content-grid">
-    <!-- Builds List -->
-    <div class="section builds-list">
-      <div class="section-header-inline">
-        <h2>Agents</h2>
-        <button class="btn-primary btn-compact" (click)="openAddAgentModal()">
-          + Add Agent
-        </button>
+    <div *ngIf="showAssumptionsNotice" class="assumptions-notice">
+      <div class="notice-icon">ℹ️</div>
+      <div class="notice-content">
+        <h3>Important Assumptions</h3>
+        <ul>
+          <li><strong>All Discs:</strong> Assumed to be S-Rank and +15</li>
+          <li>
+            <strong>All Agents:</strong> Assumed to be Level 60 with Core
+            Skill/Passive maxed out
+          </li>
+          <li>
+            <strong>W-Engine Effects:</strong> Assumed to meet best-case
+            scenario conditions
+          </li>
+        </ul>
+        <p>
+          This tool provides estimates and is not indicative of your skill or
+          build quality. I don't enforce "optimal" W-Engines or disc sets
+          because I believe in player creativity and experimentation. Skill
+          expression is what makes ZZZ awesome - play your way! Check the
+          credits page for more information.
+        </p>
       </div>
-
-      <!-- Empty State -->
-      <div *ngIf="builds.length === 0" class="empty-state">
-        <img src="assets/data/images/page-icons/avatar_default.webp" alt="No builds" class="empty-icon-img" loading="lazy">
-        <h3>No Builds Yet</h3>
-        <p>Click "+ Add Agent" in the top right to create your first build.</p>
-      </div>
-
-      <!-- Builds Grid -->
-      <div class="builds-grid" *ngIf="builds.length > 0">
-        <div
-          *ngFor="let build of builds; trackBy: trackByBuildId"
-          class="build-card"
-          [class.selected]="selectedBuild?.id === build.id"
-          [class.s-rank]="getAgentRarity(build.agentId) === 'S'"
-          [class.a-rank]="getAgentRarity(build.agentId) === 'A'"
-          (click)="selectBuild(build)">
-          <button class="delete-btn" (click)="deleteBuild(build.id, $event)" title="Delete build">×</button>
-          <div class="build-portrait">
-            <img *ngIf="getAgentIcon(build.agentId)"
-                 [src]="getAgentIcon(build.agentId)"
-                 [alt]="build.name"
-                 class="agent-icon"
-                 loading="lazy">
-            <span *ngIf="!getAgentIcon(build.agentId)" class="build-name">{{build.name}}</span>
-          </div>
-          <div class="build-info">
-            <div class="agent-name-label">{{build.name}}</div>
-            <div class="build-stats">
-              <div class="stat-badge">M{{build.mindscapeLevel}}</div>
-              <div class="stat-badge">{{getEquippedDiscsCount(build)}}/6 Discs</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <button
+        class="notice-close-btn"
+        (click)="dismissAssumptionsNotice()"
+        title="Dismiss notice"
+      >
+        ×
+      </button>
     </div>
 
-    <!-- Build Details -->
-    <div class="section build-details" *ngIf="selectedBuild">
-      <h2>{{selectedBuild.name}}</h2>
-
-      <!-- Mindscape Cinema -->
-      <div class="mindscape-section">
-        <h3 data-tooltip="Agent duplication level (constellations/eidolons)">Mindscape Cinema</h3>
-        <div class="mindscape-toggles">
-          <button
-            *ngFor="let m of [1,2,3,4,5,6]; trackBy: trackByMindscapeLevel"
-            class="mindscape-btn"
-            [class.active]="selectedBuild.mindscapeLevel >= m"
-            (click)="toggleMindscape(m)">
-            M{{m}}
-          </button>
-        </div>
-      </div>
-
-      <!-- W-Engine -->
-      <div class="wengine-section">
-        <div class="wengine-selector-header">
-          <h3>W-Engine</h3>
-          <button class="btn-secondary small" (click)="showWEnginePicker = !showWEnginePicker">
-            {{ showWEnginePicker ? 'Hide' : 'Select W-Engine' }}
+    <div class="content-grid">
+      <!-- Builds List -->
+      <div class="section builds-list">
+        <div class="section-header-inline">
+          <h2>Agents</h2>
+          <button class="btn-primary btn-compact" (click)="openAddAgentModal()">
+            + Add Agent
           </button>
         </div>
 
-        <!-- W-Engine Picker -->
-        <div *ngIf="showWEnginePicker" class="wengine-picker">
-          <div class="wengine-picker-controls">
-            <input
-              type="text"
-              [(ngModel)]="wengineSearchTerm"
-              placeholder="Search W-Engines..."
-              class="search-input">
-            <div class="filter-group">
-              <label>Specialty:</label>
-              <select [(ngModel)]="wengineSpecialtyFilter" class="filter-select">
-                <option value="">All Specialties</option>
-                <option value="Attack">Attack</option>
-                <option value="Stun">Stun</option>
-                <option value="Anomaly">Anomaly</option>
-                <option value="Support">Support</option>
-                <option value="Defense">Defense</option>
-                <option value="Rupture">Rupture</option>
-              </select>
-            </div>
-            <div class="filter-group">
-              <label>Rank:</label>
-              <select [(ngModel)]="wengineRarityFilter" class="filter-select">
-                <option value="">All Ranks</option>
-                <option value="S">S-Rank</option>
-                <option value="A">A-Rank</option>
-                <option value="B">B-Rank</option>
-              </select>
-            </div>
-            <div class="filter-group">
-              <label>Sort By:</label>
-              <select [(ngModel)]="wengineSortBy" class="filter-select">
-                <option value="name">Name</option>
-                <option value="rarity">Rarity</option>
-                <option value="atk">ATK</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="wengine-list">
-            <div class="wengine-list-item" (click)="onWEngineSelect('')">
-              <span class="wengine-list-name">None</span>
-            </div>
-            <div
-              *ngFor="let engine of getFilteredWEngines(); trackBy: trackByWEngineId"
-              class="wengine-list-item"
-              [class.s-rank]="engine.rarity === 'S'"
-              [class.a-rank]="engine.rarity === 'A'"
-              [class.b-rank]="engine.rarity === 'B'"
-              [class.selected]="selectedBuild.equippedWEngine?.id === engine.id"
-              (click)="onWEngineSelect(engine.id)">
-              <img *ngIf="engine.icon"
-                   [src]="engine.icon"
-                   [alt]="engine.name"
-                   class="wengine-thumbnail"
-                   loading="lazy">
-              <div class="wengine-list-info">
-                <span class="wengine-list-name">{{engine.name}}</span>
-                <span class="wengine-list-rarity">
-                  {{engine.rarity}}-Rank
-                </span>
-              </div>
-              <img
-                [src]="getSpecialtyIcon(engine.specialty)"
-                [alt]="engine.specialty"
-                class="wengine-specialty-icon"
-                [title]="engine.specialty"
-                loading="lazy">
-            </div>
-          </div>
-        </div>
-
-        <div *ngIf="selectedBuild.equippedWEngine" class="wengine-details">
-          <div class="wengine-header">
-            <img *ngIf="selectedBuild.equippedWEngine.icon"
-                 [src]="selectedBuild.equippedWEngine.icon"
-                 [alt]="selectedBuild.equippedWEngine.name"
-                 class="wengine-icon"
-                 loading="lazy">
-            <div class="wengine-info">
-              <h4>{{selectedBuild.equippedWEngine.name}}</h4>
-              <p class="wengine-rarity">{{selectedBuild.equippedWEngine.rarity}}-Rank</p>
-            </div>
-          </div>
-
-          <!-- Refinement Selector -->
-          <div class="refinement-selector">
-            <label><strong>Refinement (Copies):</strong></label>
-            <div class="refinement-buttons">
-              <button
-                *ngFor="let level of [1, 2, 3, 4, 5]; trackBy: trackByMindscapeLevel"
-                class="refinement-btn"
-                [class.active]="selectedBuild.wEngineRefinement === level"
-                (click)="setWEngineRefinement(level)">
-                {{level}}
-              </button>
-            </div>
-          </div>
-
-          <p><strong>Base ATK:</strong> {{selectedBuild.equippedWEngine.baseAtk}}</p>
-          <p><strong>{{formatStatType(selectedBuild.equippedWEngine.subStat.type)}}:</strong> {{selectedBuild.equippedWEngine.subStat.value}}%</p>
-          <p class="wengine-effect">
-            <strong>{{selectedBuild.equippedWEngine.effect.name}}:</strong>
-            {{selectedBuild.equippedWEngine.effect.description}}
+        <!-- Empty State -->
+        <div *ngIf="builds.length === 0" class="empty-state">
+          <img
+            src="assets/data/images/page-icons/avatar_default.webp"
+            alt="No builds"
+            class="empty-icon-img"
+            loading="lazy"
+          />
+          <h3>No Builds Yet</h3>
+          <p>
+            Click "+ Add Agent" in the top right to create your first build.
           </p>
         </div>
-      </div>
 
-      <!-- Stats -->
-      <div class="stats-section">
-        <h3>Calculated Stats</h3>
-        <div class="stats-grid">
-          <div class="stat-row">
-            <span class="stat-label">HP:</span>
-            <span class="stat-value">{{selectedBuild.calculatedStats.hp}}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">ATK:</span>
-            <span class="stat-value">{{selectedBuild.calculatedStats.atk}}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">DEF:</span>
-            <span class="stat-value">{{selectedBuild.calculatedStats.def}}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Impact:</span>
-            <span class="stat-value">{{selectedBuild.calculatedStats.impact}}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Anomaly Mastery:</span>
-            <span class="stat-value">{{selectedBuild.calculatedStats.anomalyMastery}}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Anomaly Proficiency:</span>
-            <span class="stat-value">{{selectedBuild.calculatedStats.anomalyProficiency}}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">PEN Ratio:</span>
-            <span class="stat-value">{{selectedBuild.calculatedStats.penRatio}}%</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">PEN:</span>
-            <span class="stat-value">{{selectedBuild.calculatedStats.pen}}</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">CRIT Rate:</span>
-            <span class="stat-value">{{selectedBuild.calculatedStats.critRate}}%</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">CRIT DMG:</span>
-            <span class="stat-value">{{selectedBuild.calculatedStats.critDmg}}%</span>
-          </div>
-          <div class="stat-row">
-            <span class="stat-label">Energy Regen:</span>
-            <span class="stat-value">{{selectedBuild.calculatedStats.energyRegen}}%</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="disc-section">
-        <h3>Disc Drives ({{getEquippedDiscsCount(selectedBuild)}}/6)</h3>
-        <div class="disc-grid">
+        <!-- Builds Grid -->
+        <div class="builds-grid" *ngIf="builds.length > 0">
           <div
-            *ngFor="let slot of discSlots; trackBy: trackByDiscSlot"
-            class="disc-slot"
-            [class.equipped]="selectedBuild.equippedDiscs[slot]">
-            <div *ngIf="selectedBuild.equippedDiscs[slot]; else emptySlot" class="disc-card" (click)="openDiscEdit(slot)">
-              <div class="disc-header">
-                <span class="disc-slot-number">{{formatDiscSlot(slot)}}</span>
-                <div *ngIf="getDiscScore(selectedBuild.equippedDiscs[slot]!) as discScore"
-                     class="disc-rating-badge"
-                     [ngClass]="getDiscRatingClass(discScore.rating)"
-                     [title]="discScore.rating.description">
-                  <span class="rating-grade">{{discScore.rating.grade}}</span>
-                  <span class="rating-score">{{discScore.score}}</span>
-                </div>
-              </div>
-              <div class="disc-set">{{selectedBuild.equippedDiscs[slot]!.set}}</div>
-              <div class="disc-main-stat">
-                <span class="stat-type">{{formatStatType(selectedBuild.equippedDiscs[slot]!.mainStat.type)}}</span>
-                <span class="stat-value">{{selectedBuild.equippedDiscs[slot]!.mainStat.value}}</span>
-              </div>
-              <div class="disc-substats">
-                <div *ngFor="let subStat of selectedBuild.equippedDiscs[slot]!.subStats; trackBy: trackBySubStatIndex" class="substat">
-                  {{formatStatType(subStat.type)}} +{{subStat.value}}
-                </div>
-              </div>
-              <button class="unequip-btn" (click)="unequipDisc(slot, $event)" title="Unequip disc">×</button>
+            *ngFor="let build of builds; trackBy: trackByBuildId"
+            class="build-card"
+            [class.selected]="selectedBuild?.id === build.id"
+            [class.s-rank]="getAgentRarity(build.agentId) === 'S'"
+            [class.a-rank]="getAgentRarity(build.agentId) === 'A'"
+            (click)="selectBuild(build)"
+          >
+            <button
+              class="delete-btn"
+              (click)="deleteBuild(build.id, $event)"
+              title="Delete build"
+            >
+              ×
+            </button>
+            <div class="build-portrait">
+              <img
+                *ngIf="getAgentIcon(build.agentId)"
+                [src]="getAgentIcon(build.agentId)"
+                [alt]="build.name"
+                class="agent-icon"
+                loading="lazy"
+              />
+              <span *ngIf="!getAgentIcon(build.agentId)" class="build-name">{{
+                build.name
+              }}</span>
             </div>
-            <ng-template #emptySlot>
-              <div class="empty-disc-slot" (click)="openDiscPicker(slot)">
-                <span class="slot-number">{{formatDiscSlot(slot)}}</span>
-                <span class="slot-label">Empty</span>
+            <div class="build-info">
+              <div class="agent-name-label">{{ build.name }}</div>
+              <div class="build-stats">
+                <div class="stat-badge">M{{ build.mindscapeLevel }}</div>
+                <div class="stat-badge">
+                  {{ getEquippedDiscsCount(build) }}/6 Discs
+                </div>
               </div>
-            </ng-template>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Summary -->
-    <div class="section summary-panel" *ngIf="selectedBuild">
-      <h2>Build Summary</h2>
-      <div class="summary-content">
-        <div class="summary-item build-rating-display" *ngIf="getBuildScore() as buildScore">
-          <strong data-tooltip="Overall rating of your build based on disc quality and optimization for this agent">Build Rating:</strong>
-          <div class="build-rating-badge"
-               [ngClass]="getBuildRatingClass(buildScore.rating)"
-               [title]="buildScore.rating.description">
-            <span class="rating-grade-large">{{buildScore.rating.grade}}</span>
-            <span class="rating-score-large">{{buildScore.score.toFixed(1)}}%</span>
-          </div>
-          <p class="rating-description">{{buildScore.rating.description}}</p>
-        </div>
+      <!-- Build Details -->
+      <div class="section build-details" *ngIf="selectedBuild">
+        <h2>{{ selectedBuild.name }}</h2>
 
-        <!-- Build Feedback Section -->
-        <div class="build-feedback-section" *ngIf="getBuildFeedback().length > 0">
-          <h4>How to Improve</h4>
-          <div class="feedback-list">
-            <div *ngFor="let item of getBuildFeedback(); trackBy: trackByFeedbackIndex"
-                 class="feedback-item"
-                 [ngClass]="'priority-' + item.priority">
-              <span class="feedback-icon" [ngSwitch]="item.category">
-                <ng-container *ngSwitchCase="'stat'">&#9650;</ng-container>
-                <ng-container *ngSwitchCase="'disc'">&#9673;</ng-container>
-                <ng-container *ngSwitchCase="'wengine'">&#9876;</ng-container>
-                <ng-container *ngSwitchCase="'set'">&#10022;</ng-container>
-                <ng-container *ngSwitchDefault>&#8226;</ng-container>
-              </span>
-              <span class="feedback-message">{{item.message}}</span>
-            </div>
+        <!-- Mindscape Cinema -->
+        <div class="mindscape-section">
+          <h3 data-tooltip="Agent duplication level (constellations/eidolons)">
+            Mindscape Cinema
+          </h3>
+          <div class="mindscape-toggles">
+            <button
+              *ngFor="
+                let m of [1, 2, 3, 4, 5, 6];
+                trackBy: trackByMindscapeLevel
+              "
+              class="mindscape-btn"
+              [class.active]="selectedBuild.mindscapeLevel >= m"
+              (click)="toggleMindscape(m)"
+            >
+              M{{ m }}
+            </button>
           </div>
         </div>
 
-        <div class="summary-item">
-          <strong>Level:</strong> {{selectedBuild.level}}
-        </div>
-        <div class="summary-item">
-          <strong>Mindscape:</strong> M{{selectedBuild.mindscapeLevel}}
-        </div>
-        <div class="summary-item" *ngIf="selectedBuild.equippedWEngine">
-          <strong>W-Engine:</strong> {{selectedBuild.equippedWEngine.name}}
-        </div>
-        <div class="summary-item">
-          <strong>Disc Sets:</strong> {{getEquippedDiscsCount(selectedBuild)}}/6 equipped
-        </div>
-        <div class="summary-item">
-          <strong>Created:</strong> {{selectedBuild.createdAt | date:'short'}}
-        </div>
+        <!-- W-Engine -->
+        <div class="wengine-section">
+          <div class="wengine-selector-header">
+            <h3>W-Engine</h3>
+            <button
+              class="btn-secondary small"
+              (click)="showWEnginePicker = !showWEnginePicker"
+            >
+              {{ showWEnginePicker ? "Hide" : "Select W-Engine" }}
+            </button>
+          </div>
 
-        <!-- W-Engine Stat Bonuses -->
-        <div *ngIf="selectedBuild.equippedWEngine" class="wengine-active-effect">
-          <h4>W-Engine Bonuses:</h4>
-          <div class="wengine-effect-box">
-            <p class="effect-name">{{selectedBuild.equippedWEngine.name}} (R{{selectedBuild.wEngineRefinement}})</p>
-
-            <!-- Show refinement bonuses if specialty matches -->
-            <div *ngIf="isWEngineSpecialtyMatch() && selectedBuild.equippedWEngine.effect.properties && selectedBuild.equippedWEngine.effect.properties.length > 0">
-              <p class="effect-match">✓ Specialty matches - applying bonuses:</p>
-              <div *ngFor="let prop of getWEngineRefinementBonuses(); trackBy: trackByBonusIndex" class="bonus-stat">
-                {{prop.name}}: +{{prop.value}}{{prop.isPercent ? '%' : ''}}
+          <!-- W-Engine Picker -->
+          <div *ngIf="showWEnginePicker" class="wengine-picker">
+            <div class="wengine-picker-controls">
+              <input
+                type="text"
+                [(ngModel)]="wengineSearchTerm"
+                placeholder="Search W-Engines..."
+                class="search-input"
+              />
+              <div class="filter-group">
+                <label>Specialty:</label>
+                <select
+                  [(ngModel)]="wengineSpecialtyFilter"
+                  class="filter-select"
+                >
+                  <option value="">All Specialties</option>
+                  <option value="Attack">Attack</option>
+                  <option value="Stun">Stun</option>
+                  <option value="Anomaly">Anomaly</option>
+                  <option value="Support">Support</option>
+                  <option value="Defense">Defense</option>
+                  <option value="Rupture">Rupture</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Rank:</label>
+                <select [(ngModel)]="wengineRarityFilter" class="filter-select">
+                  <option value="">All Ranks</option>
+                  <option value="S">S-Rank</option>
+                  <option value="A">A-Rank</option>
+                  <option value="B">B-Rank</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Sort By:</label>
+                <select [(ngModel)]="wengineSortBy" class="filter-select">
+                  <option value="name">Name</option>
+                  <option value="rarity">Rarity</option>
+                  <option value="atk">ATK</option>
+                </select>
               </div>
             </div>
 
-            <!-- Show message if no refinement bonuses -->
-            <p class="effect-note" *ngIf="isWEngineSpecialtyMatch() && (!selectedBuild.equippedWEngine.effect.properties || selectedBuild.equippedWEngine.effect.properties.length === 0)">
-              ✓ Specialty matches (no additional refinement stats)
-            </p>
+            <div class="wengine-list">
+              <div class="wengine-list-item" (click)="onWEngineSelect('')">
+                <span class="wengine-list-name">None</span>
+              </div>
+              <div
+                *ngFor="
+                  let engine of getFilteredWEngines();
+                  trackBy: trackByWEngineId
+                "
+                class="wengine-list-item"
+                [class.s-rank]="engine.rarity === 'S'"
+                [class.a-rank]="engine.rarity === 'A'"
+                [class.b-rank]="engine.rarity === 'B'"
+                [class.selected]="
+                  selectedBuild.equippedWEngine?.id === engine.id
+                "
+                (click)="onWEngineSelect(engine.id)"
+              >
+                <img
+                  *ngIf="engine.icon"
+                  [src]="engine.icon"
+                  [alt]="engine.name"
+                  class="wengine-thumbnail"
+                  loading="lazy"
+                />
+                <div class="wengine-list-info">
+                  <span class="wengine-list-name">{{ engine.name }}</span>
+                  <span class="wengine-list-rarity">
+                    {{ engine.rarity }}-Rank
+                  </span>
+                </div>
+                <img
+                  [src]="getSpecialtyIcon(engine.specialty)"
+                  [alt]="engine.specialty"
+                  class="wengine-specialty-icon"
+                  [title]="engine.specialty"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
 
-            <!-- Show mismatch warning -->
-            <p class="effect-mismatch" *ngIf="!isWEngineSpecialtyMatch()">
-              ⚠ Specialty mismatch - refinement bonuses not applied
+          <div *ngIf="selectedBuild.equippedWEngine" class="wengine-details">
+            <div class="wengine-header">
+              <img
+                *ngIf="selectedBuild.equippedWEngine.icon"
+                [src]="selectedBuild.equippedWEngine.icon"
+                [alt]="selectedBuild.equippedWEngine.name"
+                class="wengine-icon"
+                loading="lazy"
+              />
+              <div class="wengine-info">
+                <h4>{{ selectedBuild.equippedWEngine.name }}</h4>
+                <p class="wengine-rarity">
+                  {{ selectedBuild.equippedWEngine.rarity }}-Rank
+                </p>
+              </div>
+            </div>
+
+            <!-- Refinement Selector -->
+            <div class="refinement-selector">
+              <label><strong>Refinement (Copies):</strong></label>
+              <div class="refinement-buttons">
+                <button
+                  *ngFor="
+                    let level of [1, 2, 3, 4, 5];
+                    trackBy: trackByMindscapeLevel
+                  "
+                  class="refinement-btn"
+                  [class.active]="selectedBuild.wEngineRefinement === level"
+                  (click)="setWEngineRefinement(level)"
+                >
+                  {{ level }}
+                </button>
+              </div>
+            </div>
+
+            <p>
+              <strong>Base ATK:</strong>
+              {{ selectedBuild.equippedWEngine.baseAtk }}
+            </p>
+            <p>
+              <strong
+                >{{
+                  formatStatType(selectedBuild.equippedWEngine.subStat.type)
+                }}:</strong
+              >
+              {{ selectedBuild.equippedWEngine.subStat.value }}%
+            </p>
+            <p class="wengine-effect">
+              <strong>{{ selectedBuild.equippedWEngine.effect.name }}:</strong>
+              {{ selectedBuild.equippedWEngine.effect.description }}
             </p>
           </div>
         </div>
 
-        <!-- Mindscape Stat Bonuses -->
-        <div *ngIf="getMindscapeBonuses().length > 0" class="mindscape-active-effect">
-          <h4>Mindscape Bonuses:</h4>
-          <div class="mindscape-effect-box">
-            <p class="effect-name">M{{selectedBuild.mindscapeLevel}} Active</p>
-            <div *ngFor="let bonus of getMindscapeBonuses(); trackBy: trackByBonusIndex" class="bonus-stat">
-              <span class="mindscape-label">M{{bonus.level}} - {{bonus.name}}:</span>
-              <span class="mindscape-stats">
-                <span *ngFor="let stat of bonus.stats; let last = last; trackBy: trackByBonusIndex">
-                  {{stat.name}}: +{{stat.value}}{{stat.isPercent ? '%' : ''}}{{!last ? ', ' : ''}}
-                </span>
-              </span>
+        <!-- Stats -->
+        <div class="stats-section">
+          <h3>Calculated Stats</h3>
+          <div class="stats-grid">
+            <div class="stat-row">
+              <span class="stat-label">HP:</span>
+              <span class="stat-value">{{
+                selectedBuild.calculatedStats.hp
+              }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">ATK:</span>
+              <span class="stat-value">{{
+                selectedBuild.calculatedStats.atk
+              }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">DEF:</span>
+              <span class="stat-value">{{
+                selectedBuild.calculatedStats.def
+              }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Impact:</span>
+              <span class="stat-value">{{
+                selectedBuild.calculatedStats.impact
+              }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Anomaly Mastery:</span>
+              <span class="stat-value">{{
+                selectedBuild.calculatedStats.anomalyMastery
+              }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Anomaly Proficiency:</span>
+              <span class="stat-value">{{
+                selectedBuild.calculatedStats.anomalyProficiency
+              }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">PEN Ratio:</span>
+              <span class="stat-value"
+                >{{ selectedBuild.calculatedStats.penRatio }}%</span
+              >
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">PEN:</span>
+              <span class="stat-value">{{
+                selectedBuild.calculatedStats.pen
+              }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">CRIT Rate:</span>
+              <span class="stat-value"
+                >{{ selectedBuild.calculatedStats.critRate }}%</span
+              >
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">CRIT DMG:</span>
+              <span class="stat-value"
+                >{{ selectedBuild.calculatedStats.critDmg }}%</span
+              >
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Energy Regen:</span>
+              <span class="stat-value"
+                >{{ selectedBuild.calculatedStats.energyRegen }}%</span
+              >
             </div>
           </div>
         </div>
 
-        <!-- Disc Set Bonuses (includes 2pc and 4pc effects) -->
-        <div *ngIf="getSetBonuses().length > 0 || get4pcEffectBonuses().length > 0" class="set-bonuses">
-          <h4>Active Set Bonuses:</h4>
-          <div *ngFor="let bonus of getSetBonuses(); trackBy: trackByBonusIndex" class="set-bonus">
-            {{bonus}}
+        <div class="disc-section">
+          <h3>Disc Drives ({{ getEquippedDiscsCount(selectedBuild) }}/6)</h3>
+          <div class="disc-grid">
+            <div
+              *ngFor="let slot of discSlots; trackBy: trackByDiscSlot"
+              class="disc-slot"
+              [class.equipped]="selectedBuild.equippedDiscs[slot]"
+            >
+              <div
+                *ngIf="selectedBuild.equippedDiscs[slot]; else emptySlot"
+                class="disc-card"
+                (click)="openDiscEdit(slot)"
+              >
+                <div class="disc-header">
+                  <span class="disc-slot-number">{{
+                    formatDiscSlot(slot)
+                  }}</span>
+                  <div
+                    *ngIf="
+                      getDiscScore(
+                        selectedBuild.equippedDiscs[slot]!
+                      ) as discScore
+                    "
+                    class="disc-rating-badge"
+                    [ngClass]="getDiscRatingClass(discScore.rating)"
+                    [title]="discScore.rating.description"
+                  >
+                    <span class="rating-grade">{{
+                      discScore.rating.grade
+                    }}</span>
+                    <span class="rating-score">{{ discScore.score }}</span>
+                  </div>
+                </div>
+                <div class="disc-set">
+                  {{ selectedBuild.equippedDiscs[slot]!.set }}
+                </div>
+                <div class="disc-main-stat">
+                  <span class="stat-type">{{
+                    formatStatType(
+                      selectedBuild.equippedDiscs[slot]!.mainStat.type
+                    )
+                  }}</span>
+                  <span class="stat-value">{{
+                    selectedBuild.equippedDiscs[slot]!.mainStat.value
+                  }}</span>
+                </div>
+                <div class="disc-substats">
+                  <div
+                    *ngFor="
+                      let subStat of selectedBuild.equippedDiscs[slot]!
+                        .subStats;
+                      trackBy: trackBySubStatIndex
+                    "
+                    class="substat"
+                  >
+                    {{ formatStatType(subStat.type) }} +{{ subStat.value }}
+                  </div>
+                </div>
+                <button
+                  class="unequip-btn"
+                  (click)="unequipDisc(slot, $event)"
+                  title="Unequip disc"
+                >
+                  ×
+                </button>
+              </div>
+              <ng-template #emptySlot>
+                <div class="empty-disc-slot" (click)="openDiscPicker(slot)">
+                  <span class="slot-number">{{ formatDiscSlot(slot) }}</span>
+                  <span class="slot-label">Empty</span>
+                </div>
+              </ng-template>
+            </div>
           </div>
-          <div *ngFor="let bonus of get4pcEffectBonuses(); trackBy: trackByBonusIndex" class="set-bonus">
-            {{bonus}}
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="section summary-panel" *ngIf="selectedBuild">
+        <h2>Build Summary</h2>
+        <div class="summary-content">
+          <div
+            class="summary-item build-rating-display"
+            *ngIf="getBuildScore() as buildScore"
+          >
+            <strong
+              data-tooltip="Overall rating of your build based on disc quality and optimization for this agent"
+              >Build Rating:</strong
+            >
+            <div
+              class="build-rating-badge"
+              [ngClass]="getBuildRatingClass(buildScore.rating)"
+              [title]="buildScore.rating.description"
+            >
+              <span class="rating-grade-large">{{
+                buildScore.rating.grade
+              }}</span>
+              <span class="rating-score-large"
+                >{{ buildScore.score.toFixed(1) }}%</span
+              >
+            </div>
+            <p class="rating-description">
+              {{ buildScore.rating.description }}
+            </p>
+          </div>
+
+          <!-- Build Feedback Section -->
+          <div
+            class="build-feedback-section"
+            *ngIf="getBuildFeedback().length > 0"
+          >
+            <h4>How to Improve</h4>
+            <div class="feedback-list">
+              <div
+                *ngFor="
+                  let item of getBuildFeedback();
+                  trackBy: trackByFeedbackIndex
+                "
+                class="feedback-item"
+                [ngClass]="'priority-' + item.priority"
+              >
+                <span class="feedback-icon" [ngSwitch]="item.category">
+                  <ng-container *ngSwitchCase="'stat'">&#9650;</ng-container>
+                  <ng-container *ngSwitchCase="'disc'">&#9673;</ng-container>
+                  <ng-container *ngSwitchCase="'wengine'">&#9876;</ng-container>
+                  <ng-container *ngSwitchCase="'set'">&#10022;</ng-container>
+                  <ng-container *ngSwitchDefault>&#8226;</ng-container>
+                </span>
+                <span class="feedback-message">{{ item.message }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <strong>Level:</strong> {{ selectedBuild.level }}
+          </div>
+          <div class="summary-item">
+            <strong>Mindscape:</strong> M{{ selectedBuild.mindscapeLevel }}
+          </div>
+          <div class="summary-item" *ngIf="selectedBuild.equippedWEngine">
+            <strong>W-Engine:</strong> {{ selectedBuild.equippedWEngine.name }}
+          </div>
+          <div class="summary-item">
+            <strong>Disc Sets:</strong>
+            {{ getEquippedDiscsCount(selectedBuild) }}/6 equipped
+          </div>
+          <div class="summary-item">
+            <strong>Created:</strong>
+            {{ selectedBuild.createdAt | date: "short" }}
+          </div>
+
+          <!-- W-Engine Stat Bonuses -->
+          <div
+            *ngIf="selectedBuild.equippedWEngine"
+            class="wengine-active-effect"
+          >
+            <h4>W-Engine Bonuses:</h4>
+            <div class="wengine-effect-box">
+              <p class="effect-name">
+                {{ selectedBuild.equippedWEngine.name }} (R{{
+                  selectedBuild.wEngineRefinement
+                }})
+              </p>
+
+              <!-- Show refinement bonuses if specialty matches -->
+              <div
+                *ngIf="
+                  isWEngineSpecialtyMatch() &&
+                  selectedBuild.equippedWEngine.effect.properties &&
+                  selectedBuild.equippedWEngine.effect.properties.length > 0
+                "
+              >
+                <p class="effect-match">
+                  ✓ Specialty matches - applying bonuses:
+                </p>
+                <div
+                  *ngFor="
+                    let prop of getWEngineRefinementBonuses();
+                    trackBy: trackByBonusIndex
+                  "
+                  class="bonus-stat"
+                >
+                  {{ prop.name }}: +{{ prop.value
+                  }}{{ prop.isPercent ? "%" : "" }}
+                </div>
+              </div>
+
+              <!-- Show message if no refinement bonuses -->
+              <p
+                class="effect-note"
+                *ngIf="
+                  isWEngineSpecialtyMatch() &&
+                  (!selectedBuild.equippedWEngine.effect.properties ||
+                    selectedBuild.equippedWEngine.effect.properties.length ===
+                      0)
+                "
+              >
+                ✓ Specialty matches (no additional refinement stats)
+              </p>
+
+              <!-- Show mismatch warning -->
+              <p class="effect-mismatch" *ngIf="!isWEngineSpecialtyMatch()">
+                ⚠ Specialty mismatch - refinement bonuses not applied
+              </p>
+            </div>
+          </div>
+
+          <!-- Mindscape Stat Bonuses -->
+          <div
+            *ngIf="getMindscapeBonuses().length > 0"
+            class="mindscape-active-effect"
+          >
+            <h4>Mindscape Bonuses:</h4>
+            <div class="mindscape-effect-box">
+              <p class="effect-name">
+                M{{ selectedBuild.mindscapeLevel }} Active
+              </p>
+              <div
+                *ngFor="
+                  let bonus of getMindscapeBonuses();
+                  trackBy: trackByBonusIndex
+                "
+                class="bonus-stat"
+              >
+                <span class="mindscape-label"
+                  >M{{ bonus.level }} - {{ bonus.name }}:</span
+                >
+                <span class="mindscape-stats">
+                  <span
+                    *ngFor="
+                      let stat of bonus.stats;
+                      let last = last;
+                      trackBy: trackByBonusIndex
+                    "
+                  >
+                    {{ stat.name }}: +{{ stat.value
+                    }}{{ stat.isPercent ? "%" : "" }}{{ !last ? ", " : "" }}
+                  </span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Disc Set Bonuses (includes 2pc and 4pc effects) -->
+          <div
+            *ngIf="
+              getSetBonuses().length > 0 || get4pcEffectBonuses().length > 0
+            "
+            class="set-bonuses"
+          >
+            <h4>Active Set Bonuses:</h4>
+            <div
+              *ngFor="let bonus of getSetBonuses(); trackBy: trackByBonusIndex"
+              class="set-bonus"
+            >
+              {{ bonus }}
+            </div>
+            <div
+              *ngFor="
+                let bonus of get4pcEffectBonuses();
+                trackBy: trackByBonusIndex
+              "
+              class="set-bonus"
+            >
+              {{ bonus }}
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Add Agent Modal -->
-<div class="modal-overlay" *ngIf="showAddAgentModal" (click)="closeAddAgentModal()" role="dialog" aria-labelledby="add-agent-title" aria-modal="true">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h2 id="add-agent-title">Add Agent</h2>
-      <button class="close-btn" (click)="closeAddAgentModal()" aria-label="Close modal">×</button>
-    </div>
-    <div class="modal-body">
-      <p>Select an agent to create a new build:</p>
-
-      <!-- Agent Filters -->
-      <div class="agent-picker-controls">
-        <div class="filter-group">
-          <label>Element:</label>
-          <select [(ngModel)]="agentElementFilter" class="filter-select">
-            <option value="">All Elements</option>
-            <option value="Fire">Fire</option>
-            <option value="Ice">Ice</option>
-            <option value="Electric">Electric</option>
-            <option value="Physical">Physical</option>
-            <option value="Ether">Ether</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label>Specialty:</label>
-          <select [(ngModel)]="agentSpecialtyFilter" class="filter-select">
-            <option value="">All Specialties</option>
-            <option value="Attack">Attack</option>
-            <option value="Stun">Stun</option>
-            <option value="Anomaly">Anomaly</option>
-            <option value="Support">Support</option>
-            <option value="Defense">Defense</option>
-            <option value="Rupture">Rupture</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label>Rank:</label>
-          <select [(ngModel)]="agentRarityFilter" class="filter-select">
-            <option value="">All Ranks</option>
-            <option value="S">S-Rank</option>
-            <option value="A">A-Rank</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label>Sort By:</label>
-          <select [(ngModel)]="agentSortBy" class="filter-select">
-            <option value="name">Name</option>
-            <option value="element">Element</option>
-            <option value="specialty">Specialty</option>
-            <option value="rarity">Rarity</option>
-          </select>
-        </div>
+  <!-- Add Agent Modal -->
+  <div
+    class="modal-overlay"
+    *ngIf="showAddAgentModal"
+    (click)="closeAddAgentModal()"
+    role="dialog"
+    aria-labelledby="add-agent-title"
+    aria-modal="true"
+  >
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 id="add-agent-title">Add Agent</h2>
+        <button
+          class="close-btn"
+          (click)="closeAddAgentModal()"
+          aria-label="Close modal"
+        >
+          ×
+        </button>
       </div>
+      <div class="modal-body">
+        <p>Select an agent to create a new build:</p>
 
-      <!-- Agent Selection Grid -->
-      <div class="agent-select-grid scrollable">
-        <div
-          *ngFor="let agent of getFilteredAgents(); trackBy: trackByAgentId"
-          class="agent-select-card"
-          [class.selected]="selectedAgentForAdd?.id === agent.id"
-          [class.s-rank]="agent.rarity === 'S'"
-          [class.a-rank]="agent.rarity === 'A'"
-          (click)="selectAgentForAdd(agent)">
-          <div class="agent-portrait">
-            <img *ngIf="agent.icon"
-                 [src]="agent.icon"
-                 [alt]="agent.name"
-                 class="agent-icon"
-                 loading="lazy">
-            <span *ngIf="!agent.icon" class="agent-name">{{agent.name}}</span>
+        <!-- Agent Filters -->
+        <div class="agent-picker-controls">
+          <div class="filter-group">
+            <label>Element:</label>
+            <select [(ngModel)]="agentElementFilter" class="filter-select">
+              <option value="">All Elements</option>
+              <option value="Fire">Fire</option>
+              <option value="Ice">Ice</option>
+              <option value="Electric">Electric</option>
+              <option value="Physical">Physical</option>
+              <option value="Ether">Ether</option>
+            </select>
           </div>
-          <div class="agent-info">
-            <div class="agent-name-label">{{agent.name}}</div>
-            <div class="agent-badges">
-              <img *ngIf="getAgentElementIcon(agent.id)"
-                   [src]="getAgentElementIcon(agent.id)"
-                   [alt]="agent.element"
-                   class="element-badge"
-                   [title]="agent.element"
-                   loading="lazy">
-              <img *ngIf="agent.specialtyIcon"
-                   [src]="agent.specialtyIcon"
-                   [alt]="agent.specialty"
-                   class="specialty-badge"
-                   [title]="agent.specialty"
-                   loading="lazy">
+          <div class="filter-group">
+            <label>Specialty:</label>
+            <select [(ngModel)]="agentSpecialtyFilter" class="filter-select">
+              <option value="">All Specialties</option>
+              <option value="Attack">Attack</option>
+              <option value="Stun">Stun</option>
+              <option value="Anomaly">Anomaly</option>
+              <option value="Support">Support</option>
+              <option value="Defense">Defense</option>
+              <option value="Rupture">Rupture</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Rank:</label>
+            <select [(ngModel)]="agentRarityFilter" class="filter-select">
+              <option value="">All Ranks</option>
+              <option value="S">S-Rank</option>
+              <option value="A">A-Rank</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Sort By:</label>
+            <select [(ngModel)]="agentSortBy" class="filter-select">
+              <option value="name">Name</option>
+              <option value="element">Element</option>
+              <option value="specialty">Specialty</option>
+              <option value="rarity">Rarity</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Agent Selection Grid -->
+        <div class="agent-select-grid scrollable">
+          <div
+            *ngFor="let agent of getFilteredAgents(); trackBy: trackByAgentId"
+            class="agent-select-card"
+            [class.selected]="selectedAgentForAdd?.id === agent.id"
+            [class.s-rank]="agent.rarity === 'S'"
+            [class.a-rank]="agent.rarity === 'A'"
+            (click)="selectAgentForAdd(agent)"
+          >
+            <div class="agent-portrait">
+              <img
+                *ngIf="agent.icon"
+                [src]="agent.icon"
+                [alt]="agent.name"
+                class="agent-icon"
+                loading="lazy"
+              />
+              <span *ngIf="!agent.icon" class="agent-name">{{
+                agent.name
+              }}</span>
+            </div>
+            <div class="agent-info">
+              <div class="agent-name-label">{{ agent.name }}</div>
+              <div class="agent-badges">
+                <img
+                  *ngIf="getAgentElementIcon(agent.id)"
+                  [src]="getAgentElementIcon(agent.id)"
+                  [alt]="agent.element"
+                  class="element-badge"
+                  [title]="agent.element"
+                  loading="lazy"
+                />
+                <img
+                  *ngIf="agent.specialtyIcon"
+                  [src]="agent.specialtyIcon"
+                  [alt]="agent.specialty"
+                  class="specialty-badge"
+                  [title]="agent.specialty"
+                  loading="lazy"
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="modal-actions">
-        <button class="btn-secondary" (click)="closeAddAgentModal()">Cancel</button>
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="closeAddAgentModal()">
+            Cancel
+          </button>
+          <button
+            class="btn-primary"
+            (click)="addAgentBuild()"
+            [disabled]="!selectedAgentForAdd"
+          >
+            Add Build
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disc Picker Modal -->
+  <div
+    class="modal-overlay"
+    *ngIf="showDiscPicker"
+    (click)="closeDiscPicker()"
+    role="dialog"
+    aria-labelledby="disc-picker-title"
+    aria-modal="true"
+  >
+    <div
+      class="modal-content disc-picker-modal"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <h2 id="disc-picker-title">
+          Select Disc Set for {{ formatDiscSlot(selectedDiscSlot!) }}
+        </h2>
         <button
-          class="btn-primary"
-          (click)="addAgentBuild()"
-          [disabled]="!selectedAgentForAdd">
-          Add Build
+          class="close-btn"
+          (click)="closeDiscPicker()"
+          aria-label="Close modal"
+        >
+          ×
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="disc-picker-controls">
+          <input
+            type="text"
+            [(ngModel)]="discSearchTerm"
+            (ngModelChange)="onDiscSearchChange($event)"
+            placeholder="Search set name..."
+            class="search-input"
+          />
+          <input
+            type="text"
+            [(ngModel)]="discEffectSearchTerm"
+            (ngModelChange)="onDiscEffectSearchChange($event)"
+            placeholder="Search effects (e.g., CRIT, ATK)..."
+            class="search-input"
+          />
+        </div>
+
+        <div class="disc-set-grid">
+          <div
+            *ngFor="
+              let discSet of getFilteredDiscSets();
+              trackBy: trackByDiscSetName
+            "
+            class="disc-set-card"
+            (click)="selectDiscSet(discSet)"
+          >
+            <div class="disc-set-header">
+              <img
+                *ngIf="discSet.icon"
+                [src]="discSet.icon"
+                [alt]="discSet.name"
+                class="disc-set-icon"
+                loading="lazy"
+              />
+              <div class="disc-set-name">{{ discSet.name }}</div>
+            </div>
+            <div class="disc-set-bonuses">
+              <div
+                *ngFor="
+                  let bonus of discSet.bonuses;
+                  trackBy: trackByBonusIndex
+                "
+                class="bonus-line"
+              >
+                <strong>{{ bonus.pieces }}-Piece:</strong>
+                {{ bonus.description }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="getFilteredDiscSets().length === 0" class="no-discs">
+          <p>No disc sets found matching your search.</p>
+          <p class="hint">Try adjusting your search term.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disc Stats Form Modal -->
+  <div class="modal-overlay" *ngIf="showDiscForm" (click)="closeDiscForm()">
+    <div
+      class="modal-content disc-form-modal"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <h2>{{ isEditMode ? "Edit Disc Stats" : "Configure Disc Stats" }}</h2>
+        <button class="close-btn" (click)="closeDiscForm()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="disc-form-info">
+          <p><strong>Slot:</strong> {{ formatDiscSlot(selectedDiscSlot!) }}</p>
+          <p><strong>Set:</strong> {{ selectedDiscSetForCreation?.name }}</p>
+        </div>
+
+        <!-- Main Stat Selection for All Slots -->
+        <!-- Main Stat Selection for All Slots -->
+        <div class="form-section">
+          <label class="section-label">Main Stat:</label>
+
+          <div class="substat-row">
+            <!-- Drive 1–3: fixed main stat TYPE -->
+            <input
+              *ngIf="
+                selectedDiscSlot === 'Drive1' ||
+                selectedDiscSlot === 'Drive2' ||
+                selectedDiscSlot === 'Drive3'
+              "
+              type="text"
+              [value]="
+                formatStatType(getDefaultMainStatForSlot(selectedDiscSlot!))
+              "
+              class="substat-type-select"
+              readonly
+              title="Main stat is fixed for this slot"
+            />
+
+            <!-- Drive 1–3: fixed main stat VALUE -->
+            <span
+              class="main-stat-value"
+              *ngIf="
+                selectedDiscSlot === 'Drive1' ||
+                selectedDiscSlot === 'Drive2' ||
+                selectedDiscSlot === 'Drive3'
+              "
+            >
+              {{ getMainStatValueForSlot(selectedDiscSlot!) }}
+            </span>
+
+            <!-- Drive 4–6: selectable main stat TYPE -->
+            <select
+              *ngIf="
+                selectedDiscSlot !== 'Drive1' &&
+                selectedDiscSlot !== 'Drive2' &&
+                selectedDiscSlot !== 'Drive3'
+              "
+              [(ngModel)]="discFormData.mainStatType"
+              (ngModelChange)="onMainStatTypeChange()"
+              class="substat-type-select"
+            >
+              <option value="">Select main stat...</option>
+              <option
+                *ngFor="let stat of getMainStatOptionsForSlot()"
+                [value]="stat"
+              >
+                {{ formatStatType(stat) }}
+              </option>
+            </select>
+
+            <!-- Drive 4–6: main stat VALUE -->
+            <span
+              class="main-stat-value"
+              *ngIf="
+                selectedDiscSlot !== 'Drive1' &&
+                selectedDiscSlot !== 'Drive2' &&
+                selectedDiscSlot !== 'Drive3' &&
+                discFormData.mainStatType
+              "
+            >
+              {{ discFormData.mainStatValue }}
+            </span>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label class="section-label">Sub Stats:</label>
+          <div class="substats-list">
+            <div
+              *ngFor="
+                let subStat of discFormData.subStats;
+                let i = index;
+                trackBy: trackBySubStatIndex
+              "
+              class="substat-row"
+            >
+              <label class="substat-label">Substat {{ i + 1 }}:</label>
+              <select [(ngModel)]="subStat.type" class="substat-type-select">
+                <option value="HP">HP</option>
+                <option value="HP%">HP%</option>
+                <option value="ATK">ATK</option>
+                <option value="ATK%">ATK%</option>
+                <option value="DEF">DEF</option>
+                <option value="DEF%">DEF%</option>
+                <option value="CRIT_Rate">CRIT Rate</option>
+                <option value="CRIT_DMG">CRIT DMG</option>
+                <option value="Anomaly_Proficiency">Anomaly Proficiency</option>
+                <option value="PEN">PEN (Flat)</option>
+                <option value="Impact">Impact</option>
+                <option value="Energy_Regen">Energy Regen</option>
+              </select>
+              <input
+                type="text"
+                [(ngModel)]="subStat.value"
+                (blur)="validateAndFormatSubStat(i)"
+                placeholder="Value"
+                class="substat-value-input"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="closeDiscForm()">
+            Cancel
+          </button>
+          <button
+            *ngIf="isEditMode"
+            class="btn-secondary"
+            (click)="closeDiscForm(); openDiscPicker(selectedDiscSlot!)"
+          >
+            Change Set
+          </button>
+          <button class="btn-primary" (click)="createAndEquipDisc()">
+            {{ isEditMode ? "Save Changes" : "Create & Equip" }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Builds Tab -->
+
+  <!-- Confirmation Dialog Modal -->
+  <div
+    class="modal-overlay"
+    *ngIf="showConfirmDialog"
+    (click)="closeConfirmDialog()"
+    role="alertdialog"
+    aria-labelledby="confirm-dialog-title"
+    aria-describedby="confirm-dialog-message"
+    aria-modal="true"
+  >
+    <div
+      class="modal-content confirm-dialog-modal"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <h2 id="confirm-dialog-title">{{ confirmDialogData.title }}</h2>
+        <button
+          class="close-btn"
+          (click)="closeConfirmDialog()"
+          aria-label="Close dialog"
+        >
+          ×
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-dialog-message" class="confirm-message">
+          {{ confirmDialogData.message }}
+        </p>
+      </div>
+      <div class="modal-actions">
+        <button
+          class="btn-secondary"
+          (click)="closeConfirmDialog()"
+          aria-label="Cancel action"
+        >
+          {{ confirmDialogData.cancelText }}
+        </button>
+        <button
+          class="btn-danger"
+          (click)="confirmAction()"
+          aria-label="Confirm action"
+        >
+          {{ confirmDialogData.confirmText }}
         </button>
       </div>
     </div>
   </div>
-</div>
-
-<!-- Disc Picker Modal -->
-<div class="modal-overlay" *ngIf="showDiscPicker" (click)="closeDiscPicker()" role="dialog" aria-labelledby="disc-picker-title" aria-modal="true">
-  <div class="modal-content disc-picker-modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h2 id="disc-picker-title">Select Disc Set for {{formatDiscSlot(selectedDiscSlot!)}}</h2>
-      <button class="close-btn" (click)="closeDiscPicker()" aria-label="Close modal">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="disc-picker-controls">
-        <input
-          type="text"
-          [(ngModel)]="discSearchTerm"
-          (ngModelChange)="onDiscSearchChange($event)"
-          placeholder="Search set name..."
-          class="search-input">
-        <input
-          type="text"
-          [(ngModel)]="discEffectSearchTerm"
-          (ngModelChange)="onDiscEffectSearchChange($event)"
-          placeholder="Search effects (e.g., CRIT, ATK)..."
-          class="search-input">
-      </div>
-
-      <div class="disc-set-grid">
-        <div
-          *ngFor="let discSet of getFilteredDiscSets(); trackBy: trackByDiscSetName"
-          class="disc-set-card"
-          (click)="selectDiscSet(discSet)">
-          <div class="disc-set-header">
-            <img *ngIf="discSet.icon"
-                 [src]="discSet.icon"
-                 [alt]="discSet.name"
-                 class="disc-set-icon"
-                 loading="lazy">
-            <div class="disc-set-name">{{discSet.name}}</div>
-          </div>
-          <div class="disc-set-bonuses">
-            <div *ngFor="let bonus of discSet.bonuses; trackBy: trackByBonusIndex" class="bonus-line">
-              <strong>{{bonus.pieces}}-Piece:</strong> {{bonus.description}}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div *ngIf="getFilteredDiscSets().length === 0" class="no-discs">
-        <p>No disc sets found matching your search.</p>
-        <p class="hint">Try adjusting your search term.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Disc Stats Form Modal -->
-<div class="modal-overlay" *ngIf="showDiscForm" (click)="closeDiscForm()">
-  <div class="modal-content disc-form-modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h2>{{ isEditMode ? 'Edit Disc Stats' : 'Configure Disc Stats' }}</h2>
-      <button class="close-btn" (click)="closeDiscForm()">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="disc-form-info">
-        <p><strong>Slot:</strong> {{formatDiscSlot(selectedDiscSlot!)}}</p>
-        <p><strong>Set:</strong> {{selectedDiscSetForCreation?.name}}</p>
-      </div>
-
-      <!-- Main Stat Selection for All Slots -->
-      <div class="form-section">
-        <label class="section-label">Main Stat:</label>
-        <div class="substat-row">
-          <!-- Slots 1-3: Fixed main stat (readonly text box) -->
-          <input *ngIf="selectedDiscSlot === 'Drive1' || selectedDiscSlot === 'Drive2' || selectedDiscSlot === 'Drive3'"
-                 type="text"
-                 [value]="formatStatType(getDefaultMainStatForSlot(selectedDiscSlot!))"
-                 class="substat-type-select"
-                 readonly
-                 title="Main stat is fixed for this slot">
-          <!-- Slots 4-6: Selectable main stat -->
-          <select *ngIf="selectedDiscSlot !== 'Drive1' && selectedDiscSlot !== 'Drive2' && selectedDiscSlot !== 'Drive3'"
-                  [(ngModel)]="discFormData.mainStatType"
-                  (ngModelChange)="onMainStatTypeChange()"
-                  class="substat-type-select">
-            <option value="">Select main stat...</option>
-            <option *ngFor="let stat of getMainStatOptionsForSlot()" [value]="stat">{{formatStatType(stat)}}</option>
-          </select>
-          <span class="main-stat-value" *ngIf="discFormData.mainStatType">{{discFormData.mainStatValue}}</span>
-        </div>
-      </div>
-
-      <div class="form-section">
-        <label class="section-label">Sub Stats:</label>
-        <div class="substats-list">
-          <div *ngFor="let subStat of discFormData.subStats; let i = index; trackBy: trackBySubStatIndex" class="substat-row">
-            <label class="substat-label">Substat {{i + 1}}:</label>
-            <select [(ngModel)]="subStat.type" class="substat-type-select">
-              <option value="HP">HP</option>
-              <option value="HP%">HP%</option>
-              <option value="ATK">ATK</option>
-              <option value="ATK%">ATK%</option>
-              <option value="DEF">DEF</option>
-              <option value="DEF%">DEF%</option>
-              <option value="CRIT_Rate">CRIT Rate</option>
-              <option value="CRIT_DMG">CRIT DMG</option>
-              <option value="Anomaly_Proficiency">Anomaly Proficiency</option>
-              <option value="PEN">PEN (Flat)</option>
-              <option value="Impact">Impact</option>
-              <option value="Energy_Regen">Energy Regen</option>
-            </select>
-            <input
-              type="text"
-              [(ngModel)]="subStat.value"
-              (blur)="validateAndFormatSubStat(i)"
-              placeholder="Value"
-              class="substat-value-input">
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn-secondary" (click)="closeDiscForm()">Cancel</button>
-        <button *ngIf="isEditMode" class="btn-secondary" (click)="closeDiscForm(); openDiscPicker(selectedDiscSlot!)">Change Set</button>
-        <button class="btn-primary" (click)="createAndEquipDisc()">{{ isEditMode ? 'Save Changes' : 'Create & Equip' }}</button>
-      </div>
-    </div>
-  </div>
-  </div> <!-- End Builds Tab -->
-
-<!-- Confirmation Dialog Modal -->
-<div class="modal-overlay" *ngIf="showConfirmDialog" (click)="closeConfirmDialog()" role="alertdialog" aria-labelledby="confirm-dialog-title" aria-describedby="confirm-dialog-message" aria-modal="true">
-  <div class="modal-content confirm-dialog-modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h2 id="confirm-dialog-title">{{confirmDialogData.title}}</h2>
-      <button class="close-btn" (click)="closeConfirmDialog()" aria-label="Close dialog">×</button>
-    </div>
-    <div class="modal-body">
-      <p id="confirm-dialog-message" class="confirm-message">{{confirmDialogData.message}}</p>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-secondary" (click)="closeConfirmDialog()" aria-label="Cancel action">{{confirmDialogData.cancelText}}</button>
-      <button class="btn-danger" (click)="confirmAction()" aria-label="Confirm action">{{confirmDialogData.confirmText}}</button>
-    </div>
-  </div>
-</div>
 
   <!-- Optimizer Tab -->
   <div *ngIf="activeTab === 'optimizer'" class="tab-content optimizer-tab">
     <app-optimizer></app-optimizer>
   </div>
-
-</div> <!-- End character-tab -->
+</div>
+<!-- End character-tab -->
