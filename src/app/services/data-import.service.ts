@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { DbService } from './db.service';
 import { AgentService } from './agent.service';
 import { WEngineService } from './wengine.service';
+import { DiscSetService } from './disc-set.service';
 import { DataTransformerService } from './data-transformer.service';
 import { BuildService } from './build.service';
 import { Agent } from '../models/agent.model';
@@ -38,6 +39,7 @@ export class DataImportService {
     private db: DbService,
     private agentService: AgentService,
     private wEngineService: WEngineService,
+    private discSetService: DiscSetService,
     private transformer: DataTransformerService,
     private buildService: BuildService
   ) {}
@@ -314,6 +316,8 @@ export class DataImportService {
 
       // Store disc sets in IndexedDB
       await this.db.bulkAddDiscSets(discSets);
+      // Reload disc sets into the service cache
+      await this.discSetService.reloadDiscSets();
 
       // Save the current app version so we know when data needs to be reloaded
       await this.db.setStoredDataVersion(this.db.getCurrentAppVersion());
