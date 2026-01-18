@@ -105,26 +105,33 @@ export class AppInitService {
    * Force reload reference data (useful for updates)
    */
   async reloadReferenceData(): Promise<void> {
-    console.log('Force reloading reference data...');
-    this.loadingService.show('Clearing old data...');
+    try {
+      console.log('Force reloading reference data...');
+      this.loadingService.show('Clearing old data...');
 
-    // Clear existing reference data
-    await this.dataImport.clearReferenceData();
-    this.initialized = false;
+      // Clear existing reference data
+      await this.dataImport.clearReferenceData();
+      this.initialized = false;
 
-    // Force reload from assets (bypass the hasData check)
-    this.loadingService.show('Loading fresh data from assets...');
-    await this.loadReferenceData();
+      // Force reload from assets (bypass the hasData check)
+      this.loadingService.show('Loading fresh data from assets...');
+      await this.loadReferenceData();
 
-    this.initialized = true;
-    this.notificationService.success('Reference data reloaded successfully!');
+      this.initialized = true;
+      this.notificationService.success('Reference data reloaded successfully!');
 
-    // Recalculate all existing builds to use updated agent base stats
-    console.log('Recalculating all builds with updated reference data...');
-    this.loadingService.show('Recalculating builds...');
-    await this.buildService.recalculateAllBuilds();
+      // Recalculate all existing builds to use updated agent base stats
+      console.log('Recalculating all builds with updated reference data...');
+      this.loadingService.show('Recalculating builds...');
+      await this.buildService.recalculateAllBuilds();
 
-    this.loadingService.hide();
-    this.notificationService.success('All builds updated with new data!');
+      this.notificationService.success('All builds updated with new data!');
+    } catch (error) {
+      console.error('Error reloading reference data:', error);
+      this.notificationService.error('Failed to reload reference data. Please check console for details.');
+      throw error;
+    } finally {
+      this.loadingService.hide();
+    }
   }
 }
