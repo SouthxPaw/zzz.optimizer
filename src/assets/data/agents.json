@@ -2,6 +2,11 @@
   {
     "id": 1061,
     "name": "Corin",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [{"type": "DamageTaken", "value": "35", "format": "%"}],
+      "dazeBonus": 0
+    },
     "rarity": "A",
     "element": {
       "id": 200,
@@ -1640,6 +1645,11 @@
   {
     "id": 1251,
     "name": "Qingyi",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [{"type": "StunDMGMult", "value": "80", "format": "%"}],
+      "dazeBonus": 0.20
+    },
     "rarity": "S",
     "element": {
       "id": 203,
@@ -3289,6 +3299,11 @@
   {
     "id": 1261,
     "name": "Jane",
+    "scoring": {
+      "buffs": [{"type": "CRITRateBonus", "value": "100", "format": "%"}, {"type": "CRITDMGBonus", "value": "50", "format":"%"}],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 200,
@@ -5023,6 +5038,11 @@
   {
     "id": 1131,
     "name": "Soukaku",
+    "scoring": {
+      "buffs": [{"type": "ATKBonus", "value": "1000", "format": "flat"}, {"type": "ElementDMG", "value": "20", "format": "%"}],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "A",
     "element": {
       "id": 202,
@@ -6745,6 +6765,11 @@
   {
     "id": 1471,
     "name": "Banyue",
+    "scoring": {
+      "buffs": [{"type": "SheerForceBonus", "value": "300", "format":"flat"}, {"type":"CRITDMGBonus", "value": "36","format":"%"}],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 201,
@@ -8668,6 +8693,11 @@
   {
     "id": 1201,
     "name": "Harumasa",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 203,
@@ -10548,6 +10578,11 @@
   {
     "id": 1421,
     "name": "Pan Yinhu",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [{"type": "DamageTaken", "value": "20", "format": "%"}],
+      "dazeBonus": 0
+    },
     "rarity": "A",
     "element": {
       "id": 200,
@@ -12133,6 +12168,11 @@
   {
     "id": 1331,
     "name": "Vivian",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 205,
@@ -13735,6 +13775,11 @@
   {
     "id": 1081,
     "name": "Billy",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "A",
     "element": {
       "id": 200,
@@ -15304,6 +15349,11 @@
   {
     "id": 1181,
     "name": "Grace",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 203,
@@ -16990,6 +17040,11 @@
   {
     "id": 1371,
     "name": "Yixuan",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 205,
@@ -18794,6 +18849,11 @@
   {
     "id": 1321,
     "name": "Evelyn",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 201,
@@ -20495,6 +20555,11 @@
   {
     "id": 1401,
     "name": "Alice",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 200,
@@ -22152,6 +22217,11 @@
   {
     "id": 1011,
     "name": "Anby",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "A",
     "element": {
       "id": 203,
@@ -23683,6 +23753,11 @@
   {
     "id": 1071,
     "name": "Caesar",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [{"type": "DamageTaken", "value": "25", "format": "%"}],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 200,
@@ -25432,6 +25507,11 @@
   {
     "id": 1391,
     "name": "Ju Fufu",
+    "scoring": {
+      "buffs": [{"type": "CRITDMG", "value": "50", "format": "%"}],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 201,
@@ -27085,6 +27165,11 @@
   {
     "id": 1031,
     "name": "Nicole",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [{"type": "DEFShred", "value": "40", "format": "%"}, {"type": "RESShred", "value": "25", "format": "%"}],
+      "dazeBonus": 0
+    },
     "rarity": "A",
     "element": {
       "id": 205,
@@ -28911,6 +28996,11 @@
   {
     "id": 1281,
     "name": "Piper",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "A",
     "element": {
       "id": 200,
@@ -30524,6 +30614,11 @@
   {
     "id": 1021,
     "name": "Nekomata",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 200,
@@ -32077,6 +32172,11 @@
   {
     "id": 1241,
     "name": "Zhu Yuan",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 205,
@@ -33756,6 +33856,11 @@
   {
     "id": 1141,
     "name": "Lycaon",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [{"type": "RESShred", "value": "25", "format": "%"}, {"type": "StunDMGMult", "value": "35", "format": "%"}],
+      "dazeBonus": 0.80
+    },
     "rarity": "S",
     "element": {
       "id": 202,
@@ -35632,6 +35737,11 @@
   {
     "id": 1161,
     "name": "Lighter",
+    "scoring": {
+      "buffs": [{"type": "ElementDMG", "value": "75", "format": "%"}],
+      "debuffs": [{"type": "RESShred", "value": "15", "format": "%"}],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 201,
@@ -37421,6 +37531,11 @@
   {
     "id": 1461,
     "name": "Seed",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 203,
@@ -39051,6 +39166,11 @@
   {
     "id": 1111,
     "name": "Anton",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "A",
     "element": {
       "id": 203,
@@ -40725,6 +40845,11 @@
   {
     "id": 1041,
     "name": "Soldier 11",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 201,
@@ -42631,6 +42756,11 @@
   {
     "id": 1451,
     "name": "Lucia",
+    "scoring": {
+      "buffs": [{"type": "DMGBonus", "value": "20", "format": "%"}, {"type": "CRITDMG", "value": "30", "format": "%"}],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 205,
@@ -44342,6 +44472,11 @@
   {
     "id": 1091,
     "name": "Miyabi",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 202,
@@ -46006,6 +46141,11 @@
   {
     "id": 1361,
     "name": "Trigger",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [{"type": "StunDMGMult", "value": "35", "format": "%"}],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 203,
@@ -47669,6 +47809,11 @@
   {
     "id": 1431,
     "name": "Ye Shunguang",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 200,
@@ -49771,6 +49916,11 @@
   {
     "id": 1121,
     "name": "Ben",
+    "scoring": {
+      "buffs": [{"type": "CRITRate", "value": "16", "format": "%"}],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "A",
     "element": {
       "id": 201,
@@ -51340,6 +51490,11 @@
   {
     "id": 1211,
     "name": "Rina",
+    "scoring": {
+      "buffs": [{"type": "PENRatio", "value": "30", "format": "%"}, {"type": "ElementDMG", "value": "10", "format": "%"}],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 203,
@@ -52832,6 +52987,11 @@
   {
     "id": 1051,
     "name": "Yidhari",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 202,
@@ -54571,6 +54731,11 @@
   {
     "id": 1411,
     "name": "Yuzuha",
+    "scoring": {
+      "buffs": [{"type": "ATKBonus", "value": "1200", "format": "flat"}, {"type": "DMGBonus", "value": "15", "format": "%"}],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 200,
@@ -56325,6 +56490,11 @@
   {
     "id": 1341,
     "name": "Zhao",
+    "scoring": {
+      "buffs": [{"type": "ATKBonus", "value": "1000", "format": "flat"}, {"type": "DMGBonus", "value": "40", "format": "%"}],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 202,
@@ -57946,6 +58116,11 @@
   {
     "id": 1481,
     "name": "Dialyn",
+    "scoring": {
+      "buffs": [{"type": "DMGBonus", "value": "40", "format": "%"}],
+      "debuffs": [{"type": "StunDMGMult", "value": "30", "format": "%"}],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 200,
@@ -59652,6 +59827,11 @@
   {
     "id": 1291,
     "name": "Hugo",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 202,
@@ -61369,6 +61549,11 @@
   {
     "id": 1351,
     "name": "Pulchra",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": 0.30
+    },
     "rarity": "A",
     "element": {
       "id": 200,
@@ -62894,6 +63079,11 @@
   {
     "id": 1311,
     "name": "Astra Yao",
+    "scoring": {
+      "buffs": [{"type": "ATKBonus", "value": "1200", "format": "flat"}],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "S",
     "element": {
       "id": 205,
@@ -64582,6 +64772,11 @@
   {
     "id": 1301,
     "name": "Orphie & Magus",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 201,
@@ -66283,6 +66478,11 @@
   {
     "id": 1441,
     "name": "Manato",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "A",
     "element": {
       "id": 201,
@@ -68044,6 +68244,11 @@
   {
     "id": 1151,
     "name": "Lucy",
+    "scoring": {
+      "buffs": [{"type": "ATKBonus", "value": "600", "format": "flat"}],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
     "rarity": "A",
     "element": {
       "id": 201,
@@ -69734,6 +69939,11 @@
   {
     "id": 1101,
     "name": "Koleda",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [{"type": "StunDMGMult", "value": "70", "format": "%"}],
+      "dazeBonus": 0.60
+    },
     "rarity": "S",
     "element": {
       "id": 201,
@@ -71408,6 +71618,11 @@
   {
     "id": 1221,
     "name": "Yanagi",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 203,
@@ -73076,6 +73291,11 @@
   {
     "id": 1271,
     "name": "Seth",
+    "scoring": {
+      "buffs": [{"type": "AnomalyProficiency", "value": "100", "format": "flat"}],
+      "debuffs": [{"type": "AnomalyBuildupRES", "value": "20", "format": "%"}],
+      "dazeBonus": 0
+    },
     "rarity": "A",
     "element": {
       "id": 203,
@@ -74651,6 +74871,11 @@
   {
     "id": 1171,
     "name": "Burnice",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 201,
@@ -76517,6 +76742,11 @@
   {
     "id": 1381,
     "name": "Soldier 0 - Anby",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 203,
@@ -78320,6 +78550,11 @@
   {
     "id": 1191,
     "name": "Ellen",
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": null
+    },
     "rarity": "S",
     "element": {
       "id": 202,

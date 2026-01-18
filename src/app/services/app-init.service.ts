@@ -43,16 +43,24 @@ export class AppInitService {
     this.loadingService.show('Initializing ZZZ Optimizer...');
 
     try {
-      // Check if reference data already exists in IndexedDB
-      const hasData = await this.checkReferenceData();
+      // Check if reference data needs to be loaded or reloaded (version mismatch)
+      const needsReload = await this.checkNeedsDataReload();
 
-      if (!hasData) {
-        console.log('No reference data found. Loading from assets...');
-        this.loadingService.show('Loading game data...');
+      if (needsReload) {
+        const hasExistingData = await this.dataImport.hasReferenceData();
+        if (hasExistingData) {
+          console.log('App version changed. Reloading reference data...');
+          this.loadingService.show('Updating game data for new version...');
+          // Clear old data first
+          await this.dataImport.clearReferenceData();
+        } else {
+          console.log('No reference data found. Loading from assets...');
+          this.loadingService.show('Loading game data...');
+        }
         await this.loadReferenceData();
         this.notificationService.success('Game data loaded successfully!');
       } else {
-        console.log('Reference data already loaded');
+        console.log('Reference data already loaded and up-to-date');
       }
 
       this.initialized = true;
@@ -67,13 +75,14 @@ export class AppInitService {
   }
 
   /**
-   * Check if reference data exists in IndexedDB
+   * Check if reference data needs to be loaded/reloaded
+   * Returns true if no data exists OR if app version changed
    */
-  private async checkReferenceData(): Promise<boolean> {
+  private async checkNeedsDataReload(): Promise<boolean> {
     try {
-      return await this.dataImport.hasReferenceData();
+      return await this.dataImport.needsDataReload();
     } catch {
-      return false;
+      return true; // If check fails, assume we need to reload
     }
   }
 

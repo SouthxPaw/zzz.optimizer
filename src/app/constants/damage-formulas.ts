@@ -9,14 +9,9 @@
  */
 
 /**
- * Level coefficient for DEF scaling
- * Formula: Level * 10 + 100
- *
- * Common values:
- * - Level 60: 700
- * - Level 70: 800
- * - Level 80: 900
- * - Level 90: 1000
+ * Level coefficient for DEF scaling (LEGACY - kept for reference)
+ * Note: The actual ZZZ damage formula uses ATK / (ATK + EffectiveDEF)
+ * not the level coefficient approach used in some other games.
  */
 export const LEVEL_COEFFICIENT = {
   60: 700,
@@ -80,34 +75,41 @@ export function calculateCRITModifier(critRate: number, critDMG: number): number
 /**
  * Calculate DEF modifier (damage reduction from enemy DEF)
  *
- * Formula: Level Coefficient / (Level Coefficient + Effective DEF)
+ * Formula: ATK / (ATK + Effective DEF)
  *
- * @param playerLevel - Character level (60, 70, 80, 90)
+ * This is the correct ZZZ formula where ATK directly competes with DEF,
+ * not the level coefficient approach used in some other games.
+ *
+ * @param ATK - Character's total ATK stat
  * @param enemyDEF - Enemy's effective DEF after PEN/reduction
  * @returns DEF modifier (0.0 - 1.0)
  */
-export function calculateDEFModifier(playerLevel: number, enemyDEF: number): number {
-  const levelCoeff = LEVEL_COEFFICIENT[playerLevel as keyof typeof LEVEL_COEFFICIENT] || 1000;
-  return levelCoeff / (levelCoeff + Math.max(0, enemyDEF));
+export function calculateDEFModifier(ATK: number, enemyDEF: number): number {
+  const effectiveDEF = Math.max(0, enemyDEF);
+  if (ATK + effectiveDEF === 0) return 0;
+  return ATK / (ATK + effectiveDEF);
 }
 
 /**
- * Calculate effective enemy DEF after PEN and reductions
+ * Calculate effective enemy DEF after DEF Shred and PEN
  *
- * Formula: Target DEF × (1 - PEN Ratio%) - Flat PEN
+ * Formula: Target DEF × (1 - DEF Shred%) × (1 - PEN Ratio%) - Flat PEN
+ * DEF Shred and PEN stack multiplicatively, not additively.
  * (Cannot go below 0)
  *
  * @param baseDEF - Enemy's base DEF
- * @param penRatio - PEN Ratio as decimal (0.30 = 30%)
+ * @param defShred - DEF Shred as decimal (0.25 = 25% from debuffs like Nicole)
+ * @param penRatio - PEN Ratio as decimal (0.30 = 30% from character stats)
  * @param flatPEN - Flat PEN value
  * @returns Effective DEF value
  */
 export function calculateEffectiveDEF(
   baseDEF: number,
+  defShred: number,
   penRatio: number,
-  flatPEN: number
+  flatPEN: number = 0
 ): number {
-  const effectiveDEF = (baseDEF * (1 - penRatio)) - flatPEN;
+  const effectiveDEF = (baseDEF * (1 - defShred) * (1 - penRatio)) - flatPEN;
   return Math.max(0, effectiveDEF);
 }
 
@@ -187,6 +189,7 @@ export function calculateFinalDamage(
  * @param stats - Character stats object
  * @param skillMultiplier - Skill motion value (default 2.5 = 250% ATK)
  * @param dmgBonuses - Array of damage% bonuses (e.g., [0.30, 0.15] for 30% + 15%)
+ * @param defShred - DEF Shred from debuffs as decimal (0.25 = 25%)
  * @returns Estimated damage per hit
  */
 export function estimateDamage(stats: {
@@ -195,22 +198,21 @@ export function estimateDamage(stats: {
   critDMG: number;
   penRatio?: number;
   flatPEN?: number;
-  level?: number;
-}, skillMultiplier: number = 2.5, dmgBonuses: number[] = []): number {
+}, skillMultiplier: number = 2.5, dmgBonuses: number[] = [], defShred: number = 0): number {
   // Base damage
   const baseDMG = calculateBaseDamage(skillMultiplier, stats.ATK);
 
   // CRIT modifier
   const critMod = calculateCRITModifier(stats.critRate, stats.critDMG);
 
-  // DEF modifier
-  const playerLevel = stats.level || 60;
+  // DEF modifier - using ATK / (ATK + EffectiveDEF) formula
   const effectiveDEF = calculateEffectiveDEF(
     STANDARD_ENEMY.baseDEF,
+    defShred,
     stats.penRatio || 0,
     stats.flatPEN || 0
   );
-  const defMod = calculateDEFModifier(playerLevel, effectiveDEF);
+  const defMod = calculateDEFModifier(stats.ATK, effectiveDEF);
 
   // RES modifier (assuming no RES reduction/PEN for simplicity)
   const resMod = calculateRESModifier(
@@ -252,4 +254,79 @@ export function calculateStatusDamage(
   );
 
   return baseDMG * dmgMod * resMod;
+}
+
+/**
+ * Calculate Sheer Force damage for Rupture agents
+ *
+ * Formula: (ATK × 0.30) + (HP × 0.10)
+ * Sheer Force completely ignores DEF - it's true damage.
+ * This is why PEN stats are dead stats for Rupture agents.
+ *
+ * @param ATK - Character's total ATK stat
+ * @param HP - Character's total HP stat
+ * @param dmgBonuses - Applicable damage% bonuses
+ * @param resShred - RES Shred as decimal (0.20 = 20%)
+ * @returns Sheer Force damage
+ */
+export function calculateSheerForce(
+  ATK: number,
+  HP: number,
+  dmgBonuses: number[] = [],
+  resShred: number = 0
+): number {
+  // Base Sheer Force damage
+  const baseDMG = (ATK * 0.30) + (HP * 0.10);
+
+  // DMG% modifier
+  const dmgMod = calculateDMGModifier(dmgBonuses);
+
+  // RES modifier - Sheer Force IS affected by RES
+  const resMod = calculateRESModifier(
+    STANDARD_ENEMY.attributeRES,
+    STANDARD_ENEMY.allTypeRES,
+    resShred,
+    0
+  );
+
+  // NO DEF modifier - Sheer Force bypasses DEF entirely
+  return baseDMG * dmgMod * resMod;
+}
+
+/**
+ * Calculate Anomaly Buildup rate
+ *
+ * Formula: BaseAnomaly × (1 + AP%)
+ * AP = Anomaly Proficiency
+ *
+ * @param baseAnomaly - Base anomaly buildup from skill
+ * @param anomalyProficiency - Anomaly Proficiency as decimal (1.50 = 150%)
+ * @returns Effective anomaly buildup
+ */
+export function calculateAnomalyBuildup(
+  baseAnomaly: number,
+  anomalyProficiency: number
+): number {
+  return baseAnomaly * (1 + anomalyProficiency);
+}
+
+/**
+ * Calculate Daze (stun progress) contribution
+ *
+ * Formula: DazeApplied / EnemyDazeGauge
+ * Higher Impact increases Daze applied.
+ *
+ * @param baseDaze - Base daze from skill
+ * @param impact - Character's Impact stat
+ * @param enemyDazeGauge - Enemy's daze gauge multiplier (1.0 = baseline boss)
+ * @returns Stun progress percentage (0.0 - 1.0+)
+ */
+export function calculateDazeContribution(
+  baseDaze: number,
+  impact: number,
+  enemyDazeGauge: number = 1.0
+): number {
+  // Impact scales the daze applied
+  const dazeApplied = baseDaze * (1 + impact / 1000);
+  return dazeApplied / enemyDazeGauge;
 }
