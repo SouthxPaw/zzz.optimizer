@@ -586,16 +586,24 @@
       <div class="disc-form-info">
         <p><strong>Slot:</strong> {{formatDiscSlot(selectedDiscSlot!)}}</p>
         <p><strong>Set:</strong> {{selectedDiscSetForCreation?.name}}</p>
-        <p *ngIf="selectedDiscSlot && (selectedDiscSlot === 'Drive1' || selectedDiscSlot === 'Drive2' || selectedDiscSlot === 'Drive3')">
-          <strong>Main Stat:</strong> {{formatStatType(getDefaultMainStatForSlot(selectedDiscSlot!))}} ({{getMainStatValueForSlot(selectedDiscSlot)}})
-        </p>
       </div>
 
-      <!-- Main Stat Selection for Slots 4-6 -->
-      <div class="form-section" *ngIf="selectedDiscSlot && selectedDiscSlot !== 'Drive1' && selectedDiscSlot !== 'Drive2' && selectedDiscSlot !== 'Drive3'">
+      <!-- Main Stat Selection for All Slots -->
+      <div class="form-section">
         <label class="section-label">Main Stat:</label>
         <div class="substat-row">
-          <select [(ngModel)]="discFormData.mainStatType" (ngModelChange)="onMainStatTypeChange()" class="substat-type-select">
+          <!-- Slots 1-3: Fixed main stat (readonly text box) -->
+          <input *ngIf="selectedDiscSlot === 'Drive1' || selectedDiscSlot === 'Drive2' || selectedDiscSlot === 'Drive3'"
+                 type="text"
+                 [value]="formatStatType(getDefaultMainStatForSlot(selectedDiscSlot!))"
+                 class="substat-type-select"
+                 readonly
+                 title="Main stat is fixed for this slot">
+          <!-- Slots 4-6: Selectable main stat -->
+          <select *ngIf="selectedDiscSlot !== 'Drive1' && selectedDiscSlot !== 'Drive2' && selectedDiscSlot !== 'Drive3'"
+                  [(ngModel)]="discFormData.mainStatType"
+                  (ngModelChange)="onMainStatTypeChange()"
+                  class="substat-type-select">
             <option value="">Select main stat...</option>
             <option *ngFor="let stat of getMainStatOptionsForSlot()" [value]="stat">{{formatStatType(stat)}}</option>
           </select>
