@@ -407,6 +407,10 @@ export class ScoringService {
         // Final weighted score: rolls × stat importance × roll quality
         const weightedScore = rolls * statWeight * qualityMultiplier;
 
+        // NEW: Add bonus points for each upgrade roll into a priority stat
+        // Rewards players for getting lucky with rolls
+        const rollBonus = upgradeRolls * 0.5; // 0.5 points per upgrade roll into priority stat
+
         totalWeightedRolls += weightedScore;
         priorityStatCount++;
 
@@ -415,21 +419,43 @@ export class ScoringService {
           maxRollCount++;
         }
 
-        breakdown.subStatPoints += weightedScore;
+        const totalPoints = weightedScore + rollBonus;
+        breakdown.subStatPoints += totalPoints;
         breakdown.details.push({
           stat: `${substat.type} (×${statWeight}, ${(
             qualityMultiplier * 100
-          ).toFixed(0)}% quality)`,
+          ).toFixed(0)}% quality, +${rollBonus} roll bonus)`,
           value: substat.value,
-          points: Math.round(weightedScore * 10) / 10,
+          points: Math.round(totalPoints * 10) / 10,
           rolls: rolls,
         });
       } else {
-        // Show wasted stats with 0 contribution
+        // Wasted stats get small consolation points to be less harsh
+        // 1 point per roll for ANY percentage stat (HP%, ATK%, DEF%, CRIT Rate, CRIT DMG, Anomaly Prof, etc.)
+        // 0.5 points per roll for flat stats (HP, ATK, DEF)
+        let wastedPoints = 0;
+        let pointsLabel = '';
+
+        // Check if it's a flat stat (only HP, ATK, DEF have flat versions)
+        const isFlatStat = ['HP', 'ATK', 'DEF'].includes(substat.type);
+
+        if (isFlatStat) {
+          // Flat stats get 0.5 points per roll
+          wastedPoints = rolls * 0.5;
+          pointsLabel = '0.5pt/roll';
+        } else {
+          // All percentage stats get 1 point per roll
+          // This includes: HP%, ATK%, DEF%, CRIT Rate, CRIT DMG, PEN, PEN Ratio,
+          // Anomaly Proficiency, Anomaly Mastery, Energy Regen, Impact
+          wastedPoints = rolls * 1;
+          pointsLabel = '1pt/roll';
+        }
+
+        breakdown.subStatPoints += wastedPoints;
         breakdown.details.push({
-          stat: substat.type + ' (wasted)',
+          stat: substat.type + ` (wasted, ${pointsLabel})`,
           value: substat.value,
-          points: 0,
+          points: Math.round(wastedPoints * 10) / 10,
           rolls: rolls,
         });
       }

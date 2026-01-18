@@ -47954,7 +47954,7 @@
     "id": 1431,
     "name": "Ye Shunguang",
     "scoring": {
-      "buffs": [],
+      "buffs": [{"type":"CRITRateBonus", "value": "30", "format": "%"}, {"type":"DMGBonus", "value":"25", "format":"%"}],
       "debuffs": [],
       "dazeBonus": null
     },

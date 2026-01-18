@@ -1069,18 +1069,19 @@
         ×
       </button>
 
-      <h2>Import from Enka Network</h2>
+      <h2>Import Agents from UID</h2>
 
       <div class="modal-body">
         <p class="modal-description">
-          Enter your ZZZ UID to import your showcase characters, W-Engines, and discs.
+          Enter your ZZZ UID to import your showcase agents.
           <br />
+          <br>
           <strong>Requirements:</strong>
         </p>
         <ul class="modal-requirements">
           <li>Your profile must be set to <strong>public</strong> in-game settings</li>
           <li>Characters must be in your <strong>showcase</strong> (visible on profile)</li>
-          <li>Using CORS proxy - first request may take 5-10 seconds</li>
+          <li>First request may take 5-10 seconds</li>
         </ul>
 
         <div class="form-group">
@@ -1089,7 +1090,7 @@
             id="enka-uid"
             type="text"
             [(ngModel)]="enkaUid"
-            placeholder="e.g., 1000507772"
+            placeholder="Enter UID here"
             class="form-control"
             [disabled]="isImportingFromEnka"
             (keyup.enter)="importFromEnka()"
