@@ -35,7 +35,7 @@
 .section h3{color:var(--gold2);margin-top:20px;margin-bottom:10px}
 .section-header-inline{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-shrink:0}
 .section-header-inline h2{margin:0;padding:0;border:none}
-.builds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;overflow-y:auto;padding-right:8px;flex-grow:1;align-content:start}
+.builds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;overflow-y:auto;padding-right:12px;padding:8px 8px 12px;flex-grow:1;align-content:start}
 .build-card,.agent-card{cursor:pointer;border-radius:8px;overflow:hidden;transition:all .15s;border:3px solid transparent;position:relative}
 .build-card{background:#151515}
 .build-card.s-rank,.agent-card.s-rank,.agent-select-card.s-rank,.wengine-list-item.s-rank{background:linear-gradient(135deg,#EAB308,#CA8A04);border-color:#FDE047}
@@ -272,9 +272,23 @@
 .button-group{display:flex;gap:8px;align-items:center}
 
 /* Enka Import Modal */
-.enka-import-modal{max-width:550px}
+.enka-import-modal{max-width:700px; position:relative;}
 .enka-import-modal .modal-body{padding:25px 30px}
 .enka-import-modal .modal-footer{padding:20px 30px}
+.enka-import-modal > h2 {
+  padding: 20px 30px 0;
+  margin: 0;
+}
+.enka-import-modal > .modal-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+}
+.enka-import-modal .form-control {
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+}
 .modal-description{color:var(--light);line-height:1.6;margin-bottom:15px}
 .modal-requirements{color:var(--light);line-height:1.8;margin:15px 0 25px 20px;padding-left:0;list-style-position:outside}
 .modal-requirements li{margin-bottom:10px}

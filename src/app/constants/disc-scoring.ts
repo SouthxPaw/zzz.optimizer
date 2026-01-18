@@ -93,15 +93,15 @@ export interface DiscRating {
 }
 
 export const DISC_RATING_THRESHOLDS: DiscRating[] = [
-  { grade: 'VOID HUNTER', minPoints: 151, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection (top 3% globally)' },
-  { grade: 'LEGENDARY', minPoints: 148, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-perfect disc (top 5%)' },
-  { grade: 'SSS', minPoints: 145, color: '#FF6B9D', description: 'Perfect - Outstanding disc (top 10%)' },
-  { grade: 'SS', minPoints: 137, color: '#FF8C42', description: 'Excellent - Great disc (top 25%)' },
-  { grade: 'S', minPoints: 117, color: '#FFD93D', description: 'Very Good - Above average disc (top 35%)' },
-  { grade: 'A', minPoints: 98, color: '#6BCF7F', description: 'Good - Decent disc (top 60%)' },
-  { grade: 'B', minPoints: 69, color: '#4D96FF', description: 'Average - Usable disc (top 80%)' },
-  { grade: 'C', minPoints: 41, color: '#A0A0A0', description: 'Below Average - Needs upgrading (top 90%)' },
-  { grade: 'D', minPoints: 13, color: '#808080', description: 'Poor - Consider replacing (top 95%)' },
+  { grade: 'VOID HUNTER', minPoints: 140, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection' },
+  { grade: 'LEGENDARY', minPoints: 135, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-perfect disc' },
+  { grade: 'SSS', minPoints: 130, color: '#FF6B9D', description: 'Perfect - Outstanding disc' },
+  { grade: 'SS', minPoints: 120, color: '#FF8C42', description: 'Excellent - Great disc' },
+  { grade: 'S', minPoints: 105, color: '#FFD93D', description: 'Very Good - Above average disc' },
+  { grade: 'A', minPoints: 90, color: '#6BCF7F', description: 'Good - Decent disc' },
+  { grade: 'B', minPoints: 60, color: '#4D96FF', description: 'Average - Usable disc' },
+  { grade: 'C', minPoints: 35, color: '#A0A0A0', description: 'Below Average - Needs upgrading' },
+  { grade: 'D', minPoints: 10, color: '#808080', description: 'Poor - Consider replacing' },
   { grade: 'F', minPoints: 0, color: '#606060', description: 'Unusable - Immediate fodder' },
 ];
 
@@ -118,15 +118,15 @@ export interface BuildRating {
 }
 
 export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
-  { grade: 'VOID HUNTER', breakpointsMetPercentage: 96, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs (top 3%)' },
-  { grade: 'LEGENDARY', breakpointsMetPercentage: 94, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs (top 5%)' },
-  { grade: 'SSS', breakpointsMetPercentage: 91, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs (top 10%)' },
-  { grade: 'SS', breakpointsMetPercentage: 84, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs (top 25%)' },
-  { grade: 'S', breakpointsMetPercentage: 72, color: '#FFD93D', description: 'Very Good - Strong build with good discs (top 50%)' },
-  { grade: 'A', breakpointsMetPercentage: 66, color: '#6BCF7F', description: 'Good - Solid build with decent discs (top 60%)' },
-  { grade: 'B', breakpointsMetPercentage: 56, color: '#4D96FF', description: 'Decent - Room for improvement (top 80%)' },
-  { grade: 'C', breakpointsMetPercentage: 38, color: '#A0A0A0', description: 'Below Average - Missing key stats (top 90%)' },
-  { grade: 'D', breakpointsMetPercentage: 30, color: '#808080', description: 'Poor - Major gaps in stats (top 95%)' },
+  { grade: 'VOID HUNTER', breakpointsMetPercentage: 90, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
+  { grade: 'LEGENDARY', breakpointsMetPercentage: 87, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs' },
+  { grade: 'SSS', breakpointsMetPercentage: 84, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
+  { grade: 'SS', breakpointsMetPercentage: 78, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
+  { grade: 'S', breakpointsMetPercentage: 68, color: '#FFD93D', description: 'Very Good - Strong build with pretty good discs' },
+  { grade: 'A', breakpointsMetPercentage: 60, color: '#6BCF7F', description: 'Good - Solid build with decent discs' },
+  { grade: 'B', breakpointsMetPercentage: 50, color: '#4D96FF', description: 'Decent - Room for improvement' },
+  { grade: 'C', breakpointsMetPercentage: 32, color: '#A0A0A0', description: 'Below Average - Missing key stats' },
+  { grade: 'D', breakpointsMetPercentage: 20, color: '#808080', description: 'Poor - Major gaps in stats' },
   { grade: 'F', breakpointsMetPercentage: 0, color: '#606060', description: 'Unoptimized - Needs complete rework' },
 ];
 
