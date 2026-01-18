@@ -26,6 +26,8 @@ import {
 } from '../constants/damage-formulas';
 import {
   DEFAULT_ENEMY_PROFILE,
+  ENEMY_PROFILES,
+  ENEMY_WEIGHTS,
 } from '../constants/enemy-profiles';
 import {
   getAgentSkillMultiplier,
@@ -851,120 +853,147 @@ export class ScoringService {
       }
     });
 
-    // Use default enemy profile for calculations
-    const enemy = DEFAULT_ENEMY_PROFILE;
-
-    let directDamage = 0;
-    let statusDamage = 0;
-    let sheerForceDamage = 0;
-    let dazeContribution = 0;
+    // Calculate weighted average damage across all enemy types
+    let weightedDirectDamage = 0;
+    let weightedStatusDamage = 0;
+    let weightedSheerForceDamage = 0;
+    let weightedDazeContribution = 0;
     let damageType = 'direct';
 
-    // Role-specific damage calculations
-    switch (agentRole) {
-      case 'Rupture':
-        // Rupture agents use Sheer Force - ignores DEF entirely
-        // Formula: (ATK × 0.30) + (HP × 0.10)
-        damageType = 'sheer_force';
-        sheerForceDamage = calculateSheerForce(
-          stats.ATK,
-          stats.HP || 0,
-          dmgBonuses
-        );
-        break;
+    // Calculate damage against each enemy type
+    for (const enemy of ENEMY_PROFILES) {
+      const weight = ENEMY_WEIGHTS[enemy.name as keyof typeof ENEMY_WEIGHTS];
+      let directDamage = 0;
+      let statusDamage = 0;
+      let sheerForceDamage = 0;
+      let dazeContribution = 0;
 
-      case 'Anomaly':
-        // Anomaly agents focus on status effect damage
-        damageType = 'status';
-        const statusType = getStatusEffectType(agentElement);
-        statusDamage = calculateStatusDamage(statusType, stats.ATK, dmgBonuses);
-        break;
+      // Role-specific damage calculations
+      switch (agentRole) {
+        case 'Rupture':
+          // Rupture agents use Sheer Force - ignores DEF entirely
+          // Formula: (ATK × 0.30) + (HP × 0.10)
+          damageType = 'sheer_force';
+          sheerForceDamage = calculateSheerForce(
+            stats.ATK,
+            stats.HP || 0,
+            dmgBonuses
+          );
+          break;
 
-      case 'Stun':
-        // Stun agents focus on Daze contribution
-        // Also calculate some direct damage as they do moderate damage
-        damageType = 'daze';
-        dazeContribution = calculateDazeContribution(
-          1.0 * (1 + dazeBonus), // Apply daze bonus from agent/w-engine scoring
-          stats.impact || 0,
-          enemy.dazeGauge
-        );
-        // Stun agents also deal direct damage
-        directDamage = estimateDamage(
-          {
-            ATK: stats.ATK,
-            critRate: stats.critRate / 100,
-            critDMG: stats.critDMG / 100,
-            penRatio: (stats.penRatio || 0) / 100,
-            flatPEN: stats.flatPEN || 0,
-          },
-          skillMultiplier,
-          dmgBonuses,
-          defShred
-        );
-        break;
+        case 'Anomaly':
+          // Anomaly agents focus on status effect damage
+          damageType = 'status';
+          const statusType = getStatusEffectType(agentElement);
+          statusDamage = calculateStatusDamage(
+            statusType,
+            stats.ATK,
+            dmgBonuses,
+            resShred,
+            enemy.res
+          );
+          break;
 
-      case 'Attack':
-        // Attack agents focus on direct CRIT damage
-        damageType = 'direct';
-        directDamage = estimateDamage(
-          {
-            ATK: stats.ATK,
-            critRate: stats.critRate / 100,
-            critDMG: stats.critDMG / 100,
-            penRatio: (stats.penRatio || 0) / 100,
-            flatPEN: stats.flatPEN || 0,
-          },
-          skillMultiplier,
-          dmgBonuses,
-          defShred
-        );
-        break;
+        case 'Stun':
+          // Stun agents focus on Daze contribution
+          // Also calculate some direct damage as they do moderate damage
+          damageType = 'daze';
+          dazeContribution = calculateDazeContribution(
+            1.0 * (1 + dazeBonus), // Apply daze bonus from agent/w-engine scoring
+            stats.impact || 0,
+            enemy.dazeGauge
+          );
+          // Stun agents also deal direct damage
+          directDamage = estimateDamage(
+            {
+              ATK: stats.ATK,
+              critRate: stats.critRate / 100,
+              critDMG: stats.critDMG / 100,
+              penRatio: (stats.penRatio || 0) / 100,
+              flatPEN: stats.flatPEN || 0,
+            },
+            skillMultiplier,
+            dmgBonuses,
+            defShred,
+            resShred,
+            enemy.def,
+            enemy.res
+          );
+          break;
 
-      case 'Support':
-      case 'Defense':
-      default:
-        // Support/Defense agents do lower direct damage
-        damageType = 'direct';
-        directDamage = estimateDamage(
-          {
-            ATK: stats.ATK,
-            critRate: stats.critRate / 100,
-            critDMG: stats.critDMG / 100,
-            penRatio: (stats.penRatio || 0) / 100,
-            flatPEN: stats.flatPEN || 0,
-          },
-          skillMultiplier,
-          dmgBonuses,
-          defShred
-        );
-        break;
+        case 'Attack':
+          // Attack agents focus on direct CRIT damage
+          damageType = 'direct';
+          directDamage = estimateDamage(
+            {
+              ATK: stats.ATK,
+              critRate: stats.critRate / 100,
+              critDMG: stats.critDMG / 100,
+              penRatio: (stats.penRatio || 0) / 100,
+              flatPEN: stats.flatPEN || 0,
+            },
+            skillMultiplier,
+            dmgBonuses,
+            defShred,
+            resShred,
+            enemy.def,
+            enemy.res
+          );
+          break;
+
+        case 'Support':
+        case 'Defense':
+        default:
+          // Support/Defense agents do lower direct damage
+          damageType = 'direct';
+          directDamage = estimateDamage(
+            {
+              ATK: stats.ATK,
+              critRate: stats.critRate / 100,
+              critDMG: stats.critDMG / 100,
+              penRatio: (stats.penRatio || 0) / 100,
+              flatPEN: stats.flatPEN || 0,
+            },
+            skillMultiplier,
+            dmgBonuses,
+            defShred,
+            resShred,
+            enemy.def,
+            enemy.res
+          );
+          break;
+      }
+
+      // Apply DamageTaken multiplier from agent/w-engine scoring (final multiplier)
+      if (damageTaken > 0) {
+        directDamage *= (1 + damageTaken);
+        if (statusDamage > 0) statusDamage *= (1 + damageTaken);
+        if (sheerForceDamage > 0) sheerForceDamage *= (1 + damageTaken);
+      }
+
+      // Accumulate weighted damage
+      weightedDirectDamage += directDamage * weight;
+      weightedStatusDamage += statusDamage * weight;
+      weightedSheerForceDamage += sheerForceDamage * weight;
+      weightedDazeContribution += dazeContribution * weight;
     }
 
     // Calculate total damage based on damage type
     let totalDamage = 0;
-    if (sheerForceDamage > 0) {
-      totalDamage = sheerForceDamage;
-    } else if (dazeContribution > 0) {
+    if (weightedSheerForceDamage > 0) {
+      totalDamage = weightedSheerForceDamage;
+    } else if (weightedDazeContribution > 0) {
       // For Stun, use direct damage but also track daze
-      totalDamage = directDamage;
+      totalDamage = weightedDirectDamage;
     } else {
-      totalDamage = directDamage + statusDamage;
-    }
-
-    // Apply DamageTaken multiplier from agent/w-engine scoring (final multiplier)
-    if (damageTaken > 0) {
-      totalDamage *= (1 + damageTaken);
-      directDamage *= (1 + damageTaken);
-      if (statusDamage > 0) statusDamage *= (1 + damageTaken);
-      if (sheerForceDamage > 0) sheerForceDamage *= (1 + damageTaken);
+      totalDamage = weightedDirectDamage + weightedStatusDamage;
     }
 
     return {
-      directDamage: Math.round(directDamage),
-      statusDamage: statusDamage > 0 ? Math.round(statusDamage) : undefined,
-      sheerForceDamage: sheerForceDamage > 0 ? Math.round(sheerForceDamage) : undefined,
-      dazeContribution: dazeContribution > 0 ? Math.round(dazeContribution * 100) / 100 : undefined,
+      directDamage: Math.round(weightedDirectDamage),
+      statusDamage: weightedStatusDamage > 0 ? Math.round(weightedStatusDamage) : undefined,
+      sheerForceDamage: weightedSheerForceDamage > 0 ? Math.round(weightedSheerForceDamage) : undefined,
+      dazeContribution: weightedDazeContribution > 0 ? Math.round(weightedDazeContribution * 100) / 100 : undefined,
       totalDamage: Math.round(totalDamage),
       damageType: damageType,
     };
