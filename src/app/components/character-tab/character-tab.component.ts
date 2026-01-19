@@ -1406,7 +1406,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       const enkaResult = await this.enkaApiService.fetchPlayerData(this.enkaUid).toPromise();
 
       if (!enkaResult) {
-        throw new Error('No data received from Enka Network');
+        throw new Error('No data received from provided UID');
       }
 
       console.log(`Received ${enkaResult.builds.length} builds from Enka`);
@@ -1429,7 +1429,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         this.closeEnkaImportModal();
 
         this.showConfirmation(
-          'Import from Enka Network',
+          'Import from UID',
           `Found: ${summary}\n\nDo you want to import these builds?`,
           async () => {
             try {
@@ -1459,7 +1459,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       }
     } catch (error) {
       console.error('Enka API error:', error);
-      this.enkaImportError = error instanceof Error ? error.message : 'Failed to fetch data from Enka Network';
+      this.enkaImportError = error instanceof Error ? error.message : 'Failed to fetch data from provided UID';
     } finally {
       this.isImportingFromEnka = false;
     }
