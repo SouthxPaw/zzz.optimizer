@@ -52,9 +52,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   includeMindscapeBonuses = true;
   includePassiveBonuses = true;
 
-  // UI collapse/expand toggles
-  showMindscapeBonuses = true;
-
   // Disc creation state
   showDiscForm = false;
   selectedDiscSetForCreation: DiscSet | null = null;
