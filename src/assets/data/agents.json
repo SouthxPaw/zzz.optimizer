@@ -3310,20 +3310,9 @@
   },
   {
     "id": 1261,
-    "name": "Jane Doe",
+    "name": "Jane",
     "scoring": {
-      "buffs": [
-        {
-          "type": "CRITRateBonus",
-          "value": "100",
-          "format": "%"
-        },
-        {
-          "type": "CRITDMGBonus",
-          "value": "50",
-          "format": "%"
-        }
-      ],
+      "buffs": [],
       "debuffs": [],
       "dazeBonus": 0
     },
@@ -3371,7 +3360,18 @@
       "RpMax": 0,
       "RpRecover": 0
     },
-    "lvl60_stats": {},
+    "lvl60_stats": {
+      "HpMax": 7788,
+      "Defence": 880,
+      "Attack": 606,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 86,
+      "ElementAbnormalPower": 148,
+      "ElementMystery": 114,
+      "SpBarPoint": 12
+    },
     "ascension": [
       {
         "max_hp": 0,
@@ -32189,9 +32189,9 @@
     "id": 1241,
     "name": "Zhu Yuan",
     "scoring": {
-      "buffs": [],
+      "buffs": [{ "type": "CRITRateBonus", "value": "30", "format": "%" }],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
