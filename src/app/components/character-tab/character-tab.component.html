@@ -626,12 +626,9 @@
                   <span class="toggle-switch"></span>
                   <span class="toggle-label">Enable</span>
                 </label>
-                <button class="toggle-btn" (click)="showMindscapeBonuses = !showMindscapeBonuses">
-                  {{ showMindscapeBonuses ? '−' : '+' }}
-                </button>
               </div>
             </div>
-            <div class="mindscape-effect-box" *ngIf="showMindscapeBonuses">
+            <div class="mindscape-effect-box">
               <p class="effect-name">
                 M{{ selectedBuild.mindscapeLevel }} Active
               </p>
