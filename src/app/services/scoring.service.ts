@@ -9,7 +9,6 @@ import {
   BUILD_RATING_THRESHOLDS,
   EXTERNAL_STAT_WEIGHTS,
   BUILD_SCORE_WEIGHTS,
-  DIMINISHING_RETURNS,
   BREAKPOINT_PENALTIES,
   DiscRating,
   BuildRating,
@@ -25,13 +24,11 @@ import {
   calculateAnomalyBuildup,
 } from '../constants/damage-formulas';
 import {
-  DEFAULT_ENEMY_PROFILE,
   ENEMY_PROFILES,
   ENEMY_WEIGHTS,
 } from '../constants/enemy-profiles';
 import {
   getAgentSkillMultiplier,
-  getAgentDamageType,
   getStatusEffectType,
 } from '../constants/agent-skills';
 import { SkillParserService } from './skill-parser.service';
@@ -212,43 +209,6 @@ export class ScoringService {
   }
 
   /**
-   * Apply diminishing returns to a stat value
-   * Prevents over-investment in a single stat beyond optimal thresholds
-   *
-   * @param statType - Type of stat (for determining power exponent)
-   * @param rawValue - Actual stat value
-   * @param optimalValue - Optimal target value from breakpoints
-   * @returns Adjusted value with diminishing returns applied
-   */
-  private applyDiminishingReturns(
-    statType: string,
-    rawValue: number,
-    optimalValue: number
-  ): number {
-    // If no optimal defined or value is at/below threshold, no penalty
-    if (
-      optimalValue <= 0 ||
-      rawValue <= optimalValue * DIMINISHING_RETURNS.THRESHOLD_PERCENT
-    ) {
-      return rawValue;
-    }
-
-    const threshold = optimalValue * DIMINISHING_RETURNS.THRESHOLD_PERCENT;
-    const excess = rawValue - threshold;
-
-    // Determine power based on stat type
-    const power =
-      statType === 'energyRegen'
-        ? DIMINISHING_RETURNS.POWER.ENERGY
-        : DIMINISHING_RETURNS.POWER.STANDARD;
-
-    // Apply power function to excess
-    const diminishedExcess = Math.pow(excess, power);
-
-    return threshold + diminishedExcess;
-  }
-
-  /**
    * Calculate breakpoint penalty multiplier
    * Returns a multiplier (0.0-1.0) to apply to score based on missing breakpoints
    *
@@ -270,16 +230,7 @@ export class ScoringService {
       return 1.0 - BREAKPOINT_PENALTIES.MISSING_MIN;
     }
 
-    // Between min and optimal - apply partial penalty
-    // Linear scaling between min (full penalty) and optimal (no penalty)
-    const range = breakpoint.optimal - breakpoint.min;
-    const position = currentValue - breakpoint.min;
-    const percentOfRange = range > 0 ? position / range : 0;
-
-    // Interpolate penalty from MISSING_OPTIMAL at min to 0 at optimal
-    const penalty = BREAKPOINT_PENALTIES.MISSING_OPTIMAL * (1 - percentOfRange);
-
-    return 1.0 - penalty;
+    return 0;
   }
 
   /**
@@ -293,8 +244,7 @@ export class ScoringService {
    */
   calculateDiscScore(
     disc: Disc,
-    agentId?: string,
-    equippedDiscs?: Disc[]
+    agentId?: string
   ): { score: number; rating: DiscRating; breakdown: any } {
     let totalPoints = 0;
     const breakdown = {
@@ -407,6 +357,10 @@ export class ScoringService {
         // Final weighted score: rolls × stat importance × roll quality
         const weightedScore = rolls * statWeight * qualityMultiplier;
 
+        // NEW: Add bonus points for each upgrade roll into a priority stat
+        // Rewards players for getting lucky with rolls
+        const rollBonus = upgradeRolls * 0.5; // 0.5 points per upgrade roll into priority stat
+
         totalWeightedRolls += weightedScore;
         priorityStatCount++;
 
@@ -415,21 +369,43 @@ export class ScoringService {
           maxRollCount++;
         }
 
-        breakdown.subStatPoints += weightedScore;
+        const totalPoints = weightedScore + rollBonus;
+        breakdown.subStatPoints += totalPoints;
         breakdown.details.push({
           stat: `${substat.type} (×${statWeight}, ${(
             qualityMultiplier * 100
-          ).toFixed(0)}% quality)`,
+          ).toFixed(0)}% quality, +${rollBonus} roll bonus)`,
           value: substat.value,
-          points: Math.round(weightedScore * 10) / 10,
+          points: Math.round(totalPoints * 10) / 10,
           rolls: rolls,
         });
       } else {
-        // Show wasted stats with 0 contribution
+        // Wasted stats get small consolation points to be less harsh
+        // 1 point per roll for ANY percentage stat (HP%, ATK%, DEF%, CRIT Rate, CRIT DMG, Anomaly Prof, etc.)
+        // 0.5 points per roll for flat stats (HP, ATK, DEF)
+        let wastedPoints = 0;
+        let pointsLabel = '';
+
+        // Check if it's a flat stat (only HP, ATK, DEF have flat versions)
+        const isFlatStat = ['HP', 'ATK', 'DEF'].includes(substat.type);
+
+        if (isFlatStat) {
+          // Flat stats get 0.5 points per roll
+          wastedPoints = rolls * 0.5;
+          pointsLabel = '0.5pt/roll';
+        } else {
+          // All percentage stats get 1 point per roll
+          // This includes: HP%, ATK%, DEF%, CRIT Rate, CRIT DMG, PEN, PEN Ratio,
+          // Anomaly Proficiency, Anomaly Mastery, Energy Regen, Impact
+          wastedPoints = rolls * 1;
+          pointsLabel = '1pt/roll';
+        }
+
+        breakdown.subStatPoints += wastedPoints;
         breakdown.details.push({
-          stat: substat.type + ' (wasted)',
+          stat: substat.type + ` (wasted, ${pointsLabel})`,
           value: substat.value,
-          points: 0,
+          points: Math.round(wastedPoints * 10) / 10,
           rolls: rolls,
         });
       }
@@ -883,15 +859,68 @@ export class ScoringService {
 
         case 'Anomaly':
           // Anomaly agents focus on status effect damage
+          // Their effectiveness depends on both damage per proc and buildup rate
           damageType = 'status';
           const statusType = getStatusEffectType(agentElement);
-          statusDamage = calculateStatusDamage(
-            statusType,
-            stats.ATK,
-            dmgBonuses,
-            resShred,
-            enemy.res
-          );
+
+          // Special case for Miyabi: She's a hybrid Anomaly/CRIT agent
+          // Her Frostburn damage scales with both Anomaly Proficiency AND CRIT stats
+          if (agentId === '1091' || agentName === 'Miyabi') {
+            // Calculate both status damage and crit-scaled direct damage
+            const baseStatusDamagePerProc = calculateStatusDamage(
+              statusType,
+              stats.ATK,
+              dmgBonuses,
+              resShred,
+              enemy.res
+            );
+
+            // Calculate anomaly buildup rate
+            const baseAnomalyBuildup = 1.0;
+            const anomalyProficiency = (stats.anomalyProficiency || 0) / 100;
+            const buildupRate = calculateAnomalyBuildup(baseAnomalyBuildup, anomalyProficiency);
+
+            // Status damage scaled by buildup rate
+            statusDamage = baseStatusDamagePerProc * buildupRate;
+
+            // Also calculate CRIT-based damage (she benefits from both)
+            directDamage = estimateDamage(
+              {
+                ATK: stats.ATK,
+                critRate: stats.critRate / 100,
+                critDMG: stats.critDMG / 100,
+                penRatio: (stats.penRatio || 0) / 100,
+                flatPEN: stats.flatPEN || 0,
+              },
+              skillMultiplier,
+              dmgBonuses,
+              defShred,
+              resShred,
+              enemy.def,
+              enemy.res
+            );
+
+            // Miyabi's damage is a mix of both types
+            damageType = 'hybrid';
+          } else {
+            // Standard anomaly agent calculation
+            // Calculate base status damage per proc
+            const baseStatusDamagePerProc = calculateStatusDamage(
+              statusType,
+              stats.ATK,
+              dmgBonuses,
+              resShred,
+              enemy.res
+            );
+
+            // Calculate anomaly buildup rate
+            const baseAnomalyBuildup = 1.0;
+            const anomalyProficiency = (stats.anomalyProficiency || 0) / 100;
+            const buildupRate = calculateAnomalyBuildup(baseAnomalyBuildup, anomalyProficiency);
+
+            // Higher buildup rate = more frequent procs = more total damage
+            statusDamage = baseStatusDamagePerProc * buildupRate;
+          }
           break;
 
         case 'Stun':
@@ -1085,7 +1114,7 @@ export class ScoringService {
 
     let totalScore = 0;
     equippedDiscs.forEach((disc) => {
-      const result = this.calculateDiscScore(disc, agentId, equippedDiscs);
+      const result = this.calculateDiscScore(disc, agentId);
       totalScore += ratingToScore[result.rating.grade] || 0;
     });
 
@@ -1322,57 +1351,6 @@ export class ScoringService {
   }
 
   /**
-   * Get human-readable priority stat names for feedback messages
-   */
-  private getPriorityStatDisplayNames(breakpoints: AgentBreakpoints): string[] {
-    const displayNames: string[] = [];
-
-    // Map internal stat names to display names
-    const statDisplayMap: { [key: string]: string } = {
-      'CRIT_Rate': 'CRIT Rate',
-      'CRIT_DMG': 'CRIT DMG',
-      'ATK%': 'ATK%',
-      'ATK': 'ATK',
-      'HP%': 'HP%',
-      'HP': 'HP',
-      'DEF%': 'DEF%',
-      'DEF': 'DEF',
-      'Anomaly_Proficiency': 'Anomaly Prof',
-      'Anomaly_Mastery': 'Anomaly Mastery',
-      'PEN': 'PEN',
-      'PEN_Ratio': 'PEN Ratio',
-      'Impact': 'Impact',
-      'Energy_Regen': 'Energy Regen',
-    };
-
-    // Check statWeights first (new format)
-    if (breakpoints.statWeights) {
-      // Sort by weight (highest first) and take top stats
-      const sortedStats = Object.entries(breakpoints.statWeights)
-        .filter(([_, weight]) => weight > 0)
-        .sort((a, b) => b[1] - a[1]);
-
-      sortedStats.forEach(([stat, _]) => {
-        const displayName = statDisplayMap[stat];
-        if (displayName && !displayNames.includes(displayName)) {
-          displayNames.push(displayName);
-        }
-      });
-    }
-    // Fall back to priorityStats array (old format)
-    else if (breakpoints.priorityStats && Array.isArray(breakpoints.priorityStats)) {
-      breakpoints.priorityStats.forEach(stat => {
-        const displayName = statDisplayMap[stat];
-        if (displayName && !displayNames.includes(displayName)) {
-          displayNames.push(displayName);
-        }
-      });
-    }
-
-    return displayNames;
-  }
-
-  /**
    * Get the weight for a stat from breakpoints config
    * Returns 1.0 if stat is in priorityStats, or the actual weight from statWeights
    */
@@ -1419,8 +1397,7 @@ export class ScoringService {
    * Get W-Engine stat contributions with reduced weight
    */
   private getWEngineStatContribution(
-    wEngine?: WEngine,
-    wEngineLevel?: number
+    wEngine?: WEngine
   ): Partial<BaseStats> {
     if (!wEngine) {
       return {};
@@ -1581,7 +1558,7 @@ export class ScoringService {
     stats: BaseStats,
     equippedDiscs: Disc[],
     wEngine?: WEngine,
-    wEngineLevel?: number,
+    _wEngineRefinement?: number,
     mindscapeLevel: number = 0,
     agentName?: string,
     agentRole?: string,
@@ -1601,10 +1578,7 @@ export class ScoringService {
     }
 
     // Calculate weighted contributions from W-Engine and Mindscape
-    const wEngineContribution = this.getWEngineStatContribution(
-      wEngine,
-      wEngineLevel
-    );
+    const wEngineContribution = this.getWEngineStatContribution(wEngine);
     const mindscapeContribution = this.getMindscapeStatContribution(
       agentId,
       mindscapeLevel
@@ -1831,18 +1805,6 @@ export class ScoringService {
     // Sort by weight * deficit (highest priority improvements first)
     statsNeedingImprovement.sort((a, b) => (b.weight * b.deficit) - (a.weight * a.deficit));
 
-    // Generate smart stat suggestions for disc feedback
-    // Only suggest stats that haven't yet reached optimal breakpoints
-    let neededSubstats = statsNeedingImprovement
-      .slice(0, 3)
-      .map(s => s.substatName);
-
-    // No fallback - if all stats are at optimal, don't suggest any stats for improvement
-
-    const statSuggestion = neededSubstats.length > 0
-      ? ` - Suggestion: ${neededSubstats.join(', ')}`
-      : '';
-
     // Analyze disc substats to find wasted rolls and give specific feedback
     // Map substat types to their weight key names
     const substatToWeightKey: { [key: string]: string } = {
@@ -1907,7 +1869,7 @@ export class ScoringService {
       const missingPriorityStats: string[] = [];
       if (breakpoints.statWeights) {
         Object.entries(breakpoints.statWeights)
-          .filter(([stat, weight]) => weight > 0)
+          .filter(([, weight]) => weight > 0)
           .filter(([stat]) => {
             // Skip CRIT Rate if at or above optimal OR 100% (only stat where excess hurts)
             if (stat === 'CRIT_Rate' && (stats.critRate >= breakpoints.breakpoints.critRate.optimal || stats.critRate >= 100)) return false;
@@ -1931,21 +1893,6 @@ export class ScoringService {
         missingPriorityStats,
       });
     });
-
-    // Get top 3 priority stats for suggestions (used for all disc feedback)
-    let topPriorityStats: string[] = [];
-    if (breakpoints.statWeights) {
-      topPriorityStats = Object.entries(breakpoints.statWeights)
-        .filter(([stat, weight]) => {
-          if (weight <= 0) return false;
-          // Skip CRIT Rate if at or above optimal OR 100% (only stat where excess hurts)
-          if (stat === 'CRIT_Rate' && (stats.critRate >= breakpoints.breakpoints.critRate.optimal || stats.critRate >= 100)) return false;
-          return true;
-        })
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 3)
-        .map(([stat]) => stat.replace('_', ' '));
-    }
 
     // Find discs rated D or F (high priority to replace)
     const terribleDiscs = discAnalysis.filter(d => d.grade === 'D' || d.grade === 'F');

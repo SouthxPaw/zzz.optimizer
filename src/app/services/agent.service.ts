@@ -2,7 +2,7 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Agent, BaseStats, Element, Specialty } from '../models/agent.model';
+import { Agent, Element, Specialty } from '../models/agent.model';
 import { DbService } from './db.service';
 
 @Injectable({

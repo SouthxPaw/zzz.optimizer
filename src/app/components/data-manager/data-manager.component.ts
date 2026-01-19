@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataImportService } from '../../services/data-import.service';
@@ -23,12 +23,14 @@ export class DataManagerComponent {
   constructor(
     private dataImportService: DataImportService,
     private appInitService: AppInitService,
-    private buildImportExportService: BuildImportExportService
+    private buildImportExportService: BuildImportExportService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   async reloadReferenceData() {
     if (confirm('This will reload all reference data (agents, W-Engines) from assets. Continue?')) {
       this.isLoading = true;
+      this.cdr.markForCheck();
       this.setMessage('Reloading reference data from assets folder...', 'info');
 
       try {
@@ -39,6 +41,7 @@ export class DataManagerComponent {
         this.setMessage('Error reloading reference data. Check console for details.', 'error');
       } finally {
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     }
   }

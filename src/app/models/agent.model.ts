@@ -35,6 +35,19 @@ export interface Agent {
   specialtyIcon?: string;
   mindscapeEffects?: MindscapeEffect[];
   coreSkill?: string;
+  scoring?: AgentScoring;
+}
+
+export interface AgentScoring {
+  buffs?: AgentBuff[];
+  debuffs?: any[];
+  dazeBonus?: number;
+}
+
+export interface AgentBuff {
+  type: string;  // e.g., 'ATKBonus', 'CRITRateBonus', 'CRITDMGBonus', etc.
+  value: string;  // String number like '1000' or '40'
+  format: '%' | 'flat';
 }
 
 export interface MindscapeEffect {
@@ -48,6 +61,7 @@ export interface MindscapeStatBonus {
   type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Anomaly_Proficiency' | 'Anomaly_Mastery' | 'Impact';
   value: number;
   conditional: boolean; // true if bonus requires conditions, false if always active
+  format?: '%' | 'flat'; // New field to distinguish percentage vs flat stats
 }
 
 // models/wengine.model.ts
