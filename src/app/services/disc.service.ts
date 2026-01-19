@@ -2,7 +2,7 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Disc, DiscSet, MainStatType, SubStat, SubStatType } from '../models/disc.model';
+import { Disc, SubStat, SubStatType } from '../models/disc.model';
 import { ScoringAlgorithm } from '../models/scoring.model';
 import { DiscSlot } from '../models/agent.model';
 import { DbService } from './db.service';

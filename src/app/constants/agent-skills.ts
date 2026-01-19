@@ -80,28 +80,6 @@ export function getAgentElementalBonus(agentName: string): number {
 }
 
 /**
- * Determine primary damage type for agent role
- * Used to decide whether to calculate direct damage or status damage
- */
-export function getAgentDamageType(role: string): 'direct' | 'status' | 'sheer_force' | 'daze' {
-  switch (role) {
-    case 'Attack':
-      return 'direct';
-    case 'Anomaly':
-      return 'status';
-    case 'Rupture':
-      return 'sheer_force'; // Rupture agents use Sheer Force (ignores DEF)
-    case 'Stun':
-      return 'daze'; // Stun agents focus on Daze contribution + moderate damage
-    case 'Support':
-    case 'Defense':
-      return 'direct'; // Low damage but still direct
-    default:
-      return 'direct';
-  }
-}
-
-/**
  * Get status effect type based on agent element
  * Used for Anomaly agents to calculate status damage
  */

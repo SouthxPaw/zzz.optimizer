@@ -24,7 +24,7 @@ export class ImagePreloaderService {
     }
 
     // Create new preload promise
-    const promise = new Promise<void>((resolve, reject) => {
+    const promise = new Promise<void>((resolve) => {
       const img = new Image();
 
       img.onload = () => {

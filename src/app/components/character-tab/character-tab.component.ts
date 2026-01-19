@@ -47,6 +47,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   showDiscPicker = false;
   selectedDiscSlot: DiscSlot | null = null;
 
+  // Bonus enable/disable toggles (for stat calculations)
+  includeWEngineBonuses = true;
+  includeMindscapeBonuses = true;
+  includePassiveBonuses = true;
+
+  // UI collapse/expand toggles
+  showMindscapeBonuses = true;
+
   // Disc creation state
   showDiscForm = false;
   selectedDiscSetForCreation: DiscSet | null = null;
@@ -152,8 +160,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Subscribe to selected build
     this.buildService.selectedBuild$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(build => {
+      .subscribe(async build => {
         this.selectedBuild = build;
+
+        // Load toggle flags from build (default true if not set)
+        if (build) {
+          this.includeWEngineBonuses = build.includeWEngineBonuses ?? true;
+          this.includeMindscapeBonuses = build.includeMindscapeBonuses ?? true;
+          this.includePassiveBonuses = build.includePassiveBonuses ?? true;
+        }
       });
 
     // Load reference agents for the "Add Agent" modal
@@ -304,10 +319,49 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   toggleMindscape(level: number) {
     if (!this.selectedBuild) return;
 
-    const newLevel = this.selectedBuild.mindscapeLevel === level ? level - 1 : level;
+    // Mindscape levels work cumulatively (M1 through M6)
+    // - Clicking a level ON: activates that level and all previous levels (M1 through that level)
+    // - Clicking a level OFF: deactivates that level and all higher levels (keeps lower ones)
+    let newLevel: number;
+
+    if (this.selectedBuild.mindscapeLevel >= level) {
+      // Clicking an active mindscape - deselect it and all above it
+      newLevel = level - 1;
+    } else {
+      // Clicking an inactive mindscape - select up to this level
+      newLevel = level;
+    }
+
     this.buildService.updateBuild(this.selectedBuild.id, {
       mindscapeLevel: newLevel
     });
+  }
+
+  async onWEngineBonusesToggle() {
+    // Update build with new toggle state and recalculate
+    if (this.selectedBuild) {
+      await this.buildService.updateBuild(this.selectedBuild.id, {
+        includeWEngineBonuses: this.includeWEngineBonuses
+      });
+    }
+  }
+
+  async onMindscapeBonusesToggle() {
+    // Update build with new toggle state and recalculate
+    if (this.selectedBuild) {
+      await this.buildService.updateBuild(this.selectedBuild.id, {
+        includeMindscapeBonuses: this.includeMindscapeBonuses
+      });
+    }
+  }
+
+  async onPassiveBonusesToggle() {
+    // Update build with new toggle state and recalculate
+    if (this.selectedBuild) {
+      await this.buildService.updateBuild(this.selectedBuild.id, {
+        includePassiveBonuses: this.includePassiveBonuses
+      });
+    }
   }
 
   async equipWEngine(wEngine: WEngine | undefined) {
@@ -526,8 +580,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       const stats = mindscape.statBonuses!
         .filter(b => !b.conditional) // Only show unconditional bonuses
         .map(bonus => {
-          const isPercent = bonus.type.endsWith('%') ||
-                           ['CRIT_Rate', 'CRIT_DMG', 'PEN_Ratio', 'Energy_Regen'].includes(bonus.type);
+          // Use format field to check if percentage
+          const isPercent = bonus.format === '%';
 
           // Format stat name for display
           let displayName: string;
@@ -556,6 +610,45 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         level: mindscape.level,
         name: mindscape.name,
         stats: stats
+      };
+    });
+  }
+
+  getPassiveBonuses(): Array<{name: string, value: string, isPercent: boolean}> {
+    if (!this.selectedBuild) {
+      return [];
+    }
+
+    // Get agent reference data to access scoring buffs
+    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    if (!agent || !agent.scoring?.buffs) {
+      return [];
+    }
+
+    return agent.scoring.buffs.map(buff => {
+      const isPercent = buff.format === '%';
+
+      // Map buff type to display name
+      let displayName: string;
+      switch(buff.type) {
+        case 'ATKBonus': displayName = 'ATK'; break;
+        case 'HPBonus': displayName = 'HP'; break;
+        case 'DEFBonus': displayName = 'DEF'; break;
+        case 'CRITRateBonus': displayName = 'CRIT Rate'; break;
+        case 'CRITDMGBonus': displayName = 'CRIT DMG'; break;
+        case 'PENRatioBonus': displayName = 'PEN Ratio'; break;
+        case 'AnomalyProficiencyBonus': displayName = 'Anomaly Proficiency'; break;
+        case 'AnomalyMasteryBonus': displayName = 'Anomaly Mastery'; break;
+        case 'ImpactBonus': displayName = 'Impact'; break;
+        case 'EnergyRegenBonus': displayName = 'Energy Regen'; break;
+        case 'DMGBonus': displayName = 'DMG Bonus'; break;
+        default: displayName = buff.type; break;
+      }
+
+      return {
+        name: displayName,
+        value: buff.value,
+        isPercent: isPercent
       };
     });
   }
@@ -936,13 +1029,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    // Get equipped discs as array for hybrid agent detection
-    const equippedDiscsArray = Object.values(this.selectedBuild.equippedDiscs).filter(d => d !== undefined);
-
     const result = this.scoringService.calculateDiscScore(
       disc,
-      this.selectedBuild.agentId,
-      equippedDiscsArray
+      this.selectedBuild.agentId
     );
     return {
       score: result.score,

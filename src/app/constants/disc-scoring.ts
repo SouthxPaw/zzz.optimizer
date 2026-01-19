@@ -2,31 +2,12 @@
 // Based on fribbels HSR optimizer approach using priority stats
 
 /**
- * Diminishing returns configuration
- * Applied when a stat exceeds its optimal threshold
- */
-export const DIMINISHING_RETURNS = {
-  // Power function exponents for different stat types
-  // Lower = more aggressive diminishing returns
-  POWER: {
-    STANDARD: 0.5,   // CRIT Rate, CRIT DMG, ATK%, etc. (mild diminishing)
-    ENERGY: 0.4,     // Energy Regen (moderate diminishing)
-  },
-  // Threshold percentage - stats below this don't get diminishing returns
-  // 1.0 = only apply diminishing returns if stat is ABOVE optimal (at or below = no penalty)
-  THRESHOLD_PERCENT: 1.0,
-};
-
-/**
  * Breakpoint penalty configuration
  * Applied when a stat fails to meet its minimum or optimal threshold
  */
 export const BREAKPOINT_PENALTIES = {
   // Penalty for missing minimum breakpoint (0-100%)
   MISSING_MIN: 0.30,  // 30% penalty if below minimum
-  // Penalty for missing optimal breakpoint (0-100%)
-  MISSING_OPTIMAL: 0.15,  // 15% penalty if between min and optimal
-  // No penalty if at or above optimal
 };
 
 /**
@@ -49,7 +30,6 @@ export const BUILD_SCORE_WEIGHTS = {
   SET_BONUS: 0.05,       // 5% - Set effect alignment
   DAMAGE_OUTPUT: 0.10,   // 10% - Damage calculation with agent/W-Engine scoring modifiers
 };
-
 
 /**
  * Main stat point bonuses

@@ -152,6 +152,19 @@
           </div>
         </div>
 
+        <!-- Passive Bonuses Toggle -->
+        <div class="passive-toggle-section">
+          <label class="toggle-label">
+            <input
+              type="checkbox"
+              [(ngModel)]="includePassiveBonuses"
+              (change)="onPassiveBonusesToggle()"
+              class="toggle-checkbox"
+            />
+            <span class="toggle-text">Include Passive Bonuses in Stats</span>
+          </label>
+        </div>
+
         <!-- W-Engine -->
         <div class="wengine-section">
           <div class="wengine-selector-header">
@@ -534,7 +547,18 @@
             *ngIf="selectedBuild.equippedWEngine"
             class="wengine-active-effect"
           >
-            <h4>W-Engine Bonuses:</h4>
+            <div class="bonus-header">
+              <h4>W-Engine Bonuses:</h4>
+              <label class="enable-toggle">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="includeWEngineBonuses"
+                  (change)="onWEngineBonusesToggle()"
+                />
+                <span class="toggle-switch"></span>
+                <span class="toggle-label">Enable</span>
+              </label>
+            </div>
             <div class="wengine-effect-box">
               <p class="effect-name">
                 {{ selectedBuild.equippedWEngine.name }} (R{{
@@ -590,8 +614,24 @@
             *ngIf="getMindscapeBonuses().length > 0"
             class="mindscape-active-effect"
           >
-            <h4>Mindscape Bonuses:</h4>
-            <div class="mindscape-effect-box">
+            <div class="bonus-header">
+              <h4>Mindscape Bonuses:</h4>
+              <div class="bonus-header-controls">
+                <label class="enable-toggle">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="includeMindscapeBonuses"
+                    (change)="onMindscapeBonusesToggle()"
+                  />
+                  <span class="toggle-switch"></span>
+                  <span class="toggle-label">Enable</span>
+                </label>
+                <button class="toggle-btn" (click)="showMindscapeBonuses = !showMindscapeBonuses">
+                  {{ showMindscapeBonuses ? '−' : '+' }}
+                </button>
+              </div>
+            </div>
+            <div class="mindscape-effect-box" *ngIf="showMindscapeBonuses">
               <p class="effect-name">
                 M{{ selectedBuild.mindscapeLevel }} Active
               </p>
@@ -617,6 +657,34 @@
                     }}{{ stat.isPercent ? "%" : "" }}{{ !last ? ", " : "" }}
                   </span>
                 </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Passive Bonuses -->
+          <div
+            *ngIf="getPassiveBonuses().length > 0"
+            class="passive-bonuses"
+          >
+            <div class="bonus-header">
+              <h4>Active Passive Bonuses:</h4>
+              <label class="enable-toggle">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="includePassiveBonuses"
+                  (change)="onPassiveBonusesToggle()"
+                />
+                <span class="toggle-switch"></span>
+                <span class="toggle-label">Enable</span>
+              </label>
+            </div>
+            <div class="passive-bonus-box">
+              <div
+                *ngFor="let bonus of getPassiveBonuses(); trackBy: trackByBonusIndex"
+                class="bonus-stat"
+              >
+                <span class="bonus-label">{{ bonus.name }}:</span>
+                <span class="bonus-value">+{{ bonus.value }}{{ bonus.isPercent ? "%" : "" }}</span>
               </div>
             </div>
           </div>
