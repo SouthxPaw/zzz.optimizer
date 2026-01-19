@@ -25,7 +25,7 @@
   <div *ngIf="activeTab === 'builds'" class="tab-content">
     <!-- Import Action Bar -->
     <div class="import-action-bar">
-      <button class="btn-secondary btn-compact" (click)="openEnkaImportModal()" title="Import builds from Enka Network">
+      <button class="btn-secondary btn-compact" (click)="openEnkaImportModal()" title="Import builds from UID">
         Import from UID
       </button>
     </div>
@@ -1180,7 +1180,7 @@
 
         <div *ngIf="isImportingFromEnka" class="loading-spinner">
           <div class="spinner"></div>
-          <p>Fetching data from Enka Network via proxy...</p>
+          <p>Fetching data from UID...</p>
           <p class="spinner-note">This may take a few seconds</p>
         </div>
       </div>
