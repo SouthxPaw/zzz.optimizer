@@ -171,16 +171,16 @@ export class EnkaApiService {
       switchMap(response => from(this.transformEnkaData(uid, response))),
       catchError(error => {
         console.error('Enka API error:', error);
-        let errorMessage = 'Failed to fetch data from Enka Network';
+        let errorMessage = 'Failed to fetch data from provided UID';
 
         if (error.status === 404) {
-          errorMessage = 'UID not found. Make sure your profile is public in game settings.';
+          errorMessage = 'UID not found. Make sure your profile is public in game settings or double check your UID.';
         } else if (error.status === 429) {
           errorMessage = 'Rate limited. Please wait a moment and try again.';
         } else if (error.status === 0) {
-          errorMessage = 'CORS error. The Enka Network API might be blocking requests. Try again later or contact support.';
+          errorMessage = 'CORS error. The API might be blocking requests. Try again later or contact support.';
         } else if (error.status >= 500) {
-          errorMessage = 'Enka Network server error. Please try again later.';
+          errorMessage = 'Server error. Please try again later.';
         }
 
         return throwError(() => new Error(errorMessage));
