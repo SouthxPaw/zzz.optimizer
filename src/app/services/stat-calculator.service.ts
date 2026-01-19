@@ -94,11 +94,13 @@ export class StatCalculatorService {
     wEngineRefinement: number = 1,
     includeWEngineBonuses: boolean = true,
     includeMindscapeBonuses: boolean = true,
-    includePassiveBonuses: boolean = true
+    includePassiveBonuses: boolean = true,
+    enabledDiscs: { [slot: string]: boolean } = {}
   ): BaseStats {
 
-    // Generate cache key (include all bonus flags in cache)
-    const cacheKey = this.generateCacheKey(agent.id, level, wEngine?.id, discs, mindscapeLevel, wEngineRefinement) + `:${includeWEngineBonuses}:${includeMindscapeBonuses}:${includePassiveBonuses}`;
+    // Generate cache key (include all bonus flags and enabled discs in cache)
+    const enabledDiscsKey = Object.keys(discs).map(slot => `${slot}:${enabledDiscs[slot] ?? true}`).join(',');
+    const cacheKey = this.generateCacheKey(agent.id, level, wEngine?.id, discs, mindscapeLevel, wEngineRefinement) + `:${includeWEngineBonuses}:${includeMindscapeBonuses}:${includePassiveBonuses}:${enabledDiscsKey}`;
 
     // Check cache
     const cached = this.statCache.get(cacheKey);
@@ -134,14 +136,19 @@ export class StatCalculatorService {
     } else {
     }
 
-    // Apply disc main stats
-    this.applyDiscMainStats(stats, discs, agent);
+    // Filter out disabled discs
+    const enabledDiscsOnly = Object.fromEntries(
+      Object.entries(discs).filter(([slot, disc]) => disc && (enabledDiscs[slot] ?? true))
+    ) as { [key in DiscSlot]?: Disc };
 
-    // Apply disc substats
-    this.applyDiscSubStats(stats, discs, agent);
+    // Apply disc main stats (only from enabled discs)
+    this.applyDiscMainStats(stats, enabledDiscsOnly, agent);
 
-    // Apply set bonuses (this applies percentage bonuses to HP/ATK/DEF)
-    this.applySetBonuses(stats, discs, agent, wEngine, includeWEngineBonuses);
+    // Apply disc substats (only from enabled discs)
+    this.applyDiscSubStats(stats, enabledDiscsOnly, agent);
+
+    // Apply set bonuses (this applies percentage bonuses to HP/ATK/DEF, counting only enabled discs)
+    this.applySetBonuses(stats, enabledDiscsOnly, agent, wEngine, includeWEngineBonuses);
 
     // Calculate final energy regen using correct formula:
     // Energy/sec = Base × (1 + Σ %bonuses/100)

@@ -406,6 +406,14 @@
                   <span class="disc-slot-number">{{
                     formatDiscSlot(slot)
                   }}</span>
+                  <label class="disc-enable-toggle" (click)="$event.stopPropagation()">
+                    <input
+                      type="checkbox"
+                      [checked]="isDiscEnabled(slot)"
+                      (change)="onDiscToggle(slot)"
+                    />
+                    <span class="toggle-switch"></span>
+                  </label>
                   <div
                     *ngIf="
                       getDiscScore(
