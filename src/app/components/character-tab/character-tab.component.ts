@@ -14,8 +14,15 @@ import { StatCalculatorService } from '../../services/stat-calculator.service';
 import { ScoringService } from '../../services/scoring.service';
 import { ImagePreloaderService } from '../../services/image-preloader.service';
 import { DataMappingService } from '../../services/data-mapping.service';
-import { DiscRating, BuildRating, FeedbackItem } from '../../constants/disc-scoring';
-import { DISC_MAIN_STAT_MAX, MAIN_STAT_BY_SLOT } from '../../constants/main-stat-possibilities';
+import {
+  DiscRating,
+  BuildRating,
+  FeedbackItem,
+} from '../../constants/disc-scoring';
+import {
+  DISC_MAIN_STAT_MAX,
+  MAIN_STAT_BY_SLOT,
+} from '../../constants/main-stat-possibilities';
 import { OptimizerComponent } from '../optimizer/optimizer.component';
 import { EnkaApiService } from '../../services/enka-api.service';
 import { EnkaImportService } from '../../services/enka-import.service';
@@ -25,7 +32,7 @@ import { EnkaImportService } from '../../services/enka-import.service';
   standalone: true,
   imports: [CommonModule, FormsModule, OptimizerComponent],
   templateUrl: './character-tab.component.html',
-  styleUrls: ['./character-tab.component.css']
+  styleUrls: ['./character-tab.component.css'],
   // Using Default change detection due to many imperative updates
 })
 export class CharacterTabComponent implements OnInit, OnDestroy {
@@ -55,16 +62,23 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   // Disc creation state
   showDiscForm = false;
   selectedDiscSetForCreation: DiscSet | null = null;
-  editingDiscUid: string | null = null;  // Track which disc is being edited
-  isEditMode: boolean = false;  // Track if we're editing vs creating
+  editingDiscUid: string | null = null; // Track which disc is being edited
+  isEditMode: boolean = false; // Track if we're editing vs creating
   discFormData = {
-    mainStatType: '',  // Only used for slots 4-6
-    mainStatValue: '' as string | number,  // Can be string for input, number for processing
-    subStats: [] as Array<{ type: string; value: string | number }>
+    mainStatType: '', // Only used for slots 4-6
+    mainStatValue: '' as string | number, // Can be string for input, number for processing
+    subStats: [] as Array<{ type: string; value: string | number }>,
   };
 
   // Disc slots
-  discSlots: DiscSlot[] = ['Drive1', 'Drive2', 'Drive3', 'Drive4', 'Drive5', 'Drive6'];
+  discSlots: DiscSlot[] = [
+    'Drive1',
+    'Drive2',
+    'Drive3',
+    'Drive4',
+    'Drive5',
+    'Drive6',
+  ];
 
   // Disc inventory (user's created discs)
   allDiscs: Disc[] = [];
@@ -110,7 +124,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     message: '',
     confirmText: 'Confirm',
     cancelText: 'Cancel',
-    onConfirm: () => {}
+    onConfirm: () => {},
   };
 
   // Enka UID Import
@@ -139,14 +153,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private imagePreloader: ImagePreloaderService,
     private dataMappingService: DataMappingService,
     private enkaApiService: EnkaApiService,
-    private enkaImportService: EnkaImportService
+    private enkaImportService: EnkaImportService,
   ) {}
 
   ngOnInit() {
     // Subscribe to user builds
     this.buildService.builds$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(builds => {
+      .subscribe((builds) => {
         this.builds = builds;
         // Auto-select first build if none selected
         if (builds.length > 0 && !this.selectedBuild) {
@@ -157,7 +171,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Subscribe to selected build
     this.buildService.selectedBuild$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(async build => {
+      .subscribe(async (build) => {
         this.selectedBuild = build;
 
         // Load toggle flags from build (default true if not set)
@@ -171,7 +185,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Load reference agents for the "Add Agent" modal
     this.agentService.agents$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(agents => {
+      .subscribe((agents) => {
         this.referenceAgents = agents;
         // Preload agent images
         this.preloadAgentImages(agents);
@@ -180,7 +194,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Load reference W-Engines
     this.wEngineService.wEngines$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(wEngines => {
+      .subscribe((wEngines) => {
         this.referenceWEngines = wEngines;
         // Preload W-Engine images
         this.preloadWEngineImages(wEngines);
@@ -189,7 +203,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Load reference disc sets
     this.discSetService.discSets$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(discSets => {
+      .subscribe((discSets) => {
         this.referenceDiscSets = discSets;
         // Initialize cached filtered disc sets
         this.updateFilteredDiscSets();
@@ -200,7 +214,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Load user disc inventory
     this.discService.discs$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(discs => {
+      .subscribe((discs) => {
         this.allDiscs = discs;
         // Update cached filtered discs whenever inventory changes
         this.updateFilteredDiscs();
@@ -208,24 +222,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Set up debounced search for disc set name
     this.discSearchSubject$
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(searchTerm => {
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((searchTerm) => {
         this.debouncedDiscSearch = searchTerm;
         this.updateFilteredDiscSets();
       });
 
     // Set up debounced search for disc effects
     this.discEffectSearchSubject$
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(searchTerm => {
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((searchTerm) => {
         this.debouncedDiscEffectSearch = searchTerm;
         this.updateFilteredDiscSets();
       });
@@ -247,7 +253,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.selectedAgentForAdd = null;
     // Focus first interactive element after modal renders
     setTimeout(() => {
-      const firstFocusable = document.querySelector('.modal-content button, .modal-content input, .modal-content select') as HTMLElement;
+      const firstFocusable = document.querySelector(
+        '.modal-content button, .modal-content input, .modal-content select',
+      ) as HTMLElement;
       firstFocusable?.focus();
     }, 100);
   }
@@ -274,16 +282,23 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     // Check if this agent already has a build
-    const existingBuild = this.builds.find(b => b.agentId === this.selectedAgentForAdd!.id);
+    const existingBuild = this.builds.find(
+      (b) => b.agentId === this.selectedAgentForAdd!.id,
+    );
     if (existingBuild) {
-      alert(`You already have a build for ${this.selectedAgentForAdd.name}. Each agent can only have one build.`);
+      alert(
+        `You already have a build for ${this.selectedAgentForAdd.name}. Each agent can only have one build.`,
+      );
       return;
     }
 
     this.isProcessingAgentAction = true;
 
     try {
-      const newBuild = await this.buildService.createBuild(this.selectedAgentForAdd, 0);
+      const newBuild = await this.buildService.createBuild(
+        this.selectedAgentForAdd,
+        0,
+      );
       this.closeAddAgentModal();
       this.selectBuild(newBuild);
     } catch (error) {
@@ -309,7 +324,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         }
       },
       'Delete',
-      'Cancel'
+      'Cancel',
     );
   }
 
@@ -330,7 +345,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     this.buildService.updateBuild(this.selectedBuild.id, {
-      mindscapeLevel: newLevel
+      mindscapeLevel: newLevel,
     });
   }
 
@@ -338,7 +353,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Update build with new toggle state and recalculate
     if (this.selectedBuild) {
       await this.buildService.updateBuild(this.selectedBuild.id, {
-        includeWEngineBonuses: this.includeWEngineBonuses
+        includeWEngineBonuses: this.includeWEngineBonuses,
       });
     }
   }
@@ -347,7 +362,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Update build with new toggle state and recalculate
     if (this.selectedBuild) {
       await this.buildService.updateBuild(this.selectedBuild.id, {
-        includeMindscapeBonuses: this.includeMindscapeBonuses
+        includeMindscapeBonuses: this.includeMindscapeBonuses,
       });
     }
   }
@@ -356,7 +371,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Update build with new toggle state and recalculate
     if (this.selectedBuild) {
       await this.buildService.updateBuild(this.selectedBuild.id, {
-        includePassiveBonuses: this.includePassiveBonuses
+        includePassiveBonuses: this.includePassiveBonuses,
       });
     }
   }
@@ -382,14 +397,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         await this.buildService.unequipWEngine(this.selectedBuild.id);
 
         // Wait a tick for the subscription to update
-        await new Promise(resolve => setTimeout(resolve, 50));
-
+        await new Promise((resolve) => setTimeout(resolve, 50));
 
         this.showWEnginePicker = false;
         return;
       }
 
-      const wEngine = this.referenceWEngines.find(w => w.id === wEngineId);
+      const wEngine = this.referenceWEngines.find((w) => w.id === wEngineId);
       if (wEngine) {
         await this.equipWEngine(wEngine);
         this.showWEnginePicker = false;
@@ -404,11 +418,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     try {
       await this.buildService.updateBuild(this.selectedBuild.id, {
-        wEngineRefinement: level
+        wEngineRefinement: level,
       });
 
       // Refresh the selected build
-      const updatedBuild = this.buildService.getBuildById(this.selectedBuild.id);
+      const updatedBuild = this.buildService.getBuildById(
+        this.selectedBuild.id,
+      );
       if (updatedBuild) {
         this.selectedBuild = updatedBuild;
       }
@@ -419,14 +435,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   getSpecialtyIcon(specialty: string): string {
     const specialtyMap: { [key: string]: string } = {
-      'Attack': 'assets/data/images/roles/IconAttackType.webp',
-      'Stun': 'assets/data/images/roles/IconStun.webp',
-      'Anomaly': 'assets/data/images/roles/IconAnomaly.webp',
-      'Support': 'assets/data/images/roles/IconSupport.webp',
-      'Defense': 'assets/data/images/roles/IconDefense.webp',
-      'Rupture': 'assets/data/images/roles/IconRupture.webp'
+      Attack: 'assets/data/images/roles/IconAttackType.webp',
+      Stun: 'assets/data/images/roles/IconStun.webp',
+      Anomaly: 'assets/data/images/roles/IconAnomaly.webp',
+      Support: 'assets/data/images/roles/IconSupport.webp',
+      Defense: 'assets/data/images/roles/IconDefense.webp',
+      Rupture: 'assets/data/images/roles/IconRupture.webp',
     };
-    return specialtyMap[specialty] || 'assets/data/images/roles/IconAttackType.webp';
+    return (
+      specialtyMap[specialty] || 'assets/data/images/roles/IconAttackType.webp'
+    );
   }
 
   getFilteredAgents(): Agent[] {
@@ -434,17 +452,19 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Filter by element
     if (this.agentElementFilter) {
-      filtered = filtered.filter(a => a.element === this.agentElementFilter);
+      filtered = filtered.filter((a) => a.element === this.agentElementFilter);
     }
 
     // Filter by specialty
     if (this.agentSpecialtyFilter) {
-      filtered = filtered.filter(a => a.specialty === this.agentSpecialtyFilter);
+      filtered = filtered.filter(
+        (a) => a.specialty === this.agentSpecialtyFilter,
+      );
     }
 
     // Filter by rarity
     if (this.agentRarityFilter) {
-      filtered = filtered.filter(a => a.rarity === this.agentRarityFilter);
+      filtered = filtered.filter((a) => a.rarity === this.agentRarityFilter);
     }
 
     // Sort
@@ -466,7 +486,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         break;
       case 'rarity':
         sorted.sort((a, b) => {
-          const rarityOrder: { [key: string]: number } = { 'S': 2, 'A': 1 };
+          const rarityOrder: { [key: string]: number } = { S: 2, A: 1 };
           return (rarityOrder[b.rarity] || 0) - (rarityOrder[a.rarity] || 0);
         });
         break;
@@ -480,20 +500,23 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Filter by specialty
     if (this.wengineSpecialtyFilter) {
-      filtered = filtered.filter(w => w.specialty === this.wengineSpecialtyFilter);
+      filtered = filtered.filter(
+        (w) => w.specialty === this.wengineSpecialtyFilter,
+      );
     }
 
     // Filter by rarity
     if (this.wengineRarityFilter) {
-      filtered = filtered.filter(w => w.rarity === this.wengineRarityFilter);
+      filtered = filtered.filter((w) => w.rarity === this.wengineRarityFilter);
     }
 
     // Filter by search term
     if (this.wengineSearchTerm) {
       const searchLower = this.wengineSearchTerm.toLowerCase();
-      filtered = filtered.filter(w =>
-        w.name.toLowerCase().includes(searchLower) ||
-        w.specialty.toLowerCase().includes(searchLower)
+      filtered = filtered.filter(
+        (w) =>
+          w.name.toLowerCase().includes(searchLower) ||
+          w.specialty.toLowerCase().includes(searchLower),
       );
     }
 
@@ -510,7 +533,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         break;
       case 'rarity':
         sorted.sort((a, b) => {
-          const rarityOrder: { [key: string]: number } = { 'S': 2, 'A': 1, 'B': 0 };
+          const rarityOrder: { [key: string]: number } = { S: 2, A: 1, B: 0 };
           return (rarityOrder[b.rarity] || 0) - (rarityOrder[a.rarity] || 0);
         });
         break;
@@ -527,7 +550,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
     if (!agent) {
       return false;
     }
@@ -535,119 +560,195 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return agent.specialty === this.selectedBuild!.equippedWEngine!.specialty;
   }
 
-  getWEngineRefinementBonuses(): Array<{name: string, value: string, isPercent: boolean}> {
-    if (!this.selectedBuild || !this.selectedBuild.equippedWEngine || !this.selectedBuild.equippedWEngine.effect.properties) {
+  getWEngineRefinementBonuses(): Array<{
+    name: string;
+    value: string;
+    isPercent: boolean;
+  }> {
+    if (
+      !this.selectedBuild ||
+      !this.selectedBuild.equippedWEngine ||
+      !this.selectedBuild.equippedWEngine.effect.properties
+    ) {
       return [];
     }
 
-    const refinementKey = `W${this.selectedBuild.wEngineRefinement}` as 'W1' | 'W2' | 'W3' | 'W4' | 'W5';
+    const refinementKey = `W${this.selectedBuild.wEngineRefinement}` as
+      | 'W1'
+      | 'W2'
+      | 'W3'
+      | 'W4'
+      | 'W5';
 
-    return this.selectedBuild.equippedWEngine.effect.properties.map(prop => {
+    return this.selectedBuild.equippedWEngine.effect.properties.map((prop) => {
       const value = prop.values[refinementKey];
-      const isPercent = prop.type !== 'Impact' && prop.type !== 'Anomaly_Proficiency';
+      const isPercent =
+        prop.type !== 'Impact' && prop.type !== 'Anomaly_Proficiency';
 
       return {
         name: prop.name,
         value: value.toFixed(1),
-        isPercent: isPercent
+        isPercent: isPercent,
       };
     });
   }
 
-  getMindscapeBonuses(): Array<{level: number, name: string, stats: Array<{name: string, value: string, isPercent: boolean}>}> {
+  getMindscapeBonuses(): Array<{
+    level: number;
+    name: string;
+    stats: Array<{ name: string; value: string; isPercent: boolean }>;
+  }> {
     if (!this.selectedBuild || this.selectedBuild.mindscapeLevel === 0) {
       return [];
     }
 
     // Get agent reference data to access mindscape effects
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
     if (!agent || !agent.mindscapeEffects) {
       return [];
     }
 
     // Filter mindscapes that are unlocked and have stat bonuses
-    const activeMindscapes = agent.mindscapeEffects.filter(m =>
-      m.level <= this.selectedBuild!.mindscapeLevel &&
-      m.statBonuses &&
-      m.statBonuses.length > 0 &&
-      m.statBonuses.some(b => !b.conditional) // Only show mindscapes with unconditional bonuses
+    const activeMindscapes = agent.mindscapeEffects.filter(
+      (m) =>
+        m.level <= this.selectedBuild!.mindscapeLevel &&
+        m.statBonuses &&
+        m.statBonuses.length > 0 &&
+        m.statBonuses.some((b) => !b.conditional), // Only show mindscapes with unconditional bonuses
     );
 
-    return activeMindscapes.map(mindscape => {
-      const stats = mindscape.statBonuses!
-        .filter(b => !b.conditional) // Only show unconditional bonuses
-        .map(bonus => {
+    return activeMindscapes.map((mindscape) => {
+      const stats = mindscape
+        .statBonuses!.filter((b) => !b.conditional) // Only show unconditional bonuses
+        .map((bonus) => {
           // Use format field to check if percentage
           const isPercent = bonus.format === '%';
 
           // Format stat name for display
           let displayName: string;
-          switch(bonus.type) {
-            case 'ATK%': displayName = 'ATK'; break;
-            case 'HP%': displayName = 'HP'; break;
-            case 'DEF%': displayName = 'DEF'; break;
-            case 'CRIT_Rate': displayName = 'CRIT Rate'; break;
-            case 'CRIT_DMG': displayName = 'CRIT DMG'; break;
-            case 'PEN_Ratio': displayName = 'PEN Ratio'; break;
-            case 'Energy_Regen': displayName = 'Energy Regen'; break;
-            case 'Anomaly_Proficiency': displayName = 'Anomaly Proficiency'; break;
-            case 'Anomaly_Mastery': displayName = 'Anomaly Mastery'; break;
-            case 'Impact': displayName = 'Impact'; break;
-            default: displayName = bonus.type; break;
+          switch (bonus.type) {
+            case 'ATK%':
+              displayName = 'ATK';
+              break;
+            case 'HP%':
+              displayName = 'HP';
+              break;
+            case 'DEF%':
+              displayName = 'DEF';
+              break;
+            case 'CRIT_Rate':
+              displayName = 'CRIT Rate';
+              break;
+            case 'CRIT_DMG':
+              displayName = 'CRIT DMG';
+              break;
+            case 'PEN_Ratio':
+              displayName = 'PEN Ratio';
+              break;
+            case 'Energy_Regen':
+              displayName = 'Energy Regen';
+              break;
+            case 'Anomaly_Proficiency':
+              displayName = 'Anomaly Proficiency';
+              break;
+            case 'Anomaly_Mastery':
+              displayName = 'Anomaly Mastery';
+              break;
+            case 'Impact':
+              displayName = 'Impact';
+              break;
+            default:
+              displayName = bonus.type;
+              break;
           }
 
           return {
             name: displayName,
             value: bonus.value.toFixed(1),
-            isPercent: isPercent
+            isPercent: isPercent,
           };
         });
 
       return {
         level: mindscape.level,
         name: mindscape.name,
-        stats: stats
+        stats: stats,
       };
     });
   }
 
-  getPassiveBonuses(): Array<{name: string, value: string, isPercent: boolean}> {
+  getPassiveBonuses(): Array<{
+    name: string;
+    value: string;
+    isPercent: boolean;
+  }> {
     if (!this.selectedBuild) {
       return [];
     }
 
     // Get agent reference data to access scoring buffs
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
     if (!agent || !agent.scoring?.buffs) {
       return [];
     }
 
-    return agent.scoring.buffs.map(buff => {
-      const isPercent = buff.format === '%';
+    return agent.scoring.buffs
+      .map((buff) => {
+        const isPercent = buff.format === '%';
 
-      // Map buff type to display name
-      let displayName: string;
-      switch(buff.type) {
-        case 'ATKBonus': displayName = 'ATK'; break;
-        case 'HPBonus': displayName = 'HP'; break;
-        case 'DEFBonus': displayName = 'DEF'; break;
-        case 'CRITRateBonus': displayName = 'CRIT Rate'; break;
-        case 'CRITDMGBonus': displayName = 'CRIT DMG'; break;
-        case 'PENRatioBonus': displayName = 'PEN Ratio'; break;
-        case 'AnomalyProficiencyBonus': displayName = 'Anomaly Proficiency'; break;
-        case 'AnomalyMasteryBonus': displayName = 'Anomaly Mastery'; break;
-        case 'ImpactBonus': displayName = 'Impact'; break;
-        case 'EnergyRegenBonus': displayName = 'Energy Regen'; break;
-        case 'DMGBonus': displayName = 'DMG Bonus'; break;
-        default: displayName = buff.type; break;
-      }
+        // Map buff type to display name
+        let displayName: string | undefined;
+        switch (buff.type) {
+          case 'ATKBonus':
+            displayName = 'ATK';
+            break;
+          case 'HPBonus':
+            displayName = 'HP';
+            break;
+          case 'DEFBonus':
+            displayName = 'DEF';
+            break;
+          case 'CRITRateBonus':
+            displayName = 'CRIT Rate';
+            break;
+          case 'CRITDMGBonus':
+            displayName = 'CRIT DMG';
+            break;
+          case 'PENRatioBonus':
+            displayName = 'PEN Ratio';
+            break;
+          case 'AnomalyProficiencyBonus':
+            displayName = 'Anomaly Proficiency';
+            break;
+          case 'AnomalyMasteryBonus':
+            displayName = 'Anomaly Mastery';
+            break;
+          case 'ImpactBonus':
+            displayName = 'Impact';
+            break;
+          case 'EnergyRegenBonus':
+            displayName = 'Energy Regen';
+            break;
+        }
 
-      return {
-        name: displayName,
-        value: buff.value,
-        isPercent: isPercent
-      };
-    });
+        if (!displayName) {
+          return;
+        }
+
+        return {
+          name: displayName,
+          value: buff.value,
+          isPercent: isPercent,
+        };
+      })
+      .filter(
+        (b): b is { name: string; value: string; isPercent: boolean } =>
+          b !== undefined,
+      );
   }
 
   getEquippedDiscsCount(build: AgentBuild): number {
@@ -656,31 +757,33 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Helper to get agent rank display
   getRankDisplay(agentId: string): string {
-    const agent = this.referenceAgents.find(a => a.id === agentId);
+    const agent = this.referenceAgents.find((a) => a.id === agentId);
     return agent?.rarity === 'S' ? 'S-Rank' : 'A-Rank';
   }
 
   // Helper to get agent icon
   getAgentIcon(agentId: string): string | undefined {
-    const agent = this.referenceAgents.find(a => a.id === agentId);
+    const agent = this.referenceAgents.find((a) => a.id === agentId);
     return agent?.icon;
   }
 
   // Helper to get agent element icon (with special element support)
   getAgentElementIcon(agentId: string): string | undefined {
-    const agent = this.referenceAgents.find(a => a.id === agentId);
+    const agent = this.referenceAgents.find((a) => a.id === agentId);
     if (!agent) return undefined;
 
     // Use special element icon if available, otherwise use standard element icon
     if (agent.specialElementIcon) {
-      return this.dataMappingService.getElementIconPath(agent.specialElementIcon);
+      return this.dataMappingService.getElementIconPath(
+        agent.specialElementIcon,
+      );
     }
     return agent.elementIcon;
   }
 
   // Helper to get agent rarity
   getAgentRarity(agentId: string): 'A' | 'S' | undefined {
-    const agent = this.referenceAgents.find(a => a.id === agentId);
+    const agent = this.referenceAgents.find((a) => a.id === agentId);
     return agent?.rarity;
   }
 
@@ -705,7 +808,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     if (!equippedDisc) return;
 
     // Find the disc set
-    const discSet = this.referenceDiscSets.find(ds => ds.name === equippedDisc.set);
+    const discSet = this.referenceDiscSets.find(
+      (ds) => ds.name === equippedDisc.set,
+    );
     if (!discSet) return;
 
     // Set edit mode state
@@ -716,9 +821,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Pre-populate form data with existing disc stats
     // Always ensure we have 4 substat slots
-    const existingSubStats = equippedDisc.subStats.map(s => ({
+    const existingSubStats = equippedDisc.subStats.map((s) => ({
       type: s.type,
-      value: s.value as string | number  // Keep as number for display
+      value: s.value as string | number, // Keep as number for display
     }));
 
     // Pad with empty substats to always have 4 slots
@@ -728,8 +833,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     this.discFormData = {
       mainStatType: equippedDisc.mainStat.type,
-      mainStatValue: equippedDisc.mainStat.value,  // Keep as number for display
-      subStats: existingSubStats
+      mainStatValue: equippedDisc.mainStat.value, // Keep as number for display
+      subStats: existingSubStats,
     };
 
     // Open the form directly (skip picker)
@@ -760,7 +865,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   get4pcEffectBonuses(): string[] {
     if (!this.selectedBuild) return [];
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
     if (!agent) return [];
 
     return this.statCalculator.get4pcEffectBonuses(
@@ -768,7 +875,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       agent,
       this.selectedBuild.equippedWEngine || null,
       this.selectedBuild.mindscapeLevel || 0,
-      this.selectedBuild.wEngineRefinement || 1
+      this.selectedBuild.wEngineRefinement || 1,
     );
   }
 
@@ -783,22 +890,24 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Filter by set name
     if (this.discFilterSet) {
-      filtered = filtered.filter(s => s.name === this.discFilterSet);
+      filtered = filtered.filter((s) => s.name === this.discFilterSet);
     }
 
     // Filter by set name search term (debounced)
     if (this.debouncedDiscSearch) {
       const searchLower = this.debouncedDiscSearch.toLowerCase();
-      filtered = filtered.filter(s => s.name.toLowerCase().includes(searchLower));
+      filtered = filtered.filter((s) =>
+        s.name.toLowerCase().includes(searchLower),
+      );
     }
 
     // Filter by effect search term (debounced)
     if (this.debouncedDiscEffectSearch) {
       const effectSearchLower = this.debouncedDiscEffectSearch.toLowerCase();
-      filtered = filtered.filter(s => {
+      filtered = filtered.filter((s) => {
         // Search in bonus descriptions (2pc and 4pc effects)
-        return s.bonuses.some(bonus =>
-          bonus.description.toLowerCase().includes(effectSearchLower)
+        return s.bonuses.some((bonus) =>
+          bonus.description.toLowerCase().includes(effectSearchLower),
         );
       });
     }
@@ -823,23 +932,25 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Filter by selected slot (only show discs that match the slot being filled)
     if (this.selectedDiscSlot) {
-      filtered = filtered.filter(d => d.slot === this.selectedDiscSlot);
+      filtered = filtered.filter((d) => d.slot === this.selectedDiscSlot);
     }
 
     // Filter by set
     if (this.discFilterSet) {
-      filtered = filtered.filter(d => d.set === this.discFilterSet);
+      filtered = filtered.filter((d) => d.set === this.discFilterSet);
     }
 
     // Filter by search term
     if (this.discSearchTerm) {
       const searchLower = this.discSearchTerm.toLowerCase();
-      filtered = filtered.filter(d => d.set.toLowerCase().includes(searchLower));
+      filtered = filtered.filter((d) =>
+        d.set.toLowerCase().includes(searchLower),
+      );
     }
 
     // Filter unequipped only
     if (this.showOnlyUnequipped) {
-      filtered = filtered.filter(d => !d.equippedBy);
+      filtered = filtered.filter((d) => !d.equippedBy);
     }
 
     this.cachedFilteredDiscs = filtered;
@@ -854,7 +965,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   async equipDiscToBuild(disc: Disc) {
-    if (!this.selectedBuild || !this.selectedDiscSlot || this.isProcessingDiscAction) return;
+    if (
+      !this.selectedBuild ||
+      !this.selectedDiscSlot ||
+      this.isProcessingDiscAction
+    )
+      return;
 
     this.isProcessingDiscAction = true;
 
@@ -886,8 +1002,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           { type: 'ATK%', value: '' },
           { type: 'ATK%', value: '' },
           { type: 'ATK%', value: '' },
-          { type: 'ATK%', value: '' }
-        ]
+          { type: 'ATK%', value: '' },
+        ],
       };
     }
   }
@@ -904,13 +1020,19 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         { type: 'ATK%', value: '' },
         { type: 'ATK%', value: '' },
         { type: 'ATK%', value: '' },
-        { type: 'ATK%', value: '' }
-      ]
+        { type: 'ATK%', value: '' },
+      ],
     };
   }
 
   async createAndEquipDisc() {
-    if (!this.selectedBuild || !this.selectedDiscSlot || !this.selectedDiscSetForCreation || this.isProcessingDiscAction) return;
+    if (
+      !this.selectedBuild ||
+      !this.selectedDiscSlot ||
+      !this.selectedDiscSetForCreation ||
+      this.isProcessingDiscAction
+    )
+      return;
 
     this.isProcessingDiscAction = true;
 
@@ -918,7 +1040,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     let mainStatType: MainStatType;
     let mainStatValue: number;
 
-    if (this.selectedDiscSlot === 'Drive1' || this.selectedDiscSlot === 'Drive2' || this.selectedDiscSlot === 'Drive3') {
+    if (
+      this.selectedDiscSlot === 'Drive1' ||
+      this.selectedDiscSlot === 'Drive2' ||
+      this.selectedDiscSlot === 'Drive3'
+    ) {
       // Fixed main stats for slots 1-3
       mainStatType = this.getDefaultMainStatForSlot(this.selectedDiscSlot);
       mainStatValue = this.getMainStatValueForSlot(this.selectedDiscSlot);
@@ -926,9 +1052,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       // User input for slots 4-6
       mainStatType = this.discFormData.mainStatType as MainStatType;
       // Convert string to number if needed
-      mainStatValue = typeof this.discFormData.mainStatValue === 'string'
-        ? parseFloat(this.discFormData.mainStatValue) || 0
-        : this.discFormData.mainStatValue;
+      mainStatValue =
+        typeof this.discFormData.mainStatValue === 'string'
+          ? parseFloat(this.discFormData.mainStatValue) || 0
+          : this.discFormData.mainStatValue;
     }
 
     try {
@@ -938,12 +1065,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           set: this.selectedDiscSetForCreation.name,
           mainStat: {
             type: mainStatType,
-            value: mainStatValue
+            value: mainStatValue,
           },
-          subStats: this.discFormData.subStats.map(s => ({
+          subStats: this.discFormData.subStats.map((s) => ({
             type: s.type as SubStatType,
-            value: typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value
-          }))
+            value:
+              typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value,
+          })),
         };
 
         // Update in inventory
@@ -957,7 +1085,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           const currentDiscs = { ...this.selectedBuild.equippedDiscs };
           currentDiscs[this.selectedDiscSlot] = updatedDisc;
           await this.buildService.updateBuild(this.selectedBuild.id, {
-            equippedDiscs: currentDiscs
+            equippedDiscs: currentDiscs,
           });
         }
       } else {
@@ -970,13 +1098,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           level: 15,
           mainStat: {
             type: mainStatType,
-            value: mainStatValue
+            value: mainStatValue,
           },
-          subStats: this.discFormData.subStats.map(s => ({
+          subStats: this.discFormData.subStats.map((s) => ({
             type: s.type as SubStatType,
-            value: typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value
+            value:
+              typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value,
           })),
-          lock: false
+          lock: false,
         };
 
         // Add disc to inventory
@@ -997,12 +1126,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   getDefaultMainStatForSlot(slot: DiscSlot): MainStatType {
     // Discs 1-3 have fixed main stats, 4-6 are flexible
     const defaults: { [key in DiscSlot]: MainStatType } = {
-      'Drive1': 'HP',
-      'Drive2': 'ATK',
-      'Drive3': 'DEF',
-      'Drive4': 'ATK%',
-      'Drive5': 'Element_DMG',
-      'Drive6': 'ATK%'
+      Drive1: 'HP',
+      Drive2: 'ATK',
+      Drive3: 'DEF',
+      Drive4: 'ATK%',
+      Drive5: 'Element_DMG',
+      Drive6: 'ATK%',
     };
     return defaults[slot] || 'ATK%';
   }
@@ -1010,15 +1139,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   getMainStatValueForSlot(slot: DiscSlot): number {
     // Fixed values for slots 1-3 at level 15
     const fixedValues: { [key in DiscSlot]?: number } = {
-      'Drive1': 2200,  // HP
-      'Drive2': 316,   // ATK
-      'Drive3': 184    // DEF
+      Drive1: 2200, // HP
+      Drive2: 316, // ATK
+      Drive3: 184, // DEF
     };
     return fixedValues[slot] || 0;
   }
 
   // Disc scoring methods
-  getDiscScore(disc: Disc): { score: number, rating: DiscRating } | null {
+  getDiscScore(disc: Disc): { score: number; rating: DiscRating } | null {
     if (!this.selectedBuild) return null;
 
     // Wait for scoring service to load data before calculating
@@ -1028,11 +1157,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     const result = this.scoringService.calculateDiscScore(
       disc,
-      this.selectedBuild.agentId
+      this.selectedBuild.agentId,
     );
     return {
       score: result.score,
-      rating: result.rating
+      rating: result.rating,
     };
   }
 
@@ -1041,7 +1170,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   // Build scoring methods
-  getBuildScore(): { score: number, rating: BuildRating } | null {
+  getBuildScore(): { score: number; rating: BuildRating } | null {
     if (!this.selectedBuild) return null;
 
     // Wait for scoring service to load data before calculating
@@ -1050,10 +1179,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     // Get equipped discs as array
-    const equippedDiscsArray = Object.values(this.selectedBuild.equippedDiscs).filter(d => d !== undefined);
+    const equippedDiscsArray = Object.values(
+      this.selectedBuild.equippedDiscs,
+    ).filter((d) => d !== undefined);
 
     // Get agent info for damage estimation
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
 
     // Use composite scoring which accounts for disc quality, W-Engine, Mindscape, set bonuses, and damage estimation
     const result = this.scoringService.calculateCompositeBuildScore(
@@ -1066,12 +1199,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       agent?.name,
       agent?.specialty,
       agent?.element,
-      60 // Default level 60, can be updated later
+      60, // Default level 60, can be updated later
     );
 
     return {
       score: result.score,
-      rating: result.rating
+      rating: result.rating,
     };
   }
 
@@ -1086,7 +1219,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   // Generate a simple hash of build state to detect changes
   private getBuildHash(): string {
     if (!this.selectedBuild) return '';
-    const discCount = Object.values(this.selectedBuild.equippedDiscs).filter(d => d).length;
+    const discCount = Object.values(this.selectedBuild.equippedDiscs).filter(
+      (d) => d,
+    ).length;
     const wEngineId = this.selectedBuild.equippedWEngine?.id || 'none';
     const stats = this.selectedBuild.calculatedStats;
     return `${this.selectedBuild.id}-${discCount}-${wEngineId}-${stats.atk}-${stats.critRate}-${stats.critDmg}`;
@@ -1111,7 +1246,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       this.selectedBuild.calculatedStats,
       this.selectedBuild.equippedDiscs,
       !!this.selectedBuild.equippedWEngine,
-      this.isWEngineSpecialtyMatch()
+      this.isWEngineSpecialtyMatch(),
     );
     this.lastFeedbackBuildHash = currentHash;
 
@@ -1147,13 +1282,18 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    const breakpoints = this.scoringService.getAgentBreakpoints(this.selectedBuild.agentId);
+    const breakpoints = this.scoringService.getAgentBreakpoints(
+      this.selectedBuild.agentId,
+    );
     if (!breakpoints) {
       return false;
     }
 
     // Check statWeights first (new format)
-    if (breakpoints.statWeights && breakpoints.statWeights[substatType] !== undefined) {
+    if (
+      breakpoints.statWeights &&
+      breakpoints.statWeights[substatType] !== undefined
+    ) {
       return breakpoints.statWeights[substatType] > 0;
     }
 
@@ -1176,10 +1316,18 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     // Only auto-fill for slots 4-6
-    if (this.selectedDiscSlot === 'Drive4' || this.selectedDiscSlot === 'Drive5' || this.selectedDiscSlot === 'Drive6') {
+    if (
+      this.selectedDiscSlot === 'Drive4' ||
+      this.selectedDiscSlot === 'Drive5' ||
+      this.selectedDiscSlot === 'Drive6'
+    ) {
       const maxValues = DISC_MAIN_STAT_MAX[this.selectedDiscSlot];
-      if (maxValues && maxValues[this.discFormData.mainStatType] !== undefined) {
-        this.discFormData.mainStatValue = maxValues[this.discFormData.mainStatType];
+      if (
+        maxValues &&
+        maxValues[this.discFormData.mainStatType] !== undefined
+      ) {
+        this.discFormData.mainStatValue =
+          maxValues[this.discFormData.mainStatType];
       }
     }
   }
@@ -1216,8 +1364,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     const imageUrls = agents
-      .map(agent => agent.icon)
-      .filter(icon => icon) as string[];
+      .map((agent) => agent.icon)
+      .filter((icon) => icon) as string[];
 
     this.imagePreloader.preloadImages(imageUrls).then(() => {
       console.log(`Preloaded ${imageUrls.length} agent images`);
@@ -1230,8 +1378,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     const imageUrls = wEngines
-      .map(engine => engine.icon)
-      .filter(icon => icon) as string[];
+      .map((engine) => engine.icon)
+      .filter((icon) => icon) as string[];
 
     this.imagePreloader.preloadImages(imageUrls).then(() => {
       console.log(`Preloaded ${imageUrls.length} W-Engine images`);
@@ -1244,8 +1392,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     const imageUrls = discSets
-      .map(discSet => discSet.icon)
-      .filter(icon => icon) as string[];
+      .map((discSet) => discSet.icon)
+      .filter((icon) => icon) as string[];
 
     this.imagePreloader.preloadImages(imageUrls).then(() => {
       console.log(`Preloaded ${imageUrls.length} disc set images`);
@@ -1277,13 +1425,19 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   // Confirmation dialog methods
-  showConfirmation(title: string, message: string, onConfirm: () => void, confirmText = 'Confirm', cancelText = 'Cancel') {
+  showConfirmation(
+    title: string,
+    message: string,
+    onConfirm: () => void,
+    confirmText = 'Confirm',
+    cancelText = 'Cancel',
+  ) {
     this.confirmDialogData = {
       title,
       message,
       confirmText,
       cancelText,
-      onConfirm
+      onConfirm,
     };
     this.showConfirmDialog = true;
   }
@@ -1403,7 +1557,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     try {
       // Fetch data from Enka API
       console.log(`Fetching Enka data for UID: ${this.enkaUid}`);
-      const enkaResult = await this.enkaApiService.fetchPlayerData(this.enkaUid).toPromise();
+      const enkaResult = await this.enkaApiService
+        .fetchPlayerData(this.enkaUid)
+        .toPromise();
 
       if (!enkaResult) {
         throw new Error('No data received from provided UID');
@@ -1412,18 +1568,24 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       console.log(`Received ${enkaResult.builds.length} builds from Enka`);
 
       // Compare with existing builds
-      const comparison = await this.enkaImportService.compareBuilds(enkaResult.builds);
+      const comparison = await this.enkaImportService.compareBuilds(
+        enkaResult.builds,
+      );
 
       console.log('Import comparison:', {
         new: comparison.newBuilds.length,
         updated: comparison.updatedBuilds.length,
         unchanged: comparison.unchangedBuilds.length,
-        discs: comparison.newDiscs.length
+        discs: comparison.newDiscs.length,
       });
 
       // Show confirmation dialog if there are changes
-      if (comparison.newBuilds.length > 0 || comparison.updatedBuilds.length > 0) {
-        const summary = this.enkaImportService.generateImportSummary(comparison);
+      if (
+        comparison.newBuilds.length > 0 ||
+        comparison.updatedBuilds.length > 0
+      ) {
+        const summary =
+          this.enkaImportService.generateImportSummary(comparison);
 
         // Close the Enka import modal before showing confirmation dialog
         this.closeEnkaImportModal();
@@ -1433,21 +1595,29 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           `Found: ${summary}\n\nDo you want to import these builds?`,
           async () => {
             try {
-              const result = await this.enkaImportService.importBuilds(comparison, true);
+              const result = await this.enkaImportService.importBuilds(
+                comparison,
+                true,
+              );
 
               // Reload builds to show the imported data
               await this.buildService.loadBuilds();
 
-              console.log(`Successfully imported ${result.added} new agent(s), updated ${result.updated} build(s), and added ${result.totalDiscs} disc(s)`);
+              console.log(
+                `Successfully imported ${result.added} new agent(s), updated ${result.updated} build(s), and added ${result.totalDiscs} disc(s)`,
+              );
             } catch (error) {
               console.error('Import error:', error);
               // Re-open the Enka modal to show error
-              this.enkaImportError = error instanceof Error ? error.message : 'Failed to import builds';
+              this.enkaImportError =
+                error instanceof Error
+                  ? error.message
+                  : 'Failed to import builds';
               this.openEnkaImportModal();
             }
           },
           'Import',
-          'Cancel'
+          'Cancel',
         );
       } else {
         this.enkaImportSuccess = 'All builds are already up to date!';
@@ -1459,7 +1629,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       }
     } catch (error) {
       console.error('Enka API error:', error);
-      this.enkaImportError = error instanceof Error ? error.message : 'Failed to fetch data from provided UID';
+      this.enkaImportError =
+        error instanceof Error
+          ? error.message
+          : 'Failed to fetch data from provided UID';
     } finally {
       this.isImportingFromEnka = false;
     }
