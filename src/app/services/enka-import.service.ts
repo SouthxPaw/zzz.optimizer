@@ -91,12 +91,15 @@ export class EnkaImportService {
         }
       }
 
-      // Update build with equipment
+      // Update build with equipment and default toggle flags
       await this.buildService.updateBuild(newBuild.id, {
         level: enkaBuild.level,
         equippedWEngine: enkaBuild.wEngine,
         wEngineRefinement: enkaBuild.wEngineRefinement || 1,
-        equippedDiscs: discsBySlot
+        equippedDiscs: discsBySlot,
+        includeWEngineBonuses: true,
+        includeMindscapeBonuses: true,
+        includePassiveBonuses: true
       });
 
       added++;
@@ -121,13 +124,16 @@ export class EnkaImportService {
           }
         }
 
-        // Update build
+        // Update build (preserve existing toggle flags)
         await this.buildService.updateBuild(old.id, {
           level: enkaBuild.level,
           mindscapeLevel: enkaBuild.mindscapeLevel,
           equippedWEngine: enkaBuild.wEngine,
           wEngineRefinement: enkaBuild.wEngineRefinement || 1,
-          equippedDiscs: discsBySlot
+          equippedDiscs: discsBySlot,
+          includeWEngineBonuses: old.includeWEngineBonuses ?? true,
+          includeMindscapeBonuses: old.includeMindscapeBonuses ?? true,
+          includePassiveBonuses: old.includePassiveBonuses ?? true
         });
 
         updated++;

@@ -127,8 +127,6 @@ export class SkillParserService {
   private extractSpecialAttackMultiplier(specialSkill: any, isEX: boolean): number {
     if (!specialSkill?.Description) return isEX ? 500 : 300; // Defaults
 
-    const searchTerm = isEX ? 'EX Special Attack' : 'Special Attack';
-
     // Find the section for regular or EX special
     const specialSection = specialSkill.Description.find((desc: any) => {
       if (!desc.Name) return false;

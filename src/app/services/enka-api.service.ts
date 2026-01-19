@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError, from } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
-import { AgentBuild } from '../models/build.model';
 import { Disc, MainStatType, SubStat, SubStatType } from '../models/disc.model';
 import { DiscSlot, WEngine } from '../models/agent.model';
 import { DbService } from './db.service';

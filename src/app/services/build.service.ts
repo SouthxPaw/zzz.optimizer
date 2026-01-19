@@ -26,6 +26,10 @@ export interface AgentBuild {
   score: number; // Overall build rating
   createdAt: Date;
   updatedAt: Date;
+  // Toggle flags for bonus calculations (default true)
+  includeWEngineBonuses?: boolean;
+  includeMindscapeBonuses?: boolean;
+  includePassiveBonuses?: boolean;
 }
 
 @Injectable({
@@ -62,10 +66,20 @@ export class BuildService {
       if (buildsJson) {
         const builds = JSON.parse(buildsJson);
 
-        // Migrate old builds to add wEngineRefinement field
+        // Migrate old builds to add wEngineRefinement field and toggle flags
         builds.forEach((build: AgentBuild) => {
           if (build.wEngineRefinement === undefined) {
             build.wEngineRefinement = 1; // Default to 1 copy
+          }
+          // Add toggle flags with default true if not present
+          if (build.includeWEngineBonuses === undefined) {
+            build.includeWEngineBonuses = true;
+          }
+          if (build.includeMindscapeBonuses === undefined) {
+            build.includeMindscapeBonuses = true;
+          }
+          if (build.includePassiveBonuses === undefined) {
+            build.includePassiveBonuses = true;
           }
         });
 
@@ -138,7 +152,10 @@ export class BuildService {
       calculatedStats: { ...agent.lvl60Stats }, // Start with base stats
       score: 0,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      includeWEngineBonuses: true,
+      includeMindscapeBonuses: true,
+      includePassiveBonuses: true
     };
 
     builds.push(newBuild);
@@ -158,31 +175,39 @@ export class BuildService {
       throw new Error(`Build ${id} not found`);
     }
 
+
     builds[index] = {
       ...builds[index],
       ...updates,
       updatedAt: new Date()
     };
 
+
     // Handle explicit undefined for equippedWEngine (to properly remove it)
     if ('equippedWEngine' in updates && updates.equippedWEngine === undefined) {
       delete builds[index].equippedWEngine;
     }
 
-    // Recalculate stats if equipment, refinement, or mindscape changed
+    // Recalculate stats if equipment, refinement, mindscape, or toggle flags changed
     if (updates.equippedWEngine !== undefined ||
         updates.equippedDiscs !== undefined ||
         'equippedWEngine' in updates ||
         updates.wEngineRefinement !== undefined ||
-        updates.mindscapeLevel !== undefined) {
+        updates.mindscapeLevel !== undefined ||
+        updates.includeWEngineBonuses !== undefined ||
+        updates.includeMindscapeBonuses !== undefined ||
+        updates.includePassiveBonuses !== undefined) {
+      this.statCalculator.clearCache();
       await this.recalculateStats(builds[index]);
     }
 
     await this.saveBuilds(builds);
 
+
     // Update selected build if it's the one being updated
     if (this.selectedBuildSubject.value?.id === id) {
       this.selectedBuildSubject.next(builds[index]);
+    } else {
     }
   }
 
@@ -201,14 +226,24 @@ export class BuildService {
     await this.statCalculator.ensureDataLoaded();
 
     // Calculate final stats using the stat calculator
+    console.log(`[RECALC STATS] Calculating stats for build ${build.id} with flags:`, {
+      W: build.includeWEngineBonuses ?? true,
+      M: build.includeMindscapeBonuses ?? true,
+      P: build.includePassiveBonuses ?? true
+    });
+
     build.calculatedStats = this.statCalculator.calculateFinalStats(
       agent,
       build.level,
       build.equippedWEngine || null,
       build.equippedDiscs,
       build.mindscapeLevel,
-      build.wEngineRefinement
+      build.wEngineRefinement,
+      build.includeWEngineBonuses ?? true,
+      build.includeMindscapeBonuses ?? true,
+      build.includePassiveBonuses ?? true
     );
+
 
     // Calculate and save build score
     const equippedDiscsArray = Object.values(build.equippedDiscs).filter(d => d !== undefined);

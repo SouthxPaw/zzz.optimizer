@@ -123,7 +123,8 @@ export class DataTransformerService {
       icon: icon,
       elementIcon: elementIcon,
       specialElementIcon: specialElementIcon,
-      specialtyIcon: specialtyIcon
+      specialtyIcon: specialtyIcon,
+      scoring: rawAgent.scoring // Include scoring data (buffs, debuffs, dazeBonus)
     };
   }
 
@@ -490,7 +491,7 @@ export class DataTransformerService {
     if (raw.Effect?.Properties && Array.isArray(raw.Effect.Properties)) {
       refinementProperties = this.extractRefinementProperties(raw.Effect.Properties);
     } else {
-      refinementProperties = this.extractRefinementPropertiesFromTalents(raw.Talents || {});
+      refinementProperties = this.extractRefinementPropertiesFromTalents();
     }
 
     return {
@@ -578,7 +579,8 @@ export class DataTransformerService {
       elementIcon: elementIcon,
       specialElementIcon: specialElementIcon,
       specialtyIcon: specialtyIcon,
-      mindscapeEffects: mindscapeEffects.length > 0 ? mindscapeEffects : undefined
+      mindscapeEffects: mindscapeEffects.length > 0 ? mindscapeEffects : undefined,
+      scoring: basicAgent.scoring // Include scoring data (buffs, debuffs, dazeBonus)
     };
 
     return agent;
@@ -770,7 +772,7 @@ export class DataTransformerService {
    * The actual stat bonuses are in Effect.Properties from wengines.json
    * So this method returns empty array for weapon files
    */
-  private extractRefinementPropertiesFromTalents(talents: any): any[] {
+  private extractRefinementPropertiesFromTalents(): any[] {
     // Weapon/{id}.json Talents only contain effect descriptions, not stat bonuses
     // Stat bonuses come from wengines.json Effect.Properties
     return [];
