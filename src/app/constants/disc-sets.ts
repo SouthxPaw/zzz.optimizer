@@ -168,7 +168,7 @@ export const DISC_SETS: DiscSet[] = [
     bonuses: [
       {
         pieces: 2,
-        description: 'Ice DMG +10%',
+        description: 'Daze of attacks +10%',
       },
     ],
   },
@@ -178,7 +178,7 @@ export const DISC_SETS: DiscSet[] = [
     bonuses: [
       {
         pieces: 2,
-        description: 'Energy Regen +12%',
+        description: 'ATK + 10%',
       },
     ],
   },
@@ -198,7 +198,7 @@ export const DISC_SETS: DiscSet[] = [
     bonuses: [
       {
         pieces: 2,
-        description: 'HP +10%',
+        description: 'Basic Attack DMG by 15%',
       },
     ],
   },
@@ -208,7 +208,7 @@ export const DISC_SETS: DiscSet[] = [
     bonuses: [
       {
         pieces: 2,
-        description: 'Energy Regen +12%',
+        description: 'Energy Regen +20%',
       },
     ],
   },
@@ -218,7 +218,7 @@ export const DISC_SETS: DiscSet[] = [
     bonuses: [
       {
         pieces: 2,
-        description: 'DEF +16%',
+        description: 'Shield Effect +15%',
       },
     ],
   },
@@ -228,7 +228,7 @@ export const DISC_SETS: DiscSet[] = [
     bonuses: [
       {
         pieces: 2,
-        description: 'Impact +6%',
+        description: 'DMG of Aftershocks and Dash Attacks +15%',
       },
     ],
   },
@@ -238,7 +238,7 @@ export const DISC_SETS: DiscSet[] = [
     bonuses: [
       {
         pieces: 2,
-        description: 'HP +10%',
+        description: 'Ether DMG +10%',
       },
     ],
   },
@@ -258,7 +258,7 @@ export const DISC_SETS: DiscSet[] = [
     bonuses: [
       {
         pieces: 2,
-        description: 'ATK +10%',
+        description: 'HP +10%',
       },
     ],
   },
