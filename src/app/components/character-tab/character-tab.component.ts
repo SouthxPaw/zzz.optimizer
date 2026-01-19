@@ -17,6 +17,8 @@ import { DataMappingService } from '../../services/data-mapping.service';
 import { DiscRating, BuildRating, FeedbackItem } from '../../constants/disc-scoring';
 import { DISC_MAIN_STAT_MAX, MAIN_STAT_BY_SLOT } from '../../constants/main-stat-possibilities';
 import { OptimizerComponent } from '../optimizer/optimizer.component';
+import { EnkaApiService } from '../../services/enka-api.service';
+import { EnkaImportService } from '../../services/enka-import.service';
 
 @Component({
   selector: 'app-character-tab',
@@ -44,6 +46,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   selectedAgentForAdd: Agent | null = null;
   showDiscPicker = false;
   selectedDiscSlot: DiscSlot | null = null;
+
+  // Bonus enable/disable toggles (for stat calculations)
+  includeWEngineBonuses = true;
+  includeMindscapeBonuses = true;
+  includePassiveBonuses = true;
 
   // Disc creation state
   showDiscForm = false;
@@ -106,6 +113,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     onConfirm: () => {}
   };
 
+  // Enka UID Import
+  showEnkaImportModal = false;
+  enkaUid = '';
+  isImportingFromEnka = false;
+  enkaImportError = '';
+  enkaImportSuccess = '';
+
   private destroy$ = new Subject<void>();
   private previouslyFocusedElement: HTMLElement | null = null;
 
@@ -123,7 +137,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private statCalculator: StatCalculatorService,
     private scoringService: ScoringService,
     private imagePreloader: ImagePreloaderService,
-    private dataMappingService: DataMappingService
+    private dataMappingService: DataMappingService,
+    private enkaApiService: EnkaApiService,
+    private enkaImportService: EnkaImportService
   ) {}
 
   ngOnInit() {
@@ -141,8 +157,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Subscribe to selected build
     this.buildService.selectedBuild$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(build => {
+      .subscribe(async build => {
         this.selectedBuild = build;
+
+        // Load toggle flags from build (default true if not set)
+        if (build) {
+          this.includeWEngineBonuses = build.includeWEngineBonuses ?? true;
+          this.includeMindscapeBonuses = build.includeMindscapeBonuses ?? true;
+          this.includePassiveBonuses = build.includePassiveBonuses ?? true;
+        }
       });
 
     // Load reference agents for the "Add Agent" modal
@@ -293,10 +316,49 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   toggleMindscape(level: number) {
     if (!this.selectedBuild) return;
 
-    const newLevel = this.selectedBuild.mindscapeLevel === level ? level - 1 : level;
+    // Mindscape levels work cumulatively (M1 through M6)
+    // - Clicking a level ON: activates that level and all previous levels (M1 through that level)
+    // - Clicking a level OFF: deactivates that level and all higher levels (keeps lower ones)
+    let newLevel: number;
+
+    if (this.selectedBuild.mindscapeLevel >= level) {
+      // Clicking an active mindscape - deselect it and all above it
+      newLevel = level - 1;
+    } else {
+      // Clicking an inactive mindscape - select up to this level
+      newLevel = level;
+    }
+
     this.buildService.updateBuild(this.selectedBuild.id, {
       mindscapeLevel: newLevel
     });
+  }
+
+  async onWEngineBonusesToggle() {
+    // Update build with new toggle state and recalculate
+    if (this.selectedBuild) {
+      await this.buildService.updateBuild(this.selectedBuild.id, {
+        includeWEngineBonuses: this.includeWEngineBonuses
+      });
+    }
+  }
+
+  async onMindscapeBonusesToggle() {
+    // Update build with new toggle state and recalculate
+    if (this.selectedBuild) {
+      await this.buildService.updateBuild(this.selectedBuild.id, {
+        includeMindscapeBonuses: this.includeMindscapeBonuses
+      });
+    }
+  }
+
+  async onPassiveBonusesToggle() {
+    // Update build with new toggle state and recalculate
+    if (this.selectedBuild) {
+      await this.buildService.updateBuild(this.selectedBuild.id, {
+        includePassiveBonuses: this.includePassiveBonuses
+      });
+    }
   }
 
   async equipWEngine(wEngine: WEngine | undefined) {
@@ -515,8 +577,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       const stats = mindscape.statBonuses!
         .filter(b => !b.conditional) // Only show unconditional bonuses
         .map(bonus => {
-          const isPercent = bonus.type.endsWith('%') ||
-                           ['CRIT_Rate', 'CRIT_DMG', 'PEN_Ratio', 'Energy_Regen'].includes(bonus.type);
+          // Use format field to check if percentage
+          const isPercent = bonus.format === '%';
 
           // Format stat name for display
           let displayName: string;
@@ -545,6 +607,45 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         level: mindscape.level,
         name: mindscape.name,
         stats: stats
+      };
+    });
+  }
+
+  getPassiveBonuses(): Array<{name: string, value: string, isPercent: boolean}> {
+    if (!this.selectedBuild) {
+      return [];
+    }
+
+    // Get agent reference data to access scoring buffs
+    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    if (!agent || !agent.scoring?.buffs) {
+      return [];
+    }
+
+    return agent.scoring.buffs.map(buff => {
+      const isPercent = buff.format === '%';
+
+      // Map buff type to display name
+      let displayName: string;
+      switch(buff.type) {
+        case 'ATKBonus': displayName = 'ATK'; break;
+        case 'HPBonus': displayName = 'HP'; break;
+        case 'DEFBonus': displayName = 'DEF'; break;
+        case 'CRITRateBonus': displayName = 'CRIT Rate'; break;
+        case 'CRITDMGBonus': displayName = 'CRIT DMG'; break;
+        case 'PENRatioBonus': displayName = 'PEN Ratio'; break;
+        case 'AnomalyProficiencyBonus': displayName = 'Anomaly Proficiency'; break;
+        case 'AnomalyMasteryBonus': displayName = 'Anomaly Mastery'; break;
+        case 'ImpactBonus': displayName = 'Impact'; break;
+        case 'EnergyRegenBonus': displayName = 'Energy Regen'; break;
+        case 'DMGBonus': displayName = 'DMG Bonus'; break;
+        default: displayName = buff.type; break;
+      }
+
+      return {
+        name: displayName,
+        value: buff.value,
+        isPercent: isPercent
       };
     });
   }
@@ -925,13 +1026,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    // Get equipped discs as array for hybrid agent detection
-    const equippedDiscsArray = Object.values(this.selectedBuild.equippedDiscs).filter(d => d !== undefined);
-
     const result = this.scoringService.calculateDiscScore(
       disc,
-      this.selectedBuild.agentId,
-      equippedDiscsArray
+      this.selectedBuild.agentId
     );
     return {
       score: result.score,
@@ -1042,6 +1139,30 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         this.discFormData.mainStatValue = Math.round(parsed * 10) / 10;
       }
     }
+  }
+
+  // Check if a substat type is a priority stat for the selected build's agent
+  isPrioritySubstat(substatType: SubStatType): boolean {
+    if (!this.selectedBuild || !this.scoringService.areBreakpointsLoaded()) {
+      return false;
+    }
+
+    const breakpoints = this.scoringService.getAgentBreakpoints(this.selectedBuild.agentId);
+    if (!breakpoints) {
+      return false;
+    }
+
+    // Check statWeights first (new format)
+    if (breakpoints.statWeights && breakpoints.statWeights[substatType] !== undefined) {
+      return breakpoints.statWeights[substatType] > 0;
+    }
+
+    // Fall back to priorityStats array (old format)
+    if (breakpoints.priorityStats && Array.isArray(breakpoints.priorityStats)) {
+      return breakpoints.priorityStats.includes(substatType);
+    }
+
+    return false;
   }
 
   // Auto-fill main stat value when user selects a main stat type for slots 4-6
@@ -1249,5 +1370,98 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   trackByFeedbackIndex(index: number, _item: FeedbackItem): number {
     return index;
+  }
+
+  // =====================================
+  // Enka Network UID Import
+  // =====================================
+
+  openEnkaImportModal() {
+    this.showEnkaImportModal = true;
+    this.enkaImportError = '';
+    this.enkaImportSuccess = '';
+    this.enkaUid = '';
+  }
+
+  closeEnkaImportModal() {
+    this.showEnkaImportModal = false;
+    this.enkaUid = '';
+    this.enkaImportError = '';
+    this.enkaImportSuccess = '';
+  }
+
+  async importFromEnka() {
+    if (!this.enkaUid.trim()) {
+      this.enkaImportError = 'Please enter a valid UID';
+      return;
+    }
+
+    this.isImportingFromEnka = true;
+    this.enkaImportError = '';
+    this.enkaImportSuccess = '';
+
+    try {
+      // Fetch data from Enka API
+      console.log(`Fetching Enka data for UID: ${this.enkaUid}`);
+      const enkaResult = await this.enkaApiService.fetchPlayerData(this.enkaUid).toPromise();
+
+      if (!enkaResult) {
+        throw new Error('No data received from Enka Network');
+      }
+
+      console.log(`Received ${enkaResult.builds.length} builds from Enka`);
+
+      // Compare with existing builds
+      const comparison = await this.enkaImportService.compareBuilds(enkaResult.builds);
+
+      console.log('Import comparison:', {
+        new: comparison.newBuilds.length,
+        updated: comparison.updatedBuilds.length,
+        unchanged: comparison.unchangedBuilds.length,
+        discs: comparison.newDiscs.length
+      });
+
+      // Show confirmation dialog if there are changes
+      if (comparison.newBuilds.length > 0 || comparison.updatedBuilds.length > 0) {
+        const summary = this.enkaImportService.generateImportSummary(comparison);
+
+        // Close the Enka import modal before showing confirmation dialog
+        this.closeEnkaImportModal();
+
+        this.showConfirmation(
+          'Import from Enka Network',
+          `Found: ${summary}\n\nDo you want to import these builds?`,
+          async () => {
+            try {
+              const result = await this.enkaImportService.importBuilds(comparison, true);
+
+              // Reload builds to show the imported data
+              await this.buildService.loadBuilds();
+
+              console.log(`Successfully imported ${result.added} new agent(s), updated ${result.updated} build(s), and added ${result.totalDiscs} disc(s)`);
+            } catch (error) {
+              console.error('Import error:', error);
+              // Re-open the Enka modal to show error
+              this.enkaImportError = error instanceof Error ? error.message : 'Failed to import builds';
+              this.openEnkaImportModal();
+            }
+          },
+          'Import',
+          'Cancel'
+        );
+      } else {
+        this.enkaImportSuccess = 'All builds are already up to date!';
+
+        // Close modal after 2 seconds
+        setTimeout(() => {
+          this.closeEnkaImportModal();
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Enka API error:', error);
+      this.enkaImportError = error instanceof Error ? error.message : 'Failed to fetch data from Enka Network';
+    } finally {
+      this.isImportingFromEnka = false;
+    }
   }
 }

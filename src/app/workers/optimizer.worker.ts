@@ -233,7 +233,7 @@ function evaluateBuild(
 
 function calculateFinalStats(
   agent: Agent,
-  level: number,
+  _level: number,
   wEngine: WEngine | null,
   discs: { [key in DiscSlot]?: Disc },
   mindscapeLevel: number = 0
@@ -378,7 +378,7 @@ function applySetBonuses(
 
   // Simple set bonus application (2pc bonuses mostly)
   // Note: This is simplified. Full implementation would need disc set data
-  setCounts.forEach((count, setName) => {
+  setCounts.forEach((count, _setName) => {
     if (count >= 2) {
       // Apply basic 2pc bonuses - simplified for worker
       // In production, you'd load the DISC_SETS constant here

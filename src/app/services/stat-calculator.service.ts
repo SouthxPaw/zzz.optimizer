@@ -91,16 +91,21 @@ export class StatCalculatorService {
     wEngine: WEngine | null,
     discs: { [key in DiscSlot]?: Disc },
     mindscapeLevel: number = 0,
-    wEngineRefinement: number = 1
+    wEngineRefinement: number = 1,
+    includeWEngineBonuses: boolean = true,
+    includeMindscapeBonuses: boolean = true,
+    includePassiveBonuses: boolean = true
   ): BaseStats {
-    // Generate cache key
-    const cacheKey = this.generateCacheKey(agent.id, level, wEngine?.id, discs, mindscapeLevel, wEngineRefinement);
+
+    // Generate cache key (include all bonus flags in cache)
+    const cacheKey = this.generateCacheKey(agent.id, level, wEngine?.id, discs, mindscapeLevel, wEngineRefinement) + `:${includeWEngineBonuses}:${includeMindscapeBonuses}:${includePassiveBonuses}`;
 
     // Check cache
     const cached = this.statCache.get(cacheKey);
     if (cached) {
       return cached;
     }
+
 
     // Start with base stats at level 60
     // Initialize percent bonuses to 0 since they may not exist in older data
@@ -110,14 +115,23 @@ export class StatCalculatorService {
       energyRegenPercent: 0
     };
 
-    // Apply W-Engine stats
-    if (wEngine) {
+
+    // Apply W-Engine stats (if enabled)
+    if (includeWEngineBonuses && wEngine) {
       this.applyWEngineStats(stats, wEngine, agent, wEngineRefinement);
+    } else {
     }
 
-    // Apply mindscape stat bonuses
-    if (agent.mindscapeEffects && mindscapeLevel > 0) {
+    // Apply mindscape stat bonuses (if enabled)
+    if (includeMindscapeBonuses && agent.mindscapeEffects && mindscapeLevel > 0) {
       this.applyMindscapeStats(stats, agent, mindscapeLevel);
+    } else {
+    }
+
+    // Apply passive scoring bonuses (if enabled)
+    if (includePassiveBonuses && agent.scoring?.buffs) {
+      this.applyPassiveScoringBonuses(stats, agent);
+    } else {
     }
 
     // Apply disc main stats
@@ -127,7 +141,7 @@ export class StatCalculatorService {
     this.applyDiscSubStats(stats, discs, agent);
 
     // Apply set bonuses (this applies percentage bonuses to HP/ATK/DEF)
-    this.applySetBonuses(stats, discs, agent, wEngine);
+    this.applySetBonuses(stats, discs, agent, wEngine, includeWEngineBonuses);
 
     // Calculate final energy regen using correct formula:
     // Energy/sec = Base × (1 + Σ %bonuses/100)
@@ -279,6 +293,75 @@ export class StatCalculatorService {
           break;
         case 'Anomaly_Proficiency':
           stats.anomalyProficiency += value;
+          break;
+      }
+    });
+  }
+
+  /**
+   * Apply passive bonuses from agent's scoring buffs
+   * These are bonuses that represent the agent's kit at optimal conditions
+   */
+  private applyPassiveScoringBonuses(stats: BaseStats, agent: Agent): void {
+    if (!agent.scoring?.buffs) {
+      return;
+    }
+
+    agent.scoring.buffs.forEach(buff => {
+      const value = parseFloat(buff.value);
+      const isPercentage = buff.format === '%';
+
+      // Map buff types to stat fields
+      switch(buff.type) {
+        case 'ATKBonus':
+          if (isPercentage) {
+            stats.atkpercent += value;
+          } else {
+            stats.atk += value;
+          }
+          break;
+        case 'HPBonus':
+          if (isPercentage) {
+            stats.hppercent += value;
+          } else {
+            stats.hp += value;
+          }
+          break;
+        case 'DEFBonus':
+          if (isPercentage) {
+            stats.defpercent += value;
+          } else {
+            stats.def += value;
+          }
+          break;
+        case 'CRITRateBonus':
+          stats.critRate += value;
+          break;
+        case 'CRITDMGBonus':
+          stats.critDmg += value;
+          break;
+        case 'PENRatioBonus':
+          stats.penRatio += value;
+          break;
+        case 'AnomalyProficiencyBonus':
+          stats.anomalyProficiency += value;
+          break;
+        case 'AnomalyMasteryBonus':
+          if (isPercentage) {
+            stats.anomalyMasteryPercent += value;
+          } else {
+            stats.anomalyMastery += value;
+          }
+          break;
+        case 'ImpactBonus':
+          stats.impact += value;
+          break;
+        case 'EnergyRegenBonus':
+          if (isPercentage) {
+            stats.energyRegenPercent += value;
+          } else {
+            stats.energyRegen += value;
+          }
           break;
       }
     });
@@ -458,7 +541,8 @@ export class StatCalculatorService {
     stats: BaseStats,
     discs: { [key in DiscSlot]?: Disc },
     agent: Agent,
-    wEngine: WEngine | null
+    wEngine: WEngine | null,
+    includeWEngineBonuses: boolean = true
   ): void {
     // Count disc sets
     const setCounts = new Map<string, number>();
@@ -468,10 +552,14 @@ export class StatCalculatorService {
       setCounts.set(disc.set, count + 1);
     });
 
+    console.log('[SET BONUSES] Disc set counts:', Array.from(setCounts.entries()));
+
     // Apply bonuses for sets with 2 or 4 pieces
     setCounts.forEach((count, setName) => {
       const discSet = DISC_SETS.find(s => s.name === setName);
-      if (!discSet) return;
+      if (!discSet) {
+        return;
+      }
 
       discSet.bonuses.forEach(bonus => {
         if (count >= bonus.pieces) {
@@ -482,7 +570,7 @@ export class StatCalculatorService {
 
       // Apply 4pc effect stat bonuses from equipment data
       if (count >= 4) {
-        this.apply4pcEffectBonuses(setName, stats);
+        this.apply4pcEffectBonuses(setName, stats, agent);
       }
     });
 
@@ -507,7 +595,8 @@ export class StatCalculatorService {
     // We need to separate flat disc bonuses and apply the ZZZ formula correctly
 
     // Calculate flat disc bonuses by subtracting base values
-    const wEngineBaseATK = wEngine?.baseAtk || 0;
+    // Only include W-Engine base ATK if W-Engine bonuses are enabled
+    const wEngineBaseATK = (includeWEngineBonuses && wEngine?.baseAtk) ? wEngine.baseAtk : 0;
 
     const flatHPFromDiscs = stats.hp - baseHP;
     const flatATKFromDiscs = stats.atk - baseATK - wEngineBaseATK;
@@ -535,9 +624,12 @@ export class StatCalculatorService {
    * Apply 4pc effect stat bonuses from equipment data
    * Only applies conditional bonuses when conditions are met
    */
-  private apply4pcEffectBonuses(setName: string, stats: BaseStats): void {
+  private apply4pcEffectBonuses(setName: string, stats: BaseStats, agent: Agent): void {
     const equipmentData = this.discSetEquipmentData[setName];
-    if (!equipmentData || !equipmentData['4pcEffect']) {
+    if (!equipmentData) {
+      return;
+    }
+    if (!equipmentData['4pcEffect']) {
       return;
     }
 
@@ -549,10 +641,15 @@ export class StatCalculatorService {
     }
     // Handle conditional format (array of effect objects)
     else {
-      effect.forEach(effectPart => {
+      effect.forEach((effectPart, idx) => {
+        const hasCondition = !!effectPart.Condition;
+        if (hasCondition) {
+          const conditionMet = this.evaluateCondition(effectPart.Condition!, stats, agent);
+        }
         // Only apply if condition is met or no condition exists
-        if (!effectPart.Condition || this.evaluateCondition(effectPart.Condition, stats)) {
+        if (!effectPart.Condition || this.evaluateCondition(effectPart.Condition, stats, agent)) {
           this.applyPropertiesArray(effectPart.Properties, stats);
+        } else {
         }
       });
     }
@@ -562,50 +659,64 @@ export class StatCalculatorService {
    * Evaluate if a condition is met based on current stats
    */
   private evaluateCondition(
-    condition: { Type: string; Stat: string; Operator: string; Value: number },
-    stats: BaseStats
+    condition: { Type: string; Stat?: string; Operator?: string; Value: number | string },
+    stats: BaseStats,
+    agent: Agent
   ): boolean {
-    // Map condition stat names to BaseStats properties
-    const statMapping: { [key: string]: keyof BaseStats } = {
-      'Anomaly_Mastery': 'anomalyMastery',
-      'Anomaly_Proficiency': 'anomalyProficiency',
-      'CRIT_Rate': 'critRate',
-      'CRIT_DMG': 'critDmg',
-      'ATK': 'atk',
-      'ATK%': 'atkpercent',
-      'HP': 'hp',
-      'HP%': 'hppercent',
-      'DEF': 'def',
-      'DEF%': 'defpercent',
-      'Impact': 'impact',
-      'PEN': 'pen',
-      'PEN_Ratio': 'penRatio',
-      'Energy_Regen': 'energyRegen'
-    };
-
-    const statKey = statMapping[condition.Stat];
-    if (!statKey) {
-      console.warn(`Unknown stat in condition: ${condition.Stat}`);
-      return false;
+    // Handle Specialty condition (e.g., White Water Ballad - Attack specialty)
+    if (condition.Type === 'Specialty') {
+      return agent.specialty === condition.Value;
     }
 
-    const currentValue = stats[statKey] as number;
+    // Handle StatThreshold condition (e.g., King of the Summit - CRIT_RATE >= 50)
+    if (condition.Type === 'StatThreshold' && condition.Stat && condition.Operator) {
+      // Map condition stat names to BaseStats properties
+      const statMapping: { [key: string]: keyof BaseStats } = {
+        'Anomaly_Mastery': 'anomalyMastery',
+        'Anomaly_Proficiency': 'anomalyProficiency',
+        'CRIT_Rate': 'critRate',
+        'CRIT_RATE': 'critRate',
+        'CRIT_DMG': 'critDmg',
+        'ATK': 'atk',
+        'ATK%': 'atkpercent',
+        'HP': 'hp',
+        'HP%': 'hppercent',
+        'DEF': 'def',
+        'DEF%': 'defpercent',
+        'Impact': 'impact',
+        'PEN': 'pen',
+        'PEN_Ratio': 'penRatio',
+        'Energy_Regen': 'energyRegen'
+      };
 
-    switch (condition.Operator) {
-      case '>=':
-        return currentValue >= condition.Value;
-      case '>':
-        return currentValue > condition.Value;
-      case '<=':
-        return currentValue <= condition.Value;
-      case '<':
-        return currentValue < condition.Value;
-      case '==':
-        return currentValue === condition.Value;
-      default:
-        console.warn(`Unknown operator in condition: ${condition.Operator}`);
+      const statKey = statMapping[condition.Stat];
+      if (!statKey) {
+        console.warn(`Unknown stat in condition: ${condition.Stat}`);
         return false;
+      }
+
+      const currentValue = stats[statKey] as number;
+      const thresholdValue = condition.Value as number;
+
+      switch (condition.Operator) {
+        case '>=':
+          return currentValue >= thresholdValue;
+        case '>':
+          return currentValue > thresholdValue;
+        case '<=':
+          return currentValue <= thresholdValue;
+        case '<':
+          return currentValue < thresholdValue;
+        case '==':
+          return currentValue === thresholdValue;
+        default:
+          console.warn(`Unknown operator in condition: ${condition.Operator}`);
+          return false;
+      }
     }
+
+    console.warn(`Unknown condition type: ${condition.Type}`);
+    return false;
   }
 
   /**
@@ -777,39 +888,51 @@ export class StatCalculatorService {
         const equipmentData = this.discSetEquipmentData[setName];
         if (equipmentData && equipmentData['4pcEffect']) {
           const effect = equipmentData['4pcEffect'];
-          const statParts: string[] = [];
+          // Use a map to consolidate duplicate stats
+          const statMap = new Map<string, number>();
 
           // Handle simple format (unconditional)
           if (!Array.isArray(effect)) {
             effect.Properties.forEach(prop => {
-              // If value < 1, it's a decimal percentage that needs to be converted (0.25 → 25%)
-              // If value >= 1, it's a flat value (45 → +45, no % sign)
-              const isDecimalPercent = prop.Value < 1;
-
-              const value = isDecimalPercent ? prop.Value * 100 : prop.Value;
-              const formattedValue = isDecimalPercent ? `${value}%` : value;
+              // Use the Format field to determine if this is a percentage stat
+              // Format contains '%' for percentage stats (e.g., "2800" with Format "%" → 28%)
+              const isPercentage = prop.Format && prop.Format.includes('%');
+              const value = isPercentage ? prop.Value / 100 : prop.Value;
               const formattedStatName = prop.Name2.replace(/_/g, ' ');
-              statParts.push(`${formattedStatName}: +${formattedValue}`);
+
+              // Add to existing value if stat already exists
+              const existing = statMap.get(formattedStatName) || 0;
+              statMap.set(formattedStatName, existing + value);
             });
           }
           // Handle conditional format
           else {
             effect.forEach(effectPart => {
               // Only include stats if there's no condition OR condition is met
-              if (!effectPart.Condition || this.evaluateCondition(effectPart.Condition, currentStats)) {
+              if (!effectPart.Condition || this.evaluateCondition(effectPart.Condition, currentStats, agent)) {
                 effectPart.Properties.forEach(prop => {
-                  // If value < 1, it's a decimal percentage that needs to be converted (0.25 → 25%)
-                  // If value >= 1, it's a flat value (45 → +45, no % sign)
-                  const isDecimalPercent = prop.Value < 1;
-
-                  const value = isDecimalPercent ? prop.Value * 100 : prop.Value;
-                  const formattedValue = isDecimalPercent ? `${value}%` : value;
+                  // Use the Format field to determine if this is a percentage stat
+                  // Format contains '%' for percentage stats (e.g., "2800" with Format "%" → 28%)
+                  const isPercentage = prop.Format && prop.Format.includes('%');
+                  const value = isPercentage ? prop.Value / 100 : prop.Value;
                   const formattedStatName = prop.Name2.replace(/_/g, ' ');
-                  statParts.push(`${formattedStatName}: +${formattedValue}`);
+
+                  // Add to existing value if stat already exists
+                  const existing = statMap.get(formattedStatName) || 0;
+                  statMap.set(formattedStatName, existing + value);
                 });
               }
             });
           }
+
+          // Convert map to display strings
+          const statParts: string[] = [];
+          statMap.forEach((value, statName) => {
+            // Assume percentage if the stat name contains these keywords or value is small
+            const isPercentStat = statName.includes('RATE') || statName.includes('DMG') || statName.includes('%') || value < 100;
+            const formattedValue = isPercentStat ? `${value}%` : `${value}`;
+            statParts.push(`${statName}: +${formattedValue}`);
+          });
 
           if (statParts.length > 0) {
             active4pcBonuses.push(`${setName} (4pc): ${statParts.join(', ')}`);

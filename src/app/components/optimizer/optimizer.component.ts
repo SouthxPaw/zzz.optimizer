@@ -10,7 +10,6 @@ import { OptimizerService, OptimizedBuild, OptimizerConstraints } from '../../se
 import { Agent, DiscSlot } from '../../models/agent.model';
 import { WEngine } from '../../models/wengine.model';
 import { SCORING_PRESETS } from '../../constants/scoring-presets';
-import { Disc } from '../../models/disc.model';
 
 interface BuildViewModel {
   build: OptimizedBuild;
@@ -96,8 +95,7 @@ export class OptimizerComponent implements OnInit, OnDestroy {
 
   loadPreset() {
     if (!this.selectedAgent) return;
-
-    const preset = SCORING_PRESETS[this.selectedAgent.specialty];
+    // Preset loading functionality can be added here if needed
   }
 
   optimize() {
@@ -248,7 +246,7 @@ export class OptimizerComponent implements OnInit, OnDestroy {
     if (!this.selectedResult || !this.selectedAgent) return;
 
     // Equip all discs in the build to this agent
-    Object.entries(this.selectedResult.discs).forEach(([slot, disc]) => {
+    Object.entries(this.selectedResult.discs).forEach(([_slot, disc]) => {
       if (disc) {
         this.discService.equipDisc(disc.uid, this.selectedAgent!.id);
       }
@@ -286,23 +284,23 @@ export class OptimizerComponent implements OnInit, OnDestroy {
   }
 
   // TrackBy functions for performance optimization
-  trackByAgentId(index: number, agent: Agent): string {
+  trackByAgentId(_index: number, agent: Agent): string {
     return agent.id;
   }
 
-  trackByWEngineId(index: number, wEngine: WEngine): string {
+  trackByWEngineId(_index: number, wEngine: WEngine): string {
     return wEngine.id;
   }
 
-  trackByBuildIndex(index: number, item: BuildViewModel): number {
+  trackByBuildIndex(_index: number, item: BuildViewModel): number {
     return item.rank;
   }
 
-  trackByDiscSlot(index: number, slot: DiscSlot): string {
+  trackByDiscSlot(_index: number, slot: DiscSlot): string {
     return slot;
   }
 
-  trackBySetName(index: number, setName: string): string {
+  trackBySetName(_index: number, setName: string): string {
     return setName;
   }
 
@@ -310,11 +308,11 @@ export class OptimizerComponent implements OnInit, OnDestroy {
     return index;
   }
 
-  trackByBonusIndex(index: number, bonus: string): number {
+  trackByBonusIndex(index: number, _bonus: string): number {
     return index;
   }
 
-  trackByMindscapeLevel(index: number, level: number): number {
+  trackByMindscapeLevel(_index: number, level: number): number {
     return level;
   }
 }

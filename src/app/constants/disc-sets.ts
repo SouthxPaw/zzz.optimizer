@@ -152,4 +152,114 @@ export const DISC_SETS: DiscSet[] = [
       },
     ],
   },
+  {
+    id: 'white_water_ballad',
+    name: 'White Water Ballad',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'Physical DMG +10%',
+      },
+    ],
+  },
+  {
+    id: 'king_of_the_summit',
+    name: 'King of the Summit',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'Ice DMG +10%',
+      },
+    ],
+  },
+  {
+    id: 'astral_voice',
+    name: 'Astral Voice',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'Energy Regen +12%',
+      },
+    ],
+  },
+  {
+    id: 'chaotic_metal',
+    name: 'Chaotic Metal',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'Ether DMG +10%',
+      },
+    ],
+  },
+  {
+    id: 'dawns_bloom',
+    name: "Dawn's Bloom",
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'HP +10%',
+      },
+    ],
+  },
+  {
+    id: 'moonlight_lullaby',
+    name: 'Moonlight Lullaby',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'Energy Regen +12%',
+      },
+    ],
+  },
+  {
+    id: 'proto_punk',
+    name: 'Proto Punk',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'DEF +16%',
+      },
+    ],
+  },
+  {
+    id: 'shadow_harmony',
+    name: 'Shadow Harmony',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'Impact +6%',
+      },
+    ],
+  },
+  {
+    id: 'shining_aria',
+    name: 'Shining Aria',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'HP +10%',
+      },
+    ],
+  },
+  {
+    id: 'soul_rock',
+    name: 'Soul Rock',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'DEF +16%',
+      },
+    ],
+  },
+  {
+    id: 'yunkui_tales',
+    name: 'Yunkui Tales',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'ATK +10%',
+      },
+    ],
+  },
 ];

@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { DiscService } from '../../services/disc.service';
 import { AgentService } from '../../services/agent.service';
-import { Disc, DiscSet } from '../../models/disc.model';
+import { Disc } from '../../models/disc.model';
 import { Agent, DiscSlot } from '../../models/agent.model';
 import { ScoringAlgorithm } from '../../models/scoring.model';
 import { SCORING_PRESETS } from '../../constants/scoring-presets';
@@ -294,15 +294,15 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
   }
 
   // TrackBy functions for performance optimization
-  trackByDiscUid(index: number, disc: Disc): string {
+  trackByDiscUid(_index: number, disc: Disc): string {
     return disc.uid;
   }
 
-  trackByAgentId(index: number, agent: Agent): string {
+  trackByAgentId(_index: number, agent: Agent): string {
     return agent.id;
   }
 
-  trackBySlotIndex(index: number, slot: DiscSlot): string {
+  trackBySlotIndex(_index: number, slot: DiscSlot): string {
     return slot;
   }
 
@@ -310,7 +310,7 @@ export class DiscBuilderComponent implements OnInit, OnDestroy {
     return index;
   }
 
-  trackByPageNumber(index: number, page: number): number {
+  trackByPageNumber(_index: number, page: number): number {
     return page;
   }
 }

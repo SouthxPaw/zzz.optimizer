@@ -3310,7 +3310,7 @@
   },
   {
     "id": 1261,
-    "name": "Jane",
+    "name": "Jane Doe",
     "scoring": {
       "buffs": [
         {
@@ -4902,10 +4902,7 @@
         "1": {
           "level": 1,
           "id": 1261501,
-          "names": [
-            "Core Passive: Insight",
-            "Additional Ability: Sore Spot"
-          ],
+          "names": ["Core Passive: Insight", "Additional Ability: Sore Spot"],
           "descriptions": [
             "When Jane's attacks hit an enemy, it causes them to enter the Gnawed state, lasting for 10s. If any squad member triggers Assault on an enemy in the Gnawed state and causes the Flinch effect, the Flinch effect duration is extended by 5s. Assault DMG has a chance to trigger a critical hit against enemies in the Gnawed state, with a base CRIT Rate of 20% and CRIT DMG of 50%. Each point of Jane's Anomaly Proficiency further increases this CRIT Rate by 0.1%.",
             "When another character in your squad is an Anomaly character or shares the same Faction:\nJane's Physical Anomaly Buildup Rate is increased by 20%. When the enemy is already suffering from an Attribute Anomaly, Jane's Physical Anomaly Buildup towards the target is increased by an additional 15%."
@@ -4914,10 +4911,7 @@
         "2": {
           "level": 2,
           "id": 1261502,
-          "names": [
-            "Core Passive: Insight",
-            "Additional Ability: Sore Spot"
-          ],
+          "names": ["Core Passive: Insight", "Additional Ability: Sore Spot"],
           "descriptions": [
             "When Jane's attacks hit an enemy, it causes them to enter the Gnawed state, lasting for 10s. If any squad member triggers Assault on an enemy in the Gnawed state and causes the Flinch effect, the Flinch effect duration is extended by 5s. Assault DMG has a chance to trigger a critical hit against enemies in the Gnawed state, with a base CRIT Rate of 25% and CRIT DMG of 50%. Each point of Jane's Anomaly Proficiency further increases this CRIT Rate by 0.11%.",
             "When another character in your squad is an Anomaly character or shares the same Faction:\nJane's Physical Anomaly Buildup Rate is increased by 20%. When the enemy is already suffering from an Attribute Anomaly, Jane's Physical Anomaly Buildup towards the target is increased by an additional 15%."
@@ -4926,10 +4920,7 @@
         "3": {
           "level": 3,
           "id": 1261503,
-          "names": [
-            "Core Passive: Insight",
-            "Additional Ability: Sore Spot"
-          ],
+          "names": ["Core Passive: Insight", "Additional Ability: Sore Spot"],
           "descriptions": [
             "When Jane's attacks hit an enemy, it causes them to enter the Gnawed state, lasting for 10s. If any squad member triggers Assault on an enemy in the Gnawed state and causes the Flinch effect, the Flinch effect duration is extended by 5s. Assault DMG has a chance to trigger a critical hit against enemies in the Gnawed state, with a base CRIT Rate of 28% and CRIT DMG of 50%. Each point of Jane's Anomaly Proficiency further increases this CRIT Rate by 0.12%.",
             "When another character in your squad is an Anomaly character or shares the same Faction:\nJane's Physical Anomaly Buildup Rate is increased by 20%. When the enemy is already suffering from an Attribute Anomaly, Jane's Physical Anomaly Buildup towards the target is increased by an additional 15%."
@@ -4938,10 +4929,7 @@
         "4": {
           "level": 4,
           "id": 1261504,
-          "names": [
-            "Core Passive: Insight",
-            "Additional Ability: Sore Spot"
-          ],
+          "names": ["Core Passive: Insight", "Additional Ability: Sore Spot"],
           "descriptions": [
             "When Jane's attacks hit an enemy, it causes them to enter the Gnawed state, lasting for 10s. If any squad member triggers Assault on an enemy in the Gnawed state and causes the Flinch effect, the Flinch effect duration is extended by 5s. Assault DMG has a chance to trigger a critical hit against enemies in the Gnawed state, with a base CRIT Rate of 31% and CRIT DMG of 50%. Each point of Jane's Anomaly Proficiency further increases this CRIT Rate by 0.13%.",
             "When another character in your squad is an Anomaly character or shares the same Faction:\nJane's Physical Anomaly Buildup Rate is increased by 20%. When the enemy is already suffering from an Attribute Anomaly, Jane's Physical Anomaly Buildup towards the target is increased by an additional 15%."
@@ -4950,10 +4938,7 @@
         "5": {
           "level": 5,
           "id": 1261505,
-          "names": [
-            "Core Passive: Insight",
-            "Additional Ability: Sore Spot"
-          ],
+          "names": ["Core Passive: Insight", "Additional Ability: Sore Spot"],
           "descriptions": [
             "When Jane's attacks hit an enemy, it causes them to enter the Gnawed state, lasting for 10s. If any squad member triggers Assault on an enemy in the Gnawed state and causes the Flinch effect, the Flinch effect duration is extended by 5s. Assault DMG has a chance to trigger a critical hit against enemies in the Gnawed state, with a base CRIT Rate of 34% and CRIT DMG of 50%. Each point of Jane's Anomaly Proficiency further increases this CRIT Rate by 0.14%.",
             "When another character in your squad is an Anomaly character or shares the same Faction:\nJane's Physical Anomaly Buildup Rate is increased by 20%. When the enemy is already suffering from an Attribute Anomaly, Jane's Physical Anomaly Buildup towards the target is increased by an additional 15%."
@@ -4962,10 +4947,7 @@
         "6": {
           "level": 6,
           "id": 1261506,
-          "names": [
-            "Core Passive: Insight",
-            "Additional Ability: Sore Spot"
-          ],
+          "names": ["Core Passive: Insight", "Additional Ability: Sore Spot"],
           "descriptions": [
             "When Jane's attacks hit an enemy, it causes them to enter the Gnawed state, lasting for 10s. If any squad member triggers Assault on an enemy in the Gnawed state and causes the Flinch effect, the Flinch effect duration is extended by 5s. Assault DMG has a chance to trigger a critical hit against enemies in the Gnawed state, with a base CRIT Rate of 37% and CRIT DMG of 50%. Each point of Jane's Anomaly Proficiency further increases this CRIT Rate by 0.15%.",
             "When another character in your squad is an Anomaly character or shares the same Faction:\nJane's Physical Anomaly Buildup Rate is increased by 20%. When the enemy is already suffering from an Attribute Anomaly, Jane's Physical Anomaly Buildup towards the target is increased by an additional 15%."
@@ -4974,10 +4956,7 @@
         "7": {
           "level": 7,
           "id": 1261507,
-          "names": [
-            "Core Passive: Insight",
-            "Additional Ability: Sore Spot"
-          ],
+          "names": ["Core Passive: Insight", "Additional Ability: Sore Spot"],
           "descriptions": [
             "When Jane's attacks hit an enemy, it causes them to enter the Gnawed state, lasting for 10s. If any squad member triggers Assault on an enemy in the Gnawed state and causes the Flinch effect, the Flinch effect duration is extended by 5s. Assault DMG has a chance to trigger a critical hit against enemies in the Gnawed state, with a base CRIT Rate of 40% and CRIT DMG of 50%. Each point of Jane's Anomaly Proficiency further increases this CRIT Rate by 0.16%.",
             "When another character in your squad is an Anomaly character or shares the same Faction:\nJane's Physical Anomaly Buildup Rate is increased by 20%. When the enemy is already suffering from an Attribute Anomaly, Jane's Physical Anomaly Buildup towards the target is increased by an additional 15%."
@@ -10362,10 +10341,7 @@
         "1": {
           "level": 1,
           "id": 1201508,
-          "names": [
-            "Core Passive: Day Break",
-            "Additional Ability: Overclock"
-          ],
+          "names": ["Core Passive: Day Break", "Additional Ability: Overclock"],
           "descriptions": [
             "[Dash Attack: Hiten no Tsuru - Slash]'s CRIT Rate increases by 10.6%, and when Harumasa's [Dash Attack: Hiten no Tsuru - Slash] triggers a critical hit against an enemy, he gains 1 stack of Gleaming Edge, for up to a maximum of 3 stacks per use of the skill and stacking up to 6 times, lasting 5s, repeated triggers reset the duration. Each stack of Gleaming Edge increases the CRIT DMG of [Dash Attack: Hiten no Tsuru - Slash] and Ultimate by 6%;\nWhen [Dash Attack: Hiten no Tsuru - Slash] hits an enemy, if Harumasa has 6 stacks of Gleaming Edge, he gains Edge Revealed, automatically triggering [Ultimate: Rapid Fire] after the next [Ultimate: Zanshin] is activated.",
             "When another character in your squad is a Stun or Anomaly character:\nWhen Harumasa's attacks hit Stunned enemies or enemies under Attribute Anomaly, his DMG increases by 40%. When Harumasa's Falling Feather hits Stunned enemies or enemies under Attribute Anomaly, it will apply 2 stacks of Electro Prison to the target."
@@ -10374,10 +10350,7 @@
         "2": {
           "level": 2,
           "id": 1201509,
-          "names": [
-            "Core Passive: Day Break",
-            "Additional Ability: Overclock"
-          ],
+          "names": ["Core Passive: Day Break", "Additional Ability: Overclock"],
           "descriptions": [
             "Harumasa_UniqueSkill_02_Upgrade_Desc",
             "When another character in your squad is a Stun or Anomaly character:\nWhen Harumasa's attacks hit Stunned enemies or enemies under Attribute Anomaly, his DMG increases by 40%. When Harumasa's Falling Feather hits Stunned enemies or enemies under Attribute Anomaly, it will apply 2 stacks of Electro Prison to the target."
@@ -10386,10 +10359,7 @@
         "3": {
           "level": 3,
           "id": 1201510,
-          "names": [
-            "Core Passive: Day Break",
-            "Additional Ability: Overclock"
-          ],
+          "names": ["Core Passive: Day Break", "Additional Ability: Overclock"],
           "descriptions": [
             "Harumasa_UniqueSkill_03_Upgrade_Desc",
             "When another character in your squad is a Stun or Anomaly character:\nWhen Harumasa's attacks hit Stunned enemies or enemies under Attribute Anomaly, his DMG increases by 40%. When Harumasa's Falling Feather hits Stunned enemies or enemies under Attribute Anomaly, it will apply 2 stacks of Electro Prison to the target."
@@ -10398,10 +10368,7 @@
         "4": {
           "level": 4,
           "id": 1201511,
-          "names": [
-            "Core Passive: Day Break",
-            "Additional Ability: Overclock"
-          ],
+          "names": ["Core Passive: Day Break", "Additional Ability: Overclock"],
           "descriptions": [
             "Harumasa_UniqueSkill_04_Upgrade_Desc",
             "When another character in your squad is a Stun or Anomaly character:\nWhen Harumasa's attacks hit Stunned enemies or enemies under Attribute Anomaly, his DMG increases by 40%. When Harumasa's Falling Feather hits Stunned enemies or enemies under Attribute Anomaly, it will apply 2 stacks of Electro Prison to the target."
@@ -10410,10 +10377,7 @@
         "5": {
           "level": 5,
           "id": 1201512,
-          "names": [
-            "Core Passive: Day Break",
-            "Additional Ability: Overclock"
-          ],
+          "names": ["Core Passive: Day Break", "Additional Ability: Overclock"],
           "descriptions": [
             "Harumasa_UniqueSkill_05_Upgrade_Desc",
             "When another character in your squad is a Stun or Anomaly character:\nWhen Harumasa's attacks hit Stunned enemies or enemies under Attribute Anomaly, his DMG increases by 40%. When Harumasa's Falling Feather hits Stunned enemies or enemies under Attribute Anomaly, it will apply 2 stacks of Electro Prison to the target."
@@ -10422,10 +10386,7 @@
         "6": {
           "level": 6,
           "id": 1201513,
-          "names": [
-            "Core Passive: Day Break",
-            "Additional Ability: Overclock"
-          ],
+          "names": ["Core Passive: Day Break", "Additional Ability: Overclock"],
           "descriptions": [
             "Harumasa_UniqueSkill_06_Upgrade_Desc",
             "When another character in your squad is a Stun or Anomaly character:\nWhen Harumasa's attacks hit Stunned enemies or enemies under Attribute Anomaly, his DMG increases by 40%. When Harumasa's Falling Feather hits Stunned enemies or enemies under Attribute Anomaly, it will apply 2 stacks of Electro Prison to the target."
@@ -10434,10 +10395,7 @@
         "7": {
           "level": 7,
           "id": 1201514,
-          "names": [
-            "Core Passive: Day Break",
-            "Additional Ability: Overclock"
-          ],
+          "names": ["Core Passive: Day Break", "Additional Ability: Overclock"],
           "descriptions": [
             "Harumasa_UniqueSkill_07_Upgrade_Desc",
             "When another character in your squad is a Stun or Anomaly character:\nWhen Harumasa's attacks hit Stunned enemies or enemies under Attribute Anomaly, his DMG increases by 40%. When Harumasa's Falling Feather hits Stunned enemies or enemies under Attribute Anomaly, it will apply 2 stacks of Electro Prison to the target."
@@ -10523,9 +10481,7 @@
         "description": "",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Harumasa.webp",
         "level": 1,
-        "affected_skills": [
-          11201601
-        ],
+        "affected_skills": [11201601],
         "materials": [
           {
             "id": 20120,
@@ -10540,10 +10496,7 @@
         "description": "When triggering an [EX Special Attack], [Chain Attack], or [Ultimate], increases ATK by 10% for 12s;\nExtends the duration of [Gleaming Edge] in [Core Passive] to 10s.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Harumasa.webp",
         "level": 2,
-        "affected_skills": [
-          11201601,
-          11201701
-        ],
+        "affected_skills": [11201601, 11201701],
         "materials": [
           {
             "id": 20120,
@@ -10558,10 +10511,7 @@
         "description": "When triggering an [EX Special Attack], [Chain Attack], or [Ultimate], increases ATK by 15% for 12s;\nExtends the duration of [Gleaming Edge] in [Core Passive] to 10s.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Harumasa.webp",
         "level": 3,
-        "affected_skills": [
-          11201601,
-          11201702
-        ],
+        "affected_skills": [11201601, 11201702],
         "materials": [
           {
             "id": 20120,
@@ -10576,10 +10526,7 @@
         "description": "When triggering an [EX Special Attack], [Chain Attack], or [Ultimate], increases ATK by 20% for 12s;\nExtends the duration of [Gleaming Edge] in [Core Passive] to 10s.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Harumasa.webp",
         "level": 4,
-        "affected_skills": [
-          11201601,
-          11201703
-        ],
+        "affected_skills": [11201601, 11201703],
         "materials": [
           {
             "id": 20120,
@@ -10594,10 +10541,7 @@
         "description": "When triggering an [EX Special Attack], [Chain Attack], or [Ultimate], increases ATK by 25% for 12s;\nExtends the duration of [Gleaming Edge] in [Core Passive] to 10s.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Harumasa.webp",
         "level": 5,
-        "affected_skills": [
-          11201601,
-          11201704
-        ],
+        "affected_skills": [11201601, 11201704],
         "materials": [
           {
             "id": 20120,
@@ -10612,10 +10556,7 @@
         "description": "When triggering an [EX Special Attack], [Chain Attack], or [Ultimate], increases ATK by 30% for 12s;\nExtends the duration of [Gleaming Edge] in [Core Passive] to 10s.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Harumasa.webp",
         "level": 6,
-        "affected_skills": [
-          11201601,
-          11201705
-        ],
+        "affected_skills": [11201601, 11201705],
         "materials": [
           {
             "id": 20120,
@@ -16997,9 +16938,7 @@
         "description": "",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Grace.webp",
         "level": 1,
-        "affected_skills": [
-          11181401
-        ],
+        "affected_skills": [11181401],
         "materials": [
           {
             "id": 20118,
@@ -17014,10 +16953,7 @@
         "description": "When consuming Zap, gain Enhanced Zap, increasing Electric DMG by 10% for 25s. Repeated triggers reset the duration.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Grace.webp",
         "level": 2,
-        "affected_skills": [
-          11181401,
-          11181501
-        ],
+        "affected_skills": [11181401, 11181501],
         "materials": [
           {
             "id": 20118,
@@ -17032,10 +16968,7 @@
         "description": "When consuming Zap, gain Enhanced Zap, increasing Electric DMG by 15% for 25s. Repeated triggers reset the duration.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Grace.webp",
         "level": 3,
-        "affected_skills": [
-          11181401,
-          11181502
-        ],
+        "affected_skills": [11181401, 11181502],
         "materials": [
           {
             "id": 20118,
@@ -17050,10 +16983,7 @@
         "description": "When consuming Zap, gain Enhanced Zap, increasing Electric DMG by 20% for 25s. Repeated triggers reset the duration.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Grace.webp",
         "level": 4,
-        "affected_skills": [
-          11181401,
-          11181503
-        ],
+        "affected_skills": [11181401, 11181503],
         "materials": [
           {
             "id": 20118,
@@ -17068,10 +16998,7 @@
         "description": "When consuming Zap, gain Enhanced Zap, increasing Electric DMG by 25% for 25s. Repeated triggers reset the duration.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Grace.webp",
         "level": 5,
-        "affected_skills": [
-          11181401,
-          11181504
-        ],
+        "affected_skills": [11181401, 11181504],
         "materials": [
           {
             "id": 20118,
@@ -17086,10 +17013,7 @@
         "description": "When consuming Zap, gain Enhanced Zap, increasing Electric DMG by 30% for 25s. Repeated triggers reset the duration.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Grace.webp",
         "level": 6,
-        "affected_skills": [
-          11181401,
-          11181505
-        ],
+        "affected_skills": [11181401, 11181505],
         "materials": [
           {
             "id": 20118,
@@ -35740,9 +35664,7 @@
         "description": "",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Lycaon.webp",
         "level": 1,
-        "affected_skills": [
-          11141401
-        ],
+        "affected_skills": [11141401],
         "materials": [
           {
             "id": 20114,
@@ -35757,10 +35679,7 @@
         "description": "When Lycaon is in the [Coordinated Assault] state, Impact is increased by 5%",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Lycaon.webp",
         "level": 2,
-        "affected_skills": [
-          11141401,
-          11141501
-        ],
+        "affected_skills": [11141401, 11141501],
         "materials": [
           {
             "id": 20114,
@@ -35775,10 +35694,7 @@
         "description": "When Lycaon is in the [Coordinated Assault] state, Impact is increased by 7.5%",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Lycaon.webp",
         "level": 3,
-        "affected_skills": [
-          11141401,
-          11141502
-        ],
+        "affected_skills": [11141401, 11141502],
         "materials": [
           {
             "id": 20114,
@@ -35793,10 +35709,7 @@
         "description": "When Lycaon is in the [Coordinated Assault] state, Impact is increased by 10%",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Lycaon.webp",
         "level": 4,
-        "affected_skills": [
-          11141401,
-          11141503
-        ],
+        "affected_skills": [11141401, 11141503],
         "materials": [
           {
             "id": 20114,
@@ -35811,10 +35724,7 @@
         "description": "When Lycaon is in the [Coordinated Assault] state, Impact is increased by 12.5%",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Lycaon.webp",
         "level": 5,
-        "affected_skills": [
-          11141401,
-          11141504
-        ],
+        "affected_skills": [11141401, 11141504],
         "materials": [
           {
             "id": 20114,
@@ -35829,10 +35739,7 @@
         "description": "When Lycaon is in the [Coordinated Assault] state, Impact is increased by 15%",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Lycaon.webp",
         "level": 6,
-        "affected_skills": [
-          11141401,
-          11141505
-        ],
+        "affected_skills": [11141401, 11141505],
         "materials": [
           {
             "id": 20114,
@@ -42718,17 +42625,8 @@
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Soldier11.webp",
         "level": 1,
         "affected_skills": [
-          11041501,
-          11041601,
-          11041701,
-          11041801,
-          11041802,
-          11041803,
-          11041804,
-          11041901,
-          11042101,
-          11042201,
-          11042401
+          11041501, 11041601, 11041701, 11041801, 11041802, 11041803, 11041804,
+          11041901, 11042101, 11042201, 11042401
         ],
         "materials": [
           {
@@ -42745,18 +42643,8 @@
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Soldier11.webp",
         "level": 2,
         "affected_skills": [
-          11041501,
-          11041601,
-          11041701,
-          11041801,
-          11041802,
-          11041803,
-          11041804,
-          11041901,
-          11042101,
-          11042201,
-          11042301,
-          11042401
+          11041501, 11041601, 11041701, 11041801, 11041802, 11041803, 11041804,
+          11041901, 11042101, 11042201, 11042301, 11042401
         ],
         "materials": [
           {
@@ -42773,18 +42661,8 @@
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Soldier11.webp",
         "level": 3,
         "affected_skills": [
-          11041501,
-          11041601,
-          11041701,
-          11041801,
-          11041802,
-          11041803,
-          11041804,
-          11041901,
-          11042101,
-          11042201,
-          11042302,
-          11042401
+          11041501, 11041601, 11041701, 11041801, 11041802, 11041803, 11041804,
+          11041901, 11042101, 11042201, 11042302, 11042401
         ],
         "materials": [
           {
@@ -42801,18 +42679,8 @@
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Soldier11.webp",
         "level": 4,
         "affected_skills": [
-          11041501,
-          11041601,
-          11041701,
-          11041801,
-          11041802,
-          11041803,
-          11041804,
-          11041901,
-          11042101,
-          11042201,
-          11042303,
-          11042401
+          11041501, 11041601, 11041701, 11041801, 11041802, 11041803, 11041804,
+          11041901, 11042101, 11042201, 11042303, 11042401
         ],
         "materials": [
           {
@@ -42829,18 +42697,8 @@
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Soldier11.webp",
         "level": 5,
         "affected_skills": [
-          11041501,
-          11041601,
-          11041701,
-          11041801,
-          11041802,
-          11041803,
-          11041804,
-          11041901,
-          11042101,
-          11042201,
-          11042304,
-          11042401
+          11041501, 11041601, 11041701, 11041801, 11041802, 11041803, 11041804,
+          11041901, 11042101, 11042201, 11042304, 11042401
         ],
         "materials": [
           {
@@ -42857,18 +42715,8 @@
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Soldier11.webp",
         "level": 6,
         "affected_skills": [
-          11041501,
-          11041601,
-          11041701,
-          11041801,
-          11041802,
-          11041803,
-          11041804,
-          11041901,
-          11042101,
-          11042201,
-          11042305,
-          11042401
+          11041501, 11041601, 11041701, 11041801, 11041802, 11041803, 11041804,
+          11041901, 11042101, 11042201, 11042305, 11042401
         ],
         "materials": [
           {
@@ -47954,7 +47802,10 @@
     "id": 1431,
     "name": "Ye Shunguang",
     "scoring": {
-      "buffs": [],
+      "buffs": [
+        { "type": "CRITRateBonus", "value": "30", "format": "%" },
+        { "type": "DMGBonus", "value": "25", "format": "%" }
+      ],
       "debuffs": [],
       "dazeBonus": null
     },
@@ -76866,10 +76717,7 @@
         "description": "",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Burnice.webp",
         "level": 1,
-        "affected_skills": [
-          11171501,
-          11171601
-        ],
+        "affected_skills": [11171501, 11171601],
         "materials": [
           {
             "id": 20117,
@@ -76884,11 +76732,7 @@
         "description": "When Burnice's initial Energy Regen is greater than or equal to 1.8, every extra 0.1 points of initial Energy Regen increases Anomaly Mastery by 1 and DMG by 1%, up to a maximum increase of 25 Anomaly Mastery and 20% DMG. Core Passive: Nitro-Fuel Cocktail's Afterburn interval is reduced to 1.35s.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Burnice.webp",
         "level": 2,
-        "affected_skills": [
-          11171501,
-          11171601,
-          11171701
-        ],
+        "affected_skills": [11171501, 11171601, 11171701],
         "materials": [
           {
             "id": 20117,
@@ -76903,11 +76747,7 @@
         "description": "When Burnice's initial Energy Regen is greater than or equal to 1.8, every extra 0.1 points of initial Energy Regen increases Anomaly Mastery by 1.3 and DMG by 1.25%, up to a maximum increase of 25 Anomaly Mastery and 20% DMG. Core Passive: Nitro-Fuel Cocktail's Afterburn interval is reduced to 1.35s.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Burnice.webp",
         "level": 3,
-        "affected_skills": [
-          11171501,
-          11171601,
-          11171702
-        ],
+        "affected_skills": [11171501, 11171601, 11171702],
         "materials": [
           {
             "id": 20117,
@@ -76922,11 +76762,7 @@
         "description": "When Burnice's initial Energy Regen is greater than or equal to 1.8, every extra 0.1 points of initial Energy Regen increases Anomaly Mastery by 1.6 and DMG by 1.5%, up to a maximum increase of 25 Anomaly Mastery and 20% DMG. Core Passive: Nitro-Fuel Cocktail's Afterburn interval is reduced to 1.35s.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Burnice.webp",
         "level": 4,
-        "affected_skills": [
-          11171501,
-          11171601,
-          11171703
-        ],
+        "affected_skills": [11171501, 11171601, 11171703],
         "materials": [
           {
             "id": 20117,
@@ -76941,11 +76777,7 @@
         "description": "When Burnice's initial Energy Regen is greater than or equal to 1.8, every extra 0.1 points of initial Energy Regen increases Anomaly Mastery by 2 and DMG by 1.75%, up to a maximum increase of 25 Anomaly Mastery and 20% DMG. Core Passive: Nitro-Fuel Cocktail's Afterburn interval is reduced to 1.35s.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Burnice.webp",
         "level": 5,
-        "affected_skills": [
-          11171501,
-          11171601,
-          11171704
-        ],
+        "affected_skills": [11171501, 11171601, 11171704],
         "materials": [
           {
             "id": 20117,
@@ -76960,11 +76792,7 @@
         "description": "When Burnice's initial Energy Regen is greater than or equal to 1.8, every extra 0.1 points of initial Energy Regen increases Anomaly Mastery by 2.5 and DMG by 2%, up to a maximum increase of 25 Anomaly Mastery and 20% DMG. Core Passive: Nitro-Fuel Cocktail's Afterburn interval is reduced to 1.35s.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Burnice.webp",
         "level": 6,
-        "affected_skills": [
-          11171501,
-          11171601,
-          11171705
-        ],
+        "affected_skills": [11171501, 11171601, 11171705],
         "materials": [
           {
             "id": 20117,
@@ -78680,9 +78508,7 @@
         "description": "",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_SilverAnby.webp",
         "level": 1,
-        "affected_skills": [
-          13811401
-        ],
+        "affected_skills": [13811401],
         "materials": [
           {
             "id": 20138,
@@ -78697,10 +78523,7 @@
         "description": "During Additional Ability: Voltage Surge, all squad members' Aftershock DMG against enemies marked with Silver Star is increased to 34%.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_SilverAnby.webp",
         "level": 2,
-        "affected_skills": [
-          13811401,
-          13811501
-        ],
+        "affected_skills": [13811401, 13811501],
         "materials": [
           {
             "id": 20138,
@@ -78715,10 +78538,7 @@
         "description": "During Additional Ability: Voltage Surge, all squad members' Aftershock DMG against enemies marked with Silver Star is increased to 38%.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_SilverAnby.webp",
         "level": 3,
-        "affected_skills": [
-          13811401,
-          13811502
-        ],
+        "affected_skills": [13811401, 13811502],
         "materials": [
           {
             "id": 20138,
@@ -78733,10 +78553,7 @@
         "description": "During Additional Ability: Voltage Surge, all squad members' Aftershock DMG against enemies marked with Silver Star is increased to 42%.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_SilverAnby.webp",
         "level": 4,
-        "affected_skills": [
-          13811401,
-          13811503
-        ],
+        "affected_skills": [13811401, 13811503],
         "materials": [
           {
             "id": 20138,
@@ -78751,10 +78568,7 @@
         "description": "During Additional Ability: Voltage Surge, all squad members' Aftershock DMG against enemies marked with Silver Star is increased to 46%.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_SilverAnby.webp",
         "level": 5,
-        "affected_skills": [
-          13811401,
-          13811504
-        ],
+        "affected_skills": [13811401, 13811504],
         "materials": [
           {
             "id": 20138,
@@ -78769,10 +78583,7 @@
         "description": "During Additional Ability: Voltage Surge, all squad members' Aftershock DMG against enemies marked with Silver Star is increased to 50%.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_SilverAnby.webp",
         "level": 6,
-        "affected_skills": [
-          13811401,
-          13811505
-        ],
+        "affected_skills": [13811401, 13811505],
         "materials": [
           {
             "id": 20138,
@@ -80683,9 +80494,7 @@
         "description": "",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Ellen.webp",
         "level": 1,
-        "affected_skills": [
-          11191401
-        ],
+        "affected_skills": [11191401],
         "materials": [
           {
             "id": 20119,
@@ -80700,10 +80509,7 @@
         "description": "Ellen 's Additional Ability: Rising Storm CRIT DMG increases by 1.6% per stack. At 10 stacks, the attack ignores 3.3% of the target's Ice RES.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Ellen.webp",
         "level": 2,
-        "affected_skills": [
-          11191401,
-          11191501
-        ],
+        "affected_skills": [11191401, 11191501],
         "materials": [
           {
             "id": 20119,
@@ -80718,10 +80524,7 @@
         "description": "Ellen 's Additional Ability: Rising Storm CRIT DMG increases by 2.4% per stack. At 10 stacks, the attack ignores 5% of the target's Ice RES.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Ellen.webp",
         "level": 3,
-        "affected_skills": [
-          11191401,
-          11191502
-        ],
+        "affected_skills": [11191401, 11191502],
         "materials": [
           {
             "id": 20119,
@@ -80736,10 +80539,7 @@
         "description": "Ellen 's Additional Ability: Rising Storm CRIT DMG increases by 3.2% per stack. At 10 stacks, the attack ignores 6.7% of the target's Ice RES.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Ellen.webp",
         "level": 4,
-        "affected_skills": [
-          11191401,
-          11191503
-        ],
+        "affected_skills": [11191401, 11191503],
         "materials": [
           {
             "id": 20119,
@@ -80754,10 +80554,7 @@
         "description": "Ellen 's Additional Ability: Rising Storm CRIT DMG increases by 4% per stack. At 10 stacks, the attack ignores 8.3% of the target's Ice RES.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Ellen.webp",
         "level": 5,
-        "affected_skills": [
-          11191401,
-          11191504
-        ],
+        "affected_skills": [11191401, 11191504],
         "materials": [
           {
             "id": 20119,
@@ -80772,10 +80569,7 @@
         "description": "Ellen 's Additional Ability: Rising Storm CRIT DMG increases by 4.8% per stack. At 10 stacks, the attack ignores 10% of the target's Ice RES.",
         "image": "https://api.hakush.in/zzz/UI/AvatarSpecialAwakenBg_Ellen.webp",
         "level": 6,
-        "affected_skills": [
-          11191401,
-          11191505
-        ],
+        "affected_skills": [11191401, 11191505],
         "materials": [
           {
             "id": 20119,

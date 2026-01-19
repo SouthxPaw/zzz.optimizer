@@ -1,98 +1,357 @@
 {
   "comment": "Defines unconditional stat bonuses from mindscapes. Only includes bonuses that are always active (not conditional).",
   "mindscapes": {
-    "1211": {
+    "1091": {
       "comment": "Miyabi",
       "6": [
         {
-          "type": "CRIT_DMG",
-          "value": 60,
-          "note": "During Shimotsuki Stance, DMG +60%"
+          "type": "CRIT_Rate",
+          "value": 15,
+          "format": "%",
+          "note": ""
         }
       ]
     },
-    "1181": {
+    "1261": {
       "comment": "Jane Doe",
       "6": [
         {
           "type": "CRIT_Rate",
           "value": 20,
+          "format": "%",
           "note": "While in Passion state"
         },
         {
           "type": "CRIT_DMG",
           "value": 40,
+          "format": "%",
           "note": "While in Passion state"
         }
       ]
     },
-    "1041": {
+    "1321": {
       "comment": "Evelyn",
       "2": [
         {
           "type": "ATK%",
           "value": 15,
+          "format": "%",
           "note": "Unconditional ATK increase"
+        }
+      ],
+      "4": [
+        {
+          "type": "CRIT_DMG",
+          "value": 40,
+          "format": "%",
+          "note": ""
         }
       ]
     },
-    "1191": {
+    "1461": {
       "comment": "Seed",
       "6": [
         {
           "type": "CRIT_DMG",
           "value": 50,
+          "format": "%",
           "note": "Unconditional CRIT DMG increase"
         }
       ]
     },
-    "1111": {
+    "1051": {
       "comment": "Yidhari",
       "2": [
         {
           "type": "CRIT_DMG",
           "value": 40,
+          "format": "%",
           "note": "Unconditional CRIT DMG increase"
         }
       ]
     },
-    "1011": {
+    "1381": {
       "comment": "Soldier 0 - Anby",
       "2": [
         {
           "type": "CRIT_Rate",
           "value": 12,
+          "format": "%",
           "note": "Unconditional CRIT Rate increase"
         }
       ]
     },
-    "1021": {
+    "1191": {
       "comment": "Ellen",
       "6": [
         {
           "type": "PEN_Ratio",
           "value": 20,
+          "format": "%",
           "note": "When using certain attacks (treated as unconditional for simplicity)"
         }
       ]
     },
-    "1221": {
+    "1351": {
       "comment": "Pulchra",
+      "1": [
+        {
+          "type": "CRIT_Rate",
+          "value": 10,
+          "format": "%",
+          "note": ""
+        }
+      ],
       "2": [
         {
           "type": "ATK%",
           "value": 15,
+          "format": "%",
           "note": "While in Hunter's Gait state"
         }
       ]
     },
-    "1091": {
+    "1441": {
       "comment": "Manato",
       "4": [
         {
           "type": "HP%",
           "value": 8,
+          "format": "%",
           "note": "Unconditional Max HP increase"
+        }
+      ]
+    },
+    "1011": {
+      "comment": "Anby",
+      "1": [
+        {
+          "type": "Energy_Regen",
+          "value": 12,
+          "format": "%",
+          "note": "4th hit of basic"
+        }
+      ]
+    },
+    "1111": {
+      "comment": "Anton",
+      "4": [
+        {
+          "type": "CRIT_Rate",
+          "value": 12,
+          "format": "%",
+          "note": "When Anton uses a Chain Attack or Ultimate, all squad members' CRIT Rate increases by 10% for 12s."
+        }
+      ]
+    },
+    "1311": {
+      "comment": "Astra Yao",
+      "2": [
+        {
+          "type": "CRIT_Rate",
+          "value": 12,
+          "format": "%",
+          "note": "The ATK buff from Core Passive: Graceful Andante is further increased by 19%, with an increased maximum of 400. While in the Idyllic Cadenza state, when other characters switch in through a Quick Assist, Chain Attack, Defensive Assist, or Evasive Assist, Astra Yao will additionally follow up with 1 Tremolo and 3 Tone Clusters to attack. This effect can trigger once every 3s."
+        }
+      ]
+    },
+    "1471": {
+      "comment": "Banyue",
+      "2": [
+        {
+          "type": "CRIT_DMG",
+          "value": 15,
+          "format": "%",
+          "note": "The CRIT DMG bonus from the Core Passive is increased by an additional 15%, and the Fire DMG bonus is increased by an additional 15%. While in the Visage of Wrath state, Banyue restores an additional 5 Adrenaline when consuming Mountain's Might to unleash an EX Special Attack."
+        }
+      ]
+    },
+    "1081": {
+      "comment": "Billy",
+      "4": [
+        {
+          "type": "CRIT_Rate",
+          "value": 32,
+          "format": "%",
+          "note": "When Billy hits an enemy with his EX Special Attack, the skill's CRIT Rate increases based on the distance from the enemy. The closer he is to the target, the greater the effect, up to a maximum increase of 32%."
+        }
+      ]
+    },
+    "1071": {
+      "comment": "Caesar",
+      "4": [
+        {
+          "type": "Energy_Regen",
+          "value": 10,
+          "format": "%",
+          "note": "While Radiant Aegis is active during Core Passive: Barrier of Resilience, Caesar's Energy Generation increases by 10%, and the shield bearer's attack boost is increased to 150% of its original value."
+        }
+      ],
+      "6": [
+        {
+          "type": "CRIT_Rate",
+          "value": 30,
+          "format": "%",
+          "note": ""
+        },
+        {
+          "type": "CRIT_DMG",
+          "value": 60,
+          "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1391": {
+      "comment": "Ju Fufu",
+      "1": [
+        {
+          "type": "CRIT_Rate",
+          "value": 12,
+          "format": "%",
+          "note": ""
+        }
+      ],
+      "2": [
+        {
+          "type": "CRIT_DMG",
+          "value": 22,
+          "format": "%",
+          "note": ""
+        }
+      ],
+      "4": [
+        {
+          "type": "CRIT_DMG",
+          "value": 35,
+          "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1151": {
+      "comment": "Lucy",
+      "4": [
+        {
+          "type": "CRIT_DMG",
+          "value": 10,
+          "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1021": {
+      "comment": "Nekomata",
+      "4": [
+        {
+          "type": "CRIT_Rate",
+          "value": 14,
+          "format": "%",
+          "note": ""
+        }
+      ],
+      "6": [
+        {
+          "type": "CRIT_DMG",
+          "value": 54,
+          "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1031": {
+      "comment": "Nicole",
+      "6": [
+        {
+          "type": "CRIT_Rate",
+          "value": 15,
+          "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1301": {
+      "comment": "Orphie & Magus",
+      "2": [
+        {
+          "type": "ATK%",
+          "value": 20,
+          "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1251": {
+      "comment": "Qingyi",
+      "1": [
+        {
+          "type": "CRIT_Rate",
+          "value": 20,
+          "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1211": {
+      "comment": "Rina",
+      "4": [
+        {
+          "type": "Energy_Regen",
+          "value": 0.5,
+          "format": "flat",
+          "note": ""
+        }
+      ]
+    },
+    "1361": {
+      "comment": "Trigger",
+      "2": [
+        {
+          "type": "CRIT_DMG",
+          "value": 24,
+          "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1221": {
+      "comment": "Yanagi",
+      "1": [
+        {
+          "type": "Anomaly_Proficiency",
+          "value": 240,
+          "format": "flat",
+          "note": ""
+        }
+      ],
+      "4": [
+        {
+          "type": "PEN_Ratio",
+          "value": 16,
+          "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1371": {
+      "comment": "YiXuan",
+      "1": [
+        {
+          "type": "CRIT_Rate",
+          "value": 10,
+          "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1341": {
+      "comment": "Zhao",
+      "2": [
+        {
+          "type": "ATK%",
+          "value": 35,
+          "format": "%",
+          "note": ""
         }
       ]
     }

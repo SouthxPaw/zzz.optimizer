@@ -23,6 +23,12 @@
 
   <!-- Builds Tab -->
   <div *ngIf="activeTab === 'builds'" class="tab-content">
+    <!-- Import Action Bar -->
+    <div class="import-action-bar">
+      <button class="btn-secondary btn-compact" (click)="openEnkaImportModal()" title="Import builds from Enka Network">
+        Import from UID
+      </button>
+    </div>
     <!-- Important Assumptions Notice -->
     <div *ngIf="showAssumptionsNotice" class="assumptions-notice">
       <div class="notice-icon">ℹ️</div>
@@ -144,6 +150,19 @@
               M{{ m }}
             </button>
           </div>
+        </div>
+
+        <!-- Passive Bonuses Toggle -->
+        <div class="passive-toggle-section">
+          <label class="toggle-label">
+            <input
+              type="checkbox"
+              [(ngModel)]="includePassiveBonuses"
+              (change)="onPassiveBonusesToggle()"
+              class="toggle-checkbox"
+            />
+            <span class="toggle-text">Include Passive Bonuses in Stats</span>
+          </label>
         </div>
 
         <!-- W-Engine -->
@@ -424,8 +443,10 @@
                       trackBy: trackBySubStatIndex
                     "
                     class="substat"
+                    [class.priority]="isPrioritySubstat(subStat.type)"
                   >
-                    {{ formatStatType(subStat.type) }} +{{ subStat.value }}
+                    <span class="substat-type">{{ formatStatType(subStat.type) }}</span>
+                    <span class="substat-value">{{ subStat.value }}</span>
                   </div>
                 </div>
                 <button
@@ -526,7 +547,18 @@
             *ngIf="selectedBuild.equippedWEngine"
             class="wengine-active-effect"
           >
-            <h4>W-Engine Bonuses:</h4>
+            <div class="bonus-header">
+              <h4>W-Engine Bonuses:</h4>
+              <label class="enable-toggle">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="includeWEngineBonuses"
+                  (change)="onWEngineBonusesToggle()"
+                />
+                <span class="toggle-switch"></span>
+                <span class="toggle-label">Enable</span>
+              </label>
+            </div>
             <div class="wengine-effect-box">
               <p class="effect-name">
                 {{ selectedBuild.equippedWEngine.name }} (R{{
@@ -582,7 +614,20 @@
             *ngIf="getMindscapeBonuses().length > 0"
             class="mindscape-active-effect"
           >
-            <h4>Mindscape Bonuses:</h4>
+            <div class="bonus-header">
+              <h4>Mindscape Bonuses:</h4>
+              <div class="bonus-header-controls">
+                <label class="enable-toggle">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="includeMindscapeBonuses"
+                    (change)="onMindscapeBonusesToggle()"
+                  />
+                  <span class="toggle-switch"></span>
+                  <span class="toggle-label">Enable</span>
+                </label>
+              </div>
+            </div>
             <div class="mindscape-effect-box">
               <p class="effect-name">
                 M{{ selectedBuild.mindscapeLevel }} Active
@@ -609,6 +654,34 @@
                     }}{{ stat.isPercent ? "%" : "" }}{{ !last ? ", " : "" }}
                   </span>
                 </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Passive Bonuses -->
+          <div
+            *ngIf="getPassiveBonuses().length > 0"
+            class="passive-bonuses"
+          >
+            <div class="bonus-header">
+              <h4>Active Passive Bonuses:</h4>
+              <label class="enable-toggle">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="includePassiveBonuses"
+                  (change)="onPassiveBonusesToggle()"
+                />
+                <span class="toggle-switch"></span>
+                <span class="toggle-label">Enable</span>
+              </label>
+            </div>
+            <div class="passive-bonus-box">
+              <div
+                *ngFor="let bonus of getPassiveBonuses(); trackBy: trackByBonusIndex"
+                class="bonus-stat"
+              >
+                <span class="bonus-label">{{ bonus.name }}:</span>
+                <span class="bonus-value">+{{ bonus.value }}{{ bonus.isPercent ? "%" : "" }}</span>
               </div>
             </div>
           </div>
@@ -1041,6 +1114,83 @@
           aria-label="Confirm action"
         >
           {{ confirmDialogData.confirmText }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enka UID Import Modal -->
+  <div
+    *ngIf="showEnkaImportModal"
+    class="modal-overlay"
+    (click)="closeEnkaImportModal()"
+  >
+    <div class="modal-content enka-import-modal" (click)="$event.stopPropagation()">
+      <button
+        class="modal-close-btn"
+        (click)="closeEnkaImportModal()"
+        aria-label="Close modal"
+      >
+        ×
+      </button>
+
+      <h2>Import Agents from UID</h2>
+
+      <div class="modal-body">
+        <p class="modal-description">
+          Enter your ZZZ UID to import your showcase agents.
+          <br />
+          <br>
+          <strong>Requirements:</strong>
+        </p>
+        <ul class="modal-requirements">
+          <li>Your profile must be set to <strong>public</strong> in-game settings</li>
+          <li>Characters must be in your <strong>showcase</strong> (visible on profile)</li>
+          <li>First request may take 5-10 seconds</li>
+        </ul>
+
+        <div class="form-group">
+          <label for="enka-uid">UID</label>
+          <input
+            id="enka-uid"
+            type="text"
+            [(ngModel)]="enkaUid"
+            placeholder="Enter UID here"
+            class="form-control"
+            [disabled]="isImportingFromEnka"
+            (keyup.enter)="importFromEnka()"
+          />
+        </div>
+
+        <div *ngIf="enkaImportError" class="alert alert-error">
+          {{ enkaImportError }}
+        </div>
+
+        <div *ngIf="enkaImportSuccess" class="alert alert-success">
+          {{ enkaImportSuccess }}
+        </div>
+
+        <div *ngIf="isImportingFromEnka" class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Fetching data from Enka Network via proxy...</p>
+          <p class="spinner-note">This may take a few seconds</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="btn-secondary"
+          (click)="closeEnkaImportModal()"
+          [disabled]="isImportingFromEnka"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn-primary"
+          (click)="importFromEnka()"
+          [disabled]="isImportingFromEnka || !enkaUid.trim()"
+        >
+          {{ isImportingFromEnka ? 'Importing...' : 'Import' }}
         </button>
       </div>
     </div>
