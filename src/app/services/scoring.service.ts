@@ -56,6 +56,7 @@ interface AgentBreakpoints {
   };
   priorityStats: string[];
   statWeights?: { [stat: string]: number };
+  mainStatWeights?: { [slot: string]: { [stat: string]: number } };
 }
 
 interface DiscSetData {
@@ -305,29 +306,36 @@ export class ScoringService {
       };
     }
 
-    // STEP 1: Main Stat Points (3 points on 0-30 scale if valid for slot)
-    // Award 3 points if the main stat is a valid/possible main stat for this slot
+    // STEP 1: Main Stat Points (tiered: 3, 2, or 0 based on mainStatWeights)
     // Drive 1-3 have static main stats (HP, ATK, DEF), so always award 3 points
-    // Drive 4-6 have variable main stats, so only award if it's optimal for the agent
+    // Drive 4-6 use mainStatWeights for tiered scoring (3 = optimal, 2 = acceptable, 0 = bad)
     let mainStatPoints = 0;
-    const baseMainStatBonus = MAIN_STAT_BONUS[disc.slot]?.[disc.mainStat.type] || 0;
 
     // For Drive 1, 2, 3: Always award main stat points (they're static, can't be changed)
     if (disc.slot === 'Drive1' || disc.slot === 'Drive2' || disc.slot === 'Drive3') {
       mainStatPoints = 3;
     }
-    // For Drive 4, 5, 6: Only award if it's a priority stat for the agent
-    else if (baseMainStatBonus > 0 && agentId && this.agentBreakpoints[agentId]) {
+    // For Drive 4, 5, 6: Use mainStatWeights for tiered scoring
+    else if (agentId && this.agentBreakpoints[agentId]) {
       const agentConfig = this.agentBreakpoints[agentId];
-      if (agentConfig.priorityStats && Array.isArray(agentConfig.priorityStats)) {
-        if (agentConfig.priorityStats.includes(disc.mainStat.type)) {
-          mainStatPoints = 3;
+      const mainStatWeight = agentConfig.mainStatWeights?.[disc.slot]?.[disc.mainStat.type];
+
+      if (mainStatWeight !== undefined) {
+        // Use the defined mainStatWeight (3, 2, or 0)
+        mainStatPoints = mainStatWeight;
+      } else {
+        // Fallback: if main stat not defined in mainStatWeights, check priorityStats
+        if (agentConfig.priorityStats?.includes(disc.mainStat.type)) {
+          mainStatPoints = 2; // Assume tier 2 if in priorityStats but not in mainStatWeights
         }
       }
     }
-    // No agent specified - award for any valid main stat on Drive 4-6
-    else if (!agentId && baseMainStatBonus > 0) {
-      mainStatPoints = 3;
+    // No agent specified - award 3 for any valid main stat
+    else {
+      const baseMainStatBonus = MAIN_STAT_BONUS[disc.slot]?.[disc.mainStat.type] || 0;
+      if (baseMainStatBonus > 0) {
+        mainStatPoints = 3;
+      }
     }
 
     breakdown.mainStatPoints = mainStatPoints;
@@ -361,24 +369,32 @@ export class ScoringService {
           rolls: rolls,
         });
       } else {
-        // Wasted stat (weight = 0) - give 0 points, no penalty
+        // BLACK tier - wasted stat gets minimal points (~0.5 pts/roll)
+        // This matches Interknot's treatment of off-meta stats
+        const BLACK_TIER_WEIGHT = 0.17; // 0.17 × 3.0 = 0.51 pts/roll
+        const points = rolls * BLACK_TIER_WEIGHT * 3.0;
+        substatPoints += points;
+
+        breakdown.subStatPoints += points;
         breakdown.details.push({
-          stat: `${substat.type} (not priority)`,
+          stat: `${substat.type} (wasted, BLACK tier)`,
           value: substat.value,
-          points: 0,
+          points: Math.round(points * 10) / 10,
           rolls: rolls,
         });
       }
     });
 
-    // STEP 3: Total Rolls Bonus (1 point if 5+ total rolls)
+    // STEP 3: Total Rolls Bonus (1 point if 5+ UPGRADE rolls, not total rolls)
+    // Interknot counts upgrade rolls only (enhancements), not initial substat rolls
+    const upgradeRolls = totalRollCount - disc.subStats.length;
     let rollBonus = 0;
-    if (totalRollCount >= 5) {
+    if (upgradeRolls >= 5) {
       rollBonus = 1;
       breakdown.rollBonusPoints = rollBonus;
       breakdown.details.push({
-        stat: 'Total Rolls Bonus (5+)',
-        value: totalRollCount,
+        stat: `Upgrade Rolls Bonus (${upgradeRolls}/5+)`,
+        value: upgradeRolls,
         points: rollBonus,
         rolls: totalRollCount,
       });
