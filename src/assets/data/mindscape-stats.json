@@ -12,23 +12,6 @@
         }
       ]
     },
-    "1261": {
-      "comment": "Jane Doe",
-      "6": [
-        {
-          "type": "CRIT_Rate",
-          "value": 20,
-          "format": "%",
-          "note": "While in Passion state"
-        },
-        {
-          "type": "CRIT_DMG",
-          "value": 40,
-          "format": "%",
-          "note": "While in Passion state"
-        }
-      ]
-    },
     "1321": {
       "comment": "Evelyn",
       "2": [
