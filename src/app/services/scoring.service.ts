@@ -236,7 +236,12 @@ export class ScoringService {
   /**
    * Calculate disc score based on substats and main stat
    * Uses agent-specific weights from breakpoints config
-   * Combines stat importance weights with roll quality multiplier
+   *
+   * NEW ALGORITHM (v2) - Aligned with Interknot Network rating system:
+   * - Focuses on "where did rolls go" not "what substats exist"
+   * - No penalty for substats with 0 rolls
+   * - Simple formula: Main Stat (3pts) + Substat Rolls (rolls × weight × 3.0) + Roll Bonus (1pt)
+   * - Converts 0-30 Interknot scale to 0-140+ scale (multiply by 4.8)
    *
    * BACKWARD COMPATIBLE:
    * - Old agents use priorityStats: ['CRIT_Rate', 'CRIT_DMG'] (all weighted 1.0)
@@ -246,10 +251,11 @@ export class ScoringService {
     disc: Disc,
     agentId?: string
   ): { score: number; rating: DiscRating; breakdown: any } {
-    let totalPoints = 0;
     const breakdown = {
       mainStatPoints: 0,
       subStatPoints: 0,
+      rollBonusPoints: 0,
+      interknot_score: 0,
       detectedBuild: null as string | null,
       totalRolls: 0,
       details: [] as Array<{
@@ -299,225 +305,106 @@ export class ScoringService {
       };
     }
 
-    // Award points for optimal main stat - only if it's a priority stat for this agent
-    let mainStatBonus = 0;
+    // STEP 1: Main Stat Points (3 points on 0-30 scale if valid for slot)
+    // Award 3 points if the main stat is a valid/possible main stat for this slot
+    // Drive 1-3 have static main stats (HP, ATK, DEF), so always award 3 points
+    // Drive 4-6 have variable main stats, so only award if it's optimal for the agent
+    let mainStatPoints = 0;
     const baseMainStatBonus = MAIN_STAT_BONUS[disc.slot]?.[disc.mainStat.type] || 0;
 
-    // Check if the main stat is in the agent's priority stats (not statWeights, which is for substats only)
-    if (baseMainStatBonus > 0 && agentId && this.agentBreakpoints[agentId]) {
+    // For Drive 1, 2, 3: Always award main stat points (they're static, can't be changed)
+    if (disc.slot === 'Drive1' || disc.slot === 'Drive2' || disc.slot === 'Drive3') {
+      mainStatPoints = 3;
+    }
+    // For Drive 4, 5, 6: Only award if it's a priority stat for the agent
+    else if (baseMainStatBonus > 0 && agentId && this.agentBreakpoints[agentId]) {
       const agentConfig = this.agentBreakpoints[agentId];
       if (agentConfig.priorityStats && Array.isArray(agentConfig.priorityStats)) {
-        // Check if main stat appears in priorityStats array
         if (agentConfig.priorityStats.includes(disc.mainStat.type)) {
-          mainStatBonus = baseMainStatBonus;
+          mainStatPoints = 3;
         }
       }
-    } else if (!agentId) {
-      // No agent specified - award bonus for any valid main stat
-      mainStatBonus = baseMainStatBonus;
+    }
+    // No agent specified - award for any valid main stat on Drive 4-6
+    else if (!agentId && baseMainStatBonus > 0) {
+      mainStatPoints = 3;
     }
 
-    breakdown.mainStatPoints = mainStatBonus;
-    totalPoints += mainStatBonus;
+    breakdown.mainStatPoints = mainStatPoints;
 
-    // Score substats with: roll count × stat weight × quality multiplier
-    // Note: Each disc has 3-4 initial substats + 5 upgrade rolls
-    let totalWeightedRolls = 0;
-    let priorityStatCount = 0;
-    let maxRollCount = 0; // Count of substats with 4+ rolls
-    let totalUpgradeRolls = 0; // Track total upgrade rolls (should be ~5)
-    let upgradeRollsInPriorityStats = 0; // Track upgrades that went to priority stats
+    // STEP 2: Substat Points (ONLY count priority stats)
+    // Formula: rolls × weight × 3.0 per priority stat
+    let substatPoints = 0;
+    let totalRollCount = 0;
 
     disc.subStats.forEach((substat) => {
-      // Calculate total roll count for this substat (initial + upgrades)
+      // Calculate total roll count for this substat
       const rolls = calculateRollCount(substat.type, substat.value);
+      totalRollCount += rolls;
       breakdown.totalRolls += rolls;
-
-      // Estimate upgrade rolls: total rolls - 1 (subtract initial roll)
-      // Each substat starts with 1 roll, then gets 0-5 upgrade rolls
-      const upgradeRolls = Math.max(0, rolls - 1);
-      totalUpgradeRolls += upgradeRolls;
 
       // Get stat weight (0.7-1.0 range, or undefined if not a priority stat)
       const statWeight = statWeights[substat.type];
 
-      // Only score stats that are in the agent's priority list
+      // Only award points for priority stats (weight > 0)
       if (statWeight !== undefined && statWeight > 0) {
-        upgradeRollsInPriorityStats += upgradeRolls;
+        // NEW FORMULA: rolls × weight × 3.0
+        // This aligns with Interknot's ~3.0 points per roll in priority stats
+        const points = rolls * statWeight * 3.0;
+        substatPoints += points;
 
-        // Calculate quality multiplier based on roll count
-        // Higher rolls into priority stats = better quality
-        // Max realistic: 6 rolls (1 initial + 5 upgrades all into one stat)
-        const rollQuality = Math.min(rolls / 6, 1.0);
-
-        // Quality multiplier: 0.7 base + up to 0.3 bonus for high rolls
-        // 1 roll = 0.77x, 3 rolls = 0.85x, 6 rolls = 1.0x
-        const qualityMultiplier = 0.7 + rollQuality * 0.3;
-
-        // Final weighted score: rolls × stat importance × roll quality
-        const weightedScore = rolls * statWeight * qualityMultiplier;
-
-        // NEW: Add bonus points for each upgrade roll into a priority stat
-        // Rewards players for getting lucky with rolls
-        const rollBonus = upgradeRolls * 0.5; // 0.5 points per upgrade roll into priority stat
-
-        totalWeightedRolls += weightedScore;
-        priorityStatCount++;
-
-        // Track high-roll substats for bonus (4+ rolls = at least 3 upgrades)
-        if (rolls >= 4) {
-          maxRollCount++;
-        }
-
-        const totalPoints = weightedScore + rollBonus;
-        breakdown.subStatPoints += totalPoints;
+        breakdown.subStatPoints += points;
         breakdown.details.push({
-          stat: `${substat.type} (×${statWeight}, ${(
-            qualityMultiplier * 100
-          ).toFixed(0)}% quality, +${rollBonus} roll bonus)`,
+          stat: `${substat.type} (×${statWeight.toFixed(2)})`,
           value: substat.value,
-          points: Math.round(totalPoints * 10) / 10,
+          points: Math.round(points * 10) / 10,
           rolls: rolls,
         });
       } else {
-        // Wasted stats get small consolation points to be less harsh
-        // 1 point per roll for ANY percentage stat (HP%, ATK%, DEF%, CRIT Rate, CRIT DMG, Anomaly Prof, etc.)
-        // 0.5 points per roll for flat stats (HP, ATK, DEF)
-        let wastedPoints = 0;
-        let pointsLabel = '';
-
-        // Check if it's a flat stat (only HP, ATK, DEF have flat versions)
-        const isFlatStat = ['HP', 'ATK', 'DEF'].includes(substat.type);
-
-        if (isFlatStat) {
-          // Flat stats get 0.5 points per roll
-          wastedPoints = rolls * 0.5;
-          pointsLabel = '0.5pt/roll';
-        } else {
-          // All percentage stats get 1 point per roll
-          // This includes: HP%, ATK%, DEF%, CRIT Rate, CRIT DMG, PEN, PEN Ratio,
-          // Anomaly Proficiency, Anomaly Mastery, Energy Regen, Impact
-          wastedPoints = rolls * 1;
-          pointsLabel = '1pt/roll';
-        }
-
-        breakdown.subStatPoints += wastedPoints;
+        // Wasted stat (weight = 0) - give 0 points, no penalty
         breakdown.details.push({
-          stat: substat.type + ` (wasted, ${pointsLabel})`,
+          stat: `${substat.type} (not priority)`,
           value: substat.value,
-          points: Math.round(wastedPoints * 10) / 10,
+          points: 0,
           rolls: rolls,
         });
       }
     });
 
-    // Calculate upgrade roll efficiency (what % of the 5 upgrades went to priority stats)
-    const upgradeEfficiency =
-      totalUpgradeRolls > 0
-        ? upgradeRollsInPriorityStats / totalUpgradeRolls
-        : 0;
-
-    // Bonus for having multiple priority stats
-    // This rewards good substat selection - having the RIGHT stats matters
-    let substatBonus = 0;
-    if (priorityStatCount === 4) {
-      // Perfect: all 4 substats are priority stats
-      // Bonus: +12 effective rolls - NO wasted stats
-      substatBonus = 12;
+    // STEP 3: Total Rolls Bonus (1 point if 5+ total rolls)
+    let rollBonus = 0;
+    if (totalRollCount >= 5) {
+      rollBonus = 1;
+      breakdown.rollBonusPoints = rollBonus;
       breakdown.details.push({
-        stat: 'Perfect Substats (4/4)',
-        value: 4,
-        points: substatBonus,
-        rolls: 0,
-      });
-    } else if (priorityStatCount === 3) {
-      // Excellent: 3/4 substats are priority stats (only 1 wasted)
-      // Bonus: +8 effective rolls
-      substatBonus = 8;
-      breakdown.details.push({
-        stat: 'Excellent Substats (3/4)',
-        value: 3,
-        points: substatBonus,
-        rolls: 0,
+        stat: 'Total Rolls Bonus (5+)',
+        value: totalRollCount,
+        points: rollBonus,
+        rolls: totalRollCount,
       });
     }
 
-    // Bonus for upgrade roll efficiency
-    // Rewards discs where the 5 upgrade rolls went to priority stats instead of being wasted
-    let upgradeEfficiencyBonus = 0;
-    if (upgradeEfficiency >= 0.8) {
-      // 80%+ of upgrades went to priority stats (4+ out of 5)
-      upgradeEfficiencyBonus = 10;
-      breakdown.details.push({
-        stat: `Upgrade Efficiency (${Math.round(upgradeEfficiency * 100)}%)`,
-        value: upgradeRollsInPriorityStats,
-        points: upgradeEfficiencyBonus,
-        rolls: totalUpgradeRolls,
-      });
-    } else if (upgradeEfficiency >= 0.6) {
-      // 60%+ of upgrades went to priority stats (3+ out of 5)
-      upgradeEfficiencyBonus = 6;
-      breakdown.details.push({
-        stat: `Upgrade Efficiency (${Math.round(upgradeEfficiency * 100)}%)`,
-        value: upgradeRollsInPriorityStats,
-        points: upgradeEfficiencyBonus,
-        rolls: totalUpgradeRolls,
-      });
-    }
+    // STEP 4: Calculate Interknot score (0-30 scale)
+    const interknot_score = mainStatPoints + substatPoints + rollBonus;
+    breakdown.interknot_score = Math.round(interknot_score * 10) / 10;
 
-    // Bonus for high-roll substats (4+ rolls = 3+ upgrades into one stat)
-    // Rewards discs with maxed or near-maxed priority stats
-    let highRollBonus = 0;
-    if (maxRollCount >= 2) {
-      // 2+ substats with 4+ rolls = excellent concentration
-      highRollBonus = maxRollCount * 4; // 4 bonus rolls per high-roll stat
-      breakdown.details.push({
-        stat: `High Roll Bonus (${maxRollCount} substats)`,
-        value: maxRollCount,
-        points: highRollBonus,
-        rolls: 0,
-      });
-    } else if (maxRollCount === 1) {
-      // 1 substat with 4+ rolls = very good
-      highRollBonus = 5; // 5 bonus rolls
-      breakdown.details.push({
-        stat: 'High Roll Bonus (1 substat)',
-        value: 1,
-        points: highRollBonus,
-        rolls: 0,
-      });
-    }
-
-    // Total effective rolls with all bonuses
-    const totalEffectiveRolls =
-      totalWeightedRolls +
-      substatBonus +
-      upgradeEfficiencyBonus +
-      highRollBonus;
-
-    // Convert to 0-100 scale
-    // Max theoretical weighted: 4 stats × 5 rolls × 1.0 weight × 1.0 quality = 20 base
-    // With bonuses (perfect substats +12, high rolls), god rolls can exceed 100
-    const maxTheoretical = 20;
-    let finalScore = (totalEffectiveRolls / maxTheoretical) * 100;
-
-    // Don't cap at 100 - let god rolls exceed it
-    finalScore = Math.round(finalScore * 10) / 10;
+    // STEP 5: Convert to our 0-140+ scale (multiply by 4.8)
+    // Interknot 28+ (GOD) = 134+ (VH)
+    // Interknot 24+ (SSS) = 115+ (SSS)
+    const finalScore = interknot_score * 4.8;
 
     breakdown.details.push({
-      stat: 'Total Effective Rolls',
-      value: Math.round(totalEffectiveRolls * 10) / 10,
-      points: finalScore,
+      stat: 'Interknot Score (0-30 scale)',
+      value: breakdown.interknot_score,
+      points: Math.round(finalScore * 10) / 10,
       rolls: breakdown.totalRolls,
     });
 
-    totalPoints = finalScore + mainStatBonus;
-
     // Determine rating based on total points
-    const rating = this.getDiscRating(totalPoints);
+    const rating = this.getDiscRating(finalScore);
 
     return {
-      score: Math.round(totalPoints * 10) / 10,
+      score: Math.round(finalScore * 10) / 10,
       rating: rating,
       breakdown: breakdown,
     };
