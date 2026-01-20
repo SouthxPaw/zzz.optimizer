@@ -191,7 +191,7 @@
         "Element_DMG"
       ],
       "statWeights": {
-        "Anomaly_Proficiency": 1,
+        "Anomaly_Proficiency": 1.25,
         "ATK%": 1,
         "ATK": 0.75,
         "PEN": 0.85
@@ -457,7 +457,7 @@
       "statWeights": {
         "CRIT_DMG": 1,
         "CRIT_Rate": 1,
-        "Anomaly_Proficiency": 1,
+        "Anomaly_Proficiency": 1.25,
         "PEN": 0.75,
         "ATK": 0.6,
         "ATK%": 0.85
@@ -1115,7 +1115,7 @@
         "Element_DMG"
       ],
       "statWeights": {
-        "Anomaly_Proficiency": 1,
+        "Anomaly_Proficiency": 1.25,
         "PEN": 0.75,
         "ATK": 0.6,
         "ATK%": 0.85
@@ -1180,7 +1180,7 @@
         "Element_DMG"
       ],
       "statWeights": {
-        "Anomaly_Proficiency": 1,
+        "Anomaly_Proficiency": 1.25,
         "PEN": 0.75,
         "ATK": 0.6,
         "ATK%": 0.85
@@ -1375,7 +1375,7 @@
         "Element_DMG"
       ],
       "statWeights": {
-        "Anomaly_Proficiency": 1,
+        "Anomaly_Proficiency": 1.25,
         "CRIT_Rate": 1,
         "PEN": 0.85,
         "ATK": 0.85,
@@ -1441,7 +1441,7 @@
         "Element_DMG"
       ],
       "statWeights": {
-        "Anomaly_Proficiency": 1,
+        "Anomaly_Proficiency": 1.25,
         "PEN": 0.75,
         "ATK": 0.75,
         "ATK%": 0.85
@@ -1636,7 +1636,7 @@
         "Element_DMG"
       ],
       "statWeights": {
-        "Anomaly_Proficiency": 1,
+        "Anomaly_Proficiency": 1.25,
         "PEN": 0.75,
         "ATK": 0.6,
         "ATK%": 0.85
@@ -1765,7 +1765,7 @@
         "Element_DMG"
       ],
       "statWeights": {
-        "Anomaly_Proficiency": 1,
+        "Anomaly_Proficiency": 1.25,
         "PEN": 0.75,
         "ATK": 0.75,
         "ATK%": 0.85
@@ -2095,7 +2095,7 @@
         "Element_DMG"
       ],
       "statWeights": {
-        "Anomaly_Proficiency": 1,
+        "Anomaly_Proficiency": 1.25,
         "PEN": 0.75,
         "ATK": 0.75,
         "ATK%": 0.85
@@ -2230,7 +2230,7 @@
       "statWeights": {
         "CRIT_DMG": 1,
         "CRIT_Rate": 1,
-        "Anomaly_Proficiency": 1,
+        "Anomaly_Proficiency": 1.25,
         "PEN": 0.75,
         "ATK": 0.6,
         "ATK%": 0.85
@@ -2556,7 +2556,7 @@
         "Element_DMG"
       ],
       "statWeights": {
-        "Anomaly_Proficiency": 1,
+        "Anomaly_Proficiency": 1.25,
         "PEN": 0.75,
         "ATK": 0.6,
         "ATK%": 0.85
