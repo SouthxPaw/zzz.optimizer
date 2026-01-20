@@ -1100,8 +1100,8 @@ export class ScoringService {
 
     // Convert disc ratings to numeric scores
     const ratingToScore: { [key: string]: number } = {
-      'VOID HUNTER': 110,  // Top 3% globally - exceeds perfection
-      'LEGENDARY': 105,    // Top 5% - near-perfect
+      'VH': 110,  // Top 3% globally - exceeds perfection
+      'LGD': 105,    // Top 5% - near-perfect
       SSS: 100,            // Top 10% - perfect
       SS: 90,
       S: 80,

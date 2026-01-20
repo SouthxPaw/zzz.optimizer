@@ -376,6 +376,36 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
   }
 
+  isDiscEnabled(slot: DiscSlot): boolean {
+    if (!this.selectedBuild) return true;
+    // Default to true if not explicitly set
+    return this.selectedBuild.enabledDiscs?.[slot] ?? true;
+  }
+
+  async onDiscToggle(slot: DiscSlot) {
+    if (!this.selectedBuild) return;
+
+    // Initialize enabledDiscs if it doesn't exist
+    if (!this.selectedBuild.enabledDiscs) {
+      this.selectedBuild.enabledDiscs = {};
+    }
+
+    // Toggle the disc's enabled state
+    const currentState = this.selectedBuild.enabledDiscs[slot] ?? true;
+    const newState = !currentState;
+
+    // Update the enabledDiscs object
+    const updatedEnabledDiscs = {
+      ...this.selectedBuild.enabledDiscs,
+      [slot]: newState
+    };
+
+    // Update build with new enabled state and recalculate stats
+    await this.buildService.updateBuild(this.selectedBuild.id, {
+      enabledDiscs: updatedEnabledDiscs
+    });
+  }
+
   async equipWEngine(wEngine: WEngine | undefined) {
     if (!this.selectedBuild || !wEngine) return;
 

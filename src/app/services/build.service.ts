@@ -22,6 +22,7 @@ export interface AgentBuild {
   equippedWEngine?: WEngine;
   wEngineRefinement: number; // 1-5 (number of copies: 1 copy = refinement 1, 5 copies = refinement 5)
   equippedDiscs: { [slot: string]: Disc }; // Drive1-6
+  enabledDiscs?: { [slot: string]: boolean }; // Track which discs are enabled (default true)
   calculatedStats: BaseStats; // Final calculated stats
   score: number; // Overall build rating
   createdAt: Date;
@@ -80,6 +81,15 @@ export class BuildService {
           }
           if (build.includePassiveBonuses === undefined) {
             build.includePassiveBonuses = true;
+          }
+          // Initialize enabledDiscs if not present - default all equipped discs to enabled
+          if (build.enabledDiscs === undefined) {
+            build.enabledDiscs = {};
+            if (build.equippedDiscs) {
+              Object.keys(build.equippedDiscs).forEach(slot => {
+                build.enabledDiscs![slot] = true;
+              });
+            }
           }
         });
 
@@ -149,6 +159,7 @@ export class BuildService {
       mindscapeLevel: mindscapeLevel,
       wEngineRefinement: 1, // Default to 1 copy (refinement 1)
       equippedDiscs: {},
+      enabledDiscs: {},
       calculatedStats: { ...agent.lvl60Stats }, // Start with base stats
       score: 0,
       createdAt: new Date(),
@@ -196,7 +207,8 @@ export class BuildService {
         updates.mindscapeLevel !== undefined ||
         updates.includeWEngineBonuses !== undefined ||
         updates.includeMindscapeBonuses !== undefined ||
-        updates.includePassiveBonuses !== undefined) {
+        updates.includePassiveBonuses !== undefined ||
+        updates.enabledDiscs !== undefined) {
       this.statCalculator.clearCache();
       await this.recalculateStats(builds[index]);
     }
@@ -241,7 +253,8 @@ export class BuildService {
       build.wEngineRefinement,
       build.includeWEngineBonuses ?? true,
       build.includeMindscapeBonuses ?? true,
-      build.includePassiveBonuses ?? true
+      build.includePassiveBonuses ?? true,
+      build.enabledDiscs ?? {}
     );
 
 
@@ -312,8 +325,13 @@ export class BuildService {
     const equippedDiscs = { ...build.equippedDiscs };
     equippedDiscs[disc.slot] = disc;
 
+    // Initialize enabledDiscs if needed and set this disc to enabled
+    const enabledDiscs = { ...(build.enabledDiscs || {}) };
+    enabledDiscs[disc.slot] = true;
+
     await this.updateBuild(buildId, {
-      equippedDiscs: equippedDiscs
+      equippedDiscs: equippedDiscs,
+      enabledDiscs: enabledDiscs
     });
   }
 
@@ -329,8 +347,13 @@ export class BuildService {
     const equippedDiscs = { ...build.equippedDiscs };
     delete equippedDiscs[slot];
 
+    // Also remove from enabledDiscs
+    const enabledDiscs = { ...(build.enabledDiscs || {}) };
+    delete enabledDiscs[slot];
+
     await this.updateBuild(buildId, {
-      equippedDiscs: equippedDiscs
+      equippedDiscs: equippedDiscs,
+      enabledDiscs: enabledDiscs
     });
   }
 

@@ -66,15 +66,15 @@ export const MAIN_STAT_BONUS: { [slot: string]: { [stat: string]: number } } = {
  * Updated with normalized grading (relative to realistic benchmarks)
  */
 export interface DiscRating {
-  grade: 'VOID HUNTER' | 'LEGENDARY' | 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: 'VH' | 'LGD' | 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
   minPoints: number;
   color: string;
   description: string;
 }
 
 export const DISC_RATING_THRESHOLDS: DiscRating[] = [
-  { grade: 'VOID HUNTER', minPoints: 140, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection' },
-  { grade: 'LEGENDARY', minPoints: 135, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-perfect disc' },
+  { grade: 'VH', minPoints: 140, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection' },
+  { grade: 'LGD', minPoints: 135, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-perfect disc' },
   { grade: 'SSS', minPoints: 130, color: '#FF6B9D', description: 'Perfect - Outstanding disc' },
   { grade: 'SS', minPoints: 120, color: '#FF8C42', description: 'Excellent - Great disc' },
   { grade: 'S', minPoints: 105, color: '#FFD93D', description: 'Very Good - Above average disc' },
