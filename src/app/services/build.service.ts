@@ -325,8 +325,13 @@ export class BuildService {
     const equippedDiscs = { ...build.equippedDiscs };
     equippedDiscs[disc.slot] = disc;
 
+    // Initialize enabledDiscs if needed and set this disc to enabled
+    const enabledDiscs = { ...(build.enabledDiscs || {}) };
+    enabledDiscs[disc.slot] = true;
+
     await this.updateBuild(buildId, {
-      equippedDiscs: equippedDiscs
+      equippedDiscs: equippedDiscs,
+      enabledDiscs: enabledDiscs
     });
   }
 
@@ -342,8 +347,13 @@ export class BuildService {
     const equippedDiscs = { ...build.equippedDiscs };
     delete equippedDiscs[slot];
 
+    // Also remove from enabledDiscs
+    const enabledDiscs = { ...(build.enabledDiscs || {}) };
+    delete enabledDiscs[slot];
+
     await this.updateBuild(buildId, {
-      equippedDiscs: equippedDiscs
+      equippedDiscs: equippedDiscs,
+      enabledDiscs: enabledDiscs
     });
   }
 
