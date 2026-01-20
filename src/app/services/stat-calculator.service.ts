@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { Agent, BaseStats, DiscSlot } from '../models/agent.model';
-import { Disc, SubStatType } from '../models/disc.model';
+import { Disc } from '../models/disc.model';
 import { WEngine } from '../models/wengine.model';
 import { DISC_SETS } from '../constants/disc-sets';
 import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
@@ -42,7 +42,6 @@ interface DiscSetEquipmentData {
 })
 export class StatCalculatorService {
   private discSetEquipmentData: { [setName: string]: DiscSetEquipmentData } = {};
-  private dataLoaded = false;
   private dataLoadPromise: Promise<void>;
 
   // Memoization cache for stat calculations
@@ -78,7 +77,6 @@ export class StatCalculatorService {
         }
       });
 
-      this.dataLoaded = true;
       console.log('Loaded disc set equipment data for stat calculation');
     } catch (error) {
       console.error('Failed to load disc set equipment data:', error);
@@ -94,11 +92,13 @@ export class StatCalculatorService {
     wEngineRefinement: number = 1,
     includeWEngineBonuses: boolean = true,
     includeMindscapeBonuses: boolean = true,
-    includePassiveBonuses: boolean = true
+    includePassiveBonuses: boolean = true,
+    enabledDiscs: { [slot: string]: boolean } = {}
   ): BaseStats {
 
-    // Generate cache key (include all bonus flags in cache)
-    const cacheKey = this.generateCacheKey(agent.id, level, wEngine?.id, discs, mindscapeLevel, wEngineRefinement) + `:${includeWEngineBonuses}:${includeMindscapeBonuses}:${includePassiveBonuses}`;
+    // Generate cache key (include all bonus flags and enabled discs in cache)
+    const enabledDiscsKey = Object.keys(discs).map(slot => `${slot}:${enabledDiscs[slot] ?? true}`).join(',');
+    const cacheKey = this.generateCacheKey(agent.id, level, wEngine?.id, discs, mindscapeLevel, wEngineRefinement) + `:${includeWEngineBonuses}:${includeMindscapeBonuses}:${includePassiveBonuses}:${enabledDiscsKey}`;
 
     // Check cache
     const cached = this.statCache.get(cacheKey);
@@ -134,14 +134,19 @@ export class StatCalculatorService {
     } else {
     }
 
-    // Apply disc main stats
-    this.applyDiscMainStats(stats, discs, agent);
+    // Filter out disabled discs
+    const enabledDiscsOnly = Object.fromEntries(
+      Object.entries(discs).filter(([slot, disc]) => disc && (enabledDiscs[slot] ?? true))
+    ) as { [key in DiscSlot]?: Disc };
 
-    // Apply disc substats
-    this.applyDiscSubStats(stats, discs, agent);
+    // Apply disc main stats (only from enabled discs)
+    this.applyDiscMainStats(stats, enabledDiscsOnly);
 
-    // Apply set bonuses (this applies percentage bonuses to HP/ATK/DEF)
-    this.applySetBonuses(stats, discs, agent, wEngine, includeWEngineBonuses);
+    // Apply disc substats (only from enabled discs)
+    this.applyDiscSubStats(stats, enabledDiscsOnly);
+
+    // Apply set bonuses (this applies percentage bonuses to HP/ATK/DEF, counting only enabled discs)
+    this.applySetBonuses(stats, enabledDiscsOnly, agent, wEngine, includeWEngineBonuses);
 
     // Calculate final energy regen using correct formula:
     // Energy/sec = Base × (1 + Σ %bonuses/100)
@@ -344,9 +349,11 @@ export class StatCalculatorService {
           stats.penRatio += value;
           break;
         case 'AnomalyProficiencyBonus':
+        case 'AnomalyProficiency':
           stats.anomalyProficiency += value;
           break;
         case 'AnomalyMasteryBonus':
+        case 'AnomalyMastery':
           if (isPercentage) {
             stats.anomalyMasteryPercent += value;
           } else {
@@ -427,8 +434,7 @@ export class StatCalculatorService {
 
   private applyDiscMainStats(
     stats: BaseStats,
-    discs: { [key in DiscSlot]?: Disc },
-    agent: Agent
+    discs: { [key in DiscSlot]?: Disc }
   ): void {
     Object.values(discs).forEach(disc => {
       if (!disc) return;
@@ -487,8 +493,7 @@ export class StatCalculatorService {
 
   private applyDiscSubStats(
     stats: BaseStats,
-    discs: { [key in DiscSlot]?: Disc },
-    agent: Agent
+    discs: { [key in DiscSlot]?: Disc }
   ): void {
     Object.values(discs).forEach(disc => {
       if (!disc) return;
@@ -641,15 +646,10 @@ export class StatCalculatorService {
     }
     // Handle conditional format (array of effect objects)
     else {
-      effect.forEach((effectPart, idx) => {
-        const hasCondition = !!effectPart.Condition;
-        if (hasCondition) {
-          const conditionMet = this.evaluateCondition(effectPart.Condition!, stats, agent);
-        }
+      effect.forEach((effectPart) => {
         // Only apply if condition is met or no condition exists
         if (!effectPart.Condition || this.evaluateCondition(effectPart.Condition, stats, agent)) {
           this.applyPropertiesArray(effectPart.Properties, stats);
-        } else {
         }
       });
     }

@@ -91,12 +91,19 @@ export class EnkaImportService {
         }
       }
 
+      // Initialize enabledDiscs with all discs enabled
+      const enabledDiscs: { [slot: string]: boolean } = {};
+      Object.keys(discsBySlot).forEach(slot => {
+        enabledDiscs[slot] = true;
+      });
+
       // Update build with equipment and default toggle flags
       await this.buildService.updateBuild(newBuild.id, {
         level: enkaBuild.level,
         equippedWEngine: enkaBuild.wEngine,
         wEngineRefinement: enkaBuild.wEngineRefinement || 1,
         equippedDiscs: discsBySlot,
+        enabledDiscs: enabledDiscs,
         includeWEngineBonuses: true,
         includeMindscapeBonuses: true,
         includePassiveBonuses: true
@@ -124,6 +131,12 @@ export class EnkaImportService {
           }
         }
 
+        // Initialize enabledDiscs with all new discs enabled
+        const enabledDiscs: { [slot: string]: boolean } = {};
+        Object.keys(discsBySlot).forEach(slot => {
+          enabledDiscs[slot] = true;
+        });
+
         // Update build (preserve existing toggle flags)
         await this.buildService.updateBuild(old.id, {
           level: enkaBuild.level,
@@ -131,6 +144,7 @@ export class EnkaImportService {
           equippedWEngine: enkaBuild.wEngine,
           wEngineRefinement: enkaBuild.wEngineRefinement || 1,
           equippedDiscs: discsBySlot,
+          enabledDiscs: enabledDiscs,
           includeWEngineBonuses: old.includeWEngineBonuses ?? true,
           includeMindscapeBonuses: old.includeMindscapeBonuses ?? true,
           includePassiveBonuses: old.includePassiveBonuses ?? true
