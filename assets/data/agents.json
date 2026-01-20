@@ -1706,7 +1706,18 @@
       "RpMax": 0,
       "RpRecover": 0
     },
-    "lvl60_stats": {},
+    "lvl60_stats": {
+      "HpMax": 8250,
+      "Defence": 612,
+      "Attack": 758,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 136,
+      "ElementAbnormalPower": 94,
+      "ElementMystery": 93,
+      "SpBarPoint": 12
+    },
     "ascension": [
       {
         "max_hp": 0,
@@ -8726,7 +8737,7 @@
         }
       ],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -12169,7 +12180,7 @@
     "scoring": {
       "buffs": [],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -13776,7 +13787,7 @@
     "scoring": {
       "buffs": [],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "A",
     "element": {
@@ -15356,7 +15367,7 @@
         }
       ],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -17028,9 +17039,9 @@
     "id": 1371,
     "name": "Yixuan",
     "scoring": {
-      "buffs": [],
+      "buffs": [{ "type": "CRITDMGBonus", "value": "40", "format": "%" }],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -18837,9 +18848,9 @@
     "id": 1321,
     "name": "Evelyn",
     "scoring": {
-      "buffs": [],
+      "buffs": [{ "type": "CRITRateBonus", "value": "25", "format": "%" }],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -20543,9 +20554,11 @@
     "id": 1401,
     "name": "Alice",
     "scoring": {
-      "buffs": [],
+      "buffs": [
+        { "type": "AnomalyProficiency", "value": "70", "format": "flat" }
+      ],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -22213,7 +22226,7 @@
           "format": "%"
         }
       ],
-      "dazeBonus": 0
+      "dazeBonus": 64
     },
     "rarity": "A",
     "element": {
@@ -23747,7 +23760,7 @@
     "id": 1071,
     "name": "Caesar",
     "scoring": {
-      "buffs": [],
+      "buffs": [{ "type": "ATKBonus", "value": "1000", "format": "%" }],
       "debuffs": [
         {
           "type": "DamageTaken",
@@ -29015,7 +29028,7 @@
     "scoring": {
       "buffs": [],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "A",
     "element": {
@@ -30633,7 +30646,7 @@
     "scoring": {
       "buffs": [],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -37560,9 +37573,12 @@
     "id": 1461,
     "name": "Seed",
     "scoring": {
-      "buffs": [],
+      "buffs": [
+        { "type": "ATKBonus", "value": "1000", "format": "flat" },
+        { "type": "CRITDMGBonus", "value": "30", "format": "%" }
+      ],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -39197,7 +39213,7 @@
     "scoring": {
       "buffs": [],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "A",
     "element": {
@@ -40882,7 +40898,7 @@
         }
       ],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -44461,7 +44477,7 @@
     "scoring": {
       "buffs": [],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -46136,7 +46152,7 @@
           "format": "%"
         }
       ],
-      "dazeBonus": 0
+      "dazeBonus": 75
     },
     "rarity": "S",
     "element": {
@@ -47807,7 +47823,7 @@
         { "type": "DMGBonus", "value": "25", "format": "%" }
       ],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -53000,9 +53016,9 @@
     "id": 1051,
     "name": "Yidhari",
     "scoring": {
-      "buffs": [],
+      "buffs": [{ "type": "CRITDMGBonus", "value": "30", "format": "%" }],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -59874,9 +59890,13 @@
     "id": 1291,
     "name": "Hugo",
     "scoring": {
-      "buffs": [],
+      "buffs": [
+        { "type": "CRITRateBonus", "value": "12", "format": "%" },
+        { "type": "CRITDMGBonus", "value": "25", "format": "%" },
+        { "type": "ATKBonus", "value": "900", "format": "flat" }
+      ],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -61598,7 +61618,7 @@
     "scoring": {
       "buffs": [],
       "debuffs": [],
-      "dazeBonus": 0.3
+      "dazeBonus": 30
     },
     "rarity": "A",
     "element": {
@@ -64825,9 +64845,9 @@
     "id": 1301,
     "name": "Orphie & Magus",
     "scoring": {
-      "buffs": [],
+      "buffs": [{ "type": "CRITRateBonus", "value": "25", "format": "%" }],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -66531,9 +66551,12 @@
     "id": 1441,
     "name": "Manato",
     "scoring": {
-      "buffs": [],
+      "buffs": [
+        { "type": "CRITRateBonus", "value": "10", "format": "%" },
+        { "type": "CRITDMG", "value": "50", "format": "%" }
+      ],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "A",
     "element": {
@@ -70006,7 +70029,7 @@
           "format": "%"
         }
       ],
-      "dazeBonus": 0.6
+      "dazeBonus": 60
     },
     "rarity": "S",
     "element": {
@@ -71685,7 +71708,7 @@
     "scoring": {
       "buffs": [],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -74961,7 +74984,7 @@
         }
       ],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -76807,9 +76830,12 @@
     "id": 1381,
     "name": "Soldier 0 - Anby",
     "scoring": {
-      "buffs": [],
+      "buffs": [
+        { "type": "CRITRateBonus", "value": "10", "format": "%" },
+        { "type": "DMGBonus", "value": "75", "format": "%" }
+      ],
       "debuffs": [],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {
@@ -78612,7 +78638,7 @@
           "format": "%"
         }
       ],
-      "dazeBonus": null
+      "dazeBonus": 0
     },
     "rarity": "S",
     "element": {

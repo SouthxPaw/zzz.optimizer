@@ -180,7 +180,7 @@
         {
           "Name": "Anomaly Proficiency",
           "Name2": "Anomaly Proficiency",
-          "Format": "{0:0}",
+          "Format": "{0:0.#}",
           "Overclock": {
             "W1": 10,
             "W2": 12,
@@ -197,12 +197,12 @@
         {
           "type": "AnomalyMastery",
           "value": "16",
-          "format": "%"
+          "format": "flat"
         },
         {
           "type": "AnomalyProficiency",
           "value": "16",
-          "format": "%"
+          "format": "flat"
         }
       ],
       "debuffs": [],
@@ -471,7 +471,7 @@
     "RandProperty": {
       "Name": "Anomaly Proficiency",
       "Name2": "Anomaly Proficiency",
-      "Format": "{0:0}",
+      "Format": "{0:0.#}",
       "Value": 60
     },
     "Effect": {
@@ -479,7 +479,7 @@
         {
           "Name": "Anomaly Proficiency",
           "Name2": "Anomaly Proficiency",
-          "Format": "{0:0}",
+          "Format": "{0:0.#}",
           "Overclock": {
             "W1": 25,
             "W2": 28,
@@ -496,7 +496,7 @@
         {
           "type": "AnomalyProficiency",
           "value": "40",
-          "format": "%"
+          "format": "flat"
         }
       ],
       "debuffs": [],
@@ -746,7 +746,7 @@
     "RandProperty": {
       "Name": "Anomaly Proficiency",
       "Name2": "Anomaly Proficiency",
-      "Format": "{0:0}",
+      "Format": "{0:0.#}",
       "Value": 75
     },
     "Effect": {
@@ -1017,7 +1017,7 @@
         {
           "Name": "Anomaly Proficiency",
           "Name2": "Anomaly Proficiency",
-          "Format": "{0:0}",
+          "Format": "{0:0.#}",
           "Overclock": {
             "W1": 120,
             "W2": 136,
@@ -1034,7 +1034,7 @@
         {
           "type": "AnomalyProficiency",
           "value": "192",
-          "format": "%"
+          "format": "flat"
         }
       ],
       "debuffs": [],
@@ -1062,7 +1062,7 @@
     "RandProperty": {
       "Name": "Anomaly Proficiency",
       "Name2": "Anomaly Proficiency",
-      "Format": "{0:0}",
+      "Format": "{0:0.#}",
       "Value": 75
     },
     "Effect": {
@@ -1873,7 +1873,7 @@
         {
           "Name": "Anomaly Proficiency",
           "Name2": "Anomaly Proficiency",
-          "Format": "{0:0}",
+          "Format": "{0:0.#}",
           "Overclock": {
             "W1": 40,
             "W2": 46,
@@ -1895,7 +1895,7 @@
         {
           "type": "AnomalyProficiency",
           "value": "64",
-          "format": "%"
+          "format": "flat"
         }
       ],
       "debuffs": [],
@@ -2573,7 +2573,7 @@
         {
           "Name": "Anomaly Proficiency",
           "Name2": "Anomaly Proficiency",
-          "Format": "{0:0}",
+          "Format": "{0:0.#}",
           "Overclock": {
             "W1": 50,
             "W2": 62,
@@ -2590,7 +2590,7 @@
         {
           "type": "AnomalyProficiency",
           "value": "50",
-          "format": "%"
+          "format": "flat"
         }
       ],
       "debuffs": [],
@@ -2626,7 +2626,7 @@
         {
           "Name": "Anomaly Proficiency",
           "Name2": "Anomaly Proficiency",
-          "Format": "{0:0}",
+          "Format": "{0:0.#}",
           "Overclock": {
             "W1": 75,
             "W2": 93,
@@ -2643,7 +2643,7 @@
         {
           "type": "AnomalyProficiency",
           "value": "75",
-          "format": "%"
+          "format": "flat"
         }
       ],
       "debuffs": [],
@@ -2814,7 +2814,7 @@
         {
           "Name": "Anomaly Proficiency",
           "Name2": "Anomaly Proficiency",
-          "Format": "{0:0}",
+          "Format": "{0:0.#}",
           "Overclock": {
             "W1": 75,
             "W2": 85,
@@ -2831,7 +2831,7 @@
         {
           "type": "AnomalyProficiency",
           "value": "75",
-          "format": "%"
+          "format": "flat"
         }
       ],
       "debuffs": [],
@@ -2965,7 +2965,7 @@
     "RandProperty": {
       "Name": "Anomaly Proficiency",
       "Name2": "Anomaly Proficiency",
-      "Format": "{0:0}",
+      "Format": "{0:0.#}",
       "Value": 90
     },
     "Effect": {
@@ -3182,7 +3182,7 @@
     "RandProperty": {
       "Name": "Anomaly Proficiency",
       "Name2": "Anomaly Proficiency",
-      "Format": "{0:0}",
+      "Format": "{0:0.#}",
       "Value": 90
     },
     "Effect": {
@@ -3190,7 +3190,7 @@
         {
           "Name": "Anomaly Proficiency",
           "Name2": "Anomaly Proficiency",
-          "Format": "{0:0}",
+          "Format": "{0:0.#}",
           "Overclock": {
             "W1": 120,
             "W2": 138,
@@ -3207,7 +3207,7 @@
         {
           "type": "AnomalyProficiency",
           "value": "120",
-          "format": "%"
+          "format": "flat"
         }
       ],
       "debuffs": [],
@@ -3529,7 +3529,7 @@
         {
           "Name": "Anomaly Mastery",
           "Name2": "Anomaly Mastery",
-          "Format": "{0:0}",
+          "Format": "{0:0.#}",
           "Overclock": {
             "W1": 60,
             "W2": 69,
@@ -3582,7 +3582,7 @@
         {
           "Name": "Anomaly Mastery",
           "Name2": "Anomaly Mastery",
-          "Format": "{0:0}",
+          "Format": "{0:0.#}",
           "Overclock": {
             "W1": 30,
             "W2": 34,
@@ -3594,7 +3594,7 @@
         {
           "Name": "Anomaly Proficiency",
           "Name2": "Anomaly Proficiency",
-          "Format": "{0:0}",
+          "Format": "{0:0.#}",
           "Overclock": {
             "W1": 60,
             "W2": 69,
@@ -3611,12 +3611,12 @@
         {
           "type": "AnomalyMastery",
           "value": "30",
-          "format": "%"
+          "format": "flat"
         },
         {
           "type": "AnomalyProficiency",
           "value": "60",
-          "format": "%"
+          "format": "flat"
         }
       ],
       "debuffs": [],
