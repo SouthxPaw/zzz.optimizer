@@ -348,7 +348,11 @@ export class DataTransformerService {
     // Extract substat from RandProperty (already at level 60)
     const randProp = rawWEngine.RandProperty || {};
     const subStatName = randProp.Name || 'ATK';
-    const subStatValue = (randProp.Value || 0) / 100; // Convert from basis points to percentage
+    // Convert from basis points to percentage ONLY for percentage stats
+    // Check Format field: if it contains '%', it's a percentage stat that needs division
+    const format = randProp.Format || '';
+    const isPercentageStat = format.includes('%');
+    const subStatValue = isPercentageStat ? (randProp.Value || 0) / 100 : (randProp.Value || 0);
 
     // Map substat name to our StatType
     let subStatType: any = 'ATK%';
@@ -441,10 +445,14 @@ export class DataTransformerService {
 
     // Extract substat from RandProperty
     // RandProperty.Name is like "ATK" or "CRIT Rate"
-    // RandProperty.Value is in basis points (e.g., 800 = 8.00%)
+    // RandProperty.Value is in basis points for % stats (e.g., 800 = 8.00%), but flat values for Anomaly Proficiency/Impact
     const randProp = raw.RandProperty || {};
     const subStatName = randProp.Name || 'ATK';
-    const subStatValue = (randProp.Value || 0) / 100; // Convert from basis points to percentage
+    // Convert from basis points to percentage ONLY for percentage stats
+    // Check Format field: if it contains '%', it's a percentage stat that needs division
+    const format = randProp.Format || '';
+    const isPercentageStat = format.includes('%');
+    const subStatValue = isPercentageStat ? (randProp.Value || 0) / 100 : (randProp.Value || 0);
 
     // Map substat name to our StatType
     let subStatType: any = 'ATK%';
@@ -728,6 +736,7 @@ export class DataTransformerService {
     return properties.map(prop => {
       const name = prop.Name || '';
       const overclock = prop.Overclock || {};
+      const format = prop.Format || '';
 
       // Map property name to our stat type
       let type: any = 'ATK%';
@@ -751,16 +760,20 @@ export class DataTransformerService {
         type = 'Pen_Ratio';
       }
 
-      // Convert from basis points to percentage
+      // Convert from basis points to percentage ONLY for percentage stats
+      // Check Format field: if it contains '%', it's a percentage stat that needs division
+      const isPercentageStat = format.includes('%');
+      const divisor = isPercentageStat ? 100 : 1;
+
       return {
         name: name,
         type: type,
         values: {
-          W1: (overclock.W1 || 0) / 100,
-          W2: (overclock.W2 || 0) / 100,
-          W3: (overclock.W3 || 0) / 100,
-          W4: (overclock.W4 || 0) / 100,
-          W5: (overclock.W5 || 0) / 100
+          W1: (overclock.W1 || 0) / divisor,
+          W2: (overclock.W2 || 0) / divisor,
+          W3: (overclock.W3 || 0) / divisor,
+          W4: (overclock.W4 || 0) / divisor,
+          W5: (overclock.W5 || 0) / divisor
         }
       };
     });

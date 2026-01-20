@@ -752,9 +752,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
             displayName = 'PEN Ratio';
             break;
           case 'AnomalyProficiencyBonus':
+          case 'AnomalyProficiency':
             displayName = 'Anomaly Proficiency';
             break;
           case 'AnomalyMasteryBonus':
+          case 'AnomalyMastery':
             displayName = 'Anomaly Mastery';
             break;
           case 'ImpactBonus':

@@ -170,6 +170,10 @@ export class BuildService {
     };
 
     builds.push(newBuild);
+
+    // Recalculate stats to apply passive bonuses, W-Engine bonuses, etc.
+    await this.recalculateStats(newBuild);
+
     await this.saveBuilds(builds);
 
     return newBuild;
