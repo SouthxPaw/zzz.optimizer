@@ -98,13 +98,13 @@ export interface BuildRating {
 }
 
 export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
-  { grade: 'VOID HUNTER', breakpointsMetPercentage: 90, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
-  { grade: 'LEGENDARY', breakpointsMetPercentage: 87, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs' },
-  { grade: 'SSS', breakpointsMetPercentage: 84, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
-  { grade: 'SS', breakpointsMetPercentage: 78, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
-  { grade: 'S', breakpointsMetPercentage: 68, color: '#FFD93D', description: 'Very Good - Strong build with pretty good discs' },
-  { grade: 'A', breakpointsMetPercentage: 60, color: '#6BCF7F', description: 'Good - Solid build with decent discs' },
-  { grade: 'B', breakpointsMetPercentage: 50, color: '#4D96FF', description: 'Decent - Room for improvement' },
+  { grade: 'VOID HUNTER', breakpointsMetPercentage: 97, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
+  { grade: 'LEGENDARY', breakpointsMetPercentage: 92, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs' },
+  { grade: 'SSS', breakpointsMetPercentage: 82, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
+  { grade: 'SS', breakpointsMetPercentage: 75, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
+  { grade: 'S', breakpointsMetPercentage: 62, color: '#FFD93D', description: 'Very Good - Strong build with pretty good discs' },
+  { grade: 'A', breakpointsMetPercentage: 52, color: '#6BCF7F', description: 'Good - Solid build with decent discs' },
+  { grade: 'B', breakpointsMetPercentage: 40, color: '#4D96FF', description: 'Decent - Room for improvement' },
   { grade: 'C', breakpointsMetPercentage: 32, color: '#A0A0A0', description: 'Below Average - Missing key stats' },
   { grade: 'D', breakpointsMetPercentage: 20, color: '#808080', description: 'Poor - Major gaps in stats' },
   { grade: 'F', breakpointsMetPercentage: 0, color: '#606060', description: 'Unoptimized - Needs complete rework' },
