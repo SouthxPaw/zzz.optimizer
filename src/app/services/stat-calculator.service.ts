@@ -557,8 +557,6 @@ export class StatCalculatorService {
       setCounts.set(disc.set, count + 1);
     });
 
-    console.log('[SET BONUSES] Disc set counts:', Array.from(setCounts.entries()));
-
     // Apply bonuses for sets with 2 or 4 pieces
     setCounts.forEach((count, setName) => {
       const discSet = DISC_SETS.find(s => s.name === setName);
