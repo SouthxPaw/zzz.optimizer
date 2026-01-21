@@ -32,9 +32,45 @@
   <div *ngIf="activeTab === 'builds'" class="tab-content">
     <!-- Import Action Bar -->
     <div class="import-action-bar">
-      <button class="btn-secondary btn-compact" (click)="openEnkaImportModal()" title="Import builds from UID">
-        Import from UID
-      </button>
+      <div class="import-uid-group">
+        <button class="btn-secondary btn-compact" (click)="openEnkaImportModal()" title="Import builds from UID">
+          Import from UID
+        </button>
+
+        <!-- UID History Dropdown -->
+        <div class="uid-history-container" *ngIf="uidHistory.length > 0">
+          <button
+            class="btn-secondary btn-compact uid-history-toggle"
+            (click)="toggleUidHistoryDropdown()"
+            type="button"
+            title="Recent UIDs"
+          >
+            <span class="history-icon">▼</span>
+          </button>
+          <div *ngIf="showUidHistoryDropdown" class="uid-history-dropdown-main">
+            <div class="uid-history-header">
+              <span>Recent UIDs</span>
+              <button
+                class="clear-history-btn"
+                (click)="clearUidHistory()"
+                type="button"
+                title="Clear history"
+              >
+                Clear
+              </button>
+            </div>
+            <div class="uid-history-list">
+              <div
+                *ngFor="let uid of uidHistory"
+                class="uid-history-item"
+                (click)="selectUidFromHistory(uid)"
+              >
+                {{ uid }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Upgrade Plan Selector (right side) -->
       <div class="upgrade-plan-selector" *ngIf="selectedBuild">
@@ -151,9 +187,14 @@
         </div>
       </div>
 
-      <!-- Build Details -->
-      <div class="section build-details" *ngIf="selectedBuild">
-        <h2>{{ selectedBuild.name }}</h2>
+      <!-- Build Content -->
+      <div class="section build-content" *ngIf="selectedBuild">
+        <div class="build-header-with-actions">
+          <h2>{{ selectedBuild.name }}</h2>
+          <button class="btn-share" (click)="shareAsImage()" title="Share build as image">
+            📤 Share
+          </button>
+        </div>
 
         <!-- Mindscape Cinema -->
         <div class="mindscape-section">
@@ -172,6 +213,92 @@
             >
               M{{ m }}
             </button>
+          </div>
+        </div>
+
+        <!-- Disc Drives -->
+        <div class="disc-section">
+          <h3>Disc Drives ({{ getEquippedDiscsCount(selectedBuild) }}/6)</h3>
+          <div class="disc-grid">
+            <div
+              *ngFor="let slot of discSlots; trackBy: trackByDiscSlot"
+              class="disc-slot"
+              [class.equipped]="selectedBuild.equippedDiscs[slot]"
+            >
+              <div
+                *ngIf="selectedBuild.equippedDiscs[slot]; else emptySlot"
+                class="disc-card"
+                (click)="openDiscEdit(slot)"
+              >
+                <div class="disc-header">
+                  <span class="disc-slot-number">{{
+                    formatDiscSlot(slot)
+                  }}</span>
+                  <label class="disc-enable-checkbox" (click)="$event.stopPropagation()" title="Enable/Disable disc">
+                    <input
+                      type="checkbox"
+                      [checked]="isDiscEnabled(slot)"
+                      (change)="onDiscToggle(slot)"
+                    />
+                  </label>
+                  <div
+                    *ngIf="
+                      getDiscScore(
+                        selectedBuild.equippedDiscs[slot]!
+                      ) as discScore
+                    "
+                    class="disc-rating-badge"
+                    [ngClass]="getDiscRatingClass(discScore.rating)"
+                    [title]="discScore.rating.description"
+                  >
+                    <span class="rating-grade">{{
+                      discScore.rating.grade
+                    }}</span>
+                    <span class="rating-score">{{ discScore.score }}</span>
+                  </div>
+                </div>
+                <div class="disc-set">
+                  {{ selectedBuild.equippedDiscs[slot]!.set }}
+                </div>
+                <div class="disc-main-stat">
+                  <span class="stat-type">{{
+                    formatStatType(
+                      selectedBuild.equippedDiscs[slot]!.mainStat.type
+                    )
+                  }}</span>
+                  <span class="stat-value">{{
+                    selectedBuild.equippedDiscs[slot]!.mainStat.value
+                  }}</span>
+                </div>
+                <div class="disc-substats">
+                  <div
+                    *ngFor="
+                      let subStat of selectedBuild.equippedDiscs[slot]!
+                        .subStats;
+                      trackBy: trackBySubStatIndex
+                    "
+                    class="substat"
+                    [class.priority]="isPrioritySubstat(subStat.type)"
+                  >
+                    <span class="substat-type">{{ formatStatType(subStat.type) }}</span>
+                    <span class="substat-value">{{ subStat.value }}</span>
+                  </div>
+                </div>
+                <button
+                  class="unequip-btn"
+                  (click)="unequipDisc(slot, $event)"
+                  title="Unequip disc"
+                >
+                  ×
+                </button>
+              </div>
+              <ng-template #emptySlot>
+                <div class="empty-disc-slot" (click)="openDiscPicker(slot)">
+                  <span class="slot-number">{{ formatDiscSlot(slot) }}</span>
+                  <span class="slot-label">Empty</span>
+                </div>
+              </ng-template>
+            </div>
           </div>
         </div>
 
@@ -398,97 +525,12 @@
             </div>
           </div>
         </div>
-
-        <div class="disc-section">
-          <h3>Disc Drives ({{ getEquippedDiscsCount(selectedBuild) }}/6)</h3>
-          <div class="disc-grid">
-            <div
-              *ngFor="let slot of discSlots; trackBy: trackByDiscSlot"
-              class="disc-slot"
-              [class.equipped]="selectedBuild.equippedDiscs[slot]"
-            >
-              <div
-                *ngIf="selectedBuild.equippedDiscs[slot]; else emptySlot"
-                class="disc-card"
-                (click)="openDiscEdit(slot)"
-              >
-                <div class="disc-header">
-                  <span class="disc-slot-number">{{
-                    formatDiscSlot(slot)
-                  }}</span>
-                  <label class="disc-enable-checkbox" (click)="$event.stopPropagation()" title="Enable/Disable disc">
-                    <input
-                      type="checkbox"
-                      [checked]="isDiscEnabled(slot)"
-                      (change)="onDiscToggle(slot)"
-                    />
-                  </label>
-                  <div
-                    *ngIf="
-                      getDiscScore(
-                        selectedBuild.equippedDiscs[slot]!
-                      ) as discScore
-                    "
-                    class="disc-rating-badge"
-                    [ngClass]="getDiscRatingClass(discScore.rating)"
-                    [title]="discScore.rating.description"
-                  >
-                    <span class="rating-grade">{{
-                      discScore.rating.grade
-                    }}</span>
-                    <span class="rating-score">{{ discScore.score }}</span>
-                  </div>
-                </div>
-                <div class="disc-set">
-                  {{ selectedBuild.equippedDiscs[slot]!.set }}
-                </div>
-                <div class="disc-main-stat">
-                  <span class="stat-type">{{
-                    formatStatType(
-                      selectedBuild.equippedDiscs[slot]!.mainStat.type
-                    )
-                  }}</span>
-                  <span class="stat-value">{{
-                    selectedBuild.equippedDiscs[slot]!.mainStat.value
-                  }}</span>
-                </div>
-                <div class="disc-substats">
-                  <div
-                    *ngFor="
-                      let subStat of selectedBuild.equippedDiscs[slot]!
-                        .subStats;
-                      trackBy: trackBySubStatIndex
-                    "
-                    class="substat"
-                    [class.priority]="isPrioritySubstat(subStat.type)"
-                  >
-                    <span class="substat-type">{{ formatStatType(subStat.type) }}</span>
-                    <span class="substat-value">{{ subStat.value }}</span>
-                  </div>
-                </div>
-                <button
-                  class="unequip-btn"
-                  (click)="unequipDisc(slot, $event)"
-                  title="Unequip disc"
-                >
-                  ×
-                </button>
-              </div>
-              <ng-template #emptySlot>
-                <div class="empty-disc-slot" (click)="openDiscPicker(slot)">
-                  <span class="slot-number">{{ formatDiscSlot(slot) }}</span>
-                  <span class="slot-label">Empty</span>
-                </div>
-              </ng-template>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <!-- Summary -->
+      <!-- Summary Panel -->
       <div class="section summary-panel" *ngIf="selectedBuild">
-        <h2>Build Summary</h2>
-        <div class="summary-content">
+        <!-- Build Summary -->
+        <div class="build-summary-section">
           <div
             class="summary-item build-rating-display"
             *ngIf="getBuildScore() as buildScore"
@@ -540,25 +582,11 @@
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="summary-item">
-            <strong>Level:</strong> {{ selectedBuild.level }}
-          </div>
-          <div class="summary-item">
-            <strong>Mindscape:</strong> M{{ selectedBuild.mindscapeLevel }}
-          </div>
-          <div class="summary-item" *ngIf="selectedBuild.equippedWEngine">
-            <strong>W-Engine:</strong> {{ selectedBuild.equippedWEngine.name }}
-          </div>
-          <div class="summary-item">
-            <strong>Disc Sets:</strong>
-            {{ getEquippedDiscsCount(selectedBuild) }}/6 equipped
-          </div>
-          <div class="summary-item">
-            <strong>Created:</strong>
-            {{ selectedBuild.createdAt | date: "short" }}
-          </div>
-
+        <!-- Bonuses Section -->
+        <h3>Active Bonuses</h3>
+        <div class="bonuses-content">
           <!-- W-Engine Stat Bonuses -->
           <div
             *ngIf="selectedBuild.equippedWEngine"
@@ -725,6 +753,23 @@
               class="set-bonus"
             >
               {{ bonus }}
+            </div>
+          </div>
+
+          <!-- Substat Breakdown -->
+          <div
+            *ngIf="getSubstatBreakdown().length > 0"
+            class="substat-breakdown"
+          >
+            <h4>Substat Breakdown:</h4>
+            <div class="substat-breakdown-box">
+              <div
+                *ngFor="let stat of getSubstatBreakdown(); trackBy: trackByBonusIndex"
+                class="bonus-stat"
+              >
+                <span class="bonus-label">{{ stat.name }}:</span>
+                <span class="bonus-value">+{{ stat.value }}{{ stat.isPercent ? "%" : "" }}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -1229,6 +1274,38 @@
   <!-- Optimizer Tab -->
   <div *ngIf="activeTab === 'optimizer'" class="tab-content optimizer-tab">
     <app-optimizer></app-optimizer>
+  </div>
+
+  <!-- Share Image Modal -->
+  <div
+    class="modal-overlay"
+    *ngIf="showShareModal"
+    (click)="closeShareModal()"
+    role="dialog"
+    aria-labelledby="share-modal-title"
+    aria-modal="true"
+  >
+    <div class="modal-content share-modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 id="share-modal-title">Share Build</h2>
+        <button
+          class="close-btn"
+          (click)="closeShareModal()"
+          aria-label="Close modal"
+        >
+          ×
+        </button>
+      </div>
+      <div class="modal-body share-modal-body">
+        <div class="share-image-container">
+          <canvas #shareCanvas></canvas>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="closeShareModal()">Cancel</button>
+        <button class="btn-primary" (click)="downloadShareImage()">Download Image</button>
+      </div>
+    </div>
   </div>
 </div>
 <!-- End character-tab -->

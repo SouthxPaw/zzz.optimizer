@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -59,6 +59,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   selectedAgentForAdd: Agent | null = null;
   showDiscPicker = false;
   selectedDiscSlot: DiscSlot | null = null;
+  showShareModal = false;
+
+  @ViewChild('shareCanvas') shareCanvasRef!: ElementRef<HTMLCanvasElement>;
 
   // Bonus enable/disable toggles (for stat calculations)
   includeWEngineBonuses = true;
@@ -139,6 +142,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   isImportingFromEnka = false;
   enkaImportError = '';
   enkaImportSuccess = '';
+  uidHistory: string[] = [];
+  showUidHistoryDropdown = false;
+  private readonly UID_HISTORY_KEY = 'zzz_uid_history';
+  private readonly MAX_UID_HISTORY = 10;
 
   private destroy$ = new Subject<void>();
   private previouslyFocusedElement: HTMLElement | null = null;
@@ -164,6 +171,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // Load UID history from local storage
+    this.loadUidHistory();
+
     // Subscribe to user builds
     this.buildService.builds$
       .pipe(takeUntil(this.destroy$))
@@ -797,6 +807,128 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         (b): b is { name: string; value: string; isPercent: boolean } =>
           b !== undefined,
       );
+  }
+
+  getSubstatBreakdown(): Array<{
+    name: string;
+    value: string;
+    isPercent: boolean;
+  }> {
+    if (!this.selectedBuild || !this.selectedBuild.equippedDiscs) {
+      return [];
+    }
+
+    // Aggregate substats by type
+    const substatTotals: { [key: string]: number } = {};
+
+    // Get enabled discs state (default to true if not set)
+    const enabledDiscs = this.selectedBuild.enabledDiscs || {};
+
+    // Iterate through all equipped discs, but only include enabled ones
+    Object.entries(this.selectedBuild.equippedDiscs).forEach(([slot, disc]) => {
+      const isEnabled = enabledDiscs[slot] ?? true; // Default to true if not specified
+
+      if (disc && disc.subStats && isEnabled) {
+        disc.subStats.forEach((subStat) => {
+          if (!substatTotals[subStat.type]) {
+            substatTotals[subStat.type] = 0;
+          }
+          substatTotals[subStat.type] += subStat.value;
+        });
+      }
+    });
+
+    // Convert to display format
+    const result = Object.entries(substatTotals).map(([type, value]) => {
+      // Determine if stat is percentage or flat
+      const isPercent = type.includes('%') || [
+        'CRIT_Rate',
+        'CRIT_DMG',
+        'HP%',
+        'ATK%',
+        'DEF%',
+      ].includes(type);
+
+      // Map type to display name
+      let displayName: string;
+      switch (type) {
+        case 'HP':
+          displayName = 'Flat HP';
+          break;
+        case 'HP%':
+          displayName = 'HP';
+          break;
+        case 'ATK':
+          displayName = 'Flat ATK';
+          break;
+        case 'ATK%':
+          displayName = 'ATK';
+          break;
+        case 'DEF':
+          displayName = 'Flat DEF';
+          break;
+        case 'DEF%':
+          displayName = 'DEF';
+          break;
+        case 'CRIT_Rate':
+          displayName = 'CRIT Rate';
+          break;
+        case 'CRIT_DMG':
+          displayName = 'CRIT DMG';
+          break;
+        case 'Anomaly_Proficiency':
+          displayName = 'Anomaly Proficiency';
+          break;
+        case 'Anomaly_Mastery':
+          displayName = 'Anomaly Mastery';
+          break;
+        case 'PEN':
+          displayName = 'PEN';
+          break;
+        case 'Impact':
+          displayName = 'Impact';
+          break;
+        case 'Energy_Regen':
+          displayName = 'Energy Regen';
+          break;
+        default:
+          displayName = type;
+      }
+
+      return {
+        name: displayName,
+        value: value.toFixed(1),
+        isPercent: isPercent,
+      };
+    });
+
+    // Sort by stat type with custom order for percentage stats
+    const percentOrder = ['ATK', 'HP', 'DEF', 'CRIT Rate', 'CRIT DMG'];
+
+    return result.sort((a, b) => {
+      // Separate percentage and flat stats
+      if (a.isPercent && !b.isPercent) return -1;
+      if (!a.isPercent && b.isPercent) return 1;
+
+      // Both are percentage stats - use custom order
+      if (a.isPercent && b.isPercent) {
+        const aIndex = percentOrder.indexOf(a.name);
+        const bIndex = percentOrder.indexOf(b.name);
+
+        // If both are in the order array, sort by that order
+        if (aIndex !== -1 && bIndex !== -1) {
+          return aIndex - bIndex;
+        }
+        // If only one is in the order array, prioritize it
+        if (aIndex !== -1) return -1;
+        if (bIndex !== -1) return 1;
+        // If neither is in the order array, sort alphabetically
+        return a.name.localeCompare(b.name);
+      }
+
+      // Both are flat stats - sort alphabetically
+      return a.name.localeCompare(b.name);
+    });
   }
 
   getEquippedDiscsCount(build: AgentBuild): number {
@@ -1616,14 +1748,431 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   // =====================================
+  // Share Build as Image
+  // =====================================
+
+  async shareAsImage() {
+    if (!this.selectedBuild) return;
+    this.showShareModal = true;
+
+    // Wait for modal and canvas to be rendered
+    setTimeout(() => this.generateShareImage(), 100);
+  }
+
+  closeShareModal() {
+    this.showShareModal = false;
+  }
+
+  async generateShareImage() {
+    if (!this.selectedBuild || !this.shareCanvasRef) return;
+
+    const canvas = this.shareCanvasRef.nativeElement;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Canvas dimensions - taller to fit all stats
+    const width = 1200;
+    const height = 1800;
+    canvas.width = width;
+    canvas.height = height;
+
+    // App colors
+    const colors = {
+      bg: '#0a0a0a',
+      card: '#1a1a1a',
+      gold: '#f4b942',
+      gold2: '#d4a574',
+      text: '#eee',
+      border: '#2a2a2a',
+      // Rating colors from CSS
+      voidHunter: '#E0BBE4', // Void Hunter gradient start
+      legendary: '#FFD700', // Legendary gradient start
+      sss: '#FF6B9D',
+      ss: '#FF8C42',
+      s: '#FFD93D',
+      a: '#6BCF7F',
+      b: '#4D96FF',
+      c: '#A0A0A0'
+    };
+
+    // Background
+    ctx.fillStyle = colors.bg;
+    ctx.fillRect(0, 0, width, height);
+
+    // Border
+    ctx.strokeStyle = colors.gold;
+    ctx.lineWidth = 4;
+    ctx.strokeRect(10, 10, width - 20, height - 20);
+
+    // Get agent info
+    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const buildScore = this.getBuildScore();
+
+    let yOffset = 60;
+
+    // Agent Icon (if available)
+    if (agent?.icon) {
+      try {
+        const agentImg = await this.loadImage(agent.icon);
+        const iconSize = 120;
+        const iconX = (width - iconSize) / 2;
+        ctx.drawImage(agentImg, iconX, yOffset, iconSize, iconSize);
+        yOffset += iconSize + 30;
+      } catch (e) {
+        console.error('Failed to load agent icon:', e);
+        yOffset += 20;
+      }
+    }
+
+    // Agent Name
+    ctx.fillStyle = colors.gold;
+    ctx.font = 'bold 48px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(agent?.name || 'Unknown Agent', width / 2, yOffset);
+    yOffset += 70;
+
+    // Build Rating
+    if (buildScore) {
+      const gradeColor = this.getCanvasGradeColor(buildScore.rating.grade, colors);
+
+      // Measure text width for dynamic badge sizing
+      ctx.font = 'bold 48px Arial';
+      const textMetrics = ctx.measureText(buildScore.rating.grade);
+      const badgeWidth = Math.max(300, textMetrics.width + 60); // Min 300px, or text width + padding
+      const badgeHeight = 80;
+      const badgeX = (width - badgeWidth) / 2;
+
+      // Rating badge background with rounded corners
+      ctx.fillStyle = gradeColor;
+      ctx.beginPath();
+      ctx.roundRect(badgeX, yOffset - 55, badgeWidth, badgeHeight, 12);
+      ctx.fill();
+
+      // Rating text
+      ctx.fillStyle = colors.bg;
+      ctx.font = 'bold 48px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(buildScore.rating.grade, width / 2, yOffset);
+      yOffset += 60;
+    }
+
+    // Disc Drives Title
+    ctx.fillStyle = colors.gold2;
+    ctx.font = 'bold 32px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Disc Drives', width / 2, yOffset);
+    yOffset += 50;
+
+    // Draw discs in a grid (2 rows of 3) - larger to fit substats
+    const discSize = 220;
+    const discSpacing = 25;
+    const startX = (width - (3 * discSize + 2 * discSpacing)) / 2;
+    let discX = startX;
+    let discY = yOffset;
+
+    for (let i = 0; i < 6; i++) {
+      const slot = this.discSlots[i];
+      const disc = this.selectedBuild.equippedDiscs[slot];
+
+      // Draw disc background
+      ctx.fillStyle = colors.card;
+      ctx.fillRect(discX, discY, discSize, discSize);
+      ctx.strokeStyle = colors.border;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(discX, discY, discSize, discSize);
+
+      // Disc slot number
+      ctx.fillStyle = '#888';
+      ctx.font = 'bold 16px Arial';
+      ctx.textAlign = 'left';
+      ctx.fillText(`#${i + 1}`, discX + 10, discY + 25);
+
+      if (disc) {
+        // Get disc score
+        const discScore = this.getDiscScore(disc);
+        if (discScore) {
+          // Disc grade badge
+          const gradeColor = this.getCanvasGradeColor(discScore.rating.grade, colors);
+          const badgeSize = 50;
+          ctx.fillStyle = gradeColor;
+          ctx.fillRect(discX + discSize - badgeSize - 8, discY + 8, badgeSize, 30);
+
+          ctx.fillStyle = colors.bg;
+          ctx.font = 'bold 20px Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(discScore.rating.grade, discX + discSize - badgeSize / 2 - 8, discY + 30);
+        }
+
+        // Try to load and draw disc set icon
+        const discSet = this.referenceDiscSets.find(s => s.name === disc.set);
+        if (discSet?.icon) {
+          try {
+            const iconImg = await this.loadImage(discSet.icon);
+            const iconSize = 40;
+            const iconX = discX + (discSize - iconSize) / 2;
+            const iconY = discY + 45;
+            ctx.drawImage(iconImg, iconX, iconY, iconSize, iconSize);
+          } catch (e) {
+            // If icon fails to load, show set name as fallback
+            ctx.fillStyle = colors.gold2;
+            ctx.font = '13px Arial';
+            ctx.textAlign = 'center';
+            const setName = disc.set.length > 16 ? disc.set.substring(0, 13) + '...' : disc.set;
+            ctx.fillText(setName, discX + discSize / 2, discY + 65);
+          }
+        } else {
+          // No icon available, show set name
+          ctx.fillStyle = colors.gold2;
+          ctx.font = '13px Arial';
+          ctx.textAlign = 'center';
+          const setName = disc.set.length > 16 ? disc.set.substring(0, 13) + '...' : disc.set;
+          ctx.fillText(setName, discX + discSize / 2, discY + 65);
+        }
+
+        // Main stat
+        ctx.fillStyle = colors.text;
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        const mainStatName = this.formatStatType(disc.mainStat.type);
+        const truncatedMainStat = mainStatName.length > 12 ? mainStatName.substring(0, 10) + '.' : mainStatName;
+        ctx.fillText(truncatedMainStat, discX + discSize / 2, discY + 105);
+        ctx.font = 'bold 16px Arial';
+        ctx.fillText(`${disc.mainStat.value}`, discX + discSize / 2, discY + 125);
+
+        // Substats
+        let substatY = discY + 148;
+        ctx.font = '11px Arial';
+        ctx.fillStyle = '#aaa';
+        for (const substat of disc.subStats) {
+          const substatText = `${this.formatStatType(substat.type)}: ${substat.value}`;
+          const truncatedSubstat = substatText.length > 20 ? substatText.substring(0, 18) + '.' : substatText;
+          ctx.fillText(truncatedSubstat, discX + discSize / 2, substatY);
+          substatY += 16;
+        }
+      } else {
+        // Empty slot
+        ctx.fillStyle = '#555';
+        ctx.font = '18px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Empty', discX + discSize / 2, discY + discSize / 2);
+      }
+
+      // Move to next position
+      if (i === 2) {
+        discX = startX;
+        discY += discSize + discSpacing;
+      } else {
+        discX += discSize + discSpacing;
+      }
+    }
+
+    yOffset = discY + discSize + 50;
+
+    // W-Engine
+    if (this.selectedBuild.equippedWEngine) {
+      ctx.fillStyle = colors.gold2;
+      ctx.font = 'bold 28px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('W-Engine', width / 2, yOffset);
+      yOffset += 50;
+
+      // Try to load and draw W-Engine icon
+      if (this.selectedBuild.equippedWEngine.icon) {
+        try {
+          const wengineImg = await this.loadImage(this.selectedBuild.equippedWEngine.icon);
+          const iconSize = 80;
+          const iconX = (width - iconSize) / 2;
+          ctx.drawImage(wengineImg, iconX, yOffset, iconSize, iconSize);
+          yOffset += iconSize + 20;
+        } catch (e) {
+          console.error('Failed to load W-Engine icon:', e);
+        }
+      }
+
+      ctx.fillStyle = colors.text;
+      ctx.font = '22px Arial';
+      ctx.fillText(this.selectedBuild.equippedWEngine.name, width / 2, yOffset);
+      yOffset += 35;
+
+      ctx.fillStyle = '#aaa';
+      ctx.font = '18px Arial';
+      ctx.fillText(
+        `R${this.selectedBuild.wEngineRefinement} | ${this.selectedBuild.equippedWEngine.rarity}-Rank`,
+        width / 2,
+        yOffset
+      );
+      yOffset += 50;
+    }
+
+    // All Stats
+    ctx.fillStyle = colors.gold2;
+    ctx.font = 'bold 28px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Stats', width / 2, yOffset);
+    yOffset += 45;
+
+    const stats = this.selectedBuild.calculatedStats;
+    const allStats = [
+      { label: 'HP', value: stats.hp },
+      { label: 'ATK', value: stats.atk },
+      { label: 'DEF', value: stats.def },
+      { label: 'Impact', value: stats.impact },
+      { label: 'Anomaly Mastery', value: stats.anomalyMastery },
+      { label: 'Anomaly Proficiency', value: stats.anomalyProficiency },
+      { label: 'PEN Ratio', value: `${stats.penRatio}%` },
+      { label: 'PEN', value: stats.pen },
+      { label: 'CRIT Rate', value: `${stats.critRate}%` },
+      { label: 'CRIT DMG', value: `${stats.critDmg}%` },
+      { label: 'Energy Regen', value: `${stats.energyRegen}%` },
+    ];
+
+    // Draw stats in two columns
+    ctx.font = '19px Arial';
+    const leftColX = width / 4;
+    const rightColX = (3 * width) / 4;
+    const statsPerCol = Math.ceil(allStats.length / 2);
+
+    for (let i = 0; i < allStats.length; i++) {
+      const stat = allStats[i];
+      const isLeftCol = i < statsPerCol;
+      const colX = isLeftCol ? leftColX : rightColX;
+      const rowY = yOffset + (i % statsPerCol) * 32;
+
+      ctx.fillStyle = colors.gold2;
+      ctx.textAlign = 'left';
+      ctx.fillText(`${stat.label}:`, colX - 120, rowY);
+
+      ctx.fillStyle = colors.text;
+      ctx.textAlign = 'right';
+      ctx.fillText(String(stat.value), colX + 120, rowY);
+    }
+
+    // Calculate final yOffset after stats
+    yOffset += statsPerCol * 32 + 50;
+
+    // Watermark
+    ctx.fillStyle = '#666';
+    ctx.font = '16px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Generated with ZZZ Optimizer', width / 2, yOffset);
+    yOffset += 30;
+
+    // Resize canvas to actual content height
+    const finalHeight = yOffset;
+    const imageData = ctx.getImageData(0, 0, width, height);
+    canvas.height = finalHeight;
+    ctx.putImageData(imageData, 0, 0, 0, 0, width, finalHeight);
+  }
+
+  downloadShareImage() {
+    if (!this.selectedBuild || !this.shareCanvasRef) return;
+
+    const canvas = this.shareCanvasRef.nativeElement;
+    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `${agent?.name || 'build'}-${this.selectedBuild!.name}.png`;
+        link.href = url;
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+    });
+  }
+
+  private getCanvasGradeColor(grade: string, colors: any): string {
+    const upperGrade = grade.toUpperCase().replace(/\s+/g, '');
+    if (upperGrade === 'VOIDHUNTER' || upperGrade === 'VH') return colors.voidHunter;
+    if (upperGrade === 'LEGENDARY' || upperGrade === 'LGD') return colors.legendary;
+    if (upperGrade === 'SSS') return colors.sss;
+    if (upperGrade === 'SS') return colors.ss;
+    if (upperGrade === 'S') return colors.s;
+    if (upperGrade === 'A') return colors.a;
+    if (upperGrade === 'B') return colors.b;
+    if (upperGrade === 'C' || upperGrade === 'D' || upperGrade === 'F') return colors.c;
+    return colors.c;
+  }
+
+  private loadImage(src: string): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
+      img.src = src;
+      // Timeout after 3 seconds
+      setTimeout(() => reject(new Error('Image load timeout')), 3000);
+    });
+  }
+
+  // =====================================
   // Enka Network UID Import
   // =====================================
+
+  loadUidHistory() {
+    try {
+      const stored = localStorage.getItem(this.UID_HISTORY_KEY);
+      if (stored) {
+        this.uidHistory = JSON.parse(stored);
+      }
+    } catch (error) {
+      console.error('Failed to load UID history:', error);
+      this.uidHistory = [];
+    }
+  }
+
+  saveUidHistory() {
+    try {
+      localStorage.setItem(this.UID_HISTORY_KEY, JSON.stringify(this.uidHistory));
+    } catch (error) {
+      console.error('Failed to save UID history:', error);
+    }
+  }
+
+  addToUidHistory(uid: string) {
+    const trimmedUid = uid.trim();
+    if (!trimmedUid) return;
+
+    // Remove if already exists (to move to front)
+    this.uidHistory = this.uidHistory.filter(u => u !== trimmedUid);
+
+    // Add to front
+    this.uidHistory.unshift(trimmedUid);
+
+    // Keep only last MAX_UID_HISTORY items
+    if (this.uidHistory.length > this.MAX_UID_HISTORY) {
+      this.uidHistory = this.uidHistory.slice(0, this.MAX_UID_HISTORY);
+    }
+
+    this.saveUidHistory();
+  }
+
+  async selectUidFromHistory(uid: string) {
+    this.showUidHistoryDropdown = false;
+
+    // Import directly without opening modal
+    this.enkaUid = uid;
+    await this.importFromEnka();
+  }
+
+  toggleUidHistoryDropdown() {
+    this.showUidHistoryDropdown = !this.showUidHistoryDropdown;
+  }
+
+  clearUidHistory() {
+    this.uidHistory = [];
+    this.saveUidHistory();
+    this.showUidHistoryDropdown = false;
+  }
 
   openEnkaImportModal() {
     this.showEnkaImportModal = true;
     this.enkaImportError = '';
     this.enkaImportSuccess = '';
     this.enkaUid = '';
+    this.showUidHistoryDropdown = false;
   }
 
   closeEnkaImportModal() {
@@ -1631,6 +2180,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.enkaUid = '';
     this.enkaImportError = '';
     this.enkaImportSuccess = '';
+    this.showUidHistoryDropdown = false;
   }
 
   async importFromEnka() {
@@ -1655,6 +2205,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       }
 
       console.log(`Received ${enkaResult.builds.length} builds from Enka`);
+
+      // Add UID to history on successful fetch
+      this.addToUidHistory(this.enkaUid);
 
       // Compare with existing builds
       const comparison = await this.enkaImportService.compareBuilds(
