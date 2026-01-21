@@ -14,6 +14,7 @@ import {
   BuildRating,
   FeedbackItem,
 } from '../constants/disc-scoring';
+import { UpgradePlan } from '../models/upgrade-plan.model';
 import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
 import { calculateRollCount } from '../constants/substat-rolls';
 import {
@@ -340,7 +341,8 @@ export class ScoringService {
   calculateDiscScore(
     disc: Disc,
     agentId?: string,
-    buildType?: string
+    buildType?: string,
+    upgradePlan?: UpgradePlan  // NEW: Override with user's custom upgrade plan
   ): { score: number; rating: DiscRating; breakdown: any } {
     const breakdown = {
       mainStatPoints: 0,
@@ -357,13 +359,47 @@ export class ScoringService {
       }>,
     };
 
-    // STEP 0: Get contextual weights based on main stat and build type (NEW CONTEXTUAL SYSTEM)
-    // Uses Interknot Network data where substat weights vary based on equipped main stat
-    // Now also supports multiple builds (CRIT, Anomaly, Support) with different weight profiles
+    // STEP 0: Get contextual weights based on main stat and build type
+    // If upgradePlan is provided, use it to COMPLETELY REPLACE agent-stat-weights.json logic
     let statWeights: { [stat: string]: number } = {};
     let mainStatPoints = 0;
 
-    if (agentId && this.agentStatWeights[agentId]) {
+    if (upgradePlan) {
+      // USE UPGRADE PLAN - complete replacement of default weight system
+      // Convert user's priority levels to weights
+      const priorityToWeight: { [key: string]: number } = {
+        'Essential': 1.3,   // Highest priority
+        'Important': 1.0,   // Normal priority
+        'Nice': 0.7,        // Lower priority
+        'Ignore': 0.17      // BLACK tier - wasted stat
+      };
+
+      // Get substat priorities for this disc slot
+      const slotPriorities = upgradePlan.substatPriorities[disc.slot] || {};
+
+      // Convert priorities to weights
+      Object.keys(slotPriorities).forEach(stat => {
+        const priority = slotPriorities[stat];
+        statWeights[stat] = priorityToWeight[priority] || 0.17; // Default to Ignore if undefined
+      });
+
+      // Get main stat points based on user's preferences
+      if (disc.slot === 'Drive1' || disc.slot === 'Drive2' || disc.slot === 'Drive3') {
+        // Fixed main stat slots always get 3 points
+        mainStatPoints = 3;
+      } else {
+        // Drive 4/5/6: Check user's main stat preferences
+        const slotPrefs = upgradePlan.mainStatPreferences[disc.slot as 'Drive4' | 'Drive5' | 'Drive6'];
+        if (slotPrefs && slotPrefs[disc.mainStat.type]) {
+          mainStatPoints = slotPrefs[disc.mainStat.type] === 'Acceptable' ? 3 : 0;
+        } else {
+          // Not set by user - default to Acceptable (3 points)
+          mainStatPoints = 3;
+        }
+      }
+
+      breakdown.detectedBuild = 'Custom Plan';
+    } else if (agentId && this.agentStatWeights[agentId]) {
       // Use new contextual weight system from agent-stat-weights.json
       const agentData = this.agentStatWeights[agentId];
 
@@ -1071,7 +1107,8 @@ export class ScoringService {
    */
   private calculateDiscQualityScore(
     equippedDiscs: Disc[],
-    agentId: string
+    agentId: string,
+    upgradePlan?: UpgradePlan  // NEW: Use upgrade plan if provided
   ): number {
     if (!equippedDiscs || equippedDiscs.length === 0) {
       return 0;
@@ -1079,7 +1116,8 @@ export class ScoringService {
 
     // Detect build type based on total stats across all 6 discs
     // This determines which weight profile (CRIT, Anomaly, or Support) to use
-    const detectedBuildType = this.detectBuildType(equippedDiscs, agentId);
+    // NOTE: If upgrade plan is provided, this detection is not used
+    const detectedBuildType = upgradePlan ? undefined : this.detectBuildType(equippedDiscs, agentId);
 
     // Convert disc ratings to numeric scores
     const ratingToScore: { [key: string]: number } = {
@@ -1097,8 +1135,8 @@ export class ScoringService {
 
     let totalScore = 0;
     equippedDiscs.forEach((disc) => {
-      // Score each disc using the detected build type
-      const result = this.calculateDiscScore(disc, agentId, detectedBuildType);
+      // Score each disc using the detected build type OR upgrade plan
+      const result = this.calculateDiscScore(disc, agentId, detectedBuildType, upgradePlan);
       totalScore += ratingToScore[result.rating.grade] || 0;
     });
 
@@ -1485,6 +1523,33 @@ export class ScoringService {
   }
 
   /**
+   * Convert upgrade plan custom breakpoints to AgentBreakpoints format
+   * This allows the existing scoring logic to work with custom user-defined breakpoints
+   */
+  private convertUpgradePlanToBreakpoints(upgradePlan: UpgradePlan, agentId: string): AgentBreakpoints | null {
+    if (!upgradePlan.customBreakpoints) {
+      return null;
+    }
+
+    // Convert upgrade plan format to AgentBreakpoints format
+    const breakpoints: any = {};
+
+    Object.keys(upgradePlan.customBreakpoints).forEach(statKey => {
+      breakpoints[statKey] = {
+        min: upgradePlan.customBreakpoints[statKey].min,
+        optimal: upgradePlan.customBreakpoints[statKey].optimal
+      };
+    });
+
+    return {
+      name: upgradePlan.name,
+      breakpoints: breakpoints,
+      priorityStats: [], // Not used when upgrade plan is active
+      statWeights: {} // Not used when upgrade plan is active
+    };
+  }
+
+  /**
    * Calculate composite build score
    * Combines 4 components:
    * - Breakpoint Score (40%): Meeting stat breakpoints
@@ -1493,6 +1558,8 @@ export class ScoringService {
    * - Set Bonus Score (10%): Whether set effects align with agent needs
    *
    * W-Engine and Mindscape stats are included with 0.25x weight
+   *
+   * NEW: If upgrade plan is provided, use custom breakpoints and priorities
    */
   calculateCompositeBuildScore(
     agentId: string,
@@ -1506,9 +1573,13 @@ export class ScoringService {
     agentElement?: string,
     agentLevel?: number,
     agentScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number },
-    wengineScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number }
+    wengineScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number },
+    upgradePlan?: UpgradePlan  // NEW: Use upgrade plan if provided
   ): { score: number; rating: BuildRating; breakdown: any } {
-    const breakpoints = this.agentBreakpoints[agentId];
+    // Use custom breakpoints from upgrade plan if provided, otherwise use default
+    const breakpoints = upgradePlan
+      ? this.convertUpgradePlanToBreakpoints(upgradePlan, agentId)
+      : this.agentBreakpoints[agentId];
 
     if (!breakpoints) {
       return {
@@ -1537,7 +1608,8 @@ export class ScoringService {
     const breakpointScore = breakpointResult.score; // 0-100 percentage
     const discQualityScore = this.calculateDiscQualityScore(
       equippedDiscs,
-      agentId
+      agentId,
+      upgradePlan  // Pass upgrade plan to use custom priorities
     ); // 0-100
 
     const statEfficiencyScore = this.calculateStatEfficiencyScore(

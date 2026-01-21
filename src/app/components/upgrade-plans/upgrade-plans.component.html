@@ -1,0 +1,273 @@
+<div class="upgrade-plans-container">
+  <!-- Left Sidebar: Plan List -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>Upgrade Plans</h2>
+      <div class="sidebar-actions">
+        <button class="btn-export" (click)="exportPlans()" title="Export All Plans">
+          📤 Export
+        </button>
+        <label class="btn-import" title="Import Plans">
+          📥 Import
+          <input type="file" accept=".json" (change)="importPlans($event)" style="display: none;">
+        </label>
+      </div>
+    </div>
+
+    <!-- Create New Plan Form -->
+    <div class="create-plan-form">
+      <h3>Create New Plan</h3>
+      <input
+        type="text"
+        [(ngModel)]="newPlanName"
+        placeholder="Plan Name"
+        class="form-input"
+      />
+      <select
+        [(ngModel)]="newPlanAgentId"
+        class="form-select"
+      >
+        <option value="">Select Agent</option>
+        <option *ngFor="let agent of referenceAgents" [value]="agent.id">
+          {{ agent.name }}
+        </option>
+      </select>
+      <textarea
+        [(ngModel)]="newPlanDescription"
+        placeholder="Description (optional)"
+        class="form-textarea"
+        rows="2"
+      ></textarea>
+      <button class="btn-create" (click)="createNewPlan()">
+        ✨ Create Plan
+      </button>
+    </div>
+
+    <!-- Plans List (grouped by agent) -->
+    <div class="plans-list">
+      <div *ngIf="plans.length === 0" class="empty-message">
+        No upgrade plans yet. Create one above!
+      </div>
+
+      <div *ngFor="let agentId of Object.keys(getPlansByAgent())">
+        <div class="agent-group-header">
+          {{ getAgentName(agentId) }}
+        </div>
+        <div
+          *ngFor="let plan of getPlansByAgent()[agentId]"
+          class="plan-card"
+          [class.selected]="selectedPlan?.id === plan.id"
+          (click)="selectPlan(plan)"
+        >
+          <div class="plan-card-content">
+            <div class="plan-name">{{ plan.name }}</div>
+            <div class="plan-description" *ngIf="plan.description">
+              {{ plan.description }}
+            </div>
+          </div>
+          <div class="plan-card-actions">
+            <button class="btn-icon" (click)="duplicatePlan(plan); $event.stopPropagation()" title="Duplicate">
+              📋
+            </button>
+            <button class="btn-icon" (click)="confirmDeletePlan(plan); $event.stopPropagation()" title="Delete">
+              🗑️
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel: Plan Editor -->
+  <div class="editor-panel">
+    <div *ngIf="!selectedPlan" class="empty-state">
+      <div class="empty-icon">📋</div>
+      <h3>No Plan Selected</h3>
+      <p>Select a plan from the left sidebar or create a new one to get started.</p>
+    </div>
+
+    <div *ngIf="selectedPlan" class="editor-content">
+      <!-- Editor Header -->
+      <div class="editor-header">
+        <h2>{{ selectedPlan.name }}</h2>
+        <button class="btn-save" (click)="savePlan()">
+          💾 Save Plan
+        </button>
+      </div>
+
+      <!-- Section 1: Basic Info -->
+      <div class="editor-section">
+        <h3>Basic Information</h3>
+        <div class="form-group">
+          <label>Plan Name</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedPlan.name"
+            class="form-input"
+          />
+        </div>
+        <div class="form-group">
+          <label>Agent</label>
+          <select
+            [(ngModel)]="selectedPlan.agentId"
+            class="form-select"
+            disabled
+          >
+            <option *ngFor="let agent of referenceAgents" [value]="agent.id">
+              {{ agent.name }}
+            </option>
+          </select>
+          <small class="form-hint">Agent cannot be changed after creation</small>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            [(ngModel)]="selectedPlan.description"
+            class="form-textarea"
+            rows="3"
+            placeholder="Optional description for this plan"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Section 2: Main Stat Preferences (Drive 4/5/6) -->
+      <div class="editor-section">
+        <h3>Main Stat Preferences (Drive 4/5/6)</h3>
+        <p class="section-description">
+          Mark each main stat as Acceptable or Not Acceptable for each slot.
+        </p>
+
+        <div *ngFor="let slot of ['Drive4', 'Drive5', 'Drive6']" class="main-stat-slot">
+          <h4>Drive {{ slot.replace('Drive', '') }}</h4>
+          <div class="main-stat-grid">
+            <div
+              *ngFor="let stat of getMainStatsForSlot(slot)"
+              class="main-stat-item"
+              [class.acceptable]="getMainStatPreference(slot, stat) === 'Acceptable'"
+              [class.not-acceptable]="getMainStatPreference(slot, stat) === 'Not Acceptable'"
+              (click)="toggleMainStatPreference(slot, stat)"
+            >
+              <span class="stat-name">{{ formatStatName(stat) }}</span>
+              <span class="stat-status">
+                {{ getMainStatPreference(slot, stat) === 'Acceptable' ? '✓ OK' : '✗ Bad' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Substat Priorities (All 6 Drives) -->
+      <div class="editor-section">
+        <h3>Substat Priorities (All 6 Drives)</h3>
+        <p class="section-description">
+          Set priority level for each substat on each disc slot.
+        </p>
+
+        <div *ngFor="let slot of discSlots" class="substat-slot">
+          <h4>
+            <span class="slot-indicator">{{ slot.replace('Drive', '') }}</span>
+            Drive {{ slot.replace('Drive', '') }}
+          </h4>
+          <div class="substat-grid">
+            <div *ngFor="let stat of allSubstats" class="substat-item">
+              <label class="substat-label">{{ formatStatName(stat) }}</label>
+              <select
+                [value]="getSubstatPriority(slot, stat)"
+                (change)="setSubstatPriority(slot, stat, $any($event.target).value)"
+                class="substat-select"
+                [class.essential]="getSubstatPriority(slot, stat) === 'Essential'"
+                [class.important]="getSubstatPriority(slot, stat) === 'Important'"
+                [class.nice]="getSubstatPriority(slot, stat) === 'Nice'"
+                [class.ignore]="getSubstatPriority(slot, stat) === 'Ignore'"
+              >
+                <option value="Essential">Essential</option>
+                <option value="Important">Important</option>
+                <option value="Nice">Nice</option>
+                <option value="Ignore">Ignore</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Custom Breakpoints -->
+      <div class="editor-section">
+        <h3>Custom Breakpoints</h3>
+        <p class="section-description">
+          Set minimum and optimal stat targets. Percentage stats (CRIT Rate, CRIT DMG, PEN Ratio, Energy Regen) are displayed with %.
+        </p>
+
+        <div class="breakpoints-table">
+          <div class="breakpoints-header">
+            <div class="col-stat">Stat</div>
+            <div class="col-min">Minimum</div>
+            <div class="col-optimal">Optimal</div>
+            <div class="col-actions">Actions</div>
+          </div>
+
+          <div *ngFor="let stat of breakpointStats" class="breakpoint-row">
+            <div class="col-stat">
+              <strong>{{ stat.label }}</strong>
+            </div>
+            <div class="col-min">
+              <input
+                type="number"
+                [value]="getBreakpoint(stat.key, 'min')"
+                (input)="setBreakpoint(stat.key, 'min', $any($event.target).value)"
+                class="breakpoint-input"
+                [placeholder]="stat.isPercentage ? '0%' : '0'"
+              />
+              <span class="unit-label" *ngIf="stat.isPercentage">%</span>
+            </div>
+            <div class="col-optimal">
+              <input
+                type="number"
+                [value]="getBreakpoint(stat.key, 'optimal')"
+                (input)="setBreakpoint(stat.key, 'optimal', $any($event.target).value)"
+                class="breakpoint-input"
+                [placeholder]="stat.isPercentage ? '0%' : '0'"
+              />
+              <span class="unit-label" *ngIf="stat.isPercentage">%</span>
+            </div>
+            <div class="col-actions">
+              <button
+                class="btn-reset"
+                (click)="resetBreakpoint(stat.key)"
+                title="Reset to 0"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Save Button at Bottom -->
+      <div class="editor-footer">
+        <button class="btn-save-large" (click)="savePlan()">
+          💾 Save All Changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div *ngIf="showDeleteConfirm" class="modal-overlay" (click)="cancelDelete()">
+  <div class="modal-content confirm-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Delete Plan</h2>
+      <button class="close-btn" (click)="cancelDelete()">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-message">
+        Are you sure you want to delete "<strong>{{ planToDelete?.name }}</strong>"?
+        This action cannot be undone.
+      </p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" (click)="cancelDelete()">Cancel</button>
+      <button class="btn-danger" (click)="deletePlan()">Delete</button>
+    </div>
+  </div>
+</div>
