@@ -93,6 +93,7 @@ interface MindscapeData {
 export class ScoringService {
   private agentBreakpoints: { [agentId: string]: AgentBreakpoints } = {};
   private breakpointsLoaded = false;
+  private agentStatWeights: { [agentId: string]: any } = {};
   private discSetData: { [setId: string]: DiscSetData } = {};
   private mindscapeData: MindscapeData | null = null;
 
@@ -109,6 +110,7 @@ export class ScoringService {
   private async loadAllData() {
     await Promise.all([
       this.loadAgentBreakpoints(),
+      this.loadAgentStatWeights(),
       this.loadDiscSetData(),
       this.loadMindscapeData(),
       this.loadSkillMultipliers(),
@@ -167,6 +169,21 @@ export class ScoringService {
       console.log('Loaded agent breakpoints for scoring');
     } catch (error) {
       console.error('Failed to load agent breakpoints:', error);
+    }
+  }
+
+  /**
+   * Load contextual stat weights from Interknot Network data
+   */
+  private async loadAgentStatWeights() {
+    try {
+      const data = await firstValueFrom(
+        this.http.get<any>(versionedUrl('assets/data/agent-stat-weights.json'))
+      );
+      this.agentStatWeights = data.agents || {};
+      console.log('Loaded contextual stat weights for disc scoring');
+    } catch (error) {
+      console.error('Failed to load agent stat weights:', error);
     }
   }
 
@@ -267,30 +284,30 @@ export class ScoringService {
       }>,
     };
 
-    // Use agent-specific stat weights (0.7-1.0 range)
-    // Falls back to priorityStats array if statWeights not defined
+    // STEP 0: Get contextual weights based on main stat (NEW CONTEXTUAL SYSTEM)
+    // Uses Interknot Network data where substat weights vary based on equipped main stat
     let statWeights: { [stat: string]: number } = {};
+    let mainStatPoints = 0;
 
-    if (agentId && this.agentBreakpoints[agentId]) {
-      const agentConfig = this.agentBreakpoints[agentId];
+    if (agentId && this.agentStatWeights[agentId]) {
+      // Use new contextual weight system from agent-stat-weights.json
+      const agentWeights = this.agentStatWeights[agentId];
+      const contextualData = agentWeights.contextualWeights?.[disc.slot]?.[disc.mainStat.type];
 
-      if (agentConfig.statWeights) {
-        // New weighted system - use statWeights directly
-        statWeights = agentConfig.statWeights;
-      } else if (agentConfig.priorityStats) {
-        // Old array system - convert to weights (all 1.0)
-        if (Array.isArray(agentConfig.priorityStats)) {
-          statWeights = agentConfig.priorityStats.reduce((acc, stat) => {
-            acc[stat] = 1.0;
-            return acc;
-          }, {} as { [stat: string]: number });
-        } else {
-          // priorityStats is already an object (shouldn't happen, but handle it)
-          statWeights = agentConfig.priorityStats;
-        }
+      if (contextualData) {
+        // Found contextual weights for this slot + main stat combination
+        mainStatPoints = contextualData.mainStatPoints;
+        statWeights = contextualData.substatWeights;
+      } else {
+        // No contextual data for this main stat - this is an off-meta main stat
+        // Award default points for Drive 1-3 (fixed slots), 0 for Drive 4-6
+        mainStatPoints = (disc.slot === 'Drive1' || disc.slot === 'Drive2' || disc.slot === 'Drive3') ? 3 : 0;
+        statWeights = {}; // No substats will have weights (off-meta build)
       }
     } else {
-      // No agent specified - all stats weighted equally at 1.0
+      // No agent specified or no stat weights data available
+      // Use generic scoring: all stats weighted equally at 1.0
+      mainStatPoints = 3;
       statWeights = {
         CRIT_Rate: 1.0,
         CRIT_DMG: 1.0,
@@ -304,38 +321,6 @@ export class ScoringService {
         PEN: 1.0,
         PEN_Ratio: 1.0,
       };
-    }
-
-    // STEP 1: Main Stat Points (tiered: 3, 2, or 0 based on mainStatWeights)
-    // Drive 1-3 have static main stats (HP, ATK, DEF), so always award 3 points
-    // Drive 4-6 use mainStatWeights for tiered scoring (3 = optimal, 2 = acceptable, 0 = bad)
-    let mainStatPoints = 0;
-
-    // For Drive 1, 2, 3: Always award main stat points (they're static, can't be changed)
-    if (disc.slot === 'Drive1' || disc.slot === 'Drive2' || disc.slot === 'Drive3') {
-      mainStatPoints = 3;
-    }
-    // For Drive 4, 5, 6: Use mainStatWeights for tiered scoring
-    else if (agentId && this.agentBreakpoints[agentId]) {
-      const agentConfig = this.agentBreakpoints[agentId];
-      const mainStatWeight = agentConfig.mainStatWeights?.[disc.slot]?.[disc.mainStat.type];
-
-      if (mainStatWeight !== undefined) {
-        // Use the defined mainStatWeight (3, 2, or 0)
-        mainStatPoints = mainStatWeight;
-      } else {
-        // Fallback: if main stat not defined in mainStatWeights, check priorityStats
-        if (agentConfig.priorityStats?.includes(disc.mainStat.type)) {
-          mainStatPoints = 2; // Assume tier 2 if in priorityStats but not in mainStatWeights
-        }
-      }
-    }
-    // No agent specified - award 3 for any valid main stat
-    else {
-      const baseMainStatBonus = MAIN_STAT_BONUS[disc.slot]?.[disc.mainStat.type] || 0;
-      if (baseMainStatBonus > 0) {
-        mainStatPoints = 3;
-      }
     }
 
     breakdown.mainStatPoints = mainStatPoints;
