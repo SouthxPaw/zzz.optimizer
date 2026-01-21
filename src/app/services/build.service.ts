@@ -31,6 +31,8 @@ export interface AgentBuild {
   includeWEngineBonuses?: boolean;
   includeMindscapeBonuses?: boolean;
   includePassiveBonuses?: boolean;
+  // Active upgrade plan (overrides default weight system)
+  activeUpgradePlanId?: string; // Reference to UpgradePlan ID
 }
 
 @Injectable({
