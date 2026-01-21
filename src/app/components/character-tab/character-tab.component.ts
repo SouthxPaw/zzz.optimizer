@@ -1309,11 +1309,37 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   // Check if a substat type is a priority stat for the selected build's agent
+  // Now uses build-aware weights that adapt based on detected build type (CRIT vs Anomaly)
   isPrioritySubstat(substatType: SubStatType): boolean {
     if (!this.selectedBuild || !this.scoringService.areBreakpointsLoaded()) {
       return false;
     }
 
+    // Get all equipped discs for build detection
+    const equippedDiscs: Disc[] = [];
+    if (this.selectedBuild.equippedDiscs) {
+      Object.values(this.selectedBuild.equippedDiscs).forEach(disc => {
+        if (disc) equippedDiscs.push(disc);
+      });
+    }
+
+    // Detect build type (CRIT, Anomaly, or Support) based on equipped discs
+    const detectedBuildType = equippedDiscs.length > 0
+      ? this.scoringService.detectBuildType(equippedDiscs, this.selectedBuild.agentId)
+      : 'CRIT';
+
+    // Get build-aware stat weights
+    const buildWeights = this.scoringService.getBuildStatWeights(
+      this.selectedBuild.agentId,
+      detectedBuildType
+    );
+
+    // Check if this substat is valued in the detected build (weight >= 1.0)
+    if (Object.keys(buildWeights).length > 0) {
+      return (buildWeights[substatType] || 0) >= 1.0;
+    }
+
+    // Fallback to old system if new weights not available
     const breakpoints = this.scoringService.getAgentBreakpoints(
       this.selectedBuild.agentId,
     );
@@ -1321,7 +1347,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    // Check statWeights first (new format)
+    // Check statWeights first (old format)
     if (
       breakpoints.statWeights &&
       breakpoints.statWeights[substatType] !== undefined
@@ -1329,7 +1355,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return breakpoints.statWeights[substatType] > 0;
     }
 
-    // Fall back to priorityStats array (old format)
+    // Fall back to priorityStats array (oldest format)
     if (breakpoints.priorityStats && Array.isArray(breakpoints.priorityStats)) {
       return breakpoints.priorityStats.includes(substatType);
     }
