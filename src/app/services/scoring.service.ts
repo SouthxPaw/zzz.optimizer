@@ -252,6 +252,78 @@ export class ScoringService {
   }
 
   /**
+   * Get aggregated stat weights for a specific agent and build type
+   * Returns max weight for each stat across all disc slots
+   * Public method for UI components to check which stats are valuable
+   */
+  getBuildStatWeights(agentId: string, buildType: string): { [stat: string]: number } {
+    const buildStatWeights: { [stat: string]: number } = {};
+
+    if (!this.agentStatWeights[agentId]) {
+      return buildStatWeights;
+    }
+
+    const buildData = this.agentStatWeights[agentId].builds?.[buildType];
+    if (!buildData) {
+      return buildStatWeights;
+    }
+
+    // Aggregate max weight for each stat across all disc slots/main stats
+    Object.values(buildData.contextualWeights || {}).forEach((slotData: any) => {
+      Object.values(slotData || {}).forEach((mainStatData: any) => {
+        Object.entries(mainStatData.substatWeights || {}).forEach(([stat, weight]) => {
+          buildStatWeights[stat] = Math.max(buildStatWeights[stat] || 0, weight as number);
+        });
+      });
+    });
+
+    return buildStatWeights;
+  }
+
+  /**
+   * Detect build type (CRIT or Anomaly) based on total stats across all 6 discs
+   * This determines which weight profile to use for scoring
+   * Public method so UI components can also detect build type
+   */
+  detectBuildType(discs: Disc[], agentId?: string): string {
+    if (!agentId || !this.agentStatWeights[agentId]) {
+      return 'CRIT'; // Default to CRIT if no agent data
+    }
+
+    const availableBuilds = this.agentStatWeights[agentId].builds;
+    if (!availableBuilds) {
+      return 'CRIT'; // Fallback to CRIT
+    }
+
+    // If only one build available, use it
+    const buildTypes = Object.keys(availableBuilds);
+    if (buildTypes.length === 1) {
+      return buildTypes[0];
+    }
+
+    // Count total rolls in CRIT stats vs Anomaly stats (substats only)
+    let anomalyRolls = 0;
+    let critRolls = 0;
+
+    discs.forEach(disc => {
+      disc.subStats.forEach(substat => {
+        const rolls = calculateRollCount(substat.type, substat.value);
+
+        if (substat.type === 'Anomaly_Proficiency') {
+          anomalyRolls += rolls;
+        } else if (substat.type === 'Anomaly_Mastery') {
+          anomalyRolls += rolls / 1.33; // Normalize AM to AP scale (12 max vs 9 max)
+        } else if (substat.type === 'CRIT_Rate' || substat.type === 'CRIT_DMG') {
+          critRolls += rolls;
+        }
+      });
+    });
+
+    // Return build type with higher roll count
+    return (anomalyRolls > critRolls) ? 'Anomaly' : 'CRIT';
+  }
+
+  /**
    * Calculate disc score based on substats and main stat
    * Uses agent-specific weights from breakpoints config
    *
@@ -267,7 +339,8 @@ export class ScoringService {
    */
   calculateDiscScore(
     disc: Disc,
-    agentId?: string
+    agentId?: string,
+    buildType?: string
   ): { score: number; rating: DiscRating; breakdown: any } {
     const breakdown = {
       mainStatPoints: 0,
@@ -284,25 +357,43 @@ export class ScoringService {
       }>,
     };
 
-    // STEP 0: Get contextual weights based on main stat (NEW CONTEXTUAL SYSTEM)
+    // STEP 0: Get contextual weights based on main stat and build type (NEW CONTEXTUAL SYSTEM)
     // Uses Interknot Network data where substat weights vary based on equipped main stat
+    // Now also supports multiple builds (CRIT, Anomaly, Support) with different weight profiles
     let statWeights: { [stat: string]: number } = {};
     let mainStatPoints = 0;
 
     if (agentId && this.agentStatWeights[agentId]) {
       // Use new contextual weight system from agent-stat-weights.json
-      const agentWeights = this.agentStatWeights[agentId];
-      const contextualData = agentWeights.contextualWeights?.[disc.slot]?.[disc.mainStat.type];
+      const agentData = this.agentStatWeights[agentId];
 
-      if (contextualData) {
-        // Found contextual weights for this slot + main stat combination
-        mainStatPoints = contextualData.mainStatPoints;
-        statWeights = contextualData.substatWeights;
+      // Select the appropriate build (CRIT, Anomaly, or Support)
+      // If buildType not provided, default to first available build
+      let selectedBuildType = buildType;
+      if (!selectedBuildType && agentData.builds) {
+        selectedBuildType = Object.keys(agentData.builds)[0] || 'CRIT';
+      }
+
+      // Get the build's contextual weights
+      const buildWeights = agentData.builds?.[selectedBuildType || 'CRIT'];
+      if (buildWeights) {
+        const contextualData = buildWeights.contextualWeights?.[disc.slot]?.[disc.mainStat.type];
+
+        if (contextualData) {
+          // Found contextual weights for this slot + main stat combination
+          mainStatPoints = contextualData.mainStatPoints;
+          statWeights = contextualData.substatWeights;
+          breakdown.detectedBuild = selectedBuildType || null;
+        } else {
+          // No contextual data for this main stat - this is an off-meta main stat
+          // Award default points for Drive 1-3 (fixed slots), 0 for Drive 4-6
+          mainStatPoints = (disc.slot === 'Drive1' || disc.slot === 'Drive2' || disc.slot === 'Drive3') ? 3 : 0;
+          statWeights = {}; // No substats will have weights (off-meta build)
+        }
       } else {
-        // No contextual data for this main stat - this is an off-meta main stat
-        // Award default points for Drive 1-3 (fixed slots), 0 for Drive 4-6
+        // Build type not found, use default points
         mainStatPoints = (disc.slot === 'Drive1' || disc.slot === 'Drive2' || disc.slot === 'Drive3') ? 3 : 0;
-        statWeights = {}; // No substats will have weights (off-meta build)
+        statWeights = {};
       }
     } else {
       // No agent specified or no stat weights data available
@@ -986,6 +1077,10 @@ export class ScoringService {
       return 0;
     }
 
+    // Detect build type based on total stats across all 6 discs
+    // This determines which weight profile (CRIT, Anomaly, or Support) to use
+    const detectedBuildType = this.detectBuildType(equippedDiscs, agentId);
+
     // Convert disc ratings to numeric scores
     const ratingToScore: { [key: string]: number } = {
       'VH': 110,  // Top 3% globally - exceeds perfection
@@ -1002,7 +1097,8 @@ export class ScoringService {
 
     let totalScore = 0;
     equippedDiscs.forEach((disc) => {
-      const result = this.calculateDiscScore(disc, agentId);
+      // Score each disc using the detected build type
+      const result = this.calculateDiscScore(disc, agentId, detectedBuildType);
       totalScore += ratingToScore[result.rating.grade] || 0;
     });
 
@@ -1236,49 +1332,6 @@ export class ScoringService {
     }
 
     return false;
-  }
-
-  /**
-   * Get the weight for a stat from breakpoints config
-   * Returns 1.0 if stat is in priorityStats, or the actual weight from statWeights
-   */
-  private getStatWeight(statKey: string, breakpoints: AgentBreakpoints): number {
-    // Map breakpoint key to statWeights key
-    const statKeyMap: { [key: string]: string[] } = {
-      critRate: ['CRIT_Rate'],
-      critDmg: ['CRIT_DMG'],
-      atk: ['ATK%', 'ATK'],
-      hp: ['HP%', 'HP'],
-      def: ['DEF%', 'DEF'],
-      anomalyProficiency: ['Anomaly_Proficiency'],
-      anomalyMastery: ['Anomaly_Mastery'],
-      pen: ['PEN'],
-      penRatio: ['PEN_Ratio'],
-      impact: ['Impact'],
-      energyRegen: ['Energy_Regen'],
-    };
-
-    const possibleKeys = statKeyMap[statKey] || [];
-
-    // Check statWeights first
-    if (breakpoints.statWeights) {
-      for (const key of possibleKeys) {
-        if (breakpoints.statWeights[key] !== undefined) {
-          return breakpoints.statWeights[key];
-        }
-      }
-    }
-
-    // Fall back to priorityStats (all weighted 1.0)
-    if (breakpoints.priorityStats && Array.isArray(breakpoints.priorityStats)) {
-      for (const key of possibleKeys) {
-        if (breakpoints.priorityStats.includes(key)) {
-          return 1.0;
-        }
-      }
-    }
-
-    return 0;
   }
 
   /**
@@ -1620,11 +1673,15 @@ export class ScoringService {
     }
 
     // Check disc quality and find worst discs
+    // First, detect build type based on all equipped discs
+    const allDiscs = discSlots.map(slot => equippedDiscs[slot]).filter(d => d) as Disc[];
+    const detectedBuildType = allDiscs.length > 0 ? this.detectBuildType(allDiscs, agentId) : undefined;
+
     const discScores: Array<{ slot: string; score: number; grade: string }> = [];
     discSlots.forEach(slot => {
       const disc = equippedDiscs[slot];
       if (disc) {
-        const scoreResult = this.calculateDiscScore(disc, agentId);
+        const scoreResult = this.calculateDiscScore(disc, agentId, detectedBuildType);
         discScores.push({
           slot,
           score: scoreResult.score,
@@ -1660,40 +1717,27 @@ export class ScoringService {
       });
     }
 
-    // Build list of stats that need improvement (for disc suggestions)
-    const statsNeedingImprovement: Array<{ stat: string; substatName: string; deficit: number; weight: number }> = [];
-
-    Object.keys(breakpoints.breakpoints).forEach(statKey => {
-      const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
-      const statInfo = statMapping[statKey];
-      if (!statInfo || breakpoint.optimal === 0) return;
-
-      const isPriority = this.isPriorityStat(statKey, breakpoints);
-      const current = statInfo.value;
-      const optimal = breakpoint.optimal;
-
-      // Skip CRIT Rate if already at or above optimal OR 100% (only stat where excess hurts)
-      if (statKey === 'critRate' && (current >= optimal || current >= 100)) return;
-
-      // Calculate how far below optimal we are
-      if (current < optimal && isPriority) {
-        const deficit = optimal - current;
-        const deficitPercent = deficit / optimal;
-        // Get weight from statWeights if available
-        const weight = this.getStatWeight(statKey, breakpoints);
-        statsNeedingImprovement.push({
-          stat: statKey,
-          substatName: statInfo.substatName,
-          deficit: deficitPercent,
-          weight: weight,
+    // Get the build-aware stat weights for feedback FIRST
+    // This ensures we only suggest stats that are valuable for the detected build type
+    const buildStatWeights: { [stat: string]: number } = {};
+    if (detectedBuildType && this.agentStatWeights[agentId]) {
+      const buildData = this.agentStatWeights[agentId].builds?.[detectedBuildType];
+      if (buildData) {
+        // Aggregate max weight for each stat across all disc slots/main stats
+        Object.values(buildData.contextualWeights || {}).forEach((slotData: any) => {
+          Object.values(slotData || {}).forEach((mainStatData: any) => {
+            Object.entries(mainStatData.substatWeights || {}).forEach(([stat, weight]) => {
+              buildStatWeights[stat] = Math.max(buildStatWeights[stat] || 0, weight as number);
+            });
+          });
         });
       }
-    });
+    }
+    // Fallback to old system if new weights not available
+    const statWeightsToUse = Object.keys(buildStatWeights).length > 0
+      ? buildStatWeights
+      : (breakpoints.statWeights || {});
 
-    // Sort by weight * deficit (highest priority improvements first)
-    statsNeedingImprovement.sort((a, b) => (b.weight * b.deficit) - (a.weight * a.deficit));
-
-    // Analyze disc substats to find wasted rolls and give specific feedback
     // Map substat types to their weight key names
     const substatToWeightKey: { [key: string]: string } = {
       'HP': 'HP',
@@ -1710,6 +1754,56 @@ export class ScoringService {
       'Impact': 'Impact',
       'Energy_Regen': 'Energy_Regen',
     };
+
+    // Build list of stats that need improvement (for disc suggestions)
+    // Now uses build-aware weights to only suggest stats valued in the detected build
+    const statsNeedingImprovement: Array<{ stat: string; substatName: string; deficit: number; weight: number }> = [];
+
+    // Map breakpoint stat keys to weight keys
+    const breakpointToWeightKey: { [key: string]: string } = {
+      'hp': 'HP%',
+      'atk': 'ATK%',
+      'def': 'DEF%',
+      'impact': 'Impact',
+      'anomalyMastery': 'Anomaly_Mastery',
+      'critRate': 'CRIT_Rate',
+      'critDmg': 'CRIT_DMG',
+      'anomalyProficiency': 'Anomaly_Proficiency',
+      'pen': 'PEN',
+      'penRatio': 'PEN_Ratio',
+      'energyRegen': 'Energy_Regen',
+    };
+
+    Object.keys(breakpoints.breakpoints).forEach(statKey => {
+      const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
+      const statInfo = statMapping[statKey];
+      if (!statInfo || breakpoint.optimal === 0) return;
+
+      const current = statInfo.value;
+      const optimal = breakpoint.optimal;
+
+      // Skip CRIT Rate if already at or above optimal OR 100% (only stat where excess hurts)
+      if (statKey === 'critRate' && (current >= optimal || current >= 100)) return;
+
+      // Get weight from build-aware weights (only suggest if weight >= 1.0)
+      const weightKey = breakpointToWeightKey[statKey];
+      const weight = weightKey ? (statWeightsToUse[weightKey] || 0) : 0;
+
+      // Only suggest improvement if weight >= 1.0 (highly valued in this build)
+      if (current < optimal && weight >= 1.0) {
+        const deficit = optimal - current;
+        const deficitPercent = deficit / optimal;
+        statsNeedingImprovement.push({
+          stat: statKey,
+          substatName: statInfo.substatName,
+          deficit: deficitPercent,
+          weight: weight,
+        });
+      }
+    });
+
+    // Sort by weight * deficit (highest priority improvements first)
+    statsNeedingImprovement.sort((a, b) => (b.weight * b.deficit) - (a.weight * a.deficit));
 
     // Analyze each disc's substats for wasted rolls
     const discAnalysis: Array<{
@@ -1735,43 +1829,36 @@ export class ScoringService {
         const weightKey = substatToWeightKey[sub.type];
         presentStats.push(weightKey);
 
-        // Get weight for this substat (0 = not valuable for this agent)
-        let weight = 0;
-        if (breakpoints.statWeights && weightKey) {
-          weight = breakpoints.statWeights[weightKey] || 0;
-        } else if (breakpoints.priorityStats) {
-          weight = breakpoints.priorityStats.includes(weightKey) ? 1 : 0;
-        }
+        // Get weight for this substat from the detected build's weights
+        let weight = statWeightsToUse[weightKey] || 0;
 
         // Skip CRIT Rate check if overcapped - it's now a wasted stat
         if (sub.type === 'CRIT_Rate' && stats.critRate >= 100) {
           wastedStats.push('CRIT Rate');
-        } else if (weight === 0) {
-          // This substat has no value for this agent
+        } else if (weight < 1.0) {
+          // Only flag as wasted if weight < 1.0 (not highly valued in this build)
           const displayName = sub.type.replace('_', ' ').replace('%', '%');
           wastedStats.push(displayName);
         }
       });
 
-      // Find which priority stats are missing from this disc
+      // Find which priority stats (weight >= 1.0) are missing from this disc
       const missingPriorityStats: string[] = [];
-      if (breakpoints.statWeights) {
-        Object.entries(breakpoints.statWeights)
-          .filter(([, weight]) => weight > 0)
-          .filter(([stat]) => {
-            // Skip CRIT Rate if at or above optimal OR 100% (only stat where excess hurts)
-            if (stat === 'CRIT_Rate' && (stats.critRate >= breakpoints.breakpoints.critRate.optimal || stats.critRate >= 100)) return false;
-            return true;
-          })
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 4)
-          .forEach(([stat]) => {
-            if (!presentStats.includes(stat)) {
-              const displayName = stat.replace('_', ' ').replace('%', '%');
-              missingPriorityStats.push(displayName);
-            }
-          });
-      }
+      Object.entries(statWeightsToUse)
+        .filter(([, weight]) => weight >= 1.0)  // Only suggest stats with weight >= 1.0
+        .filter(([stat]) => {
+          // Skip CRIT Rate if at or above optimal OR 100% (only stat where excess hurts)
+          if (stat === 'CRIT_Rate' && (stats.critRate >= breakpoints.breakpoints.critRate.optimal || stats.critRate >= 100)) return false;
+          return true;
+        })
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 4)
+        .forEach(([stat]) => {
+          if (!presentStats.includes(stat)) {
+            const displayName = stat.replace('_', ' ').replace('%', '%');
+            missingPriorityStats.push(displayName);
+          }
+        });
 
       discAnalysis.push({
         slot,
