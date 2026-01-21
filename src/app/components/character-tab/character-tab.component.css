@@ -322,7 +322,7 @@
 .uid-history-container{position:relative}
 .uid-history-toggle{padding:8px 12px !important;min-width:auto}
 .history-icon{font-size:0.9em}
-.uid-history-dropdown-main{position:absolute;top:100%;left:0;margin-top:8px;background:var(--card);border:2px solid var(--gold);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.5);z-index:1000;min-width:250px;max-width:300px;overflow:hidden}
+:host ::ng-deep .uid-history-dropdown-main{position:absolute;top:100%;left:0;margin-top:8px;background:var(--card);border:2px solid var(--gold);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.5);z-index:1000;min-width:250px;max-width:300px;overflow:hidden}
 .uid-history-header{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;background:var(--bg);border-bottom:1px solid var(--bord);color:var(--gold);font-weight:600;font-size:0.95em}
 .clear-history-btn{background:transparent;border:none;color:var(--red);cursor:pointer;font-size:0.9em;padding:4px 8px;border-radius:4px;transition:all .2s}
 .clear-history-btn:hover{background:rgba(255,68,68,.2)}
