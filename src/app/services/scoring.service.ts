@@ -4,7 +4,6 @@ import { firstValueFrom } from 'rxjs';
 import { Disc } from '../models/disc.model';
 import { BaseStats, WEngine } from '../models/agent.model';
 import {
-  MAIN_STAT_BONUS,
   DISC_RATING_THRESHOLDS,
   BUILD_RATING_THRESHOLDS,
   EXTERNAL_STAT_WEIGHTS,
@@ -1526,7 +1525,7 @@ export class ScoringService {
    * Convert upgrade plan custom breakpoints to AgentBreakpoints format
    * This allows the existing scoring logic to work with custom user-defined breakpoints
    */
-  private convertUpgradePlanToBreakpoints(upgradePlan: UpgradePlan, agentId: string): AgentBreakpoints | null {
+  private convertUpgradePlanToBreakpoints(upgradePlan: UpgradePlan): AgentBreakpoints | null {
     if (!upgradePlan.customBreakpoints) {
       return null;
     }
@@ -1578,7 +1577,7 @@ export class ScoringService {
   ): { score: number; rating: BuildRating; breakdown: any } {
     // Use custom breakpoints from upgrade plan if provided, otherwise use default
     const breakpoints = upgradePlan
-      ? this.convertUpgradePlanToBreakpoints(upgradePlan, agentId)
+      ? this.convertUpgradePlanToBreakpoints(upgradePlan)
       : this.agentBreakpoints[agentId];
 
     if (!breakpoints) {
