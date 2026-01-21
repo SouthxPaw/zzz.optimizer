@@ -74,10 +74,10 @@ export interface DiscRating {
 
 export const DISC_RATING_THRESHOLDS: DiscRating[] = [
   { grade: 'VH', minPoints: 134, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection (GOD tier)' },
-  { grade: 'LGD', minPoints: 121, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-perfect disc (ZERO tier)' },
-  { grade: 'SSS', minPoints: 115, color: '#FF6B9D', description: 'Perfect - Outstanding disc (SSS tier)' },
-  { grade: 'SS', minPoints: 100, color: '#FF8C42', description: 'Excellent - Great disc (SS tier)' },
-  { grade: 'S', minPoints: 91, color: '#FFD93D', description: 'Very Good - Above average disc (S tier)' },
+  { grade: 'LGD', minPoints: 120, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-perfect disc (ZERO tier)' },
+  { grade: 'SSS', minPoints: 110, color: '#FF6B9D', description: 'Perfect - Outstanding disc (SSS tier)' },
+  { grade: 'SS', minPoints: 98, color: '#FF8C42', description: 'Excellent - Great disc (SS tier)' },
+  { grade: 'S', minPoints: 88, color: '#FFD93D', description: 'Very Good - Above average disc (S tier)' },
   { grade: 'A', minPoints: 78, color: '#6BCF7F', description: 'Good - Decent disc (A tier)' },
   { grade: 'B', minPoints: 57, color: '#4D96FF', description: 'Average - Usable disc (B tier)' },
   { grade: 'C', minPoints: 45, color: '#1920E6', description: 'Below Average - Needs upgrading (C tier)' },
