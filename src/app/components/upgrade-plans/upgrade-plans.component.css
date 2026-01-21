@@ -11,11 +11,9 @@
 
 .sidebar-actions{display:flex;gap:8px}
 
-.btn-export,.btn-import{background:var(--bg);color:var(--gold2);border:2px solid var(--gold);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.85em;font-weight:600;transition:all .15s}
+.btn-export,.btn-import{background:var(--bg);color:var(--gold2);border:2px solid var(--gold);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.85em;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
 
 .btn-export:hover,.btn-import:hover{background:var(--gold);color:var(--bg);transform:translateY(-1px)}
-
-.btn-import{display:inline-block}
 
 /* Create Plan Form */
 .create-plan-form{background:#151515;padding:15px;border-radius:8px;margin-bottom:20px;flex-shrink:0;border:1px solid var(--bord)}
@@ -209,6 +207,10 @@
 .confirm-message strong{color:var(--gold)}
 
 .modal-actions{display:flex;gap:12px;justify-content:flex-end;padding:20px 24px;border-top:1px solid var(--bord2)}
+
+.btn-primary{background:var(--gold);color:var(--bg);border:none;padding:10px 24px;border-radius:6px;cursor:pointer;font-weight:600;font-size:.95em;transition:all .15s}
+
+.btn-primary:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(244,185,66,.3)}
 
 .btn-secondary{background:var(--bg);color:var(--txt);border:2px solid var(--gold);padding:10px 24px;border-radius:6px;cursor:pointer;font-weight:600;font-size:.95em;transition:all .15s}
 
