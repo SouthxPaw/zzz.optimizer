@@ -23,8 +23,11 @@
 .notice-content li:last-child{margin-bottom:0}
 .notice-content strong{color:var(--gold)}
 .notice-content p{color:#ddd;line-height:1.6;margin:15px 0 0;padding-top:15px;border-top:1px solid rgba(244,185,66,.3);font-style:italic}
-.notice-close-btn{position:absolute;top:15px;right:15px;background:transparent;border:none;color:var(--gold);font-size:1.8em;cursor:pointer;padding:0;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:all .1s}
-.notice-close-btn:hover,.close-btn:hover{background:rgba(244,185,66,.2)}
+.notice-close-btn,.close-btn{background:transparent;border:none;color:var(--gold2);cursor:pointer;transition:all .1s}
+.notice-close-btn{position:absolute;top:15px;right:15px;font-size:1.8em;padding:0;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:4px}
+.close-btn{font-size:28px;width:32px;height:32px;border-radius:4px}
+.notice-close-btn:hover,.close-btn:hover{background:rgba(244,185,66,.2);transform:scale(1.1)}
+.close-btn:hover{color:var(--gold)}
 .header-actions{display:flex;gap:10px}
 .btn-primary,.btn-secondary{padding:10px 20px;border:none;border-radius:6px;cursor:pointer;font-size:.95em;font-weight:bold;transition:all .1s}
 .btn-primary{background:var(--gold);color:var(--bg)}
@@ -36,16 +39,14 @@
 .content-grid{display:grid;grid-template-columns:350px 1fr 400px;gap:20px;height:calc(100vh - 200px);min-height:600px}
 .section{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 4px 6px rgba(0,0,0,.5);border:1px solid var(--bord2)}
 .section.builds-list{display:flex;flex-direction:column;overflow:hidden;height:100%}
-.section.build-content{overflow-y:auto;height:100%}
-.section.summary-panel{overflow-y:auto;height:100%}
+.section.build-content,.section.summary-panel{overflow-y:auto;height:100%}
 .section h2{color:var(--gold);margin-top:0;border-bottom:2px solid var(--bord2);padding-bottom:10px}
 .section h3{color:var(--gold2);margin-top:20px;margin-bottom:10px}
-.build-header-with-actions{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-.build-header-with-actions h2{margin:0;padding:0;border:none}
+.build-header-with-actions,.section-header-inline{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.build-header-with-actions h2,.section-header-inline h2{margin:0;padding:0;border:none}
+.section-header-inline{flex-shrink:0}
 .btn-share{background:var(--gold);color:var(--bg);border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;font-size:.9em;transition:all .15s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .btn-share:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(244,185,66,.3)}
-.section-header-inline{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-shrink:0}
-.section-header-inline h2{margin:0;padding:0;border:none}
 .builds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;overflow-y:auto;padding-right:12px;padding:8px 8px 12px;flex-grow:1;align-content:start}
 .build-card,.agent-card{cursor:pointer;border-radius:8px;overflow:hidden;transition:all .15s;border:3px solid transparent;position:relative}
 .build-card{background:#151515}
@@ -55,7 +56,7 @@
 .build-card:hover,.agent-card:hover{border-color:var(--gold);box-shadow:0 6px 20px rgba(0,217,255,.3)}
 .build-card.selected,.agent-card.selected{border-color:#ffd700;box-shadow:0 0 20px rgba(255,215,0,.6)}
 .build-card.selected::before{content:'✓';position:absolute;top:8px;left:8px;width:24px;height:24px;background:var(--gold);color:var(--bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;z-index:5}
-.build-card .delete-btn,.agent-card .delete-btn{opacity:0}
+.build-card .delete-btn,.agent-card .delete-btn,.build-card:hover .delete-btn,.agent-card:hover .delete-btn{opacity:0}
 .build-card:hover .delete-btn,.agent-card:hover .delete-btn{opacity:1}
 .build-portrait,.agent-portrait{height:140px;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0}
 .build-portrait{background:linear-gradient(135deg,var(--bg),#151515)}
@@ -73,11 +74,10 @@
 .stat-badge{background:var(--card);padding:4px 8px;border-radius:4px;font-size:.75em;color:var(--gold2);text-align:center;border:1px solid #151515}
 .agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
 .agent-card{border:2px solid transparent}
-.delete-btn,.close-btn,.unequip-btn{border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s}
-.delete-btn,.unequip-btn{position:absolute;border-radius:50%;background:var(--red);color:#fff;z-index:10;opacity:0}
+.delete-btn,.unequip-btn{position:absolute;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;border-radius:50%;background:var(--red);color:#fff;z-index:10;opacity:0}
 .delete-btn{top:5px;right:5px;width:28px;height:28px;font-size:20px;line-height:1}
-.delete-btn:hover{background:#f00;transform:scale(1.1)}
 .unequip-btn{top:8px;right:8px;width:24px;height:24px;font-size:1.2em;font-weight:bold;line-height:1;padding:0}
+.delete-btn:hover{background:#f00;transform:scale(1.1)}
 .unequip-btn:hover{background:#c00}
 .agent-info{background:rgba(15,52,96,.6);padding:8px;display:flex;flex-direction:column;align-items:center;font-size:.85em;gap:4px;flex:1;min-height:0;justify-content:center;width:100%;box-sizing:border-box}
 .rank{color:#ffd700;font-weight:600}
@@ -115,9 +115,6 @@
 .modal-content{background:var(--card);border-radius:12px;width:90%;max-width:900px;max-height:90vh;overflow:hidden;box-shadow:0 8px 32px rgba(244,185,66,.3);border:1px solid var(--bord2)}
 .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:2px solid #151515}
 .modal-header h2{color:var(--gold);margin:0}
-.close-btn{background:none;color:var(--gold2);font-size:28px;width:32px;height:32px;border-radius:4px}
-.notice-close-btn:hover{transform:scale(1.1)}
-.close-btn:hover{color:var(--gold)}
 .modal-body{padding:20px;max-height:calc(90vh - 140px);overflow-y:auto}
 .modal-body p{color:var(--light);margin-bottom:15px}
 .agent-picker-controls,.disc-picker-controls{display:flex;gap:15px;margin-bottom:20px;padding:15px;background:#151515;border-radius:8px;flex-wrap:wrap}
@@ -136,10 +133,8 @@
 .import-textarea:focus{outline:none;border-color:var(--gold)}
 .modal-actions,.modal-footer{display:flex;gap:12px;justify-content:flex-end;padding:20px;border-top:1px solid var(--bord2)}
 .modal-actions{margin-top:0}
-.mindscape-section{margin-bottom:30px}
+.mindscape-section,.wengine-section,.stats-section{margin-bottom:30px}
 .disc-section{margin-top:20px;margin-bottom:30px}
-.wengine-section{margin-bottom:30px}
-.stats-section{margin-bottom:30px}
 .disc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:15px}
 .disc-slot{background:#151515;border-radius:8px;border:2px solid var(--bg);cursor:pointer;transition:all .1s;position:relative;min-height:180px}
 .disc-slot:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,217,255,.2)}
@@ -276,9 +271,10 @@
 .rating-s{background:#FFD93D;color:var(--bg);box-shadow:0 4px 12px rgba(255,217,61,.5)}
 .rating-a{background:#6BCF7F;color:var(--bg);box-shadow:0 4px 12px rgba(107,207,127,.5)}
 .rating-b{background:#4D96FF;color:var(--bg);box-shadow:0 4px 12px rgba(77,150,255,.5)}
-.rating-c{background:#1920E6;color:#fff;box-shadow:0 4px 12px rgba(160,160,160,.5)}
-.rating-d{background:#9C00DE;color:#fff;box-shadow:0 4px 12px rgba(128,128,128,.5)}
-.rating-f{background:#6B1F00;color:#fff;box-shadow:0 4px 12px rgba(96,96,96,.5)}
+.rating-c,.rating-d,.rating-f{color:#fff}
+.rating-c{background:#1920E6;box-shadow:0 4px 12px rgba(160,160,160,.5)}
+.rating-d{background:#9C00DE;box-shadow:0 4px 12px rgba(128,128,128,.5)}
+.rating-f{background:#6B1F00;box-shadow:0 4px 12px rgba(96,96,96,.5)}
 .section-label{display:block;color:var(--gold);font-size:1em;font-weight:600;margin-bottom:12px}
 .form-section{margin-bottom:20px}
 .form-section:last-child{margin-bottom:0}
