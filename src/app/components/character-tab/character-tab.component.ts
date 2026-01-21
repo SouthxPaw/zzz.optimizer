@@ -26,11 +26,14 @@ import {
 import { OptimizerComponent } from '../optimizer/optimizer.component';
 import { EnkaApiService } from '../../services/enka-api.service';
 import { EnkaImportService } from '../../services/enka-import.service';
+import { UpgradePlanService } from '../../services/upgrade-plan.service';
+import { UpgradePlan } from '../../models/upgrade-plan.model';
+import { UpgradePlansComponent } from '../upgrade-plans/upgrade-plans.component';
 
 @Component({
   selector: 'app-character-tab',
   standalone: true,
-  imports: [CommonModule, FormsModule, OptimizerComponent],
+  imports: [CommonModule, FormsModule, OptimizerComponent, UpgradePlansComponent],
   templateUrl: './character-tab.component.html',
   styleUrls: ['./character-tab.component.css'],
   // Using Default change detection due to many imperative updates
@@ -41,7 +44,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   selectedBuild: AgentBuild | null = null;
 
   // Active tab
-  activeTab: 'builds' | 'optimizer' = 'builds';
+  activeTab: 'builds' | 'upgrade-plans' | 'optimizer' = 'builds';
+
+  // Available upgrade plans (stored locally for change detection)
+  availablePlans: UpgradePlan[] = [];
 
   // Reference data for adding new builds
   referenceAgents: Agent[] = [];
@@ -154,6 +160,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private dataMappingService: DataMappingService,
     private enkaApiService: EnkaApiService,
     private enkaImportService: EnkaImportService,
+    private upgradePlanService: UpgradePlanService,
   ) {}
 
   ngOnInit() {
@@ -180,6 +187,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           this.includeMindscapeBonuses = build.includeMindscapeBonuses ?? true;
           this.includePassiveBonuses = build.includePassiveBonuses ?? true;
         }
+      });
+
+    // Subscribe to upgrade plans to keep dropdown updated
+    this.upgradePlanService.plans$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((plans) => {
+        // Store plans locally so Angular knows to update the dropdown
+        // Create new array reference to ensure change detection
+        this.availablePlans = [...plans];
       });
 
     // Load reference agents for the "Add Agent" modal
@@ -1187,9 +1203,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return null;
     }
 
+    // Get active upgrade plan if one is set
+    const activePlan = this.selectedBuild.activeUpgradePlanId
+      ? this.upgradePlanService.getPlanById(this.selectedBuild.activeUpgradePlanId)
+      : undefined;
+
     const result = this.scoringService.calculateDiscScore(
       disc,
       this.selectedBuild.agentId,
+      undefined, // buildType - not used when custom plan is active
+      activePlan  // Pass upgrade plan to override default weights
     );
     return {
       score: result.score,
@@ -1220,6 +1243,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       (a) => a.id === this.selectedBuild!.agentId,
     );
 
+    // Get active upgrade plan if one is set
+    const activePlan = this.selectedBuild.activeUpgradePlanId
+      ? this.upgradePlanService.getPlanById(this.selectedBuild.activeUpgradePlanId)
+      : undefined;
+
     // Use composite scoring which accounts for disc quality, W-Engine, Mindscape, set bonuses, and damage estimation
     const result = this.scoringService.calculateCompositeBuildScore(
       this.selectedBuild.agentId,
@@ -1232,6 +1260,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       agent?.specialty,
       agent?.element,
       60, // Default level 60, can be updated later
+      undefined, // agentScoring - not used here
+      undefined, // wengineScoring - not used here
+      activePlan  // Pass upgrade plan to override default weights and breakpoints
     );
 
     return {
@@ -1693,6 +1724,46 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           : 'Failed to fetch data from provided UID';
     } finally {
       this.isImportingFromEnka = false;
+    }
+  }
+
+  // ============================================================================
+  // UPGRADE PLAN METHODS
+  // ============================================================================
+
+  /**
+   * Get all upgrade plans for the selected build's agent
+   */
+  getPlansForSelectedAgent(): UpgradePlan[] {
+    if (!this.selectedBuild) {
+      return [];
+    }
+
+    // Filter from locally stored plans for proper change detection
+    return this.availablePlans.filter(plan => plan.agentId === this.selectedBuild!.agentId);
+  }
+
+  /**
+   * Handle upgrade plan change
+   * Recalculates disc scores and build score with new plan's priorities/breakpoints
+   */
+  async onUpgradePlanChange(): Promise<void> {
+    if (!this.selectedBuild) {
+      return;
+    }
+
+    console.log('Upgrade plan changed:', this.selectedBuild.activeUpgradePlanId);
+
+    try {
+      // Update the build with the new active plan ID
+      // This will trigger a recalculation in the build service
+      await this.buildService.updateBuild(this.selectedBuild.id, {
+        activeUpgradePlanId: this.selectedBuild.activeUpgradePlanId
+      });
+
+      console.log('Build updated with new upgrade plan');
+    } catch (error) {
+      console.error('Error updating build with upgrade plan:', error);
     }
   }
 }
