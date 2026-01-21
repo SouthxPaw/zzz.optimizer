@@ -73,15 +73,15 @@ export interface DiscRating {
 }
 
 export const DISC_RATING_THRESHOLDS: DiscRating[] = [
-  { grade: 'VH', minPoints: 135, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection (GOD tier)' },
-  { grade: 'LGD', minPoints: 118, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-perfect disc (ZERO tier)' },
-  { grade: 'SSS', minPoints: 100, color: '#FF6B9D', description: 'Perfect - Outstanding disc (SSS tier)' },
-  { grade: 'SS', minPoints: 91, color: '#FF8C42', description: 'Excellent - Great disc (SS tier)' },
-  { grade: 'S', minPoints: 82, color: '#FFD93D', description: 'Very Good - Above average disc (S tier)' },
-  { grade: 'A', minPoints: 72, color: '#6BCF7F', description: 'Good - Decent disc (A tier)' },
-  { grade: 'B', minPoints: 62, color: '#4D96FF', description: 'Average - Usable disc (B tier)' },
-  { grade: 'C', minPoints: 48, color: '#A0A0A0', description: 'Below Average - Needs upgrading (C tier)' },
-  { grade: 'D', minPoints: 40, color: '#808080', description: 'Poor - Consider replacing (D tier)' },
+  { grade: 'VH', minPoints: 134, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection (GOD tier)' },
+  { grade: 'LGD', minPoints: 123, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-perfect disc (ZERO tier)' },
+  { grade: 'SSS', minPoints: 115, color: '#FF6B9D', description: 'Perfect - Outstanding disc (SSS tier)' },
+  { grade: 'SS', minPoints: 100, color: '#FF8C42', description: 'Excellent - Great disc (SS tier)' },
+  { grade: 'S', minPoints: 88, color: '#FFD93D', description: 'Very Good - Above average disc (S tier)' },
+  { grade: 'A', minPoints: 81, color: '#6BCF7F', description: 'Good - Decent disc (A tier)' },
+  { grade: 'B', minPoints: 68, color: '#4D96FF', description: 'Average - Usable disc (B tier)' },
+  { grade: 'C', minPoints: 56, color: '#A0A0A0', description: 'Below Average - Needs upgrading (C tier)' },
+  { grade: 'D', minPoints: 45, color: '#808080', description: 'Poor - Consider replacing (D tier)' },
   { grade: 'F', minPoints: 0, color: '#606060', description: 'Unusable - Immediate fodder (F tier)' },
 ];
 
@@ -98,7 +98,7 @@ export interface BuildRating {
 }
 
 export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
-  { grade: 'VOID HUNTER', breakpointsMetPercentage: 97, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
+  { grade: 'VOID HUNTER', breakpointsMetPercentage: 95, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
   { grade: 'LEGENDARY', breakpointsMetPercentage: 92, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs' },
   { grade: 'SSS', breakpointsMetPercentage: 82, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
   { grade: 'SS', breakpointsMetPercentage: 75, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
