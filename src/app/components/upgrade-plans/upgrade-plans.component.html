@@ -4,12 +4,8 @@
     <div class="sidebar-header">
       <h2>Upgrade Plans</h2>
       <div class="sidebar-actions">
-        <button class="btn-export" (click)="exportPlans()" title="Export All Plans">
-          📤 Export
-        </button>
-        <label class="btn-import" title="Import Plans">
-          📥 Import
-          <input type="file" accept=".json" (change)="importPlans($event)" style="display: none;">
+        <button class="btn-export" (click)="exportPlans()" title="Export All Plans">📤 Export</button>
+        <label class="btn-import" title="Import Plans">📥 Import<input type="file" accept=".json" (change)="importPlans($event)" style="display: none;">
         </label>
       </div>
     </div>
@@ -66,7 +62,7 @@
             </div>
           </div>
           <div class="plan-card-actions">
-            <button class="btn-icon" (click)="duplicatePlan(plan); $event.stopPropagation()" title="Duplicate">
+            <button class="btn-icon" (click)="confirmDuplicatePlan(plan); $event.stopPropagation()" title="Duplicate this plan">
               📋
             </button>
             <button class="btn-icon" (click)="confirmDeletePlan(plan); $event.stopPropagation()" title="Delete">
@@ -248,6 +244,25 @@
           💾 Save All Changes
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Duplicate Confirmation Modal -->
+<div *ngIf="showDuplicateConfirm" class="modal-overlay" (click)="cancelDuplicate()">
+  <div class="modal-content confirm-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Duplicate Plan</h2>
+      <button class="close-btn" (click)="cancelDuplicate()">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-message">
+        Do you want to duplicate "<strong>{{ planToDuplicate?.name }}</strong>"?
+      </p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" (click)="cancelDuplicate()">Cancel</button>
+      <button class="btn-primary" (click)="duplicatePlan()">Duplicate</button>
     </div>
   </div>
 </div>

@@ -33,6 +33,8 @@ export class UpgradePlansComponent implements OnInit, OnDestroy {
   // UI state
   showDeleteConfirm = false;
   planToDelete: UpgradePlan | null = null;
+  showDuplicateConfirm = false;
+  planToDuplicate: UpgradePlan | null = null;
 
   // Form data for creating new plan
   newPlanName = '';
@@ -173,11 +175,27 @@ export class UpgradePlansComponent implements OnInit, OnDestroy {
     this.planToDelete = null;
   }
 
-  duplicatePlan(plan: UpgradePlan) {
-    const duplicated = this.upgradePlanService.duplicatePlan(plan.id);
+  confirmDuplicatePlan(plan: UpgradePlan) {
+    this.planToDuplicate = plan;
+    this.showDuplicateConfirm = true;
+  }
+
+  duplicatePlan() {
+    if (!this.planToDuplicate) return;
+
+    const duplicated = this.upgradePlanService.duplicatePlan(this.planToDuplicate.id);
     if (duplicated) {
       this.selectPlan(duplicated);
+      this.notificationService.success('Plan duplicated successfully!', 3000);
     }
+
+    this.showDuplicateConfirm = false;
+    this.planToDuplicate = null;
+  }
+
+  cancelDuplicate() {
+    this.showDuplicateConfirm = false;
+    this.planToDuplicate = null;
   }
 
   // ============================================================================
