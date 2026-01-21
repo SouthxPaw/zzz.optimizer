@@ -63,13 +63,3 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
-
-.btn-small {
-  padding: 5px 10px;
-  font-size: 0.9em;
-}
-
-.btn-large {
-  padding: 15px 30px;
-  font-size: 1.1em;
-}
