@@ -29,6 +29,7 @@ import { EnkaImportService } from '../../services/enka-import.service';
 import { UpgradePlanService } from '../../services/upgrade-plan.service';
 import { UpgradePlan } from '../../models/upgrade-plan.model';
 import { UpgradePlansComponent } from '../upgrade-plans/upgrade-plans.component';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-character-tab',
@@ -62,6 +63,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   showShareModal = false;
 
   @ViewChild('shareCanvas') shareCanvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('shareCard') shareCardRef!: ElementRef<HTMLDivElement>;
 
   // Bonus enable/disable toggles (for stat calculations)
   includeWEngineBonuses = true;
@@ -1763,307 +1765,42 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.showShareModal = false;
   }
 
+  isGeneratingShareImage = false;
+
   async generateShareImage() {
-    if (!this.selectedBuild || !this.shareCanvasRef) return;
+    if (!this.selectedBuild || !this.shareCardRef || !this.shareCanvasRef) return;
 
-    const canvas = this.shareCanvasRef.nativeElement;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    this.isGeneratingShareImage = true;
 
-    // Canvas dimensions - taller to fit all stats
-    const width = 1200;
-    const height = 1800;
-    canvas.width = width;
-    canvas.height = height;
+    try {
+      // Use html2canvas to convert the hidden HTML card to canvas
+      const cardElement = this.shareCardRef.nativeElement;
+      const generatedCanvas = await html2canvas(cardElement, {
+        backgroundColor: '#0a0a0a',
+        scale: 3, // Higher quality for sharper images
+        logging: false,
+        useCORS: true,
+        allowTaint: true,
+        imageTimeout: 0,
+        removeContainer: true
+      });
 
-    // App colors
-    const colors = {
-      bg: '#0a0a0a',
-      card: '#1a1a1a',
-      gold: '#f4b942',
-      gold2: '#d4a574',
-      text: '#eee',
-      border: '#2a2a2a',
-      // Rating colors from CSS
-      voidHunter: '#E0BBE4',
-      legendary: '#FFD700',
-      sss: '#FF6B9D',
-      ss: '#FF8C42',
-      s: '#FFD93D',
-      a: '#6BCF7F',
-      b: '#4D96FF',
-      c: '#1920E6',
-      d: '#9C00DE',
-      f: '#6B1F00'
-    };
+      // Draw the generated canvas onto our display canvas with high quality
+      const displayCanvas = this.shareCanvasRef.nativeElement;
+      displayCanvas.width = generatedCanvas.width;
+      displayCanvas.height = generatedCanvas.height;
 
-    // Background
-    ctx.fillStyle = colors.bg;
-    ctx.fillRect(0, 0, width, height);
-
-    // Border
-    ctx.strokeStyle = colors.gold;
-    ctx.lineWidth = 4;
-    ctx.strokeRect(10, 10, width - 20, height - 20);
-
-    // Get agent info
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
-    const buildScore = this.getBuildScore();
-
-    let yOffset = 60;
-
-    // Agent Icon (if available)
-    if (agent?.icon) {
-      try {
-        const agentImg = await this.loadImage(agent.icon);
-        const iconSize = 120;
-        const iconX = (width - iconSize) / 2;
-        ctx.drawImage(agentImg, iconX, yOffset, iconSize, iconSize);
-        yOffset += iconSize + 30;
-      } catch (e) {
-        console.error('Failed to load agent icon:', e);
-        yOffset += 20;
+      const ctx = displayCanvas.getContext('2d');
+      if (ctx) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(generatedCanvas, 0, 0);
       }
+    } catch (error) {
+      console.error('Error generating share image:', error);
+    } finally {
+      this.isGeneratingShareImage = false;
     }
-
-    // Agent Name
-    ctx.fillStyle = colors.gold;
-    ctx.font = 'bold 48px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText(agent?.name || 'Unknown Agent', width / 2, yOffset);
-    yOffset += 70;
-
-    // Build Rating
-    if (buildScore) {
-      const gradeColor = this.getCanvasGradeColor(buildScore.rating.grade, colors);
-
-      // Measure text width for dynamic badge sizing
-      ctx.font = 'bold 48px Arial';
-      const textMetrics = ctx.measureText(buildScore.rating.grade);
-      const badgeWidth = Math.max(300, textMetrics.width + 60); // Min 300px, or text width + padding
-      const badgeHeight = 80;
-      const badgeX = (width - badgeWidth) / 2;
-
-      // Rating badge background with rounded corners
-      ctx.fillStyle = gradeColor;
-      ctx.beginPath();
-      ctx.roundRect(badgeX, yOffset - 55, badgeWidth, badgeHeight, 12);
-      ctx.fill();
-
-      // Rating text
-      ctx.fillStyle = colors.bg;
-      ctx.font = 'bold 48px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText(buildScore.rating.grade, width / 2, yOffset);
-      yOffset += 60;
-    }
-
-    // Disc Drives Title
-    ctx.fillStyle = colors.gold2;
-    ctx.font = 'bold 32px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('Disc Drives', width / 2, yOffset);
-    yOffset += 50;
-
-    // Draw discs in a grid (2 rows of 3) - larger to fit substats
-    const discSize = 220;
-    const discSpacing = 25;
-    const startX = (width - (3 * discSize + 2 * discSpacing)) / 2;
-    let discX = startX;
-    let discY = yOffset;
-
-    for (let i = 0; i < 6; i++) {
-      const slot = this.discSlots[i];
-      const disc = this.selectedBuild.equippedDiscs[slot];
-
-      // Draw disc background
-      ctx.fillStyle = colors.card;
-      ctx.fillRect(discX, discY, discSize, discSize);
-      ctx.strokeStyle = colors.border;
-      ctx.lineWidth = 2;
-      ctx.strokeRect(discX, discY, discSize, discSize);
-
-      // Disc slot number
-      ctx.fillStyle = '#888';
-      ctx.font = 'bold 16px Arial';
-      ctx.textAlign = 'left';
-      ctx.fillText(`#${i + 1}`, discX + 10, discY + 25);
-
-      if (disc) {
-        // Get disc score
-        const discScore = this.getDiscScore(disc);
-        if (discScore) {
-          // Disc grade badge
-          const gradeColor = this.getCanvasGradeColor(discScore.rating.grade, colors);
-          const badgeSize = 50;
-          ctx.fillStyle = gradeColor;
-          ctx.fillRect(discX + discSize - badgeSize - 8, discY + 8, badgeSize, 30);
-
-          ctx.fillStyle = colors.bg;
-          ctx.font = 'bold 20px Arial';
-          ctx.textAlign = 'center';
-          ctx.fillText(discScore.rating.grade, discX + discSize - badgeSize / 2 - 8, discY + 30);
-        }
-
-        // Try to load and draw disc set icon
-        const discSet = this.referenceDiscSets.find(s => s.name === disc.set);
-        if (discSet?.icon) {
-          try {
-            const iconImg = await this.loadImage(discSet.icon);
-            const iconSize = 40;
-            const iconX = discX + (discSize - iconSize) / 2;
-            const iconY = discY + 45;
-            ctx.drawImage(iconImg, iconX, iconY, iconSize, iconSize);
-          } catch (e) {
-            // If icon fails to load, show set name as fallback
-            ctx.fillStyle = colors.gold2;
-            ctx.font = '13px Arial';
-            ctx.textAlign = 'center';
-            const setName = disc.set.length > 16 ? disc.set.substring(0, 13) + '...' : disc.set;
-            ctx.fillText(setName, discX + discSize / 2, discY + 65);
-          }
-        } else {
-          // No icon available, show set name
-          ctx.fillStyle = colors.gold2;
-          ctx.font = '13px Arial';
-          ctx.textAlign = 'center';
-          const setName = disc.set.length > 16 ? disc.set.substring(0, 13) + '...' : disc.set;
-          ctx.fillText(setName, discX + discSize / 2, discY + 65);
-        }
-
-        // Main stat
-        ctx.fillStyle = colors.text;
-        ctx.font = 'bold 14px Arial';
-        ctx.textAlign = 'center';
-        const mainStatName = this.formatStatType(disc.mainStat.type);
-        const truncatedMainStat = mainStatName.length > 12 ? mainStatName.substring(0, 10) + '.' : mainStatName;
-        ctx.fillText(truncatedMainStat, discX + discSize / 2, discY + 105);
-        ctx.font = 'bold 16px Arial';
-        ctx.fillText(`${disc.mainStat.value}`, discX + discSize / 2, discY + 125);
-
-        // Substats
-        let substatY = discY + 148;
-        ctx.font = '11px Arial';
-        ctx.fillStyle = '#aaa';
-        for (const substat of disc.subStats) {
-          const substatText = `${this.formatStatType(substat.type)}: ${substat.value}`;
-          const truncatedSubstat = substatText.length > 20 ? substatText.substring(0, 18) + '.' : substatText;
-          ctx.fillText(truncatedSubstat, discX + discSize / 2, substatY);
-          substatY += 16;
-        }
-      } else {
-        // Empty slot
-        ctx.fillStyle = '#555';
-        ctx.font = '18px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('Empty', discX + discSize / 2, discY + discSize / 2);
-      }
-
-      // Move to next position
-      if (i === 2) {
-        discX = startX;
-        discY += discSize + discSpacing;
-      } else {
-        discX += discSize + discSpacing;
-      }
-    }
-
-    yOffset = discY + discSize + 50;
-
-    // W-Engine
-    if (this.selectedBuild.equippedWEngine) {
-      ctx.fillStyle = colors.gold2;
-      ctx.font = 'bold 28px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText('W-Engine', width / 2, yOffset);
-      yOffset += 50;
-
-      // Try to load and draw W-Engine icon
-      if (this.selectedBuild.equippedWEngine.icon) {
-        try {
-          const wengineImg = await this.loadImage(this.selectedBuild.equippedWEngine.icon);
-          const iconSize = 80;
-          const iconX = (width - iconSize) / 2;
-          ctx.drawImage(wengineImg, iconX, yOffset, iconSize, iconSize);
-          yOffset += iconSize + 20;
-        } catch (e) {
-          console.error('Failed to load W-Engine icon:', e);
-        }
-      }
-
-      ctx.fillStyle = colors.text;
-      ctx.font = '22px Arial';
-      ctx.fillText(this.selectedBuild.equippedWEngine.name, width / 2, yOffset);
-      yOffset += 35;
-
-      ctx.fillStyle = '#aaa';
-      ctx.font = '18px Arial';
-      ctx.fillText(
-        `R${this.selectedBuild.wEngineRefinement} | ${this.selectedBuild.equippedWEngine.rarity}-Rank`,
-        width / 2,
-        yOffset
-      );
-      yOffset += 50;
-    }
-
-    // All Stats
-    ctx.fillStyle = colors.gold2;
-    ctx.font = 'bold 28px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('Stats', width / 2, yOffset);
-    yOffset += 45;
-
-    const stats = this.selectedBuild.calculatedStats;
-    const allStats = [
-      { label: 'HP', value: stats.hp },
-      { label: 'ATK', value: stats.atk },
-      { label: 'DEF', value: stats.def },
-      { label: 'Impact', value: stats.impact },
-      { label: 'Anomaly Mastery', value: stats.anomalyMastery },
-      { label: 'Anomaly Proficiency', value: stats.anomalyProficiency },
-      { label: 'PEN Ratio', value: `${stats.penRatio}%` },
-      { label: 'PEN', value: stats.pen },
-      { label: 'CRIT Rate', value: `${stats.critRate}%` },
-      { label: 'CRIT DMG', value: `${stats.critDmg}%` },
-      { label: 'Energy Regen', value: `${stats.energyRegen}%` },
-    ];
-
-    // Draw stats in two columns
-    ctx.font = '19px Arial';
-    const leftColX = width / 4;
-    const rightColX = (3 * width) / 4;
-    const statsPerCol = Math.ceil(allStats.length / 2);
-
-    for (let i = 0; i < allStats.length; i++) {
-      const stat = allStats[i];
-      const isLeftCol = i < statsPerCol;
-      const colX = isLeftCol ? leftColX : rightColX;
-      const rowY = yOffset + (i % statsPerCol) * 32;
-
-      ctx.fillStyle = colors.gold2;
-      ctx.textAlign = 'left';
-      ctx.fillText(`${stat.label}:`, colX - 120, rowY);
-
-      ctx.fillStyle = colors.text;
-      ctx.textAlign = 'right';
-      ctx.fillText(String(stat.value), colX + 120, rowY);
-    }
-
-    // Calculate final yOffset after stats
-    yOffset += statsPerCol * 32 + 50;
-
-    // Watermark
-    ctx.fillStyle = '#666';
-    ctx.font = '16px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('Generated with ZZZ Optimizer', width / 2, yOffset);
-    yOffset += 30;
-
-    // Resize canvas to actual content height
-    const finalHeight = yOffset;
-    const imageData = ctx.getImageData(0, 0, width, height);
-    canvas.height = finalHeight;
-    ctx.putImageData(imageData, 0, 0, 0, 0, width, finalHeight);
   }
 
   downloadShareImage() {
@@ -2324,5 +2061,79 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error updating build with upgrade plan:', error);
     }
+  }
+
+  // ============================================================================
+  // SHARE IMAGE HELPER METHODS
+  // ============================================================================
+
+  getAgentImage(): string {
+    if (!this.selectedBuild) return '';
+    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    return agent?.icon || '';
+  }
+
+  getAgentName(): string {
+    if (!this.selectedBuild) return 'Unknown Agent';
+    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    return agent?.name || 'Unknown Agent';
+  }
+
+  getElementIcon(): string {
+    if (!this.selectedBuild) return '';
+    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    if (!agent) return '';
+
+    // Use special element icon if available, otherwise use standard element icon
+    if (agent.specialElementIcon) {
+      return this.dataMappingService.getElementIconPath(agent.specialElementIcon);
+    }
+    return agent.elementIcon || '';
+  }
+
+  getRoleIcon(): string {
+    if (!this.selectedBuild) return '';
+    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    return agent?.specialty ? this.getSpecialtyIcon(agent.specialty) : '';
+  }
+
+  getBuildGrade(): string {
+    const buildScore = this.getBuildScore();
+    return buildScore?.rating.grade || 'N/A';
+  }
+
+  getDiscGrade(disc: Disc | undefined): string {
+    if (!disc) return '';
+    const discScore = this.getDiscScore(disc);
+    return discScore?.rating.grade || '';
+  }
+
+  getMainStats(): Array<{ iconName: string; label: string; value: string }> {
+    if (!this.selectedBuild) return [];
+
+    const stats = this.selectedBuild.calculatedStats;
+    return [
+      { iconName: 'HP', label: 'HP', value: String(stats.hp) },
+      { iconName: 'ATK', label: 'ATK', value: String(stats.atk) },
+      { iconName: 'DEF', label: 'DEF', value: String(stats.def) },
+      { iconName: 'CRIT_Rate', label: 'CRIT', value: `${stats.critRate}%` },
+      { iconName: 'CRIT_DMG', label: 'CD', value: `${stats.critDmg}%` },
+      { iconName: 'Impact', label: 'Impact', value: String(stats.impact) },
+      { iconName: 'Anomaly_Mastery', label: 'AM', value: String(stats.anomalyMastery) },
+      { iconName: 'Anomaly_Proficiency', label: 'AP', value: String(stats.anomalyProficiency) },
+      { iconName: 'PEN_Ratio', label: 'PEN%', value: `${stats.penRatio}%` },
+      { iconName: 'Energy_Regen', label: 'ER', value: `${stats.energyRegen}%` }
+    ];
+  }
+
+  getDiscBySlot(slotName: string): Disc | undefined {
+    if (!this.selectedBuild) return undefined;
+    return this.selectedBuild.equippedDiscs[slotName as DiscSlot];
+  }
+
+  getDiscSetIcon(disc: Disc | undefined): string {
+    if (!disc) return '';
+    const discSet = this.referenceDiscSets.find(s => s.name === disc.set);
+    return discSet?.icon || '';
   }
 }
