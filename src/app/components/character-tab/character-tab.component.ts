@@ -1809,11 +1809,17 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     const canvas = this.shareCanvasRef.nativeElement;
     const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
 
+    const timestamp = new Date()
+      .toISOString()
+      .replace(/[:.]/g, '-')   // remove illegal filename chars
+      .replace('T', '_')
+      .slice(0, 19);           // YYYY-MM-DD_HH-mm-ss
+
     canvas.toBlob((blob) => {
       if (blob) {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.download = `${agent?.name || 'build'}-${this.selectedBuild!.name}.png`;
+        link.download = `${agent?.name || 'build'}-${this.selectedBuild!.name}-${timestamp}.png`;
         link.href = url;
         link.click();
         URL.revokeObjectURL(url);
