@@ -9,11 +9,37 @@
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 10px rgba(102, 126, 234, 0.2);
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.btn-primary:hover:not(:disabled)::before {
+  width: 300px;
+  height: 300px;
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow:
+    0 4px 12px rgba(102, 126, 234, 0.4),
+    0 0 20px rgba(102, 126, 234, 0.3),
+    0 0 30px rgba(102, 126, 234, 0.2);
 }
 
 .btn-primary:disabled {
@@ -30,11 +56,20 @@
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s ease;
+  position: relative;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 0 10px rgba(0, 217, 255, 0.1);
 }
 
 .btn-secondary:hover:not(:disabled) {
   background: rgba(0, 217, 255, 0.1);
   transform: translateY(-1px);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(0, 217, 255, 0.4),
+    inset 0 0 20px rgba(0, 217, 255, 0.15);
+  text-shadow: 0 0 10px rgba(0, 217, 255, 0.8);
 }
 
 .btn-secondary:disabled {
@@ -43,7 +78,7 @@
 }
 
 .btn-danger {
-  background: #ff4757;
+  background: linear-gradient(135deg, #ff4757 0%, #dc3545 100%);
   color: white;
   border: none;
   padding: 10px 20px;
@@ -51,12 +86,18 @@
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s ease;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 0 10px rgba(255, 71, 87, 0.2);
 }
 
 .btn-danger:hover:not(:disabled) {
-  background: #ff3838;
+  background: linear-gradient(135deg, #ff3838 0%, #c82333 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+  box-shadow:
+    0 4px 12px rgba(255, 71, 87, 0.4),
+    0 0 20px rgba(255, 71, 87, 0.3),
+    0 0 30px rgba(255, 71, 87, 0.2);
 }
 
 .btn-danger:disabled {

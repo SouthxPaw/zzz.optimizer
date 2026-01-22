@@ -1666,7 +1666,7 @@ export class ScoringService {
       feedback.push({
         priority: 'medium',
         category: 'stat',
-        message: `CRIT Rate is ${Math.round(stats.critRate)}% - overcapped! You're wasting ${Math.round(stats.critRate - 100)}% CRIT Rate`,
+        message: `CRIT Rate is ${stats.critRate.toFixed(1)}% - overcapped! You're wasting ${(stats.critRate - 100).toFixed(1)}% CRIT Rate`,
         stat: 'critRate',
         currentValue: stats.critRate,
         targetValue: 100,
