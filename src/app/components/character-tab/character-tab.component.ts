@@ -28,6 +28,7 @@ import { EnkaApiService } from '../../services/enka-api.service';
 import { EnkaImportService } from '../../services/enka-import.service';
 import { UpgradePlanService } from '../../services/upgrade-plan.service';
 import { UpgradePlan } from '../../models/upgrade-plan.model';
+import { calculateRollCount } from '../../constants/substat-rolls';
 import { UpgradePlansComponent } from '../upgrade-plans/upgrade-plans.component';
 import html2canvas from 'html2canvas';
 
@@ -815,16 +816,23 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     name: string;
     value: string;
     isPercent: boolean;
+    rollCount: number;
+    isPriority: boolean;
   }> {
     if (!this.selectedBuild || !this.selectedBuild.equippedDiscs) {
       return [];
     }
 
-    // Aggregate substats by type
+    // Aggregate substats by type and count rolls
     const substatTotals: { [key: string]: number } = {};
+    const rollCounts: { [key: string]: number } = {};
 
     // Get enabled discs state (default to true if not set)
     const enabledDiscs = this.selectedBuild.enabledDiscs || {};
+
+    // Get priority stats for the agent from breakpoints
+    const agentBreakpoints = this.scoringService.getAgentBreakpoints(this.selectedBuild.agentId);
+    const priorityStats = agentBreakpoints?.priorityStats || [];
 
     // Iterate through all equipped discs, but only include enabled ones
     Object.entries(this.selectedBuild.equippedDiscs).forEach(([slot, disc]) => {
@@ -834,8 +842,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         disc.subStats.forEach((subStat) => {
           if (!substatTotals[subStat.type]) {
             substatTotals[subStat.type] = 0;
+            rollCounts[subStat.type] = 0;
           }
           substatTotals[subStat.type] += subStat.value;
+          // Count rolls: if rolls property exists, use it; otherwise calculate from value
+          const rollCount = subStat.rolls || calculateRollCount(subStat.type, subStat.value);
+          rollCounts[subStat.type] += rollCount;
         });
       }
     });
@@ -897,10 +909,21 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           displayName = type;
       }
 
+      // Check if this stat is a priority stat for the agent
+      const isPriority = priorityStats.some((priorityStat: string) => {
+        // Normalize both for comparison
+        const normalizedType = type.replace(/_/g, ' ').toLowerCase();
+        const normalizedPriority = priorityStat.replace(/_/g, ' ').toLowerCase();
+        return normalizedType === normalizedPriority ||
+               displayName.toLowerCase() === normalizedPriority;
+      });
+
       return {
         name: displayName,
         value: value.toFixed(1),
         isPercent: isPercent,
+        rollCount: rollCounts[type] || 0,
+        isPriority: isPriority
       };
     });
 
@@ -1249,11 +1272,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
             type: mainStatType,
             value: mainStatValue,
           },
-          subStats: this.discFormData.subStats.map((s) => ({
-            type: s.type as SubStatType,
-            value:
-              typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value,
-          })),
+          subStats: this.discFormData.subStats.map((s) => {
+            const value = typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value;
+            return {
+              type: s.type as SubStatType,
+              value: value,
+              rolls: calculateRollCount(s.type, value),
+            };
+          }),
         };
 
         // Update in inventory
@@ -1282,11 +1308,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
             type: mainStatType,
             value: mainStatValue,
           },
-          subStats: this.discFormData.subStats.map((s) => ({
-            type: s.type as SubStatType,
-            value:
-              typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value,
-          })),
+          subStats: this.discFormData.subStats.map((s) => {
+            const value = typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value;
+            return {
+              type: s.type as SubStatType,
+              value: value,
+              rolls: calculateRollCount(s.type, value),
+            };
+          }),
           lock: false,
         };
 
@@ -1773,15 +1802,34 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.isGeneratingShareImage = true;
 
     try {
-      // Use html2canvas to convert the hidden HTML card to canvas
       const cardElement = this.shareCardRef.nativeElement;
+
+      // Wait for all images to load before capturing
+      const images = cardElement.querySelectorAll('img');
+      const imagePromises = Array.from(images).map((img: Element) => {
+        const imgElement = img as HTMLImageElement;
+        if (imgElement.complete) {
+          return Promise.resolve();
+        }
+        return new Promise<void>((resolve) => {
+          imgElement.onload = () => resolve();
+          imgElement.onerror = () => resolve(); // Resolve anyway to not block
+          // Timeout after 3 seconds
+          setTimeout(() => resolve(), 3000);
+        });
+      });
+
+      // Wait for all images to load (or timeout)
+      await Promise.all(imagePromises);
+
+      // Use html2canvas to convert the hidden HTML card to canvas
       const generatedCanvas = await html2canvas(cardElement, {
         backgroundColor: '#0a0a0a',
         scale: 3, // Higher quality for sharper images
         logging: false,
         useCORS: true,
         allowTaint: true,
-        imageTimeout: 0,
+        imageTimeout: 5000, // Wait up to 5 seconds for images
         removeContainer: true
       });
 
@@ -2141,5 +2189,49 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     if (!disc) return '';
     const discSet = this.referenceDiscSets.find(s => s.name === disc.set);
     return discSet?.icon || '';
+  }
+
+  getWEngineStats(): Array<{ iconName: string; label: string; value: string }> {
+    if (!this.selectedBuild?.equippedWEngine) return [];
+
+    const wEngine = this.selectedBuild.equippedWEngine;
+    const stats: Array<{ iconName: string; label: string; value: string }> = [];
+
+    // Add base ATK
+    stats.push({
+      iconName: 'ATK',
+      label: 'Base ATK',
+      value: String(wEngine.baseAtk)
+    });
+
+    // Add substat
+    if (wEngine.subStat) {
+      const statTypeMap: Record<string, string> = {
+        'ATK%': 'ATK',
+        'HP%': 'HP',
+        'DEF%': 'DEF',
+        'CRIT_Rate': 'CRIT_Rate',
+        'CRIT_DMG': 'CRIT_DMG',
+        'PEN_Ratio': 'PEN_Ratio',
+        'Energy_Regen': 'Energy_Regen',
+        'Impact': 'Impact',
+        'Anomaly_Proficiency': 'Anomaly_Proficiency'
+      };
+
+      const iconName = statTypeMap[wEngine.subStat.type] || wEngine.subStat.type;
+      const isPercent = wEngine.subStat.type.includes('%') ||
+                       wEngine.subStat.type === 'CRIT_Rate' ||
+                       wEngine.subStat.type === 'CRIT_DMG' ||
+                       wEngine.subStat.type === 'PEN_Ratio' ||
+                       wEngine.subStat.type === 'Energy_Regen';
+
+      stats.push({
+        iconName: iconName,
+        label: wEngine.subStat.type.replace(/_/g, ' '),
+        value: isPercent ? `${wEngine.subStat.value}%` : String(wEngine.subStat.value)
+      });
+    }
+
+    return stats;
   }
 }

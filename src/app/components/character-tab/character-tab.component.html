@@ -1432,8 +1432,17 @@
               </div>
 
               <!-- W-Engine (center) -->
-              <div class="wengine-image-container" *ngIf="selectedBuild.equippedWEngine">
-                <img [src]="selectedBuild.equippedWEngine.icon" class="wengine-image" alt="W-Engine" />
+              <div class="wengine-center-container" *ngIf="selectedBuild.equippedWEngine">
+                <div class="wengine-image-container">
+                  <img [src]="selectedBuild.equippedWEngine.icon" class="wengine-image" alt="W-Engine" />
+                </div>
+                <div class="wengine-stats-card">
+                  <div class="wengine-stat" *ngFor="let stat of getWEngineStats()">
+                    <img [src]="'assets/data/images/share-image/Icon_Stat_' + stat.iconName + '.webp'" class="wengine-stat-icon" alt="{{stat.label}}" />
+                    <span class="wengine-stat-label">{{ stat.label }}:</span>
+                    <span class="wengine-stat-value">{{ stat.value }}</span>
+                  </div>
+                </div>
               </div>
 
               <!-- Disc 4 (top-right) -->
@@ -1516,9 +1525,8 @@
           <!-- Footer: Substats Breakdown & Credits -->
           <div class="substats-footer">
             <div class="substats-breakdown">
-              <span *ngFor="let stat of getSubstatBreakdown(); let last = last">
-                {{ stat.name }}: {{ stat.value }}{{ stat.isPercent ? '%' : '' }}
-                <span class="separator" *ngIf="!last"> | </span>
+              <span *ngFor="let stat of getSubstatBreakdown(); let last = last" class="substat-item" [class.priority-stat]="stat.isPriority">
+                ({{ stat.rollCount }}) {{ stat.name }}: {{ stat.value }}{{ stat.isPercent ? '%' : '' }}<span class="separator" *ngIf="!last"> | </span>
               </span>
             </div>
             <div class="credits">
