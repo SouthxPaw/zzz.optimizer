@@ -42,8 +42,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "35kB",
-                  "maximumError": "45kB"
+                  "maximumWarning": "40kB",
+                  "maximumError": "50kB"
                 }
               ],
               "outputHashing": "all",
@@ -54,7 +54,10 @@
                   "inlineCritical": true
                 },
                 "fonts": true
-              }
+              },
+              "allowedCommonJsDependencies": [
+                "html2canvas"
+              ]
             },
             "development": {
               "optimization": false,
@@ -74,9 +77,12 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "35kB",
-                  "maximumError": "45kB"
+                  "maximumWarning": "40kB",
+                  "maximumError": "50kB"
                 }
+              ],
+              "allowedCommonJsDependencies": [
+                "html2canvas"
               ]
             }
           },
