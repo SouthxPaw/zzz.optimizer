@@ -1,6 +1,6 @@
 {
   "name": "zzz.optimizer",
-  "version": "4.1.10",
+  "version": "4.1.11",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -20,7 +20,9 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "@types/html2canvas": "^0.5.35",
     "dexie": "^4.2.1",
+    "html2canvas": "^1.4.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

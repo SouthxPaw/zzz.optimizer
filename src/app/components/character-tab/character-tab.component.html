@@ -284,7 +284,10 @@
                     class="substat"
                     [class.priority]="isPrioritySubstat(subStat.type)"
                   >
-                    <span class="substat-type">{{ formatStatType(subStat.type) }}</span>
+                    <span class="substat-type">
+                      {{ formatStatType(subStat.type) }}
+                      <span class="roll-count" *ngIf="subStat.rolls && subStat.rolls > 1">+{{ subStat.rolls - 1 }}</span>
+                    </span>
                     <span class="substat-value">{{ subStat.value }}</span>
                   </div>
                 </div>
@@ -1301,13 +1304,242 @@
         </button>
       </div>
       <div class="modal-body share-modal-body">
-        <div class="share-image-container">
-          <canvas #shareCanvas></canvas>
+        <!-- Hidden HTML card that will be converted to image -->
+        <div #shareCard class="share-card" *ngIf="selectedBuild">
+          <!-- ZZZTV Background -->
+          <div class="share-background"></div>
+
+          <!-- Angled Black Bar with Golden Edges -->
+          <div class="angled-bar"></div>
+
+          <!-- Left Section: Agent Info -->
+          <div class="agent-section">
+            <img [src]="getAgentImage()" class="agent-backdrop-img" alt="Agent" />
+            <div class="agent-info-overlay">
+              <div class="build-rating-container">
+                <div class="build-rating-label">BUILD RATING:</div>
+                <div class="build-rating-badge" [ngClass]="'rating-' + getBuildGrade()">
+                  {{ getBuildGrade() }}
+                </div>
+              </div>
+              <div class="agent-bottom-info">
+                <h2 class="agent-name">{{ getAgentName() }}</h2>
+                <div class="mindscape-display" *ngIf="selectedBuild.mindscapeLevel > 0">
+                  M{{ selectedBuild.mindscapeLevel }}
+                </div>
+                <div class="agent-icons">
+                  <img [src]="getElementIcon()" class="element-icon" alt="Element" />
+                  <img [src]="getRoleIcon()" class="role-icon" alt="Role" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Section: Equipment -->
+          <div class="equipment-section">
+            <!-- Stats Bar (Top) -->
+            <div class="stats-bar">
+              <div class="stat-item" *ngFor="let stat of getMainStats()">
+                <img [src]="'assets/data/images/share-image/Icon_Stat_' + stat.iconName + '.webp'" class="stat-icon" alt="{{stat.label}}" />
+                <span class="stat-label">{{ stat.label }}:</span>
+                <span class="stat-value">{{ stat.value }}</span>
+              </div>
+            </div>
+
+            <!-- W-Engine Header -->
+            <div class="wengine-header" *ngIf="selectedBuild.equippedWEngine">
+              <span class="wengine-title">W-ENGINE: {{ selectedBuild.equippedWEngine.name }}</span>
+              <div class="wengine-stats">
+                <span>R{{ selectedBuild.wEngineRefinement }}</span>
+              </div>
+            </div>
+
+            <!-- Disc Grid Layout -->
+            <div class="disc-equipment-grid">
+              <!-- Disc 1 (top-left) -->
+              <div class="disc-card disc-pos-1" *ngIf="getDiscBySlot('Drive1') as disc">
+                <div class="disc-stats-card">
+                  <div class="disc-rating-badge" [ngClass]="'rating-' + getDiscGrade(disc)">
+                    {{ getDiscGrade(disc) }}
+                  </div>
+                  <div class="disc-main-stat">
+                    <span class="stat-type">{{ formatStatType(disc.mainStat.type) }}</span>
+                    <span class="stat-value">{{ disc.mainStat.value }}</span>
+                  </div>
+                  <div class="disc-substats">
+                    <div class="substat" *ngFor="let sub of disc.subStats">
+                      <span class="substat-type">
+                        {{ formatStatType(sub.type) }}
+                        <span class="roll-count" *ngIf="sub.rolls && sub.rolls > 1">+{{ sub.rolls - 1 }}</span>
+                      </span>
+                      <span class="substat-value">{{ sub.value }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="disc-image-container">
+                  <img [src]="getDiscSetIcon(disc)" class="disc-set-icon" alt="Disc Set" />
+                </div>
+              </div>
+
+              <!-- Disc 2 (middle-left) -->
+              <div class="disc-card disc-pos-2" *ngIf="getDiscBySlot('Drive2') as disc">
+                <div class="disc-stats-card">
+                  <div class="disc-rating-badge" [ngClass]="'rating-' + getDiscGrade(disc)">
+                    {{ getDiscGrade(disc) }}
+                  </div>
+                  <div class="disc-main-stat">
+                    <span class="stat-type">{{ formatStatType(disc.mainStat.type) }}</span>
+                    <span class="stat-value">{{ disc.mainStat.value }}</span>
+                  </div>
+                  <div class="disc-substats">
+                    <div class="substat" *ngFor="let sub of disc.subStats">
+                      <span class="substat-type">
+                        {{ formatStatType(sub.type) }}
+                        <span class="roll-count" *ngIf="sub.rolls && sub.rolls > 1">+{{ sub.rolls - 1 }}</span>
+                      </span>
+                      <span class="substat-value">{{ sub.value }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="disc-image-container">
+                  <img [src]="getDiscSetIcon(disc)" class="disc-set-icon" alt="Disc Set" />
+                </div>
+              </div>
+
+              <!-- Disc 3 (bottom-left) -->
+              <div class="disc-card disc-pos-3" *ngIf="getDiscBySlot('Drive3') as disc">
+                <div class="disc-stats-card">
+                  <div class="disc-rating-badge" [ngClass]="'rating-' + getDiscGrade(disc)">
+                    {{ getDiscGrade(disc) }}
+                  </div>
+                  <div class="disc-main-stat">
+                    <span class="stat-type">{{ formatStatType(disc.mainStat.type) }}</span>
+                    <span class="stat-value">{{ disc.mainStat.value }}</span>
+                  </div>
+                  <div class="disc-substats">
+                    <div class="substat" *ngFor="let sub of disc.subStats">
+                      <span class="substat-type">
+                        {{ formatStatType(sub.type) }}
+                        <span class="roll-count" *ngIf="sub.rolls && sub.rolls > 1">+{{ sub.rolls - 1 }}</span>
+                      </span>
+                      <span class="substat-value">{{ sub.value }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="disc-image-container">
+                  <img [src]="getDiscSetIcon(disc)" class="disc-set-icon" alt="Disc Set" />
+                </div>
+              </div>
+
+              <!-- W-Engine (center) -->
+              <div class="wengine-image-container" *ngIf="selectedBuild.equippedWEngine">
+                <img [src]="selectedBuild.equippedWEngine.icon" class="wengine-image" alt="W-Engine" />
+              </div>
+
+              <!-- Disc 4 (top-right) -->
+              <div class="disc-card disc-pos-4" *ngIf="getDiscBySlot('Drive4') as disc">
+                <div class="disc-image-container">
+                  <img [src]="getDiscSetIcon(disc)" class="disc-set-icon" alt="Disc Set" />
+                </div>
+                <div class="disc-stats-card">
+                  <div class="disc-rating-badge" [ngClass]="'rating-' + getDiscGrade(disc)">
+                    {{ getDiscGrade(disc) }}
+                  </div>
+                  <div class="disc-main-stat">
+                    <span class="stat-type">{{ formatStatType(disc.mainStat.type) }}</span>
+                    <span class="stat-value">{{ disc.mainStat.value }}</span>
+                  </div>
+                  <div class="disc-substats">
+                    <div class="substat" *ngFor="let sub of disc.subStats">
+                      <span class="substat-type">
+                        {{ formatStatType(sub.type) }}
+                        <span class="roll-count" *ngIf="sub.rolls && sub.rolls > 1">+{{ sub.rolls - 1 }}</span>
+                      </span>
+                      <span class="substat-value">{{ sub.value }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Disc 5 (middle-right) -->
+              <div class="disc-card disc-pos-5" *ngIf="getDiscBySlot('Drive5') as disc">
+                <div class="disc-image-container">
+                  <img [src]="getDiscSetIcon(disc)" class="disc-set-icon" alt="Disc Set" />
+                </div>
+                <div class="disc-stats-card">
+                  <div class="disc-rating-badge" [ngClass]="'rating-' + getDiscGrade(disc)">
+                    {{ getDiscGrade(disc) }}
+                  </div>
+                  <div class="disc-main-stat">
+                    <span class="stat-type">{{ formatStatType(disc.mainStat.type) }}</span>
+                    <span class="stat-value">{{ disc.mainStat.value }}</span>
+                  </div>
+                  <div class="disc-substats">
+                    <div class="substat" *ngFor="let sub of disc.subStats">
+                      <span class="substat-type">
+                        {{ formatStatType(sub.type) }}
+                        <span class="roll-count" *ngIf="sub.rolls && sub.rolls > 1">+{{ sub.rolls - 1 }}</span>
+                      </span>
+                      <span class="substat-value">{{ sub.value }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Disc 6 (bottom-right) -->
+              <div class="disc-card disc-pos-6" *ngIf="getDiscBySlot('Drive6') as disc">
+                <div class="disc-image-container">
+                  <img [src]="getDiscSetIcon(disc)" class="disc-set-icon" alt="Disc Set" />
+                </div>
+                <div class="disc-stats-card">
+                  <div class="disc-rating-badge" [ngClass]="'rating-' + getDiscGrade(disc)">
+                    {{ getDiscGrade(disc) }}
+                  </div>
+                  <div class="disc-main-stat">
+                    <span class="stat-type">{{ formatStatType(disc.mainStat.type) }}</span>
+                    <span class="stat-value">{{ disc.mainStat.value }}</span>
+                  </div>
+                  <div class="disc-substats">
+                    <div class="substat" *ngFor="let sub of disc.subStats">
+                      <span class="substat-type">
+                        {{ formatStatType(sub.type) }}
+                        <span class="roll-count" *ngIf="sub.rolls && sub.rolls > 1">+{{ sub.rolls - 1 }}</span>
+                      </span>
+                      <span class="substat-value">{{ sub.value }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer: Substats Breakdown & Credits -->
+          <div class="substats-footer">
+            <div class="substats-breakdown">
+              <span *ngFor="let stat of getSubstatBreakdown(); let last = last">
+                {{ stat.name }}: {{ stat.value }}{{ stat.isPercent ? '%' : '' }}
+                <span class="separator" *ngIf="!last"> | </span>
+              </span>
+            </div>
+            <div class="credits">
+              Made in southxpaw.github.io/zzz.optimizer
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview canvas (where the image will be shown) -->
+        <div class="share-image-preview">
+          <!-- Loading indicator -->
+          <div class="share-loading" *ngIf="isGeneratingShareImage">
+            <div class="loading-spinner"></div>
+            <p>Generating image...</p>
+          </div>
+          <canvas #shareCanvas [style.display]="isGeneratingShareImage ? 'none' : 'block'"></canvas>
         </div>
       </div>
       <div class="modal-actions">
         <button class="btn-secondary" (click)="closeShareModal()">Cancel</button>
-        <button class="btn-primary" (click)="downloadShareImage()">Download Image</button>
+        <button class="btn-primary" (click)="downloadShareImage()" [disabled]="isGeneratingShareImage">Download Image</button>
       </div>
     </div>
   </div>
