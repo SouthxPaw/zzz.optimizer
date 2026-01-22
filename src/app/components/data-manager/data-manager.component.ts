@@ -48,6 +48,7 @@ export class DataManagerComponent {
 
   async importAllFromAssets() {
     this.isLoading = true;
+    this.cdr.markForCheck();
     this.setMessage('Importing all data from assets folder...', 'info');
 
     try {
@@ -67,11 +68,13 @@ export class DataManagerComponent {
       this.setMessage('Error importing data. Check console for details.', 'error');
     } finally {
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
   async importAgentsFromAssets() {
     this.isLoading = true;
+    this.cdr.markForCheck();
     this.setMessage('Importing agents...', 'info');
 
     try {
@@ -82,11 +85,13 @@ export class DataManagerComponent {
       this.setMessage('Error importing agents. Check console for details.', 'error');
     } finally {
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
   async importWEnginesFromAssets() {
     this.isLoading = true;
+    this.cdr.markForCheck();
     this.setMessage('Importing W-Engines...', 'info');
 
     try {
@@ -97,11 +102,13 @@ export class DataManagerComponent {
       this.setMessage('Error importing W-Engines. Check console for details.', 'error');
     } finally {
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
   async importDiscsFromAssets() {
     this.isLoading = true;
+    this.cdr.markForCheck();
     this.setMessage('Importing discs...', 'info');
 
     try {
@@ -112,11 +119,13 @@ export class DataManagerComponent {
       this.setMessage('Error importing discs. Check console for details.', 'error');
     } finally {
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
   async exportAllData() {
     this.isLoading = true;
+    this.cdr.markForCheck();
     this.setMessage('Exporting data...', 'info');
 
     try {
@@ -128,6 +137,7 @@ export class DataManagerComponent {
       this.setMessage('Error exporting data. Check console for details.', 'error');
     } finally {
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -167,6 +177,7 @@ export class DataManagerComponent {
   async clearUserData() {
     if (confirm('Are you sure you want to delete your user data (disc inventory)? This cannot be undone!')) {
       this.isLoading = true;
+      this.cdr.markForCheck();
       this.setMessage('Clearing user data...', 'info');
 
       try {
@@ -177,6 +188,7 @@ export class DataManagerComponent {
         this.setMessage('Error clearing user data. Check console for details.', 'error');
       } finally {
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     }
   }
@@ -184,6 +196,7 @@ export class DataManagerComponent {
   async clearReferenceData() {
     if (confirm('Are you sure you want to delete reference data (agents, W-Engines)? You can re-import it from assets.')) {
       this.isLoading = true;
+      this.cdr.markForCheck();
       this.setMessage('Clearing reference data...', 'info');
 
       try {
@@ -194,6 +207,7 @@ export class DataManagerComponent {
         this.setMessage('Error clearing reference data. Check console for details.', 'error');
       } finally {
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     }
   }
@@ -201,6 +215,7 @@ export class DataManagerComponent {
   async clearAllData() {
     if (confirm('Are you sure you want to delete ALL data (both reference and user data)? This cannot be undone!')) {
       this.isLoading = true;
+      this.cdr.markForCheck();
       this.setMessage('Clearing all data...', 'info');
 
       try {
@@ -211,12 +226,14 @@ export class DataManagerComponent {
         this.setMessage('Error clearing data. Check console for details.', 'error');
       } finally {
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     }
   }
 
   async exportBuilds() {
     this.isLoading = true;
+    this.cdr.markForCheck();
     this.setMessage('Exporting builds and discs...', 'info');
 
     try {
@@ -227,6 +244,7 @@ export class DataManagerComponent {
       this.setMessage('Error exporting builds', 'error');
     } finally {
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -250,6 +268,7 @@ export class DataManagerComponent {
     }
 
     this.isLoading = true;
+    this.cdr.markForCheck();
     this.setMessage('Importing builds and discs...', 'info');
 
     try {
@@ -268,6 +287,7 @@ export class DataManagerComponent {
       this.setMessage('Error importing file. Check console for details.', 'error');
     } finally {
       this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
