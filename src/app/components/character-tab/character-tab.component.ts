@@ -142,7 +142,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   isImportingFromEnka = false;
   enkaImportError = '';
   enkaImportSuccess = '';
-  uidHistory: string[] = [];
+  uidHistory: Array<{ uid: string; username: string }> = [];
   showUidHistoryDropdown = false;
   private readonly UID_HISTORY_KEY = 'zzz_uid_history';
   private readonly MAX_UID_HISTORY = 10;
@@ -1785,14 +1785,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       text: '#eee',
       border: '#2a2a2a',
       // Rating colors from CSS
-      voidHunter: '#E0BBE4', // Void Hunter gradient start
-      legendary: '#FFD700', // Legendary gradient start
+      voidHunter: '#E0BBE4',
+      legendary: '#FFD700',
       sss: '#FF6B9D',
       ss: '#FF8C42',
       s: '#FFD93D',
       a: '#6BCF7F',
       b: '#4D96FF',
-      c: '#A0A0A0'
+      c: '#1920E6',
+      d: '#9C00DE',
+      f: '#6B1F00'
     };
 
     // Background
@@ -2131,15 +2133,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
   }
 
-  addToUidHistory(uid: string) {
+  addToUidHistory(uid: string, username: string) {
     const trimmedUid = uid.trim();
     if (!trimmedUid) return;
 
     // Remove if already exists (to move to front)
-    this.uidHistory = this.uidHistory.filter(u => u !== trimmedUid);
+    this.uidHistory = this.uidHistory.filter(u => u.uid !== trimmedUid);
 
     // Add to front
-    this.uidHistory.unshift(trimmedUid);
+    this.uidHistory.unshift({ uid: trimmedUid, username });
 
     // Keep only last MAX_UID_HISTORY items
     if (this.uidHistory.length > this.MAX_UID_HISTORY) {
@@ -2149,11 +2151,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.saveUidHistory();
   }
 
-  async selectUidFromHistory(uid: string) {
+  async selectUidFromHistory(historyItem: { uid: string; username: string }) {
     this.showUidHistoryDropdown = false;
 
     // Import directly without opening modal
-    this.enkaUid = uid;
+    this.enkaUid = historyItem.uid;
     await this.importFromEnka();
   }
 
@@ -2207,7 +2209,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       console.log(`Received ${enkaResult.builds.length} builds from Enka`);
 
       // Add UID to history on successful fetch
-      this.addToUidHistory(this.enkaUid);
+      this.addToUidHistory(this.enkaUid, enkaResult.playerName);
 
       // Compare with existing builds
       const comparison = await this.enkaImportService.compareBuilds(
@@ -2234,7 +2236,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
         this.showConfirmation(
           'Import from UID',
-          `Found: ${summary}\n\nDo you want to import these builds?`,
+          `Found player: ${enkaResult.playerName}
+
+          ${summary}
+
+          Do you want to import these builds?`,
           async () => {
             try {
               const result = await this.enkaImportService.importBuilds(

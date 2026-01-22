@@ -1199,117 +1199,6 @@ export class ScoringService {
   }
 
   /**
-   * Calculate set bonus score
-   * Component 4 of composite build rating (10% weight)
-   * Evaluates if set effects align with agent's breakpoint weights
-   */
-  private calculateSetBonusScore(
-    equippedDiscs: Disc[],
-    agentId: string
-  ): number {
-    if (!equippedDiscs || equippedDiscs.length === 0) {
-      return 0;
-    }
-
-    const breakpoints = this.agentBreakpoints[agentId];
-    if (!breakpoints) {
-      return 0;
-    }
-
-    // Count disc sets
-    const setCounts: { [setName: string]: number } = {};
-    equippedDiscs.forEach((disc) => {
-      if (disc.set) {
-        setCounts[disc.set] = (setCounts[disc.set] || 0) + 1;
-      }
-    });
-
-    let setBonusScore = 0;
-    let activeSets = 0;
-
-    // Check each set for 2pc and 4pc bonuses
-    Object.keys(setCounts).forEach((setName) => {
-      const count = setCounts[setName];
-
-      // Find the disc set data by name
-      const setData = Object.values(this.discSetData).find(
-        (s) => s.Name === setName
-      );
-      if (!setData || !setData['4pcEffect']) {
-        return;
-      }
-
-      // Check 4pc bonus (if we have 4+ pieces)
-      if (count >= 4) {
-        activeSets++;
-        const properties = setData['4pcEffect'].Properties;
-
-        // Check if properties exist before iterating
-        if (!properties || properties.length === 0) {
-          return;
-        }
-
-        properties.forEach((prop) => {
-          // Map property names to breakpoint keys
-          const statKey = this.mapStatNameToBreakpointKey(prop.Name);
-          if (statKey) {
-            const breakpoint =
-              breakpoints.breakpoints[
-                statKey as keyof typeof breakpoints.breakpoints
-              ];
-            // Check if this stat is in priority list
-            const isPriority = this.isPriorityStat(statKey, breakpoints);
-
-            if (breakpoint && breakpoint.optimal > 0 && isPriority) {
-              // Good set effect - aligns with agent needs
-              setBonusScore += 10;
-            } else if (breakpoint && breakpoint.optimal === 0) {
-              // Bad set effect - doesn't align with agent needs
-              setBonusScore -= 5;
-            }
-          }
-        });
-      }
-      // Check 2pc bonus (if we have 2-3 pieces)
-      else if (count >= 2) {
-        activeSets++;
-        // 2pc bonuses are usually element damage or simple stat boosts
-        // Give a small bonus for having any 2pc active (neutral rating)
-        setBonusScore += 5;
-      }
-    });
-
-    // Normalize score to 0-100 scale
-    // If no sets active, return 0
-    // If sets active and aligned well, return up to 100
-    return activeSets > 0 ? Math.max(0, Math.min(100, 50 + setBonusScore)) : 0;
-  }
-
-  /**
-   * Map stat names from disc set data to breakpoint keys
-   */
-  private mapStatNameToBreakpointKey(statName: string): string | null {
-    const mapping: { [key: string]: string } = {
-      'ATK%': 'atk',
-      ATK: 'atk',
-      'HP%': 'hp',
-      HP: 'hp',
-      'DEF%': 'def',
-      DEF: 'def',
-      CRIT_Rate: 'critRate',
-      CRIT_DMG: 'critDmg',
-      Anomaly_Proficiency: 'anomalyProficiency',
-      Anomaly_Mastery: 'anomalyMastery',
-      PEN: 'pen',
-      PEN_Ratio: 'penRatio',
-      Impact: 'impact',
-      Energy_Regen: 'energyRegen',
-    };
-
-    return mapping[statName] || null;
-  }
-
-  /**
    * Check if a stat is a priority stat for the agent
    * Handles both old priorityStats array format and new statWeights object format
    * @param statKey - Breakpoint stat key (e.g., 'critRate', 'anomalyProficiency')
@@ -1616,8 +1505,6 @@ export class ScoringService {
       breakpoints
     ); // 0-100
 
-    const setBonusScore = this.calculateSetBonusScore(equippedDiscs, agentId); // 0-100
-
     // Calculate damage estimation score (if agent info provided)
     let damageScore = 0;
     let damageEstimate: any = null;
@@ -1667,7 +1554,6 @@ export class ScoringService {
       breakpointScore * BUILD_SCORE_WEIGHTS.BREAKPOINT +
       discQualityScore * BUILD_SCORE_WEIGHTS.DISC_QUALITY +
       statEfficiencyScore * BUILD_SCORE_WEIGHTS.STAT_EFFICIENCY +
-      setBonusScore * BUILD_SCORE_WEIGHTS.SET_BONUS +
       damageScore * BUILD_SCORE_WEIGHTS.DAMAGE_OUTPUT;
 
     const rating = this.getBuildRating(compositeScore);
@@ -1680,7 +1566,6 @@ export class ScoringService {
         breakpointDetails: breakpointResult.breakdown,
         discQualityScore: Math.round(discQualityScore * 10) / 10,
         statEfficiencyScore: Math.round(statEfficiencyScore * 10) / 10,
-        setBonusScore: Math.round(setBonusScore * 10) / 10,
         damageScore:
           damageScore > 0 ? Math.round(damageScore * 10) / 10 : undefined,
         damageEstimate: damageEstimate,

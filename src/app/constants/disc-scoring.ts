@@ -26,8 +26,7 @@ export const EXTERNAL_STAT_WEIGHTS = {
 export const BUILD_SCORE_WEIGHTS = {
   BREAKPOINT: 0.15,      // 15% - Meeting stat breakpoints with progressive scoring
   DISC_QUALITY: 0.60,    // 60% - Average disc rating quality (MOST IMPORTANT)
-  STAT_EFFICIENCY: 0.15, // 15% - Stat allocation efficiency (rewards smart building)
-  SET_BONUS: 0.05,       // 5% - Set effect alignment
+  STAT_EFFICIENCY: 0.20, // 15% - Stat allocation efficiency (rewards smart building)
   DAMAGE_OUTPUT: 0.05,   // 5% - Damage calculation with agent/W-Engine scoring modifiers
 };
 
@@ -98,10 +97,10 @@ export interface BuildRating {
 }
 
 export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
-  { grade: 'VOID HUNTER', breakpointsMetPercentage: 93, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
+  { grade: 'VOID HUNTER', breakpointsMetPercentage: 94, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
   { grade: 'LEGENDARY', breakpointsMetPercentage: 88, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs' },
   { grade: 'SSS', breakpointsMetPercentage: 82, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
-  { grade: 'SS', breakpointsMetPercentage: 76, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
+  { grade: 'SS', breakpointsMetPercentage: 77, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
   { grade: 'S', breakpointsMetPercentage: 62, color: '#FFD93D', description: 'Very Good - Strong build with pretty good discs' },
   { grade: 'A', breakpointsMetPercentage: 52, color: '#6BCF7F', description: 'Good - Solid build with decent discs' },
   { grade: 'B', breakpointsMetPercentage: 40, color: '#4D96FF', description: 'Decent - Room for improvement' },

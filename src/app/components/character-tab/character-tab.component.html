@@ -61,11 +61,11 @@
             </div>
             <div class="uid-history-list">
               <div
-                *ngFor="let uid of uidHistory"
+                *ngFor="let historyItem of uidHistory"
                 class="uid-history-item"
-                (click)="selectUidFromHistory(uid)"
+                (click)="selectUidFromHistory(historyItem)"
               >
-                {{ uid }}
+                [{{ historyItem.uid }}] - {{ historyItem.username }}
               </div>
             </div>
           </div>
@@ -101,6 +101,10 @@
           </li>
           <li>
             <strong>W-Engine Effects:</strong> Assumed to meet best-case
+            scenario conditions
+          </li>
+          <li>
+            <strong>Active Bonuses:</strong> Assumed to meet best-case
             scenario conditions
           </li>
         </ul>
@@ -1158,7 +1162,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <p id="confirm-dialog-message" class="confirm-message">
+        <p id="confirm-dialog-message" class="confirm-message" style="white-space: pre-line;">
           {{ confirmDialogData.message }}
         </p>
       </div>
