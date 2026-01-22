@@ -352,7 +352,7 @@
 .share-card {
   position: absolute;
   left: -9999px;
-  width: 1200px;
+  width: 1180px;
   height: 630px;
   background: #0a0a0a;
   overflow: hidden;
@@ -366,7 +366,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('/zzz.optimizer/assets/data/images/share-image/ZZZTV.jpg');
+  background-image: url('/assets/data/images/share-image/ZZZTV.jpg');
   background-size: cover;
   background-position: center;
   filter: brightness(0.6);
@@ -376,19 +376,12 @@
 /* Angled Bar with Golden Edges - Top Right to Bottom Left - SOLID */
 .angled-bar {
   position: absolute;
-  top: -200px;
-  right: -50px;
-  width: 650px;
-  height: 1100px;
-  background: linear-gradient(
-    to right,
-    rgba(244, 185, 66, 1) 0%,
-    rgba(244, 185, 66, 1) 4px,
-    rgba(10, 10, 10, 1) 4px,
-    rgba(10, 10, 10, 1) calc(100% - 4px),
-    rgba(244, 185, 66, 1) calc(100% - 4px),
-    rgba(244, 185, 66, 1) 100%
-  );
+  top: -500px;           /* push it way above so top is hidden */
+  right: -300px;         /* move it out of view on the right */
+  width: 1000px;         /* long enough to cover the area */
+  height: 1500px;        /* tall enough to extend past bottom */
+  background-color: #444444; /* lighter grey */
+  border: 4px solid #f4b942; /* gold outlines */
   transform: rotate(-30deg);
   z-index: 2;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
@@ -402,16 +395,19 @@
   width: 350px;
   height: 630px;
   z-index: 3;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .agent-backdrop-img {
   position: absolute;
-  width: 100%;
+  left: 50%;
+  top: 0;
   height: 100%;
-  object-fit: cover;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
   object-position: center top;
-  transform: translateY(80px) translateZ(0);
+  transform: translateX(-40%) translateY(80px) translateZ(0);
   filter: brightness(0.85);
   image-rendering: auto;
   image-rendering: high-quality;
@@ -611,10 +607,10 @@
 .share-card .disc-equipment-grid {
   position: absolute;
   top: 170px;
-  left: 50%;
+  left: 58%;
   transform: translateX(-50%);
   z-index: 2;
-  width: 750px;
+  width: 780px;
   height: 380px;
 }
 
@@ -623,80 +619,90 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 315px;
-  min-height: 85px;
+  width: 330px;
+  min-height: 100px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 8px;
+  gap: 15px;
 }
 .share-card .disc-pos-2 {
   position: absolute;
   top: 125px;
   left: 0;
-  width: 315px;
-  min-height: 85px;
+  width: 330px;
+  min-height: 100px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 8px;
+  gap: 15px;
 }
 .share-card .disc-pos-3 {
   position: absolute;
   top: 250px;
   left: 0;
-  width: 315px;
-  min-height: 85px;
+  width: 330px;
+  min-height: 100px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 8px;
+  gap: 15px;
 }
 
 /* W-ENGINE in center */
-.share-card .wengine-image-container {
+.share-card .wengine-center-container {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 40%;
+  left: 43%;
   transform: translate(-50%, -50%);
-  width: 120px;
-  height: 120px;
   z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.share-card .wengine-image-container {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* RIGHT SIDE - Disc Image + Disc Card */
 .share-card .disc-pos-6 {
   position: absolute;
   top: 0;
-  right: 0;
-  width: 315px;
-  min-height: 85px;
+  right: -50px;
+  width: 330px;
+  min-height: 100px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 8px;
+  gap: 15px;
 }
 .share-card .disc-pos-5 {
   position: absolute;
   top: 125px;
-  right: 0;
-  width: 315px;
-  min-height: 85px;
+  right: -50px;
+  width: 330px;
+  min-height: 100px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 8px;
+  gap: 15px;
 }
 .share-card .disc-pos-4 {
   position: absolute;
   top: 250px;
-  right: 0;
-  width: 315px;
-  min-height: 85px;
+  right: -50px;
+  width: 330px;
+  min-height: 100px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 8px;
+  gap: 15px;
 }
 
 .share-card .disc-card {
@@ -706,8 +712,8 @@
 }
 
 .share-card .disc-image-container {
-  width: 55px;
-  height: 55px;
+  width: 65px;
+  height: 65px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -747,8 +753,8 @@
 .share-card .disc-rating-badge.rating-F { background: #6B1F00 !important; color: #fff !important; }
 
 .share-card .disc-set-icon {
-  width: 40px;
-  height: 40px;
+  width: 70px;
+  height: 70px;
   display: block;
   object-fit: contain;
   border: 2px solid #fff;
@@ -759,51 +765,53 @@
 }
 
 .share-card .disc-stats-card {
-  flex: 1;
+  width: 100px;
   background: rgba(26, 26, 26, 0.95);
   border: 2px solid #F4B942;
   border-radius: 6px;
-  padding: 4px 6px;
+  padding: 3px 5px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
-  min-height: 85px;
+  height: 100px;
+  max-height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .share-card .disc-main-stat {
-  margin-bottom: 4px;
-  padding-bottom: 4px;
+  margin-bottom: 2px;
+  padding-bottom: 2px;
   border-bottom: 1px solid #2a2a2a;
 }
 
 .share-card .disc-main-stat .stat-type {
   display: inline;
-  font-size: 10px;
+  font-size: 9px;
   color: #F4B942;
   font-weight: 600;
 }
 
 .share-card .disc-main-stat .stat-value {
   display: inline;
-  font-size: 11px;
+  font-size: 10px;
   color: #fff;
   font-weight: bold;
-  margin-left: 4px;
+  margin-left: 3px;
 }
 
 .share-card .disc-substats {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 0px;
 }
 
 .share-card .disc-substats .substat {
   display: flex;
   justify-content: space-between;
-  font-size: 9px;
-  padding: 1px 0;
+  font-size: 8px;
+  padding: 0.5px 0;
+  line-height: 1.2;
 }
 
 .share-card .disc-substats .substat-type {
@@ -828,10 +836,46 @@
 }
 
 .share-card .wengine-image {
-  width: 110px;
-  height: 110px;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
   filter: drop-shadow(0 4px 12px rgba(244, 185, 66, 0.6));
+}
+
+.share-card .wengine-stats-card {
+  background: rgba(26, 26, 26, 0.95);
+  border: 2px solid #F4B942;
+  border-radius: 6px;
+  padding: 6px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.share-card .wengine-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+}
+
+.share-card .wengine-stat-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.share-card .wengine-stat-label {
+  color: #F4B942;
+  font-weight: 600;
+  font-size: 9px;
+}
+
+.share-card .wengine-stat-value {
+  color: #fff;
+  font-weight: bold;
+  margin-left: auto;
 }
 
 /* Footer: Substats Breakdown & Credits */
@@ -846,29 +890,43 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
-  padding: 0 20px;
-  font-size: 12px;
+  gap: 10px;
+  padding: 0 15px;
+  font-size: 10px;
   color: #eee;
   z-index: 10;
 }
 
 .substats-breakdown {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   flex: 1;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.substats-breakdown .substat-item {
+  display: inline;
+}
+
+.substats-breakdown .priority-stat {
+  color: #FFD93D;
+  font-weight: bold;
 }
 
 .substats-footer .separator {
   color: #F4B942;
   font-weight: bold;
+  margin: 0 2px;
 }
 
 .credits {
   color: #aaa;
-  font-size: 11px;
+  font-size: 9px;
   font-style: italic;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Preview Canvas */
