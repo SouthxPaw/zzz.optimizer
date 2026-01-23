@@ -366,7 +366,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('assets/data/images/share-image/ZZZTV.jpg');
+  background-image: url('../../../assets/data/images/share-image/ZZZTV.jpg');
   background-size: cover;
   background-position: center;
   filter: brightness(0.6);
