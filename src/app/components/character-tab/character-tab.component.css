@@ -494,9 +494,9 @@
 .share-card .build-rating-container {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
   align-items: flex-start;
-  margin-top: 15px;
+  margin-top: 10px;
   margin-left: 15px;
 }
 
@@ -747,8 +747,8 @@
 }
 
 .share-card .wengine-image-container {
-  width: 180px;
-  height: 180px;
+  width: 160px;
+  height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
