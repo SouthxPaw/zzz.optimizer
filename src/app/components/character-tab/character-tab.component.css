@@ -512,9 +512,13 @@
 
 /* Build rating colors - handle both space-separated and hyphenated versions */
 .share-card .build-rating-badge.rating-VOID,
-.share-card .build-rating-badge.rating-void-hunter { background-color: #E0BBE4 !important; }
+.share-card .build-rating-badge.rating-void-hunter {
+  background: linear-gradient(135deg, #E0BBE4, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3) !important;
+}
 .share-card .build-rating-badge.rating-PHAETHON,
-.share-card .build-rating-badge.rating-phaethon { background-color: #FFD700 !important; }
+.share-card .build-rating-badge.rating-phaethon {
+  background: linear-gradient(135deg, #FFD700, #E5E4E2 33%, #B9F2FF 66%, #FFD700) !important;
+}
 .share-card .build-rating-badge.rating-SSS { background-color: #FF6B9D !important; }
 .share-card .build-rating-badge.rating-SS { background-color: #FF8C42 !important; }
 .share-card .build-rating-badge.rating-S { background-color: #FFD93D !important; }
