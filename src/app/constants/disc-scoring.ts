@@ -65,7 +65,7 @@ export const MAIN_STAT_BONUS: { [slot: string]: { [stat: string]: number } } = {
  * Updated with normalized grading (relative to realistic benchmarks)
  */
 export interface DiscRating {
-  grade: 'VH' | 'LGD' | 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: 'VH' | 'PHT' | 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
   minPoints: number;
   color: string;
   description: string;
@@ -73,7 +73,7 @@ export interface DiscRating {
 
 export const DISC_RATING_THRESHOLDS: DiscRating[] = [
   { grade: 'VH', minPoints: 134, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection (GOD tier)' },
-  { grade: 'LGD', minPoints: 120, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Near-perfect disc (ZERO tier)' },
+  { grade: 'PHT', minPoints: 120, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Phaethon - Near-perfect disc (ZERO tier)' },
   { grade: 'SSS', minPoints: 110, color: '#FF6B9D', description: 'Perfect - Outstanding disc (SSS tier)' },
   { grade: 'SS', minPoints: 98, color: '#FF8C42', description: 'Excellent - Great disc (SS tier)' },
   { grade: 'S', minPoints: 88, color: '#FFD93D', description: 'Very Good - Above average disc (S tier)' },
@@ -90,7 +90,7 @@ export const DISC_RATING_THRESHOLDS: DiscRating[] = [
  * These thresholds reward quality builds while maintaining meaningful progression
  */
 export interface BuildRating {
-  grade: 'VOID HUNTER' | 'LEGENDARY' | 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: 'VOID HUNTER' | 'PHAETHON' | 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
   breakpointsMetPercentage: number;  // Percentage of optimal breakpoints met
   color: string;
   description: string;
@@ -98,7 +98,7 @@ export interface BuildRating {
 
 export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
   { grade: 'VOID HUNTER', breakpointsMetPercentage: 94, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Perfect build with absolute best-in-slot discs' },
-  { grade: 'LEGENDARY', breakpointsMetPercentage: 88, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Legendary - Nearly perfect build with exceptional discs' },
+  { grade: 'PHAETHON', breakpointsMetPercentage: 88, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Phaethon - Nearly perfect build with exceptional discs' },
   { grade: 'SSS', breakpointsMetPercentage: 82, color: '#FF6B9D', description: 'Perfect - God-tier build with near-perfect discs' },
   { grade: 'SS', breakpointsMetPercentage: 77, color: '#FF8C42', description: 'Excellent - Outstanding build with great discs' },
   { grade: 'S', breakpointsMetPercentage: 62, color: '#FFD93D', description: 'Very Good - Strong build with pretty good discs' },

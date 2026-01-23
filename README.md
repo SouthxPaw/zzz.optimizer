@@ -2,7 +2,7 @@
 
 A comprehensive build optimizer and character builder for **Zenless Zone Zero** (ZZZ). Manage your agents, W-Engines, disc sets, and calculate optimal builds with real-time stat calculations and scoring.
 
-![Version](https://img.shields.io/badge/version-4.1.18-blue.svg)
+![Version](https://img.shields.io/badge/version-4.1.19-blue.svg)
 ![Angular](https://img.shields.io/badge/Angular-19.2-red.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -23,7 +23,7 @@ A comprehensive build optimizer and character builder for **Zenless Zone Zero** 
   - Filter discs by set, slot, and equipped status
   - Real-time disc scoring based on agent preferences
   - Quality ratings from VOID HUNTER (absolute perfection) to F (fodder)
-  - Elite tiers: VOID HUNTER, LEGENDARY, SSS, SS, S, A, B, C, D, F
+  - Elite tiers: VOID HUNTER, PHAETHON, SSS, SS, S, A, B, C, D, F
 
 - **Build Scoring & Optimization**:
   - **Composite Build Rating System** (5 components):
@@ -37,7 +37,7 @@ A comprehensive build optimizer and character builder for **Zenless Zone Zero** 
     - Breakpoint penalties for missing critical thresholds
     - Roll count tracking for substats
     - Agent and W-Engine damage modifiers (DEF Shred, DMG Bonuses, etc.)
-  - **Elite Rating Tiers**: VOID HUNTER, LEGENDARY, SSS, SS, S, A, B, C, D, F
+  - **Elite Rating Tiers**: VOID HUNTER, PHAETHON, SSS, SS, S, A, B, C, D, F
 
 - **Data Import/Export**:
   - Export your builds and disc inventory as JSON

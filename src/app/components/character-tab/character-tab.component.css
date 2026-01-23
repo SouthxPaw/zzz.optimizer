@@ -266,7 +266,7 @@
 .build-rating-badge .rating-score-large{font-size:1.2em;opacity:.95}
 .rating-description{color:var(--light);font-size:.9em;margin:4px 0 0;text-align:center;font-style:italic}
 .rating-vh,.rating-void-hunter{background:linear-gradient(135deg,#E0BBE4,#957DAD 25%,#D291BC 50%,#FEC8D8 75%,#FFDFD3);color:var(--bg);box-shadow:0 4px 12px rgba(224,187,228,.6);font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.2)}
-.rating-lgd,.rating-legendary{background:linear-gradient(135deg,#FFD700,#E5E4E2 33%,#B9F2FF 66%,#FFD700);color:var(--bg);box-shadow:0 4px 12px rgba(255,215,0,.6);font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.2)}
+.rating-pht,.rating-phaethon{background:linear-gradient(135deg,#FFD700,#E5E4E2 33%,#B9F2FF 66%,#FFD700);color:var(--bg);box-shadow:0 4px 12px rgba(255,215,0,.6);font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.2)}
 .rating-sss{background:#FF6B9D;color:var(--bg);box-shadow:0 4px 12px rgba(255,107,157,.5)}
 .rating-ss{background:#FF8C42;color:var(--bg);box-shadow:0 4px 12px rgba(255,140,66,.5)}
 .rating-s{background:#FFD93D;color:var(--bg);box-shadow:0 4px 12px rgba(255,217,61,.5)}
@@ -513,8 +513,8 @@
 /* Build rating colors - handle both space-separated and hyphenated versions */
 .share-card .build-rating-badge.rating-VOID,
 .share-card .build-rating-badge.rating-void-hunter { background-color: #E0BBE4 !important; }
-.share-card .build-rating-badge.rating-LEGENDARY,
-.share-card .build-rating-badge.rating-legendary { background-color: #FFD700 !important; }
+.share-card .build-rating-badge.rating-PHAETHON,
+.share-card .build-rating-badge.rating-phaethon { background-color: #FFD700 !important; }
 .share-card .build-rating-badge.rating-SSS { background-color: #FF6B9D !important; }
 .share-card .build-rating-badge.rating-SS { background-color: #FF8C42 !important; }
 .share-card .build-rating-badge.rating-S { background-color: #FFD93D !important; }
@@ -791,7 +791,7 @@
 }
 
 .share-card .disc-rating-badge.rating-VH { background: #E0BBE4 !important; }
-.share-card .disc-rating-badge.rating-LGD { background: #FFD700 !important; }
+.share-card .disc-rating-badge.rating-PHT { background: #FFD700 !important; }
 .share-card .disc-rating-badge.rating-SSS { background: #FF6B9D !important; }
 .share-card .disc-rating-badge.rating-SS { background: #FF8C42 !important; }
 .share-card .disc-rating-badge.rating-S { background: #FFD93D !important; }

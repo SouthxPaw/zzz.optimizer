@@ -1878,7 +1878,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private getCanvasGradeColor(grade: string, colors: any): string {
     const upperGrade = grade.toUpperCase().replace(/\s+/g, '');
     if (upperGrade === 'VOIDHUNTER' || upperGrade === 'VH') return colors.voidHunter;
-    if (upperGrade === 'LEGENDARY' || upperGrade === 'LGD') return colors.legendary;
+    if (upperGrade === 'PHAETHON' || upperGrade === 'PHT') return colors.PHAETHON;
     if (upperGrade === 'SSS') return colors.sss;
     if (upperGrade === 'SS') return colors.ss;
     if (upperGrade === 'S') return colors.s;
