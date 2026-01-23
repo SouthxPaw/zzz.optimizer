@@ -354,10 +354,10 @@
 .alert-icon{font-size:1.3em;flex-shrink:0;line-height:1}
 .alert-content{flex:1;line-height:1.6}
 .alert-content strong{color:inherit;font-weight:700}
-.loading-spinner{display:flex;flex-direction:column;align-items:center;gap:12px;padding:30px 20px;color:var(--muted)}
-.loading-spinner p{margin:0}
-.spinner-note{font-size:0.9em;color:var(--muted)}
-.spinner{border:4px solid var(--bord);border-top:4px solid var(--gold);border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite}
+.loading-spinner{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;padding:30px 20px;color:var(--txt)}
+.loading-spinner p{margin:0;font-size:1em;color:var(--txt)}
+.spinner-note{font-size:0.85em;color:var(--muted)}
+.spinner{border:5px solid rgba(244,185,66,0.2);border-top:5px solid var(--gold);border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
 /* ========================================
@@ -448,7 +448,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-bottom: 80px;
+  padding-bottom: 105px;
   align-items: flex-start;
 }
 
@@ -555,7 +555,22 @@
   padding: 20px;
 }
 
-/* REMOVED Equipment_Menu_Screen - no longer needed */
+/* Equipment Menu Background - positioned below W-Engine header */
+.share-card .equipment-section::before {
+  content: '';
+  position: absolute;
+  top: 150px;  /* Positions it below the W-Engine name/refinement bar */
+  left: 55%;
+  transform: translateX(-50%);
+  width: 600px;  /* Smaller width */
+  height: 400px;  /* Smaller height */
+  background-image: url('../../../assets/data/images/share-image/Equipment_Menu_Screen.webp');
+  background-size: contain;  /* Fit within bounds without stretching */
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 1.0;  /* Fully solid */
+  pointer-events: none;
+}
 
 /* Stats Bar - ONLY for share card */
 .share-card .stats-bar {
@@ -616,11 +631,36 @@
   color: #F4B942;
 }
 
-.share-card .wengine-stats {
+.share-card .wengine-stats-inline {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   align-items: center;
+  flex-wrap: wrap;
   color: #eee;
+  font-size: 13px;
+}
+
+.share-card .refinement-badge {
+  background: rgba(244, 185, 66, 0.2);
+  border: 1px solid #F4B942;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: #F4B942;
+  font-weight: bold;
+}
+
+.share-card .wengine-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.share-card .wengine-stat-icon-inline {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 /* Disc Grid Layout - Clean horizontal layout */
@@ -644,14 +684,14 @@
 }
 .share-card .disc-pos-1 .disc-stats-card {
   position: absolute;
-  left: 60px;
-  top: 0;
+  left: 70px;
+  top: -20px;
   z-index: 2;
 }
 .share-card .disc-pos-1 .disc-image-container {
   position: absolute;
-  left: 10px;
-  top: 10px;
+  left: 216px;
+  top: -3px;
   z-index: 1;
 }
 .share-card .disc-pos-2 {
@@ -663,14 +703,14 @@
 }
 .share-card .disc-pos-2 .disc-stats-card {
   position: absolute;
-  left: 60px;
-  top: 0;
+  left: 15px;
+  top: -8px;
   z-index: 2;
 }
 .share-card .disc-pos-2 .disc-image-container {
   position: absolute;
-  left: 10px;
-  top: 10px;
+  left: 156px;
+  top: 1px;
   z-index: 1;
 }
 .share-card .disc-pos-3 {
@@ -682,22 +722,22 @@
 }
 .share-card .disc-pos-3 .disc-stats-card {
   position: absolute;
-  left: 60px;
-  top: 0;
+  left: 70px;
+  top: 4px;
   z-index: 2;
 }
 .share-card .disc-pos-3 .disc-image-container {
   position: absolute;
-  left: 10px;
-  top: 10px;
+  left: 216px;
+  top: 5px;
   z-index: 1;
 }
 
 /* W-ENGINE in center */
 .share-card .wengine-center-container {
   position: absolute;
-  top: 30%;
-  left: 47%;
+  top: 49%;
+  left: 46.8%;
   transform: translate(-50%, -50%);
   z-index: 5;
   display: flex;
@@ -722,18 +762,21 @@
   width: 330px;
   min-height: 100px;
 }
+
 .share-card .disc-pos-6 .disc-stats-card {
   position: absolute;
-  right: 170px;
-  top: 0;
+  right: 180px;
+  top: -10px;
   z-index: 2;
 }
+
 .share-card .disc-pos-6 .disc-image-container {
   position: absolute;
-  right: 120px;
-  top: 10px;
+  right: 327px;
+  top: 7px;
   z-index: 1;
 }
+
 .share-card .disc-pos-5 {
   position: absolute;
   top: 125px;
@@ -741,18 +784,21 @@
   width: 330px;
   min-height: 100px;
 }
+
 .share-card .disc-pos-5 .disc-stats-card {
   position: absolute;
-  right: 170px;
-  top: 0;
+  right: 125px;
+  top: 2px;
   z-index: 2;
 }
+
 .share-card .disc-pos-5 .disc-image-container {
   position: absolute;
-  right: 120px;
+  right: 266px;
   top: 10px;
   z-index: 1;
 }
+
 .share-card .disc-pos-4 {
   position: absolute;
   top: 250px;
@@ -760,16 +806,18 @@
   width: 330px;
   min-height: 100px;
 }
+
 .share-card .disc-pos-4 .disc-stats-card {
   position: absolute;
-  right: 170px;
+  right: 180px;
   top: 0;
   z-index: 2;
 }
+
 .share-card .disc-pos-4 .disc-image-container {
   position: absolute;
-  right: 120px;
-  top: 10px;
+  right: 327px;
+  top: 16px;
   z-index: 1;
 }
 
@@ -918,7 +966,7 @@
 }
 
 .share-card .wengine-stats-card {
-  background: rgba(26, 26, 26, 0.95);
+  background: rgba(26, 26, 26, 0.75);
   border: 2px solid #F4B942;
   border-radius: 6px;
   padding: 12px 16px;
@@ -926,7 +974,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  min-width: 200px;
+  min-width: 100px;
 }
 
 .share-card .wengine-stat {
@@ -959,14 +1007,14 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 50px;
+  min-height: 50px;
   background: rgb(10, 10, 10);
   border-top: 2px solid #F4B942;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  padding: 0 15px;
+  gap: 8px;
+  padding: 8px 12px;
   font-size: 10px;
   color: #eee;
   z-index: 10;
@@ -974,7 +1022,7 @@
 
 .substats-breakdown {
   display: flex;
-  gap: 4px;
+  gap: 3px;
   flex: 1;
   flex-wrap: nowrap;
   white-space: nowrap;
@@ -1040,16 +1088,11 @@
   margin: 0;
 }
 
-.loading-spinner {
+.share-loading .loading-spinner {
   width: 60px;
   height: 60px;
   border: 5px solid rgba(244, 185, 66, 0.2);
   border-top: 5px solid #F4B942;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
