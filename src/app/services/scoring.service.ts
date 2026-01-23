@@ -1145,9 +1145,9 @@ export class ScoringService {
 
   /**
    * Calculate stat efficiency score
-   * Component 3 of composite build rating (20% weight)
-   * Awards bonus for exceeding optimal breakpoints with diminishing returns
-   * Penalizes investment in stats with 0 optimal value
+   * Component 3 of composite build rating (15% weight)
+   * Rewards balanced stat allocation and penalizes wasted investment
+   * Evaluates how well stats are distributed across priority vs non-priority stats
    */
   private calculateStatEfficiencyScore(
     stats: BaseStats,
@@ -1169,30 +1169,71 @@ export class ScoringService {
       energyRegen: stats.energyRegen,
     };
 
+    let totalPriorityStatValue = 0;
+    let totalNonPriorityStatValue = 0;
+    let totalPriorityOptimal = 0;
+
     Object.keys(breakpoints.breakpoints).forEach((statKey) => {
       const breakpoint =
         breakpoints.breakpoints[
           statKey as keyof typeof breakpoints.breakpoints
         ];
       const currentValue = statMapping[statKey] || 0;
+      const isPriority = this.isPriorityStat(statKey, breakpoints);
 
-      if (breakpoint.optimal > 0) {
-        // Stat matters - check if we exceed optimal
+      if (isPriority && breakpoint.optimal > 0) {
+        totalPriorityStatValue += currentValue;
+        totalPriorityOptimal += breakpoint.optimal;
+
+        // Reward exceeding optimal with diminishing returns
         if (currentValue > breakpoint.optimal) {
           const excessPercentage =
             ((currentValue - breakpoint.optimal) / breakpoint.optimal) * 100;
-          // Diminishing returns: first 10% excess = +5 points, next 10% = +3, next 10% = +1
+          // Diminishing returns: first 10% excess = +3 points, next 10% = +2, next 10% = +1
           if (excessPercentage <= 10) {
-            efficiencyScore += excessPercentage * 0.5;
+            efficiencyScore += excessPercentage * 0.3;
           } else if (excessPercentage <= 20) {
-            efficiencyScore += 5 + (excessPercentage - 10) * 0.3;
+            efficiencyScore += 3 + (excessPercentage - 10) * 0.2;
           } else {
-            efficiencyScore += 5 + 3 + (excessPercentage - 20) * 0.1;
+            efficiencyScore += 3 + 2 + (excessPercentage - 20) * 0.1;
           }
         }
+      } else if (!isPriority && breakpoint.optimal === 0 && currentValue > 0) {
+        // Penalize investment in non-priority stats (e.g., DEF% on DPS, ATK% on support)
+        totalNonPriorityStatValue += currentValue;
       }
-      // No penalty for investing in low-priority stats - let priorityStats handle it
     });
+
+    // Calculate allocation efficiency ratio
+    // Good builds invest heavily in priority stats, minimally in non-priority
+    if (totalPriorityOptimal > 0) {
+      const priorityRatio = Math.min(1, totalPriorityStatValue / totalPriorityOptimal);
+
+      // Reward high priority stat coverage (up to +20 points)
+      efficiencyScore += priorityRatio * 20;
+
+      // Penalize wasted investment in non-priority stats
+      if (totalNonPriorityStatValue > 0) {
+        const wasteRatio = totalNonPriorityStatValue / totalPriorityOptimal;
+        // Penalty scales with how much was wasted (up to -15 points)
+        efficiencyScore -= Math.min(15, wasteRatio * 30);
+      }
+    }
+
+    // Bonus for balanced priority stat distribution (not all eggs in one basket)
+    // This rewards spreading priority stats rather than hyper-investing in just one
+    const priorityStatCount = Object.keys(breakpoints.breakpoints).filter((statKey) => {
+      const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
+      const isPriority = this.isPriorityStat(statKey, breakpoints);
+      const currentValue = statMapping[statKey] || 0;
+      return isPriority && breakpoint.optimal > 0 && currentValue > breakpoint.min;
+    }).length;
+
+    if (priorityStatCount >= 3) {
+      efficiencyScore += 10; // Bonus for meeting 3+ priority stats
+    } else if (priorityStatCount >= 2) {
+      efficiencyScore += 5; // Smaller bonus for 2 priority stats
+    }
 
     // Clamp between 0-100
     return Math.max(0, Math.min(100, efficiencyScore));
@@ -1585,7 +1626,8 @@ export class ScoringService {
     stats: BaseStats,
     equippedDiscs: { [slot: string]: Disc | undefined },
     hasWEngine: boolean,
-    isWEngineSpecialtyMatch: boolean
+    isWEngineSpecialtyMatch: boolean,
+    upgradePlan?: UpgradePlan
   ): FeedbackItem[] {
     const feedback: FeedbackItem[] = [];
     const breakpoints = this.agentBreakpoints[agentId];
@@ -1637,7 +1679,8 @@ export class ScoringService {
     discSlots.forEach(slot => {
       const disc = equippedDiscs[slot];
       if (disc) {
-        const scoreResult = this.calculateDiscScore(disc, agentId, detectedBuildType);
+        // Use the same scoring as visual display: undefined buildType, pass upgradePlan
+        const scoreResult = this.calculateDiscScore(disc, agentId, undefined, upgradePlan);
         discScores.push({
           slot,
           score: scoreResult.score,
@@ -1768,6 +1811,7 @@ export class ScoringService {
       score: number;
       wastedStats: string[];
       missingPriorityStats: string[];
+      lowRollPriorityStats: string[];
     }> = [];
 
     discSlots.forEach(slot => {
@@ -1779,6 +1823,7 @@ export class ScoringService {
 
       const wastedStats: string[] = [];
       const presentStats: string[] = [];
+      const lowRollPriorityStats: string[] = [];
 
       // Check each substat
       disc.subStats.forEach(sub => {
@@ -1787,6 +1832,13 @@ export class ScoringService {
 
         // Get weight for this substat from the detected build's weights
         let weight = statWeightsToUse[weightKey] || 0;
+
+        // Check if this is a priority stat with low rolls (1 or fewer upgrade rolls)
+        // Rolls are: 1 initial + upgrades, so rolls <= 2 means 1 or fewer upgrades
+        if (weight >= 1.0 && sub.rolls && sub.rolls <= 2) {
+          const displayName = sub.type.replace('_', ' ').replace('%', '%');
+          lowRollPriorityStats.push(displayName);
+        }
 
         // Skip CRIT Rate check if overcapped - it's now a wasted stat
         if (sub.type === 'CRIT_Rate' && stats.critRate >= 100) {
@@ -1800,11 +1852,31 @@ export class ScoringService {
 
       // Find which priority stats (weight >= 1.0) are missing from this disc
       const missingPriorityStats: string[] = [];
+
+      // Map main stat type to weight key for comparison
+      const mainStatWeightKey = disc.mainStat.type.replace('CRIT_Rate', 'CRIT_Rate')
+                                                   .replace('CRIT_DMG', 'CRIT_DMG')
+                                                   .replace('Anomaly_Proficiency', 'Anomaly_Proficiency')
+                                                   .replace('Anomaly_Mastery', 'Anomaly_Mastery')
+                                                   .replace('Energy_Regen', 'Energy_Regen')
+                                                   .replace('Pen_Ratio', 'PEN_Ratio');
+
       Object.entries(statWeightsToUse)
-        .filter(([, weight]) => weight >= 1.0)  // Only suggest stats with weight >= 1.0
+        .filter(([stat, weight]) => {
+          // Always include CRIT Rate if in the "awkward zone" (10-50%), regardless of weight
+          if (stat === 'CRIT_Rate' && stats.critRate > 10 && stats.critRate < 50) return true;
+          // Otherwise only suggest stats with weight >= 1.0
+          return weight >= 1.0;
+        })
         .filter(([stat]) => {
           // Skip CRIT Rate if at or above optimal OR 100% (only stat where excess hurts)
-          if (stat === 'CRIT_Rate' && (stats.critRate >= breakpoints.breakpoints.critRate.optimal || stats.critRate >= 100)) return false;
+          // But don't skip if it's in the awkward zone (handled above)
+          if (stat === 'CRIT_Rate' && (stats.critRate >= 100 || (stats.critRate >= breakpoints.breakpoints.critRate.optimal && stats.critRate >= 50))) return false;
+          // Skip if this stat is already the main stat (can't have as substat)
+          if (stat === mainStatWeightKey ||
+              (stat.includes('ATK') && disc.mainStat.type.includes('ATK')) ||
+              (stat.includes('HP') && disc.mainStat.type.includes('HP')) ||
+              (stat.includes('DEF') && disc.mainStat.type.includes('DEF'))) return false;
           return true;
         })
         .sort((a, b) => b[1] - a[1])
@@ -1822,6 +1894,7 @@ export class ScoringService {
         score: scoreResult.score,
         wastedStats,
         missingPriorityStats,
+        lowRollPriorityStats,
       });
     });
 
@@ -1829,13 +1902,18 @@ export class ScoringService {
     const terribleDiscs = discAnalysis.filter(d => d.grade === 'D' || d.grade === 'F');
     terribleDiscs.sort((a, b) => a.score - b.score);
 
-    // Show up to 2 terrible discs with specific feedback
-    terribleDiscs.slice(0, 2).forEach(disc => {
+    // Show ALL terrible discs (not just 2) - these are critical to replace
+    terribleDiscs.forEach(disc => {
       let message = `Replace ${disc.slot.replace('Drive', 'Drive ')} disc (rated ${disc.grade})`;
 
       // Suggest priority stats that this disc is missing
       if (disc.missingPriorityStats.length > 0) {
         message += ` - Suggestion: ${disc.missingPriorityStats.slice(0, 3).join(', ')}`;
+      } else if (disc.lowRollPriorityStats.length > 0) {
+        const stats = disc.lowRollPriorityStats.slice(0, 2).join(', ');
+        message += ` - Low rolls on: ${stats}`;
+      } else {
+        message += ` - Poor substats overall`;
       }
 
       feedback.push({
@@ -1880,6 +1958,11 @@ export class ScoringService {
         if (disc.missingPriorityStats.length > 0) {
           message += ` - Suggestion: ${disc.missingPriorityStats.slice(0, 3).join(', ')}`;
         }
+        // Or mention low rolls on priority stats if missing stats aren't the issue
+        else if (disc.lowRollPriorityStats.length > 0) {
+          const stats = disc.lowRollPriorityStats.slice(0, 2).join(', ');
+          message += ` - Low rolls on: ${stats}`;
+        }
 
         feedback.push({
           priority: 'low',
@@ -1888,6 +1971,8 @@ export class ScoringService {
         });
       });
     }
+
+    // No separate feedback for A+ rated discs - they're already good enough!
 
     // Check priority stats first (they matter more)
     Object.keys(breakpoints.breakpoints).forEach(statKey => {
@@ -1938,11 +2023,25 @@ export class ScoringService {
       }
     });
 
-    // Sort by priority: high first, then medium, then low
+    // Sort by priority and category: disc feedback first (especially C-F rated discs), then stat feedback
     const priorityOrder = { high: 0, medium: 1, low: 2 };
-    feedback.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+    feedback.sort((a, b) => {
+      // First, sort by priority
+      const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
+      if (priorityDiff !== 0) return priorityDiff;
+
+      // Within same priority, disc feedback comes before stat feedback
+      if (a.category === 'disc' && b.category !== 'disc') return -1;
+      if (a.category !== 'disc' && b.category === 'disc') return 1;
+
+      return 0;
+    });
 
     // Limit to top 5 suggestions to avoid overwhelming the user
-    return feedback.slice(0, 5);
+    // But ensure at least all high-priority disc feedback is included
+    const highPriorityDiscFeedback = feedback.filter(f => f.priority === 'high' && f.category === 'disc');
+    const otherFeedback = feedback.filter(f => !(f.priority === 'high' && f.category === 'disc'));
+
+    return [...highPriorityDiscFeedback, ...otherFeedback].slice(0, 5);
   }
 }

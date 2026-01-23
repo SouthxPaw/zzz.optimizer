@@ -1492,12 +1492,18 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return this.cachedFeedback;
     }
 
+    // Get active upgrade plan if one is set
+    const activePlan = this.selectedBuild.activeUpgradePlanId
+      ? this.upgradePlanService.getPlanById(this.selectedBuild.activeUpgradePlanId)
+      : undefined;
+
     this.cachedFeedback = this.scoringService.generateBuildFeedback(
       this.selectedBuild.agentId,
       this.selectedBuild.calculatedStats,
       this.selectedBuild.equippedDiscs,
       !!this.selectedBuild.equippedWEngine,
       this.isWEngineSpecialtyMatch(),
+      activePlan
     );
     this.lastFeedbackBuildHash = currentHash;
 
