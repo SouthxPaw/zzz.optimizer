@@ -2,7 +2,7 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Agent, Element, Specialty } from '../models/agent.model';
+import { Agent } from '../models/agent.model';
 import { DbService } from './db.service';
 
 @Injectable({
@@ -60,17 +60,7 @@ export class AgentService {
     return this.selectedAgentSubject.value;
   }
 
-  filterAgentsByElement(element: Element): Agent[] {
-    return this.agentsSubject.value.filter(a => a.element === element);
-  }
-
-  filterAgentsBySpecialty(specialty: Specialty): Agent[] {
-    return this.agentsSubject.value.filter(a => a.specialty === specialty);
-  }
-
-  filterAgentsByRarity(rarity: 'A' | 'S'): Agent[] {
-    return this.agentsSubject.value.filter(a => a.rarity === rarity);
-  }
+  // Legacy filter methods removed - filtering is now handled in components
 
   // CRUD operations for agents
   async addAgent(agent: Agent): Promise<void> {

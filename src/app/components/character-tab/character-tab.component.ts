@@ -92,6 +92,21 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     'Drive6',
   ];
 
+  // Available substat types (for dropdown options)
+  availableSubStatTypes: Array<{ value: SubStatType; label: string }> = [
+    { value: 'HP', label: 'HP' },
+    { value: 'HP%', label: 'HP%' },
+    { value: 'ATK', label: 'ATK' },
+    { value: 'ATK%', label: 'ATK%' },
+    { value: 'DEF', label: 'DEF' },
+    { value: 'DEF%', label: 'DEF%' },
+    { value: 'CRIT_Rate', label: 'CRIT Rate' },
+    { value: 'CRIT_DMG', label: 'CRIT DMG' },
+    { value: 'Anomaly_Proficiency', label: 'Anomaly Proficiency' },
+    { value: 'Anomaly_Mastery', label: 'Anomaly Mastery' },
+    { value: 'PEN', label: 'PEN (Flat)' },
+  ];
+
   // Disc inventory (user's created discs)
   allDiscs: Disc[] = [];
 
@@ -1263,6 +1278,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           : this.discFormData.mainStatValue;
     }
 
+    // Validate substats: Impact and Energy_Regen cannot be disc substats
+    const invalidSubstats = this.discFormData.subStats.filter(
+      (s) => s.type === 'Impact' || s.type === 'Energy_Regen'
+    );
+    if (invalidSubstats.length > 0) {
+      alert('Error: Impact and Energy_Regen can only be main stats (Drive 6), not substats.');
+      this.isProcessingDiscAction = false;
+      return;
+    }
+
     try {
       if (this.isEditMode && this.editingDiscUid) {
         // UPDATE MODE: Modify existing disc
@@ -1872,31 +1897,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         link.click();
         URL.revokeObjectURL(url);
       }
-    });
-  }
-
-  private getCanvasGradeColor(grade: string, colors: any): string {
-    const upperGrade = grade.toUpperCase().replace(/\s+/g, '');
-    if (upperGrade === 'VOIDHUNTER' || upperGrade === 'VH') return colors.voidHunter;
-    if (upperGrade === 'PHAETHON' || upperGrade === 'PHT') return colors.PHAETHON;
-    if (upperGrade === 'SSS') return colors.sss;
-    if (upperGrade === 'SS') return colors.ss;
-    if (upperGrade === 'S') return colors.s;
-    if (upperGrade === 'A') return colors.a;
-    if (upperGrade === 'B') return colors.b;
-    if (upperGrade === 'C' || upperGrade === 'D' || upperGrade === 'F') return colors.c;
-    return colors.c;
-  }
-
-  private loadImage(src: string): Promise<HTMLImageElement> {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
-      img.src = src;
-      // Timeout after 3 seconds
-      setTimeout(() => reject(new Error('Image load timeout')), 3000);
     });
   }
 

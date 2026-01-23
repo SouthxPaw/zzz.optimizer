@@ -330,8 +330,7 @@ function calculateFinalStats(
         case 'CRIT_DMG': stats.critDmg += subStat.value; break;
         case 'Anomaly_Proficiency': stats.anomalyProficiency += subStat.value; break;
         case 'PEN': stats.pen += subStat.value; break;
-        case 'Impact': stats.impact += subStat.value; break;
-        case 'Energy_Regen': stats.energyRegenPercent += subStat.value; break;
+        // Note: Impact and Energy_Regen cannot be disc substats, only main stats (Drive 6)
       }
     });
   });
