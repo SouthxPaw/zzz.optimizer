@@ -810,7 +810,7 @@
 .share-card .disc-pos-4 .disc-stats-card {
   position: absolute;
   right: 180px;
-  top: 0;
+  top: 15px;
   z-index: 2;
 }
 
