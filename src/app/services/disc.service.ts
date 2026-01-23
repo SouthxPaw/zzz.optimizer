@@ -2,8 +2,7 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Disc, SubStat, SubStatType } from '../models/disc.model';
-import { ScoringAlgorithm } from '../models/scoring.model';
+import { Disc } from '../models/disc.model';
 import { DiscSlot } from '../models/agent.model';
 import { DbService } from './db.service';
 
@@ -103,78 +102,7 @@ export class DiscService {
     this.updateDisc(uid, { equippedBy: undefined });
   }
 
-  scoreDisc(disc: Disc, algorithm: ScoringAlgorithm): number {
-    let score = 0;
-
-    // Score substats based on weights
-    disc.subStats.forEach(subStat => {
-      const weight = algorithm.weights[subStat.type] || 0;
-      // Normalize the value (divide by typical max roll value)
-      const normalizedValue = this.normalizeSubstatValue(subStat);
-      score += normalizedValue * weight;
-    });
-
-    // Bonus for preferred main stat
-    const preferredMainStats = algorithm.mainStatPreferences[disc.slot] || [];
-    if (preferredMainStats.includes(disc.mainStat.type)) {
-      score *= 1.2; // 20% bonus
-    }
-
-    return Math.round(score * 100) / 100;
-  }
-
-  private normalizeSubstatValue(subStat: SubStat): number {
-    // Max roll values for substats (6 rolls: 1 initial + 5 upgrades)
-    // Values from: https://www.prydwen.gg/zenless/guides/disk-drives-stats/
-    const maxRolls: Record<SubStatType, number> = {
-      HP: 672,                // 112 × 6 rolls
-      'HP%': 18.0,            // 3.0% × 6 rolls
-      ATK: 114,               // 19 × 6 rolls
-      'ATK%': 18.0,           // 3.0% × 6 rolls
-      DEF: 96,                // 16 × 6 rolls (estimated)
-      'DEF%': 28.8,           // 4.8% × 6 rolls
-      CRIT_Rate: 14.4,        // 2.4% × 6 rolls
-      CRIT_DMG: 28.8,         // 4.8% × 6 rolls
-      Anomaly_Proficiency: 54, // 9 × 6 rolls
-      Anomaly_Mastery: 54,    // 9 × 6 rolls (estimated)
-      PEN: 54,                // 9 × 6 rolls
-      Impact: 54,             // 9 × 6 rolls (estimated)
-      Energy_Regen: 28.8,     // 4.8% × 6 rolls (estimated)
-    };
-
-    const maxRoll = maxRolls[subStat.type] || 1;
-    return subStat.value / maxRoll;
-  }
-
-  calculatePotential(disc: Disc, targetLevel: number = 15): {
-    current: number;
-    averagePotential: number;
-    maxPotential: number;
-  } {
-    const remainingRolls = Math.floor((targetLevel - disc.level) / 3);
-    const currentScore = this.calculateRelativeScore(disc);
-
-    // Average potential assumes average rolls
-    const avgRollValue = 0.6; // 60% of max roll on average
-    const avgPotential = currentScore + (remainingRolls * avgRollValue * disc.subStats.length);
-
-    // Max potential assumes all max rolls
-    const maxPotential = currentScore + (remainingRolls * 1.0 * disc.subStats.length);
-
-    return {
-      current: Math.round(currentScore * 100) / 100,
-      averagePotential: Math.round(avgPotential * 100) / 100,
-      maxPotential: Math.round(maxPotential * 100) / 100,
-    };
-  }
-
-  private calculateRelativeScore(disc: Disc): number {
-    let score = 0;
-    disc.subStats.forEach(sub => {
-      score += this.normalizeSubstatValue(sub);
-    });
-    return score;
-  }
+  // Legacy scoring methods removed - now handled by ScoringService
 
   async importDiscs(discs: Disc[]): Promise<void> {
     await this.db.bulkAddDiscs(discs);

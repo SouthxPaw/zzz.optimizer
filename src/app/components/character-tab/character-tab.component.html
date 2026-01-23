@@ -1096,16 +1096,13 @@
             >
               <label class="substat-label">Substat {{ i + 1 }}:</label>
               <select [(ngModel)]="subStat.type" class="substat-type-select">
-                <option value="HP">HP</option>
-                <option value="HP%">HP%</option>
-                <option value="ATK">ATK</option>
-                <option value="ATK%">ATK%</option>
-                <option value="DEF">DEF</option>
-                <option value="DEF%">DEF%</option>
-                <option value="CRIT_Rate">CRIT Rate</option>
-                <option value="CRIT_DMG">CRIT DMG</option>
-                <option value="Anomaly_Proficiency">Anomaly Proficiency</option>
-                <option value="PEN">PEN (Flat)</option>
+                <option
+                  *ngFor="let statType of availableSubStatTypes"
+                  [value]="statType.value"
+                  [class.priority]="isPrioritySubstat(statType.value)"
+                >
+                  {{ statType.label }}
+                </option>
               </select>
               <input
                 type="text"

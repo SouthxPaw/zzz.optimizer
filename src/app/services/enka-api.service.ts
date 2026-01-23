@@ -95,7 +95,11 @@ const MAIN_STAT_PROPERTY_MAP: { [key: number]: MainStatType } = {
   31903: 'Element_DMG', // Ether DMG Bonus [Flat]
 };
 
-const SUBSTAT_PROPERTY_MAP: { [key: number]: SubStatType } = {
+// Temporary type that includes Impact/Energy_Regen for API parsing
+// We'll filter these out since they can't actually be disc substats
+type EnkaSubStatType = SubStatType | 'Impact' | 'Energy_Regen';
+
+const SUBSTAT_PROPERTY_MAP: { [key: number]: EnkaSubStatType } = {
   11103: 'HP',          // HP [Flat]
   11102: 'HP%',         // HP%
   12103: 'ATK',         // ATK [Flat]
@@ -108,8 +112,8 @@ const SUBSTAT_PROPERTY_MAP: { [key: number]: SubStatType } = {
   23103: 'PEN',         // Pen Ratio [Flat] - maps to PEN
   31203: 'Anomaly_Proficiency', // Anomaly Proficiency [Flat]
   31403: 'Anomaly_Mastery',     // Anomaly Mastery [Flat]
-  30503: 'Energy_Regen',        // Energy Regen [Flat]
-  12202: 'Impact',      // Impact%
+  30503: 'Energy_Regen',        // Energy Regen [Flat] - Invalid but Enka may send it
+  12202: 'Impact',      // Impact% - Invalid but Enka may send it
 };
 
 // Disc set ID mapping (Enka disc set ID to app disc set name)
@@ -346,6 +350,12 @@ export class EnkaApiService {
           continue;
         }
 
+        // Filter out Impact and Energy_Regen - these can only be main stats, not substats
+        if (subStatType === 'Impact' || subStatType === 'Energy_Regen') {
+          console.warn(`Ignoring invalid disc substat: ${subStatType} (property ID ${subStatData.PropertyId})`);
+          continue;
+        }
+
         // Convert substat value using rolls
         const subStatValue = this.convertSubstatValue(
           subStatData.PropertyId,
@@ -354,7 +364,7 @@ export class EnkaApiService {
         );
 
         subStats.push({
-          type: subStatType,
+          type: subStatType as SubStatType, // Safe cast after filtering
           value: subStatValue,
           rolls: subStatData.PropertyLevel || 1
         });
