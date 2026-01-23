@@ -2181,7 +2181,18 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   getDiscSetIcon(disc: Disc | undefined): string {
     if (!disc) return '';
     const discSet = this.referenceDiscSets.find(s => s.name === disc.set);
-    return discSet?.icon || '';
+    if (!discSet?.icon) return '';
+
+    // For share image generation, html2canvas needs absolute URLs
+    // Convert relative path to absolute URL
+    const iconPath = discSet.icon;
+    if (iconPath.startsWith('http')) {
+      return iconPath; // Already absolute
+    }
+
+    // Create absolute URL from relative path
+    const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
+    return iconPath.startsWith('/') ? window.location.origin + iconPath : baseUrl + iconPath;
   }
 
   getWEngineStats(): Array<{ iconName: string; label: string; value: string }> {
