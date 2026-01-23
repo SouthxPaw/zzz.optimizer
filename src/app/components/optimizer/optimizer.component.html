@@ -29,12 +29,12 @@
             <ul>
               <li>Uses the average disc score of all 6 equipped discs</li>
               <li>
-                Each disc is scored individually from 0-170+ points based on
-                substats
+                Each disc is scored individually from 0-144 points based on
+                substats and rolls
               </li>
               <li>
-                God-tier discs can score 150+ points, while average discs score
-                ~100
+                VOID HUNTER-tier discs score 134+ points, PHAETHON scores 117+,
+                SSS scores 105+, while average B-tier discs score 62-75 points
               </li>
               <li>
                 The average of all 6 disc scores determines this component -
@@ -47,10 +47,9 @@
                 This is the most impactful component at 75% of total build score
               </li>
               <li>
-                <strong>Diminishing returns:</strong> Stacking too much of one
-                stat (like 50% CRIT Rate) gives less value than spreading stats
-                evenly. A balanced disc with 20% CRIT + 15% ATK% scores better
-                than one with 40% CRIT alone.
+                <strong>Scoring formula:</strong> Main Stat Points (0-3) + Substat Roll Points
+                (rolls × weight × 3.0) + Roll Bonus (1pt if 5+ upgrade rolls). Priority stats
+                have weights of 0.7-1.3×, while wasted stats get only 0.17× weight.
               </li>
             </ul>
           </li>
@@ -62,11 +61,12 @@
                 Each agent has important stat thresholds (breakpoints) they want
                 to reach
               </li>
-              <li>Meeting minimum breakpoints grants partial credit (50%+)</li>
+              <li>Meeting minimum breakpoints grants partial credit (50%)</li>
               <li>Meeting optimal breakpoints grants full credit (100%)</li>
+              <li>Progressive scaling between min and optimal (50%-100% based on how close to optimal)</li>
               <li>
                 <strong>Missing breakpoints applies penalties</strong> (-30%
-                below min, -15% between min and optimal)
+                if below minimum on priority stats)
               </li>
               <li>
                 Priority stats are weighted 1.5× more heavily than non-priority
@@ -177,41 +177,38 @@
         <p><strong>How Individual Disc Scoring Works:</strong></p>
         <ol>
           <li>
-            <strong>Main Stat Bonus:</strong>
+            <strong>Main Stat Points (0-3):</strong>
             <ul>
-              <li>Each disc slot has preferred main stats for the agent</li>
-              <li>Matching a preferred main stat grants a flat bonus</li>
+              <li>Each disc slot has preferred main stats for the build type</li>
+              <li>Matching a preferred main stat: <strong>3 points</strong></li>
+              <li>Off-meta main stat on Drive 4/5/6: <strong>0 points</strong></li>
+              <li>Drive 1/2/3 always get 3 points (fixed main stats)</li>
             </ul>
           </li>
 
           <li>
-            <strong
-              >Substat Evaluation (Roll Count × Stat Weight × Quality):</strong
-            >
+            <strong>Substat Roll Points (rolls × weight × 3.0):</strong>
             <ul>
-              <li>Substats are scored by three factors working together:</li>
+              <li>Each substat is scored by: <strong>Total Rolls × Stat Weight × 3.0</strong></li>
               <li>
                 <strong>Roll Count:</strong> Total rolls in the substat (1-6
                 rolls: 1 initial + up to 5 upgrades)
               </li>
               <li>
-                <strong>Stat Weight:</strong> How important the stat is for the
-                agent (0.7-1.0 multiplier)
+                <strong>Stat Weight:</strong> How valuable the stat is for this
+                build (0.7-1.3× multiplier)
               </li>
               <li>
-                <strong>Quality Multiplier:</strong> How efficiently the stat
-                rolled (0.7-1.0 based on roll count)
+                Example: 5 rolls into CRIT Rate (weight 1.0) = 5 × 1.0 × 3.0 = <strong>15 points</strong>
               </li>
               <li>
-                Example: 5 rolls into CRIT Rate (×1.0 weight, ×1.0 quality) =
-                5.0 points
+                Example: 3 rolls into ATK% (weight 0.85) = 3 × 0.85 × 3.0 = <strong>7.65 points</strong>
               </li>
               <li>
-                Example: 3 rolls into PEN (×0.7 weight, ×0.88 quality) = 1.85
-                points
+                Example: 4 rolls into PEN (weight 0.7) = 4 × 0.7 × 3.0 = <strong>8.4 points</strong>
               </li>
               <li>
-                Rolls into non-priority stats are treated as wasted (0 points)
+                Wasted stats (weight 0.17): 4 rolls × 0.17 × 3.0 = <strong>2.04 points</strong> (heavily penalized!)
               </li>
             </ul>
           </li>
@@ -220,44 +217,36 @@
             <strong>Stat Weight Tiers:</strong>
             <ul>
               <li>
-                <strong>Core Stats (×1.0):</strong> Essential stats the agent
-                needs (e.g., CRIT Rate for agents who use/need Crit Value)
+                <strong>Essential Stats (×1.3):</strong> Highest priority stats
+                (e.g., CRIT Rate for Miyabi on CRIT main stats)
               </li>
               <li>
-                <strong>Strong Stats (×0.85):</strong> Very good stats that
+                <strong>Core Stats (×1.0):</strong> Essential stats the agent
+                needs (e.g., CRIT DMG for CRIT agents)
+              </li>
+              <li>
+                <strong>Important Stats (×0.85):</strong> Very good stats that
                 amplify effectiveness (e.g., ATK%)
               </li>
               <li>
-                <strong>Situational Stats (×0.7):</strong> Useful but less
-                impactful stats (e.g., PEN for some agents who can use it but
-                not need it)
+                <strong>Nice Stats (×0.7):</strong> Useful but less
+                impactful stats (e.g., PEN for some agents)
+              </li>
+              <li>
+                <strong>Wasted Stats (×0.17):</strong> Off-meta stats that barely contribute
+                (e.g., DEF% on DPS agents)
               </li>
             </ul>
           </li>
 
           <li>
-            <strong>Priority Substat Bonus:</strong>
+            <strong>Roll Bonus (0 or 1 point):</strong>
             <ul>
               <li>
-                Having the correct substats matters more than roll count alone
+                If the disc has 5+ <strong>upgrade rolls</strong> (not counting initial substats),
+                add <strong>+1 point</strong>
               </li>
-              <li>
-                4/4 priority substats grants +12 effective rolls (no wasted
-                stats)
-              </li>
-              <li>
-                3/4 priority substats grants +8 effective rolls (only one wasted
-                stat)
-              </li>
-            </ul>
-          </li>
-
-          <li>
-            <strong>High Roll Bonus:</strong>
-            <ul>
-              <li>Substats with 4-5 rolls are considered high-roll</li>
-              <li>2+ high-roll priority stats grant +4 points per substat</li>
-              <li>1 high-roll priority stat grants +5 points</li>
+              <li>This rewards fully upgraded discs at +15</li>
             </ul>
           </li>
 
@@ -265,15 +254,22 @@
             <strong>Final Disc Score:</strong>
             <ul>
               <li>
-                Total effective rolls (weighted + bonuses) are scaled to a
-                0–100+ score
+                <strong>Formula:</strong> (Main Stat Points + Substat Roll Points + Roll Bonus) × 4.8
               </li>
               <li>
-                Scores are not capped! Exceptional "god rolls" can exceed 100!
+                The score is calculated on a 0-30+ scale, then multiplied by 4.8 for the final rating
               </li>
               <li>
-                The system rewards both getting the RIGHT stats and rolling them
-                efficiently
+                <strong>VOID HUNTER (134+):</strong> Needs ~28+ internal points
+                (example: 3 main + 24 substat points + 1 bonus = 28, then × 4.8 = 134.4)
+              </li>
+              <li>
+                <strong>Example calculation:</strong> CRIT Rate (5 rolls × 1.0 × 3.0) + CRIT DMG (3 rolls × 1.0 × 3.0)
+                = 15 + 9 = 24 substat points. Add 3 (main) + 1 (bonus) = 28 × 4.8 = 134.4 (VOID HUNTER!)
+              </li>
+              <li>
+                The system rewards both getting the RIGHT stats (high weights) and rolling them
+                heavily (many rolls into priority stats)
               </li>
             </ul>
           </li>
