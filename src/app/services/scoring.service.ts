@@ -1222,6 +1222,16 @@ export class ScoringService {
 
     // Bonus for balanced priority stat distribution (not all eggs in one basket)
     // This rewards spreading priority stats rather than hyper-investing in just one
+    // BUT: Only apply this bonus if the agent has enough priority stats to spread across
+
+    // Count total priority stats available for this agent
+    const totalPriorityStats = Object.keys(breakpoints.breakpoints).filter((statKey) => {
+      const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
+      const isPriority = this.isPriorityStat(statKey, breakpoints);
+      return isPriority && breakpoint.optimal > 0;
+    }).length;
+
+    // Count how many priority stats are currently met (above min)
     const priorityStatCount = Object.keys(breakpoints.breakpoints).filter((statKey) => {
       const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
       const isPriority = this.isPriorityStat(statKey, breakpoints);
@@ -1229,10 +1239,21 @@ export class ScoringService {
       return isPriority && breakpoint.optimal > 0 && currentValue > breakpoint.min;
     }).length;
 
-    if (priorityStatCount >= 3) {
-      efficiencyScore += 10; // Bonus for meeting 3+ priority stats
-    } else if (priorityStatCount >= 2) {
-      efficiencyScore += 5; // Smaller bonus for 2 priority stats
+    // Only apply balanced distribution bonus if agent has 4+ priority stats
+    // Anomaly agents (2-3 priority stats) and Support agents (2-3 stats) skip this bonus
+    if (totalPriorityStats >= 4) {
+      if (priorityStatCount >= 3) {
+        efficiencyScore += 10; // Bonus for meeting 3+ priority stats
+      } else if (priorityStatCount >= 2) {
+        efficiencyScore += 5; // Smaller bonus for 2 priority stats
+      }
+    } else {
+      // For agents with 2-3 priority stats, give bonus if they meet most of them
+      if (priorityStatCount >= totalPriorityStats - 1) {
+        efficiencyScore += 10; // Meeting all or all-but-one priority stats
+      } else if (priorityStatCount >= 1) {
+        efficiencyScore += 5; // Meeting at least 1 priority stat
+      }
     }
 
     // Clamp between 0-100
