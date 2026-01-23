@@ -617,54 +617,78 @@
 /* LEFT SIDE - Disc Card + Disc Image */
 .share-card .disc-pos-1 {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 10px;
+  left: 10px;
   width: 330px;
   min-height: 100px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 15px;
+}
+.share-card .disc-pos-1 .disc-stats-card {
+  position: absolute;
+  left: 60px;
+  top: 0;
+  z-index: 2;
+}
+.share-card .disc-pos-1 .disc-image-container {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 1;
 }
 .share-card .disc-pos-2 {
   position: absolute;
-  top: 125px;
-  left: 0;
+  top: 135px;
+  left: 10px;
   width: 330px;
   min-height: 100px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 15px;
+}
+.share-card .disc-pos-2 .disc-stats-card {
+  position: absolute;
+  left: 60px;
+  top: 0;
+  z-index: 2;
+}
+.share-card .disc-pos-2 .disc-image-container {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 1;
 }
 .share-card .disc-pos-3 {
   position: absolute;
-  top: 250px;
-  left: 0;
+  top: 260px;
+  left: 10px;
   width: 330px;
   min-height: 100px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 15px;
+}
+.share-card .disc-pos-3 .disc-stats-card {
+  position: absolute;
+  left: 60px;
+  top: 0;
+  z-index: 2;
+}
+.share-card .disc-pos-3 .disc-image-container {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 1;
 }
 
 /* W-ENGINE in center */
 .share-card .wengine-center-container {
   position: absolute;
-  top: 40%;
-  left: 43%;
+  top: 30%;
+  left: 47%;
   transform: translate(-50%, -50%);
   z-index: 5;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
 }
 
 .share-card .wengine-image-container {
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -677,10 +701,18 @@
   right: -50px;
   width: 330px;
   min-height: 100px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 15px;
+}
+.share-card .disc-pos-6 .disc-stats-card {
+  position: absolute;
+  right: 170px;
+  top: 0;
+  z-index: 2;
+}
+.share-card .disc-pos-6 .disc-image-container {
+  position: absolute;
+  right: 120px;
+  top: 10px;
+  z-index: 1;
 }
 .share-card .disc-pos-5 {
   position: absolute;
@@ -688,10 +720,18 @@
   right: -50px;
   width: 330px;
   min-height: 100px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 15px;
+}
+.share-card .disc-pos-5 .disc-stats-card {
+  position: absolute;
+  right: 170px;
+  top: 0;
+  z-index: 2;
+}
+.share-card .disc-pos-5 .disc-image-container {
+  position: absolute;
+  right: 120px;
+  top: 10px;
+  z-index: 1;
 }
 .share-card .disc-pos-4 {
   position: absolute;
@@ -699,10 +739,18 @@
   right: -50px;
   width: 330px;
   min-height: 100px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 15px;
+}
+.share-card .disc-pos-4 .disc-stats-card {
+  position: absolute;
+  right: 170px;
+  top: 0;
+  z-index: 2;
+}
+.share-card .disc-pos-4 .disc-image-container {
+  position: absolute;
+  right: 120px;
+  top: 10px;
+  z-index: 1;
 }
 
 .share-card .disc-card {
@@ -712,8 +760,8 @@
 }
 
 .share-card .disc-image-container {
-  width: 65px;
-  height: 65px;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -721,6 +769,7 @@
   position: relative;
   background: transparent;
   border: none;
+  z-index: 1;
 }
 
 .share-card .disc-rating-badge {
@@ -753,8 +802,8 @@
 .share-card .disc-rating-badge.rating-F { background: #6B1F00 !important; color: #fff !important; }
 
 .share-card .disc-set-icon {
-  width: 70px;
-  height: 70px;
+  width: 90px;
+  height: 90px;
   display: block;
   object-fit: contain;
   border: 2px solid #fff;
@@ -766,7 +815,7 @@
 
 .share-card .disc-stats-card {
   width: 100px;
-  background: rgba(26, 26, 26, 0.95);
+  background: rgba(26, 26, 26);
   border: 2px solid #F4B942;
   border-radius: 6px;
   padding: 3px 5px;
@@ -777,6 +826,8 @@
   flex-direction: column;
   justify-content: flex-start;
   overflow: hidden;
+  position: relative;
+  z-index: 2;
 }
 
 .share-card .disc-main-stat {
@@ -836,8 +887,8 @@
 }
 
 .share-card .wengine-image {
-  width: 120px;
-  height: 120px;
+  width: 180px;
+  height: 180px;
   object-fit: contain;
   filter: drop-shadow(0 4px 12px rgba(244, 185, 66, 0.6));
 }
@@ -846,30 +897,30 @@
   background: rgba(26, 26, 26, 0.95);
   border: 2px solid #F4B942;
   border-radius: 6px;
-  padding: 6px 10px;
+  padding: 12px 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  min-width: 140px;
+  gap: 8px;
+  min-width: 200px;
 }
 
 .share-card .wengine-stat {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 10px;
+  gap: 6px;
+  font-size: 12px;
 }
 
 .share-card .wengine-stat-icon {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 }
 
 .share-card .wengine-stat-label {
   color: #F4B942;
   font-weight: 600;
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .share-card .wengine-stat-value {
