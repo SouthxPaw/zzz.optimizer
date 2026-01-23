@@ -37,22 +37,22 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
   Stun: {
     name: 'Stun Build',
     weights: {
-      Impact: 2.0,
+      // Note: Impact and Energy_Regen removed - they are main stats only, not substats
       CRIT_Rate: 1.0,
       CRIT_DMG: 1.0,
       'ATK%': 1.0,
-      Energy_Regen: 0.8,
+      'HP%': 0.5,
     },
     mainStatPreferences: {
       Drive4: ['CRIT_Rate', 'CRIT_DMG'],
       Drive5: ['Element_DMG', 'ATK%'],
-      Drive6: ['Impact', 'Energy_Regen'],
+      Drive6: ['Impact', 'Energy_Regen'], // These are valid as main stats
     },
   },
   Support: {
     name: 'Support Build',
     weights: {
-      Energy_Regen: 1.0,
+      // Note: Energy_Regen removed - it is a main stat only, not a substat
       'PEN': 1.0,
       'HP%': 0.5,
       'DEF%': 0.5,
@@ -61,7 +61,7 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
     mainStatPreferences: {
       Drive4: ['CRIT_Rate', 'CRIT_DMG', 'ATK%', 'Anomaly_Proficiency'],
       Drive5: ['ATK%', 'Element_DMG'],
-      Drive6: ['Energy_Regen', 'ATK%'],
+      Drive6: ['Energy_Regen', 'ATK%'], // Energy_Regen valid as main stat
     },
   },
   Defense: {
@@ -71,7 +71,7 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
       'HP%': 1.5,
       DEF: 0.5,
       HP: 0.5,
-      Energy_Regen: 1.0,
+      // Note: Energy_Regen removed - it is a main stat only, not a substat
     },
     mainStatPreferences: {
       Drive4: ['CRIT_Rate', 'CRIT_DMG', 'Anomaly_Proficiency', 'ATK%'],

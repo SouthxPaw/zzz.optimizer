@@ -285,10 +285,11 @@ export class OptimizerService {
       }
 
       // Score and sort discs, keep only top 20 per slot
+      // Simple scoring based on weighted substats
       slotDiscs = slotDiscs
         .map(disc => ({
           disc,
-          score: this.discService.scoreDisc(disc, algorithm)
+          score: this.simpleScoreDisc(disc, algorithm)
         }))
         .sort((a, b) => b.score - a.score)
         .slice(0, 20)
@@ -307,5 +308,27 @@ export class OptimizerService {
       constraints,
       onProgress
     );
+  }
+
+  /**
+   * Simple scoring function for disc filtering in efficient mode
+   * Scores based on weighted substats only
+   */
+  private simpleScoreDisc(disc: Disc, algorithm: ScoringAlgorithm): number {
+    let score = 0;
+
+    // Score substats based on weights
+    disc.subStats.forEach(subStat => {
+      const weight = algorithm.weights[subStat.type] || 0;
+      score += subStat.value * weight;
+    });
+
+    // Bonus for preferred main stat
+    const preferredMainStats = algorithm.mainStatPreferences[disc.slot] || [];
+    if (preferredMainStats.includes(disc.mainStat.type)) {
+      score *= 1.2; // 20% bonus
+    }
+
+    return score;
   }
 }

@@ -530,13 +530,7 @@ export class StatCalculatorService {
           case 'PEN':
             stats.pen += subStat.value;
             break;
-          case 'Impact':
-            stats.impact += subStat.value;
-            break;
-          case 'Energy_Regen':
-            // Disc substat Energy Regen would be a percentage bonus (though doesn't exist in game)
-            stats.energyRegenPercent += subStat.value;
-            break;
+          // Note: Impact and Energy_Regen cannot be disc substats, only main stats (Drive 6)
         }
       });
     });
