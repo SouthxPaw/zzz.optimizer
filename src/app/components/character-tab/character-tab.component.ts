@@ -1564,24 +1564,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return (buildWeights[substatType] || 0) >= 1.0;
     }
 
-    // Fallback to old system if new weights not available
+    // Fallback to priorityStats array if no stat weights available (legacy agents)
     const breakpoints = this.scoringService.getAgentBreakpoints(
       this.selectedBuild.agentId,
     );
-    if (!breakpoints) {
-      return false;
-    }
-
-    // Check statWeights first (old format)
-    if (
-      breakpoints.statWeights &&
-      breakpoints.statWeights[substatType] !== undefined
-    ) {
-      return breakpoints.statWeights[substatType] > 0;
-    }
-
-    // Fall back to priorityStats array (oldest format)
-    if (breakpoints.priorityStats && Array.isArray(breakpoints.priorityStats)) {
+    if (breakpoints?.priorityStats && Array.isArray(breakpoints.priorityStats)) {
       return breakpoints.priorityStats.includes(substatType);
     }
 

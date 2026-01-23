@@ -554,10 +554,15 @@ export class ScoringService {
   /**
    * Calculate build score based on stat breakpoints
    * Compares build stats against agent-specific optimal targets
+   *
+   * @param agentId - Agent ID
+   * @param stats - Character stats
+   * @param buildType - Optional build type (CRIT, Anomaly, Support) for priority stat detection
    */
   calculateBuildScore(
     agentId: string,
-    stats: BaseStats
+    stats: BaseStats,
+    buildType?: string
   ): { score: number; rating: BuildRating; breakdown: any } {
     const breakpoints = this.agentBreakpoints[agentId];
 
@@ -609,7 +614,7 @@ export class ScoringService {
           statKey as keyof typeof breakpoints.breakpoints
         ];
       const rawValue = statMapping[statKey] || 0;
-      const isPriority = this.isPriorityStat(statKey, breakpoints);
+      const isPriority = this.isPriorityStat(statKey, agentId, buildType, breakpoints);
 
       // Only count breakpoints where optimal > 0 (meaning this stat matters)
       if (breakpoint.optimal > 0) {
@@ -1148,10 +1153,17 @@ export class ScoringService {
    * Component 3 of composite build rating (15% weight)
    * Rewards balanced stat allocation and penalizes wasted investment
    * Evaluates how well stats are distributed across priority vs non-priority stats
+   *
+   * @param stats - Character stats
+   * @param breakpoints - Agent breakpoints configuration
+   * @param agentId - Agent ID for detecting build-specific priority stats
+   * @param detectedBuildType - Build type (CRIT, Anomaly, Support) for contextual stat priorities
    */
   private calculateStatEfficiencyScore(
     stats: BaseStats,
-    breakpoints: AgentBreakpoints
+    breakpoints: AgentBreakpoints,
+    agentId?: string,
+    detectedBuildType?: string
   ): number {
     let efficiencyScore = 50; // Start at 50 (neutral)
 
@@ -1169,6 +1181,23 @@ export class ScoringService {
       energyRegen: stats.energyRegen,
     };
 
+    // Use build-specific stat weights if available (for agents with multiple builds)
+    // This allows efficiency scoring to adapt based on detected build type (CRIT, Anomaly, Support)
+    let buildSpecificStatWeights: { [stat: string]: number } = {};
+    if (agentId && detectedBuildType && this.agentStatWeights[agentId]) {
+      const buildData = this.agentStatWeights[agentId].builds?.[detectedBuildType];
+      if (buildData) {
+        // Aggregate max weight for each stat across all disc slots/main stats
+        Object.values(buildData.contextualWeights || {}).forEach((slotData: any) => {
+          Object.values(slotData || {}).forEach((mainStatData: any) => {
+            Object.entries(mainStatData.substatWeights || {}).forEach(([stat, weight]) => {
+              buildSpecificStatWeights[stat] = Math.max(buildSpecificStatWeights[stat] || 0, weight as number);
+            });
+          });
+        });
+      }
+    }
+
     let totalPriorityStatValue = 0;
     let totalNonPriorityStatValue = 0;
     let totalPriorityOptimal = 0;
@@ -1179,7 +1208,32 @@ export class ScoringService {
           statKey as keyof typeof breakpoints.breakpoints
         ];
       const currentValue = statMapping[statKey] || 0;
-      const isPriority = this.isPriorityStat(statKey, breakpoints);
+
+      // Check if stat is priority using build-specific weights if available
+      let isPriority = false;
+      if (Object.keys(buildSpecificStatWeights).length > 0) {
+        // Use build-specific weights from agent-stat-weights.json
+        const statTypeMap: { [key: string]: string[] } = {
+          critRate: ['CRIT_Rate'],
+          critDmg: ['CRIT_DMG'],
+          atk: ['ATK%', 'ATK'],
+          hp: ['HP%', 'HP'],
+          def: ['DEF%', 'DEF'],
+          anomalyProficiency: ['Anomaly_Proficiency'],
+          anomalyMastery: ['Anomaly_Mastery'],
+          pen: ['PEN'],
+          penRatio: ['PEN_Ratio'],
+          impact: ['Impact'],
+          energyRegen: ['Energy_Regen'],
+        };
+        const possibleStatNames = statTypeMap[statKey] || [];
+        isPriority = possibleStatNames.some(
+          (statName) => (buildSpecificStatWeights[statName] || 0) >= 1.0
+        );
+      } else {
+        // Fallback to original logic using breakpoints
+        isPriority = this.isPriorityStat(statKey, agentId, detectedBuildType, breakpoints);
+      }
 
       if (isPriority && breakpoint.optimal > 0) {
         totalPriorityStatValue += currentValue;
@@ -1224,17 +1278,42 @@ export class ScoringService {
     // This rewards spreading priority stats rather than hyper-investing in just one
     // BUT: Only apply this bonus if the agent has enough priority stats to spread across
 
+    // Helper to check if stat is priority (reuse logic from above)
+    const isStatPriority = (statKey: string): boolean => {
+      if (Object.keys(buildSpecificStatWeights).length > 0) {
+        const statTypeMap: { [key: string]: string[] } = {
+          critRate: ['CRIT_Rate'],
+          critDmg: ['CRIT_DMG'],
+          atk: ['ATK%', 'ATK'],
+          hp: ['HP%', 'HP'],
+          def: ['DEF%', 'DEF'],
+          anomalyProficiency: ['Anomaly_Proficiency'],
+          anomalyMastery: ['Anomaly_Mastery'],
+          pen: ['PEN'],
+          penRatio: ['PEN_Ratio'],
+          impact: ['Impact'],
+          energyRegen: ['Energy_Regen'],
+        };
+        const possibleStatNames = statTypeMap[statKey] || [];
+        return possibleStatNames.some(
+          (statName) => (buildSpecificStatWeights[statName] || 0) >= 1.0
+        );
+      } else {
+        return this.isPriorityStat(statKey, agentId, detectedBuildType, breakpoints);
+      }
+    };
+
     // Count total priority stats available for this agent
     const totalPriorityStats = Object.keys(breakpoints.breakpoints).filter((statKey) => {
       const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
-      const isPriority = this.isPriorityStat(statKey, breakpoints);
+      const isPriority = isStatPriority(statKey);
       return isPriority && breakpoint.optimal > 0;
     }).length;
 
     // Count how many priority stats are currently met (above min)
     const priorityStatCount = Object.keys(breakpoints.breakpoints).filter((statKey) => {
       const breakpoint = breakpoints.breakpoints[statKey as keyof typeof breakpoints.breakpoints];
-      const isPriority = this.isPriorityStat(statKey, breakpoints);
+      const isPriority = isStatPriority(statKey);
       const currentValue = statMapping[statKey] || 0;
       return isPriority && breakpoint.optimal > 0 && currentValue > breakpoint.min;
     }).length;
@@ -1262,44 +1341,64 @@ export class ScoringService {
 
   /**
    * Check if a stat is a priority stat for the agent
-   * Handles both old priorityStats array format and new statWeights object format
+   * Uses agent-stat-weights.json for accurate, build-specific priority detection
+   *
    * @param statKey - Breakpoint stat key (e.g., 'critRate', 'anomalyProficiency')
-   * @param breakpoints - Agent breakpoints configuration
-   * @returns true if the stat is a priority stat
+   * @param agentId - Agent ID for loading stat weights
+   * @param buildType - Build type (CRIT, Anomaly, Support) for contextual priorities
+   * @param breakpoints - Agent breakpoints (used only as fallback for legacy data)
+   * @returns true if the stat is a priority stat (weight >= 1.0)
    */
   private isPriorityStat(
     statKey: string,
-    breakpoints: AgentBreakpoints
+    agentId?: string,
+    buildType?: string,
+    breakpoints?: AgentBreakpoints
   ): boolean {
-    // First, check if statWeights is defined (new format)
-    if (breakpoints.statWeights) {
-      // Map breakpoint key back to stat type name for checking statWeights
-      const statTypeMap: { [key: string]: string[] } = {
-        critRate: ['CRIT_Rate'],
-        critDmg: ['CRIT_DMG'],
-        atk: ['ATK%', 'ATK'],
-        hp: ['HP%', 'HP'],
-        def: ['DEF%', 'DEF'],
-        anomalyProficiency: ['Anomaly_Proficiency'],
-        anomalyMastery: ['Anomaly_Mastery'],
-        pen: ['PEN'],
-        penRatio: ['PEN_Ratio'],
-        impact: ['Impact'],
-        energyRegen: ['Energy_Regen'],
-      };
+    // Map breakpoint key to stat type name for checking weights
+    const statTypeMap: { [key: string]: string[] } = {
+      critRate: ['CRIT_Rate'],
+      critDmg: ['CRIT_DMG'],
+      atk: ['ATK%', 'ATK'],
+      hp: ['HP%', 'HP'],
+      def: ['DEF%', 'DEF'],
+      anomalyProficiency: ['Anomaly_Proficiency'],
+      anomalyMastery: ['Anomaly_Mastery'],
+      pen: ['PEN'],
+      penRatio: ['PEN_Ratio'],
+      impact: ['Impact'],
+      energyRegen: ['Energy_Regen'],
+    };
 
-      const possibleStatNames = statTypeMap[statKey] || [];
-      return possibleStatNames.some(
-        (statName) =>
-          breakpoints.statWeights![statName] !== undefined &&
-          breakpoints.statWeights![statName] > 0
-      );
+    // Try to get build-specific weights from agent-stat-weights.json
+    if (agentId && this.agentStatWeights[agentId]) {
+      // If buildType not provided, use first available build
+      const availableBuilds = Object.keys(this.agentStatWeights[agentId].builds || {});
+      const selectedBuildType = buildType || availableBuilds[0];
+
+      if (selectedBuildType) {
+        const buildData = this.agentStatWeights[agentId].builds?.[selectedBuildType];
+        if (buildData) {
+          // Aggregate max weight for this stat across all contexts
+          let maxWeight = 0;
+          Object.values(buildData.contextualWeights || {}).forEach((slotData: any) => {
+            Object.values(slotData || {}).forEach((mainStatData: any) => {
+              const possibleStatNames = statTypeMap[statKey] || [];
+              possibleStatNames.forEach(statName => {
+                const weight = mainStatData.substatWeights?.[statName] || 0;
+                maxWeight = Math.max(maxWeight, weight);
+              });
+            });
+          });
+          // Stat is priority if weight >= 1.0
+          return maxWeight >= 1.0;
+        }
+      }
     }
 
-    // Fall back to old priorityStats array format
-    if (breakpoints.priorityStats && Array.isArray(breakpoints.priorityStats)) {
-      // Map breakpoint key to stat type names that appear in priorityStats
-      const statTypeMap: { [key: string]: string[] } = {
+    // Fallback: Use priorityStats array if available (legacy format)
+    if (breakpoints?.priorityStats && Array.isArray(breakpoints.priorityStats)) {
+      const legacyStatTypeMap: { [key: string]: string[] } = {
         critRate: ['CRIT_Rate', 'critRate'],
         critDmg: ['CRIT_DMG', 'critDmg'],
         atk: ['ATK%', 'ATK', 'atk'],
@@ -1313,9 +1412,9 @@ export class ScoringService {
         energyRegen: ['Energy_Regen', 'energyRegen'],
       };
 
-      const possibleStatNames = statTypeMap[statKey] || [];
+      const possibleStatNames = legacyStatTypeMap[statKey] || [];
       return possibleStatNames.some((statName) =>
-        breakpoints.priorityStats.includes(statName)
+        breakpoints.priorityStats!.includes(statName)
       );
     }
 
@@ -1553,8 +1652,12 @@ export class ScoringService {
       mindscapeContribution
     );
 
+    // Detect build type for contextual scoring (CRIT, Anomaly, Support, etc.)
+    // This determines which stat weights to use for disc and stat efficiency scoring
+    const detectedBuildType = upgradePlan ? undefined : this.detectBuildType(equippedDiscs, agentId);
+
     // Calculate each component using weighted stats
-    const breakpointResult = this.calculateBuildScore(agentId, weightedStats);
+    const breakpointResult = this.calculateBuildScore(agentId, weightedStats, detectedBuildType);
     const breakpointScore = breakpointResult.score; // 0-100 percentage
     const discQualityScore = this.calculateDiscQualityScore(
       equippedDiscs,
@@ -1564,7 +1667,9 @@ export class ScoringService {
 
     const statEfficiencyScore = this.calculateStatEfficiencyScore(
       weightedStats,
-      breakpoints
+      breakpoints,
+      agentId,
+      detectedBuildType
     ); // 0-100
 
     // Calculate damage estimation score (if agent info provided)
@@ -1753,10 +1858,9 @@ export class ScoringService {
         });
       }
     }
-    // Fallback to old system if new weights not available
-    const statWeightsToUse = Object.keys(buildStatWeights).length > 0
-      ? buildStatWeights
-      : (breakpoints.statWeights || {});
+    // Use build-aware stat weights (from agent-stat-weights.json)
+    // Fallback to priorityStats array if no stat weights available
+    const statWeightsToUse = buildStatWeights;
 
     // Map substat types to their weight key names
     const substatToWeightKey: { [key: string]: string } = {
@@ -2002,7 +2106,7 @@ export class ScoringService {
 
       if (!statInfo || breakpoint.optimal === 0) return;
 
-      const isPriority = this.isPriorityStat(statKey, breakpoints);
+      const isPriority = this.isPriorityStat(statKey, agentId, detectedBuildType, breakpoints);
       const current = statInfo.value;
       const min = breakpoint.min;
       const optimal = breakpoint.optimal;
