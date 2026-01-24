@@ -451,7 +451,7 @@
                   formatStatType(selectedBuild.equippedWEngine.subStat.type)
                 }}:</strong
               >
-              {{ selectedBuild.equippedWEngine.subStat.value }}%
+              {{ formatWEngineSubstatValue(selectedBuild.equippedWEngine.subStat) }}
             </p>
             <p class="wengine-effect">
               <strong>{{ selectedBuild.equippedWEngine.effect.name }}:</strong>
@@ -1312,7 +1312,7 @@
             <img [src]="getAgentImage()" class="agent-backdrop-img" alt="Agent" />
             <div class="agent-info-overlay">
               <div class="build-rating-container">
-                <div class="build-rating-label">BUILD RATING:</div>
+                <div class="build-rating-label">BUILD RATING: {{ getBuildScore()?.score || 'N/A' }}%</div>
                 <div class="build-rating-badge" [ngClass]="'rating-' + getBuildGrade()">
                   {{ getBuildGrade() }}
                 </div>
