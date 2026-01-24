@@ -337,17 +337,6 @@
           "note": ""
         }
       ]
-    },
-    "1261": {
-      "comment": "Jane",
-      "2": [
-        {
-          "type": "PEN_Ratio",
-          "value": 15,
-          "format": "%",
-          "note": ""
-        }
-      ]
     }
   }
 }
