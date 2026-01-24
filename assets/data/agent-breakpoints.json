@@ -2294,8 +2294,8 @@
           "optimal": 0
         },
         "energyRegen": {
-          "min": 66,
-          "optimal": 66
+          "min": 1.5,
+          "optimal": 2.00
         }
       },
       "priorityStats": [
