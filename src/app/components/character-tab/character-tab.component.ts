@@ -2238,4 +2238,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     return stats;
   }
+
+  // Format W-Engine substat value with % only for percentage stats
+  formatWEngineSubstatValue(subStat: { type: string; value: number }): string {
+    const isPercent = subStat.type.includes('%') ||
+                     subStat.type === 'CRIT_Rate' ||
+                     subStat.type === 'CRIT_DMG' ||
+                     subStat.type === 'PEN_Ratio' ||
+                     subStat.type === 'Energy_Regen';
+
+    return isPercent ? `${subStat.value}%` : String(subStat.value);
+  }
 }

@@ -96,7 +96,8 @@ export class DbService extends Dexie {
   }
 
   async bulkAddAgents(agents: Agent[]): Promise<string> {
-    return await this.agents.bulkAdd(agents, { allKeys: true }) as any;
+    // Use bulkPut for reference data to allow updates on reload
+    return await this.agents.bulkPut(agents, { allKeys: true }) as any;
   }
 
   // W-Engine operations
@@ -121,7 +122,8 @@ export class DbService extends Dexie {
   }
 
   async bulkAddWEngines(wEngines: WEngine[]): Promise<string> {
-    return await this.wEngines.bulkAdd(wEngines, { allKeys: true }) as any;
+    // Use bulkPut for reference data to allow updates on reload
+    return await this.wEngines.bulkPut(wEngines, { allKeys: true }) as any;
   }
 
   // Disc operations
@@ -155,7 +157,8 @@ export class DbService extends Dexie {
   }
 
   async bulkAddDiscSets(discSets: any[]): Promise<string> {
-    return await this.discSets.bulkAdd(discSets, { allKeys: true }) as any;
+    // Use bulkPut for reference data to allow updates on reload
+    return await this.discSets.bulkPut(discSets, { allKeys: true }) as any;
   }
 
   // Clear user data only (keeps reference data intact)

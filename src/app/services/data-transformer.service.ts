@@ -631,6 +631,7 @@ export class DataTransformerService {
       { regex: /CRIT Rate increases by (\d+(?:\.\d+)?)%/i, type: 'CRIT_Rate', conditional: false },
       { regex: /CRIT DMG increases by (\d+(?:\.\d+)?)%/i, type: 'CRIT_DMG', conditional: false },
       { regex: /PEN Ratio increases by (\d+(?:\.\d+)?)%/i, type: 'PEN_Ratio', conditional: false },
+      { regex: /(\d+(?:\.\d+)?)% of (?:the )?enemy's DEF is ignored/i, type: 'PEN_Ratio', conditional: false },
       { regex: /Energy (?:Generation Rate|Regen) increases by (\d+(?:\.\d+)?)%/i, type: 'Energy_Regen', conditional: false },
       { regex: /Anomaly Proficiency increases by (\d+)/i, type: 'Anomaly_Proficiency', conditional: false },
       { regex: /Anomaly Mastery increases by (\d+)/i, type: 'Anomaly_Mastery', conditional: false },
