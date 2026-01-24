@@ -103,7 +103,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     { value: 'CRIT_Rate', label: 'CRIT Rate' },
     { value: 'CRIT_DMG', label: 'CRIT DMG' },
     { value: 'Anomaly_Proficiency', label: 'Anomaly Proficiency' },
-    { value: 'Anomaly_Mastery', label: 'Anomaly Mastery' },
     { value: 'PEN', label: 'PEN (Flat)' },
   ];
 
@@ -1396,10 +1395,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       ? this.upgradePlanService.getPlanById(this.selectedBuild.activeUpgradePlanId)
       : undefined;
 
+    // Detect build type based on ALL equipped discs (not just this one)
+    const allDiscs = Object.values(this.selectedBuild.equippedDiscs || {}).filter(d => d);
+    const detectedBuildType = allDiscs.length > 0
+      ? this.scoringService.detectBuildType(allDiscs, this.selectedBuild.agentId)
+      : undefined;
+
     const result = this.scoringService.calculateDiscScore(
       disc,
       this.selectedBuild.agentId,
-      undefined, // buildType - not used when custom plan is active
+      detectedBuildType, // Use detected build type based on all 6 discs
       activePlan  // Pass upgrade plan to override default weights
     );
     return {
@@ -1475,7 +1480,24 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     ).length;
     const wEngineId = this.selectedBuild.equippedWEngine?.id || 'none';
     const stats = this.selectedBuild.calculatedStats;
-    return `${this.selectedBuild.id}-${discCount}-${wEngineId}-${stats.atk}-${stats.critRate}-${stats.critDmg}`;
+
+    // Include disc UIDs to detect disc changes (even if stats are same)
+    const discUids = Object.values(this.selectedBuild.equippedDiscs)
+      .filter(d => d)
+      .map(d => d.uid)
+      .sort()
+      .join(',');
+
+    // Include active upgrade plan ID
+    const planId = this.selectedBuild.activeUpgradePlanId || 'none';
+
+    // Include detected build type (CRIT vs Anomaly) since feedback differs by build type
+    const allDiscs = Object.values(this.selectedBuild.equippedDiscs || {}).filter(d => d);
+    const detectedBuildType = allDiscs.length > 0
+      ? this.scoringService.detectBuildType(allDiscs, this.selectedBuild.agentId)
+      : 'unknown';
+
+    return `${this.selectedBuild.id}-${discCount}-${wEngineId}-${stats.atk}-${stats.critRate}-${stats.critDmg}-${discUids}-${planId}-${detectedBuildType}`;
   }
 
   getBuildFeedback(): FeedbackItem[] {

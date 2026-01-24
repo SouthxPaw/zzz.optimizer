@@ -311,11 +311,10 @@ export class ScoringService {
 
         if (substat.type === 'Anomaly_Proficiency') {
           anomalyRolls += rolls;
-        } else if (substat.type === 'Anomaly_Mastery') {
-          anomalyRolls += rolls / 1.33; // Normalize AM to AP scale (12 max vs 9 max)
         } else if (substat.type === 'CRIT_Rate' || substat.type === 'CRIT_DMG') {
           critRolls += rolls;
         }
+        // Note: Anomaly_Mastery is no longer a valid substat (main stat only on Disc 6)
       });
     });
 
@@ -456,20 +455,26 @@ export class ScoringService {
     let substatPoints = 0;
     let totalRollCount = 0;
 
+    // Detect if we're using InterKnot scaled weights (> 1.5) or old system (≤ 1.5)
+    const maxWeight = Math.max(...Object.values(statWeights).filter(w => typeof w === 'number'));
+    const useInterKnotScaling = maxWeight > 1.5;
+
     disc.subStats.forEach((substat) => {
       // Calculate total roll count for this substat
       const rolls = calculateRollCount(substat.type, substat.value);
       totalRollCount += rolls;
       breakdown.totalRolls += rolls;
 
-      // Get stat weight (0.7-1.0 range, or undefined if not a priority stat)
+      // Get stat weight (0.7-1.0 range for old system, or 3.5-4.25 for InterKnot)
       const statWeight = statWeights[substat.type];
 
       // Only award points for priority stats (weight > 0)
       if (statWeight !== undefined && statWeight > 0) {
-        // NEW FORMULA: rolls × weight × 3.0
-        // This aligns with Interknot's ~3.0 points per roll in priority stats
-        const points = rolls * statWeight * 3.0;
+        // FORMULA: rolls × weight × multiplier
+        // InterKnot weights are already scaled (3.5, 4.25, etc.) so multiplier = 1.0
+        // Old system weights (0.7-1.0) need multiplier = 3.0
+        const multiplier = useInterKnotScaling ? 1.0 : 3.0;
+        const points = rolls * statWeight * multiplier;
         substatPoints += points;
 
         breakdown.subStatPoints += points;
@@ -480,10 +485,11 @@ export class ScoringService {
           rolls: rolls,
         });
       } else {
-        // BLACK tier - wasted stat gets minimal points (~0.5 pts/roll)
+        // BLACK tier - wasted stat gets minimal points
         // This matches Interknot's treatment of off-meta stats
-        const BLACK_TIER_WEIGHT = 0.17; // 0.17 × 3.0 = 0.51 pts/roll
-        const points = rolls * BLACK_TIER_WEIGHT * 3.0;
+        const BLACK_TIER_WEIGHT = useInterKnotScaling ? 0.5 : 0.17;
+        const multiplier = useInterKnotScaling ? 1.0 : 3.0;
+        const points = rolls * BLACK_TIER_WEIGHT * multiplier;
         substatPoints += points;
 
         breakdown.subStatPoints += points;
@@ -1819,8 +1825,8 @@ export class ScoringService {
     discSlots.forEach(slot => {
       const disc = equippedDiscs[slot];
       if (disc) {
-        // Use the same scoring as visual display: undefined buildType, pass upgradePlan
-        const scoreResult = this.calculateDiscScore(disc, agentId, undefined, upgradePlan);
+        // Use detected build type to ensure consistent scoring
+        const scoreResult = this.calculateDiscScore(disc, agentId, detectedBuildType, upgradePlan);
         discScores.push({
           slot,
           score: scoreResult.score,
