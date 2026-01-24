@@ -97,7 +97,7 @@ const MAIN_STAT_PROPERTY_MAP: { [key: number]: MainStatType } = {
 
 // Temporary type that includes Impact/Energy_Regen for API parsing
 // We'll filter these out since they can't actually be disc substats
-type EnkaSubStatType = SubStatType | 'Impact' | 'Energy_Regen';
+type EnkaSubStatType = SubStatType | 'Impact' | 'Energy_Regen' | 'Anomaly_Mastery';
 
 const SUBSTAT_PROPERTY_MAP: { [key: number]: EnkaSubStatType } = {
   11103: 'HP',          // HP [Flat]

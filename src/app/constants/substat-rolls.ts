@@ -23,9 +23,9 @@ export const SUBSTAT_ROLL_VALUES: { [statType: string]: number } = {
   'DEF': 0,                   // Not documented in source (rare substat)
   'PEN': 9,                   // +9 flat PEN per roll
   'Anomaly_Proficiency': 9,   // +9 flat Anomaly Proficiency per roll
-  'Anomaly_Mastery': 0,       // Not documented in source (may not roll on discs)
-  'Impact': 0,                // Not documented in source (may not roll on discs)
-  'Energy_Regen': 0,          // Not documented in source (may not roll on discs)
+  'Anomaly_Mastery': 0,       // Main stat only (Disc 6) - does not roll as substat
+  'Impact': 0,                // Main stat only (Disc 6) - does not roll as substat
+  'Energy_Regen': 0,          // Main stat only (Disc 6) - does not roll as substat
   'PEN_Ratio': 0,             // Not documented in source (main stat only?)
 };
 

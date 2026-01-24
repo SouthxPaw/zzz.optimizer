@@ -8,9 +8,9 @@ export type MainStatType =
 
 export type SubStatType =
   | 'HP' | 'HP%' | 'ATK' | 'ATK%' | 'DEF' | 'DEF%'
-  | 'CRIT_Rate' | 'CRIT_DMG' | 'Anomaly_Proficiency' | 'Anomaly_Mastery'
+  | 'CRIT_Rate' | 'CRIT_DMG' | 'Anomaly_Proficiency'
   | 'PEN';
-// Note: Impact and Energy_Regen are main stats only (Drive 6), not substats
+// Note: Anomaly_Mastery, Impact, and Energy_Regen are main stats only (Drive 6), not substats
 
 export interface SubStat {
   type: SubStatType;
