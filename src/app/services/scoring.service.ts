@@ -2003,8 +2003,8 @@ export class ScoringService {
 
       Object.entries(statWeightsToUse)
         .filter(([stat, weight]) => {
-          // Always include CRIT Rate if in the "awkward zone" (10-50%), regardless of weight
-          if (stat === 'CRIT_Rate' && stats.critRate > 10 && stats.critRate < 50) return true;
+          // Always include CRIT Rate if in the "awkward zone" (30-50%), regardless of weight
+          if (stat === 'CRIT_Rate' && stats.critRate > 30 && stats.critRate < 50) return true;
           // Otherwise only suggest stats with weight >= 1.0
           return weight >= 1.0;
         })
