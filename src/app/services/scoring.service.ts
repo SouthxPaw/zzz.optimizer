@@ -1844,12 +1844,13 @@ export class ScoringService {
       energyRegen: { value: stats.energyRegen, label: 'Energy Regen', unit: '%', substatName: 'Energy Regen' },
     };
 
-    // Check for CRIT Rate overcap (warn if over 100%)
-    if (stats.critRate > 100) {
+    // Check for CRIT Rate overcap (warn if >= 101%)
+    if (stats.critRate >= 101) {
+      const overcap = stats.critRate - 100;
       feedback.push({
         priority: 'medium',
         category: 'stat',
-        message: `CRIT Rate is ${stats.critRate.toFixed(1)}% - overcapped! You're wasting ${(stats.critRate - 100).toFixed(1)}% CRIT Rate`,
+        message: `CRIT Rate overcapped by ${overcap.toFixed(1)}% (${stats.critRate.toFixed(1)}% total)`,
         stat: 'critRate',
         currentValue: stats.critRate,
         targetValue: 100,
