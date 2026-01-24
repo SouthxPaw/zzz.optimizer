@@ -90,7 +90,7 @@ export const DISC_RATING_THRESHOLDS: DiscRating[] = [
  * These thresholds reward quality builds while maintaining meaningful progression
  */
 export interface BuildRating {
-  grade: 'VOID HUNTER' | 'PHAETHON' | 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: 'VOID HUNTER' | 'PHAETHON' | 'SSS' | 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'F' | 'INCOMPLETE';
   breakpointsMetPercentage: number;  // Percentage of optimal breakpoints met
   color: string;
   description: string;
@@ -107,6 +107,7 @@ export const BUILD_RATING_THRESHOLDS: BuildRating[] = [
   { grade: 'C', breakpointsMetPercentage: 43, color: '#1920E6', description: 'Below Average - Missing key stats' },
   { grade: 'D', breakpointsMetPercentage: 30, color: '#9C00DE', description: 'Poor - Major gaps in stats' },
   { grade: 'F', breakpointsMetPercentage: 0, color: '#6B1F00', description: 'Unoptimized - Needs complete rework' },
+  { grade: 'INCOMPLETE', breakpointsMetPercentage: 0, color: '#808080', description: 'Incomplete - Missing disc slots (equip all 6 discs for rating)' },
 ];
 
 /**

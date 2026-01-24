@@ -1145,7 +1145,9 @@ export class ScoringService {
     });
 
     // Return average score as percentage (0-100)
-    return equippedDiscs.length > 0 ? totalScore / equippedDiscs.length : 0;
+    // IMPORTANT: Always divide by 6 (total disc slots), not by number of equipped discs
+    // This ensures missing discs properly penalize the score
+    return totalScore / 6;
   }
 
   /**
@@ -1625,6 +1627,18 @@ export class ScoringService {
     wengineScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number },
     upgradePlan?: UpgradePlan  // NEW: Use upgrade plan if provided
   ): { score: number; rating: BuildRating; breakdown: any } {
+    // Check if build has all 6 discs equipped
+    if (!equippedDiscs || equippedDiscs.length < 6) {
+      const incompleteRating = BUILD_RATING_THRESHOLDS.find(r => r.grade === 'INCOMPLETE');
+      return {
+        score: 0,
+        rating: incompleteRating || BUILD_RATING_THRESHOLDS[BUILD_RATING_THRESHOLDS.length - 1],
+        breakdown: {
+          message: `Incomplete build - ${equippedDiscs?.length || 0}/6 disc slots filled. Equip all 6 discs to receive a rating.`
+        },
+      };
+    }
+
     // Use custom breakpoints from upgrade plan if provided, otherwise use default
     const breakpoints = upgradePlan
       ? this.convertUpgradePlanToBreakpoints(upgradePlan)
