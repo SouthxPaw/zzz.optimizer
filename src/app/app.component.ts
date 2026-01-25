@@ -9,6 +9,8 @@ import { LoadingOverlayComponent } from './components/loading-overlay/loading-ov
 import { NotificationComponent } from './components/notification/notification.component';
 import { AppInitService } from './services/app-init.service';
 import { LoadingService } from './services/loading.service';
+import { SwUpdateService } from './services/sw-update.service';
+import { SeoService } from './services/seo.service';
 
 @Component({
   selector: 'app-root',
@@ -24,10 +26,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private appInit: AppInitService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private swUpdate: SwUpdateService,
+    private seo: SeoService
   ) {}
 
   async ngOnInit() {
+    // Initialize SEO structured data
+    this.seo.addStructuredData();
+
+    // Initialize Service Worker update checking
+    this.swUpdate.init();
+
     // Subscribe to loading state
     this.loadingService.loading$
       .pipe(takeUntil(this.destroy$))

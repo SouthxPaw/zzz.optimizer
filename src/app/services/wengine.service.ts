@@ -12,6 +12,12 @@ export class WEngineService {
   private wEnginesSubject = new BehaviorSubject<WEngine[]>([]);
   public wEngines$: Observable<WEngine[]> = this.wEnginesSubject.asObservable();
 
+  // Maps for O(1) lookups
+  private wEngineMapById = new Map<string, WEngine>();
+  private wEnginesBySpecialty = new Map<string, WEngine[]>();
+  private wEnginesByRarity = new Map<'S' | 'A' | 'B', WEngine[]>();
+  private signatureWEngineMap = new Map<string, WEngine>();
+
   constructor(
     private db: DbService,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -29,11 +35,53 @@ export class WEngineService {
     try {
       const wEngines = await this.db.getAllWEngines();
       this.wEnginesSubject.next(wEngines);
+
+      // Build Maps for O(1) lookups
+      this.buildLookupMaps(wEngines);
+
       console.log(`Loaded ${wEngines.length} W-Engines from IndexedDB`);
     } catch (error) {
       console.error('Error loading W-Engines from IndexedDB:', error);
       this.wEnginesSubject.next([]);
+      this.clearLookupMaps();
     }
+  }
+
+  private buildLookupMaps(wEngines: WEngine[]): void {
+    // Clear existing maps
+    this.clearLookupMaps();
+
+    // Build all lookup maps
+    wEngines.forEach(wEngine => {
+      // By ID
+      this.wEngineMapById.set(wEngine.id, wEngine);
+
+      // By Specialty
+      if (wEngine.specialty) {
+        const specialtyList = this.wEnginesBySpecialty.get(wEngine.specialty) || [];
+        specialtyList.push(wEngine);
+        this.wEnginesBySpecialty.set(wEngine.specialty, specialtyList);
+      }
+
+      // By Rarity
+      if (wEngine.rarity) {
+        const rarityList = this.wEnginesByRarity.get(wEngine.rarity) || [];
+        rarityList.push(wEngine);
+        this.wEnginesByRarity.set(wEngine.rarity, rarityList);
+      }
+
+      // By Signature
+      if (wEngine.signature) {
+        this.signatureWEngineMap.set(wEngine.signature, wEngine);
+      }
+    });
+  }
+
+  private clearLookupMaps(): void {
+    this.wEngineMapById.clear();
+    this.wEnginesBySpecialty.clear();
+    this.wEnginesByRarity.clear();
+    this.signatureWEngineMap.clear();
   }
 
   getWEngines(): WEngine[] {
@@ -41,19 +89,23 @@ export class WEngineService {
   }
 
   getWEngineById(id: string): WEngine | undefined {
-    return this.wEnginesSubject.value.find(w => w.id === id);
+    // O(1) lookup using Map instead of O(n) find
+    return this.wEngineMapById.get(id);
   }
 
   getWEnginesBySpecialty(specialty: string): WEngine[] {
-    return this.wEnginesSubject.value.filter(w => w.specialty === specialty);
+    // O(1) lookup using Map instead of O(n) filter
+    return this.wEnginesBySpecialty.get(specialty) || [];
   }
 
   getWEnginesByRarity(rarity: 'S' | 'A' | 'B'): WEngine[] {
-    return this.wEnginesSubject.value.filter(w => w.rarity === rarity);
+    // O(1) lookup using Map instead of O(n) filter
+    return this.wEnginesByRarity.get(rarity) || [];
   }
 
   getSignatureWEngine(agentName: string): WEngine | undefined {
-    return this.wEnginesSubject.value.find(w => w.signature === agentName);
+    // O(1) lookup using Map instead of O(n) find
+    return this.signatureWEngineMap.get(agentName);
   }
 
   // CRUD operations for W-Engines

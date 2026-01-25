@@ -22,6 +22,10 @@ export class DiscSetService {
   private discSetsSubject = new BehaviorSubject<DiscSet[]>([]);
   public discSets$: Observable<DiscSet[]> = this.discSetsSubject.asObservable();
 
+  // Maps for O(1) lookups
+  private discSetMapById = new Map<string, DiscSet>();
+  private discSetMapByName = new Map<string, DiscSet>();
+
   constructor(
     private db: DbService,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -39,11 +43,30 @@ export class DiscSetService {
     try {
       const discSets = await this.db.getAllDiscSets();
       this.discSetsSubject.next(discSets);
+
+      // Build Maps for O(1) lookups
+      this.buildLookupMaps(discSets);
+
       console.log(`Loaded ${discSets.length} disc sets from IndexedDB`);
     } catch (error) {
       console.error('Error loading disc sets from IndexedDB:', error);
       this.discSetsSubject.next([]);
+      this.clearLookupMaps();
     }
+  }
+
+  private buildLookupMaps(discSets: DiscSet[]): void {
+    this.clearLookupMaps();
+
+    discSets.forEach(discSet => {
+      this.discSetMapById.set(discSet.id, discSet);
+      this.discSetMapByName.set(discSet.name, discSet);
+    });
+  }
+
+  private clearLookupMaps(): void {
+    this.discSetMapById.clear();
+    this.discSetMapByName.clear();
   }
 
   /**
@@ -59,10 +82,12 @@ export class DiscSetService {
   }
 
   getDiscSetById(id: string): DiscSet | undefined {
-    return this.discSetsSubject.value.find(s => s.id === id);
+    // O(1) lookup using Map instead of O(n) find
+    return this.discSetMapById.get(id);
   }
 
   getDiscSetByName(name: string): DiscSet | undefined {
-    return this.discSetsSubject.value.find(s => s.name === name);
+    // O(1) lookup using Map instead of O(n) find
+    return this.discSetMapByName.get(name);
   }
 }

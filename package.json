@@ -1,6 +1,6 @@
 {
   "name": "zzz.optimizer",
-  "version": "5.0.9",
+  "version": "5.1.9",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "@angular/service-worker": "^19.2.0",
     "@types/html2canvas": "^0.5.35",
     "dexie": "^4.2.1",
     "html2canvas": "^1.4.1",
@@ -40,6 +41,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.7.2"
+    "typescript": "~5.7.2",
+    "webpack-bundle-analyzer": "^5.2.0"
   }
 }

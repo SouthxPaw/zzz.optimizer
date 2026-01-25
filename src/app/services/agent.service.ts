@@ -12,6 +12,9 @@ export class AgentService {
   private agentsSubject = new BehaviorSubject<Agent[]>([]);
   public agents$: Observable<Agent[]> = this.agentsSubject.asObservable();
 
+  // Map for O(1) lookups by ID
+  private agentMapById = new Map<string, Agent>();
+
   private selectedAgentSubject = new BehaviorSubject<Agent | null>(null);
   public selectedAgent$: Observable<Agent | null> = this.selectedAgentSubject.asObservable();
 
@@ -32,6 +35,13 @@ export class AgentService {
     try {
       const agents = await this.db.getAllAgents();
       this.agentsSubject.next(agents);
+
+      // Build the Map for O(1) lookups
+      this.agentMapById.clear();
+      agents.forEach(agent => {
+        this.agentMapById.set(agent.id, agent);
+      });
+
       console.log(`Loaded ${agents.length} agents from IndexedDB`);
 
       // Select first agent by default if available
@@ -41,6 +51,7 @@ export class AgentService {
     } catch (error) {
       console.error('Error loading agents from IndexedDB:', error);
       this.agentsSubject.next([]);
+      this.agentMapById.clear();
     }
   }
 
@@ -49,7 +60,8 @@ export class AgentService {
   }
 
   getAgentById(id: string): Agent | undefined {
-    return this.agentsSubject.value.find(a => a.id === id);
+    // O(1) lookup using Map instead of O(n) find
+    return this.agentMapById.get(id);
   }
 
   selectAgent(agent: Agent | null): void {

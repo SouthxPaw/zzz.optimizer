@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { Agent, DiscSlot } from '../../models/agent.model';
 import { WEngine } from '../../models/wengine.model';
@@ -35,10 +36,10 @@ import html2canvas from 'html2canvas';
 @Component({
   selector: 'app-character-tab',
   standalone: true,
-  imports: [CommonModule, FormsModule, OptimizerComponent, UpgradePlansComponent],
+  imports: [CommonModule, FormsModule, ScrollingModule, OptimizerComponent, UpgradePlansComponent],
   templateUrl: './character-tab.component.html',
   styleUrls: ['./character-tab.component.css'],
-  // Using Default change detection due to many imperative updates
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CharacterTabComponent implements OnInit, OnDestroy {
   // User builds (not reference data!)
@@ -185,6 +186,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private enkaApiService: EnkaApiService,
     private enkaImportService: EnkaImportService,
     private upgradePlanService: UpgradePlanService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -200,6 +202,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         if (builds.length > 0 && !this.selectedBuild) {
           this.selectBuild(builds[0]);
         }
+        this.cdr.markForCheck();
       });
 
     // Subscribe to selected build
@@ -214,6 +217,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           this.includeMindscapeBonuses = build.includeMindscapeBonuses ?? true;
           this.includePassiveBonuses = build.includePassiveBonuses ?? true;
         }
+        this.cdr.markForCheck();
       });
 
     // Subscribe to upgrade plans to keep dropdown updated
@@ -223,6 +227,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         // Store plans locally so Angular knows to update the dropdown
         // Create new array reference to ensure change detection
         this.availablePlans = [...plans];
+        this.cdr.markForCheck();
       });
 
     // Load reference agents for the "Add Agent" modal
@@ -232,6 +237,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         this.referenceAgents = agents;
         // Preload agent images
         this.preloadAgentImages(agents);
+        this.cdr.markForCheck();
       });
 
     // Load reference W-Engines
@@ -241,6 +247,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         this.referenceWEngines = wEngines;
         // Preload W-Engine images
         this.preloadWEngineImages(wEngines);
+        this.cdr.markForCheck();
       });
 
     // Load reference disc sets
@@ -252,6 +259,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         this.updateFilteredDiscSets();
         // Preload disc set images
         this.preloadDiscSetImages(discSets);
+        this.cdr.markForCheck();
       });
 
     // Load user disc inventory
@@ -261,6 +269,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         this.allDiscs = discs;
         // Update cached filtered discs whenever inventory changes
         this.updateFilteredDiscs();
+        this.cdr.markForCheck();
       });
 
     // Set up debounced search for disc set name
@@ -269,6 +278,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .subscribe((searchTerm) => {
         this.debouncedDiscSearch = searchTerm;
         this.updateFilteredDiscSets();
+        this.cdr.markForCheck();
       });
 
     // Set up debounced search for disc effects
@@ -277,6 +287,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .subscribe((searchTerm) => {
         this.debouncedDiscEffectSearch = searchTerm;
         this.updateFilteredDiscSets();
+        this.cdr.markForCheck();
       });
   }
 
@@ -313,10 +324,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   dismissAssumptionsNotice() {
     this.showAssumptionsNotice = false;
+    this.cdr.markForCheck();
   }
 
   selectAgentForAdd(agent: Agent) {
     this.selectedAgentForAdd = agent;
+    this.cdr.markForCheck();
   }
 
   async addAgentBuild() {
@@ -349,6 +362,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       alert('Error creating build');
     } finally {
       this.isProcessingAgentAction = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -390,6 +404,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.buildService.updateBuild(this.selectedBuild.id, {
       mindscapeLevel: newLevel,
     });
+    this.cdr.markForCheck();
   }
 
   async onWEngineBonusesToggle() {
@@ -1014,6 +1029,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Update filtered disc sets and discs when opening picker
     this.updateFilteredDiscSets();
     this.updateFilteredDiscs();
+    this.cdr.markForCheck();
   }
 
   openDiscEdit(slot: DiscSlot, event?: Event) {
@@ -1059,11 +1075,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Open the form directly (skip picker)
     this.showDiscForm = true;
     this.showDiscPicker = false;
+    this.cdr.markForCheck();
   }
 
   closeDiscPicker() {
     this.showDiscPicker = false;
     this.selectedDiscSlot = null;
+    this.cdr.markForCheck();
   }
 
   async unequipDisc(slot: DiscSlot, event: Event) {
@@ -1242,6 +1260,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         { type: 'ATK%', value: '' },
       ],
     };
+    this.cdr.markForCheck();
   }
 
   async createAndEquipDisc() {
@@ -1732,6 +1751,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       onConfirm,
     };
     this.showConfirmDialog = true;
+    this.cdr.markForCheck();
   }
 
   confirmAction() {
@@ -1741,6 +1761,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   closeConfirmDialog() {
     this.showConfirmDialog = false;
+    this.cdr.markForCheck();
   }
 
   // Keyboard shortcuts handler
@@ -1825,6 +1846,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   async shareAsImage() {
     if (!this.selectedBuild) return;
     this.showShareModal = true;
+    this.cdr.markForCheck();
 
     // Wait for modal and canvas to be rendered
     setTimeout(() => this.generateShareImage(), 100);
@@ -1832,6 +1854,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   closeShareModal() {
     this.showShareModal = false;
+    this.cdr.markForCheck();
   }
 
   isGeneratingShareImage = false;
@@ -1864,7 +1887,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
       // Use html2canvas to convert the hidden HTML card to canvas
       const generatedCanvas = await html2canvas(cardElement, {
-        backgroundColor: '#0a0a0a',
         scale: 3, // Higher quality for sharper images
         logging: false,
         useCORS: true,
@@ -1967,12 +1989,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   toggleUidHistoryDropdown() {
     this.showUidHistoryDropdown = !this.showUidHistoryDropdown;
+    this.cdr.markForCheck();
   }
 
   clearUidHistory() {
     this.uidHistory = [];
     this.saveUidHistory();
     this.showUidHistoryDropdown = false;
+    this.cdr.markForCheck();
   }
 
   openEnkaImportModal() {
@@ -1981,6 +2005,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.enkaImportSuccess = '';
     this.enkaUid = '';
     this.showUidHistoryDropdown = false;
+    this.cdr.markForCheck();
   }
 
   closeEnkaImportModal() {
@@ -1989,17 +2014,20 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.enkaImportError = '';
     this.enkaImportSuccess = '';
     this.showUidHistoryDropdown = false;
+    this.cdr.markForCheck();
   }
 
   async importFromEnka() {
     if (!this.enkaUid.trim()) {
       this.enkaImportError = 'Please enter a valid UID';
+      this.cdr.markForCheck();
       return;
     }
 
     this.isImportingFromEnka = true;
     this.enkaImportError = '';
     this.enkaImportSuccess = '';
+    this.cdr.markForCheck();
 
     try {
       // Fetch data from Enka API
@@ -2075,6 +2103,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         );
       } else {
         this.enkaImportSuccess = 'All builds are already up to date!';
+        this.cdr.markForCheck();
 
         // Close modal after 2 seconds
         setTimeout(() => {
@@ -2087,8 +2116,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         error instanceof Error
           ? error.message
           : 'Failed to fetch data from provided UID';
+      this.cdr.markForCheck();
     } finally {
       this.isImportingFromEnka = false;
+      this.cdr.markForCheck();
     }
   }
 
