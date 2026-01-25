@@ -55,9 +55,6 @@
                 },
                 "fonts": true
               },
-              "allowedCommonJsDependencies": [
-                "html2canvas"
-              ],
               "serviceWorker": "ngsw-config.json"
             },
             "development": {
@@ -81,9 +78,6 @@
                   "maximumWarning": "50kB",
                   "maximumError": "60kB"
                 }
-              ],
-              "allowedCommonJsDependencies": [
-                "html2canvas"
               ]
             }
           },
