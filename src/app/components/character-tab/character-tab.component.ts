@@ -1934,52 +1934,26 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       // Wait for all images to load (or timeout)
       await Promise.all(imagePromises);
 
-      // Define target dimensions (fixed output size regardless of device)
-      const TARGET_WIDTH = 1180;
-      const TARGET_HEIGHT = 630;
-      const QUALITY_MULTIPLIER = 3; // 3x resolution for high quality
-
-      // Force element dimensions to ensure consistent rendering
-      const originalWidth = cardElement.style.width;
-      const originalHeight = cardElement.style.height;
-      cardElement.style.width = `${TARGET_WIDTH}px`;
-      cardElement.style.height = `${TARGET_HEIGHT}px`;
-
       // Use html2canvas to convert the hidden HTML card to canvas
-      // Type assertion needed due to incomplete type definitions in html2canvas 1.4.1
       const generatedCanvas = await html2canvas(cardElement, {
-        windowWidth: TARGET_WIDTH,
-        windowHeight: TARGET_HEIGHT,
-        scrollX: 0,
-        scrollY: 0,
+        scale: 3, // Higher quality for sharper images
         logging: false,
-        allowTaint: true,
         useCORS: true,
-        removeContainer: true,
-      } as any);
+        allowTaint: true,
+        imageTimeout: 5000, // Wait up to 5 seconds for images
+        removeContainer: true
+      });
 
-      // Restore original dimensions
-      cardElement.style.width = originalWidth;
-      cardElement.style.height = originalHeight;
-
-      // Always output at 3x target resolution (3540x1890) for quality
-      // This ensures consistent output regardless of device pixel ratio
-      const FINAL_WIDTH = TARGET_WIDTH * QUALITY_MULTIPLIER;
-      const FINAL_HEIGHT = TARGET_HEIGHT * QUALITY_MULTIPLIER;
-
-      // Draw the generated canvas onto our display canvas with consistent sizing
+      // Draw the generated canvas onto our display canvas with high quality
       const displayCanvas = this.shareCanvasRef.nativeElement;
-      displayCanvas.width = FINAL_WIDTH;
-      displayCanvas.height = FINAL_HEIGHT;
+      displayCanvas.width = generatedCanvas.width;
+      displayCanvas.height = generatedCanvas.height;
 
       const ctx = displayCanvas.getContext('2d');
       if (ctx) {
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
-
-        // Scale the captured canvas to our target high-resolution output
-        // This normalizes the output regardless of input device scaling
-        ctx.drawImage(generatedCanvas, 0, 0, FINAL_WIDTH, FINAL_HEIGHT);
+        ctx.drawImage(generatedCanvas, 0, 0);
       }
     } catch (error) {
       console.error('Error generating share image:', error);
