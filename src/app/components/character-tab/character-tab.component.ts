@@ -1906,61 +1906,87 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   isGeneratingShareImage = false;
 
-  async generateShareImage() {
-    if (!this.selectedBuild || !this.shareCardRef || !this.shareCanvasRef)
-      return;
+async generateShareImage() {
+  if (!this.selectedBuild || !this.shareCardRef || !this.shareCanvasRef)
+    return;
 
-      this.isGeneratingShareImage = true;
+  this.isGeneratingShareImage = true;
 
-    try {
+  try {
+    const cardElement = this.shareCardRef.nativeElement;
 
-      const cardElement = this.shareCardRef.nativeElement;
-
-      // Wait for all images to load before capturing
-      const images = cardElement.querySelectorAll('img');
-      const imagePromises = Array.from(images).map((img: Element) => {
-        const imgElement = img as HTMLImageElement;
-        if (imgElement.complete) {
-          return Promise.resolve();
-        }
-        return new Promise<void>((resolve) => {
-          imgElement.onload = () => resolve();
-          imgElement.onerror = () => resolve(); // Resolve anyway to not block
-          // Timeout after 3 seconds
-          setTimeout(() => resolve(), 3000);
-        });
+    // Wait for all images inside the card to load (or timeout after 3s)
+    const images = cardElement.querySelectorAll('img');
+    const imagePromises = Array.from(images).map((img: Element) => {
+      const imgElement = img as HTMLImageElement;
+      if (imgElement.complete) return Promise.resolve();
+      return new Promise<void>((resolve) => {
+        imgElement.onload = () => resolve();
+        imgElement.onerror = () => resolve();
+        setTimeout(() => resolve(), 3000);
       });
+    });
+    await Promise.all(imagePromises);
 
-      // Wait for all images to load (or timeout)
-      await Promise.all(imagePromises);
+    // Target dimensions for share image
+    const TARGET_WIDTH = 1180;
+    const TARGET_HEIGHT = 630;
+    const QUALITY_MULTIPLIER = 3; // 3x resolution
 
-      // Use html2canvas to convert the hidden HTML card to canvas
-      const generatedCanvas = await html2canvas(cardElement, {
-        scale: 3, // Higher quality for sharper images
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
-        imageTimeout: 5000, // Wait up to 5 seconds for images
-        removeContainer: true
-      });
+    // Save original dimensions and transform
+    const originalWidth = cardElement.style.width;
+    const originalHeight = cardElement.style.height;
+    const originalTransform = cardElement.style.transform || '';
 
-      // Draw the generated canvas onto our display canvas with high quality
-      const displayCanvas = this.shareCanvasRef.nativeElement;
-      displayCanvas.width = generatedCanvas.width;
-      displayCanvas.height = generatedCanvas.height;
+    // Force element dimensions
+    cardElement.style.width = `${TARGET_WIDTH}px`;
+    cardElement.style.height = `${TARGET_HEIGHT}px`;
 
-      const ctx = displayCanvas.getContext('2d');
-      if (ctx) {
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-        ctx.drawImage(generatedCanvas, 0, 0);
-      }
-    } catch (error) {
-      console.error('Error generating share image:', error);
-    } finally {
-      this.isGeneratingShareImage = false;
+    // Calculate scale to make sizes consistent across devices
+    const scaleX = TARGET_WIDTH / cardElement.offsetWidth;
+    const scaleY = TARGET_HEIGHT / cardElement.offsetHeight;
+
+    cardElement.style.transform = `scale(${scaleX}, ${scaleY})`;
+    cardElement.style.transformOrigin = 'top left';
+
+    // Render to canvas
+    const generatedCanvas = await html2canvas(cardElement, {
+      scale: QUALITY_MULTIPLIER, // for high resolution
+      windowWidth: TARGET_WIDTH,
+      windowHeight: TARGET_HEIGHT,
+      scrollX: 0,
+      scrollY: 0,
+      logging: false,
+      removeContainer: true,
+      useCORS: true,
+    } as any);
+
+    // Restore original dimensions and transform
+    cardElement.style.width = originalWidth;
+    cardElement.style.height = originalHeight;
+    cardElement.style.transform = originalTransform;
+
+    // Draw the generated canvas onto the display canvas
+    const displayCanvas = this.shareCanvasRef.nativeElement;
+    const FINAL_WIDTH = TARGET_WIDTH * QUALITY_MULTIPLIER;
+    const FINAL_HEIGHT = TARGET_HEIGHT * QUALITY_MULTIPLIER;
+    displayCanvas.width = FINAL_WIDTH;
+    displayCanvas.height = FINAL_HEIGHT;
+
+    const ctx = displayCanvas.getContext('2d');
+    if (ctx) {
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(generatedCanvas, 0, 0, FINAL_WIDTH, FINAL_HEIGHT);
     }
+
+  } catch (error) {
+    console.error('Error generating share image:', error);
+  } finally {
+    this.isGeneratingShareImage = false;
   }
+}
+
 
   downloadShareImage() {
     if (!this.selectedBuild || !this.shareCanvasRef) return;
