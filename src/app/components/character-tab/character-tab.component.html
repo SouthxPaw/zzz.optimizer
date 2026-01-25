@@ -1,27 +1,36 @@
-<div class="character-tab">
+<div class="character-tab" role="region" aria-label="Agent Builds Manager">
   <div class="header">
-    <h1>Agents</h1>
+    <h1 id="page-heading">Agents</h1>
   </div>
 
   <!-- Tab Navigation -->
-  <div class="tab-navigation">
+  <div class="tab-navigation" role="tablist" aria-label="Build management sections">
     <button
       class="tab-btn"
+      role="tab"
       [class.active]="activeTab === 'builds'"
+      [attr.aria-selected]="activeTab === 'builds'"
+      [attr.aria-controls]="'builds-panel'"
       (click)="activeTab = 'builds'"
     >
       My Builds
     </button>
     <button
       class="tab-btn"
+      role="tab"
       [class.active]="activeTab === 'upgrade-plans'"
+      [attr.aria-selected]="activeTab === 'upgrade-plans'"
+      [attr.aria-controls]="'upgrade-plans-panel'"
       (click)="activeTab = 'upgrade-plans'"
     >
       Upgrade Plans
     </button>
     <button
       class="tab-btn"
+      role="tab"
       [class.active]="activeTab === 'optimizer'"
+      [attr.aria-selected]="activeTab === 'optimizer'"
+      [attr.aria-controls]="'optimizer-panel'"
       (click)="activeTab = 'optimizer'"
     >
       How Scoring Works
@@ -851,51 +860,58 @@
           </div>
         </div>
 
-        <!-- Agent Selection Grid -->
-        <div class="agent-select-grid scrollable">
-          <div
-            *ngFor="let agent of getFilteredAgents(); trackBy: trackByAgentId"
-            class="agent-select-card"
-            [class.selected]="selectedAgentForAdd?.id === agent.id"
-            [class.s-rank]="agent.rarity === 'S'"
-            [class.a-rank]="agent.rarity === 'A'"
-            (click)="selectAgentForAdd(agent)"
-          >
-            <div class="agent-portrait">
-              <img
-                *ngIf="agent.icon"
-                [src]="agent.icon"
-                [alt]="agent.name"
-                class="agent-icon"
-                loading="lazy"
-              />
-              <span *ngIf="!agent.icon" class="agent-name">{{
-                agent.name
-              }}</span>
-            </div>
-            <div class="agent-info">
-              <div class="agent-name-label">{{ agent.name }}</div>
-              <div class="agent-badges">
+        <!-- Agent Selection Grid with Virtual Scrolling -->
+        <cdk-virtual-scroll-viewport
+          class="agent-select-grid-viewport"
+          [itemSize]="222"
+          [minBufferPx]="444"
+          [maxBufferPx]="888"
+        >
+          <div class="agent-select-grid">
+            <div
+              *cdkVirtualFor="let agent of getFilteredAgents(); trackBy: trackByAgentId"
+              class="agent-select-card"
+              [class.selected]="selectedAgentForAdd?.id === agent.id"
+              [class.s-rank]="agent.rarity === 'S'"
+              [class.a-rank]="agent.rarity === 'A'"
+              (click)="selectAgentForAdd(agent)"
+            >
+              <div class="agent-portrait">
                 <img
-                  *ngIf="getAgentElementIcon(agent.id)"
-                  [src]="getAgentElementIcon(agent.id)"
-                  [alt]="agent.element"
-                  class="element-badge"
-                  [title]="agent.element"
+                  *ngIf="agent.icon"
+                  [src]="agent.icon"
+                  [alt]="agent.name"
+                  class="agent-icon"
                   loading="lazy"
                 />
-                <img
-                  *ngIf="agent.specialtyIcon"
-                  [src]="agent.specialtyIcon"
-                  [alt]="agent.specialty"
-                  class="specialty-badge"
-                  [title]="agent.specialty"
-                  loading="lazy"
-                />
+                <span *ngIf="!agent.icon" class="agent-name">{{
+                  agent.name
+                }}</span>
+              </div>
+              <div class="agent-info">
+                <div class="agent-name-label">{{ agent.name }}</div>
+                <div class="agent-badges">
+                  <img
+                    *ngIf="getAgentElementIcon(agent.id)"
+                    [src]="getAgentElementIcon(agent.id)"
+                    [alt]="agent.element"
+                    class="element-badge"
+                    [title]="agent.element"
+                    loading="lazy"
+                  />
+                  <img
+                    *ngIf="agent.specialtyIcon"
+                    [src]="agent.specialtyIcon"
+                    [alt]="agent.specialty"
+                    class="specialty-badge"
+                    [title]="agent.specialty"
+                    loading="lazy"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </cdk-virtual-scroll-viewport>
 
         <div class="modal-actions">
           <button class="btn-secondary" (click)="closeAddAgentModal()">

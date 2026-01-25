@@ -57,7 +57,8 @@
               },
               "allowedCommonJsDependencies": [
                 "html2canvas"
-              ]
+              ],
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
