@@ -40,7 +40,10 @@ import { UpgradePlanService } from '../../services/upgrade-plan.service';
 import { UpgradePlan } from '../../models/upgrade-plan.model';
 import { calculateRollCount } from '../../constants/substat-rolls';
 import { UpgradePlansComponent } from '../upgrade-plans/upgrade-plans.component';
-import html2canvas from 'html2canvas';
+import {
+  CanvasShareImageService,
+  ShareImageData,
+} from '../../services/canvas-share-image.service';
 
 @Component({
   selector: 'app-character-tab',
@@ -201,6 +204,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private enkaApiService: EnkaApiService,
     private enkaImportService: EnkaImportService,
     private upgradePlanService: UpgradePlanService,
+    private canvasShareImageService: CanvasShareImageService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -1907,83 +1911,86 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   isGeneratingShareImage = false;
 
 async generateShareImage() {
-  if (!this.selectedBuild || !this.shareCardRef || !this.shareCanvasRef)
+  if (!this.selectedBuild || !this.shareCanvasRef)
     return;
 
+  console.log('Starting Canvas share image generation...');
   this.isGeneratingShareImage = true;
+  this.cdr.markForCheck(); // Force change detection
 
   try {
-    const cardElement = this.shareCardRef.nativeElement;
-
-    // Wait for all images inside the card to load (or timeout after 3s)
-    const images = cardElement.querySelectorAll('img');
-    const imagePromises = Array.from(images).map((img: Element) => {
-      const imgElement = img as HTMLImageElement;
-      if (imgElement.complete) return Promise.resolve();
-      return new Promise<void>((resolve) => {
-        imgElement.onload = () => resolve();
-        imgElement.onerror = () => resolve();
-        setTimeout(() => resolve(), 3000);
-      });
-    });
-    await Promise.all(imagePromises);
-
-    // Target dimensions for share image
-    const TARGET_WIDTH = 1180;
-    const TARGET_HEIGHT = 630;
-    const QUALITY_MULTIPLIER = 3; // 3x resolution
-
-    // Save original dimensions and transform
-    const originalWidth = cardElement.style.width;
-    const originalHeight = cardElement.style.height;
-    const originalTransform = cardElement.style.transform || '';
-
-    // Force element dimensions
-    cardElement.style.width = `${TARGET_WIDTH}px`;
-    cardElement.style.height = `${TARGET_HEIGHT}px`;
-
-    // Calculate scale to make sizes consistent across devices
-    const scaleX = TARGET_WIDTH / cardElement.offsetWidth;
-    const scaleY = TARGET_HEIGHT / cardElement.offsetHeight;
-
-    cardElement.style.transform = `scale(${scaleX}, ${scaleY})`;
-    cardElement.style.transformOrigin = 'top left';
-
-    // Render to canvas
-    const generatedCanvas = await html2canvas(cardElement, {
-      scale: QUALITY_MULTIPLIER, // for high resolution
-      windowWidth: TARGET_WIDTH,
-      windowHeight: TARGET_HEIGHT,
-      scrollX: 0,
-      scrollY: 0,
-      logging: false,
-      removeContainer: true,
-      useCORS: true,
-    } as any);
-
-    // Restore original dimensions and transform
-    cardElement.style.width = originalWidth;
-    cardElement.style.height = originalHeight;
-    cardElement.style.transform = originalTransform;
-
-    // Draw the generated canvas onto the display canvas
-    const displayCanvas = this.shareCanvasRef.nativeElement;
-    const FINAL_WIDTH = TARGET_WIDTH * QUALITY_MULTIPLIER;
-    const FINAL_HEIGHT = TARGET_HEIGHT * QUALITY_MULTIPLIER;
-    displayCanvas.width = FINAL_WIDTH;
-    displayCanvas.height = FINAL_HEIGHT;
-
-    const ctx = displayCanvas.getContext('2d');
-    if (ctx) {
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(generatedCanvas, 0, 0, FINAL_WIDTH, FINAL_HEIGHT);
+    // Get agent data
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
+    if (!agent) {
+      console.error('Agent not found');
+      alert('Error: Agent data not found');
+      return;
     }
+
+    console.log('Agent found:', agent.name);
+
+    // Collect disc scores
+    const discScores = new Map<string, { score: number; rating: any }>();
+    Object.values(this.selectedBuild.equippedDiscs).forEach((disc) => {
+      if (disc) {
+        const score = this.getDiscScore(disc);
+        if (score) {
+          discScores.set(disc.uid, score);
+        }
+      }
+    });
+
+    console.log('Collected disc scores:', discScores.size);
+
+    // Prepare data for Canvas renderer
+    const shareData: ShareImageData = {
+      build: this.selectedBuild,
+      agent: agent,
+      buildScore: this.getBuildScore(),
+      discScores: discScores,
+      mainStats: this.getMainStats(),
+      wEngineStats: this.getWEngineStats(),
+      discSets: this.referenceDiscSets,
+      substatBreakdown: this.getSubstatBreakdown(),
+    };
+
+    console.log('Calling Canvas service...');
+
+    // Generate image using Canvas service
+    const blob = await this.canvasShareImageService.generateShareImage(shareData);
+
+    console.log('Canvas image generated, blob size:', blob.size);
+
+    // Display the image on canvas
+    const displayCanvas = this.shareCanvasRef.nativeElement;
+    const img = new Image();
+    img.onload = () => {
+      console.log('Image loaded, drawing to canvas');
+      displayCanvas.width = img.width;
+      displayCanvas.height = img.height;
+      const ctx = displayCanvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(img, 0, 0);
+      }
+      URL.revokeObjectURL(img.src);
+      this.isGeneratingShareImage = false;
+      this.cdr.markForCheck();
+    };
+    img.onerror = (err) => {
+      console.error('Failed to load generated image:', err);
+      alert('Error loading generated image');
+      this.isGeneratingShareImage = false;
+      this.cdr.markForCheck();
+    };
+    img.src = URL.createObjectURL(blob);
 
   } catch (error) {
     console.error('Error generating share image:', error);
-  } finally {
+    alert('Error generating share image. Check console for details.');
     this.isGeneratingShareImage = false;
+    this.cdr.markForCheck();
   }
 }
 
@@ -2252,57 +2259,6 @@ async generateShareImage() {
   // SHARE IMAGE HELPER METHODS
   // ============================================================================
 
-  getAgentImage(): string {
-    if (!this.selectedBuild) return '';
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
-    return agent?.icon || '';
-  }
-
-  getAgentName(): string {
-    if (!this.selectedBuild) return 'Unknown Agent';
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
-    return agent?.name || 'Unknown Agent';
-  }
-
-  getElementIcon(): string {
-    if (!this.selectedBuild) return '';
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
-    if (!agent) return '';
-
-    // Use special element icon if available, otherwise use standard element icon
-    if (agent.specialElementIcon) {
-      return this.dataMappingService.getElementIconPath(
-        agent.specialElementIcon,
-      );
-    }
-    return agent.elementIcon || '';
-  }
-
-  getRoleIcon(): string {
-    if (!this.selectedBuild) return '';
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
-    return agent?.specialty ? this.getSpecialtyIcon(agent.specialty) : '';
-  }
-
-  getBuildGrade(): string {
-    const buildScore = this.getBuildScore();
-    return buildScore?.rating.grade || 'N/A';
-  }
-
-  getDiscGrade(disc: Disc | undefined): string {
-    if (!disc) return '';
-    const discScore = this.getDiscScore(disc);
-    return discScore?.rating.grade || '';
-  }
-
   getMainStats(): Array<{ iconName: string; label: string; value: string }> {
     if (!this.selectedBuild) return [];
 
@@ -2327,32 +2283,6 @@ async generateShareImage() {
       { iconName: 'PEN_Ratio', label: 'PEN%', value: `${stats.penRatio}%` },
       { iconName: 'Energy_Regen', label: 'ER', value: `${stats.energyRegen}%` },
     ];
-  }
-
-  getDiscBySlot(slotName: string): Disc | undefined {
-    if (!this.selectedBuild) return undefined;
-    return this.selectedBuild.equippedDiscs[slotName as DiscSlot];
-  }
-
-  getDiscSetIcon(disc: Disc | undefined): string {
-    if (!disc) return '';
-    const discSet = this.referenceDiscSets.find((s) => s.name === disc.set);
-    if (!discSet?.icon) return '';
-
-    // For share image generation, html2canvas needs absolute URLs
-    // Convert relative path to absolute URL
-    const iconPath = discSet.icon;
-    if (iconPath.startsWith('http')) {
-      return iconPath; // Already absolute
-    }
-
-    // Create absolute URL from relative path
-    const baseUrl =
-      window.location.origin +
-      window.location.pathname.replace(/\/[^/]*$/, '/');
-    return iconPath.startsWith('/')
-      ? window.location.origin + iconPath
-      : baseUrl + iconPath;
   }
 
   getWEngineStats(): Array<{ iconName: string; label: string; value: string }> {
