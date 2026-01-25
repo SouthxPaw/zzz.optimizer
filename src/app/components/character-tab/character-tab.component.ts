@@ -1,4 +1,13 @@
-import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  ViewChild,
+  ElementRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -36,10 +45,16 @@ import html2canvas from 'html2canvas';
 @Component({
   selector: 'app-character-tab',
   standalone: true,
-  imports: [CommonModule, FormsModule, ScrollingModule, OptimizerComponent, UpgradePlansComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ScrollingModule,
+    OptimizerComponent,
+    UpgradePlansComponent,
+  ],
   templateUrl: './character-tab.component.html',
   styleUrls: ['./character-tab.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CharacterTabComponent implements OnInit, OnDestroy {
   // User builds (not reference data!)
@@ -186,7 +201,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private enkaApiService: EnkaApiService,
     private enkaImportService: EnkaImportService,
     private upgradePlanService: UpgradePlanService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -455,12 +470,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Update the enabledDiscs object
     const updatedEnabledDiscs = {
       ...this.selectedBuild.enabledDiscs,
-      [slot]: newState
+      [slot]: newState,
     };
 
     // Update build with new enabled state and recalculate stats
     await this.buildService.updateBuild(this.selectedBuild.id, {
-      enabledDiscs: updatedEnabledDiscs
+      enabledDiscs: updatedEnabledDiscs,
     });
   }
 
@@ -860,7 +875,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     const enabledDiscs = this.selectedBuild.enabledDiscs || {};
 
     // Get priority stats for the agent from breakpoints
-    const agentBreakpoints = this.scoringService.getAgentBreakpoints(this.selectedBuild.agentId);
+    const agentBreakpoints = this.scoringService.getAgentBreakpoints(
+      this.selectedBuild.agentId,
+    );
     const priorityStats = agentBreakpoints?.priorityStats || [];
 
     // Iterate through all equipped discs, but only include enabled ones
@@ -875,7 +892,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           }
           substatTotals[subStat.type] += subStat.value;
           // Count rolls: if rolls property exists, use it; otherwise calculate from value
-          const rollCount = subStat.rolls || calculateRollCount(subStat.type, subStat.value);
+          const rollCount =
+            subStat.rolls || calculateRollCount(subStat.type, subStat.value);
           rollCounts[subStat.type] += rollCount;
         });
       }
@@ -884,13 +902,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Convert to display format
     const result = Object.entries(substatTotals).map(([type, value]) => {
       // Determine if stat is percentage or flat
-      const isPercent = type.includes('%') || [
-        'CRIT_Rate',
-        'CRIT_DMG',
-        'HP%',
-        'ATK%',
-        'DEF%',
-      ].includes(type);
+      const isPercent =
+        type.includes('%') ||
+        ['CRIT_Rate', 'CRIT_DMG', 'HP%', 'ATK%', 'DEF%'].includes(type);
 
       // Map type to display name
       let displayName: string;
@@ -942,9 +956,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       const isPriority = priorityStats.some((priorityStat: string) => {
         // Normalize both for comparison
         const normalizedType = type.replace(/_/g, ' ').toLowerCase();
-        const normalizedPriority = priorityStat.replace(/_/g, ' ').toLowerCase();
-        return normalizedType === normalizedPriority ||
-               displayName.toLowerCase() === normalizedPriority;
+        const normalizedPriority = priorityStat
+          .replace(/_/g, ' ')
+          .toLowerCase();
+        return (
+          normalizedType === normalizedPriority ||
+          displayName.toLowerCase() === normalizedPriority
+        );
       });
 
       return {
@@ -952,7 +970,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         value: value.toFixed(1),
         isPercent: isPercent,
         rollCount: rollCounts[type] || 0,
-        isPriority: isPriority
+        isPriority: isPriority,
       };
     });
 
@@ -1298,10 +1316,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Validate substats: Impact and Energy_Regen cannot be disc substats
     const invalidSubstats = this.discFormData.subStats.filter(
-      (s) => s.type === 'Impact' || s.type === 'Energy_Regen'
+      (s) => s.type === 'Impact' || s.type === 'Energy_Regen',
     );
     if (invalidSubstats.length > 0) {
-      alert('Error: Impact and Energy_Regen can only be main stats (Drive 6), not substats.');
+      alert(
+        'Error: Impact and Energy_Regen can only be main stats (Drive 6), not substats.',
+      );
       this.isProcessingDiscAction = false;
       return;
     }
@@ -1316,7 +1336,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
             value: mainStatValue,
           },
           subStats: this.discFormData.subStats.map((s) => {
-            const value = typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value;
+            const value =
+              typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value;
             return {
               type: s.type as SubStatType,
               value: value,
@@ -1352,7 +1373,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
             value: mainStatValue,
           },
           subStats: this.discFormData.subStats.map((s) => {
-            const value = typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value;
+            const value =
+              typeof s.value === 'string' ? parseFloat(s.value) || 0 : s.value;
             return {
               type: s.type as SubStatType,
               value: value,
@@ -1411,20 +1433,28 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Get active upgrade plan if one is set
     const activePlan = this.selectedBuild.activeUpgradePlanId
-      ? this.upgradePlanService.getPlanById(this.selectedBuild.activeUpgradePlanId)
+      ? this.upgradePlanService.getPlanById(
+          this.selectedBuild.activeUpgradePlanId,
+        )
       : undefined;
 
     // Detect build type based on ALL equipped discs (not just this one)
-    const allDiscs = Object.values(this.selectedBuild.equippedDiscs || {}).filter(d => d);
-    const detectedBuildType = allDiscs.length > 0
-      ? this.scoringService.detectBuildType(allDiscs, this.selectedBuild.agentId)
-      : undefined;
+    const allDiscs = Object.values(
+      this.selectedBuild.equippedDiscs || {},
+    ).filter((d) => d);
+    const detectedBuildType =
+      allDiscs.length > 0
+        ? this.scoringService.detectBuildType(
+            allDiscs,
+            this.selectedBuild.agentId,
+          )
+        : undefined;
 
     const result = this.scoringService.calculateDiscScore(
       disc,
       this.selectedBuild.agentId,
       detectedBuildType, // Use detected build type based on all 6 discs
-      activePlan  // Pass upgrade plan to override default weights
+      activePlan, // Pass upgrade plan to override default weights
     );
     return {
       score: result.score,
@@ -1457,7 +1487,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Get active upgrade plan if one is set
     const activePlan = this.selectedBuild.activeUpgradePlanId
-      ? this.upgradePlanService.getPlanById(this.selectedBuild.activeUpgradePlanId)
+      ? this.upgradePlanService.getPlanById(
+          this.selectedBuild.activeUpgradePlanId,
+        )
       : undefined;
 
     // Use composite scoring which accounts for disc quality, W-Engine, Mindscape, set bonuses, and damage estimation
@@ -1474,7 +1506,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       60, // Default level 60, can be updated later
       undefined, // agentScoring - not used here
       undefined, // wengineScoring - not used here
-      activePlan  // Pass upgrade plan to override default weights and breakpoints
+      activePlan, // Pass upgrade plan to override default weights and breakpoints
     );
 
     return {
@@ -1502,8 +1534,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Include disc UIDs to detect disc changes (even if stats are same)
     const discUids = Object.values(this.selectedBuild.equippedDiscs)
-      .filter(d => d)
-      .map(d => d.uid)
+      .filter((d) => d)
+      .map((d) => d.uid)
       .sort()
       .join(',');
 
@@ -1511,10 +1543,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     const planId = this.selectedBuild.activeUpgradePlanId || 'none';
 
     // Include detected build type (CRIT vs Anomaly) since feedback differs by build type
-    const allDiscs = Object.values(this.selectedBuild.equippedDiscs || {}).filter(d => d);
-    const detectedBuildType = allDiscs.length > 0
-      ? this.scoringService.detectBuildType(allDiscs, this.selectedBuild.agentId)
-      : 'unknown';
+    const allDiscs = Object.values(
+      this.selectedBuild.equippedDiscs || {},
+    ).filter((d) => d);
+    const detectedBuildType =
+      allDiscs.length > 0
+        ? this.scoringService.detectBuildType(
+            allDiscs,
+            this.selectedBuild.agentId,
+          )
+        : 'unknown';
 
     return `${this.selectedBuild.id}-${discCount}-${wEngineId}-${stats.atk}-${stats.critRate}-${stats.critDmg}-${discUids}-${planId}-${detectedBuildType}`;
   }
@@ -1535,7 +1573,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Get active upgrade plan if one is set
     const activePlan = this.selectedBuild.activeUpgradePlanId
-      ? this.upgradePlanService.getPlanById(this.selectedBuild.activeUpgradePlanId)
+      ? this.upgradePlanService.getPlanById(
+          this.selectedBuild.activeUpgradePlanId,
+        )
       : undefined;
 
     this.cachedFeedback = this.scoringService.generateBuildFeedback(
@@ -1544,7 +1584,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       this.selectedBuild.equippedDiscs,
       !!this.selectedBuild.equippedWEngine,
       this.isWEngineSpecialtyMatch(),
-      activePlan
+      activePlan,
     );
     this.lastFeedbackBuildHash = currentHash;
 
@@ -1584,20 +1624,24 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Get all equipped discs for build detection
     const equippedDiscs: Disc[] = [];
     if (this.selectedBuild.equippedDiscs) {
-      Object.values(this.selectedBuild.equippedDiscs).forEach(disc => {
+      Object.values(this.selectedBuild.equippedDiscs).forEach((disc) => {
         if (disc) equippedDiscs.push(disc);
       });
     }
 
     // Detect build type (CRIT, Anomaly, or Support) based on equipped discs
-    const detectedBuildType = equippedDiscs.length > 0
-      ? this.scoringService.detectBuildType(equippedDiscs, this.selectedBuild.agentId)
-      : 'CRIT';
+    const detectedBuildType =
+      equippedDiscs.length > 0
+        ? this.scoringService.detectBuildType(
+            equippedDiscs,
+            this.selectedBuild.agentId,
+          )
+        : 'CRIT';
 
     // Get build-aware stat weights
     const buildWeights = this.scoringService.getBuildStatWeights(
       this.selectedBuild.agentId,
-      detectedBuildType
+      detectedBuildType,
     );
 
     // Check if this substat is valued in the detected build (weight >= 1.0)
@@ -1609,7 +1653,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     const breakpoints = this.scoringService.getAgentBreakpoints(
       this.selectedBuild.agentId,
     );
-    if (breakpoints?.priorityStats && Array.isArray(breakpoints.priorityStats)) {
+    if (
+      breakpoints?.priorityStats &&
+      Array.isArray(breakpoints.priorityStats)
+    ) {
       return breakpoints.priorityStats.includes(substatType);
     }
 
@@ -1860,11 +1907,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   isGeneratingShareImage = false;
 
   async generateShareImage() {
-    if (!this.selectedBuild || !this.shareCardRef || !this.shareCanvasRef) return;
+    if (!this.selectedBuild || !this.shareCardRef || !this.shareCanvasRef)
+      return;
 
-    this.isGeneratingShareImage = true;
+      this.isGeneratingShareImage = true;
 
     try {
+
       const cardElement = this.shareCardRef.nativeElement;
 
       // Wait for all images to load before capturing
@@ -1905,7 +1954,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         scrollY: 0,
         logging: false,
         allowTaint: true,
-        removeContainer: true
+        useCORS: true,
+        removeContainer: true,
       } as any);
 
       // Restore original dimensions
@@ -1942,13 +1992,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     if (!this.selectedBuild || !this.shareCanvasRef) return;
 
     const canvas = this.shareCanvasRef.nativeElement;
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
 
     const timestamp = new Date()
       .toISOString()
-      .replace(/[:.]/g, '-')   // remove illegal filename chars
+      .replace(/[:.]/g, '-') // remove illegal filename chars
       .replace('T', '_')
-      .slice(0, 19);           // YYYY-MM-DD_HH-mm-ss
+      .slice(0, 19); // YYYY-MM-DD_HH-mm-ss
 
     canvas.toBlob((blob) => {
       if (blob) {
@@ -1980,7 +2032,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   saveUidHistory() {
     try {
-      localStorage.setItem(this.UID_HISTORY_KEY, JSON.stringify(this.uidHistory));
+      localStorage.setItem(
+        this.UID_HISTORY_KEY,
+        JSON.stringify(this.uidHistory),
+      );
     } catch (error) {
       console.error('Failed to save UID history:', error);
     }
@@ -1991,7 +2046,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     if (!trimmedUid) return;
 
     // Remove if already exists (to move to front)
-    this.uidHistory = this.uidHistory.filter(u => u.uid !== trimmedUid);
+    this.uidHistory = this.uidHistory.filter((u) => u.uid !== trimmedUid);
 
     // Add to front
     this.uidHistory.unshift({ uid: trimmedUid, username });
@@ -2161,7 +2216,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     // Filter from locally stored plans for proper change detection
-    return this.availablePlans.filter(plan => plan.agentId === this.selectedBuild!.agentId);
+    return this.availablePlans.filter(
+      (plan) => plan.agentId === this.selectedBuild!.agentId,
+    );
   }
 
   /**
@@ -2173,13 +2230,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log('Upgrade plan changed:', this.selectedBuild.activeUpgradePlanId);
+    console.log(
+      'Upgrade plan changed:',
+      this.selectedBuild.activeUpgradePlanId,
+    );
 
     try {
       // Update the build with the new active plan ID
       // This will trigger a recalculation in the build service
       await this.buildService.updateBuild(this.selectedBuild.id, {
-        activeUpgradePlanId: this.selectedBuild.activeUpgradePlanId
+        activeUpgradePlanId: this.selectedBuild.activeUpgradePlanId,
       });
 
       console.log('Build updated with new upgrade plan');
@@ -2194,31 +2254,41 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   getAgentImage(): string {
     if (!this.selectedBuild) return '';
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
     return agent?.icon || '';
   }
 
   getAgentName(): string {
     if (!this.selectedBuild) return 'Unknown Agent';
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
     return agent?.name || 'Unknown Agent';
   }
 
   getElementIcon(): string {
     if (!this.selectedBuild) return '';
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
     if (!agent) return '';
 
     // Use special element icon if available, otherwise use standard element icon
     if (agent.specialElementIcon) {
-      return this.dataMappingService.getElementIconPath(agent.specialElementIcon);
+      return this.dataMappingService.getElementIconPath(
+        agent.specialElementIcon,
+      );
     }
     return agent.elementIcon || '';
   }
 
   getRoleIcon(): string {
     if (!this.selectedBuild) return '';
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
     return agent?.specialty ? this.getSpecialtyIcon(agent.specialty) : '';
   }
 
@@ -2244,10 +2314,18 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       { iconName: 'CRIT_Rate', label: 'CRIT', value: `${stats.critRate}%` },
       { iconName: 'CRIT_DMG', label: 'CD', value: `${stats.critDmg}%` },
       { iconName: 'Impact', label: 'Impact', value: String(stats.impact) },
-      { iconName: 'Anomaly_Mastery', label: 'AM', value: String(stats.anomalyMastery) },
-      { iconName: 'Anomaly_Proficiency', label: 'AP', value: String(stats.anomalyProficiency) },
+      {
+        iconName: 'Anomaly_Mastery',
+        label: 'AM',
+        value: String(stats.anomalyMastery),
+      },
+      {
+        iconName: 'Anomaly_Proficiency',
+        label: 'AP',
+        value: String(stats.anomalyProficiency),
+      },
       { iconName: 'PEN_Ratio', label: 'PEN%', value: `${stats.penRatio}%` },
-      { iconName: 'Energy_Regen', label: 'ER', value: `${stats.energyRegen}%` }
+      { iconName: 'Energy_Regen', label: 'ER', value: `${stats.energyRegen}%` },
     ];
   }
 
@@ -2258,7 +2336,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   getDiscSetIcon(disc: Disc | undefined): string {
     if (!disc) return '';
-    const discSet = this.referenceDiscSets.find(s => s.name === disc.set);
+    const discSet = this.referenceDiscSets.find((s) => s.name === disc.set);
     if (!discSet?.icon) return '';
 
     // For share image generation, html2canvas needs absolute URLs
@@ -2269,8 +2347,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     // Create absolute URL from relative path
-    const baseUrl = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
-    return iconPath.startsWith('/') ? window.location.origin + iconPath : baseUrl + iconPath;
+    const baseUrl =
+      window.location.origin +
+      window.location.pathname.replace(/\/[^/]*$/, '/');
+    return iconPath.startsWith('/')
+      ? window.location.origin + iconPath
+      : baseUrl + iconPath;
   }
 
   getWEngineStats(): Array<{ iconName: string; label: string; value: string }> {
@@ -2283,7 +2365,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     stats.push({
       iconName: 'ATK',
       label: 'Base ATK',
-      value: String(wEngine.baseAtk)
+      value: String(wEngine.baseAtk),
     });
 
     // Add substat
@@ -2292,25 +2374,29 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         'ATK%': 'ATK',
         'HP%': 'HP',
         'DEF%': 'DEF',
-        'CRIT_Rate': 'CRIT_Rate',
-        'CRIT_DMG': 'CRIT_DMG',
-        'PEN_Ratio': 'PEN_Ratio',
-        'Energy_Regen': 'Energy_Regen',
-        'Impact': 'Impact',
-        'Anomaly_Proficiency': 'Anomaly_Proficiency'
+        CRIT_Rate: 'CRIT_Rate',
+        CRIT_DMG: 'CRIT_DMG',
+        PEN_Ratio: 'PEN_Ratio',
+        Energy_Regen: 'Energy_Regen',
+        Impact: 'Impact',
+        Anomaly_Proficiency: 'Anomaly_Proficiency',
       };
 
-      const iconName = statTypeMap[wEngine.subStat.type] || wEngine.subStat.type;
-      const isPercent = wEngine.subStat.type.includes('%') ||
-                       wEngine.subStat.type === 'CRIT_Rate' ||
-                       wEngine.subStat.type === 'CRIT_DMG' ||
-                       wEngine.subStat.type === 'PEN_Ratio' ||
-                       wEngine.subStat.type === 'Energy_Regen';
+      const iconName =
+        statTypeMap[wEngine.subStat.type] || wEngine.subStat.type;
+      const isPercent =
+        wEngine.subStat.type.includes('%') ||
+        wEngine.subStat.type === 'CRIT_Rate' ||
+        wEngine.subStat.type === 'CRIT_DMG' ||
+        wEngine.subStat.type === 'PEN_Ratio' ||
+        wEngine.subStat.type === 'Energy_Regen';
 
       stats.push({
         iconName: iconName,
         label: wEngine.subStat.type.replace(/_/g, ' '),
-        value: isPercent ? `${wEngine.subStat.value}%` : String(wEngine.subStat.value)
+        value: isPercent
+          ? `${wEngine.subStat.value}%`
+          : String(wEngine.subStat.value),
       });
     }
 
@@ -2319,11 +2405,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Format W-Engine substat value with % only for percentage stats
   formatWEngineSubstatValue(subStat: { type: string; value: number }): string {
-    const isPercent = subStat.type.includes('%') ||
-                     subStat.type === 'CRIT_Rate' ||
-                     subStat.type === 'CRIT_DMG' ||
-                     subStat.type === 'PEN_Ratio' ||
-                     subStat.type === 'Energy_Regen';
+    const isPercent =
+      subStat.type.includes('%') ||
+      subStat.type === 'CRIT_Rate' ||
+      subStat.type === 'CRIT_DMG' ||
+      subStat.type === 'PEN_Ratio' ||
+      subStat.type === 'Energy_Regen';
 
     return isPercent ? `${subStat.value}%` : String(subStat.value);
   }
