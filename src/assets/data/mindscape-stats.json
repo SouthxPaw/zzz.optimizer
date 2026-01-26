@@ -337,6 +337,31 @@
           "note": ""
         }
       ]
+    },
+    "1491": {
+      "comment": "Sunna",
+      "2": [
+        {
+          "type": "ATK%",
+          "value": 10,
+          "format": "%",
+          "note": ""
+        }
+      ],
+      "6": [
+        {
+          "type":"CRIT_Rate",
+          "value": 100,
+          "format": "%",
+          "note": ""
+        },
+        {
+          "type":"CRIT_DMG",
+          "value": 105,
+          "format": "%",
+          "note": ""
+        }
+      ]
     }
   }
 }
