@@ -77,22 +77,55 @@ export class CanvasShareImageService {
 
     console.log('[Canvas] All layers drawn, converting to blob...');
 
-    // Convert canvas to blob
+    // Ensure all rendering is complete before converting to blob
+    // This fixes Firefox-specific timing issues where canvas may not be fully rendered
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    // Convert canvas to blob with fallback handling
     return new Promise((resolve, reject) => {
       canvas.toBlob(
         (blob) => {
-          if (blob) {
-            console.log('[Canvas] Blob created successfully');
+          // Check if blob was created successfully AND has content
+          if (blob && blob.size > 0) {
+            console.log('[Canvas] Blob created successfully, size:', blob.size);
             resolve(blob);
           } else {
-            console.error('[Canvas] Failed to create blob');
-            reject(new Error('Failed to generate image blob'));
+            // Fallback to dataURL method if blob is empty or null
+            // This handles Firefox privacy settings and edge cases
+            console.warn('[Canvas] Blob empty or null, using dataURL fallback');
+            try {
+              const dataUrl = canvas.toDataURL('image/png', 1.0);
+              const blobFromDataUrl = this.dataURLToBlob(dataUrl);
+              console.log('[Canvas] Fallback blob created, size:', blobFromDataUrl.size);
+              resolve(blobFromDataUrl);
+            } catch (err) {
+              console.error('[Canvas] Failed to create blob via both methods:', err);
+              console.error('[Canvas] Canvas size:', canvas.width, 'x', canvas.height);
+              console.error('[Canvas] Image cache size:', this.imageCache.size);
+              reject(new Error('Failed to generate image blob'));
+            }
           }
         },
         'image/png',
         1.0,
       );
     });
+  }
+
+  /**
+   * Convert dataURL to Blob (fallback method for browsers with canvas restrictions)
+   */
+  private dataURLToBlob(dataUrl: string): Blob {
+    const parts = dataUrl.split(',');
+    const mime = parts[0].match(/:(.*?);/)?.[1] || 'image/png';
+    const binaryString = atob(parts[1]);
+    const bytes = new Uint8Array(binaryString.length);
+
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    return new Blob([bytes], { type: mime });
   }
 
   /**
