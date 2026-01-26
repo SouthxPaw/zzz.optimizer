@@ -190,7 +190,7 @@ export class SkillParserService {
   getAgentMultiplier(agentId: string): number {
     const multiplier = this.skillMultipliers[agentId];
     if (!multiplier) {
-      console.warn(`No skill multiplier found for agent ${agentId}, using default 2.5`);
+      // Silently use default multiplier if not found
       return 2.5;
     }
     return multiplier.averageMultiplier;
