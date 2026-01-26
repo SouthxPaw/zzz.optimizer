@@ -76,33 +76,55 @@ export class CanvasShareImageService {
     await this.drawFooter(ctx, data);
 
     console.log('[Canvas] All layers drawn, converting to blob...');
+    console.log('[Canvas] ========== DIAGNOSTICS ==========');
+    console.log('[Canvas] Browser:', navigator.userAgent);
+    console.log('[Canvas] Canvas dimensions:', canvas.width, 'x', canvas.height);
+    console.log('[Canvas] Images in cache:', this.imageCache.size);
+    console.log('[Canvas] Agent:', data.agent.name);
+    console.log('[Canvas] Build score:', data.buildScore?.score);
+    console.log('[Canvas] ===================================');
 
     // Ensure all rendering is complete before converting to blob
     // This fixes Firefox-specific timing issues where canvas may not be fully rendered
     await new Promise(resolve => requestAnimationFrame(resolve));
 
+    // TEST: Check if canvas has actual content by sampling a pixel
+    try {
+      const testPixel = ctx.getImageData(canvas.width / 2, canvas.height / 2, 1, 1);
+      console.log('[Canvas] Test pixel data:', testPixel.data);
+    } catch (err) {
+      console.error('[Canvas] Canvas may be tainted (CORS issue):', err);
+    }
+
     // Convert canvas to blob with fallback handling
     return new Promise((resolve, reject) => {
+      console.log('[Canvas] Attempting toBlob...');
       canvas.toBlob(
         (blob) => {
+          console.log('[Canvas] toBlob callback received, blob:', blob);
           // Check if blob was created successfully AND has content
           if (blob && blob.size > 0) {
-            console.log('[Canvas] Blob created successfully, size:', blob.size);
+            console.log('[Canvas] ✅ Blob created successfully, size:', blob.size);
             resolve(blob);
           } else {
             // Fallback to dataURL method if blob is empty or null
             // This handles Firefox privacy settings and edge cases
-            console.warn('[Canvas] Blob empty or null, using dataURL fallback');
+            console.warn('[Canvas] ⚠️ Blob empty or null, using dataURL fallback');
+            console.log('[Canvas] Blob details:', { exists: !!blob, size: blob?.size });
             try {
+              console.log('[Canvas] Attempting toDataURL...');
               const dataUrl = canvas.toDataURL('image/png', 1.0);
+              console.log('[Canvas] toDataURL length:', dataUrl.length);
               const blobFromDataUrl = this.dataURLToBlob(dataUrl);
-              console.log('[Canvas] Fallback blob created, size:', blobFromDataUrl.size);
+              console.log('[Canvas] ✅ Fallback blob created, size:', blobFromDataUrl.size);
               resolve(blobFromDataUrl);
             } catch (err) {
-              console.error('[Canvas] Failed to create blob via both methods:', err);
+              console.error('[Canvas] ❌ Failed to create blob via both methods:', err);
+              console.error('[Canvas] Error name:', (err as Error).name);
+              console.error('[Canvas] Error message:', (err as Error).message);
               console.error('[Canvas] Canvas size:', canvas.width, 'x', canvas.height);
               console.error('[Canvas] Image cache size:', this.imageCache.size);
-              reject(new Error('Failed to generate image blob'));
+              reject(new Error('Failed to generate image blob: ' + (err as Error).message));
             }
           }
         },
@@ -134,18 +156,29 @@ export class CanvasShareImageService {
   private async loadImage(src: string): Promise<HTMLImageElement> {
     // Check cache first
     if (this.imageCache.has(src)) {
+      console.log('[Canvas] Image from cache:', src);
       return this.imageCache.get(src)!;
     }
+
+    console.log('[Canvas] Loading image:', src);
 
     // Load image
     return new Promise((resolve, reject) => {
       const img = new Image();
-      img.crossOrigin = 'anonymous'; // Enable CORS for local assets
+
+      // Only set crossOrigin for external URLs, not for local assets
+      // This prevents canvas tainting in Firefox
+      if (src.startsWith('http://') || src.startsWith('https://')) {
+        img.crossOrigin = 'anonymous';
+      }
+
       img.onload = () => {
+        console.log('[Canvas] ✅ Image loaded successfully:', src, `(${img.width}x${img.height})`);
         this.imageCache.set(src, img);
         resolve(img);
       };
-      img.onerror = () => {
+      img.onerror = (error) => {
+        console.error('[Canvas] ❌ Failed to load image:', src, error);
         reject(new Error(`Failed to load image: ${src}`));
       };
       img.src = src;
@@ -159,6 +192,7 @@ export class CanvasShareImageService {
     // Fill with base color
     ctx.fillStyle = '#0a0a0a';
     ctx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
+    console.log('[Canvas] Background base color drawn');
 
     // Draw background image
     try {
@@ -171,8 +205,9 @@ export class CanvasShareImageService {
       ctx.globalAlpha = 0.6;
       ctx.drawImage(bgImage, 0, 0, this.WIDTH, this.HEIGHT);
       ctx.restore();
+      console.log('[Canvas] ✅ Background image drawn');
     } catch (error) {
-      console.warn('Background image failed to load, using solid color');
+      console.warn('[Canvas] ⚠️ Background image failed to load, using solid color:', error);
     }
   }
 
@@ -228,9 +263,12 @@ export class CanvasShareImageService {
 
         ctx.drawImage(agentImg, x, y, agentWidth, agentHeight);
         ctx.restore();
+        console.log('[Canvas] ✅ Agent image drawn:', data.agent.name);
       } catch (error) {
-        console.warn('Agent image failed to load');
+        console.warn('[Canvas] ⚠️ Agent image failed to load:', data.agent.name, error);
       }
+    } else {
+      console.warn('[Canvas] ⚠️ No agent icon available');
     }
 
     // Draw build rating container (top-left)
@@ -445,8 +483,9 @@ export class CanvasShareImageService {
       ctx.globalAlpha = 1.0; // Fully opaque
       ctx.drawImage(menuImg, menuX, menuY, menuWidth, menuHeight);
       ctx.restore();
+      console.log('[Canvas] ✅ Equipment menu background drawn');
     } catch (error) {
-      console.warn('Equipment menu background failed to load, using solid color fallback');
+      console.warn('[Canvas] ⚠️ Equipment menu background failed to load, using solid color fallback:', error);
       // Fallback to solid color
       ctx.save();
       ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
