@@ -2054,7 +2054,7 @@ export class ScoringService {
 
       // Suggest priority stats that this disc is missing
       if (disc.missingPriorityStats.length > 0) {
-        message += ` - Suggestion: ${disc.missingPriorityStats.slice(0, 3).join(', ')}`;
+        message += ` - Substat Suggestion: ${disc.missingPriorityStats.slice(0, 3).join(', ')}`;
       } else if (disc.lowRollPriorityStats.length > 0) {
         const stats = disc.lowRollPriorityStats.slice(0, 2).join(', ');
         message += ` - Low rolls on: ${stats}`;
@@ -2080,7 +2080,7 @@ export class ScoringService {
 
         // Suggest priority stats that this disc is missing
         if (disc.missingPriorityStats.length > 0) {
-          message += ` - Suggestion: ${disc.missingPriorityStats.slice(0, 3).join(', ')}`;
+          message += ` - Substat Suggestion: ${disc.missingPriorityStats.slice(0, 3).join(', ')}`;
         }
 
         feedback.push({
@@ -2102,7 +2102,7 @@ export class ScoringService {
 
         // Suggest priority stats that this disc is missing
         if (disc.missingPriorityStats.length > 0) {
-          message += ` - Suggestion: ${disc.missingPriorityStats.slice(0, 3).join(', ')}`;
+          message += ` - Substat Suggestion: ${disc.missingPriorityStats.slice(0, 3).join(', ')}`;
         }
         // Or mention low rolls on priority stats if missing stats aren't the issue
         else if (disc.lowRollPriorityStats.length > 0) {
