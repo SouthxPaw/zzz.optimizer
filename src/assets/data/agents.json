@@ -20555,7 +20555,7 @@
     "name": "Alice",
     "scoring": {
       "buffs": [
-        { "type": "AnomalyProficiency", "value": "70", "format": "flat" }
+        { "type": "AnomalyProficiency", "value": "88", "format": "flat" }
       ],
       "debuffs": [],
       "dazeBonus": 0
