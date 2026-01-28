@@ -119,7 +119,7 @@
     },
     "subStats": [
       { "type": "ATK%", "value": 9.6, "rolls": 2 },
-      { "type": "DEF", "value": 16, "rolls": 1 },
+      { "type": "DEF", "value": 15, "rolls": 1 },
       { "type": "CRIT_Rate", "value": 9.6, "rolls": 3 },
       { "type": "Anomaly_Mastery", "value": 18, "rolls": 2 }
     ],
