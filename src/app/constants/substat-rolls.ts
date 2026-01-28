@@ -20,7 +20,7 @@ export const SUBSTAT_ROLL_VALUES: { [statType: string]: number } = {
   'DEF%': 4.8,                // +4.8% per roll
   'ATK': 19,                  // +19 flat ATK per roll
   'HP': 112,                  // +112 flat HP per roll
-  'DEF': 0,                   // Not documented in source (rare substat)
+  'DEF': 15,                  // +15 flat DEF per roll (S-Rank)
   'PEN': 9,                   // +9 flat PEN per roll
   'Anomaly_Proficiency': 9,   // +9 flat Anomaly Proficiency per roll
   'Anomaly_Mastery': 0,       // Main stat only (Disc 6) - does not roll as substat
