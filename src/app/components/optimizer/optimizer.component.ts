@@ -55,6 +55,11 @@ export class OptimizerComponent implements OnInit, OnDestroy {
   maxResults = 100;
   useEfficientMode = true; // Use optimized algorithm by default
 
+  // OPTIMIZATION: New configuration options
+  topDiscsPerSlot = 10; // Configurable: 5, 10, 15, 20
+  minDiscLevel = 12; // Minimum disc level for optimization
+  enablePruning = true; // Branch-and-bound pruning
+
   private worker: Worker | null = null;
 
   constructor(
@@ -168,8 +173,12 @@ export class OptimizerComponent implements OnInit, OnDestroy {
       this.optimizeSync(algorithm, constraints);
     };
 
-    // Get all unequipped discs
-    const allDiscs = this.discService.getUnequippedDiscs();
+    // OPTIMIZATION 7: Get unequipped discs with minimum level filter
+    const allDiscs = this.useEfficientMode
+      ? this.discService.getUnequippedDiscsForOptimization(this.minDiscLevel)
+      : this.discService.getUnequippedDiscs();
+
+    console.log(`Starting optimization with ${allDiscs.length} discs (min level: ${this.minDiscLevel})`);
 
     // Send data to worker
     this.worker.postMessage({
@@ -180,29 +189,52 @@ export class OptimizerComponent implements OnInit, OnDestroy {
       algorithm,
       constraints,
       allDiscs,
-      useEfficientMode: this.useEfficientMode
+      useEfficientMode: this.useEfficientMode,
+      options: {
+        topDiscsPerSlot: this.topDiscsPerSlot,
+        minDiscLevel: this.minDiscLevel,
+        enablePruning: this.enablePruning
+      }
     });
   }
 
   private optimizeSync(algorithm: any, constraints: OptimizerConstraints) {
     setTimeout(() => {
       try {
-        const optimizeMethod = this.useEfficientMode
-          ? this.optimizerService.optimizeBuildsEfficient.bind(this.optimizerService)
-          : this.optimizerService.optimizeBuilds.bind(this.optimizerService);
-
-        this.results = optimizeMethod(
-          this.selectedAgent!,
-          this.agentLevel,
-          this.selectedWEngine,
-          this.mindscapeLevel,
-          algorithm,
-          constraints,
-          (progress, text) => {
-            this.progress = progress;
-            this.progressText = text;
-          }
-        );
+        if (this.useEfficientMode) {
+          // Use optimized method with new options
+          this.results = this.optimizerService.optimizeBuildsEfficient(
+            this.selectedAgent!,
+            this.agentLevel,
+            this.selectedWEngine,
+            this.mindscapeLevel,
+            algorithm,
+            constraints,
+            (progress, text) => {
+              this.progress = progress;
+              this.progressText = text;
+            },
+            {
+              topDiscsPerSlot: this.topDiscsPerSlot,
+              minDiscLevel: this.minDiscLevel,
+              enablePruning: this.enablePruning
+            }
+          );
+        } else {
+          // Use standard exhaustive search
+          this.results = this.optimizerService.optimizeBuilds(
+            this.selectedAgent!,
+            this.agentLevel,
+            this.selectedWEngine,
+            this.mindscapeLevel,
+            algorithm,
+            constraints,
+            (progress, text) => {
+              this.progress = progress;
+              this.progressText = text;
+            }
+          );
+        }
 
         this.buildViewModel();
         this.progress = 100;

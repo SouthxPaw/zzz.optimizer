@@ -79,6 +79,17 @@ export class DiscService {
     return this.discsSubject.value.filter(d => !d.equippedBy);
   }
 
+  /**
+   * OPTIMIZATION 7: Get unequipped discs above a minimum level for optimization
+   * Reduces search space by filtering out low-level discs
+   */
+  getUnequippedDiscsForOptimization(minLevel: number = 0): Disc[] {
+    if (minLevel <= 0) {
+      return this.getUnequippedDiscs();
+    }
+    return this.discsSubject.value.filter(d => !d.equippedBy && d.level >= minLevel);
+  }
+
   getDiscsEquippedBy(agentId: string): Disc[] {
     return this.discsSubject.value.filter(d => d.equippedBy === agentId);
   }
