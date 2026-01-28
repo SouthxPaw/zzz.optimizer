@@ -257,8 +257,18 @@ export class OptimizerService {
     mindscapeLevel: number,
     algorithm: ScoringAlgorithm,
     constraints: OptimizerConstraints = {},
-    onProgress?: (progress: number, text: string) => void
+    onProgress?: (progress: number, text: string) => void,
+    options: {
+      topDiscsPerSlot?: number;
+      minDiscLevel?: number;
+      enablePruning?: boolean;
+    } = {}
   ): OptimizedBuild[] {
+    // OPTIMIZATION 2: Aggressive pre-filtering with configurable limits
+    const topDiscsPerSlot = options.topDiscsPerSlot ?? 10; // Down from 20
+    const minDiscLevel = options.minDiscLevel ?? 12; // Only consider leveled discs
+    const enablePruning = options.enablePruning ?? true;
+
     const allDiscs = this.discService.getUnequippedDiscs();
 
     // Pre-filter discs aggressively
@@ -273,10 +283,22 @@ export class OptimizerService {
 
     const slots: DiscSlot[] = ['Drive1', 'Drive2', 'Drive3', 'Drive4', 'Drive5', 'Drive6'];
 
+    // OPTIMIZATION 6: Pre-compute all disc scores once
+    const discScoreCache = new Map<string, number>();
+    allDiscs.forEach(disc => {
+      const score = this.simpleScoreDisc(disc, algorithm);
+      discScoreCache.set(disc.uid, score);
+    });
+
     slots.forEach(slot => {
       let slotDiscs = this.filterDiscsBySlot(allDiscs, slot);
 
-      // Filter by preferred main stats
+      // Filter by minimum level (skip low-level discs)
+      if (minDiscLevel > 0) {
+        slotDiscs = slotDiscs.filter(disc => disc.level >= minDiscLevel);
+      }
+
+      // Filter by preferred main stats FIRST (most effective filter)
       const preferredMainStats = algorithm.mainStatPreferences[slot];
       if (preferredMainStats && preferredMainStats.length > 0) {
         slotDiscs = slotDiscs.filter(disc =>
@@ -284,21 +306,40 @@ export class OptimizerService {
         );
       }
 
-      // Score and sort discs, keep only top 20 per slot
-      // Simple scoring based on weighted substats
+      // Score and sort discs, keep only top N per slot
+      // Use pre-computed scores from cache
       slotDiscs = slotDiscs
         .map(disc => ({
           disc,
-          score: this.simpleScoreDisc(disc, algorithm)
+          score: discScoreCache.get(disc.uid) || 0
         }))
+        .filter(item => item.score > 0) // Exclude discs with 0 score
         .sort((a, b) => b.score - a.score)
-        .slice(0, 20)
+        .slice(0, topDiscsPerSlot)
         .map(item => item.disc);
 
       discsBySlot[slot] = slotDiscs;
     });
 
-    // Now run optimization with filtered discs
+    const totalCombinations = this.calculateTotalCombinations(discsBySlot);
+    console.log(`Optimized filtering: ${totalCombinations.toLocaleString()} combinations (${topDiscsPerSlot} discs/slot, min level ${minDiscLevel})`);
+
+    // Use optimized generation with pruning if enabled
+    if (enablePruning && totalCombinations > 10000) {
+      return this.optimizeBuildsWithPruning(
+        discsBySlot,
+        discScoreCache,
+        agent,
+        level,
+        wEngine,
+        mindscapeLevel,
+        algorithm,
+        constraints,
+        onProgress
+      );
+    }
+
+    // For smaller search spaces, use standard algorithm
     return this.optimizeBuilds(
       agent,
       level,
@@ -308,6 +349,155 @@ export class OptimizerService {
       constraints,
       onProgress
     );
+  }
+
+  /**
+   * OPTIMIZATION 1 & 4: Optimized build generation with branch-and-bound pruning and top-K heap
+   */
+  private optimizeBuildsWithPruning(
+    discsBySlot: { [key in DiscSlot]: Disc[] },
+    discScoreCache: Map<string, number>,
+    agent: Agent,
+    level: number,
+    wEngine: WEngine | null,
+    mindscapeLevel: number,
+    algorithm: ScoringAlgorithm,
+    constraints: OptimizerConstraints,
+    onProgress?: (progress: number, text: string) => void
+  ): OptimizedBuild[] {
+    const slots: DiscSlot[] = ['Drive1', 'Drive2', 'Drive3', 'Drive4', 'Drive5', 'Drive6'];
+    const maxResults = constraints.maxResults || 100;
+
+    // OPTIMIZATION 4: Use top-K heap instead of storing all builds
+    const topBuilds: OptimizedBuild[] = [];
+    let worstTopScore = 0;
+
+    // OPTIMIZATION 1: Track best score for pruning
+    let bestScore = 0;
+    let evaluatedCount = 0;
+    let prunedCount = 0;
+
+    const currentDiscs: { [key in DiscSlot]?: Disc } = {};
+    const indices: number[] = new Array(slots.length).fill(0);
+    let slotIndex = 0;
+
+    const totalCombinations = this.calculateTotalCombinations(discsBySlot);
+
+    while (slotIndex >= 0) {
+      const currentSlot = slots[slotIndex];
+      const availableDiscs = discsBySlot[currentSlot];
+
+      if (indices[slotIndex] < availableDiscs.length) {
+        currentDiscs[currentSlot] = availableDiscs[indices[slotIndex]];
+
+        // OPTIMIZATION 1: Early termination - estimate upper bound
+        if (slotIndex < slots.length - 1) {
+          const upperBound = this.estimateUpperBound(
+            currentDiscs,
+            discsBySlot,
+            discScoreCache,
+            slots,
+            slotIndex
+          );
+
+          // Prune if upper bound can't beat worst in top-K (with 5% tolerance)
+          if (topBuilds.length >= maxResults && upperBound < worstTopScore * 0.95) {
+            indices[slotIndex]++;
+            prunedCount++;
+            continue;
+          }
+        }
+
+        if (slotIndex === slots.length - 1) {
+          // Evaluate complete build
+          const build = this.evaluateBuild(
+            currentDiscs,
+            agent,
+            level,
+            wEngine,
+            mindscapeLevel,
+            algorithm
+          );
+
+          if (this.meetsConstraints(build, constraints)) {
+            // OPTIMIZATION 4: Insert into top-K heap
+            if (topBuilds.length < maxResults) {
+              topBuilds.push(build);
+              topBuilds.sort((a, b) => b.score - a.score);
+              worstTopScore = topBuilds[topBuilds.length - 1].score;
+            } else if (build.score > worstTopScore) {
+              topBuilds[topBuilds.length - 1] = build;
+              topBuilds.sort((a, b) => b.score - a.score);
+              worstTopScore = topBuilds[topBuilds.length - 1].score;
+            }
+
+            bestScore = Math.max(bestScore, build.score);
+          }
+
+          evaluatedCount++;
+
+          // Progress reporting
+          if (evaluatedCount % 1000 === 0 && onProgress) {
+            const progress = (evaluatedCount / totalCombinations) * 100;
+            onProgress(progress, `Evaluated ${evaluatedCount.toLocaleString()} / ${totalCombinations.toLocaleString()} (pruned ${prunedCount.toLocaleString()})`);
+          }
+
+          indices[slotIndex]++;
+        } else {
+          slotIndex++;
+          indices[slotIndex] = 0;
+        }
+      } else {
+        delete currentDiscs[currentSlot];
+        indices[slotIndex] = 0;
+        slotIndex--;
+        if (slotIndex >= 0) {
+          indices[slotIndex]++;
+        }
+      }
+    }
+
+    console.log(`Optimization complete: Evaluated ${evaluatedCount}, Pruned ${prunedCount} (${((prunedCount / (evaluatedCount + prunedCount)) * 100).toFixed(1)}% reduction)`);
+
+    if (onProgress) {
+      onProgress(100, `Complete! Found ${topBuilds.length} builds (evaluated ${evaluatedCount.toLocaleString()}, pruned ${prunedCount.toLocaleString()})`);
+    }
+
+    return topBuilds;
+  }
+
+  /**
+   * OPTIMIZATION 1: Estimate upper bound for branch-and-bound pruning
+   */
+  private estimateUpperBound(
+    currentDiscs: { [key in DiscSlot]?: Disc },
+    discsBySlot: { [key in DiscSlot]: Disc[] },
+    discScoreCache: Map<string, number>,
+    slots: DiscSlot[],
+    currentSlotIndex: number
+  ): number {
+    let upperBound = 0;
+
+    // Add scores from already-selected discs
+    Object.values(currentDiscs).forEach(disc => {
+      if (disc) {
+        upperBound += discScoreCache.get(disc.uid) || 0;
+      }
+    });
+
+    // Add BEST possible scores from remaining slots
+    for (let i = currentSlotIndex + 1; i < slots.length; i++) {
+      const slot = slots[i];
+      const discsInSlot = discsBySlot[slot];
+
+      if (discsInSlot.length > 0) {
+        // Find best disc in this slot (they're already sorted, so take first)
+        const bestDiscScore = discScoreCache.get(discsInSlot[0].uid) || 0;
+        upperBound += bestDiscScore;
+      }
+    }
+
+    return upperBound;
   }
 
   /**
