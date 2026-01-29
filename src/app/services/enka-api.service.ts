@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError, from } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
+import { Observable, throwError, from, timer } from 'rxjs';
+import { switchMap, catchError, retryWhen, mergeMap } from 'rxjs/operators';
 import { Disc, MainStatType, SubStat, SubStatType } from '../models/disc.model';
 import { DiscSlot, WEngine } from '../models/agent.model';
 import { DbService } from './db.service';
@@ -165,6 +165,7 @@ export class EnkaApiService {
 
   /**
    * Fetch player data from Enka Network API by UID
+   * OPTIMIZATION: Added retry logic with exponential backoff for rate limits
    */
   fetchPlayerData(uid: string): Observable<EnkaImportResult> {
     // Use CORS proxy to avoid browser CORS restrictions
@@ -172,6 +173,21 @@ export class EnkaApiService {
     const proxiedUrl = `${this.CORS_PROXY}${encodeURIComponent(enkaUrl)}`;
 
     return this.http.get<EnkaResponse>(proxiedUrl).pipe(
+      // OPTIMIZATION: Retry on rate limit (429) with exponential backoff
+      retryWhen(errors =>
+        errors.pipe(
+          mergeMap((error, index) => {
+            // Only retry on rate limit errors
+            if (error.status === 429 && index < 3) {
+              const delay = Math.pow(2, index) * 500; // 500ms, 1s, 2s
+              console.log(`Rate limited. Retrying in ${delay}ms (attempt ${index + 1}/3)...`);
+              return timer(delay);
+            }
+            // Don't retry other errors
+            return throwError(() => error);
+          })
+        )
+      ),
       switchMap(response => from(this.transformEnkaData(uid, response))),
       catchError(error => {
         console.error('Enka API error:', error);
@@ -180,7 +196,7 @@ export class EnkaApiService {
         if (error.status === 404) {
           errorMessage = 'UID not found. Make sure your profile is public in game settings or double check your UID.';
         } else if (error.status === 429) {
-          errorMessage = 'Rate limited. Please wait a moment and try again.';
+          errorMessage = 'Rate limited after 3 retries. Please wait a moment and try again.';
         } else if (error.status === 0) {
           errorMessage = 'CORS error. The API might be blocking requests. Try again later or contact support.';
         } else if (error.status >= 500) {

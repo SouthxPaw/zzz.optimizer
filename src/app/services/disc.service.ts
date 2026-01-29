@@ -13,11 +13,44 @@ export class DiscService {
   private discsSubject = new BehaviorSubject<Disc[]>([]);
   public discs$: Observable<Disc[]> = this.discsSubject.asObservable();
 
+  // OPTIMIZATION: Pre-indexed discs for O(1) lookups
+  private discsBySlot = new Map<DiscSlot, Disc[]>();
+  private discsBySet = new Map<string, Disc[]>();
+  private unequippedDiscs: Disc[] = [];
+
   constructor(
     private db: DbService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.loadDiscsFromDb();
+  }
+
+  // OPTIMIZATION: Rebuild indexes when discs change
+  private rebuildIndexes(discs: Disc[]): void {
+    // Clear existing indexes
+    this.discsBySlot.clear();
+    this.discsBySet.clear();
+    this.unequippedDiscs = [];
+
+    // Rebuild indexes
+    for (const disc of discs) {
+      // Index by slot
+      if (!this.discsBySlot.has(disc.slot)) {
+        this.discsBySlot.set(disc.slot, []);
+      }
+      this.discsBySlot.get(disc.slot)!.push(disc);
+
+      // Index by set
+      if (!this.discsBySet.has(disc.set)) {
+        this.discsBySet.set(disc.set, []);
+      }
+      this.discsBySet.get(disc.set)!.push(disc);
+
+      // Index unequipped
+      if (!disc.equippedBy) {
+        this.unequippedDiscs.push(disc);
+      }
+    }
   }
 
   private async loadDiscsFromDb(): Promise<void> {
@@ -29,8 +62,9 @@ export class DiscService {
 
     try {
       const discs = await this.db.getAllDiscs();
+      this.rebuildIndexes(discs); // OPTIMIZATION: Build indexes
       this.discsSubject.next(discs);
-      console.log(`Loaded ${discs.length} discs from IndexedDB`);
+      console.log(`Loaded ${discs.length} discs from IndexedDB (indexed by slot/set)`);
     } catch (error) {
       console.error('Error loading discs from IndexedDB:', error);
       this.discsSubject.next([]);
@@ -48,7 +82,9 @@ export class DiscService {
   async addDisc(disc: Disc): Promise<void> {
     await this.db.addDisc(disc);
     const current = this.discsSubject.value;
-    this.discsSubject.next([...current, disc]);
+    const updated = [...current, disc];
+    this.rebuildIndexes(updated); // OPTIMIZATION: Rebuild indexes
+    this.discsSubject.next(updated);
   }
 
   async updateDisc(uid: string, updates: Partial<Disc>): Promise<void> {
@@ -57,6 +93,7 @@ export class DiscService {
     if (index !== -1) {
       await this.db.updateDisc(uid, updates);
       current[index] = { ...current[index], ...updates };
+      this.rebuildIndexes(current); // OPTIMIZATION: Rebuild indexes
       this.discsSubject.next([...current]);
     }
   }
@@ -64,19 +101,23 @@ export class DiscService {
   async deleteDisc(uid: string): Promise<void> {
     await this.db.deleteDisc(uid);
     const current = this.discsSubject.value.filter(d => d.uid !== uid);
+    this.rebuildIndexes(current); // OPTIMIZATION: Rebuild indexes
     this.discsSubject.next(current);
   }
 
+  // OPTIMIZATION: Use indexed lookup (O(1) instead of O(n))
   getDiscsBySlot(slot: DiscSlot): Disc[] {
-    return this.discsSubject.value.filter(d => d.slot === slot);
+    return this.discsBySlot.get(slot) || [];
   }
 
+  // OPTIMIZATION: Use indexed lookup (O(1) instead of O(n))
   getDiscsBySet(setName: string): Disc[] {
-    return this.discsSubject.value.filter(d => d.set === setName);
+    return this.discsBySet.get(setName) || [];
   }
 
+  // OPTIMIZATION: Use pre-filtered unequipped list
   getUnequippedDiscs(): Disc[] {
-    return this.discsSubject.value.filter(d => !d.equippedBy);
+    return this.unequippedDiscs;
   }
 
   /**
@@ -117,6 +158,7 @@ export class DiscService {
 
   async importDiscs(discs: Disc[]): Promise<void> {
     await this.db.bulkAddDiscs(discs);
+    this.rebuildIndexes(discs); // OPTIMIZATION: Rebuild indexes
     this.discsSubject.next(discs);
   }
 

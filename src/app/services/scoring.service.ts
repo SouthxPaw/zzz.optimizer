@@ -14,8 +14,8 @@ import {
   FeedbackItem,
 } from '../constants/disc-scoring';
 import { UpgradePlan } from '../models/upgrade-plan.model';
-import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
 import { calculateRollCount } from '../constants/substat-rolls';
+import { DiscSetDataService } from './disc-set-data.service';
 import {
   estimateDamage,
   calculateStatusDamage,
@@ -94,12 +94,13 @@ export class ScoringService {
   private agentBreakpoints: { [agentId: string]: AgentBreakpoints } = {};
   private breakpointsLoaded = false;
   private agentStatWeights: { [agentId: string]: any } = {};
-  private discSetData: { [setId: string]: DiscSetData } = {};
   private mindscapeData: MindscapeData | null = null;
 
+  // OPTIMIZATION: Use shared disc set data service
   constructor(
     private http: HttpClient,
-    private skillParserService: SkillParserService
+    private skillParserService: SkillParserService,
+    private discSetDataService: DiscSetDataService
   ) {
     this.loadAllData();
   }
@@ -111,7 +112,7 @@ export class ScoringService {
     await Promise.all([
       this.loadAgentBreakpoints(),
       this.loadAgentStatWeights(),
-      this.loadDiscSetData(),
+      this.discSetDataService.loadDiscSetData(), // OPTIMIZATION: Use shared service
       this.loadMindscapeData(),
       this.loadSkillMultipliers(),
     ]);
@@ -187,30 +188,7 @@ export class ScoringService {
     }
   }
 
-  /**
-   * Load disc set data from equipment JSON files
-   */
-  private async loadDiscSetData() {
-    try {
-      const promises = DISC_SET_EQUIPMENT_IDS.map(
-        (id) =>
-          firstValueFrom(
-            this.http.get<DiscSetData>(versionedUrl(`assets/data/equipment/${id}.json`))
-          ).catch(() => null) // Ignore errors for missing files
-      );
-
-      const results = await Promise.all(promises);
-      results.forEach((data, index) => {
-        if (data) {
-          this.discSetData[DISC_SET_EQUIPMENT_IDS[index]] = data;
-        }
-      });
-
-      console.log('Loaded disc set data for scoring');
-    } catch (error) {
-      console.error('Failed to load disc set data:', error);
-    }
-  }
+  // OPTIMIZATION: Removed - now using shared DiscSetDataService
 
   /**
    * Load mindscape stat bonuses
