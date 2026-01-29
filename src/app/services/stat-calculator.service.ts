@@ -1,49 +1,15 @@
 // services/stat-calculator.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
 import { Agent, BaseStats, DiscSlot } from '../models/agent.model';
 import { Disc } from '../models/disc.model';
 import { WEngine } from '../models/wengine.model';
 import { DISC_SETS } from '../constants/disc-sets';
-import { DISC_SET_EQUIPMENT_IDS } from '../constants/disc-set-ids';
-import { versionedUrl } from '../utils/versioned-url';
-
-interface DiscSetEquipmentData {
-  Id: number;
-  Name: string;
-  Desc2: string;
-  Desc4: string;
-  '4pcEffect': {
-    Properties: Array<{
-      Name: string;
-      Name2: string;
-      Format: string;
-      Value: number;
-    }>;
-  } | Array<{
-    Condition?: {
-      Type: string;
-      Stat: string;
-      Operator: string;
-      Value: number;
-    };
-    Properties: Array<{
-      Name: string;
-      Name2: string;
-      Format: string;
-      Value: number;
-    }>;
-  }>;
-}
+import { DiscSetDataService, DiscSetEquipmentData } from './disc-set-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StatCalculatorService {
-  private discSetEquipmentData: { [setName: string]: DiscSetEquipmentData } = {};
-  private dataLoadPromise: Promise<void>;
-
   // OPTIMIZATION 4: Increased cache size for better performance
   private statCache = new Map<string, BaseStats>();
   private readonly CACHE_SIZE_LIMIT = 10000; // Up from 1000 for 20-30% speedup
@@ -51,39 +17,17 @@ export class StatCalculatorService {
   // OPTIMIZATION 5: Set bonus caching
   private setBonusCache = new Map<string, any>();
 
-  constructor(private http: HttpClient) {
-    this.dataLoadPromise = this.loadDiscSetEquipmentData();
+  // OPTIMIZATION: Use shared disc set data service
+  constructor(private discSetDataService: DiscSetDataService) {
+    // Data loading is handled by shared service
+    this.discSetDataService.loadDiscSetData();
   }
 
   /**
    * Ensure disc set equipment data is loaded before calculating stats
    */
   async ensureDataLoaded(): Promise<void> {
-    await this.dataLoadPromise;
-  }
-
-  /**
-   * Load disc set equipment data from JSON files
-   */
-  private async loadDiscSetEquipmentData() {
-    try {
-      const promises = DISC_SET_EQUIPMENT_IDS.map(id =>
-        firstValueFrom(
-          this.http.get<DiscSetEquipmentData>(versionedUrl(`assets/data/equipment/${id}.json`))
-        ).catch(() => null)
-      );
-
-      const results = await Promise.all(promises);
-      results.forEach(data => {
-        if (data) {
-          this.discSetEquipmentData[data.Name] = data;
-        }
-      });
-
-      console.log('Loaded disc set equipment data for stat calculation');
-    } catch (error) {
-      console.error('Failed to load disc set equipment data:', error);
-    }
+    await this.discSetDataService.loadDiscSetData();
   }
 
   calculateFinalStats(
@@ -624,7 +568,7 @@ export class StatCalculatorService {
    * Only applies conditional bonuses when conditions are met
    */
   private apply4pcEffectBonuses(setName: string, stats: BaseStats, agent: Agent): void {
-    const equipmentData = this.discSetEquipmentData[setName];
+    const equipmentData = this.discSetDataService.getDiscSet(setName);
     if (!equipmentData) {
       return;
     }
@@ -879,7 +823,7 @@ export class StatCalculatorService {
 
     setCounts.forEach((count, setName) => {
       if (count >= 4) {
-        const equipmentData = this.discSetEquipmentData[setName];
+        const equipmentData = this.discSetDataService.getDiscSet(setName);
         if (equipmentData && equipmentData['4pcEffect']) {
           const effect = equipmentData['4pcEffect'];
           // Use a map to consolidate duplicate stats

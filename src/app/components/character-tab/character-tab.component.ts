@@ -146,6 +146,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   cachedFilteredDiscSets: DiscSet[] = [];
   cachedFilteredDiscs: Disc[] = [];
 
+  // OPTIMIZATION: Memoization caches for score calculations
+  private discScoreCache = new Map<string, { score: number; rating: DiscRating }>();
+  private buildScoreCache = new Map<string, { score: number; rating: BuildRating }>();
+
   // W-Engine picker
   showWEnginePicker = false;
   wengineSearchTerm = '';
@@ -1106,12 +1110,19 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  // OPTIMIZATION: Clear score caches when build changes
+  private clearScoreCaches(): void {
+    this.discScoreCache.clear();
+    this.buildScoreCache.clear();
+  }
+
   async unequipDisc(slot: DiscSlot, event: Event) {
     event.stopPropagation();
     if (!this.selectedBuild) return;
 
     try {
       await this.buildService.unequipDisc(this.selectedBuild.id, slot);
+      this.clearScoreCaches(); // OPTIMIZATION: Invalidate caches
     } catch (error) {
       console.error('Error unequipping disc:', error);
     }
@@ -1235,6 +1246,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     try {
       await this.buildService.equipDisc(this.selectedBuild.id, disc);
+      this.clearScoreCaches(); // OPTIMIZATION: Invalidate caches
       this.closeDiscPicker();
     } catch (error) {
       console.error('Error equipping disc:', error);
@@ -1454,16 +1466,30 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           )
         : undefined;
 
+    // OPTIMIZATION: Cache key for memoization
+    const cacheKey = `${disc.uid}-${this.selectedBuild.agentId}-${detectedBuildType || 'default'}-${activePlan?.id || 'none'}`;
+
+    // Check cache first
+    if (this.discScoreCache.has(cacheKey)) {
+      return this.discScoreCache.get(cacheKey)!;
+    }
+
     const result = this.scoringService.calculateDiscScore(
       disc,
       this.selectedBuild.agentId,
       detectedBuildType, // Use detected build type based on all 6 discs
       activePlan, // Pass upgrade plan to override default weights
     );
-    return {
+
+    const cachedResult = {
       score: result.score,
       rating: result.rating,
     };
+
+    // Store in cache
+    this.discScoreCache.set(cacheKey, cachedResult);
+
+    return cachedResult;
   }
 
   getDiscRatingClass(rating: DiscRating): string {
@@ -1496,6 +1522,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         )
       : undefined;
 
+    // OPTIMIZATION: Cache key based on build state
+    const discUids = equippedDiscsArray.map(d => d.uid).sort().join('|');
+    const cacheKey = `${this.selectedBuild.id}-${discUids}-${this.selectedBuild.equippedWEngine || 'none'}-${this.selectedBuild.wEngineRefinement || 1}-${this.selectedBuild.mindscapeLevel || 0}-${activePlan?.id || 'none'}`;
+
+    // Check cache first
+    if (this.buildScoreCache.has(cacheKey)) {
+      return this.buildScoreCache.get(cacheKey)!;
+    }
+
     // Use composite scoring which accounts for disc quality, W-Engine, Mindscape, set bonuses, and damage estimation
     const result = this.scoringService.calculateCompositeBuildScore(
       this.selectedBuild.agentId,
@@ -1513,10 +1548,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       activePlan, // Pass upgrade plan to override default weights and breakpoints
     );
 
-    return {
+    const cachedResult = {
       score: result.score,
       rating: result.rating,
     };
+
+    // Store in cache
+    this.buildScoreCache.set(cacheKey, cachedResult);
+
+    return cachedResult;
   }
 
   getBuildRatingClass(rating: BuildRating): string {
@@ -2248,6 +2288,8 @@ async generateShareImage() {
       await this.buildService.updateBuild(this.selectedBuild.id, {
         activeUpgradePlanId: this.selectedBuild.activeUpgradePlanId,
       });
+
+      this.clearScoreCaches(); // OPTIMIZATION: Invalidate caches when upgrade plan changes
 
       console.log('Build updated with new upgrade plan');
     } catch (error) {
