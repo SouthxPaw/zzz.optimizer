@@ -436,6 +436,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       await this.buildService.updateBuild(this.selectedBuild.id, {
         includeWEngineBonuses: this.includeWEngineBonuses,
       });
+      this.clearScoreCaches(); // OPTIMIZATION: Clear caches when stats change
     }
   }
 
@@ -445,6 +446,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       await this.buildService.updateBuild(this.selectedBuild.id, {
         includeMindscapeBonuses: this.includeMindscapeBonuses,
       });
+      this.clearScoreCaches(); // OPTIMIZATION: Clear caches when stats change
     }
   }
 
@@ -454,6 +456,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       await this.buildService.updateBuild(this.selectedBuild.id, {
         includePassiveBonuses: this.includePassiveBonuses,
       });
+      this.clearScoreCaches(); // OPTIMIZATION: Clear caches when stats change
     }
   }
 
@@ -485,6 +488,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     await this.buildService.updateBuild(this.selectedBuild.id, {
       enabledDiscs: updatedEnabledDiscs,
     });
+    this.clearScoreCaches(); // OPTIMIZATION: Clear caches when disc is toggled
   }
 
   async equipWEngine(wEngine: WEngine | undefined) {
@@ -1376,6 +1380,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
             equippedDiscs: currentDiscs,
           });
         }
+
+        // OPTIMIZATION: Clear caches after updating disc stats
+        this.clearScoreCaches();
       } else {
         // CREATE MODE: Create new disc
         const newDisc: Disc = {
@@ -1404,6 +1411,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         await this.discService.addDisc(newDisc);
         // Equip it to the build
         await this.buildService.equipDisc(this.selectedBuild.id, newDisc);
+
+        // OPTIMIZATION: Clear caches after creating new disc
+        this.clearScoreCaches();
       }
 
       this.closeDiscForm();
