@@ -56540,6 +56540,11 @@
           "type": "DMGBonus",
           "value": "40",
           "format": "%"
+        },
+        {
+          "type": "CRITRateBonus",
+          "value": "37.8",
+          "format": "%"
         }
       ],
       "debuffs": [],
