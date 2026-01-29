@@ -336,6 +336,22 @@
           "format": "%",
           "note": ""
         }
+      ],
+      "4": [
+        {
+          "type": "CRIT_DMG",
+          "value": 40,
+          "format": "%",
+          "note": ""
+        }
+      ],
+      "6":[
+        {
+          "type": "CRIT_Rate",
+          "value": 9.45,
+          "format": "%",
+          "note": ""
+        }
       ]
     },
     "1491": {
