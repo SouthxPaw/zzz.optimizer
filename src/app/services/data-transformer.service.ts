@@ -65,8 +65,32 @@ export class DataTransformerService {
       return null;
     }
 
-    // Get level 60 stats
-    const lvl60Stats = this.extractLevel60Stats(rawAgent);
+    // Check for HP ascension bonus (property 11102) FIRST
+    let hasHPAscension = false;
+    let hpAscensionPercent = 0;
+
+    // Check extra_ascension first (agents.json format)
+    if (rawAgent.extra_ascension) {
+      const level60Phase = rawAgent.extra_ascension.find((phase: any) => phase.max_level === 60);
+      if (level60Phase && level60Phase.props) {
+        const hpProp = level60Phase.props.find((prop: any) => prop.id === 11102);
+        if (hpProp) {
+          hasHPAscension = true;
+          hpAscensionPercent = hpProp.value / 100; // 1800 -> 18
+        }
+      }
+    }
+    // Fallback to ExtraLevel (character/{id}.json format)
+    else if (rawAgent.ExtraLevel) {
+      const finalPhase = rawAgent.ExtraLevel['6'];
+      if (finalPhase && finalPhase.Extra && finalPhase.Extra['11102']) {
+        hasHPAscension = true;
+        hpAscensionPercent = finalPhase.Extra['11102'].Value / 100; // 1800 -> 18
+      }
+    }
+
+    // Get level 60 stats (passing HP ascension info)
+    const lvl60Stats = this.extractLevel60Stats(rawAgent, hasHPAscension, hpAscensionPercent);
     if (!lvl60Stats) {
       console.warn(`No level 60 stats found for agent ${name}`);
       return null;
@@ -124,21 +148,30 @@ export class DataTransformerService {
       elementIcon: elementIcon,
       specialElementIcon: specialElementIcon,
       specialtyIcon: specialtyIcon,
-      scoring: rawAgent.scoring // Include scoring data (buffs, debuffs, dazeBonus)
+      scoring: rawAgent.scoring, // Include scoring data (buffs, debuffs, dazeBonus)
+      hasHPAscension: hasHPAscension ? true : undefined,
+      hpAscensionPercent: hasHPAscension ? hpAscensionPercent : undefined
     };
   }
 
   /**
    * Extract level 60 base stats from raw agent data
    */
-  private extractLevel60Stats(rawAgent: any): BaseStats | null {
+  private extractLevel60Stats(rawAgent: any, hasHPAscension: boolean = false, hpAscensionPercent: number = 0): BaseStats | null {
     // PREFERRED: Use pre-calculated lvl60_stats from agents.json if available
     if (rawAgent.lvl60_stats) {
       const lvl60 = rawAgent.lvl60_stats;
       const stats = rawAgent.stats || rawAgent.Stats;
 
+      // For agents with HP ascension, lvl60_stats.HpMax is the pre-ascension base
+      // We need to add the ascension bonus to get the naked HP for display
+      let displayHP = Math.round(lvl60.HpMax || 0);
+      if (hasHPAscension && hpAscensionPercent > 0) {
+        displayHP = Math.round(displayHP * (1 + hpAscensionPercent / 100));
+      }
+
       return {
-        hp: Math.round(lvl60.HpMax || 0),
+        hp: displayHP,
         hppercent: 0,
         atk: Math.round(lvl60.Attack || 0),
         atkpercent: 0,
@@ -520,8 +553,30 @@ export class DataTransformerService {
    * Icon field is now included in agents.json, no need for separate character files
    */
   transformAgentWithDetailedStats(id: string, basicAgent: any): Agent {
+    // Check for HP ascension bonus FIRST (same logic as transformSingleAgent)
+    let hasHPAscension = false;
+    let hpAscensionPercent = 0;
+
+    if (basicAgent.extra_ascension) {
+      const level60Phase = basicAgent.extra_ascension.find((phase: any) => phase.max_level === 60);
+      if (level60Phase && level60Phase.props) {
+        const hpProp = level60Phase.props.find((prop: any) => prop.id === 11102);
+        if (hpProp) {
+          hasHPAscension = true;
+          hpAscensionPercent = hpProp.value / 100; // 1800 -> 18
+        }
+      }
+    }
+    else if (basicAgent.ExtraLevel) {
+      const finalPhase = basicAgent.ExtraLevel['6'];
+      if (finalPhase && finalPhase.Extra && finalPhase.Extra['11102']) {
+        hasHPAscension = true;
+        hpAscensionPercent = finalPhase.Extra['11102'].Value / 100; // 1800 -> 18
+      }
+    }
+
     // Use detailed stats if available, otherwise fall back to extractLevel60Stats
-    const lvl60Stats = this.extractLevel60Stats(basicAgent);
+    const lvl60Stats = this.extractLevel60Stats(basicAgent, hasHPAscension, hpAscensionPercent);
 
     if (!lvl60Stats) {
       throw new Error(`Failed to extract stats for agent ${id}`);
@@ -581,7 +636,9 @@ export class DataTransformerService {
       specialElementIcon: specialElementIcon,
       specialtyIcon: specialtyIcon,
       mindscapeEffects: mindscapeEffects.length > 0 ? mindscapeEffects : undefined,
-      scoring: basicAgent.scoring // Include scoring data (buffs, debuffs, dazeBonus)
+      scoring: basicAgent.scoring, // Include scoring data (buffs, debuffs, dazeBonus)
+      hasHPAscension: hasHPAscension ? true : undefined,
+      hpAscensionPercent: hasHPAscension ? hpAscensionPercent : undefined
     };
 
     return agent;

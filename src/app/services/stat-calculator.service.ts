@@ -552,7 +552,20 @@ export class StatCalculatorService {
     // Apply ZZZ formula: Final = (Base × (1 + %)) + Flat Bonuses
     // Base for HP/DEF = Agent base only
     // Base for ATK = Agent base + W-Engine base
-    stats.hp = baseHP * (1 + stats.hppercent / 100) + flatHPFromDiscs;
+
+    // Special handling for HP: Some agents (Zhao, Manato) have HP% ascension bonuses
+    // For these agents, baseHP already includes the ascension bonus (naked HP for display)
+    // But HP% bonuses must be calculated from the PRE-ASCENSION base
+    // Formula: nakedHP + (preAscensionBase × HP%) + flatHP
+    if (agent.hasHPAscension && agent.hpAscensionPercent) {
+      // baseHP is the naked HP (with ascension included)
+      // Calculate pre-ascension base for HP% multiplication
+      const preAscensionBase = baseHP / (1 + agent.hpAscensionPercent / 100);
+      const hpFromPercent = preAscensionBase * (stats.hppercent / 100);
+      stats.hp = baseHP + hpFromPercent + flatHPFromDiscs;
+    } else {
+      stats.hp = baseHP * (1 + stats.hppercent / 100) + flatHPFromDiscs;
+    }
     stats.atk = (baseATK + wEngineBaseATK) * (1 + stats.atkpercent / 100) + flatATKFromDiscs;
     stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFFromDiscs;
 
