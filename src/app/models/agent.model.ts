@@ -36,6 +36,8 @@ export interface Agent {
   mindscapeEffects?: MindscapeEffect[];
   coreSkill?: string;
   scoring?: AgentScoring;
+  hasHPAscension?: boolean;      // true for agents with HP% ascension bonus (Zhao, Manato)
+  hpAscensionPercent?: number;   // HP ascension percentage (e.g., 18 for 18%)
 }
 
 export interface AgentScoring {
