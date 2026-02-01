@@ -235,7 +235,7 @@
           "ATK%": 2
         },
         "Drive6": {
-          "Anomaly_Mastery":3,
+          "Anomaly_Mastery": 3,
           "ATK%": 2,
           "Energy_Regen": 2
         }
@@ -718,7 +718,7 @@
         "Drive4": {
           "CRIT_Rate": 3,
           "CRIT_DMG": 3,
-          "Anomaly_Proficiency":1,
+          "Anomaly_Proficiency": 1,
           "ATK%": 2
         },
         "Drive5": {
@@ -1021,11 +1021,7 @@
           "optimal": 0
         }
       },
-      "priorityStats": [
-        "ATK%",
-        "ATK",
-        "Element_DMG"
-      ],
+      "priorityStats": ["ATK%", "ATK", "Element_DMG"],
       "statWeights": {
         "CRIT_DMG": 1,
         "CRIT_Rate": 1,
@@ -1582,13 +1578,7 @@
           "optimal": 0
         }
       },
-      "priorityStats": [
-        "CRIT_DMG",
-        "CRIT_Rate",
-        "ATK%",
-        "ATK",
-        "Element_DMG"
-      ],
+      "priorityStats": ["CRIT_DMG", "CRIT_Rate", "ATK%", "ATK", "Element_DMG"],
       "statWeights": {
         "CRIT_DMG": 1,
         "CRIT_Rate": 1,
@@ -2295,7 +2285,7 @@
         },
         "energyRegen": {
           "min": 1.5,
-          "optimal": 2.00
+          "optimal": 2.0
         }
       },
       "priorityStats": [
@@ -3265,13 +3255,7 @@
           "optimal": 0
         }
       },
-      "priorityStats": [
-        "CRIT_DMG",
-        "CRIT_Rate",
-        "ATK%",
-        "ATK",
-        "Element_DMG"
-      ],
+      "priorityStats": ["CRIT_DMG", "CRIT_Rate", "ATK%", "ATK", "Element_DMG"],
       "statWeights": {
         "CRIT_DMG": 1,
         "CRIT_Rate": 1,
@@ -3503,13 +3487,7 @@
           "optimal": 0
         }
       },
-      "priorityStats": [
-        "HP",
-        "HP%",
-        "CRIT_DMG",
-        "CRIT_Rate",
-        "Element_DMG"
-      ],
+      "priorityStats": ["HP", "HP%", "CRIT_DMG", "CRIT_Rate", "Element_DMG"],
       "statWeights": {
         "CRIT_DMG": 0.15,
         "CRIT_Rate": 0.15,
@@ -3660,13 +3638,7 @@
           "optimal": 0
         }
       },
-      "priorityStats": [
-        "CRIT_DMG",
-        "CRIT_Rate",
-        "HP",
-        "HP%",
-        "Element_DMG"
-      ],
+      "priorityStats": ["CRIT_DMG", "CRIT_Rate", "HP", "HP%", "Element_DMG"],
       "statWeights": {
         "CRIT_DMG": 1,
         "CRIT_Rate": 1,
@@ -3767,6 +3739,88 @@
         },
         "Drive6": {
           "ATK%": 2,
+          "Energy_Regen": 3
+        }
+      }
+    },
+    "1491": {
+      "comment": "Sunna",
+      "name": "Sunna",
+      "breakpoints": {
+        "hp": {
+          "min": 7840,
+          "optimal": 7840
+        },
+        "atk": {
+          "min": 2800,
+          "optimal": 3500
+        },
+        "def": {
+          "min": 660,
+          "optimal": 700
+        },
+        "impact": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyMastery": {
+          "min": 0,
+          "optimal": 0
+        },
+        "critRate": {
+          "min": 52,
+          "optimal": 52
+        },
+        "critDmg": {
+          "min": 82,
+          "optimal": 82
+        },
+        "anomalyProficiency": {
+          "min": 0,
+          "optimal": 0
+        },
+        "pen": {
+          "min": 0,
+          "optimal": 0
+        },
+        "penRatio": {
+          "min": 0,
+          "optimal": 0
+        },
+        "energyRegen": {
+          "min": 0,
+          "optimal": 0
+        }
+      },
+      "priorityStats": [
+        "CRIT_Rate",
+        "CRIT_DMG",
+        "ATK%",
+        "ATK",
+        "PEN",
+        "PEN_Ratio",
+        "Element_DMG"
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1,
+        "CRIT_Rate": 1,
+        "PEN": 0.15,
+        "ATK": 0.15,
+        "ATK%": 0.85
+      },
+      "mainStatWeights": {
+        "Drive4": {
+          "CRIT_Rate": 2,
+          "CRIT_DMG": 2,
+          "ATK%": 3
+        },
+        "Drive5": {
+          "Element_DMG": 3,
+          "ATK%": 3,
+          "PEN_Ratio": 2
+        },
+        "Drive6": {
+          "ATK%": 3,
           "Energy_Regen": 3
         }
       }
