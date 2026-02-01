@@ -3887,5 +3887,75 @@
       "debuffs": [],
       "dazeBonus": 0.09
     }
+  },
+  "14149": {
+    "Id": 14149,
+    "CodeName": "Weapon_S_1491",
+    "Name": "Thoughtbop",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1491.png",
+    "WeaponType": {
+      "4": "Support"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 6000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Energy Regen",
+          "Name2": "Energy Regen",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 6000,
+            "W2": 6900,
+            "W3": 7800,
+            "W4": 8700,
+            "W5": 9600
+          }
+        },
+        {
+          "Name": "ATK",
+          "Name2": "Percent ATK",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1000,
+            "W2": 1150,
+            "W3": 1300,
+            "W4": 1450,
+            "W5": 1600
+          }
+        }
+      ],
+      "Desc": "While not the active character, the equipper's Energy Regen increases by /s. When the equipper uses an EX Special Attack and deals Physical DMG, all squad members gain a buff: DMG dealt increases by % for 40s, stacking up to 2 times. Repeated triggers reset the duration. At 2 stacks, characters gain an additional % ATK. Only one instance of this effect can exist in the same squad."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "EnergyRegenBonus",
+          "value": "6000",
+          "format": "flat"
+        },
+        {
+          "type": "ATKBonus",
+          "value": 1000,
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }

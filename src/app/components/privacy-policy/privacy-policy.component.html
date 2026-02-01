@@ -21,10 +21,11 @@
       </div>
 
       <div class="info-card">
-        <h3>No Server Communication</h3>
+        <h3>Limited Server Communication</h3>
         <p>
-          This application does not send any data to external servers. All
-          calculations and optimizations are performed entirely on your device.
+          This application operates entirely locally on your device, with one optional exception:
+          the Enka Network import feature (see below for details). All calculations and
+          optimizations are performed entirely on your device without sending data to servers.
         </p>
       </div>
 
@@ -42,6 +43,70 @@
           This tool does not require user accounts or authentication. You can
           use it without providing any personal information.
         </p>
+      </div>
+    </div>
+
+    <div class="privacy-section">
+      <h2>Enka Network Import Feature</h2>
+      <p>
+        This application includes an <strong>optional</strong> feature to import
+        your character builds from Zenless Zone Zero using your in-game UID
+        (User Identifier). This feature uses external services to fetch publicly
+        available game data.
+      </p>
+
+      <div class="info-card">
+        <h3>How It Works</h3>
+        <p>
+          When you use the Enka import feature:
+        </p>
+        <ul class="control-list">
+          <li>Your game UID is sent to our Cloudflare Worker proxy service</li>
+          <li>The proxy forwards your request to Enka Network API</li>
+          <li>Enka Network fetches your public game statistics</li>
+          <li>The data is returned to your browser and stored locally</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>What Data Is Transmitted</h3>
+        <ul class="control-list">
+          <li><strong>Game UID:</strong> Your in-game User Identifier (public game data, not personal information)</li>
+          <li><strong>IP Address:</strong> Processed by Cloudflare during the request (standard for all web traffic)</li>
+          <li><strong>Character Builds:</strong> Public game statistics retrieved from Enka Network</li>
+        </ul>
+        <p>
+          <strong>Important:</strong> Game UIDs are public identifiers used to display
+          in-game statistics. They do not contain personal information like your email,
+          password, or real name.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h3>Third-Party Services Used</h3>
+        <ul class="control-list">
+          <li>
+            <strong>Cloudflare Workers:</strong> A proxy service that forwards requests
+            to Enka Network. Cloudflare is GDPR compliant and processes data globally
+            through their edge network.
+          </li>
+          <li>
+            <strong>Enka Network:</strong> A third-party service that provides public
+            game statistics for Zenless Zone Zero. Data is fetched from HoYoverse's
+            public APIs.
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>Your Privacy & Control</h3>
+        <ul class="control-list">
+          <li>This feature is <strong>completely optional</strong> - you can use the optimizer without importing data</li>
+          <li>No personal information is collected or stored on external servers</li>
+          <li>All imported data is stored locally in your browser only</li>
+          <li>You can delete imported data at any time using the Data Manager</li>
+          <li>Cloudflare complies with GDPR and international privacy regulations</li>
+        </ul>
       </div>
     </div>
 
@@ -74,13 +139,19 @@
         When you visit this site, your browser may load resources from:
       </p>
       <ul class="control-list">
-        <li>GitHub Pages (hosting platform)</li>
-        <li>Game asset CDNs (for character images and icons)</li>
+        <li><strong>GitHub Pages:</strong> Hosting platform for the application</li>
+        <li><strong>Game asset CDNs:</strong> For character images and icons</li>
+        <li><strong>Cloudflare Workers:</strong> API proxy service (only used when importing data via Enka)</li>
+        <li><strong>Enka Network:</strong> Game statistics API (only used when importing data)</li>
       </ul>
       <p>
         These third-party services may have their own privacy policies. Please
-        refer to their respective websites for more information.
+        refer to their respective websites for more information:
       </p>
+      <ul class="control-list">
+        <li><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare Privacy Policy</a></li>
+        <li><a href="https://enka.network/" target="_blank" rel="noopener">Enka Network</a></li>
+      </ul>
     </div>
 
     <div class="privacy-section">
@@ -91,7 +162,7 @@
         directly of changes.
       </p>
       <p class="last-updated">
-        Last Updated: January 15, 2026
+        Last Updated: February 1, 2026
       </p>
     </div>
 
