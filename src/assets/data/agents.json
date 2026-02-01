@@ -80680,7 +80680,7 @@
       "BreakStun": 98,
       "ElementAbnormalPower": 96,
       "ElementMystery": 95,
-      "SpBarPoint": 1
+      "SpBarPoint": 10
     },
     "ascension": [
       {
@@ -82242,6 +82242,7 @@
         ]
       }
     },
-    "potentials": []
+    "potentials": [],
+    "Icon": "IconRole58"
   }
 ]
