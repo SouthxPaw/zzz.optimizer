@@ -6,6 +6,7 @@ import { Disc, MainStatType, SubStat, SubStatType } from '../models/disc.model';
 import { DiscSlot, WEngine } from '../models/agent.model';
 import { DbService } from './db.service';
 import { DISC_MAIN_STAT_MAX } from '../constants/main-stat-possibilities';
+import { environment } from '../../environments/environment';
 
 // Enka API response interfaces
 interface EnkaResponse {
@@ -150,13 +151,18 @@ const DISC_SET_MAP: { [key: number]: string } = {
   providedIn: 'root'
 })
 export class EnkaApiService {
-  // Using CORS proxy to avoid CORS issues in browser
-  // Alternative proxies:
-  // - 'https://corsproxy.io/?'
-  // - 'https://api.allorigins.win/raw?url='
-  // - Direct API when CORS is fixed: 'https://enka.network/api/zzz/uid'
-  private readonly CORS_PROXY = 'https://corsproxy.io/?';
+  // Cloudflare Worker proxy URL from environment (kept private, not committed to git)
+  // Set this in src/environments/environment.local.ts (which is gitignored)
+  private readonly CLOUDFLARE_WORKER = environment.enkaProxyUrl;
+
+  // Fallback CORS proxies in case Cloudflare Worker is not configured
+  private readonly FALLBACK_PROXIES = [
+    'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?'
+  ];
+
   private readonly ENKA_API_URL = 'https://enka.network/api/zzz/uid';
+  private currentProxyIndex = 0;
 
   constructor(
     private http: HttpClient,
@@ -164,15 +170,30 @@ export class EnkaApiService {
   ) {}
 
   /**
+   * Build the request URL for Enka API
+   * Uses Cloudflare Worker if configured, otherwise uses CORS proxy fallback
+   */
+  private buildRequestUrl(uid: string): string {
+    // If Cloudflare Worker is configured, use it
+    if (this.CLOUDFLARE_WORKER) {
+      return `${this.CLOUDFLARE_WORKER}?uid=${uid}`;
+    }
+
+    // Otherwise, use fallback CORS proxy
+    const enkaUrl = `${this.ENKA_API_URL}/${uid}`;
+    const proxy = this.FALLBACK_PROXIES[this.currentProxyIndex % this.FALLBACK_PROXIES.length];
+    return `${proxy}${encodeURIComponent(enkaUrl)}`;
+  }
+
+  /**
    * Fetch player data from Enka Network API by UID
+   * Uses Cloudflare Worker if configured, otherwise falls back to CORS proxies
    * OPTIMIZATION: Added retry logic with exponential backoff for rate limits
    */
   fetchPlayerData(uid: string): Observable<EnkaImportResult> {
-    // Use CORS proxy to avoid browser CORS restrictions
-    const enkaUrl = `${this.ENKA_API_URL}/${uid}`;
-    const proxiedUrl = `${this.CORS_PROXY}${encodeURIComponent(enkaUrl)}`;
+    const requestUrl = this.buildRequestUrl(uid);
 
-    return this.http.get<EnkaResponse>(proxiedUrl).pipe(
+    return this.http.get<EnkaResponse>(requestUrl).pipe(
       // OPTIMIZATION: Retry on rate limit (429) with exponential backoff
       retryWhen(errors =>
         errors.pipe(

@@ -45,6 +45,9 @@ testem.log
 # Scripts folder (contains sensitive UIDs and analysis data)
 /scripts
 
+# Local environment file (contains private Cloudflare Worker URL)
+/src/environments/environment.local.ts
+
 # System files
 .DS_Store
 Thumbs.db
