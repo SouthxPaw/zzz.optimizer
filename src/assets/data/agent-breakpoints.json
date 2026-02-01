@@ -3748,8 +3748,8 @@
       "name": "Sunna",
       "breakpoints": {
         "hp": {
-          "min": 7840,
-          "optimal": 7840
+          "min": 9080,
+          "optimal": 9080
         },
         "atk": {
           "min": 2800,
@@ -3757,7 +3757,7 @@
         },
         "def": {
           "min": 660,
-          "optimal": 700
+          "optimal": 660
         },
         "impact": {
           "min": 0,
@@ -3768,12 +3768,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 52,
-          "optimal": 52
+          "min": 0,
+          "optimal": 0
         },
         "critDmg": {
-          "min": 82,
-          "optimal": 82
+          "min": 0,
+          "optimal": 0
         },
         "anomalyProficiency": {
           "min": 0,
@@ -3788,8 +3788,8 @@
           "optimal": 0
         },
         "energyRegen": {
-          "min": 0,
-          "optimal": 0
+          "min": 1.8,
+          "optimal": 2.5
         }
       },
       "priorityStats": [

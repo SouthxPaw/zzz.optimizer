@@ -3915,18 +3915,6 @@
     "Effect": {
       "Properties": [
         {
-          "Name": "Energy Regen",
-          "Name2": "Energy Regen",
-          "Format": "{0:0.#}",
-          "Overclock": {
-            "W1": 6000,
-            "W2": 6900,
-            "W3": 7800,
-            "W4": 8700,
-            "W5": 9600
-          }
-        },
-        {
           "Name": "ATK",
           "Name2": "Percent ATK",
           "Format": "{0:0.#%}",
