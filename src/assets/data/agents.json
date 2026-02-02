@@ -80610,5 +80610,1639 @@
       }
     ],
     "Icon": "IconRole21"
+  },
+    {
+    "id": 1491,
+    "name": "Sunna",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "1100",
+          "format": "flat"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 200,
+      "name": "Physical"
+    },
+    "specialty": {
+      "id": 4,
+      "name": "Support"
+    },
+    "attack_type": {
+      "id": 102,
+      "name": "Strike"
+    },
+    "stats": {
+      "Armor": 0.0,
+      "ArmorGrowth": 0.0,
+      "Attack": 108.0,
+      "AttackGrowth": 63517.0,
+      "AvatarPieceId": 5491.0,
+      "BreakStun": 98.0,
+      "Crit": 500.0,
+      "CritDamage": 5000.0,
+      "CritDmgRes": 0.0,
+      "CritRes": 0.0,
+      "Defence": 48.0,
+      "DefenceGrowth": 65524.0,
+      "ElementAbnormalPower": 96.0,
+      "ElementMystery": 95.0,
+      "Endurance": 0.0,
+      "HpGrowth": 924944.0,
+      "HpMax": 681.0,
+      "PenDelta": 0.0,
+      "PenRate": 0.0,
+      "Rbl": 1.0,
+      "RblCorrectionFactor": 10000.0,
+      "RblProbability": 0.0,
+      "Shield": 0.0,
+      "ShieldGrowth": 0.0,
+      "SpBarPoint": 120.0,
+      "SpRecover": 100.0,
+      "Stun": 0.0,
+      "RpMax": 0.0,
+      "RpRecover": 0.0
+    },
+    "lvl60_stats": {
+      "HpMax": 8477,
+      "Defence": 600,
+      "Attack": 750,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 98,
+      "ElementAbnormalPower": 96,
+      "ElementMystery": 95,
+      "SpBarPoint": 10
+    },
+    "ascension": [
+      {
+        "max_hp": 0,
+        "attack": 0,
+        "defense": 0,
+        "max_level": 10,
+        "min_level": 0,
+        "materials": [
+          {
+            "id": 10,
+            "amount": 24000
+          },
+          {
+            "id": 100214,
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "max_hp": 468,
+        "attack": 39,
+        "defense": 33,
+        "max_level": 20,
+        "min_level": 10,
+        "materials": [
+          {
+            "id": 10,
+            "amount": 56000
+          },
+          {
+            "id": 100224,
+            "amount": 12
+          }
+        ]
+      },
+      {
+        "max_hp": 936,
+        "attack": 77,
+        "defense": 66,
+        "max_level": 30,
+        "min_level": 20,
+        "materials": [
+          {
+            "id": 10,
+            "amount": 120000
+          },
+          {
+            "id": 100224,
+            "amount": 20
+          }
+        ]
+      },
+      {
+        "max_hp": 1403,
+        "attack": 116,
+        "defense": 99,
+        "max_level": 40,
+        "min_level": 30,
+        "materials": [
+          {
+            "id": 10,
+            "amount": 200000
+          },
+          {
+            "id": 100234,
+            "amount": 10
+          }
+        ]
+      },
+      {
+        "max_hp": 1871,
+        "attack": 154,
+        "defense": 133,
+        "max_level": 50,
+        "min_level": 40,
+        "materials": [
+          {
+            "id": 10,
+            "amount": 400000
+          },
+          {
+            "id": 100234,
+            "amount": 20
+          }
+        ]
+      },
+      {
+        "max_hp": 2339,
+        "attack": 193,
+        "defense": 166,
+        "max_level": 60,
+        "min_level": 50,
+        "materials": []
+      }
+    ],
+    "extra_ascension": [
+      {
+        "max_level": 15,
+        "props": [
+          {
+            "id": 12102,
+            "name": "ATK",
+            "format": "{0:0.#%}",
+            "value": 700,
+            "formatted_value": "700%%"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 0,
+            "formatted_value": "0"
+          }
+        ]
+      },
+      {
+        "max_level": 25,
+        "props": [
+          {
+            "id": 12102,
+            "name": "ATK",
+            "format": "{0:0.#%}",
+            "value": 700,
+            "formatted_value": "700%%"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 25,
+            "formatted_value": "25"
+          }
+        ]
+      },
+      {
+        "max_level": 35,
+        "props": [
+          {
+            "id": 12102,
+            "name": "ATK",
+            "format": "{0:0.#%}",
+            "value": 1400,
+            "formatted_value": "1400%%"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 25,
+            "formatted_value": "25"
+          }
+        ]
+      },
+      {
+        "max_level": 45,
+        "props": [
+          {
+            "id": 12102,
+            "name": "ATK",
+            "format": "{0:0.#%}",
+            "value": 1400,
+            "formatted_value": "1400%%"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 50,
+            "formatted_value": "50"
+          }
+        ]
+      },
+      {
+        "max_level": 55,
+        "props": [
+          {
+            "id": 12102,
+            "name": "ATK",
+            "format": "{0:0.#%}",
+            "value": 2100,
+            "formatted_value": "2100%%"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 50,
+            "formatted_value": "50"
+          }
+        ]
+      },
+      {
+        "max_level": 60,
+        "props": [
+          {
+            "id": 12102,
+            "name": "ATK",
+            "format": "{0:0.#%}",
+            "value": 2100,
+            "formatted_value": "2100%%"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 75,
+            "formatted_value": "75"
+          }
+        ]
+      }
+    ],
+    "mindscape_cinemas": [
+      {
+        "level": 1,
+        "name": "Lonely Corruption Symptoms",
+        "description": "When Sunna enters the battlefield, she gains 15 Energy. In Investigation Zone Mode, this effect can trigger once every 180s. When Cat's Gaze triggers and hits an enemy, the target's DEF is reduced by 7% for 40s, stacking up to 3 times. The duration of each stack is calculated separately.",
+        "description2": "..."
+      },
+      {
+        "level": 2,
+        "name": "Feline Go-With-the-Flow",
+        "description": "While Sunna is within any Ether Veil, all squad members gain 10% ATK and obtain 1 Claw Sharpener every 10s. The number of attacks required to trigger Cat's Gaze is reduced, and the DMG Multiplier on trigger is increased:\nWhen triggered by an ATK character, the DMG Multiplier is increased by 200%.\nWhen triggered by an Anomaly character, the DMG Multiplier is increased by 300%.",
+        "description2": "..."
+      },
+      {
+        "level": 3,
+        "name": "Transformation Apple",
+        "description": "Basic Attack, Dodge, Assist, Special Attack, and Chain Attack Lv. +2",
+        "description2": "..."
+      },
+      {
+        "level": 4,
+        "name": "Delusion Investigation Team",
+        "description": "When Sunna uses her Ultimate, all squad members deal 18% increased DMG for 60s.",
+        "description2": "..."
+      },
+      {
+        "level": 5,
+        "name": "\"Galaxy Lightway\"",
+        "description": "Basic Attack, Dodge, Assist, Special Attack, and Chain Attack Lv. +2",
+        "description2": "..."
+      },
+      {
+        "level": 6,
+        "name": "Hollow Big Bang",
+        "description": "When Sunna uses an EX Special Attack, she enters the Focused Creation! state for 8s.\nWhile in Focused Creation!, all attacks Sunna performs are guaranteed to CRIT, and her CRIT DMG is increased by 0.03% of her initial ATK, up to a maximum of 105%.\nWhile in the Focused Creation! state, Sunna's Anti-Interrupt Level is increased, and DMG taken is reduced by 40%.\nWhile in the Focused Creation! state, Sunna can trigger Cat's Gaze, its damage being calculated using Attack Agent rules. If Cat's Gaze is triggered while Sunna has a Claw Sharpener, the Claw Sharpener is immediately consumed and Cat's Gaze is reapplied to the enemy.\nWhile in the Focused Creation! state, damage dealt by the entire squad when triggering Cat's Gaze is increased by 50%.",
+        "description2": "..."
+      }
+    ],
+    "skills": {
+      "BASIC": {
+        "descriptions": [
+          {
+            "name": "Basic Attack: Mischief Meteor Hammer",
+            "description": "Press  to activate:\nUnleashes up to four attacks ahead, dealing Physical DMG.",
+            "params": null
+          },
+          {
+            "name": "Basic Attack: Naughty Cat Spotted",
+            "description": "During combat, when Sunna is off-field and there are no enemies with Cat's Gaze, Bubblegum consumes 1 Claw Sharpener to automatically launch an attack, dealing Physical DMG.\nWhen any squad member activates Ether Veil, Sunna gains 2 Claw Sharpeners.\nWhen any squad member applies an Anomaly to an enemy, Sunna gains 1 Claw Sharpeners. This effect can trigger at most once every 10s.\nBubblegum inherits Sunna's initial ATK. Sunna can hold up to 6 Claw Sharpeners.",
+            "params": null
+          },
+          {
+            "name": "Basic Attack: Mischief Meteor Hammer",
+            "description": null,
+            "params": [
+              {
+                "name": "1st-Hit DMG Multiplier",
+                "description": "{Skill:1491001, Prop:1001}",
+                "params": {
+                  "1491001": {
+                    "main": 4340,
+                    "growth": 400,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "2nd-Hit DMG Multiplier",
+                "description": "{Skill:1491002, Prop:1001}",
+                "params": {
+                  "1491002": {
+                    "main": 17590,
+                    "growth": 1600,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "3rd-Hit DMG Multiplier",
+                "description": "{Skill:1491003, Prop:1001}",
+                "params": {
+                  "1491003": {
+                    "main": 18120,
+                    "growth": 1650,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "4th-Hit DMG Multiplier",
+                "description": "{Skill:1491004, Prop:1001}",
+                "params": {
+                  "1491004": {
+                    "main": 40530,
+                    "growth": 3690,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "1st-Hit Daze Multiplier",
+                "description": "{Skill:1491001, Prop:1002}",
+                "params": {
+                  "1491001": {
+                    "main": 2480,
+                    "growth": 120,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "2nd-Hit Daze Multiplier",
+                "description": "{Skill:1491002, Prop:1002}",
+                "params": {
+                  "1491002": {
+                    "main": 10910,
+                    "growth": 500,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "3rd-Hit Daze Multiplier",
+                "description": "{Skill:1491003, Prop:1002}",
+                "params": {
+                  "1491003": {
+                    "main": 12360,
+                    "growth": 570,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "4th-Hit Daze Multiplier",
+                "description": "{Skill:1491004, Prop:1002}",
+                "params": {
+                  "1491004": {
+                    "main": 25170,
+                    "growth": 1150,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Basic Attack: Naughty Cat Spotted",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1491005, Prop:1001}",
+                "params": {
+                  "1491005": {
+                    "main": 39000,
+                    "growth": 0,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "materials": {
+          "1": [
+            {
+              "id": 10,
+              "amount": 2000
+            },
+            {
+              "id": 100110,
+              "amount": 2
+            }
+          ],
+          "2": [
+            {
+              "id": 10,
+              "amount": 3000
+            },
+            {
+              "id": 100110,
+              "amount": 3
+            }
+          ],
+          "3": [
+            {
+              "id": 10,
+              "amount": 6000
+            },
+            {
+              "id": 100120,
+              "amount": 2
+            }
+          ],
+          "4": [
+            {
+              "id": 10,
+              "amount": 9000
+            },
+            {
+              "id": 100120,
+              "amount": 3
+            }
+          ],
+          "5": [
+            {
+              "id": 10,
+              "amount": 12000
+            },
+            {
+              "id": 100120,
+              "amount": 4
+            }
+          ],
+          "6": [
+            {
+              "id": 10,
+              "amount": 18000
+            },
+            {
+              "id": 100120,
+              "amount": 6
+            }
+          ],
+          "7": [
+            {
+              "id": 10,
+              "amount": 45000
+            },
+            {
+              "id": 100130,
+              "amount": 5
+            }
+          ],
+          "8": [
+            {
+              "id": 10,
+              "amount": 67500
+            },
+            {
+              "id": 100130,
+              "amount": 8
+            }
+          ],
+          "9": [
+            {
+              "id": 10,
+              "amount": 90000
+            },
+            {
+              "id": 100130,
+              "amount": 10
+            }
+          ],
+          "10": [
+            {
+              "id": 10,
+              "amount": 112500
+            },
+            {
+              "id": 100130,
+              "amount": 12
+            }
+          ],
+          "11": [
+            {
+              "id": 10,
+              "amount": 135000
+            },
+            {
+              "id": 100130,
+              "amount": 15
+            },
+            {
+              "id": 100941,
+              "amount": 1
+            }
+          ],
+          "12": []
+        },
+        "type": "Basic"
+      },
+      "DODGE": {
+        "descriptions": [
+          {
+            "name": "Dodge: Can't Hit Me",
+            "description": "Press  to activate:\nA quick dash dodge.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Dash Attack: Skyward Hammer",
+            "description": "Press  during a dodge to activate:\nLaunches enemies in front into the air, dealing Physical DMG.",
+            "params": null
+          },
+          {
+            "name": "Dodge Counter: Delusion Strikeout",
+            "description": "Press  during a Perfect Dodge to activate:\nStrikes enemies in front with a series of hammer blows, dealing Physical DMG.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Dash Attack: Skyward Hammer",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1491009, Prop:1001}",
+                "params": {
+                  "1491009": {
+                    "main": 9970,
+                    "growth": 910,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1491009, Prop:1002}",
+                "params": {
+                  "1491009": {
+                    "main": 4990,
+                    "growth": 230,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dodge Counter: Delusion Strikeout",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1491010, Prop:1001}",
+                "params": {
+                  "1491010": {
+                    "main": 31880,
+                    "growth": 2900,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1491010, Prop:1002}",
+                "params": {
+                  "1491010": {
+                    "main": 27530,
+                    "growth": 1260,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "materials": {
+          "1": [
+            {
+              "id": 10,
+              "amount": 2000
+            },
+            {
+              "id": 100110,
+              "amount": 2
+            }
+          ],
+          "2": [
+            {
+              "id": 10,
+              "amount": 3000
+            },
+            {
+              "id": 100110,
+              "amount": 3
+            }
+          ],
+          "3": [
+            {
+              "id": 10,
+              "amount": 6000
+            },
+            {
+              "id": 100120,
+              "amount": 2
+            }
+          ],
+          "4": [
+            {
+              "id": 10,
+              "amount": 9000
+            },
+            {
+              "id": 100120,
+              "amount": 3
+            }
+          ],
+          "5": [
+            {
+              "id": 10,
+              "amount": 12000
+            },
+            {
+              "id": 100120,
+              "amount": 4
+            }
+          ],
+          "6": [
+            {
+              "id": 10,
+              "amount": 18000
+            },
+            {
+              "id": 100120,
+              "amount": 6
+            }
+          ],
+          "7": [
+            {
+              "id": 10,
+              "amount": 45000
+            },
+            {
+              "id": 100130,
+              "amount": 5
+            }
+          ],
+          "8": [
+            {
+              "id": 10,
+              "amount": 67500
+            },
+            {
+              "id": 100130,
+              "amount": 8
+            }
+          ],
+          "9": [
+            {
+              "id": 10,
+              "amount": 90000
+            },
+            {
+              "id": 100130,
+              "amount": 10
+            }
+          ],
+          "10": [
+            {
+              "id": 10,
+              "amount": 112500
+            },
+            {
+              "id": 100130,
+              "amount": 12
+            }
+          ],
+          "11": [
+            {
+              "id": 10,
+              "amount": 135000
+            },
+            {
+              "id": 100130,
+              "amount": 15
+            },
+            {
+              "id": 100941,
+              "amount": 1
+            }
+          ],
+          "12": []
+        },
+        "type": "Dodge"
+      },
+      "SPECIAL": {
+        "descriptions": [
+          {
+            "name": "Special Attack: Star Shooter",
+            "description": "Press  to activate:\nShoots Bubblegum to attack enemies in front using an air gun, dealing Physical DMG. After activation, Bubblegum enters combat.",
+            "params": null
+          },
+          {
+            "name": "EX Special Attack: Bubblegum Barrage",
+            "description": "With enough energy, press  to activate:\nHurls Bubblegum at the target, dealing Physical DMG. After activation, Bubblegum enters combat.\nUpon activating this skill, all Agents in the squad gain Angelic Chord-ination for 40s.\nLanding a heavy attack with this move triggers a Quick Assist.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "EX Special Attack: Special Photography Technique",
+            "description": "While in the Angelic Chord-ination state, press  to activate, or during EX Special Attack: Bubblegum Barrage, keep holding  to quickly activate:\nAttacks the target enemy in coordination with Bubblegum, dealing Physical DMG. After activation, Bubblegum enters combat.\nBefore the heavy attack is executed, activates Ether Veil: Delusion Reprise. While Ether Veil: Delusion Reprise is active, all squad members gain an additional 50 ATK for 40s. Re-activating Ether Veil: Delusion Reprise will cancel the existing instance of Ether Veil: Delusion Reprise.\nThe heavy attack from this skill triggers a Quick Assist.\nCharacter is invulnerable while using this skill. Each time the Angelic Sync state is entered, EX Special Attack: Special Photo Technique can be used once.",
+            "params": null
+          },
+          {
+            "name": "Special Attack: Star Shooter",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1491006, Prop:1001}",
+                "params": {
+                  "1491006": {
+                    "main": 5640,
+                    "growth": 520,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1491006, Prop:1002}",
+                "params": {
+                  "1491006": {
+                    "main": 5640,
+                    "growth": 260,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "EX Special Attack: Bubblegum Barrage",
+            "description": null,
+            "params": [
+              {
+                "name": "Bubblegum Barrage DMG Multiplier",
+                "description": "{{Skill:1491007, Prop:1001} + {Skill:1491018, Prop:1001}}",
+                "params": {
+                  "1491007": {
+                    "main": 79410,
+                    "growth": 7220,
+                    "format": "%"
+                  },
+                  "1491018": {
+                    "main": 11920,
+                    "growth": 1090,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Bubblegum Barrage Daze Multiplier",
+                "description": "{{Skill:1491007, Prop:1002} + {Skill:1491018, Prop:1002}}",
+                "params": {
+                  "1491007": {
+                    "main": 49460,
+                    "growth": 2250,
+                    "format": "%"
+                  },
+                  "1491018": {
+                    "main": 11920,
+                    "growth": 550,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Bubblegum Barrage DMG Multiplier when quickly chaining into Special Photography Technique",
+                "description": "{Skill:1491007, Prop:1001}",
+                "params": {
+                  "1491007": {
+                    "main": 79410,
+                    "growth": 7220,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Bubblegum Barrage Daze Multiplier when quickly chaining into Special Photography Technique",
+                "description": "{Skill:1491007, Prop:1002}",
+                "params": {
+                  "1491007": {
+                    "main": 49460,
+                    "growth": 2250,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Energy Cost",
+                "description": "70",
+                "params": null
+              }
+            ]
+          },
+          {
+            "name": "EX Special Attack: Special Photography Technique",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1491008, Prop:1001}",
+                "params": {
+                  "1491008": {
+                    "main": 82810,
+                    "growth": 7530,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1491008, Prop:1002}",
+                "params": {
+                  "1491008": {
+                    "main": 60230,
+                    "growth": 2740,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "DMG Multiplier (Teamwork)",
+                "description": "{{Skill:1491008, Prop:1001} + {Skill:1491019, Prop:1001}}",
+                "params": {
+                  "1491008": {
+                    "main": 82810,
+                    "growth": 7530,
+                    "format": "%"
+                  },
+                  "1491019": {
+                    "main": 12430,
+                    "growth": 1130,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier (Teamwork)",
+                "description": "{{Skill:1491008, Prop:1002} + {Skill:1491019, Prop:1002}}",
+                "params": {
+                  "1491008": {
+                    "main": 60230,
+                    "growth": 2740,
+                    "format": "%"
+                  },
+                  "1491019": {
+                    "main": 9040,
+                    "growth": 420,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "materials": {
+          "1": [
+            {
+              "id": 10,
+              "amount": 2000
+            },
+            {
+              "id": 100110,
+              "amount": 2
+            }
+          ],
+          "2": [
+            {
+              "id": 10,
+              "amount": 3000
+            },
+            {
+              "id": 100110,
+              "amount": 3
+            }
+          ],
+          "3": [
+            {
+              "id": 10,
+              "amount": 6000
+            },
+            {
+              "id": 100120,
+              "amount": 2
+            }
+          ],
+          "4": [
+            {
+              "id": 10,
+              "amount": 9000
+            },
+            {
+              "id": 100120,
+              "amount": 3
+            }
+          ],
+          "5": [
+            {
+              "id": 10,
+              "amount": 12000
+            },
+            {
+              "id": 100120,
+              "amount": 4
+            }
+          ],
+          "6": [
+            {
+              "id": 10,
+              "amount": 18000
+            },
+            {
+              "id": 100120,
+              "amount": 6
+            }
+          ],
+          "7": [
+            {
+              "id": 10,
+              "amount": 45000
+            },
+            {
+              "id": 100130,
+              "amount": 5
+            }
+          ],
+          "8": [
+            {
+              "id": 10,
+              "amount": 67500
+            },
+            {
+              "id": 100130,
+              "amount": 8
+            }
+          ],
+          "9": [
+            {
+              "id": 10,
+              "amount": 90000
+            },
+            {
+              "id": 100130,
+              "amount": 10
+            }
+          ],
+          "10": [
+            {
+              "id": 10,
+              "amount": 112500
+            },
+            {
+              "id": 100130,
+              "amount": 12
+            }
+          ],
+          "11": [
+            {
+              "id": 10,
+              "amount": 135000
+            },
+            {
+              "id": 100130,
+              "amount": 15
+            },
+            {
+              "id": 100941,
+              "amount": 1
+            }
+          ],
+          "12": []
+        },
+        "type": "Special"
+      },
+      "CHAIN": {
+        "descriptions": [
+          {
+            "name": "Chain Attack: Don't Mess With Kitty",
+            "description": "When a Chain Attack is triggered, select the character to activate:\nCharges forward while riding Bubblegum, dealing massive Physical DMG.\nLanding a heavy attack with this move triggers a Quick Assist.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Ultimate: Smash It All!",
+            "description": "When Decibel Rating is at Maximum, press  to activate:\nAfter a series of hammer attacks, launches Bubblegum to cause an explosion, dealing massive Physical DMG to enemies in the area.\nOn a heavy attack, gain 6 Claw Sharpeners.\nLanding a heavy attack with this move triggers a Quick Assist.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Chain Attack: Don't Mess With Kitty",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1491011, Prop:1001}",
+                "params": {
+                  "1491011": {
+                    "main": 81130,
+                    "growth": 7380,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1491011, Prop:1002}",
+                "params": {
+                  "1491011": {
+                    "main": 29260,
+                    "growth": 1330,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Ultimate: Smash It All!",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1491012, Prop:1001}",
+                "params": {
+                  "1491012": {
+                    "main": 209090,
+                    "growth": 19010,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1491012, Prop:1002}",
+                "params": {
+                  "1491012": {
+                    "main": 37280,
+                    "growth": 1700,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Summer_Property_ExQTE_HPRecover_Desc_01",
+                "description": "Summer_Property_ExQTE_HPRecover_Value_01",
+                "params": null
+              }
+            ]
+          }
+        ],
+        "materials": {
+          "1": [
+            {
+              "id": 10,
+              "amount": 2000
+            },
+            {
+              "id": 100110,
+              "amount": 2
+            }
+          ],
+          "2": [
+            {
+              "id": 10,
+              "amount": 3000
+            },
+            {
+              "id": 100110,
+              "amount": 3
+            }
+          ],
+          "3": [
+            {
+              "id": 10,
+              "amount": 6000
+            },
+            {
+              "id": 100120,
+              "amount": 2
+            }
+          ],
+          "4": [
+            {
+              "id": 10,
+              "amount": 9000
+            },
+            {
+              "id": 100120,
+              "amount": 3
+            }
+          ],
+          "5": [
+            {
+              "id": 10,
+              "amount": 12000
+            },
+            {
+              "id": 100120,
+              "amount": 4
+            }
+          ],
+          "6": [
+            {
+              "id": 10,
+              "amount": 18000
+            },
+            {
+              "id": 100120,
+              "amount": 6
+            }
+          ],
+          "7": [
+            {
+              "id": 10,
+              "amount": 45000
+            },
+            {
+              "id": 100130,
+              "amount": 5
+            }
+          ],
+          "8": [
+            {
+              "id": 10,
+              "amount": 67500
+            },
+            {
+              "id": 100130,
+              "amount": 8
+            }
+          ],
+          "9": [
+            {
+              "id": 10,
+              "amount": 90000
+            },
+            {
+              "id": 100130,
+              "amount": 10
+            }
+          ],
+          "10": [
+            {
+              "id": 10,
+              "amount": 112500
+            },
+            {
+              "id": 100130,
+              "amount": 12
+            }
+          ],
+          "11": [
+            {
+              "id": 10,
+              "amount": 135000
+            },
+            {
+              "id": 100130,
+              "amount": 15
+            },
+            {
+              "id": 100941,
+              "amount": 1
+            }
+          ],
+          "12": []
+        },
+        "type": "Chain"
+      },
+      "ASSIST": {
+        "descriptions": [
+          {
+            "name": "Quick Assist: Sonic Beatdown",
+            "description": "When the active character is launched, press  to activate:\nUnleash a series of hammer blows against enemies in front, dealing Physical DMG.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Defensive Assist: Stage Fright",
+            "description": "When the on-field character is about to be attacked, press  to activate:\nParries the enemy's attack, dealing massive Daze.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Assist Follow-Up: Jump Training",
+            "description": "Press  after a Defensive Assist to activate:\nContinuously jumps forward while riding the Inflatable Hammer, dealing massive Physical DMG to enemies in front.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Quick Assist: Sonic Beatdown",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1491013, Prop:1001}",
+                "params": {
+                  "1491013": {
+                    "main": 7270,
+                    "growth": 670,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1491013, Prop:1002}",
+                "params": {
+                  "1491013": {
+                    "main": 7270,
+                    "growth": 340,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Defensive Assist: Stage Fright",
+            "description": null,
+            "params": [
+              {
+                "name": "Light Defensive Daze Multiplier",
+                "description": "{Skill:1491014, Prop:1002}",
+                "params": {
+                  "1491014": {
+                    "main": 32070,
+                    "growth": 1460,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Heavy Defensive Daze Multiplier",
+                "description": "{Skill:1491015, Prop:1002}",
+                "params": {
+                  "1491015": {
+                    "main": 40520,
+                    "growth": 1850,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Chain Defensive Daze Multiplier",
+                "description": "{Skill:1491016, Prop:1002}",
+                "params": {
+                  "1491016": {
+                    "main": 19720,
+                    "growth": 900,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Assist Follow-Up: Jump Training",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1491017, Prop:1001}",
+                "params": {
+                  "1491017": {
+                    "main": 53570,
+                    "growth": 4870,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1491017, Prop:1002}",
+                "params": {
+                  "1491017": {
+                    "main": 47170,
+                    "growth": 2150,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "materials": {
+          "1": [
+            {
+              "id": 10,
+              "amount": 2000
+            },
+            {
+              "id": 100110,
+              "amount": 2
+            }
+          ],
+          "2": [
+            {
+              "id": 10,
+              "amount": 3000
+            },
+            {
+              "id": 100110,
+              "amount": 3
+            }
+          ],
+          "3": [
+            {
+              "id": 10,
+              "amount": 6000
+            },
+            {
+              "id": 100120,
+              "amount": 2
+            }
+          ],
+          "4": [
+            {
+              "id": 10,
+              "amount": 9000
+            },
+            {
+              "id": 100120,
+              "amount": 3
+            }
+          ],
+          "5": [
+            {
+              "id": 10,
+              "amount": 12000
+            },
+            {
+              "id": 100120,
+              "amount": 4
+            }
+          ],
+          "6": [
+            {
+              "id": 10,
+              "amount": 18000
+            },
+            {
+              "id": 100120,
+              "amount": 6
+            }
+          ],
+          "7": [
+            {
+              "id": 10,
+              "amount": 45000
+            },
+            {
+              "id": 100130,
+              "amount": 5
+            }
+          ],
+          "8": [
+            {
+              "id": 10,
+              "amount": 67500
+            },
+            {
+              "id": 100130,
+              "amount": 8
+            }
+          ],
+          "9": [
+            {
+              "id": 10,
+              "amount": 90000
+            },
+            {
+              "id": 100130,
+              "amount": 10
+            }
+          ],
+          "10": [
+            {
+              "id": 10,
+              "amount": 112500
+            },
+            {
+              "id": 100130,
+              "amount": 12
+            }
+          ],
+          "11": [
+            {
+              "id": 10,
+              "amount": 135000
+            },
+            {
+              "id": 100130,
+              "amount": 15
+            },
+            {
+              "id": 100941,
+              "amount": 1
+            }
+          ],
+          "12": []
+        },
+        "type": "Assist"
+      }
+    },
+    "passive": {
+      "levels": {
+        "1": {
+          "level": 1,
+          "id": 1491049,
+          "names": [
+            "Core Passive: Cuteness is Justice",
+            "Additional Ability: Daydreamer's Counterpoint"
+          ],
+          "descriptions": [
+            "Characters in the Angelic Sync state gain increased ATK, equal to 30% of Sunna's initial ATK, up to a maximum of 525 ATK. When Sunna's initial ATK reaches 1,750, the ATK bonus granted to the entire squad reaches its maximum.\nWhen attacks from Basic Attack: Naughty Cat Spotted, EX Special Attack: Bubblegum Barrage, EX Special Attack: Special Photo Technique, Chain Attack: Don't Mess With the Cat, or Ultimate: Smash It All! hit an enemy, apply Cat's Gaze to the target for 12s. While Sunna is on the field, the duration of Cat's Gaze is continuously refreshed. Some normal enemies affected by Cat's Gaze show reduced aggression toward Sunna.\nWhen Attack or Anomaly characters in the squad continuously land attacks on enemies affected by Cat's Gaze, Cat's Gaze is triggered and removed:\nWhen triggered by an Attack character, deals Agent Attribute DMG equal to 150% ATK to enemies in the area.\nWhen triggered by an Anomaly character, deals Agent Attribute DMG equal to 240% ATK to enemies in the area. This damage is guaranteed to CRIT, and the CRIT DMG is increased by 80%.\nDamage dealt by Cat's Gaze is treated as damage dealt by the triggering Agent.\nWhen multiple enemies on the field have Cat's Gaze, only the primary attack target's Cat's Gaze is triggered. Upon triggering, Cat's Gaze is removed from all enemies on the field.\nWhen an enemy is Stunned, the number of attacks required to trigger Cat's Gaze is significantly reduced.",
+            "When another character in your squad is an Attack character or shares the same Faction:\nWhen characters inside Ether Veil: Delusion Reprise land attacks on enemies, the target's Stun DMG Multiplier increases by 30% for 40s.\nWhen Sunna enters the battlefield, she gains 15 Energy. In Investigation Zone mode, the effect can trigger once every 180s."
+          ]
+        },
+        "2": {
+          "level": 2,
+          "id": 1491050,
+          "names": [
+            "Core Passive: Cuteness is Justice",
+            "Additional Ability: Daydreamer's Counterpoint"
+          ],
+          "descriptions": [
+            "Characters in the Angelic Sync state gain increased ATK, equal to 30% of Sunna's initial ATK, up to a maximum of 615 ATK. When Sunna's initial ATK reaches 2,050, the ATK bonus granted to the entire squad reaches its maximum.\nWhen attacks from Basic Attack: Naughty Cat Spotted, EX Special Attack: Bubblegum Barrage, EX Special Attack: Special Photo Technique, Chain Attack: Don't Mess With the Cat, or Ultimate: Smash It All! hit an enemy, apply Cat's Gaze to the target for 12s. While Sunna is on the field, the duration of Cat's Gaze is continuously refreshed. Some normal enemies affected by Cat's Gaze show reduced aggression toward Sunna.\nWhen Attack or Anomaly characters in the squad continuously land attacks on enemies affected by Cat's Gaze, Cat's Gaze is triggered and removed:\nWhen triggered by an Attack character, deals Agent Attribute DMG equal to 175% ATK to enemies in the area.\nWhen triggered by an Anomaly character, deals Agent Attribute DMG equal to 280% ATK to enemies in the area. This damage is guaranteed to CRIT, and the CRIT DMG is increased by 90%.\nDamage dealt by Cat's Gaze is treated as damage dealt by the triggering Agent.\nWhen multiple enemies on the field have Cat's Gaze, only the primary attack target's Cat's Gaze is triggered. Upon triggering, Cat's Gaze is removed from all enemies on the field.\nWhen an enemy is Stunned, the number of attacks required to trigger Cat's Gaze is significantly reduced.",
+            "When another character in your squad is an Attack character or shares the same Faction:\nWhen characters inside Ether Veil: Delusion Reprise land attacks on enemies, the target's Stun DMG Multiplier increases by 30% for 40s.\nWhen Sunna enters the battlefield, she gains 15 Energy. In Investigation Zone mode, the effect can trigger once every 180s."
+          ]
+        },
+        "3": {
+          "level": 3,
+          "id": 1491051,
+          "names": [
+            "Core Passive: Cuteness is Justice",
+            "Additional Ability: Daydreamer's Counterpoint"
+          ],
+          "descriptions": [
+            "Characters in the Angelic Sync state gain increased ATK, equal to 30% of Sunna's initial ATK, up to a maximum of 705 ATK. When Sunna's initial ATK reaches 2,350, the ATK bonus granted to the entire squad reaches its maximum.\nWhen attacks from Basic Attack: Naughty Cat Spotted, EX Special Attack: Bubblegum Barrage, EX Special Attack: Special Photo Technique, Chain Attack: Don't Mess With the Cat, or Ultimate: Smash It All! hit an enemy, apply Cat's Gaze to the target for 12s. While Sunna is on the field, the duration of Cat's Gaze is continuously refreshed. Some normal enemies affected by Cat's Gaze show reduced aggression toward Sunna.\nWhen Attack or Anomaly characters in the squad continuously land attacks on enemies affected by Cat's Gaze, Cat's Gaze is triggered and removed:\nWhen triggered by an Attack character, deals Agent Attribute DMG equal to 200% ATK to enemies in the area.\nWhen triggered by an Anomaly character, deals Agent Attribute DMG equal to 320% ATK to enemies in the area. This damage is guaranteed to CRIT, and the CRIT DMG is increased by 100%.\nDamage dealt by Cat's Gaze is treated as damage dealt by the triggering Agent.\nWhen multiple enemies on the field have Cat's Gaze, only the primary attack target's Cat's Gaze is triggered. Upon triggering, Cat's Gaze is removed from all enemies on the field.\nWhen an enemy is Stunned, the number of attacks required to trigger Cat's Gaze is significantly reduced.",
+            "When another character in your squad is an Attack character or shares the same Faction:\nWhen characters inside Ether Veil: Delusion Reprise land attacks on enemies, the target's Stun DMG Multiplier increases by 30% for 40s.\nWhen Sunna enters the battlefield, she gains 15 Energy. In Investigation Zone mode, the effect can trigger once every 180s."
+          ]
+        },
+        "4": {
+          "level": 4,
+          "id": 1491052,
+          "names": [
+            "Core Passive: Cuteness is Justice",
+            "Additional Ability: Daydreamer's Counterpoint"
+          ],
+          "descriptions": [
+            "Characters in the Angelic Sync state gain increased ATK, equal to 30% of Sunna's initial ATK, up to a maximum of 795 ATK. When Sunna's initial ATK reaches 2,650, the ATK bonus granted to the entire squad reaches its maximum.\nWhen attacks from Basic Attack: Naughty Cat Spotted, EX Special Attack: Bubblegum Barrage, EX Special Attack: Special Photo Technique, Chain Attack: Don't Mess With the Cat, or Ultimate: Smash It All! hit an enemy, apply Cat's Gaze to the target for 12s. While Sunna is on the field, the duration of Cat's Gaze is continuously refreshed. Some normal enemies affected by Cat's Gaze show reduced aggression toward Sunna.\nWhen Attack or Anomaly characters in the squad continuously land attacks on enemies affected by Cat's Gaze, Cat's Gaze is triggered and removed:\nWhen triggered by an Attack character, deals Agent Attribute DMG equal to 225% ATK to enemies in the area.\nWhen triggered by an Anomaly character, deals Agent Attribute DMG equal to 360% ATK to enemies in the area. This damage is guaranteed to CRIT, and the CRIT DMG is increased by 120%.\nDamage dealt by Cat's Gaze is treated as damage dealt by the triggering Agent.\nWhen multiple enemies on the field have Cat's Gaze, only the primary attack target's Cat's Gaze is triggered. Upon triggering, Cat's Gaze is removed from all enemies on the field.\nWhen an enemy is Stunned, the number of attacks required to trigger Cat's Gaze is significantly reduced.",
+            "When another character in your squad is an Attack character or shares the same Faction:\nWhen characters inside Ether Veil: Delusion Reprise land attacks on enemies, the target's Stun DMG Multiplier increases by 30% for 40s.\nWhen Sunna enters the battlefield, she gains 15 Energy. In Investigation Zone mode, the effect can trigger once every 180s."
+          ]
+        },
+        "5": {
+          "level": 5,
+          "id": 1491053,
+          "names": [
+            "Core Passive: Cuteness is Justice",
+            "Additional Ability: Daydreamer's Counterpoint"
+          ],
+          "descriptions": [
+            "Characters in the Angelic Sync state gain increased ATK, equal to 30% of Sunna's initial ATK, up to a maximum of 885 ATK. When Sunna's initial ATK reaches 2,950, the ATK bonus granted to the entire squad reaches its maximum.\nWhen attacks from Basic Attack: Naughty Cat Spotted, EX Special Attack: Bubblegum Barrage, EX Special Attack: Special Photo Technique, Chain Attack: Don't Mess With the Cat, or Ultimate: Smash It All! hit an enemy, apply Cat's Gaze to the target for 12s. While Sunna is on the field, the duration of Cat's Gaze is continuously refreshed. Some normal enemies affected by Cat's Gaze show reduced aggression toward Sunna.\nWhen Attack or Anomaly characters in the squad continuously land attacks on enemies affected by Cat's Gaze, Cat's Gaze is triggered and removed:\nWhen triggered by an Attack character, deals Agent Attribute DMG equal to 250% ATK to enemies in the area.\nWhen triggered by an Anomaly character, deals Agent Attribute DMG equal to 400% ATK to enemies in the area. This damage is guaranteed to CRIT, and the CRIT DMG is increased by 130%.\nDamage dealt by Cat's Gaze is treated as damage dealt by the triggering Agent.\nWhen multiple enemies on the field have Cat's Gaze, only the primary attack target's Cat's Gaze is triggered. Upon triggering, Cat's Gaze is removed from all enemies on the field.\nWhen an enemy is Stunned, the number of attacks required to trigger Cat's Gaze is significantly reduced.",
+            "When another character in your squad is an Attack character or shares the same Faction:\nWhen characters inside Ether Veil: Delusion Reprise land attacks on enemies, the target's Stun DMG Multiplier increases by 30% for 40s.\nWhen Sunna enters the battlefield, she gains 15 Energy. In Investigation Zone mode, the effect can trigger once every 180s."
+          ]
+        },
+        "6": {
+          "level": 6,
+          "id": 1491054,
+          "names": [
+            "Core Passive: Cuteness is Justice",
+            "Additional Ability: Daydreamer's Counterpoint"
+          ],
+          "descriptions": [
+            "Characters in the Angelic Sync state gain increased ATK, equal to 30% of Sunna's initial ATK, up to a maximum of 975 ATK. When Sunna's initial ATK reaches 3,250, the ATK bonus granted to the entire squad reaches its maximum.\nWhen attacks from Basic Attack: Naughty Cat Spotted, EX Special Attack: Bubblegum Barrage, EX Special Attack: Special Photo Technique, Chain Attack: Don't Mess With the Cat, or Ultimate: Smash It All! hit an enemy, apply Cat's Gaze to the target for 12s. While Sunna is on the field, the duration of Cat's Gaze is continuously refreshed. Some normal enemies affected by Cat's Gaze show reduced aggression toward Sunna.\nWhen Attack or Anomaly characters in the squad continuously land attacks on enemies affected by Cat's Gaze, Cat's Gaze is triggered and removed:\nWhen triggered by an Attack character, deals Agent Attribute DMG equal to 275% ATK to enemies in the area.\nWhen triggered by an Anomaly character, deals Agent Attribute DMG equal to 440% ATK to enemies in the area. This damage is guaranteed to CRIT, and the CRIT DMG is increased by 140%.\nDamage dealt by Cat's Gaze is treated as damage dealt by the triggering Agent.\nWhen multiple enemies on the field have Cat's Gaze, only the primary attack target's Cat's Gaze is triggered. Upon triggering, Cat's Gaze is removed from all enemies on the field.\nWhen an enemy is Stunned, the number of attacks required to trigger Cat's Gaze is significantly reduced.",
+            "When another character in your squad is an Attack character or shares the same Faction:\nWhen characters inside Ether Veil: Delusion Reprise land attacks on enemies, the target's Stun DMG Multiplier increases by 30% for 40s.\nWhen Sunna enters the battlefield, she gains 15 Energy. In Investigation Zone mode, the effect can trigger once every 180s."
+          ]
+        },
+        "7": {
+          "level": 7,
+          "id": 1491055,
+          "names": [
+            "Core Passive: Cuteness is Justice",
+            "Additional Ability: Daydreamer's Counterpoint"
+          ],
+          "descriptions": [
+            "Characters in the Angelic Sync state gain increased ATK, equal to 30% of Sunna's initial ATK, up to a maximum of 1,050 ATK. When Sunna's initial ATK reaches 3,500, the ATK bonus granted to the entire squad reaches its maximum.\nWhen attacks from Basic Attack: Naughty Cat Spotted, EX Special Attack: Bubblegum Barrage, EX Special Attack: Special Photo Technique, Chain Attack: Don't Mess With the Cat, or Ultimate: Smash It All! hit an enemy, apply Cat's Gaze to the target for 12s. While Sunna is on the field, the duration of Cat's Gaze is continuously refreshed. Some normal enemies affected by Cat's Gaze show reduced aggression toward Sunna.\nWhen Attack or Anomaly characters in the squad continuously land attacks on enemies affected by Cat's Gaze, Cat's Gaze is triggered and removed:\nWhen triggered by an Attack character, deals Agent Attribute DMG equal to 300% ATK to enemies in the area.\nWhen triggered by an Anomaly character, deals Agent Attribute DMG equal to 480% ATK to enemies in the area. This damage is guaranteed to CRIT, and the CRIT DMG is increased by 150%.\nDamage dealt by Cat's Gaze is treated as damage dealt by the triggering Agent.\nWhen multiple enemies on the field have Cat's Gaze, only the primary attack target's Cat's Gaze is triggered. Upon triggering, Cat's Gaze is removed from all enemies on the field.\nWhen an enemy is Stunned, the number of attacks required to trigger Cat's Gaze is significantly reduced.",
+            "When another character in your squad is an Attack character or shares the same Faction:\nWhen characters inside Ether Veil: Delusion Reprise land attacks on enemies, the target's Stun DMG Multiplier increases by 30% for 40s.\nWhen Sunna enters the battlefield, she gains 15 Energy. In Investigation Zone mode, the effect can trigger once every 180s."
+          ]
+        }
+      },
+      "level_up_materials": {
+        "1": [
+          {
+            "id": 10,
+            "amount": 5000
+          }
+        ],
+        "2": [
+          {
+            "id": 10,
+            "amount": 12000
+          },
+          {
+            "id": 110514,
+            "amount": 2
+          }
+        ],
+        "3": [
+          {
+            "id": 10,
+            "amount": 28000
+          },
+          {
+            "id": 110514,
+            "amount": 4
+          }
+        ],
+        "4": [
+          {
+            "id": 10,
+            "amount": 60000
+          },
+          {
+            "id": 110514,
+            "amount": 9
+          },
+          {
+            "id": 110008,
+            "amount": 2
+          }
+        ],
+        "5": [
+          {
+            "id": 10,
+            "amount": 100000
+          },
+          {
+            "id": 110514,
+            "amount": 15
+          },
+          {
+            "id": 110008,
+            "amount": 3
+          }
+        ],
+        "6": [
+          {
+            "id": 10,
+            "amount": 200000
+          },
+          {
+            "id": 110514,
+            "amount": 30
+          },
+          {
+            "id": 110008,
+            "amount": 4
+          }
+        ]
+      }
+    },
+    "potentials": [],
+    "Icon": "IconRole58"
   }
 ]
