@@ -420,7 +420,7 @@
 .modal-content{background:var(--card);border-radius:12px;width:90%;max-width:900px;max-height:90vh;overflow:hidden;box-shadow:0 8px 32px rgba(244,185,66,.3);border:1px solid var(--bord2)}
 .modal-header{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:2px solid #151515}
 .modal-header h2{color:var(--gold);margin:0}
-.modal-body{padding:20px;max-height:calc(90vh - 140px);overflow-y:auto}
+.modal-body{padding:20px;max-height:calc(90vh - 140px);overflow-y:auto;-webkit-overflow-scrolling:touch}
 .modal-body p{color:var(--light);margin-bottom:15px}
 .agent-picker-controls,.disc-picker-controls{display:flex;gap:15px;margin-bottom:20px;padding:15px;background:#151515;border-radius:8px;flex-wrap:wrap}
 .disc-picker-controls{gap:10px;align-items:center}
@@ -696,4 +696,39 @@
   border-top: 5px solid #f4b942;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+/* Mobile-specific fixes for Enka Import Modal scrolling */
+@media (max-width: 768px) {
+  .enka-import-modal .modal-body {
+    max-height: calc(85vh - 180px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .enka-import-modal .modal-content {
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .enka-import-modal .modal-header {
+    flex-shrink: 0;
+  }
+
+  .enka-import-modal .modal-footer {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .enka-import-modal .modal-body {
+    max-height: calc(80vh - 160px);
+    padding: 15px 20px;
+  }
+
+  .enka-import-modal .modal-content {
+    max-height: 80vh;
+    width: 95%;
+  }
 }
