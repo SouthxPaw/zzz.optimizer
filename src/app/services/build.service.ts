@@ -96,6 +96,15 @@ export class BuildService {
         });
 
         this.buildsSubject.next(builds);
+
+        // Re-sync selectedBuild if one is currently selected (e.g. after an Enka import reload)
+        const selectedId = this.selectedBuildSubject.value?.id;
+        if (selectedId) {
+          const refreshed = builds.find((b: AgentBuild) => b.id === selectedId);
+          if (refreshed) {
+            this.selectedBuildSubject.next(refreshed);
+          }
+        }
       } else {
         this.buildsSubject.next([]);
       }
