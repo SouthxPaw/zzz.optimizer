@@ -1789,12 +1789,35 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return; // Don't preload if no W-Engines yet
     }
 
-    const imageUrls = wEngines
+    // Preload static W-Engine icons
+    const staticImageUrls = wEngines
       .map((engine) => engine.icon)
       .filter((icon) => icon) as string[];
 
-    this.imagePreloader.preloadImages(imageUrls).then(() => {
-      console.log(`Preloaded ${imageUrls.length} W-Engine images`);
+    // Preload animated W-Engine versions (desktop only)
+    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 769;
+    let animatedImageUrls: string[] = [];
+
+    if (isDesktop) {
+      animatedImageUrls = wEngines
+        .filter((engine) => engine.name)
+        .map((engine) => {
+          // Convert name to animated filename format
+          // Remove apostrophes: "Grill O'Wisp" -> "Grill_OWisp", "Kraken's Cradle" -> "Krakens_Cradle"
+          const animatedName = engine.name
+            .replace(/\[/g, '(')
+            .replace(/\]/g, ')')
+            .replace(/'/g, '')  // Remove all apostrophes
+            .replace(/\s+/g, '_') + '_Animation.webp';
+          return `assets/data/images/wengine-gifs/${animatedName}`;
+        });
+    }
+
+    // Combine both static and animated URLs
+    const allImageUrls = [...staticImageUrls, ...animatedImageUrls];
+
+    this.imagePreloader.preloadImages(allImageUrls).then(() => {
+      console.log(`Preloaded ${staticImageUrls.length} static W-Engine images${isDesktop ? ` and ${animatedImageUrls.length} animated versions` : ''}`);
     });
   }
 
@@ -2395,5 +2418,35 @@ async generateShareImage() {
       subStat.type === 'Energy_Regen';
 
     return isPercent ? `${subStat.value}%` : String(subStat.value);
+  }
+
+  getDiscSetByName(name: string): DiscSet | undefined {
+    return this.discSetService.getDiscSetByName(name);
+  }
+
+  getWEngineIconPath(wengine: any): string {
+    // Check if desktop (window width >= 769px)
+    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 769;
+
+    if (isDesktop && wengine.name) {
+      // Try animated version first
+      // Convert name: "[Identity] Base" -> "(Identity)_Base_Animation.webp"
+      // Remove apostrophes: "Grill O'Wisp" -> "Grill_OWisp", "Kraken's Cradle" -> "Krakens_Cradle"
+      const animatedName = wengine.name
+        .replace(/\[/g, '(')
+        .replace(/\]/g, ')')
+        .replace(/'/g, '')  // Remove all apostrophes
+        .replace(/\s+/g, '_') + '_Animation.webp';
+
+      return `assets/data/images/wengine-gifs/${animatedName}`;
+    }
+
+    // Fallback to static icon
+    return wengine.icon || '';
+  }
+
+  onWEngineImageError(event: any, wengine: any): void {
+    // If animated image fails to load, fall back to static
+    event.target.src = wengine.icon;
   }
 }
