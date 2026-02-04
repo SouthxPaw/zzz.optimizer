@@ -428,9 +428,10 @@
             <div class="wengine-header">
               <img
                 *ngIf="selectedBuild.equippedWEngine.icon"
-                [src]="selectedBuild.equippedWEngine.icon"
+                [src]="getWEngineIconPath(selectedBuild.equippedWEngine)"
                 [alt]="selectedBuild.equippedWEngine.name"
                 class="wengine-icon"
+                (error)="onWEngineImageError($event, selectedBuild.equippedWEngine)"
                 loading="lazy"
               />
               <div class="wengine-info">
