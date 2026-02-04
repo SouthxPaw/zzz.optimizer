@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
@@ -17,6 +17,7 @@ import { MAIN_STAT_BY_SLOT } from '../../constants/main-stat-possibilities';
   imports: [CommonModule, FormsModule],
   templateUrl: './upgrade-plans.component.html',
   styleUrls: ['./upgrade-plans.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UpgradePlansComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -29,6 +30,9 @@ export class UpgradePlansComponent implements OnInit, OnDestroy {
   selectedPlan: UpgradePlan | null = null;
   referenceAgents: Agent[] = [];
   referenceDiscSets: DiscSet[] = [];
+
+  // Cache
+  private cachedPlansByAgent: { [agentId: string]: UpgradePlan[] } | null = null;
 
   // UI state
   showDeleteConfirm = false;
@@ -75,7 +79,8 @@ export class UpgradePlansComponent implements OnInit, OnDestroy {
     private upgradePlanService: UpgradePlanService,
     private agentService: AgentService,
     private discSetService: DiscSetService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -84,6 +89,8 @@ export class UpgradePlansComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(plans => {
         this.plans = plans;
+        this.cachedPlansByAgent = null;
+        this.cdr.markForCheck();
       });
 
     // Load reference data
@@ -92,12 +99,14 @@ export class UpgradePlansComponent implements OnInit, OnDestroy {
       .subscribe(agents => {
         // Sort agents alphabetically by name
         this.referenceAgents = agents.sort((a, b) => a.name.localeCompare(b.name));
+        this.cdr.markForCheck();
       });
 
     this.discSetService.discSets$
       .pipe(takeUntil(this.destroy$))
       .subscribe(sets => {
         this.referenceDiscSets = sets;
+        this.cdr.markForCheck();
       });
   }
 
@@ -345,8 +354,9 @@ export class UpgradePlansComponent implements OnInit, OnDestroy {
   }
 
   getPlansByAgent(): { [agentId: string]: UpgradePlan[] } {
-    const grouped: { [agentId: string]: UpgradePlan[] } = {};
+    if (this.cachedPlansByAgent) return this.cachedPlansByAgent;
 
+    const grouped: { [agentId: string]: UpgradePlan[] } = {};
     this.plans.forEach(plan => {
       if (!grouped[plan.agentId]) {
         grouped[plan.agentId] = [];
@@ -354,6 +364,7 @@ export class UpgradePlansComponent implements OnInit, OnDestroy {
       grouped[plan.agentId].push(plan);
     });
 
+    this.cachedPlansByAgent = grouped;
     return grouped;
   }
 
@@ -364,6 +375,22 @@ export class UpgradePlansComponent implements OnInit, OnDestroy {
       case 'Drive6': return this.drive6MainStats;
       default: return [];
     }
+  }
+
+  trackByAgentId(_index: number, agent: Agent): string {
+    return agent.id;
+  }
+
+  trackByPlanId(_index: number, plan: UpgradePlan): string {
+    return plan.id;
+  }
+
+  trackByString(_index: number, value: string): string {
+    return value;
+  }
+
+  trackByStatKey(_index: number, item: { key: string }): string {
+    return item.key;
   }
 
   formatStatName(stat: string): string {

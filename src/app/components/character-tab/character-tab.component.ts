@@ -150,6 +150,17 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private discScoreCache = new Map<string, { score: number; rating: DiscRating }>();
   private buildScoreCache = new Map<string, { score: number; rating: BuildRating }>();
 
+  // OPTIMIZATION: Cached results for expensive template functions
+  private cachedSubstatBreakdown: ReturnType<typeof this.computeSubstatBreakdown> | null = null;
+  private cachedMindscapeBonuses: ReturnType<typeof this.computeMindscapeBonuses> | null = null;
+  private cachedPassiveBonuses: ReturnType<typeof this.computePassiveBonuses> | null = null;
+  private cachedWEngineRefinementBonuses: ReturnType<typeof this.computeWEngineRefinementBonuses> | null = null;
+  private cachedFilteredAgents: Agent[] | null = null;
+  private cachedFilteredWEngines: WEngine[] | null = null;
+  private lastAgentFilterKey = '';
+  private lastWEngineFilterKey = '';
+  private lastBuildStateKey = '';
+
   // W-Engine picker
   showWEnginePicker = false;
   wengineSearchTerm = '';
@@ -233,6 +244,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(async (build) => {
         this.selectedBuild = build;
+        this.invalidateBuildCaches();
 
         // Load toggle flags from build (default true if not set)
         if (build) {
@@ -563,27 +575,28 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   getFilteredAgents(): Agent[] {
+    const filterKey = `${this.referenceAgents.length}|${this.agentElementFilter}|${this.agentSpecialtyFilter}|${this.agentRarityFilter}|${this.agentSortBy}`;
+    if (this.cachedFilteredAgents && this.lastAgentFilterKey === filterKey) {
+      return this.cachedFilteredAgents;
+    }
+
     let filtered = this.referenceAgents;
 
-    // Filter by element
     if (this.agentElementFilter) {
       filtered = filtered.filter((a) => a.element === this.agentElementFilter);
     }
-
-    // Filter by specialty
     if (this.agentSpecialtyFilter) {
       filtered = filtered.filter(
         (a) => a.specialty === this.agentSpecialtyFilter,
       );
     }
-
-    // Filter by rarity
     if (this.agentRarityFilter) {
       filtered = filtered.filter((a) => a.rarity === this.agentRarityFilter);
     }
 
-    // Sort
-    return this.sortAgents(filtered);
+    this.cachedFilteredAgents = this.sortAgents(filtered);
+    this.lastAgentFilterKey = filterKey;
+    return this.cachedFilteredAgents;
   }
 
   sortAgents(agents: Agent[]): Agent[] {
@@ -611,21 +624,21 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   getFilteredWEngines(): WEngine[] {
+    const filterKey = `${this.referenceWEngines.length}|${this.wengineSpecialtyFilter}|${this.wengineRarityFilter}|${this.wengineSearchTerm}|${this.wengineSortBy}`;
+    if (this.cachedFilteredWEngines && this.lastWEngineFilterKey === filterKey) {
+      return this.cachedFilteredWEngines;
+    }
+
     let filtered = this.referenceWEngines;
 
-    // Filter by specialty
     if (this.wengineSpecialtyFilter) {
       filtered = filtered.filter(
         (w) => w.specialty === this.wengineSpecialtyFilter,
       );
     }
-
-    // Filter by rarity
     if (this.wengineRarityFilter) {
       filtered = filtered.filter((w) => w.rarity === this.wengineRarityFilter);
     }
-
-    // Filter by search term
     if (this.wengineSearchTerm) {
       const searchLower = this.wengineSearchTerm.toLowerCase();
       filtered = filtered.filter(
@@ -635,8 +648,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       );
     }
 
-    // Sort
-    return this.sortWEngines(filtered);
+    this.cachedFilteredWEngines = this.sortWEngines(filtered);
+    this.lastWEngineFilterKey = filterKey;
+    return this.cachedFilteredWEngines;
   }
 
   sortWEngines(wengines: WEngine[]): WEngine[] {
@@ -675,7 +689,32 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return agent.specialty === this.selectedBuild!.equippedWEngine!.specialty;
   }
 
+  // OPTIMIZATION: Key that changes whenever build state changes — used to invalidate all build-dependent caches
+  private getBuildStateKey(): string {
+    if (!this.selectedBuild) return '';
+    const discUids = Object.entries(this.selectedBuild.equippedDiscs || {})
+      .filter(([, d]) => d)
+      .map(([slot, d]) => `${slot}:${d!.uid}`)
+      .sort()
+      .join(',');
+    return `${this.selectedBuild.id}|${this.selectedBuild.equippedWEngine?.id || ''}|${this.selectedBuild.wEngineRefinement || 1}|${this.selectedBuild.mindscapeLevel || 0}|${discUids}|${this.selectedBuild.enabledDiscs ? JSON.stringify(this.selectedBuild.enabledDiscs) : ''}`;
+  }
+
   getWEngineRefinementBonuses(): Array<{
+    name: string;
+    value: string;
+    isPercent: boolean;
+  }> {
+    const key = this.getBuildStateKey();
+    if (this.cachedWEngineRefinementBonuses && this.lastBuildStateKey === key) {
+      return this.cachedWEngineRefinementBonuses;
+    }
+    this.cachedWEngineRefinementBonuses = this.computeWEngineRefinementBonuses();
+    this.lastBuildStateKey = key;
+    return this.cachedWEngineRefinementBonuses;
+  }
+
+  private computeWEngineRefinementBonuses(): Array<{
     name: string;
     value: string;
     isPercent: boolean;
@@ -713,11 +752,24 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     name: string;
     stats: Array<{ name: string; value: string; isPercent: boolean }>;
   }> {
+    const key = this.getBuildStateKey();
+    if (this.cachedMindscapeBonuses && this.lastBuildStateKey === key) {
+      return this.cachedMindscapeBonuses;
+    }
+    this.cachedMindscapeBonuses = this.computeMindscapeBonuses();
+    this.lastBuildStateKey = key;
+    return this.cachedMindscapeBonuses;
+  }
+
+  private computeMindscapeBonuses(): Array<{
+    level: number;
+    name: string;
+    stats: Array<{ name: string; value: string; isPercent: boolean }>;
+  }> {
     if (!this.selectedBuild || this.selectedBuild.mindscapeLevel === 0) {
       return [];
     }
 
-    // Get agent reference data to access mindscape effects
     const agent = this.referenceAgents.find(
       (a) => a.id === this.selectedBuild!.agentId,
     );
@@ -725,23 +777,20 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return [];
     }
 
-    // Filter mindscapes that are unlocked and have stat bonuses
     const activeMindscapes = agent.mindscapeEffects.filter(
       (m) =>
         m.level <= this.selectedBuild!.mindscapeLevel &&
         m.statBonuses &&
         m.statBonuses.length > 0 &&
-        m.statBonuses.some((b) => !b.conditional), // Only show mindscapes with unconditional bonuses
+        m.statBonuses.some((b) => !b.conditional),
     );
 
     return activeMindscapes.map((mindscape) => {
       const stats = mindscape
-        .statBonuses!.filter((b) => !b.conditional) // Only show unconditional bonuses
+        .statBonuses!.filter((b) => !b.conditional)
         .map((bonus) => {
-          // Use format field to check if percentage
           const isPercent = bonus.format === '%';
 
-          // Format stat name for display
           let displayName: string;
           switch (bonus.type) {
             case 'ATK%':
@@ -799,11 +848,24 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     value: string;
     isPercent: boolean;
   }> {
+    const key = this.getBuildStateKey();
+    if (this.cachedPassiveBonuses && this.lastBuildStateKey === key) {
+      return this.cachedPassiveBonuses;
+    }
+    this.cachedPassiveBonuses = this.computePassiveBonuses();
+    this.lastBuildStateKey = key;
+    return this.cachedPassiveBonuses;
+  }
+
+  private computePassiveBonuses(): Array<{
+    name: string;
+    value: string;
+    isPercent: boolean;
+  }> {
     if (!this.selectedBuild) {
       return [];
     }
 
-    // Get agent reference data to access scoring buffs
     const agent = this.referenceAgents.find(
       (a) => a.id === this.selectedBuild!.agentId,
     );
@@ -815,7 +877,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .map((buff) => {
         const isPercent = buff.format === '%';
 
-        // Map buff type to display name
         let displayName: string | undefined;
         switch (buff.type) {
           case 'ATKBonus':
@@ -875,26 +936,37 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     rollCount: number;
     isPriority: boolean;
   }> {
+    const key = this.getBuildStateKey();
+    if (this.cachedSubstatBreakdown && this.lastBuildStateKey === key) {
+      return this.cachedSubstatBreakdown;
+    }
+    this.cachedSubstatBreakdown = this.computeSubstatBreakdown();
+    this.lastBuildStateKey = key;
+    return this.cachedSubstatBreakdown;
+  }
+
+  private computeSubstatBreakdown(): Array<{
+    name: string;
+    value: string;
+    isPercent: boolean;
+    rollCount: number;
+    isPriority: boolean;
+  }> {
     if (!this.selectedBuild || !this.selectedBuild.equippedDiscs) {
       return [];
     }
 
-    // Aggregate substats by type and count rolls
     const substatTotals: { [key: string]: number } = {};
     const rollCounts: { [key: string]: number } = {};
-
-    // Get enabled discs state (default to true if not set)
     const enabledDiscs = this.selectedBuild.enabledDiscs || {};
 
-    // Get priority stats for the agent from breakpoints
     const agentBreakpoints = this.scoringService.getAgentBreakpoints(
       this.selectedBuild.agentId,
     );
     const priorityStats = agentBreakpoints?.priorityStats || [];
 
-    // Iterate through all equipped discs, but only include enabled ones
     Object.entries(this.selectedBuild.equippedDiscs).forEach(([slot, disc]) => {
-      const isEnabled = enabledDiscs[slot] ?? true; // Default to true if not specified
+      const isEnabled = enabledDiscs[slot] ?? true;
 
       if (disc && disc.subStats && isEnabled) {
         disc.subStats.forEach((subStat) => {
@@ -903,7 +975,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
             rollCounts[subStat.type] = 0;
           }
           substatTotals[subStat.type] += subStat.value;
-          // Count rolls: if rolls property exists, use it; otherwise calculate from value
           const rollCount =
             subStat.rolls || calculateRollCount(subStat.type, subStat.value);
           rollCounts[subStat.type] += rollCount;
@@ -911,14 +982,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Convert to display format
     const result = Object.entries(substatTotals).map(([type, value]) => {
-      // Determine if stat is percentage or flat
       const isPercent =
         type.includes('%') ||
         ['CRIT_Rate', 'CRIT_DMG', 'HP%', 'ATK%', 'DEF%'].includes(type);
 
-      // Map type to display name
       let displayName: string;
       switch (type) {
         case 'HP':
@@ -964,9 +1032,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           displayName = type;
       }
 
-      // Check if this stat is a priority stat for the agent
       const isPriority = priorityStats.some((priorityStat: string) => {
-        // Normalize both for comparison
         const normalizedType = type.replace(/_/g, ' ').toLowerCase();
         const normalizedPriority = priorityStat
           .replace(/_/g, ' ')
@@ -986,31 +1052,24 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       };
     });
 
-    // Sort by stat type with custom order for percentage stats
     const percentOrder = ['ATK', 'HP', 'DEF', 'CRIT Rate', 'CRIT DMG'];
 
     return result.sort((a, b) => {
-      // Separate percentage and flat stats
       if (a.isPercent && !b.isPercent) return -1;
       if (!a.isPercent && b.isPercent) return 1;
 
-      // Both are percentage stats - use custom order
       if (a.isPercent && b.isPercent) {
         const aIndex = percentOrder.indexOf(a.name);
         const bIndex = percentOrder.indexOf(b.name);
 
-        // If both are in the order array, sort by that order
         if (aIndex !== -1 && bIndex !== -1) {
           return aIndex - bIndex;
         }
-        // If only one is in the order array, prioritize it
         if (aIndex !== -1) return -1;
         if (bIndex !== -1) return 1;
-        // If neither is in the order array, sort alphabetically
         return a.name.localeCompare(b.name);
       }
 
-      // Both are flat stats - sort alphabetically
       return a.name.localeCompare(b.name);
     });
   }
@@ -1118,6 +1177,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private clearScoreCaches(): void {
     this.discScoreCache.clear();
     this.buildScoreCache.clear();
+    this.invalidateBuildCaches();
+  }
+
+  // OPTIMIZATION: Invalidate cached template function results
+  private invalidateBuildCaches(): void {
+    this.cachedSubstatBreakdown = null;
+    this.cachedMindscapeBonuses = null;
+    this.cachedPassiveBonuses = null;
+    this.cachedWEngineRefinementBonuses = null;
+    this.lastBuildStateKey = '';
   }
 
   async unequipDisc(slot: DiscSlot, event: Event) {
@@ -1779,9 +1848,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .map((agent) => agent.icon)
       .filter((icon) => icon) as string[];
 
-    this.imagePreloader.preloadImages(imageUrls).then(() => {
-      console.log(`Preloaded ${imageUrls.length} agent images`);
-    });
+    this.imagePreloader.preloadImages(imageUrls);
   }
 
   private preloadWEngineImages(wEngines: WEngine[]): void {
@@ -1816,9 +1883,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Combine both static and animated URLs
     const allImageUrls = [...staticImageUrls, ...animatedImageUrls];
 
-    this.imagePreloader.preloadImages(allImageUrls).then(() => {
-      console.log(`Preloaded ${staticImageUrls.length} static W-Engine images${isDesktop ? ` and ${animatedImageUrls.length} animated versions` : ''}`);
-    });
+    this.imagePreloader.preloadImages(allImageUrls);
   }
 
   private preloadDiscSetImages(discSets: DiscSet[]): void {
@@ -1830,9 +1895,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .map((discSet) => discSet.icon)
       .filter((icon) => icon) as string[];
 
-    this.imagePreloader.preloadImages(imageUrls).then(() => {
-      console.log(`Preloaded ${imageUrls.length} disc set images`);
-    });
+    this.imagePreloader.preloadImages(imageUrls);
   }
 
   // Text formatting helpers for consistent UI display
@@ -1987,7 +2050,6 @@ async generateShareImage() {
   if (!this.selectedBuild || !this.shareCanvasRef)
     return;
 
-  console.log('Starting Canvas share image generation...');
   this.isGeneratingShareImage = true;
   this.cdr.markForCheck(); // Force change detection
 
@@ -2002,8 +2064,6 @@ async generateShareImage() {
       return;
     }
 
-    console.log('Agent found:', agent.name);
-
     // Collect disc scores
     const discScores = new Map<string, { score: number; rating: any }>();
     Object.values(this.selectedBuild.equippedDiscs).forEach((disc) => {
@@ -2014,8 +2074,6 @@ async generateShareImage() {
         }
       }
     });
-
-    console.log('Collected disc scores:', discScores.size);
 
     // Prepare data for Canvas renderer
     const shareData: ShareImageData = {
@@ -2029,18 +2087,13 @@ async generateShareImage() {
       substatBreakdown: this.getSubstatBreakdown(),
     };
 
-    console.log('Calling Canvas service...');
-
     // Generate image using Canvas service
     const blob = await this.canvasShareImageService.generateShareImage(shareData);
-
-    console.log('Canvas image generated, blob size:', blob.size);
 
     // Display the image on canvas
     const displayCanvas = this.shareCanvasRef.nativeElement;
     const img = new Image();
     img.onload = () => {
-      console.log('Image loaded, drawing to canvas');
       displayCanvas.width = img.width;
       displayCanvas.height = img.height;
       const ctx = displayCanvas.getContext('2d');
@@ -2191,7 +2244,6 @@ async generateShareImage() {
 
     try {
       // Fetch data from Enka API
-      console.log(`Fetching Enka data for UID: ${this.enkaUid}`);
       const enkaResult = await this.enkaApiService
         .fetchPlayerData(this.enkaUid)
         .toPromise();
@@ -2200,8 +2252,6 @@ async generateShareImage() {
         throw new Error('No data received from provided UID');
       }
 
-      console.log(`Received ${enkaResult.builds.length} builds from Enka`);
-
       // Add UID to history on successful fetch
       this.addToUidHistory(this.enkaUid, enkaResult.playerName);
 
@@ -2209,13 +2259,6 @@ async generateShareImage() {
       const comparison = await this.enkaImportService.compareBuilds(
         enkaResult.builds,
       );
-
-      console.log('Import comparison:', {
-        new: comparison.newBuilds.length,
-        updated: comparison.updatedBuilds.length,
-        unchanged: comparison.unchangedBuilds.length,
-        discs: comparison.newDiscs.length,
-      });
 
       // Show confirmation dialog if there are changes
       if (
@@ -2245,9 +2288,6 @@ async generateShareImage() {
               // Reload builds to show the imported data
               await this.buildService.loadBuilds();
 
-              console.log(
-                `Successfully imported ${result.added} new agent(s), updated ${result.updated} build(s), and added ${result.totalDiscs} disc(s)`,
-              );
             } catch (error) {
               console.error('Import error:', error);
               // Re-open the Enka modal to show error
@@ -2310,11 +2350,6 @@ async generateShareImage() {
       return;
     }
 
-    console.log(
-      'Upgrade plan changed:',
-      this.selectedBuild.activeUpgradePlanId,
-    );
-
     try {
       // Update the build with the new active plan ID
       // This will trigger a recalculation in the build service
@@ -2323,8 +2358,6 @@ async generateShareImage() {
       });
 
       this.clearScoreCaches(); // OPTIMIZATION: Invalidate caches when upgrade plan changes
-
-      console.log('Build updated with new upgrade plan');
     } catch (error) {
       console.error('Error updating build with upgrade plan:', error);
     }

@@ -164,7 +164,6 @@ export class DbService extends Dexie {
   // Clear user data only (keeps reference data intact)
   async clearUserData(): Promise<void> {
     await this.discs.clear();
-    console.log('User data (discs) cleared');
   }
 
   // Clear reference data only
@@ -172,14 +171,12 @@ export class DbService extends Dexie {
     await this.agents.clear();
     await this.wEngines.clear();
     await this.discSets.clear();
-    console.log('Reference data (agents, W-Engines, disc sets) cleared');
   }
 
   // Clear ALL data (both reference and user data)
   async clearAllData(): Promise<void> {
     await this.clearReferenceData();
     await this.clearUserData();
-    console.log('All data cleared');
   }
 
   // Check if reference data is loaded
@@ -217,7 +214,6 @@ export class DbService extends Dexie {
   async needsDataReload(): Promise<boolean> {
     const hasData = await this.hasReferenceData();
     if (!hasData) {
-      console.log('No reference data found - needs reload');
       return true;
     }
 
@@ -225,16 +221,13 @@ export class DbService extends Dexie {
     const currentVersion = this.getCurrentAppVersion();
 
     if (!storedVersion) {
-      console.log('No stored version found - needs reload');
       return true;
     }
 
     if (storedVersion !== currentVersion) {
-      console.log(`Version mismatch: stored=${storedVersion}, current=${currentVersion} - needs reload`);
       return true;
     }
 
-    console.log(`Data version matches (${currentVersion}) - no reload needed`);
     return false;
   }
 }

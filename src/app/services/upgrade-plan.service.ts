@@ -35,7 +35,6 @@ export class UpgradePlanService {
         this.http.get<any>(versionedUrl('assets/data/agent-breakpoints.json'))
       );
       this.agentBreakpoints = data.agents || {};
-      console.log('Loaded agent breakpoints for upgrade plans');
     } catch (error) {
       console.error('Failed to load agent breakpoints:', error);
     }
@@ -56,7 +55,6 @@ export class UpgradePlanService {
       if (plansJson) {
         const plans: UpgradePlan[] = JSON.parse(plansJson);
         this.plansSubject.next(plans);
-        console.log(`Loaded ${plans.length} upgrade plans`);
       } else {
         this.plansSubject.next([]);
       }

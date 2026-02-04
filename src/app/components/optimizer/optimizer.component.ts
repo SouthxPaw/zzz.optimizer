@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './optimizer.component.html',
-  styleUrls: ['./optimizer.component.css']
+  styleUrls: ['./optimizer.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OptimizerComponent {
   // This component just displays scoring documentation

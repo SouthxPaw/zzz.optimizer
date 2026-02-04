@@ -264,8 +264,6 @@ export class DataTransformerService {
     }
 
     // No Stats field - generate placeholder stats based on rarity and specialty
-    console.log(`Using placeholder stats for ${rawAgent.EN} (Stats field not found)`);
-
     const rarity = rawAgent.rank >= 4 ? 'S' : 'A';
     const specialty = rawAgent.type;
 
