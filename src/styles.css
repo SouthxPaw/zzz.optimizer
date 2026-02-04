@@ -3,8 +3,8 @@
 /* Custom Font */
 @font-face {
   font-family: 'InpinHongMeti';
-  src: url('/assets/fonts/inpinhongmeti.woff2') format('woff2'),
-       url('/assets/fonts/inpinhongmeti.ttf') format('truetype');
+  src: url('assets/fonts/inpinhongmeti.woff2') format('woff2'),
+       url('assets/fonts/inpinhongmeti.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
