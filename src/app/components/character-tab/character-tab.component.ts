@@ -1177,6 +1177,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private clearScoreCaches(): void {
     this.discScoreCache.clear();
     this.buildScoreCache.clear();
+    this.statCalculator.clearCache();
     this.invalidateBuildCaches();
   }
 
