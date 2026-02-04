@@ -47,7 +47,6 @@ export class DiscSetService {
       // Build Maps for O(1) lookups
       this.buildLookupMaps(discSets);
 
-      console.log(`Loaded ${discSets.length} disc sets from IndexedDB`);
     } catch (error) {
       console.error('Error loading disc sets from IndexedDB:', error);
       this.discSetsSubject.next([]);

@@ -42,8 +42,6 @@ export class AgentService {
         this.agentMapById.set(agent.id, agent);
       });
 
-      console.log(`Loaded ${agents.length} agents from IndexedDB`);
-
       // Select first agent by default if available
       if (agents.length > 0) {
         this.selectAgent(agents[0]);

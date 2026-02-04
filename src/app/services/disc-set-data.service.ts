@@ -79,7 +79,6 @@ export class DiscSetDataService {
       });
 
       this.isLoaded = true;
-      console.log('DiscSetDataService: Loaded disc set equipment data (shared singleton)');
     } catch (error) {
       console.error('DiscSetDataService: Failed to load disc set equipment data:', error);
       throw error;
