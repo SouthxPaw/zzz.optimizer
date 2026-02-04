@@ -39,7 +39,6 @@ export class WEngineService {
       // Build Maps for O(1) lookups
       this.buildLookupMaps(wEngines);
 
-      console.log(`Loaded ${wEngines.length} W-Engines from IndexedDB`);
     } catch (error) {
       console.error('Error loading W-Engines from IndexedDB:', error);
       this.wEnginesSubject.next([]);

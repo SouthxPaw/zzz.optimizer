@@ -96,7 +96,6 @@ export class BuildService {
         });
 
         this.buildsSubject.next(builds);
-        console.log(`Loaded ${builds.length} user builds`);
       } else {
         this.buildsSubject.next([]);
       }
@@ -404,8 +403,6 @@ export class BuildService {
    */
   async recalculateAllBuilds(): Promise<void> {
     const builds = this.buildsSubject.value;
-    console.log(`Recalculating stats for ${builds.length} builds...`);
-
     for (const build of builds) {
       await this.recalculateStats(build);
     }
@@ -421,7 +418,6 @@ export class BuildService {
       }
     }
 
-    console.log('All builds recalculated successfully');
   }
 
   /**

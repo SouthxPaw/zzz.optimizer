@@ -64,7 +64,6 @@ export class DiscService {
       const discs = await this.db.getAllDiscs();
       this.rebuildIndexes(discs); // OPTIMIZATION: Build indexes
       this.discsSubject.next(discs);
-      console.log(`Loaded ${discs.length} discs from IndexedDB (indexed by slot/set)`);
     } catch (error) {
       console.error('Error loading discs from IndexedDB:', error);
       this.discsSubject.next([]);
