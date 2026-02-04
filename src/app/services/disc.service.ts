@@ -157,8 +157,9 @@ export class DiscService {
 
   async importDiscs(discs: Disc[]): Promise<void> {
     await this.db.bulkAddDiscs(discs);
-    this.rebuildIndexes(discs); // OPTIMIZATION: Rebuild indexes
-    this.discsSubject.next(discs);
+    const updated = [...this.discsSubject.value, ...discs];
+    this.rebuildIndexes(updated); // OPTIMIZATION: Rebuild indexes
+    this.discsSubject.next(updated);
   }
 
   exportDiscs(): string {
