@@ -1,10 +1,29 @@
 // services/stat-calculator.service.ts
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { Agent, BaseStats, DiscSlot } from '../models/agent.model';
 import { Disc } from '../models/disc.model';
-import { WEngine } from '../models/wengine.model';
+import { WEngine, RefinementProperty } from '../models/wengine.model';
 import { DISC_SETS } from '../constants/disc-sets';
 import { DiscSetDataService, DiscSetEquipmentData } from './disc-set-data.service';
+import { versionedUrl } from '../utils/versioned-url';
+
+interface MindscapeStatBonus {
+  type: string;
+  value: number;
+  format: string;
+  note: string;
+}
+
+interface MindscapeData {
+  mindscapes: {
+    [agentId: string]: {
+      comment?: string;
+      [level: number]: MindscapeStatBonus[];
+    };
+  };
+}
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +36,31 @@ export class StatCalculatorService {
   // OPTIMIZATION 5: Set bonus caching
   private setBonusCache = new Map<string, any>();
 
+  // Mindscape data loaded from mindscape-stats.json (manually curated source of truth)
+  private mindscapeData: MindscapeData | null = null;
+
   // OPTIMIZATION: Use shared disc set data service
-  constructor(private discSetDataService: DiscSetDataService) {
+  constructor(
+    private discSetDataService: DiscSetDataService,
+    private http: HttpClient
+  ) {
     // Data loading is handled by shared service
     this.discSetDataService.loadDiscSetData();
+    this.loadMindscapeData();
+  }
+
+  /**
+   * Load mindscape stat bonuses from the manually-curated JSON file.
+   * This is the source of truth for mindscape bonuses used in stat calculations.
+   */
+  private async loadMindscapeData(): Promise<void> {
+    try {
+      this.mindscapeData = await firstValueFrom(
+        this.http.get<MindscapeData>(versionedUrl('assets/data/mindscape-stats.json'))
+      );
+    } catch (error) {
+      console.error('Failed to load mindscape data:', error);
+    }
   }
 
   /**
@@ -133,11 +173,14 @@ export class StatCalculatorService {
     mindscapeLevel: number,
     wEngineRefinement: number
   ): string {
-    // Create a deterministic key from disc UIDs and their stats
-    // Include main stat type/value to invalidate cache when disc is edited
+    // Create a deterministic key from disc UIDs, main stats, and substats
+    // All stat fields must be included so cache invalidates when any disc stat is edited
     const discInfo = Object.entries(discs)
       .filter(([_, disc]) => disc !== undefined)
-      .map(([slot, disc]) => `${slot}:${disc!.uid}:${disc!.mainStat.type}:${disc!.mainStat.value}`)
+      .map(([slot, disc]) => {
+        const subKey = disc!.subStats.map(s => `${s.type}:${s.value}`).join(',');
+        return `${slot}:${disc!.uid}:${disc!.mainStat.type}:${disc!.mainStat.value}:${subKey}`;
+      })
       .sort()
       .join('|');
 
@@ -209,7 +252,7 @@ export class StatCalculatorService {
    * @param properties The refinement properties from the W-Engine
    * @param refinement The refinement level (1-5)
    */
-  private applyRefinementBonuses(stats: BaseStats, properties: any[], refinement: number): void {
+  private applyRefinementBonuses(stats: BaseStats, properties: RefinementProperty[], refinement: number): void {
     const refinementKey = `W${Math.min(Math.max(refinement, 1), 5)}` as 'W1' | 'W2' | 'W3' | 'W4' | 'W5';
 
     properties.forEach(prop => {
@@ -321,20 +364,84 @@ export class StatCalculatorService {
   }
 
   /**
-   * Apply mindscape stat bonuses based on mindscape level
-   * Only applies bonuses from mindscapes at or below the current level
-   * Only applies unconditional bonuses (conditional bonuses are ignored)
+   * Apply mindscape stat bonuses based on mindscape level.
+   * Reads from mindscape-stats.json (manually curated source of truth)
+   * rather than agent.mindscapeEffects (which is populated by fragile regex parsing).
+   * Falls back to agent.mindscapeEffects if the JSON file hasn't loaded yet.
    */
   private applyMindscapeStats(stats: BaseStats, agent: Agent, mindscapeLevel: number): void {
-    if (!agent.mindscapeEffects || mindscapeLevel === 0) {
+    if (mindscapeLevel === 0) {
       return;
     }
 
-    // Apply stat bonuses from all unlocked mindscapes (level 1 through mindscapeLevel)
+    // Preferred path: use manually-curated mindscape-stats.json
+    if (this.mindscapeData) {
+      const agentMindscapes = this.mindscapeData.mindscapes[agent.id];
+      if (!agentMindscapes) {
+        return;
+      }
+
+      // Apply bonuses from all unlocked mindscape levels (1 through mindscapeLevel)
+      for (let level = 1; level <= mindscapeLevel; level++) {
+        const bonuses = agentMindscapes[level];
+        if (!bonuses) continue;
+
+        bonuses.forEach(bonus => {
+          const value = bonus.value;
+          const type = bonus.type;
+          const isFlat = bonus.format === 'flat';
+
+          switch(type) {
+            case 'ATK%':
+              stats.atkpercent += value;
+              break;
+            case 'HP%':
+              stats.hppercent += value;
+              break;
+            case 'DEF%':
+              stats.defpercent += value;
+              break;
+            case 'CRIT_Rate':
+              stats.critRate += value;
+              break;
+            case 'CRIT_DMG':
+              stats.critDmg += value;
+              break;
+            case 'PEN_Ratio':
+              stats.penRatio += value;
+              break;
+            case 'Energy_Regen':
+              // format "%" = percentage bonus, format "flat" = flat regen value
+              if (isFlat) {
+                stats.energyRegen += value;
+              } else {
+                stats.energyRegenPercent += value;
+              }
+              break;
+            case 'Anomaly_Proficiency':
+              stats.anomalyProficiency += value;
+              break;
+            case 'Anomaly_Mastery':
+              stats.anomalyMastery += value;
+              break;
+            case 'Impact':
+              stats.impact += value;
+              break;
+          }
+        });
+      }
+      return;
+    }
+
+    // Fallback: use agent.mindscapeEffects (regex-parsed from agent descriptions)
+    // This path is used only if mindscape-stats.json hasn't finished loading yet
+    if (!agent.mindscapeEffects) {
+      return;
+    }
+
     agent.mindscapeEffects.forEach(mindscape => {
       if (mindscape.level <= mindscapeLevel && mindscape.statBonuses) {
         mindscape.statBonuses.forEach(bonus => {
-          // Only apply unconditional bonuses
           if (!bonus.conditional) {
             const value = bonus.value;
             const type = bonus.type;
@@ -359,7 +466,6 @@ export class StatCalculatorService {
                 stats.penRatio += value;
                 break;
               case 'Energy_Regen':
-                // Mindscape Energy Regen bonuses are percentage bonuses
                 stats.energyRegenPercent += value;
                 break;
               case 'Anomaly_Proficiency':
@@ -737,9 +843,9 @@ export class StatCalculatorService {
    */
   private parseAndApplyBonus(description: string, stats: BaseStats): void {
     // Match patterns like "ATK +10%" or "CRIT Rate +8%" or "Anomaly Mastery +8%"
-    const percentMatch = description.match(/(ATK|HP|DEF|CRIT Rate|CRIT DMG|PEN Ratio|Energy Regen|Impact|Anomaly Mastery)\s*\+(\d+(?:\.\d+)?)%/i);
+    const percentMatch = description.match(/(ATK|HP|DEF|CRIT Rate|CRIT DMG|PEN Ratio|Energy Regen|Impact|Anomaly Mastery)\s*\+\s*(\d+(?:\.\d+)?)%/i);
     // Match flat stat patterns like "Anomaly Proficiency +30"
-    const flatMatch = description.match(/(Anomaly Proficiency)\s*\+(\d+)/i);
+    const flatMatch = description.match(/(Anomaly Proficiency)\s*\+\s*(\d+)/i);
 
     if (percentMatch) {
       const [, stat, value] = percentMatch;
