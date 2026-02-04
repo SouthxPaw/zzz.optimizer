@@ -24,7 +24,7 @@
         class="form-select"
       >
         <option value="">Select Agent</option>
-        <option *ngFor="let agent of referenceAgents" [value]="agent.id">
+        <option *ngFor="let agent of referenceAgents; trackBy: trackByAgentId" [value]="agent.id">
           {{ agent.name }}
         </option>
       </select>
@@ -45,12 +45,12 @@
         No upgrade plans yet. Create one above!
       </div>
 
-      <div *ngFor="let agentId of Object.keys(getPlansByAgent())">
+      <div *ngFor="let agentId of Object.keys(getPlansByAgent()); trackBy: trackByString">
         <div class="agent-group-header">
           {{ getAgentName(agentId) }}
         </div>
         <div
-          *ngFor="let plan of getPlansByAgent()[agentId]"
+          *ngFor="let plan of getPlansByAgent()[agentId]; trackBy: trackByPlanId"
           class="plan-card"
           [class.selected]="selectedPlan?.id === plan.id"
           (click)="selectPlan(plan)"
@@ -109,7 +109,7 @@
             class="form-select"
             disabled
           >
-            <option *ngFor="let agent of referenceAgents" [value]="agent.id">
+            <option *ngFor="let agent of referenceAgents; trackBy: trackByAgentId" [value]="agent.id">
               {{ agent.name }}
             </option>
           </select>
@@ -159,13 +159,13 @@
           Set priority level for each substat on each disc slot.
         </p>
 
-        <div *ngFor="let slot of discSlots" class="substat-slot">
+        <div *ngFor="let slot of discSlots; trackBy: trackByString" class="substat-slot">
           <h4>
             <span class="slot-indicator">{{ slot.replace('Drive', '') }}</span>
             Drive {{ slot.replace('Drive', '') }}
           </h4>
           <div class="substat-grid">
-            <div *ngFor="let stat of allSubstats" class="substat-item">
+            <div *ngFor="let stat of allSubstats; trackBy: trackByString" class="substat-item">
               <label class="substat-label">{{ formatStatName(stat) }}</label>
               <select
                 [value]="getSubstatPriority(slot, stat)"
@@ -201,7 +201,7 @@
             <div class="col-actions">Actions</div>
           </div>
 
-          <div *ngFor="let stat of breakpointStats" class="breakpoint-row">
+          <div *ngFor="let stat of breakpointStats; trackBy: trackByStatKey" class="breakpoint-row">
             <div class="col-stat">
               <strong>{{ stat.label }}</strong>
             </div>

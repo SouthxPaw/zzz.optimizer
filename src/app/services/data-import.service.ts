@@ -56,14 +56,12 @@ export class DataImportService {
     try {
       // Use relative path (without leading /) to work with baseHref
       const relativePath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
-      console.log(`Attempting to load agents from: ${relativePath}`);
       const rawData = await firstValueFrom(this.http.get<any>(versionedUrl(relativePath)));
 
       let agents: Agent[];
 
       if (transformRawData) {
         // Transform raw game data (object with numeric IDs) to Agent[]
-        console.log('Transforming raw agent data...');
         agents = this.transformer.transformAgents(rawData);
       } else {
         // Handle already-formatted data
@@ -76,7 +74,6 @@ export class DataImportService {
       }
 
       await this.agentService.bulkImportAgents(agents);
-      console.log(`Successfully imported ${agents.length} agents`);
       return agents.length;
     } catch (error) {
       console.error('Error importing agents from file:', error);
@@ -102,7 +99,6 @@ export class DataImportService {
 
       if (transformRawData) {
         // Transform raw game data (object with numeric IDs) to WEngine[]
-        console.log('Transforming raw W-Engine data...');
         wEngines = this.transformer.transformWEngines(rawData);
       } else {
         // Handle already-formatted data
@@ -115,7 +111,6 @@ export class DataImportService {
       }
 
       await this.wEngineService.bulkImportWEngines(wEngines);
-      console.log(`Successfully imported ${wEngines.length} W-Engines`);
       return wEngines.length;
     } catch (error) {
       console.error('Error importing W-Engines from file:', error);
@@ -145,7 +140,6 @@ export class DataImportService {
       }
 
       await this.db.bulkAddDiscs(discs);
-      console.log(`Successfully imported ${discs.length} discs`);
       return discs.length;
     } catch (error) {
       console.error('Error importing discs from file:', error);
@@ -247,8 +241,6 @@ export class DataImportService {
    * This is the preferred method as it loads complete data with accurate stats
    */
   async importReferenceDataFromIndividualFiles(): Promise<{ agents: number, wEngines: number, discSets: number }> {
-    console.log('Starting import from individual JSON files...');
-
     try {
       // Load the index files to get IDs
       const agentsData = await firstValueFrom(this.http.get<any>(versionedUrl('assets/data/agents.json')));
@@ -273,8 +265,6 @@ export class DataImportService {
       }
 
       const wEngineIds = Object.keys(wEnginesIndex);
-
-      console.log(`Found ${agentIds.length} agents, ${wEngineIds.length} W-Engines, and ${DISC_SET_EQUIPMENT_IDS.length} disc sets`);
 
       // Transform all agents directly from agents.json (now includes Icon field)
       const agentPromises = agentIds.map(async (id) => {
@@ -308,8 +298,6 @@ export class DataImportService {
       const wEngines = (await Promise.all(wEnginePromises)).filter(w => w !== null) as WEngine[];
       const discSets = (await Promise.all(discSetPromises)).filter(d => d !== null);
 
-      console.log(`Transformed ${agents.length} agents, ${wEngines.length} W-Engines, and ${discSets.length} disc sets`);
-
       // Import into database
       await this.agentService.bulkImportAgents(agents);
       await this.wEngineService.bulkImportWEngines(wEngines);
@@ -321,8 +309,6 @@ export class DataImportService {
 
       // Save the current app version so we know when data needs to be reloaded
       await this.db.setStoredDataVersion(this.db.getCurrentAppVersion());
-
-      console.log(`Successfully imported all reference data from individual files (version ${this.db.getCurrentAppVersion()})`);
 
       return {
         agents: agents.length,
@@ -382,7 +368,6 @@ export class DataImportService {
   async clearUserData(): Promise<void> {
     await this.db.clearUserData();
     await this.buildService.clearAllBuilds();
-    console.log('User data (discs and builds) cleared');
   }
 
   /**
@@ -390,7 +375,6 @@ export class DataImportService {
    */
   async clearReferenceData(): Promise<void> {
     await this.db.clearReferenceData();
-    console.log('Reference data cleared from IndexedDB');
   }
 
   /**
@@ -399,7 +383,6 @@ export class DataImportService {
   async clearAllData(): Promise<void> {
     await this.db.clearAllData();
     await this.buildService.clearAllBuilds();
-    console.log('All data cleared from IndexedDB and localStorage');
   }
 
   /**

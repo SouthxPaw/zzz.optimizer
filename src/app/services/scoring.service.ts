@@ -167,7 +167,6 @@ export class ScoringService {
       );
       this.agentBreakpoints = data.agents || {};
       this.breakpointsLoaded = true;
-      console.log('Loaded agent breakpoints for scoring');
     } catch (error) {
       console.error('Failed to load agent breakpoints:', error);
     }
@@ -182,7 +181,6 @@ export class ScoringService {
         this.http.get<any>(versionedUrl('assets/data/agent-stat-weights.json'))
       );
       this.agentStatWeights = data.agents || {};
-      console.log('Loaded contextual stat weights for disc scoring');
     } catch (error) {
       console.error('Failed to load agent stat weights:', error);
     }
@@ -198,7 +196,6 @@ export class ScoringService {
       this.mindscapeData = await firstValueFrom(
         this.http.get<MindscapeData>(versionedUrl('assets/data/mindscape-stats.json'))
       );
-      console.log('Loaded mindscape data for scoring');
     } catch (error) {
       console.error('Failed to load mindscape data:', error);
     }

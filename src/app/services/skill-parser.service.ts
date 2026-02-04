@@ -37,7 +37,6 @@ export class SkillParserService {
     await Promise.allSettled(promises);
 
     this.loaded = true;
-    console.log(`Loaded skill multipliers for ${Object.keys(this.skillMultipliers).length} agents`);
   }
 
   /**
