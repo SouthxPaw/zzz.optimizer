@@ -247,31 +247,40 @@
                   <span class="disc-slot-number">{{
                     formatDiscSlot(slot)
                   }}</span>
-                  <label class="disc-enable-checkbox" (click)="$event.stopPropagation()" title="Enable/Disable disc">
-                    <input
-                      type="checkbox"
-                      [checked]="isDiscEnabled(slot)"
-                      (change)="onDiscToggle(slot)"
-                    />
-                  </label>
-                  <div
-                    *ngIf="
-                      getDiscScore(
-                        selectedBuild.equippedDiscs[slot]!
-                      ) as discScore
-                    "
-                    class="disc-rating-badge"
-                    [ngClass]="getDiscRatingClass(discScore.rating)"
-                    [title]="discScore.rating.description"
-                  >
-                    <span class="rating-grade">{{
-                      discScore.rating.grade
-                    }}</span>
-                    <span class="rating-score">{{ discScore.score }}</span>
+                  <div class="disc-header-right">
+                    <label class="disc-enable-checkbox" (click)="$event.stopPropagation()" title="Enable/Disable disc">
+                      <input
+                        type="checkbox"
+                        [checked]="isDiscEnabled(slot)"
+                        (change)="onDiscToggle(slot)"
+                      />
+                    </label>
+                    <div
+                      *ngIf="
+                        getDiscScore(
+                          selectedBuild.equippedDiscs[slot]!
+                        ) as discScore
+                      "
+                      class="disc-rating-badge"
+                      [ngClass]="getDiscRatingClass(discScore.rating)"
+                      [title]="discScore.rating.description"
+                    >
+                      <span class="rating-grade">{{
+                        discScore.rating.grade
+                      }}</span>
+                      <span class="rating-score">{{ discScore.score }}</span>
+                    </div>
                   </div>
                 </div>
                 <div class="disc-set">
                   {{ selectedBuild.equippedDiscs[slot]!.set }}
+                  <img
+                    *ngIf="getDiscSetByName(selectedBuild.equippedDiscs[slot]!.set)?.icon"
+                    [src]="getDiscSetByName(selectedBuild.equippedDiscs[slot]!.set)!.icon"
+                    [alt]="selectedBuild.equippedDiscs[slot]!.set"
+                    class="disc-set-icon-inline"
+                    loading="lazy"
+                  />
                 </div>
                 <div class="disc-main-stat">
                   <span class="stat-type">{{
@@ -419,9 +428,10 @@
             <div class="wengine-header">
               <img
                 *ngIf="selectedBuild.equippedWEngine.icon"
-                [src]="selectedBuild.equippedWEngine.icon"
+                [src]="getWEngineIconPath(selectedBuild.equippedWEngine)"
                 [alt]="selectedBuild.equippedWEngine.name"
                 class="wengine-icon"
+                (error)="onWEngineImageError($event, selectedBuild.equippedWEngine)"
                 loading="lazy"
               />
               <div class="wengine-info">
