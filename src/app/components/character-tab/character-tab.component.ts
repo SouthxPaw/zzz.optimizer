@@ -2445,8 +2445,13 @@ async generateShareImage() {
     return wengine.icon || '';
   }
 
+  isWEngineAnimated(wengine: any): boolean {
+    return typeof window !== 'undefined' && window.innerWidth >= 769 && !!wengine?.name;
+  }
+
   onWEngineImageError(event: any, wengine: any): void {
     // If animated image fails to load, fall back to static
     event.target.src = wengine.icon;
+    event.target.classList.remove('animated');
   }
 }

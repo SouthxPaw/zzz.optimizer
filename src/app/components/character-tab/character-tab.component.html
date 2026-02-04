@@ -431,6 +431,7 @@
                 [src]="getWEngineIconPath(selectedBuild.equippedWEngine)"
                 [alt]="selectedBuild.equippedWEngine.name"
                 class="wengine-icon"
+                [ngClass]="{'animated': isWEngineAnimated(selectedBuild.equippedWEngine)}"
                 (error)="onWEngineImageError($event, selectedBuild.equippedWEngine)"
                 loading="lazy"
               />
