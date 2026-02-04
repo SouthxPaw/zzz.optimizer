@@ -462,6 +462,22 @@
 .disc-rarity{color:#ffd700;font-weight:bold;font-size:.9em}
 .disc-set{display:flex;align-items:center;gap:6px;color:var(--gold2);font-weight:600;font-size:.9em;margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .disc-set-icon-inline{width:20px;height:20px;object-fit:contain;border-radius:4px;background:transparent;padding:2px;flex-shrink:0}
+
+/* Slow spin animation for disc icons - desktop only */
+@media (min-width: 769px) {
+  .disc-set-icon-inline {
+    animation: disc-spin 8s linear infinite;
+  }
+}
+
+@keyframes disc-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 .disc-main-stat,.disc-picker-main{display:flex;justify-content:space-between;background:var(--bg);padding:6px 8px;border-radius:4px;margin-bottom:8px}
 .disc-main-stat .stat-type{color:var(--gold);font-weight:600;font-size:.85em}
 .disc-main-stat .stat-value{color:#fff;font-weight:bold;font-size:.85em}
