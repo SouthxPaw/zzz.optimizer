@@ -466,16 +466,7 @@
 /* Slow spin animation for disc icons - desktop only */
 @media (min-width: 769px) {
   .disc-set-icon-inline {
-    animation: disc-spin 8s linear infinite;
-  }
-}
-
-@keyframes disc-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+    animation: global-disc-spin 8s linear infinite;
   }
 }
 .disc-main-stat,.disc-picker-main{display:flex;justify-content:space-between;background:var(--bg);padding:6px 8px;border-radius:4px;margin-bottom:8px}
