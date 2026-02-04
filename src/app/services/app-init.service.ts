@@ -30,16 +30,13 @@ export class AppInitService {
   async initialize(): Promise<void> {
     // Only run in browser, not during SSR
     if (!isPlatformBrowser(this.platformId)) {
-      console.log('Skipping initialization - running in SSR');
       return;
     }
 
     if (this.initialized) {
-      console.log('App already initialized');
       return;
     }
 
-    console.log('Initializing ZZZ Optimizer...');
     this.loadingService.show('Initializing ZZZ Optimizer...');
 
     try {
@@ -49,22 +46,17 @@ export class AppInitService {
       if (needsReload) {
         const hasExistingData = await this.dataImport.hasReferenceData();
         if (hasExistingData) {
-          console.log('App version changed. Reloading reference data...');
           this.loadingService.show('Updating game data for new version...');
           // Clear old data first
           await this.dataImport.clearReferenceData();
         } else {
-          console.log('No reference data found. Loading from assets...');
           this.loadingService.show('Loading game data...');
         }
         await this.loadReferenceData();
         this.notificationService.success('Game data loaded successfully!');
-      } else {
-        console.log('Reference data already loaded and up-to-date');
       }
 
       this.initialized = true;
-      console.log('ZZZ Optimizer initialized successfully');
     } catch (error) {
       console.error('Error initializing app:', error);
       this.notificationService.error('Failed to load game data. Please refresh the page.');
@@ -91,10 +83,7 @@ export class AppInitService {
    */
   private async loadReferenceData(): Promise<void> {
     try {
-      console.log('Loading reference data from individual JSON files...');
       const results = await this.dataImport.importReferenceDataFromIndividualFiles();
-
-      console.log(`✓ Reference data loaded successfully: ${results.agents} agents, ${results.wEngines} W-Engines, ${results.discSets} disc sets`);
     } catch (error) {
       console.error('Error loading reference data:', error);
       throw error;
@@ -106,7 +95,6 @@ export class AppInitService {
    */
   async reloadReferenceData(): Promise<void> {
     try {
-      console.log('Force reloading reference data...');
       this.loadingService.show('Clearing old data...');
 
       // Clear existing reference data
@@ -121,7 +109,6 @@ export class AppInitService {
       this.notificationService.success('Reference data reloaded successfully!');
 
       // Recalculate all existing builds to use updated agent base stats
-      console.log('Recalculating all builds with updated reference data...');
       this.loadingService.show('Recalculating builds...');
       await this.buildService.recalculateAllBuilds();
 

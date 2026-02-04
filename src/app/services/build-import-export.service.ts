@@ -90,12 +90,6 @@ export class BuildImportExportService {
         };
       }
 
-      if (compatibilityCheck.message !== 'Import file version matches current version') {
-        console.log(compatibilityCheck.message);
-      }
-
-      console.log(`Importing data from version ${fileVersion} (current version: ${this.EXPORT_VERSION})`);
-
       // Migrate data if from older version
       const migratedData = this.migrateData(data, fileVersion);
 
@@ -255,8 +249,6 @@ export class BuildImportExportService {
 
     // Migrate from version 1.0 to 2.0
     if (fromVersion === '1.0') {
-      console.log('Migrating data from version 1.0 to 2.0...');
-
       // Ensure all builds have wEngineRefinement field (default to 1)
       migratedData.builds = migratedData.builds.map(build => {
         if (build.wEngineRefinement === undefined) {
@@ -269,12 +261,10 @@ export class BuildImportExportService {
       migratedData.builds = migratedData.builds.map(build => {
         if (build.equippedWEngine && !build.equippedWEngine.effect.properties) {
           // Old W-Engine format - properties will be added when reference data is loaded
-          console.log(`W-Engine ${build.equippedWEngine.name} will be updated from reference data`);
         }
         return build;
       });
 
-      console.log('Migration from 1.0 to 2.0 complete');
     }
 
     // Future migrations can be added here
