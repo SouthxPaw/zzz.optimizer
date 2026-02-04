@@ -244,12 +244,6 @@ export class BuildService {
     await this.statCalculator.ensureDataLoaded();
 
     // Calculate final stats using the stat calculator
-    console.log(`[RECALC STATS] Calculating stats for build ${build.id} with flags:`, {
-      W: build.includeWEngineBonuses ?? true,
-      M: build.includeMindscapeBonuses ?? true,
-      P: build.includePassiveBonuses ?? true
-    });
-
     build.calculatedStats = this.statCalculator.calculateFinalStats(
       agent,
       build.level,

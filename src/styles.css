@@ -3,8 +3,8 @@
 /* Custom Font */
 @font-face {
   font-family: 'InpinHongMeti';
-  src: url('/assets/fonts/inpinhongmeti.woff2') format('woff2'),
-       url('/assets/fonts/inpinhongmeti.ttf') format('truetype');
+  src: url('assets/fonts/inpinhongmeti.woff2') format('woff2'),
+       url('assets/fonts/inpinhongmeti.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -124,6 +124,15 @@ body {
   }
   to {
     filter: drop-shadow(0 0 8px rgba(244, 185, 66, 0.8));
+  }
+}
+
+@keyframes global-disc-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 
