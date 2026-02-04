@@ -201,7 +201,6 @@ export class EnkaApiService {
             // Only retry on rate limit errors
             if (error.status === 429 && index < 3) {
               const delay = Math.pow(2, index) * 500; // 500ms, 1s, 2s
-              console.log(`Rate limited. Retrying in ${delay}ms (attempt ${index + 1}/3)...`);
               return timer(delay);
             }
             // Don't retry other errors
@@ -270,7 +269,6 @@ export class EnkaApiService {
           // UpgradeLevel is the W-Engine Phase Level which represents refinement (W1-W5)
           // UpgradeLevel 1 = W1, UpgradeLevel 5 = W5
           wEngineRefinement = Math.max(1, Math.min(character.Weapon.UpgradeLevel || 1, 5));
-          console.log(`W-Engine ${wEngineId}: UpgradeLevel=${character.Weapon.UpgradeLevel} → Refinement=W${wEngineRefinement}`);
         }
       }
 
@@ -278,13 +276,11 @@ export class EnkaApiService {
       const characterDiscs: { [key in DiscSlot]?: Disc } = {};
 
       if (character.EquippedList) {
-        console.log(`Character ${agentId} has ${character.EquippedList.length} equipped items`);
         for (const equipped of character.EquippedList) {
           const disc = this.transformDisc(equipped, agentId);
           if (disc) {
             characterDiscs[disc.slot] = disc;
             discs.push(disc);
-            console.log(`  Added disc slot ${disc.slot}: ${disc.set}`);
           } else {
             console.warn(`  Failed to transform disc in slot ${equipped.Slot}`);
           }
@@ -295,8 +291,6 @@ export class EnkaApiService {
 
       // Mindscape level from TalentLevel field
       const mindscapeLevel = (character.TalentLevel || 0) as (0 | 1 | 2 | 3 | 4 | 5 | 6);
-
-      console.log(`Character ${agentId} - Level: ${character.Level}, Mindscape: M${mindscapeLevel}, W-Engine: ${wEngine?.name || 'None'} (W${wEngineRefinement}), Discs: ${Object.keys(characterDiscs).length}/6`);
 
       builds.push({
         agentId,
