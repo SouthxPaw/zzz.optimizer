@@ -517,6 +517,7 @@
 .agent-icon{width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:8px}
 .agent-name-label{font-weight:bold;color:var(--gold);margin-bottom:4px;font-size:.95em}
 .wengine-icon{width:80px;height:80px;object-fit:contain;border-radius:8px;background:rgba(0,0,0,.3);padding:8px}
+.wengine-icon.animated{border-radius:50%;background:transparent}
 .wengine-header{display:flex;gap:15px;align-items:center;margin-bottom:15px;padding:12px;background:rgba(0,217,255,.05);border-radius:8px}
 .wengine-info h4{margin:0 0 5px;color:var(--gold);font-size:1.1em}
 .wengine-rarity{color:#ffd700;font-size:.9em;margin:0}
