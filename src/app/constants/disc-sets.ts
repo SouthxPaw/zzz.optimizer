@@ -168,7 +168,7 @@ export const DISC_SETS: DiscSet[] = [
     bonuses: [
       {
         pieces: 2,
-        description: 'Daze of attacks +10%',
+        description: 'Daze of attacks +6%',
       },
     ],
   },
@@ -178,7 +178,7 @@ export const DISC_SETS: DiscSet[] = [
     bonuses: [
       {
         pieces: 2,
-        description: 'ATK + 10%',
+        description: 'ATK +10%',
       },
     ],
   },
