@@ -2396,4 +2396,8 @@ async generateShareImage() {
 
     return isPercent ? `${subStat.value}%` : String(subStat.value);
   }
+
+  getDiscSetByName(name: string): DiscSet | undefined {
+    return this.discSetService.getDiscSetByName(name);
+  }
 }

@@ -1,5 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Custom Font */
+@font-face {
+  font-family: 'InpinHongMeti';
+  src: url('/assets/fonts/inpinhongmeti.woff2') format('woff2'),
+       url('/assets/fonts/inpinhongmeti.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Accessibility: Skip to main content link */
 .skip-link {
   position: absolute;
@@ -28,13 +38,16 @@
 
 /* Global font family */
 * {
-  font-family: Arial, sans-serif;
+  font-family: 'InpinHongMeti', Arial, sans-serif;
+  letter-spacing: 0.5px;
+  font-weight: 400;
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'InpinHongMeti', Arial, sans-serif;
   margin: 0;
   padding: 0;
+  line-height: 1.6;
   /* Cyberpunk background with grid pattern and vignette */
   background:
     radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%),
@@ -43,6 +56,17 @@ body {
     #0a0a0a;
   background-size: 100% 100%, 50px 50px, 50px 50px, 100% 100%;
   background-attachment: fixed;
+}
+
+/* Use Arial for small text elements where custom font is too thick */
+.disc-rating-badge,
+.stat-badge,
+.equipped-badge,
+.set-badge,
+.rating-grade,
+.rating-score,
+.btn-share {
+  font-family: Arial, sans-serif !important;
 }
 
 /* Cyberpunk Keyframe Animations */
