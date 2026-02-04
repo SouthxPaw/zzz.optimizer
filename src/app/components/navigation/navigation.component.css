@@ -65,17 +65,15 @@
 }
 
 .nav-brand::before {
-  top: 50%;
+  top: -5px;
   left: -15px;
-  transform: translateY(-50%);
   border-right: none;
   border-bottom: none;
 }
 
 .nav-brand::after {
-  top: 50%;
+  bottom: -5px;
   right: -15px;
-  transform: translateY(-50%);
   border-left: none;
   border-top: none;
 }
