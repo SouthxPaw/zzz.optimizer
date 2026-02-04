@@ -67,6 +67,18 @@ export interface MindscapeStatBonus {
 }
 
 // models/wengine.model.ts
+export interface WEngineRefinementProperty {
+  name: string;
+  type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency';
+  values: {
+    W1: number;
+    W2: number;
+    W3: number;
+    W4: number;
+    W5: number;
+  };
+}
+
 export interface WEngine {
   id: string;
   name: string;
@@ -81,6 +93,7 @@ export interface WEngine {
     name: string;
     description: string;
     maxRefinement?: string;
+    properties?: WEngineRefinementProperty[];
   };
   signature?: string;
 }
