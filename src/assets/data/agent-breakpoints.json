@@ -2331,7 +2331,7 @@
         },
         "atk": {
           "min": 1871,
-          "optimal": 1871
+          "optimal": 3200
         },
         "def": {
           "min": 660,
@@ -3748,12 +3748,12 @@
       "name": "Sunna",
       "breakpoints": {
         "hp": {
-          "min": 9080,
-          "optimal": 9080
+          "min": 8660,
+          "optimal": 8660
         },
         "atk": {
           "min": 2800,
-          "optimal": 3500
+          "optimal": 3400
         },
         "def": {
           "min": 660,
