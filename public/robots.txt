@@ -1,0 +1,8 @@
+# robots.txt for Southpaw's ZZZ Optimizer
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://southxpaw.github.io/zzz.optimizer/sitemap.xml
