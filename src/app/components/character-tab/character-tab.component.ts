@@ -11,6 +11,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { Agent, DiscSlot } from '../../models/agent.model';
 import { WEngine } from '../../models/wengine.model';
@@ -53,6 +54,7 @@ import {
     CommonModule,
     FormsModule,
     ScrollingModule,
+    DragDropModule,
     OptimizerComponent,
     UpgradePlansComponent,
   ],
@@ -420,6 +422,20 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       'Delete',
       'Cancel',
     );
+  }
+
+  async onBuildDrop(event: CdkDragDrop<AgentBuild[]>) {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+
+    // Reorder the builds array
+    moveItemInArray(this.builds, event.previousIndex, event.currentIndex);
+
+    // Update the order in the build service
+    await this.buildService.reorderBuilds(this.builds);
+
+    this.cdr.markForCheck();
   }
 
   toggleMindscape(level: number) {
