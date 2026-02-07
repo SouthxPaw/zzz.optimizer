@@ -21,6 +21,8 @@ export interface ShareImageData {
     rollCount: number;
     isPriority: boolean;
   }>;
+  showBuildRating?: boolean;
+  showDiscRatings?: boolean;
 }
 
 @Injectable({
@@ -233,63 +235,65 @@ export class CanvasShareImageService {
       console.warn('[Canvas] ⚠️ No agent icon available');
     }
 
-    // Draw build rating container (top-left)
-    const ratingX = 30 + 15; // padding + margin-left
-    const ratingY = 10 + 10; // padding + margin-top
+    // Draw build rating container (top-left) - only if showBuildRating is true
+    if (data.showBuildRating !== false) {
+      const ratingX = 30 + 15; // padding + margin-left
+      const ratingY = 10 + 10; // padding + margin-top
 
-    // Draw rating label
-    ctx.save();
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
-    ctx.beginPath();
-    this.roundRect(ctx, ratingX, ratingY, 200, 24, 4);
-    ctx.fill();
-
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 16px Arial';
-    ctx.textBaseline = 'top';
-    ctx.shadowColor = 'rgba(100, 100, 100, 0.9)';
-    ctx.shadowBlur = 4;
-    ctx.shadowOffsetX = 2;
-    ctx.shadowOffsetY = 2;
-    const scoreText = `BUILD RATING: ${data.buildScore?.score || 'N/A'}%`;
-    ctx.fillText(scoreText, ratingX + 12, ratingY + 4);
-    ctx.restore();
-
-    // Draw rating badge
-    if (data.buildScore) {
-      const badgeY = ratingY + 24 + 8; // gap of 8px
-      const grade = data.buildScore.rating.grade;
-      const badgeWidth = this.measureTextWidth(ctx, grade, 'bold 28px Arial') + 90;
-
+      // Draw rating label
       ctx.save();
-
-      // Draw badge background with color or gradient
-      const badgeColor = this.createBuildRatingGradient(
-        ctx,
-        grade,
-        ratingX,
-        badgeY,
-        badgeWidth,
-        48,
-      );
-      ctx.fillStyle = badgeColor;
-      this.roundRect(ctx, ratingX, badgeY, badgeWidth, 48, 8);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.85)';
+      ctx.beginPath();
+      this.roundRect(ctx, ratingX, ratingY, 200, 24, 4);
       ctx.fill();
 
-      // Draw gold border
-      ctx.strokeStyle = '#f4b942';
-      ctx.lineWidth = 3;
-      this.roundRect(ctx, ratingX, badgeY, badgeWidth, 48, 8);
-      ctx.stroke();
-
-      // Draw grade text
-      ctx.fillStyle = '#0a0a0a';
-      ctx.font = 'bold 28px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(grade, ratingX + badgeWidth / 2, badgeY + 24);
-
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 16px Arial';
+      ctx.textBaseline = 'top';
+      ctx.shadowColor = 'rgba(100, 100, 100, 0.9)';
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+      const scoreText = `BUILD RATING: ${data.buildScore?.score || 'N/A'}%`;
+      ctx.fillText(scoreText, ratingX + 12, ratingY + 4);
       ctx.restore();
+
+      // Draw rating badge
+      if (data.buildScore) {
+        const badgeY = ratingY + 24 + 8; // gap of 8px
+        const grade = data.buildScore.rating.grade;
+        const badgeWidth = this.measureTextWidth(ctx, grade, 'bold 28px Arial') + 90;
+
+        ctx.save();
+
+        // Draw badge background with color or gradient
+        const badgeColor = this.createBuildRatingGradient(
+          ctx,
+          grade,
+          ratingX,
+          badgeY,
+          badgeWidth,
+          48,
+        );
+        ctx.fillStyle = badgeColor;
+        this.roundRect(ctx, ratingX, badgeY, badgeWidth, 48, 8);
+        ctx.fill();
+
+        // Draw gold border
+        ctx.strokeStyle = '#f4b942';
+        ctx.lineWidth = 3;
+        this.roundRect(ctx, ratingX, badgeY, badgeWidth, 48, 8);
+        ctx.stroke();
+
+        // Draw grade text
+        ctx.fillStyle = '#0a0a0a';
+        ctx.font = 'bold 28px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(grade, ratingX + badgeWidth / 2, badgeY + 24);
+
+        ctx.restore();
+      }
     }
 
     // Draw agent info (bottom of agent section)
@@ -691,7 +695,7 @@ export class CanvasShareImageService {
       const pos = discPositions[slot];
       const discScore = data.discScores.get(disc.uid);
 
-      await this.drawDisc(ctx, disc, discScore, pos.statsX, pos.statsY);
+      await this.drawDisc(ctx, disc, discScore, pos.statsX, pos.statsY, data.showDiscRatings);
       await this.drawDiscImage(
         ctx,
         disc,
@@ -711,6 +715,7 @@ export class CanvasShareImageService {
     discScore: { score: number; rating: DiscRating } | undefined,
     x: number,
     y: number,
+    showDiscRatings?: boolean,
   ): Promise<void> {
     ctx.save();
 
@@ -725,8 +730,8 @@ export class CanvasShareImageService {
     this.roundRect(ctx, x, y, 110, 85, 6);
     ctx.stroke();
 
-    // Rating badge
-    if (discScore) {
+    // Rating badge - only if showDiscRatings is true
+    if (discScore && showDiscRatings !== false) {
       const grade = discScore.rating.grade;
       const badgeWidth = this.measureTextWidth(ctx, grade, 'bold 12px Arial') + 20;
       const badgeX = x + 55 - badgeWidth / 2;
