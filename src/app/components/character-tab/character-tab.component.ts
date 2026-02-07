@@ -37,6 +37,7 @@ import { OptimizerComponent } from '../optimizer/optimizer.component';
 import { EnkaApiService } from '../../services/enka-api.service';
 import { EnkaImportService } from '../../services/enka-import.service';
 import { UpgradePlanService } from '../../services/upgrade-plan.service';
+import { LoadingService } from '../../services/loading.service';
 import { UpgradePlan } from '../../models/upgrade-plan.model';
 import { calculateRollCount } from '../../constants/substat-rolls';
 import { UpgradePlansComponent } from '../upgrade-plans/upgrade-plans.component';
@@ -220,6 +221,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private enkaImportService: EnkaImportService,
     private upgradePlanService: UpgradePlanService,
     private canvasShareImageService: CanvasShareImageService,
+    private loadingService: LoadingService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -2196,9 +2198,77 @@ async generateShareImage() {
   async selectUidFromHistory(historyItem: { uid: string; username: string }) {
     this.showUidHistoryDropdown = false;
 
-    // Import directly without opening modal
-    this.enkaUid = historyItem.uid;
-    await this.importFromEnka();
+    // Use global loading overlay for better UX
+    this.loadingService.show(`Fetching data for ${historyItem.username}...`);
+
+    try {
+      // Fetch data from Enka API
+      const enkaResult = await this.enkaApiService
+        .fetchPlayerData(historyItem.uid)
+        .toPromise();
+
+      if (!enkaResult) {
+        throw new Error('No data received from provided UID');
+      }
+
+      // Compare with existing builds
+      const comparison = await this.enkaImportService.compareBuilds(
+        enkaResult.builds,
+      );
+
+      this.loadingService.hide();
+
+      // Show confirmation dialog if there are changes
+      if (
+        comparison.newBuilds.length > 0 ||
+        comparison.updatedBuilds.length > 0
+      ) {
+        const summary =
+          this.enkaImportService.generateImportSummary(comparison);
+
+        this.showConfirmation(
+          'Import from UID',
+          `Found player: ${enkaResult.playerName}
+
+          ${summary}
+
+          Do you want to import these builds?`,
+          async () => {
+            try {
+              this.loadingService.show('Importing builds...');
+              const result = await this.enkaImportService.importBuilds(
+                comparison,
+                true,
+              );
+
+              // Reload builds to show the imported data
+              await this.buildService.loadBuilds();
+              this.loadingService.hide();
+            } catch (error) {
+              this.loadingService.hide();
+              console.error('Import error:', error);
+              alert(
+                error instanceof Error
+                  ? error.message
+                  : 'Failed to import builds'
+              );
+            }
+          },
+          'Import',
+          'Cancel',
+        );
+      } else {
+        alert('All builds are already up to date!');
+      }
+    } catch (error) {
+      this.loadingService.hide();
+      console.error('Enka API error:', error);
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Failed to fetch data from provided UID'
+      );
+    }
   }
 
   toggleUidHistoryDropdown() {
