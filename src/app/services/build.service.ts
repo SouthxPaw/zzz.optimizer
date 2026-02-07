@@ -297,6 +297,13 @@ export class BuildService {
   }
 
   /**
+   * Reorder builds based on drag-and-drop
+   */
+  async reorderBuilds(builds: AgentBuild[]): Promise<void> {
+    await this.saveBuilds(builds);
+  }
+
+  /**
    * Select a build
    */
   selectBuild(build: AgentBuild | null): void {

@@ -742,3 +742,146 @@
     width: 95%;
   }
 }
+
+/* Drag and Drop Styles */
+.drag-handle {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 10;
+  background: rgba(244, 185, 66, 0.12);
+  border: 1px solid rgba(244, 185, 66, 0.25);
+  border-radius: 3px;
+  padding: 12px 2px;
+  width: 14px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  opacity: 0.5;
+  transition: all 0.2s;
+  backdrop-filter: blur(3px);
+  touch-action: none; /* Better touch handling */
+}
+
+.drag-handle:hover {
+  opacity: 1;
+  background: rgba(244, 185, 66, 0.25);
+  border-color: var(--gold);
+  box-shadow: 0 2px 8px rgba(244, 185, 66, 0.3);
+  transform: scaleX(1.2);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+  background: rgba(244, 185, 66, 0.35);
+  transform: scaleX(0.9);
+}
+
+.drag-icon {
+  color: var(--gold);
+  font-size: 9px;
+  font-weight: bold;
+  letter-spacing: -2px;
+  user-select: none;
+  pointer-events: none;
+  writing-mode: vertical-rl;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .drag-handle {
+    padding: 14px 3px;
+    width: 18px;
+    height: 70px;
+    opacity: 0.7; /* More visible on mobile */
+  }
+
+  .drag-icon {
+    font-size: 11px;
+  }
+
+  /* Larger placeholder text on mobile */
+  .build-card.cdk-drag-placeholder::before {
+    font-size: 1em;
+  }
+
+  /* Better touch feedback */
+  .drag-handle:active {
+    background: rgba(244, 185, 66, 0.5);
+    transform: scaleX(0.85);
+  }
+}
+
+@media (max-width: 480px) {
+  .drag-handle {
+    width: 22px;
+    height: 80px;
+    padding: 16px 4px;
+  }
+
+  .drag-icon {
+    font-size: 13px;
+  }
+}
+
+.builds-grid.cdk-drop-list-dragging .build-card:not(.cdk-drag-placeholder) {
+  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.build-card.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6),
+              0 0 40px rgba(244, 185, 66, 0.8),
+              inset 0 0 20px rgba(244, 185, 66, 0.2);
+  opacity: 0.95;
+  cursor: grabbing !important;
+  transform: rotate(2deg) scale(1.05);
+  border: 3px solid var(--gold);
+}
+
+.build-card.cdk-drag-preview .drag-handle {
+  background: rgba(244, 185, 66, 0.4);
+  border-color: var(--gold);
+}
+
+.build-card.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.build-card.cdk-drag-placeholder {
+  opacity: 0;
+  background: rgba(244, 185, 66, 0.15) !important;
+  border: 3px dashed var(--gold) !important;
+  box-shadow: inset 0 0 30px rgba(244, 185, 66, 0.3),
+              0 0 20px rgba(244, 185, 66, 0.4);
+  position: relative;
+}
+
+.build-card.cdk-drag-placeholder::before {
+  content: 'Drop here';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--gold);
+  font-size: 1.2em;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Improve grid spacing during drag */
+.builds-grid.cdk-drop-list-dragging {
+  gap: 16px;
+}
+
+/* Add visual separator lines during drag */
+.builds-grid.cdk-drop-list-dragging .build-card:not(.cdk-drag-placeholder):hover {
+  box-shadow: -3px 0 0 var(--gold),
+              3px 0 0 var(--gold),
+              0 6px 20px rgba(0, 217, 255, 0.3);
+}

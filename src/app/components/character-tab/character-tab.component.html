@@ -159,15 +159,28 @@
         </div>
 
         <!-- Builds Grid -->
-        <div class="builds-grid" *ngIf="builds.length > 0">
+        <div
+          class="builds-grid"
+          *ngIf="builds.length > 0"
+          cdkDropList
+          cdkDropListOrientation="mixed"
+          [cdkDropListAutoScrollStep]="15"
+          (cdkDropListDropped)="onBuildDrop($event)"
+        >
           <div
             *ngFor="let build of builds; trackBy: trackByBuildId"
             class="build-card"
+            cdkDrag
             [class.selected]="selectedBuild?.id === build.id"
             [class.s-rank]="getAgentRarity(build.agentId) === 'S'"
             [class.a-rank]="getAgentRarity(build.agentId) === 'A'"
             (click)="selectBuild(build)"
           >
+            <!-- Drag Handle Indicator -->
+            <div class="drag-handle" cdkDragHandle title="Drag to reorder">
+              <span class="drag-icon">⋮⋮</span>
+            </div>
+
             <button
               class="delete-btn"
               (click)="deleteBuild(build.id, $event)"
