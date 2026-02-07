@@ -37,7 +37,7 @@
   height: 70px;
 }
 
-.nav-brand h1 {
+.nav-brand .site-title {
   color: #F4B942;
   font-size: 1.5em;
   margin: 0;
@@ -48,6 +48,7 @@
     0 0 20px rgba(244, 185, 66, 0.3),
     0 2px 4px rgba(0, 0, 0, 0.5);
   position: relative;
+  display: block;
 }
 
 .nav-brand {
