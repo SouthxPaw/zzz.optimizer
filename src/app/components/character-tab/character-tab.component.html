@@ -1342,9 +1342,31 @@
           <canvas #shareCanvas [style.display]="isGeneratingShareImage ? 'none' : 'block'"></canvas>
         </div>
       </div>
-      <div class="modal-actions">
-        <button class="btn-secondary" (click)="closeShareModal()">Cancel</button>
-        <button class="btn-primary" (click)="downloadShareImage()" [disabled]="isGeneratingShareImage">Download Image</button>
+      <div class="modal-actions share-modal-actions">
+        <div class="share-options">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              [(ngModel)]="showBuildRating"
+              (change)="onShareOptionChange()"
+              [disabled]="isGeneratingShareImage"
+            />
+            <span>Show Build Rating</span>
+          </label>
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              [(ngModel)]="showDiscRatings"
+              (change)="onShareOptionChange()"
+              [disabled]="isGeneratingShareImage"
+            />
+            <span>Show Disc Ratings</span>
+          </label>
+        </div>
+        <div class="share-action-buttons">
+          <button class="btn-secondary" (click)="closeShareModal()">Cancel</button>
+          <button class="btn-primary" (click)="downloadShareImage()" [disabled]="isGeneratingShareImage">Download Image</button>
+        </div>
       </div>
     </div>
   </div>

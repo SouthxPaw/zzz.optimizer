@@ -2063,7 +2063,18 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  onShareOptionChange() {
+    // Show loading state immediately
+    this.isGeneratingShareImage = true;
+    this.cdr.markForCheck();
+
+    // Add a small delay to allow the change detection cycle to complete
+    setTimeout(() => this.generateShareImage(), 50);
+  }
+
   isGeneratingShareImage = false;
+  showBuildRating = true;
+  showDiscRatings = true;
 
 async generateShareImage() {
   if (!this.selectedBuild || !this.shareCanvasRef)
@@ -2104,6 +2115,8 @@ async generateShareImage() {
       wEngineStats: this.getWEngineStats(),
       discSets: this.referenceDiscSets,
       substatBreakdown: this.getSubstatBreakdown(),
+      showBuildRating: this.showBuildRating,
+      showDiscRatings: this.showDiscRatings,
     };
 
     // Generate image using Canvas service
