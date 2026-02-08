@@ -75,6 +75,27 @@
   text-decoration: underline;
 }
 
+.footer-separator {
+  color: #555;
+  margin: 0 10px;
+  font-size: 0.85em;
+}
+
+.kofi-link {
+  color: #F4B942;
+  text-decoration: none;
+  font-size: 0.85em;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.kofi-link:hover {
+  background: rgba(244, 185, 66, 0.1);
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   .footer-content {
     flex-direction: column;
