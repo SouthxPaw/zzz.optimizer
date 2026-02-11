@@ -439,15 +439,19 @@
 
           <div *ngIf="selectedBuild.equippedWEngine" class="wengine-details">
             <div class="wengine-header">
-              <img
+              <video
                 *ngIf="selectedBuild.equippedWEngine.icon"
                 [src]="getWEngineIconPath(selectedBuild.equippedWEngine)"
-                [alt]="selectedBuild.equippedWEngine.name"
+                [title]="selectedBuild.equippedWEngine.name"
                 class="wengine-icon"
+                autoplay
+                loop
+                muted
+                playsinline
                 [ngClass]="{'animated': isWEngineAnimated(selectedBuild.equippedWEngine)}"
-                (error)="onWEngineImageError($event, selectedBuild.equippedWEngine)"
+                (error)="onWEngineVideoError($event, selectedBuild.equippedWEngine)"
                 loading="lazy"
-              />
+              ></video>
               <div class="wengine-info">
                 <h4>{{ selectedBuild.equippedWEngine.name }}</h4>
                 <p class="wengine-rarity">
