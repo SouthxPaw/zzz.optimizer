@@ -1831,7 +1831,7 @@ export class ScoringService {
       // Only show the specific overcap value if it's >= 1% (i.e., total critRate >= 101%)
       const message = stats.critRate >= 101
         ? `CRIT Rate overcapped by ${overcap.toFixed(1)}% (${stats.critRate.toFixed(1)}% total)`
-        : `CRIT Rate is overcapped - consider reallocating substats`;
+        : `CRIT Rate is overcapped - watch out for more crit substats`;
       feedback.push({
         priority: 'medium',
         category: 'stat',
