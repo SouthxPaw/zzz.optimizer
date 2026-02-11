@@ -1,6 +1,6 @@
 {
   "name": "zzz.optimizer",
-  "version": "5.8.45",
+  "version": "5.8.46",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
