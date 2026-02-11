@@ -1875,34 +1875,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return; // Don't preload if no W-Engines yet
     }
 
-    // Preload static W-Engine icons
+    // Preload static W-Engine icons only
+    // Note: MP4 videos are NOT preloaded because:
+    // 1. Image preloader doesn't support video formats (causes console warnings)
+    // 2. Videos use lazy loading which is more efficient
+    // 3. Videos load on-demand when displayed
     const staticImageUrls = wEngines
       .map((engine) => engine.icon)
       .filter((icon) => icon) as string[];
 
-    // Preload animated W-Engine versions (desktop only)
-    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 769;
-    let animatedImageUrls: string[] = [];
-
-    if (isDesktop) {
-      animatedImageUrls = wEngines
-        .filter((engine) => engine.name)
-        .map((engine) => {
-          // Convert name to animated filename format
-          // Remove apostrophes: "Grill O'Wisp" -> "Grill_OWisp", "Kraken's Cradle" -> "Krakens_Cradle"
-          const animatedName = engine.name
-            .replace(/\[/g, '(')
-            .replace(/\]/g, ')')
-            .replace(/'/g, '')  // Remove all apostrophes
-            .replace(/\s+/g, '_') + '_Animation.webp';
-          return `assets/data/images/wengine-gifs/${animatedName}`;
-        });
-    }
-
-    // Combine both static and animated URLs
-    const allImageUrls = [...staticImageUrls, ...animatedImageUrls];
-
-    this.imagePreloader.preloadImages(allImageUrls);
+    this.imagePreloader.preloadImages(staticImageUrls);
   }
 
   private preloadDiscSetImages(discSets: DiscSet[]): void {
@@ -2561,17 +2543,16 @@ async generateShareImage() {
     // Check if desktop (window width >= 769px)
     const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 769;
 
-    if (isDesktop && wengine.name) {
+    if (isDesktop && wengine.icon) {
       // Try animated version first
-      // Convert name: "[Identity] Base" -> "(Identity)_Base_Animation.webp"
-      // Remove apostrophes: "Grill O'Wisp" -> "Grill_OWisp", "Kraken's Cradle" -> "Krakens_Cradle"
-      const animatedName = wengine.name
-        .replace(/\[/g, '(')
-        .replace(/\]/g, ')')
-        .replace(/'/g, '')  // Remove all apostrophes
-        .replace(/\s+/g, '_') + '_Animation.webp';
+      // Extract base filename from icon path
+      // e.g., "assets/data/images/wengines/Weapon_S_1051.webp" -> "Weapon_S_1051"
+      const iconPath = wengine.icon;
+      const fileName = iconPath.split('/').pop()?.replace(/\.(webp|png)$/, '') || '';
 
-      return `assets/data/images/wengine-gifs/${animatedName}`;
+      if (fileName) {
+        return `assets/data/images/wengine-gifs/${fileName}.mp4`;
+      }
     }
 
     // Fallback to static icon
@@ -2579,11 +2560,11 @@ async generateShareImage() {
   }
 
   isWEngineAnimated(wengine: any): boolean {
-    return typeof window !== 'undefined' && window.innerWidth >= 769 && !!wengine?.name;
+    return typeof window !== 'undefined' && window.innerWidth >= 769 && !!wengine?.icon;
   }
 
-  onWEngineImageError(event: any, wengine: any): void {
-    // If animated image fails to load, fall back to static
+  onWEngineVideoError(event: any, wengine: any): void {
+    // If animated video fails to load, fall back to static
     event.target.src = wengine.icon;
     event.target.classList.remove('animated');
   }
