@@ -76,7 +76,7 @@ export const DISC_RATING_THRESHOLDS: DiscRating[] = [
   { grade: 'PHT', minPoints: 118, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Phaethon - Near-perfect disc (ZERO tier)' },
   { grade: 'SSS', minPoints: 106, color: '#FF6B9D', description: 'Perfect - Outstanding disc (SSS tier)' },
   { grade: 'SS', minPoints: 98, color: '#FF8C42', description: 'Excellent - Great disc (SS tier)' },
-  { grade: 'S', minPoints: 92, color: '#FFD93D', description: 'Very Good - Above average disc (S tier)' },
+  { grade: 'S', minPoints: 89, color: '#FFD93D', description: 'Very Good - Above average disc (S tier)' },
   { grade: 'A', minPoints: 78, color: '#6BCF7F', description: 'Good - Decent disc (A tier)' },
   { grade: 'B', minPoints: 62, color: '#4D96FF', description: 'Average - Usable disc (B tier)' },
   { grade: 'C', minPoints: 48, color: '#1920E6', description: 'Below Average - Needs upgrading (C tier)' },
