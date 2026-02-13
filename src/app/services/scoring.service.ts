@@ -497,22 +497,23 @@ export class ScoringService {
     breakdown.interknot_score = Math.round(interknot_score * 10) / 10;
 
     // STEP 5: Convert to our 0-140+ scale (multiply by 4.8)
-    // Interknot 28+ (GOD) = 134+ (VH)
-    // Interknot 24+ (SSS) = 115+ (SSS)
     const finalScore = interknot_score * 4.8;
+
+    // Round the score first
+    const roundedScore = Math.round(finalScore * 10) / 10;
 
     breakdown.details.push({
       stat: 'Interknot Score (0-30 scale)',
       value: breakdown.interknot_score,
-      points: Math.round(finalScore * 10) / 10,
+      points: roundedScore,
       rolls: breakdown.totalRolls,
     });
 
-    // Determine rating based on total points
-    const rating = this.getDiscRating(finalScore);
+    // Determine rating based on ROUNDED score (not raw score)
+    const rating = this.getDiscRating(roundedScore);
 
     return {
-      score: Math.round(finalScore * 10) / 10,
+      score: roundedScore,
       rating: rating,
       breakdown: breakdown,
     };
