@@ -5,7 +5,7 @@
 /* Sidebar Styles */
 .sidebar{background:var(--card);border-radius:12px;padding:20px;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--bord2)}
 
-.sidebar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-shrink:0}
+.sidebar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-shrink:0;gap:16px}
 
 .sidebar-header h2{color:var(--gold);margin:0;font-size:1.5em}
 
