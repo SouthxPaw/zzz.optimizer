@@ -3,12 +3,12 @@
   "mindscapes": {
     "1091": {
       "comment": "Miyabi",
-      "6": [
+      "2": [
         {
           "type": "CRIT_Rate",
           "value": 15,
           "format": "%",
-          "note": ""
+          "note": "Upon entering the battlefield, CRIT Rate increases by 15%"
         }
       ]
     },
@@ -66,6 +66,14 @@
     },
     "1191": {
       "comment": "Ellen",
+      "1": [
+        {
+          "type": "CRIT_Rate",
+          "value": 12,
+          "format": "%",
+          "note": ""
+        }
+      ],
       "6": [
         {
           "type": "PEN_Ratio",
@@ -121,7 +129,7 @@
       "4": [
         {
           "type": "CRIT_Rate",
-          "value": 12,
+          "value": 10,
           "format": "%",
           "note": "When Anton uses a Chain Attack or Ultimate, all squad members' CRIT Rate increases by 10% for 12s."
         }
@@ -131,8 +139,8 @@
       "comment": "Astra Yao",
       "2": [
         {
-          "type": "CRIT_Rate",
-          "value": 12,
+          "type": "ATK%",
+          "value": 19,
           "format": "%",
           "note": "The ATK buff from Core Passive: Graceful Andante is further increased by 19%, with an increased maximum of 400. While in the Idyllic Cadenza state, when other characters switch in through a Quick Assist, Chain Attack, Defensive Assist, or Evasive Assist, Astra Yao will additionally follow up with 1 Tremolo and 3 Tone Clusters to attack. This effect can trigger once every 3s."
         }
@@ -162,7 +170,7 @@
     },
     "1071": {
       "comment": "Caesar",
-      "4": [
+      "2": [
         {
           "type": "Energy_Regen",
           "value": 10,
@@ -302,7 +310,7 @@
       "1": [
         {
           "type": "Anomaly_Proficiency",
-          "value": 240,
+          "value": 80,
           "format": "flat",
           "note": ""
         }
@@ -332,7 +340,7 @@
       "2": [
         {
           "type": "ATK%",
-          "value": 35,
+          "value": 20,
           "format": "%",
           "note": ""
         }
