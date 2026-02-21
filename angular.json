@@ -67,6 +67,7 @@
               "baseHref": "/zzz.optimizer/",
               "outputHashing": "all",
               "optimization": true,
+              "serviceWorker": "ngsw-config.json",
               "budgets": [
                 {
                   "type": "initial",
