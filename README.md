@@ -2,7 +2,7 @@
 
 A comprehensive build optimizer and character builder for **Zenless Zone Zero** (ZZZ). Manage your agents, W-Engines, disc sets, and calculate optimal builds with real-time stat calculations and scoring.
 
-![Version](https://img.shields.io/badge/version-5.8.56-blue.svg)
+![Version](https://img.shields.io/badge/version-5.8.57-blue.svg)
 ![Angular](https://img.shields.io/badge/Angular-19.2-red.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -81,7 +81,6 @@ Visit the live site: [ZZZ Optimizer](https://southxpaw.github.io/zzz.optimizer/)
 
 This tool uses game data from:
 - [Prydwen.gg](https://www.prydwen.gg/zenless/) - Character guides and analysis
-- [Hakushin](https://zzz3.hakush.in/) - Game data
 - [Enka Network](https://enka.network) - API for validating disc scoring thresholds against real player data
 - Official game assets and calculations
 
