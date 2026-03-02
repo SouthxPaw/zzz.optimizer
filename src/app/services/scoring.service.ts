@@ -173,7 +173,7 @@ export class ScoringService {
   }
 
   /**
-   * Load contextual stat weights from Interknot Network data
+   * Load contextual stat weights from agent stat weights data
    */
   private async loadAgentStatWeights() {
     try {
@@ -301,11 +301,11 @@ export class ScoringService {
    * Calculate disc score based on substats and main stat
    * Uses agent-specific weights from breakpoints config
    *
-   * NEW ALGORITHM (v2) - Aligned with Interknot Network rating system:
+   * NEW ALGORITHM (v2):
    * - Focuses on "where did rolls go" not "what substats exist"
    * - No penalty for substats with 0 rolls
    * - Simple formula: Main Stat (3pts) + Substat Rolls (rolls × weight × 3.0) + Roll Bonus (1pt)
-   * - Converts 0-30 Interknot scale to 0-140+ scale (multiply by 4.8)
+   * - Converts 0-30 normalized scale to 0-140+ scale (multiply by 4.8)
    *
    * BACKWARD COMPATIBLE:
    * - Old agents use priorityStats: ['CRIT_Rate', 'CRIT_DMG'] (all weighted 1.0)
@@ -321,7 +321,7 @@ export class ScoringService {
       mainStatPoints: 0,
       subStatPoints: 0,
       rollBonusPoints: 0,
-      interknot_score: 0,
+      normalized_score: 0,
       detectedBuild: null as string | null,
       totalRolls: 0,
       details: [] as Array<{
@@ -430,9 +430,9 @@ export class ScoringService {
     let substatPoints = 0;
     let totalRollCount = 0;
 
-    // Detect if we're using InterKnot scaled weights (> 1.5) or old system (≤ 1.5)
+    // Detect if we're using new scaled weights (> 1.5) or old system (≤ 1.5)
     const maxWeight = Math.max(...Object.values(statWeights).filter(w => typeof w === 'number'));
-    const useInterKnotScaling = maxWeight > 1.5;
+    const useNewScaling = maxWeight > 1.5;
 
     disc.subStats.forEach((substat) => {
       // Calculate total roll count for this substat
@@ -440,15 +440,15 @@ export class ScoringService {
       totalRollCount += rolls;
       breakdown.totalRolls += rolls;
 
-      // Get stat weight (0.7-1.0 range for old system, or 3.5-4.25 for InterKnot)
+      // Get stat weight (0.7-1.0 range for old system, or 3.5-4.25 for new system)
       const statWeight = statWeights[substat.type];
 
       // Only award points for priority stats (weight > 0)
       if (statWeight !== undefined && statWeight > 0) {
         // FORMULA: rolls × weight × multiplier
-        // InterKnot weights are already scaled (3.5, 4.25, etc.) so multiplier = 1.0
+        // New scaled weights (3.5, 4.25, etc.) use multiplier = 1.0
         // Old system weights (0.7-1.0) need multiplier = 3.0
-        const multiplier = useInterKnotScaling ? 1.0 : 3.0;
+        const multiplier = useNewScaling ? 1.0 : 3.0;
         const points = rolls * statWeight * multiplier;
         substatPoints += points;
 
@@ -461,9 +461,8 @@ export class ScoringService {
         });
       } else {
         // BLACK tier - wasted stat gets minimal points
-        // This matches Interknot's treatment of off-meta stats
-        const BLACK_TIER_WEIGHT = useInterKnotScaling ? 0.5 : 0.17;
-        const multiplier = useInterKnotScaling ? 1.0 : 3.0;
+        const BLACK_TIER_WEIGHT = useNewScaling ? 0.5 : 0.17;
+        const multiplier = useNewScaling ? 1.0 : 3.0;
         const points = rolls * BLACK_TIER_WEIGHT * multiplier;
         substatPoints += points;
 
@@ -478,7 +477,7 @@ export class ScoringService {
     });
 
     // STEP 3: Total Rolls Bonus (1 point if 5+ UPGRADE rolls, not total rolls)
-    // Interknot counts upgrade rolls only (enhancements), not initial substat rolls
+    // Count upgrade rolls only (enhancements), not initial substat rolls
     const upgradeRolls = totalRollCount - disc.subStats.length;
     let rollBonus = 0;
     if (upgradeRolls >= 5) {
@@ -492,19 +491,20 @@ export class ScoringService {
       });
     }
 
-    // STEP 4: Calculate Interknot score (0-30 scale)
-    const interknot_score = mainStatPoints + substatPoints + rollBonus;
-    breakdown.interknot_score = Math.round(interknot_score * 10) / 10;
+    // STEP 4: Calculate normalized score (0-30 scale)
+    const normalized_score = mainStatPoints + substatPoints + rollBonus;
+    breakdown.normalized_score = Math.round(normalized_score * 10) / 10;
 
     // STEP 5: Convert to our 0-140+ scale (multiply by 4.8)
-    const finalScore = interknot_score * 4.8;
+    // Use the already-rounded normalized_score to ensure consistency
+    const finalScore = breakdown.normalized_score * 4.8;
 
     // Round the score first
     const roundedScore = Math.round(finalScore * 10) / 10;
 
     breakdown.details.push({
-      stat: 'Interknot Score (0-30 scale)',
-      value: breakdown.interknot_score,
+      stat: 'Normalized Score (0-30 scale)',
+      value: breakdown.normalized_score,
       points: roundedScore,
       rolls: breakdown.totalRolls,
     });
