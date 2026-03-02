@@ -33,8 +33,8 @@
                 substats and rolls
               </li>
               <li>
-                VOID HUNTER-tier discs score 134+ points, PHAETHON scores 117+,
-                SSS scores 105+, while average B-tier discs score 62-75 points
+                VOID HUNTER-tier discs score 134+ points, PHAETHON scores 118+,
+                SSS scores 114+, while average B-tier discs score 62-75 points
               </li>
               <li>
                 The average of all 6 disc scores determines this component -
@@ -205,7 +205,7 @@
               </li>
               <li>
                 <strong>Stat Weight:</strong> How valuable the stat is for this
-                build (0.7-1.3× multiplier)
+                build (varies by system - see stat weight tiers below)
               </li>
               <li>
                 Example: 5 rolls into CRIT Rate (weight 1.0) = 5 × 1.0 × 3.0 = <strong>15 points</strong>
@@ -223,27 +223,27 @@
           </li>
 
           <li>
-            <strong>Stat Weight Tiers:</strong>
+            <strong>Stat Weight Tiers (for Custom Upgrade Plans):</strong>
             <ul>
               <li>
-                <strong>Essential Stats (×1.3):</strong> Highest priority stats
-                (e.g., CRIT Rate for Miyabi on CRIT main stats)
+                <strong>Essential Priority (×1.3 in upgrade plans):</strong> Highest priority stats
+                you designate (e.g., CRIT Rate for a CRIT-focused build)
               </li>
               <li>
-                <strong>Core Stats (×1.0):</strong> Essential stats the agent
+                <strong>Important Priority (×1.0 in upgrade plans):</strong> Core stats the build
                 needs (e.g., CRIT DMG for CRIT agents)
               </li>
               <li>
-                <strong>Important Stats (×0.85):</strong> Very good stats that
-                amplify effectiveness (e.g., ATK%)
-              </li>
-              <li>
-                <strong>Nice Stats (×0.7):</strong> Useful but less
+                <strong>Nice Priority (×0.7 in upgrade plans):</strong> Useful but less
                 impactful stats (e.g., PEN for some agents)
               </li>
               <li>
-                <strong>Wasted Stats (×0.17):</strong> Off-meta stats that barely contribute
+                <strong>Ignore Priority (×0.17 in upgrade plans):</strong> Off-meta stats that barely contribute
                 (e.g., DEF% on DPS agents)
+              </li>
+              <li>
+                <strong>Note:</strong> Default agent scoring uses internal weight profiles optimized per agent
+                and build type. Custom upgrade plans allow you to override these with your own priorities.
               </li>
             </ul>
           </li>
