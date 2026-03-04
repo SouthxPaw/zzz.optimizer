@@ -5,8 +5,8 @@
   "theme_color": "#f4b942",
   "background_color": "#0a0a0a",
   "display": "standalone",
-  "scope": "./",
-  "start_url": "./",
+  "scope": "/zzz.optimizer/",
+  "start_url": "/zzz.optimizer/",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
