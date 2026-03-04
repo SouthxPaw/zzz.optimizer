@@ -30,7 +30,7 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
     },
     mainStatPreferences: {
       Drive4: ['Anomaly_Proficiency'],
-      Drive5: ['Element_DMG', 'Pen_Ratio', 'ATK%'],
+      Drive5: ['Element_DMG', 'PEN_Ratio', 'ATK%'],
       Drive6: ['Anomaly_Mastery', 'ATK%'],
     },
   },
