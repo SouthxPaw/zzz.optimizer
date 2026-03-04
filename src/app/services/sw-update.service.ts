@@ -1,8 +1,8 @@
 // services/sw-update.service.ts
 import { Injectable, ApplicationRef, OnDestroy } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { concat, interval, Subject } from 'rxjs';
-import { first, takeUntil, switchMap } from 'rxjs/operators';
+import { concat, interval, Subject, fromEvent, merge } from 'rxjs';
+import { first, takeUntil, switchMap, filter, map } from 'rxjs/operators';
 
 /**
  * Service Worker Update Service
@@ -13,14 +13,6 @@ import { first, takeUntil, switchMap } from 'rxjs/operators';
 })
 export class SwUpdateService implements OnDestroy {
   private destroy$ = new Subject<void>();
-  private visibilityChangeHandler = () => {
-    if (!document.hidden) {
-      this.checkForUpdate();
-    }
-  };
-  private focusHandler = () => {
-    this.checkForUpdate();
-  };
 
   constructor(
     private swUpdate: SwUpdate,
@@ -46,7 +38,26 @@ export class SwUpdateService implements OnDestroy {
     const everyHour$ = interval(60 * 60 * 1000);
     const everyHourOnceAppIsStable$ = concat(appIsStable$, everyHour$);
 
-    everyHourOnceAppIsStable$.pipe(
+    // Tab becomes visible (not hidden)
+    const tabVisible$ = fromEvent(document, 'visibilitychange').pipe(
+      filter(() => !document.hidden),
+      map(() => void 0) // Normalize to void for consistency
+    );
+
+    // Window gains focus
+    const windowFocus$ = fromEvent(window, 'focus').pipe(
+      map(() => void 0) // Normalize to void for consistency
+    );
+
+    // Combine all update triggers into a single stream
+    const allUpdateTriggers$ = merge(
+      everyHourOnceAppIsStable$,
+      tabVisible$,
+      windowFocus$
+    );
+
+    // Single subscription handles ALL update triggers with consistent logic
+    allUpdateTriggers$.pipe(
       takeUntil(this.destroy$),
       switchMap(() => this.swUpdate.checkForUpdate())
     ).subscribe({
@@ -81,12 +92,6 @@ export class SwUpdateService implements OnDestroy {
         'Please reload the page to continue.'
       );
     });
-
-    // Check for updates when user returns to tab
-    document.addEventListener('visibilitychange', this.visibilityChangeHandler);
-
-    // Check for updates when window regains focus
-    window.addEventListener('focus', this.focusHandler);
   }
 
   /**
@@ -95,8 +100,6 @@ export class SwUpdateService implements OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    document.removeEventListener('visibilitychange', this.visibilityChangeHandler);
-    window.removeEventListener('focus', this.focusHandler);
   }
 
 
