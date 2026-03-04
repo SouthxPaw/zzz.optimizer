@@ -38,4 +38,11 @@ export class NotificationComponent implements OnInit, OnDestroy {
   close() {
     this.notificationService.hide();
   }
+
+  onAction() {
+    if (this.notification?.action) {
+      this.notification.action.callback();
+      this.close();
+    }
+  }
 }
