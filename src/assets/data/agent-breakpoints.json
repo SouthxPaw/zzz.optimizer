@@ -3831,35 +3831,35 @@
       "breakpoints": {
         "hp": {
           "min": 7840,
-          "optimal": 7840
+          "optimal": 8500
         },
         "atk": {
-          "min": 1840,
-          "optimal": 1840
+          "min": 2500,
+          "optimal": 2900
         },
         "def": {
-          "min": 660,
-          "optimal": 660
+          "min": 650,
+          "optimal": 750
         },
         "impact": {
           "min": 0,
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 0,
-          "optimal": 0
+          "min": 184,
+          "optimal": 244
         },
         "critRate": {
-          "min": 52,
-          "optimal": 52
-        },
-        "critDmg": {
-          "min": 82,
-          "optimal": 82
-        },
-        "anomalyProficiency": {
           "min": 0,
           "optimal": 0
+        },
+        "critDmg": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyProficiency": {
+          "min": 330,
+          "optimal": 420
         },
         "pen": {
           "min": 0,
