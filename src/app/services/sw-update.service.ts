@@ -6,7 +6,7 @@ import { first } from 'rxjs/operators';
 
 /**
  * Service Worker Update Service
- * Handles automatic updates and user notifications for new app versions
+ * Handles automatic updates with smart detection (hourly + on visibility change)
  */
 @Injectable({
   providedIn: 'root'
@@ -32,11 +32,11 @@ export class SwUpdateService {
       first(isStable => isStable === true)
     );
 
-    // Check for updates every 6 hours after app is stable
-    const everySixHours$ = interval(6 * 60 * 60 * 1000);
-    const everySixHoursOnceAppIsStable$ = concat(appIsStable$, everySixHours$);
+    // Check for updates every hour after app is stable
+    const everyHour$ = interval(60 * 60 * 1000);
+    const everyHourOnceAppIsStable$ = concat(appIsStable$, everyHour$);
 
-    everySixHoursOnceAppIsStable$.subscribe(async () => {
+    everyHourOnceAppIsStable$.subscribe(async () => {
       try {
         const updateFound = await this.swUpdate.checkForUpdate();
         if (updateFound) {
@@ -49,15 +49,16 @@ export class SwUpdateService {
       }
     });
 
-    // Listen for version updates
-    this.swUpdate.versionUpdates
-      .pipe(
-        filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY')
-      )
-      .subscribe(evt => {
-        console.log('New version detected:', evt.latestVersion);
-        this.promptUserToUpdate();
-      });
+    // Listen for ALL version update events (for debugging)
+    this.swUpdate.versionUpdates.subscribe(evt => {
+      console.log('[SW Update] Version event:', evt.type, evt);
+
+      // When VERSION_READY is detected, the service worker will auto-activate
+      // due to updateMode: 'prefetch' in ngsw-config.json
+      if (evt.type === 'VERSION_READY') {
+        console.log('[SW Update] New version ready - will auto-reload');
+      }
+    });
 
     // Listen for unrecoverable state
     this.swUpdate.unrecoverable.subscribe(event => {
@@ -67,32 +68,22 @@ export class SwUpdateService {
         'Please reload the page to continue.'
       );
     });
+
+    // Check for updates when user returns to tab
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        console.log('[SW Update] Tab became visible - checking for updates');
+        this.checkForUpdate();
+      }
+    });
+
+    // Check for updates when window regains focus
+    window.addEventListener('focus', () => {
+      console.log('[SW Update] Window focused - checking for updates');
+      this.checkForUpdate();
+    });
   }
 
-  /**
-   * Prompt user to reload for new version
-   */
-  private promptUserToUpdate(): void {
-    const message =
-      'A new version of ZZZ Optimizer is available!\n' +
-      'Would you like to reload to get the latest features and improvements?';
-
-    if (confirm(message)) {
-      this.activateUpdate();
-    }
-  }
-
-  /**
-   * Activate the waiting service worker and reload
-   */
-  private async activateUpdate(): Promise<void> {
-    try {
-      await this.swUpdate.activateUpdate();
-      document.location.reload();
-    } catch (err) {
-      console.error('Failed to activate update:', err);
-    }
-  }
 
   /**
    * Notify user of unrecoverable state
