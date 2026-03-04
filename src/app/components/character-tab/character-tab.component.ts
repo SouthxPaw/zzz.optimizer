@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Subject, takeUntil, debounceTime, distinctUntilChanged, firstValueFrom } from 'rxjs';
 import { Agent, DiscSlot } from '../../models/agent.model';
 import { WEngine } from '../../models/wengine.model';
 import { Disc, MainStatType, SubStatType } from '../../models/disc.model';
@@ -2214,9 +2214,9 @@ async generateShareImage() {
 
     try {
       // Fetch data from Enka API
-      const enkaResult = await this.enkaApiService
-        .fetchPlayerData(historyItem.uid)
-        .toPromise();
+      const enkaResult = await firstValueFrom(
+        this.enkaApiService.fetchPlayerData(historyItem.uid)
+      );
 
       if (!enkaResult) {
         throw new Error('No data received from provided UID');
@@ -2326,9 +2326,9 @@ async generateShareImage() {
 
     try {
       // Fetch data from Enka API
-      const enkaResult = await this.enkaApiService
-        .fetchPlayerData(this.enkaUid)
-        .toPromise();
+      const enkaResult = await firstValueFrom(
+        this.enkaApiService.fetchPlayerData(this.enkaUid)
+      );
 
       if (!enkaResult) {
         throw new Error('No data received from provided UID');

@@ -1,8 +1,8 @@
 // services/sw-update.service.ts
-import { Injectable, ApplicationRef } from '@angular/core';
-import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
-import { filter, concat, interval } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { Injectable, ApplicationRef, OnDestroy } from '@angular/core';
+import { SwUpdate } from '@angular/service-worker';
+import { concat, interval, Subject } from 'rxjs';
+import { first, takeUntil, switchMap } from 'rxjs/operators';
 
 /**
  * Service Worker Update Service
@@ -11,7 +11,17 @@ import { first } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class SwUpdateService {
+export class SwUpdateService implements OnDestroy {
+  private destroy$ = new Subject<void>();
+  private visibilityChangeHandler = () => {
+    if (!document.hidden) {
+      this.checkForUpdate();
+    }
+  };
+  private focusHandler = () => {
+    this.checkForUpdate();
+  };
+
   constructor(
     private swUpdate: SwUpdate,
     private appRef: ApplicationRef
@@ -36,52 +46,35 @@ export class SwUpdateService {
     const everyHour$ = interval(60 * 60 * 1000);
     const everyHourOnceAppIsStable$ = concat(appIsStable$, everyHour$);
 
-    everyHourOnceAppIsStable$.subscribe(async () => {
-      try {
-        const updateFound = await this.swUpdate.checkForUpdate();
+    everyHourOnceAppIsStable$.pipe(
+      takeUntil(this.destroy$),
+      switchMap(() => this.swUpdate.checkForUpdate())
+    ).subscribe({
+      next: (updateFound) => {
         if (updateFound) {
           console.log('New version available');
         } else {
           console.log('App is up to date');
         }
-      } catch (err) {
+      },
+      error: (err) => {
         console.error('Failed to check for updates:', err);
       }
     });
 
-    // Listen for ALL version update events (for debugging)
-    this.swUpdate.versionUpdates.subscribe(evt => {
-      console.log('[SW Update] Version event:', evt.type, evt);
-
-      // When VERSION_READY is detected, the service worker will auto-activate
-      // due to updateMode: 'prefetch' in ngsw-config.json
+    // Listen for version ready events
+    this.swUpdate.versionUpdates.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(evt => {
       if (evt.type === 'VERSION_READY') {
-        console.log('[SW Update] New version ready - will auto-reload');
-      }
-
-      // Handle installation failures (e.g., hash mismatches during deployment)
-      if (evt.type === 'VERSION_INSTALLATION_FAILED') {
-        console.warn('[SW Update] Version installation failed - this may be due to deployment timing');
-
-        // Check if it's a hash mismatch error
-        const error = (evt as any).error || '';
-        if (error.includes('Hash mismatch')) {
-          console.warn('[SW Update] Hash mismatch detected - deployment may still be in progress');
-          console.warn('[SW Update] Will retry in 30 seconds...');
-
-          // Retry after a short delay to allow deployment to complete
-          setTimeout(() => {
-            console.log('[SW Update] Retrying update check after hash mismatch...');
-            this.checkForUpdate();
-          }, 30000); // 30 seconds
-        } else {
-          console.warn('[SW Update] Will retry on next scheduled check');
-        }
+        console.log('[SW Update] New version ready');
       }
     });
 
     // Listen for unrecoverable state
-    this.swUpdate.unrecoverable.subscribe(event => {
+    this.swUpdate.unrecoverable.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(event => {
       console.error('Service Worker unrecoverable state:', event.reason);
       this.notifyUnrecoverableState(
         'An error occurred that cannot be recovered from.\n' +
@@ -90,18 +83,20 @@ export class SwUpdateService {
     });
 
     // Check for updates when user returns to tab
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        console.log('[SW Update] Tab became visible - checking for updates');
-        this.checkForUpdate();
-      }
-    });
+    document.addEventListener('visibilitychange', this.visibilityChangeHandler);
 
     // Check for updates when window regains focus
-    window.addEventListener('focus', () => {
-      console.log('[SW Update] Window focused - checking for updates');
-      this.checkForUpdate();
-    });
+    window.addEventListener('focus', this.focusHandler);
+  }
+
+  /**
+   * Cleanup subscriptions and event listeners
+   */
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    document.removeEventListener('visibilitychange', this.visibilityChangeHandler);
+    window.removeEventListener('focus', this.focusHandler);
   }
 
 
