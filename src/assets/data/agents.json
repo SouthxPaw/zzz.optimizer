@@ -82244,5 +82244,1717 @@
     },
     "potentials": [],
     "Icon": "IconRole58"
+  },
+  {
+    "id": 1501,
+    "name": "Aria",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "90",
+          "format": "flat"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 205,
+      "name": "Ether"
+    },
+    "specialty": {
+      "id": 3,
+      "name": "Anomaly"
+    },
+    "attack_type": {
+      "id": 102,
+      "name": "Strike"
+    },
+    "stats": {
+      "Armor": 0.0,
+      "ArmorGrowth": 0.0,
+      "Attack": 124.0,
+      "AttackGrowth": 74992.0,
+      "AvatarPieceId": 5501.0,
+      "BreakStun": 87.0,
+      "Crit": 500.0,
+      "CritDamage": 5000.0,
+      "CritDmgRes": 0.0,
+      "CritRes": 0.0,
+      "Defence": 50.0,
+      "DefenceGrowth": 67561.0,
+      "ElementAbnormalPower": 115.0,
+      "ElementMystery": 116.0,
+      "Endurance": 0.0,
+      "HpGrowth": 845544.0,
+      "HpMax": 623.0,
+      "PenDelta": 0.0,
+      "PenRate": 0.0,
+      "Rbl": 1.0,
+      "RblCorrectionFactor": 10000.0,
+      "RblProbability": 0.0,
+      "Shield": 0.0,
+      "ShieldGrowth": 0.0,
+      "SpBarPoint": 120.0,
+      "SpRecover": 120.0,
+      "Stun": 0.0,
+      "RpMax": 0.0,
+      "RpRecover": 0.0
+    },
+    "lvl60_stats": {
+      "HpMax": 7749,
+      "Defence": 619,
+      "Attack": 863,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 87,
+      "ElementAbnormalPower": 151,
+      "ElementMystery": 116,
+      "SpBarPoint": 12
+    },
+    "ascension": [
+      {
+        "max_hp": 0,
+        "attack": 0,
+        "defense": 0,
+        "max_level": 10,
+        "min_level": 0,
+        "materials": [
+          {
+            "id": 10,
+            "amount": 24000
+          },
+          {
+            "id": 100213,
+            "amount": 4
+          }
+        ]
+      },
+      {
+        "max_hp": 428,
+        "attack": 44,
+        "defense": 34,
+        "max_level": 20,
+        "min_level": 10,
+        "materials": [
+          {
+            "id": 10,
+            "amount": 56000
+          },
+          {
+            "id": 100223,
+            "amount": 12
+          }
+        ]
+      },
+      {
+        "max_hp": 855,
+        "attack": 89,
+        "defense": 68,
+        "max_level": 30,
+        "min_level": 20,
+        "materials": [
+          {
+            "id": 10,
+            "amount": 120000
+          },
+          {
+            "id": 100223,
+            "amount": 20
+          }
+        ]
+      },
+      {
+        "max_hp": 1283,
+        "attack": 133,
+        "defense": 103,
+        "max_level": 40,
+        "min_level": 30,
+        "materials": [
+          {
+            "id": 10,
+            "amount": 200000
+          },
+          {
+            "id": 100233,
+            "amount": 10
+          }
+        ]
+      },
+      {
+        "max_hp": 1710,
+        "attack": 177,
+        "defense": 137,
+        "max_level": 50,
+        "min_level": 40,
+        "materials": [
+          {
+            "id": 10,
+            "amount": 400000
+          },
+          {
+            "id": 100233,
+            "amount": 20
+          }
+        ]
+      },
+      {
+        "max_hp": 2138,
+        "attack": 222,
+        "defense": 171,
+        "max_level": 60,
+        "min_level": 50,
+        "materials": []
+      }
+    ],
+    "extra_ascension": [
+      {
+        "max_level": 15,
+        "props": [
+          {
+            "id": 31401,
+            "name": "Anomaly Mastery",
+            "format": "{0:0.#}",
+            "value": 12,
+            "formatted_value": "12"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 0,
+            "formatted_value": "0"
+          }
+        ]
+      },
+      {
+        "max_level": 25,
+        "props": [
+          {
+            "id": 31401,
+            "name": "Anomaly Mastery",
+            "format": "{0:0.#}",
+            "value": 12,
+            "formatted_value": "12"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 25,
+            "formatted_value": "25"
+          }
+        ]
+      },
+      {
+        "max_level": 35,
+        "props": [
+          {
+            "id": 31401,
+            "name": "Anomaly Mastery",
+            "format": "{0:0.#}",
+            "value": 24,
+            "formatted_value": "24"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 25,
+            "formatted_value": "25"
+          }
+        ]
+      },
+      {
+        "max_level": 45,
+        "props": [
+          {
+            "id": 31401,
+            "name": "Anomaly Mastery",
+            "format": "{0:0.#}",
+            "value": 24,
+            "formatted_value": "24"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 50,
+            "formatted_value": "50"
+          }
+        ]
+      },
+      {
+        "max_level": 55,
+        "props": [
+          {
+            "id": 31401,
+            "name": "Anomaly Mastery",
+            "format": "{0:0.#}",
+            "value": 36,
+            "formatted_value": "36"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 50,
+            "formatted_value": "50"
+          }
+        ]
+      },
+      {
+        "max_level": 60,
+        "props": [
+          {
+            "id": 31401,
+            "name": "Anomaly Mastery",
+            "format": "{0:0.#}",
+            "value": 36,
+            "formatted_value": "36"
+          },
+          {
+            "id": 12101,
+            "name": "Base ATK",
+            "format": "{0:0.#}",
+            "value": 75,
+            "formatted_value": "75"
+          }
+        ]
+      }
+    ],
+    "mindscape_cinemas": [
+      {
+        "level": 1,
+        "name": "Energy Pulse",
+        "description": "When Aria's Basic Attack, Special Attack, or EX Special Attack deals damage to enemies, it ignores 10% of the target's Ether Anomaly Buildup RES. Additionally, when Aria triggers Abloom, it has a chance to trigger a critical hit. The base CRIT Rate is 25%, and CRIT DMG is 25%.. If initial Anomaly Mastery exceeds 100, each additional point of Anomaly Mastery increases this effect's CRIT Rate by 0.5%.",
+        "description2": "..."
+      },
+      {
+        "level": 2,
+        "name": "Dreambeat",
+        "description": "During Moment of Delusion, Aria ignores 12% of enemy DEF when attacking or triggering the Abloom effect.",
+        "description2": "..."
+      },
+      {
+        "level": 3,
+        "name": "Dreamer",
+        "description": "Basic Attack, Dodge, Assist, Special Attack, and Chain Attack Lv. +2",
+        "description2": "..."
+      },
+      {
+        "level": 4,
+        "name": "Mechanical Angel",
+        "description": "When Aria triggers Abloom, she gains 4 Energy and 70 Decibels. This can trigger once every 10s.",
+        "description2": "..."
+      },
+      {
+        "level": 5,
+        "name": "Tears in the Rain",
+        "description": "Basic Attack, Dodge, Assist, Special Attack, and Chain Attack Lv. +2",
+        "description2": "..."
+      },
+      {
+        "level": 6,
+        "name": "Construct's Dream",
+        "description": "Upon entering the battlefield, Aria immediately gains 1,200 Decibels. In Investigation Zone mode, this effect can trigger at most once every 180 . After Aria enters Moment of Delusion, she will not exit it, and Enhanced Charged Attacks deal 30% increased Ether DMG. While in Moment of Delusion, when an enemy on the field enters an Anomaly state, Aria gains 1 stacks of All-Out Support. This effect can occur once every 6s.",
+        "description2": "..."
+      }
+    ],
+    "skills": {
+      "BASIC": {
+        "descriptions": [
+          {
+            "name": "Basic Attack: Sweet Beat",
+            "description": "Press  to activate:\nLaunches up to four consecutive attacks forward, dealing Ether DMG.\nIf the fourth hit lands, 1 Support Energy is generated on the field after the attack ends.",
+            "params": null
+          },
+          {
+            "name": "Charged Attack: Perfect Pitch",
+            "description": "Hold  to activte:\nAria enters a charging state and can charge up to three stages. Releasing  or reaching the maximum charge time causes Aria to unleash a powerful downward attack forward based on the current charge stage, dealing massive Ether DMG.\nIf Support Energy is nearby while Aria is charging, she will absorb it. Each Support Energy absorbed immediately increases the charge level by 1 and grants 1 stack of a buff: the next charged attack increases Anomaly Buildup by 10%. This buff can stack up to 2 times and is removed after the charged attack ends.\nAfter the fourth hit of her Basic Attack, Special Attack: Full-Sugar Beats - No Ice, EX Special Attack, Lv. 3 Charged Attack, Quick Assist, Chain Attack, or Ultimate, if there are more than 2 Support Energy nearby, hold  to instantly unleash a Lv. 3 Charged Attack.\nWhile charging, Anti-Interrupt Level is increased and damage taken is reduced by 40%. Character is invulnerable during the charge attack.",
+            "params": null
+          },
+          {
+            "name": "Basic Attack: Sweet Beat",
+            "description": null,
+            "params": [
+              {
+                "name": "1st-Hit DMG Multiplier",
+                "description": "{Skill:1501001, Prop:1001}",
+                "params": {
+                  "1501001": {
+                    "main": 3320,
+                    "growth": 310,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "2nd-Hit DMG Multiplier",
+                "description": "{Skill:1501002, Prop:1001}",
+                "params": {
+                  "1501002": {
+                    "main": 7160,
+                    "growth": 660,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "3rd-Hit DMG Multiplier",
+                "description": "{Skill:1501003, Prop:1001}",
+                "params": {
+                  "1501003": {
+                    "main": 9380,
+                    "growth": 860,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "4th-Hit DMG Multiplier",
+                "description": "{Skill:1501004, Prop:1001}",
+                "params": {
+                  "1501004": {
+                    "main": 19420,
+                    "growth": 1770,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "1st-Hit Daze Multiplier",
+                "description": "{Skill:1501001, Prop:1002}",
+                "params": {
+                  "1501001": {
+                    "main": 3440,
+                    "growth": 160,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "2nd-Hit Daze Multiplier",
+                "description": "{Skill:1501002, Prop:1002}",
+                "params": {
+                  "1501002": {
+                    "main": 6800,
+                    "growth": 310,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "3rd-Hit Daze Multiplier",
+                "description": "{Skill:1501003, Prop:1002}",
+                "params": {
+                  "1501003": {
+                    "main": 8230,
+                    "growth": 380,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "4th-Hit Daze Multiplier",
+                "description": "{Skill:1501004, Prop:1002}",
+                "params": {
+                  "1501004": {
+                    "main": 16560,
+                    "growth": 760,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Charged Attack: Perfect Pitch",
+            "description": null,
+            "params": [
+              {
+                "name": "Charge Level One Attack DMG Multiplier",
+                "description": "{Skill:1501005, Prop:1001}",
+                "params": {
+                  "1501005": {
+                    "main": 18150,
+                    "growth": 1650,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Charge Level Two Attack DMG Multiplier",
+                "description": "{Skill:1501006, Prop:1001}",
+                "params": {
+                  "1501006": {
+                    "main": 20720,
+                    "growth": 1890,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Charge Level Three Attack DMG Multiplier",
+                "description": "{Skill:1501007, Prop:1001}",
+                "params": {
+                  "1501007": {
+                    "main": 27500,
+                    "growth": 2500,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Enhanced Charge Attack DMG Multiplier",
+                "description": "{Skill:1501008, Prop:1001}",
+                "params": {
+                  "1501008": {
+                    "main": 32090,
+                    "growth": 2920,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Charge Level Three Attack DMG Multiplier (Coordinated)",
+                "description": "{Skill:1501007, Prop:1001} + {Skill:1501022, Prop:1001}",
+                "params": {
+                  "1501007": {
+                    "main": 27500,
+                    "growth": 2500,
+                    "format": "%"
+                  },
+                  "1501022": {
+                    "main": 4130,
+                    "growth": 380,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Charge Level One Attack Daze Multiplier",
+                "description": "{Skill:1501005, Prop:1002}",
+                "params": {
+                  "1501005": {
+                    "main": 15430,
+                    "growth": 710,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Charge Level Two Attack Daze Multiplier",
+                "description": "{Skill:1501006, Prop:1002}",
+                "params": {
+                  "1501006": {
+                    "main": 17610,
+                    "growth": 810,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Charge Level Three Attack Daze Multiplier",
+                "description": "{Skill:1501007, Prop:1002}",
+                "params": {
+                  "1501007": {
+                    "main": 11000,
+                    "growth": 500,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Charge Level Three Attack Daze Multiplier (Coordinated)",
+                "description": "{Skill:1501007, Prop:1002} + {Skill:1501022, Prop:1002}",
+                "params": {
+                  "1501007": {
+                    "main": 11000,
+                    "growth": 500,
+                    "format": "%"
+                  },
+                  "1501022": {
+                    "main": 1650,
+                    "growth": 80,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Enhanced Charge Attack Daze Multiplier",
+                "description": "{Skill:1501008, Prop:1002}",
+                "params": {
+                  "1501008": {
+                    "main": 11000,
+                    "growth": 500,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "materials": {
+          "1": [
+            {
+              "id": 10,
+              "amount": 2000
+            },
+            {
+              "id": 100115,
+              "amount": 2
+            }
+          ],
+          "2": [
+            {
+              "id": 10,
+              "amount": 3000
+            },
+            {
+              "id": 100115,
+              "amount": 3
+            }
+          ],
+          "3": [
+            {
+              "id": 10,
+              "amount": 6000
+            },
+            {
+              "id": 100125,
+              "amount": 2
+            }
+          ],
+          "4": [
+            {
+              "id": 10,
+              "amount": 9000
+            },
+            {
+              "id": 100125,
+              "amount": 3
+            }
+          ],
+          "5": [
+            {
+              "id": 10,
+              "amount": 12000
+            },
+            {
+              "id": 100125,
+              "amount": 4
+            }
+          ],
+          "6": [
+            {
+              "id": 10,
+              "amount": 18000
+            },
+            {
+              "id": 100125,
+              "amount": 6
+            }
+          ],
+          "7": [
+            {
+              "id": 10,
+              "amount": 45000
+            },
+            {
+              "id": 100135,
+              "amount": 5
+            }
+          ],
+          "8": [
+            {
+              "id": 10,
+              "amount": 67500
+            },
+            {
+              "id": 100135,
+              "amount": 8
+            }
+          ],
+          "9": [
+            {
+              "id": 10,
+              "amount": 90000
+            },
+            {
+              "id": 100135,
+              "amount": 10
+            }
+          ],
+          "10": [
+            {
+              "id": 10,
+              "amount": 112500
+            },
+            {
+              "id": 100135,
+              "amount": 12
+            }
+          ],
+          "11": [
+            {
+              "id": 10,
+              "amount": 135000
+            },
+            {
+              "id": 100135,
+              "amount": 15
+            },
+            {
+              "id": 100941,
+              "amount": 1
+            }
+          ],
+          "12": []
+        },
+        "type": "Basic"
+      },
+      "DODGE": {
+        "descriptions": [
+          {
+            "name": "Dodge: On-Beat Precision",
+            "description": "Press  to activate:\nA quick dash dodge.\nIf activated during a Basic Attack, this action does not reset the Basic Attack sequence.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Dash Attack: Silky-Smooth Combo",
+            "description": "Press  during a dodge to activate:\nFlies forward with a swift slashing attack, dealing Ether DMG.\nIf activated during a Basic Attack, this action does not reset the Basic Attack sequence.",
+            "params": null
+          },
+          {
+            "name": "Dodge Counter: ",
+            "description": "Press  during a Perfect Dodge to activate:\nUnleashes a powerful slash against the target, dealing Ether DMG.\nAfter using this skill, it can be immediately followed up with the third hit of a Basic Attack.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Dash Attack: Silky-Smooth Combo",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1501013, Prop:1001}",
+                "params": {
+                  "1501013": {
+                    "main": 4580,
+                    "growth": 420,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1501013, Prop:1002}",
+                "params": {
+                  "1501013": {
+                    "main": 2290,
+                    "growth": 110,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Dodge Counter: ",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1501014, Prop:1001}",
+                "params": {
+                  "1501014": {
+                    "main": 24120,
+                    "growth": 2200,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1501014, Prop:1002}",
+                "params": {
+                  "1501014": {
+                    "main": 21090,
+                    "growth": 960,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "materials": {
+          "1": [
+            {
+              "id": 10,
+              "amount": 2000
+            },
+            {
+              "id": 100115,
+              "amount": 2
+            }
+          ],
+          "2": [
+            {
+              "id": 10,
+              "amount": 3000
+            },
+            {
+              "id": 100115,
+              "amount": 3
+            }
+          ],
+          "3": [
+            {
+              "id": 10,
+              "amount": 6000
+            },
+            {
+              "id": 100125,
+              "amount": 2
+            }
+          ],
+          "4": [
+            {
+              "id": 10,
+              "amount": 9000
+            },
+            {
+              "id": 100125,
+              "amount": 3
+            }
+          ],
+          "5": [
+            {
+              "id": 10,
+              "amount": 12000
+            },
+            {
+              "id": 100125,
+              "amount": 4
+            }
+          ],
+          "6": [
+            {
+              "id": 10,
+              "amount": 18000
+            },
+            {
+              "id": 100125,
+              "amount": 6
+            }
+          ],
+          "7": [
+            {
+              "id": 10,
+              "amount": 45000
+            },
+            {
+              "id": 100135,
+              "amount": 5
+            }
+          ],
+          "8": [
+            {
+              "id": 10,
+              "amount": 67500
+            },
+            {
+              "id": 100135,
+              "amount": 8
+            }
+          ],
+          "9": [
+            {
+              "id": 10,
+              "amount": 90000
+            },
+            {
+              "id": 100135,
+              "amount": 10
+            }
+          ],
+          "10": [
+            {
+              "id": 10,
+              "amount": 112500
+            },
+            {
+              "id": 100135,
+              "amount": 12
+            }
+          ],
+          "11": [
+            {
+              "id": 10,
+              "amount": 135000
+            },
+            {
+              "id": 100135,
+              "amount": 15
+            },
+            {
+              "id": 100941,
+              "amount": 1
+            }
+          ],
+          "12": []
+        },
+        "type": "Dodge"
+      },
+      "SPECIAL": {
+        "descriptions": [
+          {
+            "name": "Special Attack: Full-Sugar Beats",
+            "description": "Press  to activate:\nDelivers a forward kick, dealing Ether DMG.\nAnti-Interrupt level is increased while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Special Attack: Full-Sugar Beats - No Ice",
+            "description": "After the fourth hit of her Basic Attack, Assist Follow-Up, Chain Attack, or Ultimate, press  to activate:\nDelivers a forward kick, dealing Ether DMG. If the attack hits an enemy, 1 Support Energy is generated on the field after the attack ends.\nAnti-Interrupt level is increased while using this skill.",
+            "params": null
+          },
+          {
+            "name": "EX Special Attack: Fall into Delusion",
+            "description": "With enough energy, press  to activate:\nDelivers a powerful forward kick followed by a sonic wave attack, dealing Ether DMG. If the attack hits an enemy, 3 Support Energy are generated on the field after the attack ends.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "EX Special Attack: Instantly Hooked",
+            "description": "After launching EX Special Attack: Fall into Delusion, and with enough Energy, press  to activate:\nPerforms a powerful downward attack in front, dealing Ether DMG. If the attack hits an enemy, 3 Support Energy are generated on the field after the attack ends.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Special Attack: Full-Sugar Beats",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1501009, Prop:1001}",
+                "params": {
+                  "1501009": {
+                    "main": 5430,
+                    "growth": 500,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1501009, Prop:1002}",
+                "params": {
+                  "1501009": {
+                    "main": 6790,
+                    "growth": 310,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Special Attack: Full-Sugar Beats - No Ice",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1501010, Prop:1001}",
+                "params": {
+                  "1501010": {
+                    "main": 6480,
+                    "growth": 590,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1501010, Prop:1002}",
+                "params": {
+                  "1501010": {
+                    "main": 6710,
+                    "growth": 310,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "EX Special Attack: Fall into Delusion",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1501011, Prop:1001}",
+                "params": {
+                  "1501011": {
+                    "main": 51120,
+                    "growth": 4650,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1501011, Prop:1002}",
+                "params": {
+                  "1501011": {
+                    "main": 40270,
+                    "growth": 1840,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Energy Cost",
+                "description": "40",
+                "params": null
+              }
+            ]
+          },
+          {
+            "name": "EX Special Attack: Instantly Hooked",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1501012, Prop:1001}",
+                "params": {
+                  "1501012": {
+                    "main": 54450,
+                    "growth": 4950,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1501012, Prop:1002}",
+                "params": {
+                  "1501012": {
+                    "main": 43360,
+                    "growth": 1980,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Energy Cost",
+                "description": "40",
+                "params": null
+              }
+            ]
+          }
+        ],
+        "materials": {
+          "1": [
+            {
+              "id": 10,
+              "amount": 2000
+            },
+            {
+              "id": 100115,
+              "amount": 2
+            }
+          ],
+          "2": [
+            {
+              "id": 10,
+              "amount": 3000
+            },
+            {
+              "id": 100115,
+              "amount": 3
+            }
+          ],
+          "3": [
+            {
+              "id": 10,
+              "amount": 6000
+            },
+            {
+              "id": 100125,
+              "amount": 2
+            }
+          ],
+          "4": [
+            {
+              "id": 10,
+              "amount": 9000
+            },
+            {
+              "id": 100125,
+              "amount": 3
+            }
+          ],
+          "5": [
+            {
+              "id": 10,
+              "amount": 12000
+            },
+            {
+              "id": 100125,
+              "amount": 4
+            }
+          ],
+          "6": [
+            {
+              "id": 10,
+              "amount": 18000
+            },
+            {
+              "id": 100125,
+              "amount": 6
+            }
+          ],
+          "7": [
+            {
+              "id": 10,
+              "amount": 45000
+            },
+            {
+              "id": 100135,
+              "amount": 5
+            }
+          ],
+          "8": [
+            {
+              "id": 10,
+              "amount": 67500
+            },
+            {
+              "id": 100135,
+              "amount": 8
+            }
+          ],
+          "9": [
+            {
+              "id": 10,
+              "amount": 90000
+            },
+            {
+              "id": 100135,
+              "amount": 10
+            }
+          ],
+          "10": [
+            {
+              "id": 10,
+              "amount": 112500
+            },
+            {
+              "id": 100135,
+              "amount": 12
+            }
+          ],
+          "11": [
+            {
+              "id": 10,
+              "amount": 135000
+            },
+            {
+              "id": 100135,
+              "amount": 15
+            },
+            {
+              "id": 100941,
+              "amount": 1
+            }
+          ],
+          "12": []
+        },
+        "type": "Special"
+      },
+      "CHAIN": {
+        "descriptions": [
+          {
+            "name": "Chain Attack: Dream Collab",
+            "description": "When a Chain Attack is triggered, select the character to activate:\nLaunches a series of attacks forward, dealing massive Ether DMG. 4 Support Energy are generated on the field on skill activation.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Ultimate: 100% Energy",
+            "description": "When Decibel Rating is at Maximum, press  to activate:\nReleases all her power, entering Moment of Delusion, and fires multiple powerful shots at the target, dealing massive Ether DMG.\nUpon entering Moment of Delusion, Aria gains 3 stacks of All-Out Support and activates Ether Veil: Delusion Reprise. While Ether Veil: Delusion Reprise is active, all squad members gain an additional 50 ATK for 30s. Re-activating Ether Veil: Delusion Reprise will first cancel any existing instance of Ether Veil: Delusion Reprise.\nWhile Aria is charging, if she has All-Out Support, stacks of All-Out Support are consumed first to charge. Each stack of All-Out Support consumed increases the charge level by 2.\nUpon entering Moment of Delusion, if Aria already has All-Out Support, all remaining stacks of All-Out Support are first converted into Support Energy and generated on the field. Each stack of All-Out Support is converted into 2 Support Energy.\nMoment of Delusion lasts for up to 15s. During Moment of Delusion, Aria's Lv. 3 Charged Attack is upgraded to an enhanced version.\nWhen exiting Moment of Delusion, if Aria has All-Out Support, all remaining stacks of All-Out Support are converted into Support Energy and generated on the field. Each stack of All-Out Support is converted into 2 Support Energy.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Chain Attack: Dream Collab",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1501015, Prop:1001}",
+                "params": {
+                  "1501015": {
+                    "main": 81620,
+                    "growth": 7420,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1501015, Prop:1002}",
+                "params": {
+                  "1501015": {
+                    "main": 23100,
+                    "growth": 1050,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Ultimate: 100% Energy",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1501016, Prop:1001}",
+                "params": {
+                  "1501016": {
+                    "main": 162250,
+                    "growth": 14750,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1501016, Prop:1002}",
+                "params": {
+                  "1501016": {
+                    "main": 19800,
+                    "growth": 900,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "materials": {
+          "1": [
+            {
+              "id": 10,
+              "amount": 2000
+            },
+            {
+              "id": 100115,
+              "amount": 2
+            }
+          ],
+          "2": [
+            {
+              "id": 10,
+              "amount": 3000
+            },
+            {
+              "id": 100115,
+              "amount": 3
+            }
+          ],
+          "3": [
+            {
+              "id": 10,
+              "amount": 6000
+            },
+            {
+              "id": 100125,
+              "amount": 2
+            }
+          ],
+          "4": [
+            {
+              "id": 10,
+              "amount": 9000
+            },
+            {
+              "id": 100125,
+              "amount": 3
+            }
+          ],
+          "5": [
+            {
+              "id": 10,
+              "amount": 12000
+            },
+            {
+              "id": 100125,
+              "amount": 4
+            }
+          ],
+          "6": [
+            {
+              "id": 10,
+              "amount": 18000
+            },
+            {
+              "id": 100125,
+              "amount": 6
+            }
+          ],
+          "7": [
+            {
+              "id": 10,
+              "amount": 45000
+            },
+            {
+              "id": 100135,
+              "amount": 5
+            }
+          ],
+          "8": [
+            {
+              "id": 10,
+              "amount": 67500
+            },
+            {
+              "id": 100135,
+              "amount": 8
+            }
+          ],
+          "9": [
+            {
+              "id": 10,
+              "amount": 90000
+            },
+            {
+              "id": 100135,
+              "amount": 10
+            }
+          ],
+          "10": [
+            {
+              "id": 10,
+              "amount": 112500
+            },
+            {
+              "id": 100135,
+              "amount": 12
+            }
+          ],
+          "11": [
+            {
+              "id": 10,
+              "amount": 135000
+            },
+            {
+              "id": 100135,
+              "amount": 15
+            },
+            {
+              "id": 100941,
+              "amount": 1
+            }
+          ],
+          "12": []
+        },
+        "type": "Chain"
+      },
+      "ASSIST": {
+        "descriptions": [
+          {
+            "name": "Quick Assist: Shattered Fantasy",
+            "description": "When the active character is launched, press  to activate:\nDelivers a powerful slash to the target, dealing Ether DMG.\nAfter using this skill, it can be immediately followed up with the third hit of a Basic Attack.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Defensive Assist: Clutch Save",
+            "description": "When the on-field character is about to be attacked, press  to activate:\nParries the enemy's attack, dealing massive Daze.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Assist Follow-Up: Song Encore",
+            "description": "Press  after a Defensive Assist to activate:\nUnleashes a powerful series of slashes on the target, dealing massive Ether DMG.\nCharacter is invulnerable while using this skill.",
+            "params": null
+          },
+          {
+            "name": "Quick Assist: Shattered Fantasy",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1501017, Prop:1001}",
+                "params": {
+                  "1501017": {
+                    "main": 4960,
+                    "growth": 460,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1501017, Prop:1002}",
+                "params": {
+                  "1501017": {
+                    "main": 4960,
+                    "growth": 230,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Defensive Assist: Clutch Save",
+            "description": null,
+            "params": [
+              {
+                "name": "Light Defensive Daze Multiplier",
+                "description": "{Skill:1501018, Prop:1002}",
+                "params": {
+                  "1501018": {
+                    "main": 27130,
+                    "growth": 1240,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Heavy Defensive Daze Multiplier",
+                "description": "{Skill:1501019, Prop:1002}",
+                "params": {
+                  "1501019": {
+                    "main": 34280,
+                    "growth": 1560,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Chain Defensive Daze Multiplier",
+                "description": "{Skill:1501020, Prop:1002}",
+                "params": {
+                  "1501020": {
+                    "main": 16680,
+                    "growth": 760,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "Assist Follow-Up: Song Encore",
+            "description": null,
+            "params": [
+              {
+                "name": "DMG Multiplier",
+                "description": "{Skill:1501021, Prop:1001}",
+                "params": {
+                  "1501021": {
+                    "main": 36350,
+                    "growth": 3310,
+                    "format": "%"
+                  }
+                }
+              },
+              {
+                "name": "Daze Multiplier",
+                "description": "{Skill:1501021, Prop:1002}",
+                "params": {
+                  "1501021": {
+                    "main": 31570,
+                    "growth": 1440,
+                    "format": "%"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "materials": {
+          "1": [
+            {
+              "id": 10,
+              "amount": 2000
+            },
+            {
+              "id": 100115,
+              "amount": 2
+            }
+          ],
+          "2": [
+            {
+              "id": 10,
+              "amount": 3000
+            },
+            {
+              "id": 100115,
+              "amount": 3
+            }
+          ],
+          "3": [
+            {
+              "id": 10,
+              "amount": 6000
+            },
+            {
+              "id": 100125,
+              "amount": 2
+            }
+          ],
+          "4": [
+            {
+              "id": 10,
+              "amount": 9000
+            },
+            {
+              "id": 100125,
+              "amount": 3
+            }
+          ],
+          "5": [
+            {
+              "id": 10,
+              "amount": 12000
+            },
+            {
+              "id": 100125,
+              "amount": 4
+            }
+          ],
+          "6": [
+            {
+              "id": 10,
+              "amount": 18000
+            },
+            {
+              "id": 100125,
+              "amount": 6
+            }
+          ],
+          "7": [
+            {
+              "id": 10,
+              "amount": 45000
+            },
+            {
+              "id": 100135,
+              "amount": 5
+            }
+          ],
+          "8": [
+            {
+              "id": 10,
+              "amount": 67500
+            },
+            {
+              "id": 100135,
+              "amount": 8
+            }
+          ],
+          "9": [
+            {
+              "id": 10,
+              "amount": 90000
+            },
+            {
+              "id": 100135,
+              "amount": 10
+            }
+          ],
+          "10": [
+            {
+              "id": 10,
+              "amount": 112500
+            },
+            {
+              "id": 100135,
+              "amount": 12
+            }
+          ],
+          "11": [
+            {
+              "id": 10,
+              "amount": 135000
+            },
+            {
+              "id": 100135,
+              "amount": 15
+            },
+            {
+              "id": 100941,
+              "amount": 1
+            }
+          ],
+          "12": []
+        },
+        "type": "Assist"
+      }
+    },
+    "passive": {
+      "levels": {
+        "1": {
+          "level": 1,
+          "id": 1501049,
+          "names": [
+            "Core Passive: Control Core",
+            "Additional Ability: Collaborative Stage"
+          ],
+          "descriptions": [
+            "Aria's Anomaly Proficiency is increased by 45.\nIf Aria's Level 3 Charged Attack hits an enemy suffering Ether, Electric, Fire, Physical, or Ice Anomaly, it will trigger Abloom, dealing additional Attribute Anomaly DMG. The DMG ratio is equal to 14.5%/7.6%/18.8%/1.35%/1.9% of the original Anomaly DMG for every 10 points of initial Anomaly Mastery. If the target is Stunned, the DMG ratio is further increased by 50%.",
+            "When another character in your squad is an Attack or Support character:\nWhen Ether Veil is activated, 4 Support Energy are generated on the field. This can trigger once every 1s.\nWhen any squad member applies Corruption to an enemy, the effect's duration is extended by 3s."
+          ]
+        },
+        "2": {
+          "level": 2,
+          "id": 1501050,
+          "names": [
+            "Core Passive: Control Core",
+            "Additional Ability: Collaborative Stage"
+          ],
+          "descriptions": [
+            "Aria's Anomaly Proficiency is increased by 52.\nIf Aria's Level 3 Charged Attack hits an enemy suffering Ether, Electric, Fire, Physical, or Ice Anomaly, it will trigger Abloom, dealing additional Attribute Anomaly DMG. The DMG ratio is equal to 16.9%/8.8%/21.9%/1.58%/2.2% of the original Anomaly DMG for every 10 points of initial Anomaly Mastery. If the target is Stunned, the DMG ratio is further increased by 50%.",
+            "When another character in your squad is an Attack or Support character:\nWhen Ether Veil is activated, 4 Support Energy are generated on the field. This can trigger once every 1s.\nWhen any squad member applies Corruption to an enemy, the effect's duration is extended by 3s."
+          ]
+        },
+        "3": {
+          "level": 3,
+          "id": 1501051,
+          "names": [
+            "Core Passive: Control Core",
+            "Additional Ability: Collaborative Stage"
+          ],
+          "descriptions": [
+            "Aria's Anomaly Proficiency is increased by 60.\nIf Aria's Level 3 Charged Attack hits an enemy suffering Ether, Electric, Fire, Physical, or Ice Anomaly, it will trigger Abloom, dealing additional Attribute Anomaly DMG. The DMG ratio is equal to 19.3%/10.1%/25.1%/1.8%/2.5% of the original Anomaly DMG for every 10 points of initial Anomaly Mastery. If the target is Stunned, the DMG ratio is further increased by 50%.",
+            "When another character in your squad is an Attack or Support character:\nWhen Ether Veil is activated, 4 Support Energy are generated on the field. This can trigger once every 1s.\nWhen any squad member applies Corruption to an enemy, the effect's duration is extended by 3s."
+          ]
+        },
+        "4": {
+          "level": 4,
+          "id": 1501052,
+          "names": [
+            "Core Passive: Control Core",
+            "Additional Ability: Collaborative Stage"
+          ],
+          "descriptions": [
+            "Aria's Anomaly Proficiency is increased by 67.\nIf Aria's Level 3 Charged Attack hits an enemy suffering Ether, Electric, Fire, Physical, or Ice Anomaly, it will trigger Abloom, dealing additional Attribute Anomaly DMG. The DMG ratio is equal to 21.8%/11.3%/28.2%/2.03%/2.9% of the original Anomaly DMG for every 10 points of initial Anomaly Mastery. If the target is Stunned, the DMG ratio is further increased by 50%.",
+            "When another character in your squad is an Attack or Support character:\nWhen Ether Veil is activated, 4 Support Energy are generated on the field. This can trigger once every 1s.\nWhen any squad member applies Corruption to an enemy, the effect's duration is extended by 3s."
+          ]
+        },
+        "5": {
+          "level": 5,
+          "id": 1501053,
+          "names": [
+            "Core Passive: Control Core",
+            "Additional Ability: Collaborative Stage"
+          ],
+          "descriptions": [
+            "Aria's Anomaly Proficiency is increased by 75.\nIf Aria's Level 3 Charged Attack hits an enemy suffering Ether, Electric, Fire, Physical, or Ice Anomaly, it will trigger Abloom, dealing additional Attribute Anomaly DMG. The DMG ratio is equal to 24.2%/12.6%/31.3%/2.25%/3.2% of the original Anomaly DMG for every 10 points of initial Anomaly Mastery. If the target is Stunned, the DMG ratio is further increased by 50%.",
+            "When another character in your squad is an Attack or Support character:\nWhen Ether Veil is activated, 4 Support Energy are generated on the field. This can trigger once every 1s.\nWhen any squad member applies Corruption to an enemy, the effect's duration is extended by 3s."
+          ]
+        },
+        "6": {
+          "level": 6,
+          "id": 1501054,
+          "names": [
+            "Core Passive: Control Core",
+            "Additional Ability: Collaborative Stage"
+          ],
+          "descriptions": [
+            "Aria's Anomaly Proficiency is increased by 82.\nIf Aria's Level 3 Charged Attack hits an enemy suffering Ether, Electric, Fire, Physical, or Ice Anomaly, it will trigger Abloom, dealing additional Attribute Anomaly DMG. The DMG ratio is equal to 26.6%/13.8%/34.5%/2.48%/3.5% of the original Anomaly DMG for every 10 points of initial Anomaly Mastery. If the target is Stunned, the DMG ratio is further increased by 50%.",
+            "When another character in your squad is an Attack or Support character:\nWhen Ether Veil is activated, 4 Support Energy are generated on the field. This can trigger once every 1s.\nWhen any squad member applies Corruption to an enemy, the effect's duration is extended by 3s."
+          ]
+        },
+        "7": {
+          "level": 7,
+          "id": 1501055,
+          "names": [
+            "Core Passive: Control Core",
+            "Additional Ability: Collaborative Stage"
+          ],
+          "descriptions": [
+            "Aria's Anomaly Proficiency is increased by 90.\nIf Aria's Level 3 Charged Attack hits an enemy suffering Ether, Electric, Fire, Physical, or Ice Anomaly, it will trigger Abloom, dealing additional Attribute Anomaly DMG. The DMG ratio is equal to 29%/15.1%/37.6%/2.7%/3.8% of the original Anomaly DMG for every 10 points of initial Anomaly Mastery. If the target is Stunned, the DMG ratio is further increased by 50%.",
+            "When another character in your squad is an Attack or Support character:\nWhen Ether Veil is activated, 4 Support Energy are generated on the field. This can trigger once every 1s.\nWhen any squad member applies Corruption to an enemy, the effect's duration is extended by 3s."
+          ]
+        }
+      },
+      "level_up_materials": {
+        "1": [
+          {
+            "id": 10,
+            "amount": 5000
+          }
+        ],
+        "2": [
+          {
+            "id": 10,
+            "amount": 12000
+          },
+          {
+            "id": 110506,
+            "amount": 2
+          }
+        ],
+        "3": [
+          {
+            "id": 10,
+            "amount": 28000
+          },
+          {
+            "id": 110506,
+            "amount": 4
+          }
+        ],
+        "4": [
+          {
+            "id": 10,
+            "amount": 60000
+          },
+          {
+            "id": 110506,
+            "amount": 9
+          },
+          {
+            "id": 110008,
+            "amount": 2
+          }
+        ],
+        "5": [
+          {
+            "id": 10,
+            "amount": 100000
+          },
+          {
+            "id": 110506,
+            "amount": 15
+          },
+          {
+            "id": 110008,
+            "amount": 3
+          }
+        ],
+        "6": [
+          {
+            "id": 10,
+            "amount": 200000
+          },
+          {
+            "id": 110506,
+            "amount": 30
+          },
+          {
+            "id": 110008,
+            "amount": 4
+          }
+        ]
+      }
+    },
+    "potentials": [],
+    "Icon": "IconRole57"
   }
 ]

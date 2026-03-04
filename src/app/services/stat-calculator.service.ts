@@ -238,6 +238,10 @@ export class StatCalculatorService {
       case 'Anomaly_Proficiency':
         stats.anomalyProficiency += subStatValue;
         break;
+      case 'Anomaly_Mastery':
+        // W-Engine Anomaly Mastery is a percentage bonus
+        stats.anomalyMasteryPercent += subStatValue;
+        break;
     }
 
     // Apply refinement bonuses ONLY if W-Engine specialty matches agent specialty
@@ -287,6 +291,11 @@ export class StatCalculatorService {
           break;
         case 'Anomaly_Proficiency':
           stats.anomalyProficiency += value;
+          break;
+        case 'Anomaly_Mastery':
+          // Refinement Anomaly Mastery bonuses are flat values (Format does not include %)
+          // The value has already been processed by extractRefinementProperties
+          stats.anomalyMastery += value;
           break;
       }
     });
@@ -525,7 +534,7 @@ export class StatCalculatorService {
           // Disc 6 Anomaly Mastery is a percentage bonus (30%)
           stats.anomalyMasteryPercent += mainStat.value;
           break;
-        case 'Pen_Ratio':
+        case 'PEN_Ratio':
           stats.penRatio += mainStat.value;
           break;
         case 'Impact':

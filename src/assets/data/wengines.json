@@ -3945,5 +3945,58 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14150": {
+    "Id": 14150,
+    "CodeName": "Weapon_S_1501",
+    "Name": "Angel in the Shell",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1501.png",
+    "WeaponType": {
+      "3": "Anomaly"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Anomaly Mastery",
+      "Name2": "Anomaly Mastery",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 90,
+            "W2": 103,
+            "W3": 117,
+            "W4": 130,
+            "W5": 144
+          }
+        }
+      ],
+      "Desc": "Increases the equipper's Anomaly Proficiency by [NUMBER]. When the equipper is an Ether character, and comes on-field or uses a Special Attack or EX Special Attack, they gain a buff: DMG dealt to enemies afflicted with Attribute Anomalies increases by %, and all Attribute Anomaly DMG they trigger increases by %, lasting 15s. Repeated triggers reset the duration, and the effect is removed when switching off-field."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "9000",
+          "format": "flat"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
