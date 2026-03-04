@@ -71,8 +71,8 @@ const MAIN_STAT_PROPERTY_MAP: { [key: number]: MainStatType } = {
   20103: 'CRIT_Rate',   // Crit Rate [Flat]
   21101: 'CRIT_DMG',    // Crit DMG [Base]
   21103: 'CRIT_DMG',    // Crit DMG [Flat]
-  23101: 'Pen_Ratio',   // Pen Ratio [Base]
-  23103: 'Pen_Ratio',   // Pen Ratio [Flat]
+  23101: 'PEN_Ratio',   // Pen Ratio [Base]
+  23103: 'PEN_Ratio',   // Pen Ratio [Flat]
   30501: 'Energy_Regen',// Energy Regen [Base]
   30502: 'Energy_Regen',// Energy Regen%
   30503: 'Energy_Regen',// Energy Regen [Flat]

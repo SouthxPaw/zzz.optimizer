@@ -2509,7 +2509,8 @@ async generateShareImage() {
         wEngine.subStat.type === 'CRIT_Rate' ||
         wEngine.subStat.type === 'CRIT_DMG' ||
         wEngine.subStat.type === 'PEN_Ratio' ||
-        wEngine.subStat.type === 'Energy_Regen';
+        wEngine.subStat.type === 'Energy_Regen' ||
+        wEngine.subStat.type === 'Anomaly_Mastery';
 
       stats.push({
         iconName: iconName,
@@ -2530,7 +2531,8 @@ async generateShareImage() {
       subStat.type === 'CRIT_Rate' ||
       subStat.type === 'CRIT_DMG' ||
       subStat.type === 'PEN_Ratio' ||
-      subStat.type === 'Energy_Regen';
+      subStat.type === 'Energy_Regen' ||
+      subStat.type === 'Anomaly_Mastery';
 
     return isPercent ? `${subStat.value}%` : String(subStat.value);
   }
