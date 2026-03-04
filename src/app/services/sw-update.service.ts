@@ -58,6 +58,26 @@ export class SwUpdateService {
       if (evt.type === 'VERSION_READY') {
         console.log('[SW Update] New version ready - will auto-reload');
       }
+
+      // Handle installation failures (e.g., hash mismatches during deployment)
+      if (evt.type === 'VERSION_INSTALLATION_FAILED') {
+        console.warn('[SW Update] Version installation failed - this may be due to deployment timing');
+
+        // Check if it's a hash mismatch error
+        const error = (evt as any).error || '';
+        if (error.includes('Hash mismatch')) {
+          console.warn('[SW Update] Hash mismatch detected - deployment may still be in progress');
+          console.warn('[SW Update] Will retry in 30 seconds...');
+
+          // Retry after a short delay to allow deployment to complete
+          setTimeout(() => {
+            console.log('[SW Update] Retrying update check after hash mismatch...');
+            this.checkForUpdate();
+          }, 30000); // 30 seconds
+        } else {
+          console.warn('[SW Update] Will retry on next scheduled check');
+        }
+      }
     });
 
     // Listen for unrecoverable state
