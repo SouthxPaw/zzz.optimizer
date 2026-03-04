@@ -390,6 +390,8 @@ export class DataTransformerService {
       subStatType = 'DEF%';
     } else if (subStatName.includes('HP')) {
       subStatType = 'HP%';
+    } else if (subStatName.includes('Anomaly Mastery')) {
+      subStatType = 'Anomaly_Mastery';
     } else if (subStatName.includes('Anomaly Proficiency')) {
       subStatType = 'Anomaly_Proficiency';
     } else if (subStatName.includes('Impact')) {
@@ -397,7 +399,7 @@ export class DataTransformerService {
     } else if (subStatName.includes('Energy')) {
       subStatType = 'Energy_Regen';
     } else if (subStatName.includes('PEN')) {
-      subStatType = 'Pen_Ratio';
+      subStatType = 'PEN_Ratio';
     }
 
     // Get effect description from Effect field
@@ -490,6 +492,8 @@ export class DataTransformerService {
       subStatType = 'DEF%';
     } else if (subStatName.includes('HP')) {
       subStatType = 'HP%';
+    } else if (subStatName.includes('Anomaly Mastery')) {
+      subStatType = 'Anomaly_Mastery';
     } else if (subStatName.includes('Anomaly Proficiency')) {
       subStatType = 'Anomaly_Proficiency';
     } else if (subStatName.includes('Impact')) {
@@ -497,7 +501,7 @@ export class DataTransformerService {
     } else if (subStatName.includes('Energy')) {
       subStatType = 'Energy_Regen';
     } else if (subStatName.includes('PEN')) {
-      subStatType = 'Pen_Ratio';
+      subStatType = 'PEN_Ratio';
     }
 
     // Get effect description from Effect.Desc first, then fallback to Talents (first talent)
@@ -798,6 +802,8 @@ export class DataTransformerService {
         type = 'DEF%';
       } else if (name.includes('HP')) {
         type = 'HP%';
+      } else if (name.includes('Anomaly Mastery')) {
+        type = 'Anomaly_Mastery';
       } else if (name.includes('Anomaly Proficiency')) {
         type = 'Anomaly_Proficiency';
       } else if (name.includes('Impact')) {
@@ -805,7 +811,7 @@ export class DataTransformerService {
       } else if (name.includes('Energy')) {
         type = 'Energy_Regen';
       } else if (name.includes('PEN')) {
-        type = 'Pen_Ratio';
+        type = 'PEN_Ratio';
       }
 
       // Convert from basis points to percentage ONLY for percentage stats

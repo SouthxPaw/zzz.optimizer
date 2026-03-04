@@ -4,7 +4,7 @@ import { BaseStats, DiscSlot } from "./agent.model";
 export type MainStatType =
   | 'HP' | 'HP%' | 'ATK' | 'ATK%' | 'DEF' | 'DEF%'
   | 'CRIT_Rate' | 'CRIT_DMG' | 'Anomaly_Proficiency' | 'Anomaly_Mastery'
-  | 'Pen_Ratio' | 'Element_DMG' | 'Impact' | 'Energy_Regen';
+  | 'PEN_Ratio' | 'Element_DMG' | 'Impact' | 'Energy_Regen';
 
 export type SubStatType =
   | 'HP' | 'HP%' | 'ATK' | 'ATK%' | 'DEF' | 'DEF%'
