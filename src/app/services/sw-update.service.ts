@@ -73,12 +73,13 @@ export class SwUpdateService implements OnDestroy {
       }
     });
 
-    // Listen for version ready events
+    // Listen for version ready events and auto-reload
     this.swUpdate.versionUpdates.pipe(
       takeUntil(this.destroy$)
     ).subscribe(evt => {
       if (evt.type === 'VERSION_READY') {
-        console.log('[SW Update] New version ready');
+        console.log('[SW Update] New version ready - reloading page to apply update');
+        document.location.reload();
       }
     });
 
