@@ -100,21 +100,16 @@ export class DataTransformerService {
     const mappedElement = this.mappingService.getElement(element);
     const mappedSpecialty = this.mappingService.getSpecialty(specialty);
 
-    // Extract icon from rawAgent if available (character/{id}.json has Icon field like "IconRole11")
-    let icon: string | undefined;
-
-    if (rawAgent.Icon) {
-      // Extract number from IconRole format (e.g., "IconRole11" -> "11")
-      const match = rawAgent.Icon.match(/IconRole(\d+)/);
-      if (match) {
-        const iconNumber = match[1];
-        icon = `assets/data/images/agents/IconRole${iconNumber}.webp`;
-      }
-    }
-
-    // If no Icon field, fallback to default (shouldn't happen with proper data)
-    if (!icon) {
-      icon = `assets/data/images/agents/IconRole01.webp`;
+    // Extract icon - prefer Icon field if available, fallback to normalized name
+    let icon: string;
+    if (rawAgent.Icon && !rawAgent.Icon.startsWith('IconRole')) {
+      // Icon field exists and is not the old IconRole format - use it directly
+      const iconFileName = rawAgent.Icon.endsWith('.webp') ? rawAgent.Icon : `${rawAgent.Icon}.webp`;
+      icon = `assets/data/images/agents/${iconFileName}`;
+    } else {
+      // Fallback: normalize agent name to match icon filename format
+      const iconFileName = this.normalizeAgentNameForIcon(name);
+      icon = `assets/data/images/agents/${iconFileName}.webp`;
     }
 
     // Map element icon
@@ -290,6 +285,43 @@ export class DataTransformerService {
       energyRegen: 1.2,
       energyRegenPercent: 0
     };
+  }
+
+  /**
+   * Normalize agent name to match icon filename format
+   * Examples:
+   * - "Zhu Yuan" -> "ZhuYuan"
+   * - "Qingyi" -> "QingYi"
+   * - "Soldier 11" -> "Soldier11"
+   * - "Astra Yao" -> "AstraYao"
+   * - "Yixuan" -> "YiXuan"
+   * - "Pan Yinhu" -> "PanYinhu"
+   * - "Ye Shunguang" -> "YeShunguang"
+   * - "Ju Fufu" -> "JuFufu"
+   * - "Soldier 0 - Anby" -> "Soldier0Anby"
+   * - "Orphie & Magus" -> "Orphie"
+   * - "Seed" -> "SEED"
+   */
+  private normalizeAgentNameForIcon(name: string): string {
+    // Handle special cases first
+    const specialCases: { [key: string]: string } = {
+      'Qingyi': 'QingYi',
+      'Yixuan': 'YiXuan',
+      'Seed': 'SEED',
+      'Orphie & Magus': 'Orphie'
+    };
+
+    // Check if this is a special case (case-insensitive check)
+    const specialKey = Object.keys(specialCases).find(key => key.toLowerCase() === name.toLowerCase());
+    if (specialKey) {
+      return specialCases[specialKey];
+    }
+
+    // Default normalization: remove spaces, hyphens, and ampersands
+    return name
+      .replace(/\s*&\s*.*$/, '') // Remove " & Magus" or similar patterns
+      .replace(/\s+/g, '')        // Remove all spaces
+      .replace(/-/g, '');          // Remove hyphens
   }
 
   /**
@@ -590,17 +622,17 @@ export class DataTransformerService {
     const element = this.mappingService.getElement(basicAgent.element?.id || basicAgent.element);
     const specialty = this.mappingService.getSpecialty(basicAgent.specialty?.id || basicAgent.type);
 
-    // Extract icon from basicAgent (agents.json now has Icon field like "IconRole11")
-    let icon: string | undefined;
-    let iconNumber: string | undefined;
-
-    if (basicAgent.Icon) {
-      // Extract number from IconRole format (e.g., "IconRole11" -> "11")
-      const match = basicAgent.Icon.match(/IconRole(\d+)/);
-      if (match) {
-        iconNumber = match[1];
-        icon = `assets/data/images/agents/IconRole${iconNumber}.webp`;
-      }
+    // Extract icon - prefer Icon field if available, fallback to normalized name
+    const agentName = basicAgent.name || basicAgent.EN || basicAgent.Name || 'Unknown';
+    let icon: string;
+    if (basicAgent.Icon && !basicAgent.Icon.startsWith('IconRole')) {
+      // Icon field exists and is not the old IconRole format - use it directly
+      const iconFileName = basicAgent.Icon.endsWith('.webp') ? basicAgent.Icon : `${basicAgent.Icon}.webp`;
+      icon = `assets/data/images/agents/${iconFileName}`;
+    } else {
+      // Fallback: normalize agent name to match icon filename format
+      const iconFileName = this.normalizeAgentNameForIcon(agentName);
+      icon = `assets/data/images/agents/${iconFileName}.webp`;
     }
 
     // Map element icon

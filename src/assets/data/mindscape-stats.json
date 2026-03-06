@@ -353,7 +353,7 @@
           "note": ""
         }
       ],
-      "6":[
+      "6": [
         {
           "type": "CRIT_Rate",
           "value": 9.45,
@@ -374,15 +374,26 @@
       ],
       "6": [
         {
-          "type":"CRIT_Rate",
+          "type": "CRIT_Rate",
           "value": 100,
           "format": "%",
           "note": ""
         },
         {
-          "type":"CRIT_DMG",
+          "type": "CRIT_DMG",
           "value": 105,
           "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1511": {
+      "comment": "NangongYu",
+      "4": [
+        {
+          "type": "Anomaly_Proficiency",
+          "value": 40,
+          "format": "flat",
           "note": ""
         }
       ]
