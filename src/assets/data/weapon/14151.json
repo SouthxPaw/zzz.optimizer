@@ -1,0 +1,23 @@
+{
+  "Id": 14148,
+  "CodeName": "Weapon_S_1481",
+  "Name": "Yesterday Calls",
+  "Desc": "Riiiing, riiing — every missed call from the Hollows will be answered by Krampus' top-tier customer service!\nThat playful line hardly captures the weight of old obsessions, grudges, and regrets carried through those calls. But in truth, it's the most earnest vow of one prepared to bear that burden.\n\n<color=#959595>\"Everyone else enters the Hollow armed to the teeth. Why am I the one carrying a bunch of phones?\" —Dialyn, venting to her boss about her assigned gear.</color>",
+  "Desc2": "Equip to increase Stun Agents' combat capabilities",
+  "Desc3": "That call you never picked up... she's the one who answered it.",
+  "Rarity": 4,
+  "Icon": "Assets/NapResources/UI/Sprite/A1DynamicLoad/ItemIconWeapon/UnPacker/Weapon_S_1481.png",
+  "WeaponType": { "2": "Stun" },
+  "BaseProperty": {
+    "Name": "Base ATK",
+    "Name2": "Base ATK",
+    "Format": "{0:0.#}",
+    "Value": 48
+  },
+  "RandProperty": {
+    "Name": "Anomaly Mastery",
+    "Name2": "Anomaly Mastery",
+    "Format": "{0:0.#%}",
+    "Value": 3000
+  }
+}
