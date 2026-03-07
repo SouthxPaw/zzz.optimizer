@@ -68,15 +68,17 @@ export class SwUpdateService implements OnDestroy {
       switchMap(() => {
         // Add timestamp to bust browser cache for ngsw.json
         // This ensures we always check the server for new versions
-        console.log('[SW Update] Checking for updates...');
+        const timestamp = new Date().toLocaleTimeString();
+        console.log(`[SW Update] ${timestamp} - Update check triggered`);
         return this.bustCacheAndCheckForUpdate();
       })
     ).subscribe({
       next: (updateFound) => {
+        const timestamp = new Date().toLocaleTimeString();
         if (updateFound) {
-          console.log('[SW Update] New version available');
+          console.log(`[SW Update] ${timestamp} - ✅ New version available`);
         } else {
-          console.log('[SW Update] App is up to date');
+          console.log(`[SW Update] ${timestamp} - ℹ️ App is up to date`);
         }
       },
       error: (err) => {
@@ -183,8 +185,9 @@ export class SwUpdateService implements OnDestroy {
   }
 
   /**
-   * Bust browser cache and check for Service Worker updates
-   * Forces a fresh check by invalidating the ngsw.json cache
+   * Check for updates using the SAME mechanism that works on page refresh
+   * Key insight: Angular SW checks for updates on NAVIGATION events, not programmatic checks
+   * So we fetch ngsw.json ourselves, compare versions, and reload if different
    */
   private async bustCacheAndCheckForUpdate(): Promise<boolean> {
     if (!this.swUpdate.isEnabled) {
@@ -192,21 +195,101 @@ export class SwUpdateService implements OnDestroy {
     }
 
     try {
-      // Delete the ngsw.json from browser cache to force fresh check
-      const cacheNames = await caches.keys();
-      for (const cacheName of cacheNames) {
-        const cache = await caches.open(cacheName);
-        // Remove ngsw.json from all caches
-        await cache.delete('/ngsw.json');
-        await cache.delete('/ngsw.json?ngsw-cache-bust=' + Date.now());
+      // Fetch fresh ngsw.json from server (bypasses all caches)
+      const cacheBuster = Date.now();
+      const ngswUrl = `/ngsw.json?v=${cacheBuster}`;
+
+      console.log('[SW Update] Fetching fresh ngsw.json from server...');
+
+      const response = await fetch(ngswUrl, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
+        }
+      });
+
+      if (!response.ok) {
+        console.warn('[SW Update] Failed to fetch ngsw.json:', response.status);
+        return false;
       }
 
-      // Now check for updates - SW will fetch fresh ngsw.json
-      return await this.swUpdate.checkForUpdate();
+      const serverManifest = await response.json();
+      const serverHash = serverManifest?.hash;
+
+      if (!serverHash) {
+        console.warn('[SW Update] Server manifest missing hash');
+        return false;
+      }
+
+      console.log('[SW Update] Server version hash:', serverHash.substring(0, 8) + '...');
+
+      // Get currently installed version
+      const installedHash = await this.getInstalledVersionHash();
+
+      if (!installedHash) {
+        console.log('[SW Update] Could not determine installed version, triggering check');
+        // Can't compare, let Angular try
+        return await this.swUpdate.checkForUpdate();
+      }
+
+      console.log('[SW Update] Installed version hash:', installedHash.substring(0, 8) + '...');
+
+      // Compare versions
+      if (serverHash !== installedHash) {
+        console.log('[SW Update] 🎉 NEW VERSION DETECTED! Reloading page...');
+
+        // Clear ALL caches before reload to ensure fresh content
+        const cacheNames = await caches.keys();
+        await Promise.all(
+          cacheNames.map(cacheName => {
+            console.log('[SW Update] Clearing cache:', cacheName);
+            return caches.delete(cacheName);
+          })
+        );
+
+        // Reload page - this triggers navigation event which Angular SW handles correctly
+        setTimeout(() => window.location.reload(), 500);
+        return true;
+      } else {
+        console.log('[SW Update] Already on latest version');
+        return false;
+      }
     } catch (err) {
-      console.error('[SW Update] Error busting cache:', err);
-      // Fallback to regular check
-      return await this.swUpdate.checkForUpdate();
+      console.error('[SW Update] Error checking for updates:', err);
+      return false;
+    }
+  }
+
+  /**
+   * Get the hash of the currently installed Service Worker version
+   * This reads from the SW's internal storage
+   */
+  private async getInstalledVersionHash(): Promise<string | null> {
+    try {
+      // The SW stores its version in a cache called 'ngsw:<hash>:db:control'
+      const cacheNames = await caches.keys();
+
+      // Find the control cache
+      const controlCache = cacheNames.find(name =>
+        name.startsWith('ngsw:') && name.includes(':db:control')
+      );
+
+      if (!controlCache) {
+        console.warn('[SW Update] No control cache found');
+        return null;
+      }
+
+      // Extract hash from cache name: 'ngsw:<hash>:db:control'
+      const hashMatch = controlCache.match(/ngsw:([^:]+):/);
+      if (hashMatch && hashMatch[1]) {
+        return hashMatch[1];
+      }
+
+      return null;
+    } catch (err) {
+      console.warn('[SW Update] Error getting installed version:', err);
+      return null;
     }
   }
 
