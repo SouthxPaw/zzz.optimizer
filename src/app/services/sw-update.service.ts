@@ -239,8 +239,13 @@ export class SwUpdateService implements OnDestroy {
         console.log('[SW Update] Already on latest version');
         return false;
       }
-    } catch (err) {
-      console.error('[SW Update] Error checking for updates:', err);
+    } catch (err: any) {
+      // Network errors during SW initialization are normal - just log and skip
+      if (err?.message?.includes('NetworkError') || err?.message?.includes('fetch')) {
+        console.log('[SW Update] Network unavailable or SW not ready, skipping check');
+      } else {
+        console.error('[SW Update] Error checking for updates:', err);
+      }
       return false;
     }
   }
@@ -254,19 +259,26 @@ export class SwUpdateService implements OnDestroy {
       // Look for cached ngsw.json in Service Worker caches
       const cacheNames = await caches.keys();
 
+      // Try multiple strategies to find the cached ngsw.json
       for (const cacheName of cacheNames) {
         if (cacheName.includes('ngsw:')) {
           const cache = await caches.open(cacheName);
 
-          // Try to find ngsw.json in this cache
+          // Strategy 1: Look for ngsw.json in cache keys
           const keys = await cache.keys();
           for (const request of keys) {
             if (request.url.includes('ngsw.json') && !request.url.includes('?')) {
               const response = await cache.match(request);
               if (response) {
-                const manifest = await response.json();
-                if (manifest?.timestamp) {
-                  return manifest.timestamp;
+                try {
+                  const manifest = await response.json();
+                  if (manifest?.timestamp) {
+                    console.log('[SW Update] Found cached manifest in:', cacheName);
+                    return manifest.timestamp;
+                  }
+                } catch {
+                  // Not valid JSON, skip
+                  continue;
                 }
               }
             }
@@ -274,7 +286,24 @@ export class SwUpdateService implements OnDestroy {
         }
       }
 
-      console.warn('[SW Update] Could not find cached ngsw.json');
+      // Strategy 2: Try direct cache match for ngsw.json
+      const baseUrl = document.baseURI || window.location.origin + window.location.pathname;
+      const ngswUrl = new URL('ngsw.json', baseUrl).href;
+
+      const cachedResponse = await caches.match(ngswUrl);
+      if (cachedResponse) {
+        try {
+          const manifest = await cachedResponse.json();
+          if (manifest?.timestamp) {
+            console.log('[SW Update] Found manifest via direct cache match');
+            return manifest.timestamp;
+          }
+        } catch {
+          // Not valid JSON
+        }
+      }
+
+      console.warn('[SW Update] Could not find cached ngsw.json, assuming first load');
       return null;
     } catch (err) {
       console.warn('[SW Update] Error getting installed version:', err);
