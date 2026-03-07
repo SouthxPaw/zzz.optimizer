@@ -439,19 +439,31 @@
 
           <div *ngIf="selectedBuild.equippedWEngine" class="wengine-details">
             <div class="wengine-header">
-              <video
-                *ngIf="selectedBuild.equippedWEngine.icon"
-                [src]="getWEngineIconPath(selectedBuild.equippedWEngine)"
-                [title]="selectedBuild.equippedWEngine.name"
-                class="wengine-icon"
-                autoplay
-                loop
-                muted
-                playsinline
-                [ngClass]="{'animated': isWEngineAnimated(selectedBuild.equippedWEngine)}"
-                (error)="onWEngineVideoError($event, selectedBuild.equippedWEngine)"
-                loading="lazy"
-              ></video>
+              <!-- Container for W-Engine icon (video or image) -->
+              <div class="wengine-icon-container">
+                <!-- Animated MP4 for desktop -->
+                <video
+                  *ngIf="isWEngineAnimated(selectedBuild.equippedWEngine)"
+                  [src]="getWEngineIconPath(selectedBuild.equippedWEngine)"
+                  [title]="selectedBuild.equippedWEngine.name"
+                  class="wengine-icon animated"
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                  (error)="onWEngineVideoError($event, selectedBuild.equippedWEngine)"
+                  loading="lazy"
+                ></video>
+                <!-- Static image for mobile or as fallback when video fails -->
+                <img
+                  *ngIf="!isWEngineAnimated(selectedBuild.equippedWEngine) && selectedBuild.equippedWEngine.icon"
+                  [src]="selectedBuild.equippedWEngine.icon"
+                  [alt]="selectedBuild.equippedWEngine.name"
+                  [title]="selectedBuild.equippedWEngine.name"
+                  class="wengine-icon"
+                  loading="lazy"
+                />
+              </div>
               <div class="wengine-info">
                 <h4>{{ selectedBuild.equippedWEngine.name }}</h4>
                 <p class="wengine-rarity">
