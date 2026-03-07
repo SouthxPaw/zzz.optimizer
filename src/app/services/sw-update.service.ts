@@ -196,10 +196,12 @@ export class SwUpdateService implements OnDestroy {
 
     try {
       // Fetch fresh ngsw.json from server (bypasses all caches)
+      // Use document.baseURI to get correct path (handles /zzz.optimizer/ subdirectory)
       const cacheBuster = Date.now();
-      const ngswUrl = `/ngsw.json?v=${cacheBuster}`;
+      const baseUrl = document.baseURI || window.location.origin + window.location.pathname;
+      const ngswUrl = new URL('ngsw.json', baseUrl).href + `?v=${cacheBuster}`;
 
-      console.log('[SW Update] Fetching fresh ngsw.json from server...');
+      console.log('[SW Update] Fetching fresh ngsw.json from:', ngswUrl);
 
       const response = await fetch(ngswUrl, {
         cache: 'no-store',
