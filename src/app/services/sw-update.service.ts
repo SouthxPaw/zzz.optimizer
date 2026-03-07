@@ -65,17 +65,22 @@ export class SwUpdateService implements OnDestroy {
     // Single subscription handles ALL update triggers with consistent logic
     allUpdateTriggers$.pipe(
       takeUntil(this.destroy$),
-      switchMap(() => this.swUpdate.checkForUpdate())
+      switchMap(() => {
+        // Add timestamp to bust browser cache for ngsw.json
+        // This ensures we always check the server for new versions
+        console.log('[SW Update] Checking for updates...');
+        return this.bustCacheAndCheckForUpdate();
+      })
     ).subscribe({
       next: (updateFound) => {
         if (updateFound) {
-          console.log('New version available');
+          console.log('[SW Update] New version available');
         } else {
-          console.log('App is up to date');
+          console.log('[SW Update] App is up to date');
         }
       },
       error: (err) => {
-        console.error('Failed to check for updates:', err);
+        console.error('[SW Update] Failed to check for updates:', err);
       }
     });
 
@@ -178,6 +183,34 @@ export class SwUpdateService implements OnDestroy {
   }
 
   /**
+   * Bust browser cache and check for Service Worker updates
+   * Forces a fresh check by invalidating the ngsw.json cache
+   */
+  private async bustCacheAndCheckForUpdate(): Promise<boolean> {
+    if (!this.swUpdate.isEnabled) {
+      return false;
+    }
+
+    try {
+      // Delete the ngsw.json from browser cache to force fresh check
+      const cacheNames = await caches.keys();
+      for (const cacheName of cacheNames) {
+        const cache = await caches.open(cacheName);
+        // Remove ngsw.json from all caches
+        await cache.delete('/ngsw.json');
+        await cache.delete('/ngsw.json?ngsw-cache-bust=' + Date.now());
+      }
+
+      // Now check for updates - SW will fetch fresh ngsw.json
+      return await this.swUpdate.checkForUpdate();
+    } catch (err) {
+      console.error('[SW Update] Error busting cache:', err);
+      // Fallback to regular check
+      return await this.swUpdate.checkForUpdate();
+    }
+  }
+
+  /**
    * Notify user of unrecoverable state
    */
   private notifyUnrecoverableState(message: string): void {
@@ -191,15 +224,7 @@ export class SwUpdateService implements OnDestroy {
    * Can be called from UI button
    */
   async checkForUpdate(): Promise<boolean> {
-    if (!this.swUpdate.isEnabled) {
-      return false;
-    }
-
-    try {
-      return await this.swUpdate.checkForUpdate();
-    } catch (err) {
-      console.error('Error checking for updates:', err);
-      return false;
-    }
+    console.log('[SW Update] Manual update check triggered');
+    return await this.bustCacheAndCheckForUpdate();
   }
 }
