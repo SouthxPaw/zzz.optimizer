@@ -1,13 +1,13 @@
 // services/sw-update.service.ts
 import { Injectable, ApplicationRef, OnDestroy } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { concat, interval, Subject, fromEvent, merge } from 'rxjs';
-import { first, takeUntil, switchMap, filter, map } from 'rxjs/operators';
+import { concat, interval, Subject } from 'rxjs';
+import { first, takeUntil, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 /**
  * Service Worker Update Service
- * Handles automatic updates with smart detection (hourly + on visibility change)
+ * Handles automatic updates with hourly checks
  * Also detects version changes and forces cache clear automatically
  */
 @Injectable({
@@ -44,32 +44,13 @@ export class SwUpdateService implements OnDestroy {
     const everyHour$ = interval(60 * 60 * 1000);
     const everyHourOnceAppIsStable$ = concat(appIsStable$, everyHour$);
 
-    // Tab becomes visible (not hidden)
-    const tabVisible$ = fromEvent(document, 'visibilitychange').pipe(
-      filter(() => !document.hidden),
-      map(() => void 0) // Normalize to void for consistency
-    );
-
-    // Window gains focus
-    const windowFocus$ = fromEvent(window, 'focus').pipe(
-      map(() => void 0) // Normalize to void for consistency
-    );
-
-    // Combine all update triggers into a single stream
-    const allUpdateTriggers$ = merge(
-      everyHourOnceAppIsStable$,
-      tabVisible$,
-      windowFocus$
-    );
-
-    // Single subscription handles ALL update triggers with consistent logic
-    allUpdateTriggers$.pipe(
+    // Subscribe to hourly update checks
+    everyHourOnceAppIsStable$.pipe(
       takeUntil(this.destroy$),
       switchMap(() => {
-        // Add timestamp to bust browser cache for ngsw.json
-        // This ensures we always check the server for new versions
+        // Check for new version by comparing server and installed timestamps
         const timestamp = new Date().toLocaleTimeString();
-        console.log(`[SW Update] ${timestamp} - Update check triggered`);
+        console.log(`[SW Update] ${timestamp} - Hourly update check triggered`);
         return this.bustCacheAndCheckForUpdate();
       })
     ).subscribe({
@@ -217,29 +198,30 @@ export class SwUpdateService implements OnDestroy {
       }
 
       const serverManifest = await response.json();
-      const serverHash = serverManifest?.hash;
+      const serverTimestamp = serverManifest?.timestamp;
 
-      if (!serverHash) {
-        console.warn('[SW Update] Server manifest missing hash');
+      if (!serverTimestamp) {
+        console.warn('[SW Update] Server manifest missing timestamp');
         return false;
       }
 
-      console.log('[SW Update] Server version hash:', serverHash.substring(0, 8) + '...');
+      console.log('[SW Update] Server version timestamp:', serverTimestamp);
 
       // Get currently installed version
-      const installedHash = await this.getInstalledVersionHash();
+      const installedTimestamp = await this.getInstalledVersionTimestamp();
 
-      if (!installedHash) {
+      if (!installedTimestamp) {
         console.log('[SW Update] Could not determine installed version, triggering check');
         // Can't compare, let Angular try
         return await this.swUpdate.checkForUpdate();
       }
 
-      console.log('[SW Update] Installed version hash:', installedHash.substring(0, 8) + '...');
+      console.log('[SW Update] Installed version timestamp:', installedTimestamp);
 
-      // Compare versions
-      if (serverHash !== installedHash) {
+      // Compare versions (newer timestamp = new version)
+      if (serverTimestamp > installedTimestamp) {
         console.log('[SW Update] 🎉 NEW VERSION DETECTED! Reloading page...');
+        console.log('[SW Update] Server is newer:', serverTimestamp, 'vs', installedTimestamp);
 
         // Clear ALL caches before reload to ensure fresh content
         const cacheNames = await caches.keys();
@@ -264,30 +246,35 @@ export class SwUpdateService implements OnDestroy {
   }
 
   /**
-   * Get the hash of the currently installed Service Worker version
-   * This reads from the SW's internal storage
+   * Get the timestamp of the currently installed Service Worker version
+   * This reads from the cached ngsw.json manifest
    */
-  private async getInstalledVersionHash(): Promise<string | null> {
+  private async getInstalledVersionTimestamp(): Promise<number | null> {
     try {
-      // The SW stores its version in a cache called 'ngsw:<hash>:db:control'
+      // Look for cached ngsw.json in Service Worker caches
       const cacheNames = await caches.keys();
 
-      // Find the control cache
-      const controlCache = cacheNames.find(name =>
-        name.startsWith('ngsw:') && name.includes(':db:control')
-      );
+      for (const cacheName of cacheNames) {
+        if (cacheName.includes('ngsw:')) {
+          const cache = await caches.open(cacheName);
 
-      if (!controlCache) {
-        console.warn('[SW Update] No control cache found');
-        return null;
+          // Try to find ngsw.json in this cache
+          const keys = await cache.keys();
+          for (const request of keys) {
+            if (request.url.includes('ngsw.json') && !request.url.includes('?')) {
+              const response = await cache.match(request);
+              if (response) {
+                const manifest = await response.json();
+                if (manifest?.timestamp) {
+                  return manifest.timestamp;
+                }
+              }
+            }
+          }
+        }
       }
 
-      // Extract hash from cache name: 'ngsw:<hash>:db:control'
-      const hashMatch = controlCache.match(/ngsw:([^:]+):/);
-      if (hashMatch && hashMatch[1]) {
-        return hashMatch[1];
-      }
-
+      console.warn('[SW Update] Could not find cached ngsw.json');
       return null;
     } catch (err) {
       console.warn('[SW Update] Error getting installed version:', err);
