@@ -35,8 +35,8 @@ export class AppComponent implements OnInit, OnDestroy {
     // Initialize SEO structured data
     this.seo.addStructuredData();
 
-    // Initialize Service Worker update checking
-    this.swUpdate.init();
+    // Initialize Service Worker update checking (clears caches on version change)
+    await this.swUpdate.init();
 
     // Subscribe to loading state
     this.loadingService.loading$

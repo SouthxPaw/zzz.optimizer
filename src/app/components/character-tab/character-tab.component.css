@@ -759,7 +759,7 @@
 /* Mobile-specific fixes for Enka Import Modal scrolling */
 @media (max-width: 768px) {
   .enka-import-modal .modal-body {
-    max-height: calc(85vh - 180px);
+    max-height: calc(85vh - 220px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -776,18 +776,23 @@
 
   .enka-import-modal .modal-footer {
     flex-shrink: 0;
+    padding: 15px 20px;
   }
 }
 
 @media (max-width: 480px) {
   .enka-import-modal .modal-body {
-    max-height: calc(80vh - 160px);
+    max-height: calc(80vh - 200px);
     padding: 15px 20px;
   }
 
   .enka-import-modal .modal-content {
     max-height: 80vh;
     width: 95%;
+  }
+
+  .enka-import-modal .modal-footer {
+    padding: 12px 15px;
   }
 }
 
