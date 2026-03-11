@@ -93,6 +93,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   includeMindscapeBonuses = true;
   includePassiveBonuses = true;
 
+  // Track failed video loads to prevent infinite error loops
+  private failedVideoLoads = new Set<string>();
+
   // Disc creation state
   showDiscForm = false;
   selectedDiscSetForCreation: DiscSet | null = null;
@@ -2542,8 +2545,9 @@ async generateShareImage() {
   }
 
   getWEngineIconPath(wengine: any): string {
-    // Check if desktop (window width >= 769px)
-    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 769;
+    // Check if desktop using multiple signals
+    // Only show MP4s on true desktop devices, not mobile/tablet
+    const isDesktop = this.isDesktopDevice();
 
     if (isDesktop && wengine.icon) {
       // Try animated version first
@@ -2562,12 +2566,56 @@ async generateShareImage() {
   }
 
   isWEngineAnimated(wengine: any): boolean {
-    return typeof window !== 'undefined' && window.innerWidth >= 769 && !!wengine?.icon;
+    if (!wengine?.icon) {
+      return false;
+    }
+
+    // Don't try to animate if the video previously failed to load
+    const videoKey = this.getWEngineIconPath(wengine);
+    if (this.failedVideoLoads.has(videoKey)) {
+      return false;
+    }
+
+    return this.isDesktopDevice();
+  }
+
+  /**
+   * Detect if device is a true desktop (not mobile/tablet)
+   * Uses multiple signals: pointer type, touch support, and user agent
+   */
+  private isDesktopDevice(): boolean {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    // Check for touch capability (mobile/tablet will have touch)
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    // Check pointer type (fine = mouse, coarse = touch)
+    const hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+
+    // Check user agent for mobile keywords
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isMobileUA = /iphone|ipad|ipod|android|webos|blackberry|windows phone/i.test(userAgent);
+
+    // Device is desktop if:
+    // 1. No touch support AND fine pointer (mouse), OR
+    // 2. Not identified as mobile in user agent AND width >= 769px
+    const isDesktop = (!hasTouch && !hasCoarsePointer) ||
+                      (!isMobileUA && window.innerWidth >= 769);
+
+    return isDesktop;
   }
 
   onWEngineVideoError(event: any, wengine: any): void {
-    // If animated video fails to load, fall back to static
-    event.target.src = wengine.icon;
-    event.target.classList.remove('animated');
+    // If animated video fails to load, mark it as failed and hide the video element
+    // The template will automatically show the static image instead
+    const videoKey = this.getWEngineIconPath(wengine);
+    this.failedVideoLoads.add(videoKey);
+
+    // Hide the video element that failed
+    event.target.style.display = 'none';
+
+    console.warn(`Failed to load W-Engine video: ${videoKey}, falling back to static image`);
   }
 }

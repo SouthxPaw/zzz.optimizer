@@ -93,7 +93,20 @@ export class BuildService {
               });
             }
           }
+
+          // Migrate old disc main stat format: "Pen_Ratio" → "PEN_Ratio"
+          // This fixes a casing mismatch introduced in earlier versions
+          if (build.equippedDiscs) {
+            Object.values(build.equippedDiscs).forEach((disc: any) => {
+              if (disc?.mainStat?.type === 'Pen_Ratio') {
+                disc.mainStat.type = 'PEN_Ratio';
+              }
+            });
+          }
         });
+
+        // Save migrated builds back to localStorage
+        localStorage.setItem('zzz-optimizer-builds', JSON.stringify(builds));
 
         this.buildsSubject.next(builds);
 

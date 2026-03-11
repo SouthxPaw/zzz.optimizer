@@ -1,18 +1,21 @@
 // services/sw-update.service.ts
 import { Injectable, ApplicationRef, OnDestroy } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { concat, interval, Subject, fromEvent, merge } from 'rxjs';
-import { first, takeUntil, switchMap, filter, map } from 'rxjs/operators';
+import { concat, interval, Subject } from 'rxjs';
+import { first, takeUntil, switchMap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 /**
  * Service Worker Update Service
- * Handles automatic updates with smart detection (hourly + on visibility change)
+ * Handles automatic updates with hourly checks
+ * Also detects version changes and forces cache clear automatically
  */
 @Injectable({
   providedIn: 'root'
 })
 export class SwUpdateService implements OnDestroy {
   private destroy$ = new Subject<void>();
+  private readonly VERSION_KEY = 'app_version';
 
   constructor(
     private swUpdate: SwUpdate,
@@ -23,7 +26,10 @@ export class SwUpdateService implements OnDestroy {
    * Initialize service worker update checking
    * Call this from app initialization
    */
-  init(): void {
+  async init(): Promise<void> {
+    // Check if app version has changed and clear caches if needed
+    await this.checkVersionAndClearCaches();
+
     if (!this.swUpdate.isEnabled) {
       console.log('Service Worker is not enabled');
       return;
@@ -38,48 +44,51 @@ export class SwUpdateService implements OnDestroy {
     const everyHour$ = interval(60 * 60 * 1000);
     const everyHourOnceAppIsStable$ = concat(appIsStable$, everyHour$);
 
-    // Tab becomes visible (not hidden)
-    const tabVisible$ = fromEvent(document, 'visibilitychange').pipe(
-      filter(() => !document.hidden),
-      map(() => void 0) // Normalize to void for consistency
-    );
-
-    // Window gains focus
-    const windowFocus$ = fromEvent(window, 'focus').pipe(
-      map(() => void 0) // Normalize to void for consistency
-    );
-
-    // Combine all update triggers into a single stream
-    const allUpdateTriggers$ = merge(
-      everyHourOnceAppIsStable$,
-      tabVisible$,
-      windowFocus$
-    );
-
-    // Single subscription handles ALL update triggers with consistent logic
-    allUpdateTriggers$.pipe(
+    // Subscribe to hourly update checks
+    everyHourOnceAppIsStable$.pipe(
       takeUntil(this.destroy$),
-      switchMap(() => this.swUpdate.checkForUpdate())
+      switchMap(() => {
+        // Check for new version by comparing server and installed timestamps
+        const timestamp = new Date().toLocaleTimeString();
+        console.log(`[SW Update] ${timestamp} - Hourly update check triggered`);
+        return this.bustCacheAndCheckForUpdate();
+      })
     ).subscribe({
       next: (updateFound) => {
+        const timestamp = new Date().toLocaleTimeString();
         if (updateFound) {
-          console.log('New version available');
+          console.log(`[SW Update] ${timestamp} - ✅ New version available`);
         } else {
-          console.log('App is up to date');
+          console.log(`[SW Update] ${timestamp} - ℹ️ App is up to date`);
         }
       },
       error: (err) => {
-        console.error('Failed to check for updates:', err);
+        console.error('[SW Update] Failed to check for updates:', err);
       }
     });
 
     // Listen for version ready events and auto-reload
     this.swUpdate.versionUpdates.pipe(
       takeUntil(this.destroy$)
-    ).subscribe(evt => {
+    ).subscribe(async evt => {
       if (evt.type === 'VERSION_READY') {
-        console.log('[SW Update] New version ready - reloading page to apply update');
-        document.location.reload();
+        console.log('[SW Update] New version ready - clearing caches and reloading');
+
+        // Clear all caches before reloading to ensure fresh data
+        try {
+          const cacheNames = await caches.keys();
+          await Promise.all(
+            cacheNames.map(cacheName => {
+              console.log('[SW Update] Deleting cache:', cacheName);
+              return caches.delete(cacheName);
+            })
+          );
+        } catch (err) {
+          console.error('[SW Update] Failed to clear caches:', err);
+        }
+
+        // Force reload from server (bypass cache)
+        window.location.reload();
       }
     });
 
@@ -103,6 +112,204 @@ export class SwUpdateService implements OnDestroy {
     this.destroy$.complete();
   }
 
+  /**
+   * Check if app version has changed and clear all caches if needed
+   * This ensures users never have stale data after updates
+   */
+  private async checkVersionAndClearCaches(): Promise<void> {
+    try {
+      const currentVersion = environment.appVersion;
+      const storedVersion = localStorage.getItem(this.VERSION_KEY);
+
+      if (storedVersion && storedVersion !== currentVersion) {
+        console.log(`[SW Update] Version changed from ${storedVersion} to ${currentVersion} - clearing all caches`);
+
+        // Clear all Service Worker caches (images, fonts, etc.)
+        // NOTE: This does NOT affect IndexedDB (ZZZOptimizerDB) which contains:
+        // - User's disc inventory (discs table)
+        // - Reference data (agents, wEngines, discSets) - will reload from fresh JSON
+        const cacheNames = await caches.keys();
+        await Promise.all(
+          cacheNames.map(cacheName => {
+            console.log('[SW Update] Deleting cache:', cacheName);
+            return caches.delete(cacheName);
+          })
+        );
+
+        // Clear localStorage except for USER DATA
+        // USER DATA TO PRESERVE:
+        // - zzz-optimizer-builds: All user's character builds (agents + equipped gear)
+        // - zzz-optimizer-upgrade-plans: User's custom upgrade plans
+        // - zzz_uid_history: Recent UID search history
+        const keysToPreserve = [
+          'zzz-optimizer-builds',
+          'zzz-optimizer-upgrade-plans',
+          'zzz_uid_history'
+        ];
+        const allKeys = Object.keys(localStorage);
+        allKeys.forEach(key => {
+          // Only remove if NOT in the preserve list
+          if (!keysToPreserve.includes(key)) {
+            console.log(`[SW Update] Removing localStorage key: ${key}`);
+            localStorage.removeItem(key);
+          }
+        });
+
+        console.log('[SW Update] Cache clearing complete');
+      }
+
+      // Update stored version
+      localStorage.setItem(this.VERSION_KEY, currentVersion);
+    } catch (err) {
+      console.error('[SW Update] Error checking version:', err);
+    }
+  }
+
+  /**
+   * Check for updates using the SAME mechanism that works on page refresh
+   * Key insight: Angular SW checks for updates on NAVIGATION events, not programmatic checks
+   * So we fetch ngsw.json ourselves, compare versions, and reload if different
+   */
+  private async bustCacheAndCheckForUpdate(): Promise<boolean> {
+    if (!this.swUpdate.isEnabled) {
+      return false;
+    }
+
+    try {
+      // Fetch fresh ngsw.json from server (bypasses all caches)
+      // Use document.baseURI to get correct path (handles /zzz.optimizer/ subdirectory)
+      const cacheBuster = Date.now();
+      const baseUrl = document.baseURI || window.location.origin + window.location.pathname;
+      const ngswUrl = new URL('ngsw.json', baseUrl).href + `?v=${cacheBuster}`;
+
+      console.log('[SW Update] Fetching fresh ngsw.json from:', ngswUrl);
+
+      const response = await fetch(ngswUrl, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
+        }
+      });
+
+      if (!response.ok) {
+        console.warn('[SW Update] Failed to fetch ngsw.json:', response.status);
+        return false;
+      }
+
+      const serverManifest = await response.json();
+      const serverTimestamp = serverManifest?.timestamp;
+
+      if (!serverTimestamp) {
+        console.warn('[SW Update] Server manifest missing timestamp');
+        return false;
+      }
+
+      console.log('[SW Update] Server version timestamp:', serverTimestamp);
+
+      // Get currently installed version
+      const installedTimestamp = await this.getInstalledVersionTimestamp();
+
+      if (!installedTimestamp) {
+        console.log('[SW Update] Could not determine installed version, triggering check');
+        // Can't compare, let Angular try
+        return await this.swUpdate.checkForUpdate();
+      }
+
+      console.log('[SW Update] Installed version timestamp:', installedTimestamp);
+
+      // Compare versions (newer timestamp = new version)
+      if (serverTimestamp > installedTimestamp) {
+        console.log('[SW Update] 🎉 NEW VERSION DETECTED! Reloading page...');
+        console.log('[SW Update] Server is newer:', serverTimestamp, 'vs', installedTimestamp);
+
+        // Clear ALL caches before reload to ensure fresh content
+        const cacheNames = await caches.keys();
+        await Promise.all(
+          cacheNames.map(cacheName => {
+            console.log('[SW Update] Clearing cache:', cacheName);
+            return caches.delete(cacheName);
+          })
+        );
+
+        // Reload page - this triggers navigation event which Angular SW handles correctly
+        setTimeout(() => window.location.reload(), 500);
+        return true;
+      } else {
+        console.log('[SW Update] Already on latest version');
+        return false;
+      }
+    } catch (err: any) {
+      // Network errors during SW initialization are normal - just log and skip
+      if (err?.message?.includes('NetworkError') || err?.message?.includes('fetch')) {
+        console.log('[SW Update] Network unavailable or SW not ready, skipping check');
+      } else {
+        console.error('[SW Update] Error checking for updates:', err);
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Get the timestamp of the currently installed Service Worker version
+   * This reads from the cached ngsw.json manifest
+   */
+  private async getInstalledVersionTimestamp(): Promise<number | null> {
+    try {
+      // Look for cached ngsw.json in Service Worker caches
+      const cacheNames = await caches.keys();
+
+      // Try multiple strategies to find the cached ngsw.json
+      for (const cacheName of cacheNames) {
+        if (cacheName.includes('ngsw:')) {
+          const cache = await caches.open(cacheName);
+
+          // Strategy 1: Look for ngsw.json in cache keys
+          const keys = await cache.keys();
+          for (const request of keys) {
+            if (request.url.includes('ngsw.json') && !request.url.includes('?')) {
+              const response = await cache.match(request);
+              if (response) {
+                try {
+                  const manifest = await response.json();
+                  if (manifest?.timestamp) {
+                    console.log('[SW Update] Found cached manifest in:', cacheName);
+                    return manifest.timestamp;
+                  }
+                } catch {
+                  // Not valid JSON, skip
+                  continue;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // Strategy 2: Try direct cache match for ngsw.json
+      const baseUrl = document.baseURI || window.location.origin + window.location.pathname;
+      const ngswUrl = new URL('ngsw.json', baseUrl).href;
+
+      const cachedResponse = await caches.match(ngswUrl);
+      if (cachedResponse) {
+        try {
+          const manifest = await cachedResponse.json();
+          if (manifest?.timestamp) {
+            console.log('[SW Update] Found manifest via direct cache match');
+            return manifest.timestamp;
+          }
+        } catch {
+          // Not valid JSON
+        }
+      }
+
+      console.warn('[SW Update] Could not find cached ngsw.json, assuming first load');
+      return null;
+    } catch (err) {
+      console.warn('[SW Update] Error getting installed version:', err);
+      return null;
+    }
+  }
 
   /**
    * Notify user of unrecoverable state
@@ -118,15 +325,7 @@ export class SwUpdateService implements OnDestroy {
    * Can be called from UI button
    */
   async checkForUpdate(): Promise<boolean> {
-    if (!this.swUpdate.isEnabled) {
-      return false;
-    }
-
-    try {
-      return await this.swUpdate.checkForUpdate();
-    } catch (err) {
-      console.error('Error checking for updates:', err);
-      return false;
-    }
+    console.log('[SW Update] Manual update check triggered');
+    return await this.bustCacheAndCheckForUpdate();
   }
 }

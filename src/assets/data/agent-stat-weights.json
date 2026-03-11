@@ -135,7 +135,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -286,7 +286,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -457,7 +457,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -628,7 +628,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -794,7 +794,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -995,7 +995,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -1322,7 +1322,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -1493,7 +1493,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -1674,7 +1674,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -1845,7 +1845,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -2031,7 +2031,7 @@
                   "Anomaly_Proficiency": 0.67
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -2217,7 +2217,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -2388,7 +2388,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -2559,7 +2559,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -2740,7 +2740,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -2941,7 +2941,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -3092,7 +3092,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -3263,7 +3263,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -3449,7 +3449,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -3600,7 +3600,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -3771,7 +3771,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -3922,7 +3922,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -4108,7 +4108,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -4294,7 +4294,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -4465,7 +4465,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -4606,7 +4606,7 @@
               }
             },
             "Drive5": {
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -4742,7 +4742,7 @@
               }
             },
             "Drive5": {
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -4928,7 +4928,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -5114,7 +5114,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -5285,7 +5285,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -5436,7 +5436,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -5592,7 +5592,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -5919,7 +5919,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -6105,7 +6105,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -6447,7 +6447,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -6754,7 +6754,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -6910,7 +6910,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -7222,7 +7222,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 1,
                 "substatWeights": {
                   "HP%": 0,
@@ -7735,7 +7735,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -7906,7 +7906,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -8077,7 +8077,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -8233,7 +8233,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -8404,7 +8404,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -8590,7 +8590,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -8992,7 +8992,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 1.25,
@@ -9163,7 +9163,7 @@
                   "Anomaly_Proficiency": 0
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
@@ -9973,7 +9973,7 @@
                   "Anomaly_Proficiency": 1.42
                 }
               },
-              "Pen_Ratio": {
+              "PEN_Ratio": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
