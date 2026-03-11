@@ -4054,13 +4054,13 @@
   },
   "14152": {
     "Id": 14152,
-    "CodeName": "Weapon_S_14152",
+    "CodeName": "Weapon_S_1521",
     "Name": "Serpentine Seeker",
     "Desc": "",
     "Desc2": "",
     "Desc3": "",
     "Rarity": 4,
-    "Icon": "Weapon_S_14152.png",
+    "Icon": "Weapon_S_1521.png",
     "WeaponType": {
       "1": "Attack"
     },
