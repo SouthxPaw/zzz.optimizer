@@ -3905,6 +3905,87 @@
           "Energy_Regen": 3
         }
       }
+    },
+    "1511": {
+      "comment": "Nangong Yu",
+      "name": "Nangong Yu",
+      "breakpoints": {
+        "hp": {
+          "min": 7840,
+          "optimal": 8500
+        },
+        "atk": {
+          "min": 2500,
+          "optimal": 2900
+        },
+        "def": {
+          "min": 650,
+          "optimal": 750
+        },
+        "impact": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyMastery": {
+          "min": 184,
+          "optimal": 244
+        },
+        "critRate": {
+          "min": 0,
+          "optimal": 0
+        },
+        "critDmg": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyProficiency": {
+          "min": 330,
+          "optimal": 420
+        },
+        "pen": {
+          "min": 0,
+          "optimal": 0
+        },
+        "penRatio": {
+          "min": 0,
+          "optimal": 0
+        },
+        "energyRegen": {
+          "min": 0,
+          "optimal": 0
+        }
+      },
+      "priorityStats": [
+        "ATK%",
+        "ATK",
+        "PEN",
+        "PEN_Ratio",
+        "Element_DMG",
+        "Anomaly_Mastery",
+        "Anomaly_Proficiency"
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.5,
+        "PEN": 0.15,
+        "ATK": 0.15,
+        "ATK%": 1.5
+      },
+      "mainStatWeights": {
+        "Drive4": {
+          "CRIT_Rate": 3,
+          "CRIT_DMG": 2,
+          "ATK%": 2
+        },
+        "Drive5": {
+          "Element_DMG": 3,
+          "ATK%": 3,
+          "PEN_Ratio": 3
+        },
+        "Drive6": {
+          "ATK%": 2,
+          "Energy_Regen": 3
+        }
+      }
     }
   }
 }
