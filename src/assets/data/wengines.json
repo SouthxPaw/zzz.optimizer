@@ -4001,13 +4001,13 @@
   },
   "14151": {
     "Id": 14151,
-    "CodeName": "Weapon_S_14151",
+    "CodeName": "Weapon_S_1511",
     "Name": "Neon Fantasies",
     "Desc": "",
     "Desc2": "",
     "Desc3": "",
     "Rarity": 4,
-    "Icon": "Weapon_S_14151.png",
+    "Icon": "Weapon_S_1511.png",
     "WeaponType": {
       "2": "Stun"
     },
