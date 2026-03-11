@@ -1,4 +1,4 @@
-import { DiscSet } from "../models/disc.model";
+import { DiscSet } from '../models/disc.model';
 
 // constants/disc-sets.ts
 export const DISC_SETS: DiscSet[] = [
@@ -92,7 +92,8 @@ export const DISC_SETS: DiscSet[] = [
       },
       {
         pieces: 4,
-        description: 'When Anomaly Buildup deals DMG, deal 5% more DMG. Max 15 stacks.',
+        description:
+          'When Anomaly Buildup deals DMG, deal 5% more DMG. Max 15 stacks.',
       },
     ],
   },
@@ -106,7 +107,8 @@ export const DISC_SETS: DiscSet[] = [
       },
       {
         pieces: 4,
-        description: 'When launching an EX Special Attack or Assist Attack, ATK increases by 25% for 15s.',
+        description:
+          'When launching an EX Special Attack or Assist Attack, ATK increases by 25% for 15s.',
       },
     ],
   },
@@ -120,7 +122,8 @@ export const DISC_SETS: DiscSet[] = [
       },
       {
         pieces: 4,
-        description: 'When launching a Chain Attack or Ultimate, DMG increases by 15% for 15s.',
+        description:
+          'When launching a Chain Attack or Ultimate, DMG increases by 15% for 15s.',
       },
     ],
   },
@@ -134,7 +137,8 @@ export const DISC_SETS: DiscSet[] = [
       },
       {
         pieces: 4,
-        description: 'When Anomaly Mastery exceeds or equals 115 points, the equipper\'s CRIT DMG increases by 30%. When any squad member applies Freeze or triggers the Shatter effect on an enemy, the equipper\'s CRIT Rate increases by 12%, lasting 15s.',
+        description:
+          "When Anomaly Mastery exceeds or equals 115 points, the equipper's CRIT DMG increases by 30%. When any squad member applies Freeze or triggers the Shatter effect on an enemy, the equipper's CRIT Rate increases by 12%, lasting 15s.",
       },
     ],
   },
@@ -148,7 +152,8 @@ export const DISC_SETS: DiscSet[] = [
       },
       {
         pieces: 4,
-        description: 'When any squad member uses an EX Special Attack, the equipper\'s Anomaly Proficiency increases by 45 for 8s. If the character using the EX Special Attack is not the equipper, the equipper\'s Ether DMG is increased by 25%.',
+        description:
+          "When any squad member uses an EX Special Attack, the equipper's Anomaly Proficiency increases by 45 for 8s. If the character using the EX Special Attack is not the equipper, the equipper's Ether DMG is increased by 25%.",
       },
     ],
   },
@@ -259,6 +264,26 @@ export const DISC_SETS: DiscSet[] = [
       {
         pieces: 2,
         description: 'HP +10%',
+      },
+    ],
+  },
+  {
+    id: 'bunny_in_wonderland',
+    name: 'Bunny In Wonderland',
+    bonuses: [
+      {
+        pieces: 2,
+        description: 'HP +10%',
+      },
+    ],
+  },
+  {
+    id: 'notes_from_the_chained',
+    name: 'Notes From The Chained',
+    bonuses: [
+      {
+        pieces: 2,
+        description: '',
       },
     ],
   },

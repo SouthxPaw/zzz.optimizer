@@ -1,0 +1,19 @@
+{
+  "Id": 33800,
+  "Name": "Notes From the Chained",
+  "Desc2": " +10%",
+  "Desc4": "",
+    "4pcEffect": {
+    "Properties": [
+      {
+        "Name": "Anomaly_Proficiency",
+        "Name2": "Anomaly_Proficiency",
+        "Format": "{0:0}",
+        "Value": 36
+      }
+    ]
+  },
+  "Story": "This was the first album released after the Angels of Delusion debuted. Its sound was bright and energetic, but sales were disappointingly low. Kept as a master copy for memory's sake, the back of the lyric sheet carries the support chants a fan wrote for them.",
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitNotesFromTheChained.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitNotesFromTheChained.png"
+}
