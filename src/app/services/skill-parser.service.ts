@@ -185,11 +185,13 @@ export class SkillParserService {
 
   /**
    * Get skill multiplier for an agent
+   * Returns a default multiplier if character file doesn't exist (e.g., new characters)
    */
   getAgentMultiplier(agentId: string): number {
     const multiplier = this.skillMultipliers[agentId];
     if (!multiplier) {
-      // Silently use default multiplier if not found
+      // Use default multiplier if character file not found (e.g., new characters without skill data)
+      // This allows the app to work even if assets/data/character/ folder is deleted
       return 2.5;
     }
     return multiplier.averageMultiplier;
