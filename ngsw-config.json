@@ -9,7 +9,6 @@
       "resources": {
         "files": [
           "/favicon.ico",
-          "/index.csr.html",
           "/index.html",
           "/manifest.webmanifest",
           "/robots.txt",
@@ -29,22 +28,6 @@
           "/assets/data/images/**/*.png",
           "/**/*.(svg|cur|jpg|jpeg|apng|avif|gif|otf|ttf|woff|woff2)"
         ]
-      }
-    },
-    {
-      "name": "assets-data",
-      "installMode": "lazy",
-      "updateMode": "prefetch",
-      "resources": {
-        "files": [
-          "/assets/data/**/*.json"
-        ]
-      },
-      "cacheConfig": {
-        "maxSize": 200,
-        "maxAge": "7d",
-        "timeout": "10s",
-        "strategy": "performance"
       }
     }
   ],
