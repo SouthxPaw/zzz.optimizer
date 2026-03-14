@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { Agent, BaseStats, DiscSlot } from '../models/agent.model';
 import { Disc } from '../models/disc.model';
 import { WEngine, RefinementProperty } from '../models/wengine.model';
-import { DISC_SETS } from '../constants/disc-sets';
+// DISC_SETS import removed - now using equipment data from DiscSetDataService
 import { DiscSetDataService, DiscSetEquipmentData } from './disc-set-data.service';
 import { versionedUrl } from '../utils/versioned-url';
 
@@ -614,17 +614,15 @@ export class StatCalculatorService {
 
     // Apply bonuses for sets with 2 or 4 pieces
     setCounts.forEach((count, setName) => {
-      const discSet = DISC_SETS.find(s => s.name === setName);
-      if (!discSet) {
+      const equipmentData = this.discSetDataService.getDiscSet(setName);
+      if (!equipmentData) {
         return;
       }
 
-      discSet.bonuses.forEach(bonus => {
-        if (count >= bonus.pieces) {
-          // Parse bonus description and apply stats (2pc bonuses)
-          this.parseAndApplyBonus(bonus.description, stats);
-        }
-      });
+      // Apply 2pc bonus from equipment data (Desc2)
+      if (count >= 2 && equipmentData.Desc2) {
+        this.parseAndApplyBonus(equipmentData.Desc2, stats);
+      }
 
       // Apply 4pc effect stat bonuses from equipment data
       if (count >= 4) {
@@ -911,15 +909,13 @@ export class StatCalculatorService {
 
     const activeBonuses: string[] = [];
     setCounts.forEach((count, setName) => {
-      const discSet = DISC_SETS.find(s => s.name === setName);
-      if (!discSet) return;
+      const equipmentData = this.discSetDataService.getDiscSet(setName);
+      if (!equipmentData) return;
 
       // Only show 2pc bonuses here (4pc bonuses are handled by get4pcEffectBonuses)
-      discSet.bonuses.forEach(bonus => {
-        if (bonus.pieces === 2 && count >= 2) {
-          activeBonuses.push(`${setName} (2pc): ${bonus.description}`);
-        }
-      });
+      if (count >= 2 && equipmentData.Desc2) {
+        activeBonuses.push(`${setName} (2pc): ${equipmentData.Desc2}`);
+      }
     });
 
     return activeBonuses;
