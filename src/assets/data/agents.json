@@ -83966,6 +83966,11 @@
           "type": "AnomalyProficiency",
           "value": "120",
           "format": "flat"
+        },
+        {
+          "type": "ImpactBonus",
+          "value": "149",
+          "format": "flat"
         }
       ],
       "debuffs": [],
