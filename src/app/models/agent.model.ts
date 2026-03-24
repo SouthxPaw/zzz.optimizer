@@ -50,6 +50,12 @@ export interface AgentBuff {
   type: string;  // e.g., 'ATKBonus', 'CRITRateBonus', 'CRITDMGBonus', etc.
   value: string;  // String number like '1000' or '40'
   format: '%' | 'flat';
+  condition?: {
+    sourceStat: string;      // Source stat to read (e.g., 'anomalyMastery')
+    threshold: number;       // Minimum value before conversion starts
+    ratio: number;           // Conversion ratio (e.g., 1.0 for 1:1)
+    cap?: number;            // Maximum value the bonus can provide
+  };
 }
 
 export interface MindscapeEffect {
