@@ -1417,9 +1417,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.showDiscPicker = false;
     this.showDiscForm = true;
 
-    // Only reset form if we're not in edit mode
-    // If we're editing and changing set, preserve the form data
-    if (!this.isEditMode) {
+    // Only reset form if we're creating a brand new disc AND form is currently empty
+    // Preserve data if user is switching sets or editing
+    const isFormEmpty = !this.discFormData.mainStatType &&
+                        !this.discFormData.mainStatValue &&
+                        this.discFormData.subStats.every(s => !s.value || s.value === '');
+
+    if (!this.isEditMode && isFormEmpty) {
       this.discFormData = {
         mainStatType: '',
         mainStatValue: '',
@@ -1431,6 +1435,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         ],
       };
     }
+    // If form has data, preserve it when changing sets
   }
 
   closeDiscForm() {
@@ -1449,6 +1454,17 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       ],
     };
     this.cdr.markForCheck();
+  }
+
+  /**
+   * Opens disc picker to change set while preserving form data
+   * Used when user wants to try a different disc set without losing entered stats
+   */
+  openDiscPickerWithoutClosingForm() {
+    this.showDiscForm = false;
+    this.showDiscPicker = true;
+    // NOTE: We don't clear discFormData here - it gets preserved
+    // When selectDiscSet() is called, it will check if form has data and preserve it
   }
 
   async createAndEquipDisc() {
