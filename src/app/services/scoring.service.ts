@@ -33,6 +33,7 @@ import {
 } from '../constants/agent-skills';
 import { SkillParserService } from './skill-parser.service';
 import { versionedUrl } from '../utils/versioned-url';
+import { hasValidationErrors } from '../utils/disc-validation';
 
 interface AgentBreakpoint {
   min: number;
@@ -1617,6 +1618,19 @@ export class ScoringService {
         rating: incompleteRating || BUILD_RATING_THRESHOLDS[BUILD_RATING_THRESHOLDS.length - 1],
         breakdown: {
           message: `Incomplete build - ${equippedDiscs?.length || 0}/6 disc slots filled. Equip all 6 discs to receive a rating.`
+        },
+      };
+    }
+
+    // Check if any disc has validation errors (duplicate substats or main=sub conflicts)
+    const invalidDiscs = equippedDiscs.filter(disc => hasValidationErrors(disc));
+    if (invalidDiscs.length > 0) {
+      const incompleteRating = BUILD_RATING_THRESHOLDS.find(r => r.grade === 'INCOMPLETE');
+      return {
+        score: 0,
+        rating: incompleteRating || BUILD_RATING_THRESHOLDS[BUILD_RATING_THRESHOLDS.length - 1],
+        breakdown: {
+          message: `Incomplete build - ${invalidDiscs.length} disc${invalidDiscs.length > 1 ? 's have' : ' has'} validation errors. Fix invalid discs to receive a rating.`
         },
       };
     }
