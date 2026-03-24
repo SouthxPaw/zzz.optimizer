@@ -894,9 +894,27 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return [];
     }
 
-    return agent.scoring.buffs
+    const stats = this.selectedBuild.calculatedStats;
+
+    // First pass: calculate all buff values
+    const calculatedBuffs = agent.scoring.buffs
       .map((buff) => {
         const isPercent = buff.format === '%';
+        let displayValue = buff.value;
+
+        // Calculate conditional bonuses based on current stats
+        if (buff.condition && stats) {
+          const sourceStat = this.getStatValueFromStats(stats, buff.condition.sourceStat);
+          const excess = Math.max(0, sourceStat - buff.condition.threshold);
+          let calculatedValue = excess * buff.condition.ratio;
+
+          // Apply cap if specified
+          if (buff.condition.cap !== undefined) {
+            calculatedValue = Math.min(calculatedValue, buff.condition.cap);
+          }
+
+          displayValue = String(Math.round(calculatedValue * 10) / 10);
+        }
 
         let displayName: string | undefined;
         switch (buff.type) {
@@ -940,14 +958,54 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
         return {
           name: displayName,
-          value: buff.value,
+          value: parseFloat(displayValue),
           isPercent: isPercent,
         };
       })
       .filter(
-        (b): b is { name: string; value: string; isPercent: boolean } =>
+        (b): b is { name: string; value: number; isPercent: boolean } =>
           b !== undefined,
       );
+
+    // Second pass: combine buffs with same name and format
+    const combined = new Map<string, { name: string; value: number; isPercent: boolean }>();
+
+    for (const buff of calculatedBuffs) {
+      const key = `${buff.name}:${buff.isPercent}`;
+      const existing = combined.get(key);
+
+      if (existing) {
+        existing.value += buff.value;
+      } else {
+        combined.set(key, { ...buff });
+      }
+    }
+
+    // Convert back to array and format values as strings
+    return Array.from(combined.values()).map(buff => ({
+      name: buff.name,
+      value: String(Math.round(buff.value * 10) / 10),
+      isPercent: buff.isPercent,
+    }));
+  }
+
+  private getStatValueFromStats(stats: any, statKey: string): number {
+    const statMap: { [key: string]: string } = {
+      'hp': 'hp',
+      'atk': 'atk',
+      'def': 'def',
+      'impact': 'impact',
+      'anomalyMastery': 'anomalyMastery',
+      'critRate': 'critRate',
+      'critDmg': 'critDmg',
+      'anomalyProficiency': 'anomalyProficiency',
+      'pen': 'pen',
+      'penRatio': 'penRatio',
+      'energyRegen': 'energyRegen'
+    };
+
+    const mappedKey = statMap[statKey];
+    return mappedKey ? stats[mappedKey] : 0;
   }
 
   getSubstatBreakdown(): Array<{
