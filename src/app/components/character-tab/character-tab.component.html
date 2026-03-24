@@ -1176,9 +1176,8 @@
             Cancel
           </button>
           <button
-            *ngIf="isEditMode"
             class="btn-secondary"
-            (click)="closeDiscForm(); openDiscPicker(selectedDiscSlot!)"
+            (click)="openDiscPickerWithoutClosingForm()"
           >
             Change Set
           </button>
