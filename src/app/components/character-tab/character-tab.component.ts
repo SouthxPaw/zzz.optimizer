@@ -46,6 +46,7 @@ import {
   CanvasShareImageService,
   ShareImageData,
 } from '../../services/canvas-share-image.service';
+import { getDiscValidationErrors, hasValidationErrors } from '../../utils/disc-validation';
 
 @Component({
   selector: 'app-character-tab',
@@ -1815,6 +1816,100 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         this.discFormData.mainStatValue = Math.round(parsed * 10) / 10;
       }
     }
+  }
+
+  /**
+   * Get the base stat type from the main stat
+   * Handles both fixed slots (1-3) and variable slots (4-6)
+   * Returns the base type without % suffix for comparison with substats
+   */
+  getMainStatBaseType(): string | null {
+    let mainStatType: MainStatType;
+
+    // For Drive 1-3, use fixed main stat
+    if (
+      this.selectedDiscSlot === 'Drive1' ||
+      this.selectedDiscSlot === 'Drive2' ||
+      this.selectedDiscSlot === 'Drive3'
+    ) {
+      mainStatType = this.getDefaultMainStatForSlot(this.selectedDiscSlot);
+    } else {
+      // For Drive 4-6, use selected main stat from form
+      if (!this.discFormData.mainStatType) {
+        return null; // No main stat selected yet
+      }
+      mainStatType = this.discFormData.mainStatType as MainStatType;
+    }
+
+    return mainStatType;
+  }
+
+  /**
+   * Check if a substat type conflicts with the main stat type
+   * Handles percent vs flat distinction:
+   * - ATK% main conflicts with ATK% sub (YES)
+   * - ATK% main conflicts with ATK flat sub (NO)
+   * - HP main conflicts with HP sub (YES)
+   * - HP main conflicts with HP% sub (NO)
+   */
+  isMainStatConflict(substatType: SubStatType, mainStatBase: string | null): boolean {
+    if (!mainStatBase) {
+      return false; // No main stat selected, no conflict
+    }
+
+    // Direct match - always a conflict
+    if (mainStatBase === substatType) {
+      return true;
+    }
+
+    // No conflict if they're different stats entirely
+    return false;
+  }
+
+  /**
+   * Get available substat types for a specific substat dropdown index
+   * Filters out:
+   * 1. The main stat (if it matches exactly)
+   * 2. Substats already selected in other dropdown positions
+   */
+  getAvailableSubstatTypesForIndex(index: number): Array<{ value: SubStatType; label: string }> {
+    const mainStatBase = this.getMainStatBaseType();
+
+    // Get already selected substats from OTHER positions (not current index)
+    const selectedSubstats = this.discFormData.subStats
+      .map((s, i) => i !== index ? s.type : null)
+      .filter((t): t is SubStatType => t !== null);
+
+    // Filter out main stat conflicts and already-selected substats
+    return this.availableSubStatTypes.filter(stat =>
+      !this.isMainStatConflict(stat.value, mainStatBase) &&
+      !selectedSubstats.includes(stat.value)
+    );
+  }
+
+  /**
+   * Check if a disc has validation errors (for existing discs)
+   */
+  hasDiscValidationErrors(disc: Disc): boolean {
+    return hasValidationErrors(disc);
+  }
+
+  /**
+   * Get validation error messages for a disc
+   */
+  getDiscValidationErrors(disc: Disc): string[] {
+    return getDiscValidationErrors(disc);
+  }
+
+  /**
+   * Get formatted validation error tooltip for a disc
+   */
+  getDiscValidationTooltip(disc: Disc): string {
+    const errors = getDiscValidationErrors(disc);
+    if (errors.length === 0) {
+      return '';
+    }
+    return `Validation errors:\n${errors.map(e => `• ${e}`).join('\n')}`;
   }
 
   // Check if a substat type is a priority stat for the selected build's agent

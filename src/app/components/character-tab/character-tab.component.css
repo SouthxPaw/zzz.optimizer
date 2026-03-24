@@ -455,6 +455,8 @@
 .disc-card{padding:12px;height:100%;display:flex;flex-direction:column}
 .disc-header,.disc-picker-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .disc-header-right{display:flex;align-items:center;gap:8px}
+.validation-warning-icon{font-size:1.2em;color:#FFC107;cursor:help;flex-shrink:0;filter:drop-shadow(0 0 2px rgba(255,193,7,.6));animation:pulse-warning 2s ease-in-out infinite}
+@keyframes pulse-warning{0%,100%{opacity:.8}50%{opacity:1}}
 .disc-slot-number{background:var(--bg);padding:4px 8px;border-radius:4px;font-weight:bold;font-size:.85em}
 .disc-enable-checkbox{display:flex;align-items:center;cursor:pointer;flex-shrink:0}
 .disc-enable-checkbox input[type="checkbox"]{width:14px;height:14px;cursor:pointer;accent-color:var(--gold);opacity:.7;transition:opacity .2s}
