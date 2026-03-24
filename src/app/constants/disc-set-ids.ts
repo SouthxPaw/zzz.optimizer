@@ -27,4 +27,6 @@ export const DISC_SET_EQUIPMENT_IDS = [
   '33400', // Moonlight Lullaby
   '33500', // White Water Ballad
   '33600', // Shining Aria
+  '33700', // Bunny in Wonderland
+  '33800', // Notes From the Chained
 ] as const;

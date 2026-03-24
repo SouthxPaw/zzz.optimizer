@@ -283,6 +283,13 @@
                       }}</span>
                       <span class="rating-score">{{ discScore.score }}</span>
                     </div>
+                    <span
+                      *ngIf="hasDiscValidationErrors(selectedBuild.equippedDiscs[slot]!)"
+                      class="validation-warning-icon"
+                      [title]="getDiscValidationTooltip(selectedBuild.equippedDiscs[slot]!)"
+                    >
+                      ⚠️
+                    </span>
                   </div>
                 </div>
                 <div class="disc-set">
@@ -1146,7 +1153,7 @@
               <label class="substat-label">Substat {{ i + 1 }}:</label>
               <select [(ngModel)]="subStat.type" class="substat-type-select">
                 <option
-                  *ngFor="let statType of availableSubStatTypes"
+                  *ngFor="let statType of getAvailableSubstatTypesForIndex(i)"
                   [value]="statType.value"
                   [class.priority]="isPrioritySubstat(statType.value)"
                 >
@@ -1169,9 +1176,8 @@
             Cancel
           </button>
           <button
-            *ngIf="isEditMode"
             class="btn-secondary"
-            (click)="closeDiscForm(); openDiscPicker(selectedDiscSlot!)"
+            (click)="openDiscPickerWithoutClosingForm()"
           >
             Change Set
           </button>
