@@ -1652,7 +1652,19 @@
     "id": 1251,
     "name": "Qingyi",
     "scoring": {
-      "buffs": [],
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "impact",
+            "threshold": 120,
+            "ratio": 6,
+            "cap": 600
+          }
+        }
+      ],
       "debuffs": [
         {
           "type": "StunDMGMult",
@@ -5055,8 +5067,14 @@
       "buffs": [
         {
           "type": "ATKBonus",
-          "value": "1000",
-          "format": "flat"
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 0,
+            "ratio": 0.4,
+            "cap": 1000
+          }
         },
         {
           "type": "ElementDMG",
@@ -20555,7 +20573,21 @@
     "name": "Alice",
     "scoring": {
       "buffs": [
-        { "type": "AnomalyProficiency", "value": "88", "format": "flat" }
+        {
+          "type": "AnomalyProficiency",
+          "value": "88",
+          "format": "flat"
+        },
+        {
+          "type": "AnomalyProficiency",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "anomalyMastery",
+            "threshold": 140,
+            "ratio": 1.6
+          }
+        }
       ],
       "debuffs": [],
       "dazeBonus": 0
@@ -23760,7 +23792,7 @@
     "id": 1071,
     "name": "Caesar",
     "scoring": {
-      "buffs": [{ "type": "ATKBonus", "value": "1000", "format": "%" }],
+      "buffs": [{ "type": "ATKBonus", "value": "1000", "format": "flat" }],
       "debuffs": [
         {
           "type": "DamageTaken",
@@ -25523,8 +25555,19 @@
       "buffs": [
         {
           "type": "CRITDMG",
-          "value": "50",
+          "value": "20",
           "format": "%"
+        },
+        {
+          "type": "CRITDMGBonus",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 2800,
+            "ratio": 0.05,
+            "cap": 30
+          }
         }
       ],
       "debuffs": [],
@@ -35772,6 +35815,11 @@
           "type": "ElementDMG",
           "value": "75",
           "format": "%"
+        },
+        {
+          "type": "ImpactBonus",
+          "value": "20",
+          "format": "%"
         }
       ],
       "debuffs": [
@@ -42758,6 +42806,11 @@
           "type": "CRITDMG",
           "value": "30",
           "format": "%"
+        },
+        {
+          "type": "HPBonus",
+          "value": "5",
+          "format": "%"
         }
       ],
       "debuffs": [],
@@ -46144,7 +46197,19 @@
     "id": 1361,
     "name": "Trigger",
     "scoring": {
-      "buffs": [],
+      "buffs": [
+        {
+          "type": "DazeBonus",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "critRate",
+            "threshold": 40,
+            "ratio": 1.5,
+            "cap": 75
+          }
+        }
+      ],
       "debuffs": [
         {
           "type": "StunDMGMult",
@@ -49933,6 +49998,16 @@
           "type": "CRITRate",
           "value": "16",
           "format": "%"
+        },
+        {
+          "type": "ATKBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "def",
+            "threshold": 0,
+            "ratio": 0.8
+          }
         }
       ],
       "debuffs": [],
@@ -51510,9 +51585,15 @@
     "scoring": {
       "buffs": [
         {
-          "type": "PENRatio",
-          "value": "30",
-          "format": "%"
+          "type": "PENRatioBonus",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "penRatio",
+            "threshold": -48,
+            "ratio": 0.25,
+            "cap": 30
+          }
         },
         {
           "type": "ElementDMG",
@@ -54763,8 +54844,14 @@
       "buffs": [
         {
           "type": "ATKBonus",
-          "value": "1200",
-          "format": "flat"
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 0,
+            "ratio": 0.4,
+            "cap": 1200
+          }
         },
         {
           "type": "DMGBonus",
@@ -56543,7 +56630,17 @@
         },
         {
           "type": "CRITRateBonus",
-          "value": "37.8",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "hp",
+            "threshold": 0,
+            "ratio": 0.0014
+          }
+        },
+        {
+          "type": "HPBonus",
+          "value": "5",
           "format": "%"
         }
       ],
@@ -58177,6 +58274,17 @@
           "type": "DMGBonus",
           "value": "40",
           "format": "%"
+        },
+        {
+          "type": "ImpactBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "critRate",
+            "threshold": 50,
+            "ratio": 2,
+            "cap": 100
+          }
         }
       ],
       "debuffs": [
@@ -63154,8 +63262,14 @@
       "buffs": [
         {
           "type": "ATKBonus",
-          "value": "1200",
-          "format": "flat"
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 0,
+            "ratio": 0.35,
+            "cap": 1200
+          }
         }
       ],
       "debuffs": [],
@@ -64850,7 +64964,29 @@
     "id": 1301,
     "name": "Orphie & Magus",
     "scoring": {
-      "buffs": [{ "type": "CRITRateBonus", "value": "25", "format": "%" }],
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "25",
+          "format": "%"
+        },
+        {
+          "type": "ATKBonus",
+          "value": "280",
+          "format": "flat"
+        },
+        {
+          "type": "ATKBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "energyRegen",
+            "threshold": 1.6,
+            "ratio": 200,
+            "cap": 420
+          }
+        }
+      ],
       "debuffs": [],
       "dazeBonus": 0
     },
@@ -80618,8 +80754,14 @@
       "buffs": [
         {
           "type": "ATKBonus",
-          "value": "1100",
-          "format": "flat"
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 0,
+            "ratio": 0.6,
+            "cap": 1050
+          }
         }
       ],
       "debuffs": [],
@@ -83969,8 +84111,13 @@
         },
         {
           "type": "ImpactBonus",
-          "value": "149",
-          "format": "flat"
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "anomalyMastery",
+            "threshold": 110,
+            "ratio": 1.0
+          }
         }
       ],
       "debuffs": [],

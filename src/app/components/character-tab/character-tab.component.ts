@@ -46,6 +46,7 @@ import {
   CanvasShareImageService,
   ShareImageData,
 } from '../../services/canvas-share-image.service';
+import { getDiscValidationErrors, hasValidationErrors } from '../../utils/disc-validation';
 
 @Component({
   selector: 'app-character-tab',
@@ -894,9 +895,27 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return [];
     }
 
-    return agent.scoring.buffs
+    const stats = this.selectedBuild.calculatedStats;
+
+    // First pass: calculate all buff values
+    const calculatedBuffs = agent.scoring.buffs
       .map((buff) => {
         const isPercent = buff.format === '%';
+        let displayValue = buff.value;
+
+        // Calculate conditional bonuses based on current stats
+        if (buff.condition && stats) {
+          const sourceStat = this.getStatValueFromStats(stats, buff.condition.sourceStat);
+          const excess = Math.max(0, sourceStat - buff.condition.threshold);
+          let calculatedValue = excess * buff.condition.ratio;
+
+          // Apply cap if specified
+          if (buff.condition.cap !== undefined) {
+            calculatedValue = Math.min(calculatedValue, buff.condition.cap);
+          }
+
+          displayValue = String(Math.round(calculatedValue * 10) / 10);
+        }
 
         let displayName: string | undefined;
         switch (buff.type) {
@@ -940,14 +959,54 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
         return {
           name: displayName,
-          value: buff.value,
+          value: parseFloat(displayValue),
           isPercent: isPercent,
         };
       })
       .filter(
-        (b): b is { name: string; value: string; isPercent: boolean } =>
+        (b): b is { name: string; value: number; isPercent: boolean } =>
           b !== undefined,
       );
+
+    // Second pass: combine buffs with same name and format
+    const combined = new Map<string, { name: string; value: number; isPercent: boolean }>();
+
+    for (const buff of calculatedBuffs) {
+      const key = `${buff.name}:${buff.isPercent}`;
+      const existing = combined.get(key);
+
+      if (existing) {
+        existing.value += buff.value;
+      } else {
+        combined.set(key, { ...buff });
+      }
+    }
+
+    // Convert back to array and format values as strings
+    return Array.from(combined.values()).map(buff => ({
+      name: buff.name,
+      value: String(Math.round(buff.value * 10) / 10),
+      isPercent: buff.isPercent,
+    }));
+  }
+
+  private getStatValueFromStats(stats: any, statKey: string): number {
+    const statMap: { [key: string]: string } = {
+      'hp': 'hp',
+      'atk': 'atk',
+      'def': 'def',
+      'impact': 'impact',
+      'anomalyMastery': 'anomalyMastery',
+      'critRate': 'critRate',
+      'critDmg': 'critDmg',
+      'anomalyProficiency': 'anomalyProficiency',
+      'pen': 'pen',
+      'penRatio': 'penRatio',
+      'energyRegen': 'energyRegen'
+    };
+
+    const mappedKey = statMap[statKey];
+    return mappedKey ? stats[mappedKey] : 0;
   }
 
   getSubstatBreakdown(): Array<{
@@ -1358,9 +1417,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.showDiscPicker = false;
     this.showDiscForm = true;
 
-    // Only reset form if we're not in edit mode
-    // If we're editing and changing set, preserve the form data
-    if (!this.isEditMode) {
+    // Only reset form if we're creating a brand new disc AND form is currently empty
+    // Preserve data if user is switching sets or editing
+    const isFormEmpty = !this.discFormData.mainStatType &&
+                        !this.discFormData.mainStatValue &&
+                        this.discFormData.subStats.every(s => !s.value || s.value === '');
+
+    if (!this.isEditMode && isFormEmpty) {
       this.discFormData = {
         mainStatType: '',
         mainStatValue: '',
@@ -1372,6 +1435,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         ],
       };
     }
+    // If form has data, preserve it when changing sets
   }
 
   closeDiscForm() {
@@ -1390,6 +1454,17 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       ],
     };
     this.cdr.markForCheck();
+  }
+
+  /**
+   * Opens disc picker to change set while preserving form data
+   * Used when user wants to try a different disc set without losing entered stats
+   */
+  openDiscPickerWithoutClosingForm() {
+    this.showDiscForm = false;
+    this.showDiscPicker = true;
+    // NOTE: We don't clear discFormData here - it gets preserved
+    // When selectDiscSet() is called, it will check if form has data and preserve it
   }
 
   async createAndEquipDisc() {
@@ -1757,6 +1832,100 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         this.discFormData.mainStatValue = Math.round(parsed * 10) / 10;
       }
     }
+  }
+
+  /**
+   * Get the base stat type from the main stat
+   * Handles both fixed slots (1-3) and variable slots (4-6)
+   * Returns the base type without % suffix for comparison with substats
+   */
+  getMainStatBaseType(): string | null {
+    let mainStatType: MainStatType;
+
+    // For Drive 1-3, use fixed main stat
+    if (
+      this.selectedDiscSlot === 'Drive1' ||
+      this.selectedDiscSlot === 'Drive2' ||
+      this.selectedDiscSlot === 'Drive3'
+    ) {
+      mainStatType = this.getDefaultMainStatForSlot(this.selectedDiscSlot);
+    } else {
+      // For Drive 4-6, use selected main stat from form
+      if (!this.discFormData.mainStatType) {
+        return null; // No main stat selected yet
+      }
+      mainStatType = this.discFormData.mainStatType as MainStatType;
+    }
+
+    return mainStatType;
+  }
+
+  /**
+   * Check if a substat type conflicts with the main stat type
+   * Handles percent vs flat distinction:
+   * - ATK% main conflicts with ATK% sub (YES)
+   * - ATK% main conflicts with ATK flat sub (NO)
+   * - HP main conflicts with HP sub (YES)
+   * - HP main conflicts with HP% sub (NO)
+   */
+  isMainStatConflict(substatType: SubStatType, mainStatBase: string | null): boolean {
+    if (!mainStatBase) {
+      return false; // No main stat selected, no conflict
+    }
+
+    // Direct match - always a conflict
+    if (mainStatBase === substatType) {
+      return true;
+    }
+
+    // No conflict if they're different stats entirely
+    return false;
+  }
+
+  /**
+   * Get available substat types for a specific substat dropdown index
+   * Filters out:
+   * 1. The main stat (if it matches exactly)
+   * 2. Substats already selected in other dropdown positions
+   */
+  getAvailableSubstatTypesForIndex(index: number): Array<{ value: SubStatType; label: string }> {
+    const mainStatBase = this.getMainStatBaseType();
+
+    // Get already selected substats from OTHER positions (not current index)
+    const selectedSubstats = this.discFormData.subStats
+      .map((s, i) => i !== index ? s.type : null)
+      .filter((t): t is SubStatType => t !== null);
+
+    // Filter out main stat conflicts and already-selected substats
+    return this.availableSubStatTypes.filter(stat =>
+      !this.isMainStatConflict(stat.value, mainStatBase) &&
+      !selectedSubstats.includes(stat.value)
+    );
+  }
+
+  /**
+   * Check if a disc has validation errors (for existing discs)
+   */
+  hasDiscValidationErrors(disc: Disc): boolean {
+    return hasValidationErrors(disc);
+  }
+
+  /**
+   * Get validation error messages for a disc
+   */
+  getDiscValidationErrors(disc: Disc): string[] {
+    return getDiscValidationErrors(disc);
+  }
+
+  /**
+   * Get formatted validation error tooltip for a disc
+   */
+  getDiscValidationTooltip(disc: Disc): string {
+    const errors = getDiscValidationErrors(disc);
+    if (errors.length === 0) {
+      return '';
+    }
+    return `Validation errors:\n${errors.map(e => `• ${e}`).join('\n')}`;
   }
 
   // Check if a substat type is a priority stat for the selected build's agent
