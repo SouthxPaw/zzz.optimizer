@@ -1,0 +1,19 @@
+{
+  "Id": 33800,
+  "Name": "Notes From the Chained",
+  "Desc2": "Ice DMG +10%",
+  "Desc4": "When the equipper triggers Abloom, the equipper's Anomaly Proficiency increases by 48 for 30s. Repeated triggers reset the duration. When the equipper triggers Freeze, the equipper's Anomaly DMG and Disorder DMG increase by 16% for 30s. Repeated triggers reset the duration.",
+    "4pcEffect": {
+    "Properties": [
+      {
+        "Name": "Anomaly_Proficiency",
+        "Name2": "Anomaly_Proficiency",
+        "Format": "{0:0}",
+        "Value": 48
+      }
+    ]
+  },
+  "Story": "",
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitNotesFromTheChained.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitNotesFromTheChained.png"
+}
