@@ -235,8 +235,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Load UID history from local storage
     this.loadUidHistory();
 
-    // Load custom images from local storage
-    this.loadCustomImages();
+    // Load customizations from local storage
+    this.loadCustomizations();
 
     // Subscribe to user builds
     this.buildService.builds$
@@ -2209,6 +2209,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   async shareAsImage() {
     if (!this.selectedBuild) return;
     this.showShareModal = true;
+
+    // Load agent-specific customizations
+    this.loadCustomizations();
+
     this.cdr.markForCheck();
 
     // Wait for modal and canvas to be rendered
@@ -2236,6 +2240,19 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   customAgentImageUrl: string | null = null;
   customBackgroundImageUrl: string | null = null;
   customBarImageUrl: string | null = null;
+  accentColor: string = '#f4b942'; // Default gold
+  hexInputValue: string = '#f4b942'; // Separate value for hex input to prevent loops
+
+  presetColors = [
+    { name: 'Gold', color: '#f4b942' },
+    { name: 'Red', color: '#ff4444' },
+    { name: 'Blue', color: '#4d96ff' },
+    { name: 'Purple', color: '#9c00de' },
+    { name: 'Green', color: '#6bcf7f' },
+    { name: 'Orange', color: '#ff8c42' },
+    { name: 'Cyan', color: '#00d9ff' },
+    { name: 'White', color: '#ffffff' },
+  ];
 
 async generateShareImage() {
   if (!this.selectedBuild || !this.shareCanvasRef)
@@ -2281,6 +2298,7 @@ async generateShareImage() {
       customAgentImageUrl: this.customAgentImageUrl || undefined,
       customBackgroundImageUrl: this.customBackgroundImageUrl || undefined,
       customBarImageUrl: this.customBarImageUrl || undefined,
+      accentColor: this.accentColor,
     };
 
     // Generate image using Canvas service
@@ -2353,7 +2371,7 @@ async generateShareImage() {
       reader.onload = (e: ProgressEvent<FileReader>) => {
         if (e.target?.result) {
           this.customAgentImageUrl = e.target.result as string;
-          this.saveCustomImages(); // Persist to localStorage
+          this.saveCustomizations(); // Persist to localStorage
           // Regenerate the image with the new custom image
           this.onShareOptionChange();
         }
@@ -2372,7 +2390,7 @@ async generateShareImage() {
       reader.onload = (e: ProgressEvent<FileReader>) => {
         if (e.target?.result) {
           this.customBackgroundImageUrl = e.target.result as string;
-          this.saveCustomImages(); // Persist to localStorage
+          this.saveCustomizations(); // Persist to localStorage
           // Regenerate the image with the new custom image
           this.onShareOptionChange();
         }
@@ -2391,7 +2409,7 @@ async generateShareImage() {
       reader.onload = (e: ProgressEvent<FileReader>) => {
         if (e.target?.result) {
           this.customBarImageUrl = e.target.result as string;
-          this.saveCustomImages(); // Persist to localStorage
+          this.saveCustomizations(); // Persist to localStorage
           // Regenerate the image with the new custom image
           this.onShareOptionChange();
         }
@@ -2403,56 +2421,155 @@ async generateShareImage() {
 
   clearCustomAgentImage() {
     this.customAgentImageUrl = null;
-    this.saveCustomImages(); // Update localStorage
+    this.saveCustomizations(); // Update localStorage
     // Regenerate the image without the custom image
     this.onShareOptionChange();
   }
 
   clearCustomBackgroundImage() {
     this.customBackgroundImageUrl = null;
-    this.saveCustomImages(); // Update localStorage
+    this.saveCustomizations(); // Update localStorage
     // Regenerate the image without the custom image
     this.onShareOptionChange();
   }
 
   clearCustomBarImage() {
     this.customBarImageUrl = null;
-    this.saveCustomImages(); // Update localStorage
+    this.saveCustomizations(); // Update localStorage
     // Regenerate the image without the custom image
     this.onShareOptionChange();
   }
 
-  resetAllCustomImages() {
+  private isColorUpdating = false;
+
+  // Accent color selection methods
+  selectAccentColor(color: string) {
+    if (this.isColorUpdating) return;
+    this.isColorUpdating = true;
+
+    this.accentColor = color;
+    this.hexInputValue = color; // Sync hex input
+    this.saveCustomizations();
+    this.onShareOptionChange(); // Regenerate preview
+
+    setTimeout(() => this.isColorUpdating = false, 100);
+  }
+
+  onCustomColorSelected() {
+    if (this.isColorUpdating) return;
+    this.isColorUpdating = true;
+
+    this.hexInputValue = this.accentColor; // Sync hex input
+    this.saveCustomizations();
+    this.onShareOptionChange(); // Regenerate preview
+
+    setTimeout(() => this.isColorUpdating = false, 100);
+  }
+
+  isCustomColor(): boolean {
+    return !this.presetColors.some(p => p.color === this.accentColor);
+  }
+
+  onHexInputChange(value: string) {
+    if (!value || this.isColorUpdating) return;
+
+    let formattedValue = value.trim();
+
+    // Auto-add # if user doesn't include it
+    if (formattedValue && !formattedValue.startsWith('#')) {
+      formattedValue = '#' + formattedValue;
+      this.hexInputValue = formattedValue;
+    }
+
+    // Convert to uppercase for consistency
+    formattedValue = formattedValue.toUpperCase();
+    if (formattedValue !== value) {
+      this.hexInputValue = formattedValue;
+    }
+
+    // Only update accent color if it's a valid hex format
+    if (this.isValidHexFormat(formattedValue)) {
+      this.accentColor = formattedValue;
+
+      // Only save and regenerate if it's a complete hex color
+      if (this.isCompleteHex(formattedValue)) {
+        this.isColorUpdating = true;
+        this.saveCustomizations();
+        this.onShareOptionChange();
+        setTimeout(() => this.isColorUpdating = false, 100);
+      }
+    }
+  }
+
+  validateHexInput() {
+    // On blur, ensure we have a valid complete hex color
+    if (!this.isCompleteHex(this.accentColor)) {
+      // Reset to default if invalid
+      this.accentColor = '#f4b942';
+      this.saveCustomizations();
+      this.onShareOptionChange();
+    }
+  }
+
+  private isValidHexFormat(hex: string): boolean {
+    // Allow partial hex input (e.g., #f, #ff, #fff)
+    return /^#[0-9A-Fa-f]{0,6}$/.test(hex);
+  }
+
+  private isCompleteHex(hex: string): boolean {
+    // Check if it's a complete 6-digit hex color
+    return /^#[0-9A-Fa-f]{6}$/.test(hex);
+  }
+
+  hasAnyCustomizations(): boolean {
+    return this.customAgentImageUrl !== null ||
+           this.customBackgroundImageUrl !== null ||
+           this.customBarImageUrl !== null ||
+           this.accentColor !== '#f4b942';
+  }
+
+  resetAllCustomizations() {
     this.customAgentImageUrl = null;
     this.customBackgroundImageUrl = null;
     this.customBarImageUrl = null;
-    this.saveCustomImages(); // Clear from localStorage
+    this.accentColor = '#F4B942'; // Reset to default gold
+    this.hexInputValue = '#F4B942'; // Sync hex input
+    this.saveCustomizations(); // Clear from localStorage
     // Regenerate the image with defaults
     this.onShareOptionChange();
   }
 
-  private saveCustomImages() {
+  private saveCustomizations() {
+    if (!this.selectedBuild) return;
+
     try {
-      localStorage.setItem('customAgentImage', this.customAgentImageUrl || '');
-      localStorage.setItem('customBackgroundImage', this.customBackgroundImageUrl || '');
-      localStorage.setItem('customBarImage', this.customBarImageUrl || '');
+      const agentId = this.selectedBuild.agentId;
+      localStorage.setItem(`customAgentImage_${agentId}`, this.customAgentImageUrl || '');
+      localStorage.setItem(`customBackgroundImage_${agentId}`, this.customBackgroundImageUrl || '');
+      localStorage.setItem(`customBarImage_${agentId}`, this.customBarImageUrl || '');
+      localStorage.setItem(`accentColor_${agentId}`, this.accentColor);
     } catch (error) {
-      console.error('Failed to save custom images to localStorage:', error);
+      console.error('Failed to save customizations to localStorage:', error);
     }
   }
 
-  private loadCustomImages() {
+  private loadCustomizations() {
+    if (!this.selectedBuild) return;
+
     try {
-      this.customAgentImageUrl = localStorage.getItem('customAgentImage') || null;
-      this.customBackgroundImageUrl = localStorage.getItem('customBackgroundImage') || null;
-      this.customBarImageUrl = localStorage.getItem('customBarImage') || null;
+      const agentId = this.selectedBuild.agentId;
+      this.customAgentImageUrl = localStorage.getItem(`customAgentImage_${agentId}`) || null;
+      this.customBackgroundImageUrl = localStorage.getItem(`customBackgroundImage_${agentId}`) || null;
+      this.customBarImageUrl = localStorage.getItem(`customBarImage_${agentId}`) || null;
+      this.accentColor = localStorage.getItem(`accentColor_${agentId}`) || '#f4b942';
+      this.hexInputValue = this.accentColor; // Sync hex input
 
       // Clear empty strings (treat as null)
       if (this.customAgentImageUrl === '') this.customAgentImageUrl = null;
       if (this.customBackgroundImageUrl === '') this.customBackgroundImageUrl = null;
       if (this.customBarImageUrl === '') this.customBarImageUrl = null;
     } catch (error) {
-      console.error('Failed to load custom images from localStorage:', error);
+      console.error('Failed to load customizations from localStorage:', error);
     }
   }
 

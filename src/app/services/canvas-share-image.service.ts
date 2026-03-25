@@ -26,6 +26,7 @@ export interface ShareImageData {
   customAgentImageUrl?: string;
   customBackgroundImageUrl?: string;
   customBarImageUrl?: string;
+  accentColor?: string;
 }
 
 @Injectable({
@@ -166,14 +167,34 @@ export class CanvasShareImageService {
     // Use custom background image if provided, otherwise use default
     const backgroundImageUrl = data.customBackgroundImageUrl || 'assets/data/images/share-image/ZZZTV.jpg';
 
-    // Draw background image
+    // Draw background image with aspect ratio maintained (cover mode)
     try {
       const bgImage = await this.loadImage(backgroundImageUrl);
+
+      // Calculate dimensions to cover the canvas while maintaining aspect ratio
+      const imgRatio = bgImage.width / bgImage.height;
+      const canvasRatio = this.WIDTH / this.HEIGHT;
+
+      let drawWidth, drawHeight, drawX, drawY;
+
+      if (imgRatio > canvasRatio) {
+        // Image is wider than canvas - fit to height
+        drawHeight = this.HEIGHT;
+        drawWidth = drawHeight * imgRatio;
+        drawX = (this.WIDTH - drawWidth) / 2; // Center horizontally
+        drawY = 0;
+      } else {
+        // Image is taller than canvas - fit to width
+        drawWidth = this.WIDTH;
+        drawHeight = drawWidth / imgRatio;
+        drawX = 0;
+        drawY = (this.HEIGHT - drawHeight) / 2; // Center vertically
+      }
 
       // Apply brightness filter (0.6)
       ctx.save();
       ctx.globalAlpha = 0.6;
-      ctx.drawImage(bgImage, 0, 0, this.WIDTH, this.HEIGHT);
+      ctx.drawImage(bgImage, drawX, drawY, drawWidth, drawHeight);
       ctx.restore();
     } catch (error) {
       console.warn('[Canvas] ⚠️ Background image failed to load, using solid color:', error);
@@ -181,14 +202,21 @@ export class CanvasShareImageService {
   }
 
   /**
-   * Draw angled grey bar with gold borders (or custom image)
+   * Draw angled grey bar with accent-colored borders (or custom image)
    */
   private async drawAngledBar(ctx: CanvasRenderingContext2D, data: ShareImageData): Promise<void> {
+    const accentColor = data.accentColor || '#f4b942';
+
     ctx.save();
 
     // Move to position and rotate
     ctx.translate(this.WIDTH - 705 + 500, -500 + 750); // right: -300, top: -500 + center of bar
     ctx.rotate((-30 * Math.PI) / 180);
+
+    // Create clipping path for the bar area
+    ctx.beginPath();
+    ctx.rect(-500, -750, 1000, 1500);
+    ctx.clip();
 
     // Draw shadow
     ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
@@ -201,8 +229,30 @@ export class CanvasShareImageService {
       try {
         const barImg = await this.loadImage(data.customBarImageUrl);
 
-        // Draw the custom image to fill the bar area
-        ctx.drawImage(barImg, -500, -750, 1000, 1500);
+        // Calculate dimensions to cover the bar area while maintaining aspect ratio
+        const barWidth = 1000;
+        const barHeight = 1500;
+        const imgRatio = barImg.width / barImg.height;
+        const barRatio = barWidth / barHeight;
+
+        let drawWidth, drawHeight, drawX, drawY;
+
+        if (imgRatio > barRatio) {
+          // Image is wider than bar - fit to height
+          drawHeight = barHeight;
+          drawWidth = drawHeight * imgRatio;
+          drawX = -500 - (drawWidth - barWidth) / 2; // Center horizontally
+          drawY = -750;
+        } else {
+          // Image is taller than bar - fit to width
+          drawWidth = barWidth;
+          drawHeight = drawWidth / imgRatio;
+          drawX = -500;
+          drawY = -750 - (drawHeight - barHeight) / 2; // Center vertically
+        }
+
+        // Draw the custom image to cover the bar area (maintains aspect ratio)
+        ctx.drawImage(barImg, drawX, drawY, drawWidth, drawHeight);
       } catch (error) {
         console.warn('[Canvas] ⚠️ Custom bar image failed to load, using default:', error);
         // Fallback to default grey bar
@@ -215,8 +265,16 @@ export class CanvasShareImageService {
       ctx.fillRect(-500, -750, 1000, 1500);
     }
 
-    // Draw gold border
-    ctx.strokeStyle = '#f4b942';
+    // Restore context to remove clipping before drawing border
+    ctx.restore();
+
+    // Draw the border outside of the clipping region
+    ctx.save();
+    ctx.translate(this.WIDTH - 705 + 500, -500 + 750);
+    ctx.rotate((-30 * Math.PI) / 180);
+
+    // Draw accent-colored border
+    ctx.strokeStyle = accentColor;
     ctx.lineWidth = 4;
     ctx.strokeRect(-500, -750, 1000, 1500);
 
@@ -230,6 +288,8 @@ export class CanvasShareImageService {
     ctx: CanvasRenderingContext2D,
     data: ShareImageData,
   ): Promise<void> {
+    const accentColor = data.accentColor || '#f4b942';
+
     // Draw agent image (use custom image if provided, otherwise use default)
     const agentImageUrl = data.customAgentImageUrl || data.agent.icon;
 
@@ -300,8 +360,8 @@ export class CanvasShareImageService {
         this.roundRect(ctx, ratingX, badgeY, badgeWidth, 48, 8);
         ctx.fill();
 
-        // Draw gold border
-        ctx.strokeStyle = '#f4b942';
+        // Draw accent-colored border
+        ctx.strokeStyle = accentColor;
         ctx.lineWidth = 3;
         this.roundRect(ctx, ratingX, badgeY, badgeWidth, 48, 8);
         ctx.stroke();
@@ -332,8 +392,8 @@ export class CanvasShareImageService {
     ctx.shadowOffsetY = 2;
     ctx.fillText(data.agent.name, infoX, infoY);
 
-    // Add gold glow
-    ctx.shadowColor = 'rgba(244, 185, 66, 0.5)';
+    // Add accent-colored glow
+    ctx.shadowColor = this.hexToRgba(accentColor, 0.5);
     ctx.shadowBlur = 20;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
@@ -496,6 +556,8 @@ export class CanvasShareImageService {
     y: number,
     data: ShareImageData,
   ): Promise<void> {
+    const accentColor = data.accentColor || '#f4b942';
+
     ctx.save();
 
     // Background
@@ -526,7 +588,7 @@ export class CanvasShareImageService {
       }
 
       // Draw stat label
-      ctx.fillStyle = '#f4b942';
+      ctx.fillStyle = accentColor;
       ctx.font = '600 10px Arial';
       ctx.textBaseline = 'top';
       ctx.fillText(stat.label + ':', statX + 21, statY + 4);
@@ -556,6 +618,8 @@ export class CanvasShareImageService {
   ): Promise<void> {
     if (!data.build.equippedWEngine) return;
 
+    const accentColor = data.accentColor || '#f4b942';
+
     ctx.save();
 
     // Background
@@ -563,14 +627,14 @@ export class CanvasShareImageService {
     this.roundRect(ctx, x, y, this.WIDTH - 350 - 40, 40, 8);
     ctx.fill();
 
-    // Gold border
-    ctx.strokeStyle = '#f4b942';
+    // Accent-colored border
+    ctx.strokeStyle = accentColor;
     ctx.lineWidth = 2;
     this.roundRect(ctx, x, y, this.WIDTH - 350 - 40, 40);
     ctx.stroke();
 
     // W-Engine name
-    ctx.fillStyle = '#f4b942';
+    ctx.fillStyle = accentColor;
     ctx.font = 'bold 18px Arial';
     ctx.textBaseline = 'middle';
     ctx.fillText(data.build.equippedWEngine.name, x + 12, y + 20);
@@ -582,16 +646,16 @@ export class CanvasShareImageService {
     const refinementText = `R${data.build.wEngineRefinement}`;
     const badgeWidth = this.measureTextWidth(ctx, refinementText, 'bold 13px Arial') + 20;
 
-    ctx.fillStyle = 'rgba(244, 185, 66, 0.2)';
+    ctx.fillStyle = this.hexToRgba(accentColor, 0.2);
     this.roundRect(ctx, statsX - badgeWidth, y + 10, badgeWidth, 20, 4);
     ctx.fill();
 
-    ctx.strokeStyle = '#f4b942';
+    ctx.strokeStyle = accentColor;
     ctx.lineWidth = 1;
     this.roundRect(ctx, statsX - badgeWidth, y + 10, badgeWidth, 20, 4);
     ctx.stroke();
 
-    ctx.fillStyle = '#f4b942';
+    ctx.fillStyle = accentColor;
     ctx.font = 'bold 13px Arial';
     ctx.textAlign = 'center';
     ctx.fillText(refinementText, statsX - badgeWidth / 2, y + 20);
@@ -716,7 +780,7 @@ export class CanvasShareImageService {
       const pos = discPositions[slot];
       const discScore = data.discScores.get(disc.uid);
 
-      await this.drawDisc(ctx, disc, discScore, pos.statsX, pos.statsY, data.showDiscRatings);
+      await this.drawDisc(ctx, disc, discScore, pos.statsX, pos.statsY, data.showDiscRatings, data.accentColor);
       await this.drawDiscImage(
         ctx,
         disc,
@@ -737,7 +801,10 @@ export class CanvasShareImageService {
     x: number,
     y: number,
     showDiscRatings?: boolean,
+    accentColor?: string,
   ): Promise<void> {
+    const color = accentColor || '#f4b942';
+
     ctx.save();
 
     // Background
@@ -745,8 +812,8 @@ export class CanvasShareImageService {
     this.roundRect(ctx, x, y, 110, 85, 6);
     ctx.fill();
 
-    // Gold border
-    ctx.strokeStyle = '#f4b942';
+    // Accent-colored border
+    ctx.strokeStyle = color;
     ctx.lineWidth = 2;
     this.roundRect(ctx, x, y, 110, 85, 6);
     ctx.stroke();
@@ -782,7 +849,7 @@ export class CanvasShareImageService {
     let textY = y + 24;
 
     // Main stat type (left-aligned)
-    ctx.fillStyle = '#f4b942';
+    ctx.fillStyle = color;
     ctx.font = '500 9px Arial';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
@@ -1175,6 +1242,7 @@ export class CanvasShareImageService {
     ctx: CanvasRenderingContext2D,
     data: ShareImageData,
   ): Promise<void> {
+    const accentColor = data.accentColor || '#f4b942';
     const footerHeight = 50;
     const footerY = this.HEIGHT - footerHeight;
 
@@ -1185,7 +1253,7 @@ export class CanvasShareImageService {
     ctx.fillRect(0, footerY, this.WIDTH, footerHeight);
 
     // Draw top border
-    ctx.strokeStyle = '#f4b942';
+    ctx.strokeStyle = accentColor;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(0, footerY);
@@ -1218,7 +1286,7 @@ export class CanvasShareImageService {
 
       // Add separator if not last
       if (!isLast) {
-        ctx.fillStyle = '#f4b942';
+        ctx.fillStyle = accentColor;
         ctx.font = 'bold 10px Arial';
         ctx.fillText(' | ', textX, textY);
         textX += this.measureTextWidth(ctx, ' | ', 'bold 10px Arial');
@@ -1233,5 +1301,20 @@ export class CanvasShareImageService {
     ctx.fillText(creditsText, this.WIDTH - 12, textY);
 
     ctx.restore();
+  }
+
+  /**
+   * Convert hex color to rgba with alpha
+   */
+  private hexToRgba(hex: string, alpha: number): string {
+    // Remove # if present
+    hex = hex.replace('#', '');
+
+    // Parse RGB values
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   }
 }
