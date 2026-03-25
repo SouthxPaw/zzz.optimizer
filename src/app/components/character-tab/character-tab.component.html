@@ -1385,6 +1385,164 @@
             <span>Show Disc Ratings</span>
           </label>
         </div>
+
+        <!-- Customization Options -->
+        <div class="share-customization-options">
+          <div class="custom-image-option">
+            <label class="file-upload-label">
+              <span class="label-text" title="Suggested: 400x630px or similar tall portrait. Character image on the left side">Replace Character Portrait:</span>
+              <input
+                type="file"
+                #agentImageInput
+                accept="image/*"
+                (change)="onCustomAgentImageSelected($event)"
+                [disabled]="isGeneratingShareImage"
+                style="display: none"
+              />
+              <button
+                class="btn-secondary btn-compact"
+                (click)="agentImageInput.click()"
+                [disabled]="isGeneratingShareImage"
+                title="Suggested: 400x630px or similar tall portrait. Character image on the left side"
+              >
+                {{ customAgentImageUrl ? 'Change Image' : 'Upload Image' }}
+              </button>
+              <button
+                *ngIf="customAgentImageUrl"
+                class="btn-secondary btn-compact btn-clear"
+                (click)="clearCustomAgentImage()"
+                [disabled]="isGeneratingShareImage"
+                title="Reset to default character portrait"
+              >
+                Clear
+              </button>
+            </label>
+          </div>
+
+          <div class="custom-image-option">
+            <label class="file-upload-label">
+              <span class="label-text" title="Suggested: 1180x630px. Background image behind all elements">Replace Main Background:</span>
+              <input
+                type="file"
+                #backgroundImageInput
+                accept="image/*"
+                (change)="onCustomBackgroundImageSelected($event)"
+                [disabled]="isGeneratingShareImage"
+                style="display: none"
+              />
+              <button
+                class="btn-secondary btn-compact"
+                (click)="backgroundImageInput.click()"
+                [disabled]="isGeneratingShareImage"
+                title="Suggested: 1180x630px. Background image behind all elements"
+              >
+                {{ customBackgroundImageUrl ? 'Change Image' : 'Upload Image' }}
+              </button>
+              <button
+                *ngIf="customBackgroundImageUrl"
+                class="btn-secondary btn-compact btn-clear"
+                (click)="clearCustomBackgroundImage()"
+                [disabled]="isGeneratingShareImage"
+                title="Reset to default background"
+              >
+                Clear
+              </button>
+            </label>
+          </div>
+
+          <div class="custom-image-option">
+            <label class="file-upload-label">
+              <span class="label-text" title="Suggested: 1000x1500px. Angled bar on the right side">Replace Diagonal Bar:</span>
+              <input
+                type="file"
+                #barImageInput
+                accept="image/*"
+                (change)="onCustomBarImageSelected($event)"
+                [disabled]="isGeneratingShareImage"
+                style="display: none"
+              />
+              <button
+                class="btn-secondary btn-compact"
+                (click)="barImageInput.click()"
+                [disabled]="isGeneratingShareImage"
+                title="Suggested: 1000x1500px. Angled bar on the right side"
+              >
+                {{ customBarImageUrl ? 'Change Image' : 'Upload Image' }}
+              </button>
+              <button
+                *ngIf="customBarImageUrl"
+                class="btn-secondary btn-compact btn-clear"
+                (click)="clearCustomBarImage()"
+                [disabled]="isGeneratingShareImage"
+                title="Reset to default diagonal bar"
+              >
+                Clear
+              </button>
+            </label>
+          </div>
+
+          <!-- Accent Color Picker -->
+          <div class="accent-color-section">
+            <span class="label-text" title="Color used for borders, labels, and accents">Accent Color:</span>
+            <div class="accent-color-picker">
+              <!-- Preset color swatches -->
+              <button
+                *ngFor="let preset of presetColors"
+                class="color-swatch"
+                [class.active]="accentColor === preset.color"
+                [style.background-color]="preset.color"
+                [title]="preset.name"
+                (click)="selectAccentColor(preset.color)"
+                [disabled]="isGeneratingShareImage">
+              </button>
+
+              <!-- Custom color button -->
+              <button
+                class="color-swatch color-swatch-custom"
+                [class.active]="isCustomColor()"
+                [class.default-gradient]="!isCustomColor()"
+                [style.background]="isCustomColor() ? accentColor : null"
+                title="Choose custom color"
+                (click)="customColorInput.click()"
+                [disabled]="isGeneratingShareImage">
+                <span class="custom-color-icon" *ngIf="!isCustomColor()">🎨</span>
+              </button>
+
+              <!-- Hidden native color picker -->
+              <input
+                #customColorInput
+                type="color"
+                [(ngModel)]="accentColor"
+                (change)="onCustomColorSelected()"
+                style="display: none">
+
+              <!-- Hex input field -->
+              <input
+                type="text"
+                class="hex-input"
+                [(ngModel)]="hexInputValue"
+                (ngModelChange)="onHexInputChange($event)"
+                (blur)="validateHexInput()"
+                maxlength="7"
+                placeholder="#f4b942"
+                [disabled]="isGeneratingShareImage"
+                title="Enter hex color code (e.g., #ff0000)">
+            </div>
+          </div>
+
+          <!-- Reset All Button -->
+          <div class="reset-all-customizations" *ngIf="hasAnyCustomizations()">
+            <button
+              class="btn-secondary btn-compact"
+              (click)="resetAllCustomizations()"
+              [disabled]="isGeneratingShareImage"
+              title="Clear all customizations and restore defaults"
+            >
+              Reset All Customizations
+            </button>
+          </div>
+        </div>
+
         <div class="share-action-buttons">
           <button class="btn-secondary" (click)="closeShareModal()">Cancel</button>
           <button class="btn-primary" (click)="downloadShareImage()" [disabled]="isGeneratingShareImage">Download Image</button>
