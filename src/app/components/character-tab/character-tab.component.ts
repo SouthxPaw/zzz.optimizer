@@ -235,6 +235,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Load UID history from local storage
     this.loadUidHistory();
 
+    // Load custom images from local storage
+    this.loadCustomImages();
+
     // Subscribe to user builds
     this.buildService.builds$
       .pipe(takeUntil(this.destroy$))
@@ -2214,6 +2217,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   closeShareModal() {
     this.showShareModal = false;
+    // Don't clear custom images - they persist until user explicitly resets them
     this.cdr.markForCheck();
   }
 
@@ -2229,6 +2233,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   isGeneratingShareImage = false;
   showBuildRating = true;
   showDiscRatings = true;
+  customAgentImageUrl: string | null = null;
+  customBackgroundImageUrl: string | null = null;
+  customBarImageUrl: string | null = null;
 
 async generateShareImage() {
   if (!this.selectedBuild || !this.shareCanvasRef)
@@ -2271,6 +2278,9 @@ async generateShareImage() {
       substatBreakdown: this.getSubstatBreakdown(),
       showBuildRating: this.showBuildRating,
       showDiscRatings: this.showDiscRatings,
+      customAgentImageUrl: this.customAgentImageUrl || undefined,
+      customBackgroundImageUrl: this.customBackgroundImageUrl || undefined,
+      customBarImageUrl: this.customBarImageUrl || undefined,
     };
 
     // Generate image using Canvas service
@@ -2331,6 +2341,119 @@ async generateShareImage() {
         URL.revokeObjectURL(url);
       }
     });
+  }
+
+  // Custom image upload handlers
+  onCustomAgentImageSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) {
+          this.customAgentImageUrl = e.target.result as string;
+          this.saveCustomImages(); // Persist to localStorage
+          // Regenerate the image with the new custom image
+          this.onShareOptionChange();
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onCustomBackgroundImageSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) {
+          this.customBackgroundImageUrl = e.target.result as string;
+          this.saveCustomImages(); // Persist to localStorage
+          // Regenerate the image with the new custom image
+          this.onShareOptionChange();
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onCustomBarImageSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) {
+          this.customBarImageUrl = e.target.result as string;
+          this.saveCustomImages(); // Persist to localStorage
+          // Regenerate the image with the new custom image
+          this.onShareOptionChange();
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  clearCustomAgentImage() {
+    this.customAgentImageUrl = null;
+    this.saveCustomImages(); // Update localStorage
+    // Regenerate the image without the custom image
+    this.onShareOptionChange();
+  }
+
+  clearCustomBackgroundImage() {
+    this.customBackgroundImageUrl = null;
+    this.saveCustomImages(); // Update localStorage
+    // Regenerate the image without the custom image
+    this.onShareOptionChange();
+  }
+
+  clearCustomBarImage() {
+    this.customBarImageUrl = null;
+    this.saveCustomImages(); // Update localStorage
+    // Regenerate the image without the custom image
+    this.onShareOptionChange();
+  }
+
+  resetAllCustomImages() {
+    this.customAgentImageUrl = null;
+    this.customBackgroundImageUrl = null;
+    this.customBarImageUrl = null;
+    this.saveCustomImages(); // Clear from localStorage
+    // Regenerate the image with defaults
+    this.onShareOptionChange();
+  }
+
+  private saveCustomImages() {
+    try {
+      localStorage.setItem('customAgentImage', this.customAgentImageUrl || '');
+      localStorage.setItem('customBackgroundImage', this.customBackgroundImageUrl || '');
+      localStorage.setItem('customBarImage', this.customBarImageUrl || '');
+    } catch (error) {
+      console.error('Failed to save custom images to localStorage:', error);
+    }
+  }
+
+  private loadCustomImages() {
+    try {
+      this.customAgentImageUrl = localStorage.getItem('customAgentImage') || null;
+      this.customBackgroundImageUrl = localStorage.getItem('customBackgroundImage') || null;
+      this.customBarImageUrl = localStorage.getItem('customBarImage') || null;
+
+      // Clear empty strings (treat as null)
+      if (this.customAgentImageUrl === '') this.customAgentImageUrl = null;
+      if (this.customBackgroundImageUrl === '') this.customBackgroundImageUrl = null;
+      if (this.customBarImageUrl === '') this.customBarImageUrl = null;
+    } catch (error) {
+      console.error('Failed to load custom images from localStorage:', error);
+    }
   }
 
   // =====================================

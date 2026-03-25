@@ -23,6 +23,9 @@ export interface ShareImageData {
   }>;
   showBuildRating?: boolean;
   showDiscRatings?: boolean;
+  customAgentImageUrl?: string;
+  customBackgroundImageUrl?: string;
+  customBarImageUrl?: string;
 }
 
 @Injectable({
@@ -57,8 +60,8 @@ export class CanvasShareImageService {
     ctx.imageSmoothingQuality = 'high';
 
     // Draw all layers in order
-    await this.drawBackground(ctx);
-    await this.drawAngledBar(ctx);
+    await this.drawBackground(ctx, data);
+    await this.drawAngledBar(ctx, data);
     await this.drawAgentSection(ctx, data);
     await this.drawEquipmentSection(ctx, data);
     await this.drawFooter(ctx, data);
@@ -153,18 +156,19 @@ export class CanvasShareImageService {
   }
 
   /**
-   * Draw background layer (ZZZTV.jpg with brightness filter)
+   * Draw background layer (ZZZTV.jpg with brightness filter or custom image)
    */
-  private async drawBackground(ctx: CanvasRenderingContext2D): Promise<void> {
+  private async drawBackground(ctx: CanvasRenderingContext2D, data: ShareImageData): Promise<void> {
     // Fill with base color
     ctx.fillStyle = '#0a0a0a';
     ctx.fillRect(0, 0, this.WIDTH, this.HEIGHT);
 
+    // Use custom background image if provided, otherwise use default
+    const backgroundImageUrl = data.customBackgroundImageUrl || 'assets/data/images/share-image/ZZZTV.jpg';
+
     // Draw background image
     try {
-      const bgImage = await this.loadImage(
-        'assets/data/images/share-image/ZZZTV.jpg',
-      );
+      const bgImage = await this.loadImage(backgroundImageUrl);
 
       // Apply brightness filter (0.6)
       ctx.save();
@@ -177,9 +181,9 @@ export class CanvasShareImageService {
   }
 
   /**
-   * Draw angled grey bar with gold borders
+   * Draw angled grey bar with gold borders (or custom image)
    */
-  private async drawAngledBar(ctx: CanvasRenderingContext2D): Promise<void> {
+  private async drawAngledBar(ctx: CanvasRenderingContext2D, data: ShareImageData): Promise<void> {
     ctx.save();
 
     // Move to position and rotate
@@ -192,9 +196,24 @@ export class CanvasShareImageService {
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
 
-    // Draw bar background
-    ctx.fillStyle = '#444444';
-    ctx.fillRect(-500, -750, 1000, 1500);
+    // If custom bar image is provided, use it instead of the default grey bar
+    if (data.customBarImageUrl) {
+      try {
+        const barImg = await this.loadImage(data.customBarImageUrl);
+
+        // Draw the custom image to fill the bar area
+        ctx.drawImage(barImg, -500, -750, 1000, 1500);
+      } catch (error) {
+        console.warn('[Canvas] ⚠️ Custom bar image failed to load, using default:', error);
+        // Fallback to default grey bar
+        ctx.fillStyle = '#444444';
+        ctx.fillRect(-500, -750, 1000, 1500);
+      }
+    } else {
+      // Draw default bar background
+      ctx.fillStyle = '#444444';
+      ctx.fillRect(-500, -750, 1000, 1500);
+    }
 
     // Draw gold border
     ctx.strokeStyle = '#f4b942';
@@ -211,10 +230,12 @@ export class CanvasShareImageService {
     ctx: CanvasRenderingContext2D,
     data: ShareImageData,
   ): Promise<void> {
-    // Draw agent image
-    if (data.agent.icon) {
+    // Draw agent image (use custom image if provided, otherwise use default)
+    const agentImageUrl = data.customAgentImageUrl || data.agent.icon;
+
+    if (agentImageUrl) {
       try {
-        const agentImg = await this.loadImage(data.agent.icon);
+        const agentImg = await this.loadImage(agentImageUrl);
 
         ctx.save();
 
