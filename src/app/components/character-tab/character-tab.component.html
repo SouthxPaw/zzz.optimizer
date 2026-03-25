@@ -1386,11 +1386,11 @@
           </label>
         </div>
 
-        <!-- Custom Image Options -->
-        <div class="share-custom-images">
+        <!-- Customization Options -->
+        <div class="share-customization-options">
           <div class="custom-image-option">
             <label class="file-upload-label">
-              <span class="label-text" title="Character image on the left side">Replace Character Portrait:</span>
+              <span class="label-text" title="Suggested: 400x630px or similar tall portrait. Character image on the left side">Replace Character Portrait:</span>
               <input
                 type="file"
                 #agentImageInput
@@ -1403,6 +1403,7 @@
                 class="btn-secondary btn-compact"
                 (click)="agentImageInput.click()"
                 [disabled]="isGeneratingShareImage"
+                title="Suggested: 400x630px or similar tall portrait. Character image on the left side"
               >
                 {{ customAgentImageUrl ? 'Change Image' : 'Upload Image' }}
               </button>
@@ -1420,7 +1421,7 @@
 
           <div class="custom-image-option">
             <label class="file-upload-label">
-              <span class="label-text" title="Background image behind all elements">Replace Main Background:</span>
+              <span class="label-text" title="Suggested: 1180x630px. Background image behind all elements">Replace Main Background:</span>
               <input
                 type="file"
                 #backgroundImageInput
@@ -1433,6 +1434,7 @@
                 class="btn-secondary btn-compact"
                 (click)="backgroundImageInput.click()"
                 [disabled]="isGeneratingShareImage"
+                title="Suggested: 1180x630px. Background image behind all elements"
               >
                 {{ customBackgroundImageUrl ? 'Change Image' : 'Upload Image' }}
               </button>
@@ -1450,7 +1452,7 @@
 
           <div class="custom-image-option">
             <label class="file-upload-label">
-              <span class="label-text" title="Angled bar on the right side">Replace Diagonal Bar:</span>
+              <span class="label-text" title="Suggested: 1000x1500px. Angled bar on the right side">Replace Diagonal Bar:</span>
               <input
                 type="file"
                 #barImageInput
@@ -1463,6 +1465,7 @@
                 class="btn-secondary btn-compact"
                 (click)="barImageInput.click()"
                 [disabled]="isGeneratingShareImage"
+                title="Suggested: 1000x1500px. Angled bar on the right side"
               >
                 {{ customBarImageUrl ? 'Change Image' : 'Upload Image' }}
               </button>
@@ -1478,15 +1481,64 @@
             </label>
           </div>
 
+          <!-- Accent Color Picker -->
+          <div class="accent-color-section">
+            <span class="label-text" title="Color used for borders, labels, and accents">Accent Color:</span>
+            <div class="accent-color-picker">
+              <!-- Preset color swatches -->
+              <button
+                *ngFor="let preset of presetColors"
+                class="color-swatch"
+                [class.active]="accentColor === preset.color"
+                [style.background-color]="preset.color"
+                [title]="preset.name"
+                (click)="selectAccentColor(preset.color)"
+                [disabled]="isGeneratingShareImage">
+              </button>
+
+              <!-- Custom color button -->
+              <button
+                class="color-swatch color-swatch-custom"
+                [class.active]="isCustomColor()"
+                [class.default-gradient]="!isCustomColor()"
+                [style.background]="isCustomColor() ? accentColor : null"
+                title="Choose custom color"
+                (click)="customColorInput.click()"
+                [disabled]="isGeneratingShareImage">
+                <span class="custom-color-icon" *ngIf="!isCustomColor()">🎨</span>
+              </button>
+
+              <!-- Hidden native color picker -->
+              <input
+                #customColorInput
+                type="color"
+                [(ngModel)]="accentColor"
+                (change)="onCustomColorSelected()"
+                style="display: none">
+
+              <!-- Hex input field -->
+              <input
+                type="text"
+                class="hex-input"
+                [(ngModel)]="hexInputValue"
+                (ngModelChange)="onHexInputChange($event)"
+                (blur)="validateHexInput()"
+                maxlength="7"
+                placeholder="#f4b942"
+                [disabled]="isGeneratingShareImage"
+                title="Enter hex color code (e.g., #ff0000)">
+            </div>
+          </div>
+
           <!-- Reset All Button -->
-          <div class="reset-all-custom-images" *ngIf="customAgentImageUrl || customBackgroundImageUrl || customBarImageUrl">
+          <div class="reset-all-customizations" *ngIf="hasAnyCustomizations()">
             <button
               class="btn-secondary btn-compact"
-              (click)="resetAllCustomImages()"
+              (click)="resetAllCustomizations()"
               [disabled]="isGeneratingShareImage"
-              title="Clear all custom images and restore defaults"
+              title="Clear all customizations and restore defaults"
             >
-              Reset All Custom Images
+              Reset All Customizations
             </button>
           </div>
         </div>
