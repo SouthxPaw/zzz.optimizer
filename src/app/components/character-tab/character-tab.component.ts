@@ -2225,13 +2225,21 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  private isShareOptionUpdating = false;
+
   onShareOptionChange() {
+    if (this.isShareOptionUpdating) return;
+    this.isShareOptionUpdating = true;
+
     // Show loading state immediately
     this.isGeneratingShareImage = true;
     this.cdr.markForCheck();
 
     // Add a small delay to allow the change detection cycle to complete
-    setTimeout(() => this.generateShareImage(), 50);
+    setTimeout(() => {
+      this.generateShareImage();
+      setTimeout(() => this.isShareOptionUpdating = false, 100);
+    }, 50);
   }
 
   isGeneratingShareImage = false;
@@ -2241,6 +2249,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   customBackgroundImageUrl: string | null = null;
   customBarImageUrl: string | null = null;
   accentColor: string = '#f4b942'; // Default gold
+  customizationOptionsExpanded = true; // Collapsible customization section
   hexInputValue: string = '#f4b942'; // Separate value for hex input to prevent loops
 
   presetColors = [
@@ -2595,6 +2604,10 @@ async generateShareImage() {
     } catch (error) {
       console.error('Failed to reset customizations:', error);
     }
+  }
+
+  toggleCustomizationOptions() {
+    this.customizationOptionsExpanded = !this.customizationOptionsExpanded;
   }
 
   // Check IndexedDB storage quota and warn if approaching limit
