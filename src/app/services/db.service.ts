@@ -10,6 +10,14 @@ interface AppMetadata {
   value: string;
 }
 
+interface ShareCustomization {
+  agentId: string;
+  customAgentImage?: string;
+  customBackgroundImage?: string;
+  customBarImage?: string;
+  accentColor?: string;
+}
+
 /**
  * Database Service
  *
@@ -35,6 +43,9 @@ export class DbService extends Dexie {
 
   // APP METADATA - Stores app version, settings, etc.
   metadata!: Table<AppMetadata, string>;
+
+  // SHARE CUSTOMIZATIONS - User's custom share image settings per agent
+  shareCustomizations!: Table<ShareCustomization, string>;
 
   constructor() {
     super('ZZZOptimizerDB');
@@ -71,6 +82,23 @@ export class DbService extends Dexie {
 
       // App metadata
       metadata: 'key'
+    });
+
+    // Version 4: Add shareCustomizations table for per-agent share image settings
+    this.version(4).stores({
+      // Reference data tables
+      agents: 'id, name, rarity, element, specialty',
+      wEngines: 'id, name, rarity, specialty',
+      discSets: 'id, name',
+
+      // User data tables
+      discs: 'uid, slot, set, rarity, equippedBy',
+
+      // App metadata
+      metadata: 'key',
+
+      // Share customizations
+      shareCustomizations: 'agentId'
     });
   }
 
@@ -230,4 +258,24 @@ export class DbService extends Dexie {
 
     return false;
   }
+
+  // Share customization operations
+  async getShareCustomization(agentId: string): Promise<ShareCustomization | undefined> {
+    return await this.shareCustomizations.get(agentId);
+  }
+
+  async saveShareCustomization(customization: ShareCustomization): Promise<string> {
+    return await this.shareCustomizations.put(customization);
+  }
+
+  async deleteShareCustomization(agentId: string): Promise<void> {
+    await this.shareCustomizations.delete(agentId);
+  }
+
+  async getAllShareCustomizations(): Promise<ShareCustomization[]> {
+    return await this.shareCustomizations.toArray();
+  }
 }
+
+// Export the interface for use in other services
+export type { ShareCustomization };
