@@ -1365,29 +1365,19 @@
         </div>
       </div>
       <div class="modal-actions share-modal-actions">
-        <div class="share-options">
-          <label class="checkbox-label">
-            <input
-              type="checkbox"
-              [(ngModel)]="showBuildRating"
-              (change)="onShareOptionChange()"
-              [disabled]="isGeneratingShareImage"
-            />
-            <span>Show Build Rating</span>
-          </label>
-          <label class="checkbox-label">
-            <input
-              type="checkbox"
-              [(ngModel)]="showDiscRatings"
-              (change)="onShareOptionChange()"
-              [disabled]="isGeneratingShareImage"
-            />
-            <span>Show Disc Ratings</span>
-          </label>
+        <!-- Customization Options Header -->
+        <div class="customization-header">
+          <button
+            class="btn-secondary btn-compact toggle-customization-btn"
+            (click)="toggleCustomizationOptions()"
+            [disabled]="isGeneratingShareImage"
+            title="{{customizationOptionsExpanded ? 'Hide' : 'Show'}} customization options">
+            {{ customizationOptionsExpanded ? '▼' : '▶' }} Customization Options
+          </button>
         </div>
 
         <!-- Customization Options -->
-        <div class="share-customization-options">
+        <div class="share-customization-options" *ngIf="customizationOptionsExpanded">
           <div class="custom-image-option">
             <label class="file-upload-label">
               <span class="label-text" title="Suggested: 400x630px or similar tall portrait. Character image on the left side">Replace Character Portrait:</span>
@@ -1544,8 +1534,30 @@
         </div>
 
         <div class="share-action-buttons">
-          <button class="btn-secondary" (click)="closeShareModal()">Cancel</button>
-          <button class="btn-primary" (click)="downloadShareImage()" [disabled]="isGeneratingShareImage">Download Image</button>
+          <div class="share-options">
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [(ngModel)]="showBuildRating"
+                (change)="onShareOptionChange()"
+                [disabled]="isGeneratingShareImage"
+              />
+              <span>Show Build Rating</span>
+            </label>
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [(ngModel)]="showDiscRatings"
+                (change)="onShareOptionChange()"
+                [disabled]="isGeneratingShareImage"
+              />
+              <span>Show Disc Ratings</span>
+            </label>
+          </div>
+          <div class="share-buttons-group">
+            <button class="btn-secondary" (click)="closeShareModal()">Cancel</button>
+            <button class="btn-primary" (click)="downloadShareImage()" [disabled]="isGeneratingShareImage">Download Image</button>
+          </div>
         </div>
       </div>
     </div>
