@@ -2361,61 +2361,109 @@ async generateShareImage() {
     });
   }
 
+  // Helper method to compress/resize images before storing
+  private async compressImage(file: File, maxWidth: number, maxHeight: number): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        const img = new Image();
+
+        img.onload = () => {
+          // Calculate new dimensions while maintaining aspect ratio
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            const aspectRatio = width / height;
+
+            if (width > height) {
+              width = maxWidth;
+              height = width / aspectRatio;
+            } else {
+              height = maxHeight;
+              width = height * aspectRatio;
+            }
+          }
+
+          // Create canvas and draw resized image
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Convert to PNG (lossless)
+            const compressedDataUrl = canvas.toDataURL('image/png');
+            resolve(compressedDataUrl);
+          } else {
+            reject(new Error('Failed to get canvas context'));
+          }
+        };
+
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = e.target?.result as string;
+      };
+
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  }
+
   // Custom image upload handlers
-  onCustomAgentImageSelected(event: Event) {
+  async onCustomAgentImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      const reader = new FileReader();
 
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (e.target?.result) {
-          this.customAgentImageUrl = e.target.result as string;
-          this.saveCustomizations(); // Persist to localStorage
-          // Regenerate the image with the new custom image
-          this.onShareOptionChange();
-        }
-      };
-
-      reader.readAsDataURL(file);
+      try {
+        // Compress to max 800x1200 (portrait orientation for character)
+        const compressedImage = await this.compressImage(file, 800, 1200);
+        this.customAgentImageUrl = compressedImage;
+        this.saveCustomizations(); // Persist to localStorage
+        this.onShareOptionChange();
+      } catch (error) {
+        console.error('Failed to compress agent image:', error);
+        alert('Failed to process image. Please try a different file.');
+      }
     }
   }
 
-  onCustomBackgroundImageSelected(event: Event) {
+  async onCustomBackgroundImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      const reader = new FileReader();
 
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (e.target?.result) {
-          this.customBackgroundImageUrl = e.target.result as string;
-          this.saveCustomizations(); // Persist to localStorage
-          // Regenerate the image with the new custom image
-          this.onShareOptionChange();
-        }
-      };
-
-      reader.readAsDataURL(file);
+      try {
+        // Compress to max 1920x1080 (landscape for background)
+        const compressedImage = await this.compressImage(file, 1920, 1080);
+        this.customBackgroundImageUrl = compressedImage;
+        this.saveCustomizations(); // Persist to localStorage
+        this.onShareOptionChange();
+      } catch (error) {
+        console.error('Failed to compress background image:', error);
+        alert('Failed to process image. Please try a different file.');
+      }
     }
   }
 
-  onCustomBarImageSelected(event: Event) {
+  async onCustomBarImageSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      const reader = new FileReader();
 
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (e.target?.result) {
-          this.customBarImageUrl = e.target.result as string;
-          this.saveCustomizations(); // Persist to localStorage
-          // Regenerate the image with the new custom image
-          this.onShareOptionChange();
-        }
-      };
-
-      reader.readAsDataURL(file);
+      try {
+        // Compress to max 1000x1500 (portrait for diagonal bar)
+        const compressedImage = await this.compressImage(file, 1000, 1500);
+        this.customBarImageUrl = compressedImage;
+        this.saveCustomizations(); // Persist to localStorage
+        this.onShareOptionChange();
+      } catch (error) {
+        console.error('Failed to compress bar image:', error);
+        alert('Failed to process image. Please try a different file.');
+      }
     }
   }
 
@@ -2528,48 +2576,122 @@ async generateShareImage() {
            this.accentColor !== '#f4b942';
   }
 
-  resetAllCustomizations() {
-    this.customAgentImageUrl = null;
-    this.customBackgroundImageUrl = null;
-    this.customBarImageUrl = null;
-    this.accentColor = '#F4B942'; // Reset to default gold
-    this.hexInputValue = '#F4B942'; // Sync hex input
-    this.saveCustomizations(); // Clear from localStorage
-    // Regenerate the image with defaults
-    this.onShareOptionChange();
-  }
-
-  private saveCustomizations() {
+  async resetAllCustomizations() {
     if (!this.selectedBuild) return;
 
     try {
-      const agentId = this.selectedBuild.agentId;
-      localStorage.setItem(`customAgentImage_${agentId}`, this.customAgentImageUrl || '');
-      localStorage.setItem(`customBackgroundImage_${agentId}`, this.customBackgroundImageUrl || '');
-      localStorage.setItem(`customBarImage_${agentId}`, this.customBarImageUrl || '');
-      localStorage.setItem(`accentColor_${agentId}`, this.accentColor);
+      // Delete from IndexedDB
+      await this.buildService['db'].deleteShareCustomization(this.selectedBuild.agentId);
+
+      // Reset local state
+      this.customAgentImageUrl = null;
+      this.customBackgroundImageUrl = null;
+      this.customBarImageUrl = null;
+      this.accentColor = '#F4B942'; // Reset to default gold
+      this.hexInputValue = '#F4B942'; // Sync hex input
+
+      // Regenerate the image with defaults
+      this.onShareOptionChange();
     } catch (error) {
-      console.error('Failed to save customizations to localStorage:', error);
+      console.error('Failed to reset customizations:', error);
     }
   }
 
-  private loadCustomizations() {
+  // Check IndexedDB storage quota and warn if approaching limit
+  private async checkStorageQuota(): Promise<void> {
+    try {
+      if ('storage' in navigator && 'estimate' in navigator.storage) {
+        const estimate = await navigator.storage.estimate();
+        const usage = estimate.usage || 0;
+        const quota = estimate.quota || 0;
+
+        if (quota > 0) {
+          const usageInMB = usage / (1024 * 1024);
+          const quotaInMB = quota / (1024 * 1024);
+          const percentUsed = (usage / quota) * 100;
+
+          console.log(`Storage: ${usageInMB.toFixed(2)}MB / ${quotaInMB.toFixed(2)}MB (${percentUsed.toFixed(1)}%)`);
+
+          // Warn if over 80% capacity
+          if (percentUsed > 80) {
+            alert(
+              `Warning: You're approaching the browser storage limit!\n\n` +
+              `Used: ${usageInMB.toFixed(1)}MB / ${quotaInMB.toFixed(1)}MB (${percentUsed.toFixed(1)}%)\n\n` +
+              `Consider clearing some customizations for agents you don't use to free up space.`
+            );
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to check storage quota:', error);
+      // Don't block on error - storage API might not be available
+    }
+  }
+
+  private async saveCustomizations() {
     if (!this.selectedBuild) return;
 
     try {
       const agentId = this.selectedBuild.agentId;
-      this.customAgentImageUrl = localStorage.getItem(`customAgentImage_${agentId}`) || null;
-      this.customBackgroundImageUrl = localStorage.getItem(`customBackgroundImage_${agentId}`) || null;
-      this.customBarImageUrl = localStorage.getItem(`customBarImage_${agentId}`) || null;
-      this.accentColor = localStorage.getItem(`accentColor_${agentId}`) || '#f4b942';
-      this.hexInputValue = this.accentColor; // Sync hex input
 
-      // Clear empty strings (treat as null)
-      if (this.customAgentImageUrl === '') this.customAgentImageUrl = null;
-      if (this.customBackgroundImageUrl === '') this.customBackgroundImageUrl = null;
-      if (this.customBarImageUrl === '') this.customBarImageUrl = null;
+      await this.buildService['db'].saveShareCustomization({
+        agentId,
+        customAgentImage: this.customAgentImageUrl || undefined,
+        customBackgroundImage: this.customBackgroundImageUrl || undefined,
+        customBarImage: this.customBarImageUrl || undefined,
+        accentColor: this.accentColor
+      });
+
+      console.log(`Saved customizations for agent ${agentId}`);
+
+      // Check storage quota after saving
+      await this.checkStorageQuota();
     } catch (error) {
-      console.error('Failed to load customizations from localStorage:', error);
+      console.error('Failed to save customizations to IndexedDB:', error);
+
+      // Check if it's a quota error
+      if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+        alert(
+          'Storage limit exceeded! Your customizations could not be saved.\n\n' +
+          'Please clear some existing customizations for other agents to free up space.'
+        );
+      } else {
+        alert(
+          'Failed to save customizations. Please try again or contact support if the issue persists.'
+        );
+      }
+    }
+  }
+
+  private async loadCustomizations() {
+    if (!this.selectedBuild) return;
+
+    try {
+      const agentId = this.selectedBuild.agentId;
+      const customization = await this.buildService['db'].getShareCustomization(agentId);
+
+      if (customization) {
+        this.customAgentImageUrl = customization.customAgentImage || null;
+        this.customBackgroundImageUrl = customization.customBackgroundImage || null;
+        this.customBarImageUrl = customization.customBarImage || null;
+        this.accentColor = customization.accentColor || '#f4b942';
+      } else {
+        // No customization found, use defaults
+        this.customAgentImageUrl = null;
+        this.customBackgroundImageUrl = null;
+        this.customBarImageUrl = null;
+        this.accentColor = '#f4b942';
+      }
+
+      this.hexInputValue = this.accentColor; // Sync hex input
+    } catch (error) {
+      console.error('Failed to load customizations from IndexedDB:', error);
+      // Fall back to defaults on error
+      this.customAgentImageUrl = null;
+      this.customBackgroundImageUrl = null;
+      this.customBarImageUrl = null;
+      this.accentColor = '#f4b942';
+      this.hexInputValue = this.accentColor;
     }
   }
 
