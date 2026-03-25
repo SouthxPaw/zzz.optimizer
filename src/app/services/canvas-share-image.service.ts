@@ -1275,8 +1275,8 @@ export class CanvasShareImageService {
       // Format stat text
       const statText = `(${stat.rollCount}) ${stat.name}: ${stat.value}${stat.isPercent ? '%' : ''}`;
 
-      // Draw stat in priority color or normal color
-      ctx.fillStyle = stat.isPriority ? '#ffd93d' : '#eee';
+      // Draw stat in priority color (using accent color) or normal color
+      ctx.fillStyle = stat.isPriority ? accentColor : '#eee';
       ctx.font = stat.isPriority ? 'bold 10px Arial' : '400 10px Arial';
       ctx.fillText(statText, textX, textY);
 
