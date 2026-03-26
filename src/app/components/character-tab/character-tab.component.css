@@ -1221,6 +1221,13 @@
     width: 24px;
     height: 24px;
   }
+
+  /* Hide custom color picker on mobile - native color pickers don't work well on mobile */
+  .color-swatch-custom {
+    display: none;
+  }
+
+  /* Hex input stays visible so users can still paste or type custom colors if they want */
 }
 
 .builds-grid.cdk-drop-list-dragging .build-card:not(.cdk-drag-placeholder) {
