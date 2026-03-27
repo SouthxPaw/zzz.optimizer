@@ -1365,29 +1365,19 @@
         </div>
       </div>
       <div class="modal-actions share-modal-actions">
-        <div class="share-options">
-          <label class="checkbox-label">
-            <input
-              type="checkbox"
-              [(ngModel)]="showBuildRating"
-              (change)="onShareOptionChange()"
-              [disabled]="isGeneratingShareImage"
-            />
-            <span>Show Build Rating</span>
-          </label>
-          <label class="checkbox-label">
-            <input
-              type="checkbox"
-              [(ngModel)]="showDiscRatings"
-              (change)="onShareOptionChange()"
-              [disabled]="isGeneratingShareImage"
-            />
-            <span>Show Disc Ratings</span>
-          </label>
+        <!-- Customization Options Header -->
+        <div class="customization-header">
+          <button
+            class="btn-secondary btn-compact toggle-customization-btn"
+            (click)="toggleCustomizationOptions()"
+            [disabled]="isGeneratingShareImage"
+            title="{{customizationOptionsExpanded ? 'Hide' : 'Show'}} customization options">
+            {{ customizationOptionsExpanded ? '▼' : '▶' }} Customization Options
+          </button>
         </div>
 
         <!-- Customization Options -->
-        <div class="share-customization-options">
+        <div class="share-customization-options" *ngIf="customizationOptionsExpanded">
           <div class="custom-image-option">
             <label class="file-upload-label">
               <span class="label-text" title="Suggested: 400x630px or similar tall portrait. Character image on the left side">Replace Character Portrait:</span>
@@ -1417,6 +1407,16 @@
                 Clear
               </button>
             </label>
+            <input
+              *ngIf="customAgentImageUrl"
+              type="text"
+              class="artist-credit-input"
+              [(ngModel)]="agentImageArtist"
+              (ngModelChange)="onArtistCreditChange()"
+              placeholder="Artist credit"
+              [disabled]="isGeneratingShareImage"
+              title="Credit the artist who created this image"
+            />
           </div>
 
           <div class="custom-image-option">
@@ -1448,6 +1448,16 @@
                 Clear
               </button>
             </label>
+            <input
+              *ngIf="customBackgroundImageUrl"
+              type="text"
+              class="artist-credit-input"
+              [(ngModel)]="backgroundImageArtist"
+              (ngModelChange)="onArtistCreditChange()"
+              placeholder="Artist credit"
+              [disabled]="isGeneratingShareImage"
+              title="Credit the artist who created this image"
+            />
           </div>
 
           <div class="custom-image-option">
@@ -1479,6 +1489,16 @@
                 Clear
               </button>
             </label>
+            <input
+              *ngIf="customBarImageUrl"
+              type="text"
+              class="artist-credit-input"
+              [(ngModel)]="barImageArtist"
+              (ngModelChange)="onArtistCreditChange()"
+              placeholder="Artist credit"
+              [disabled]="isGeneratingShareImage"
+              title="Credit the artist who created this image"
+            />
           </div>
 
           <!-- Accent Color Picker -->
@@ -1544,8 +1564,30 @@
         </div>
 
         <div class="share-action-buttons">
-          <button class="btn-secondary" (click)="closeShareModal()">Cancel</button>
-          <button class="btn-primary" (click)="downloadShareImage()" [disabled]="isGeneratingShareImage">Download Image</button>
+          <div class="share-options">
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [(ngModel)]="showBuildRating"
+                (change)="onShareOptionChange()"
+                [disabled]="isGeneratingShareImage"
+              />
+              <span>Show Build Rating</span>
+            </label>
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [(ngModel)]="showDiscRatings"
+                (change)="onShareOptionChange()"
+                [disabled]="isGeneratingShareImage"
+              />
+              <span>Show Disc Ratings</span>
+            </label>
+          </div>
+          <div class="share-buttons-group">
+            <button class="btn-secondary" (click)="closeShareModal()">Cancel</button>
+            <button class="btn-primary" (click)="downloadShareImage()" [disabled]="isGeneratingShareImage">Download Image</button>
+          </div>
         </div>
       </div>
     </div>

@@ -222,3 +222,45 @@
 
 /* Responsive */
 @media(max-width:1200px){.upgrade-plans-container{grid-template-columns:1fr;height:auto}.sidebar{max-height:400px}}
+
+@media (max-width: 768px) {
+  .radio-label input[type="radio"],
+  .checkbox-label input[type="checkbox"] {
+    min-width: 24px;
+    min-height: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .slot-indicator {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .close-btn {
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .upgrade-plans-container {
+    padding: 10px;
+  }
+
+  .sidebar {
+    padding: 12px;
+  }
+
+  .plan-form {
+    padding: 12px;
+  }
+
+  h2, h3 {
+    font-size: 1.2em;
+  }
+}
