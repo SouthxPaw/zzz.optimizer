@@ -48,6 +48,7 @@
   justify-content: center;
   opacity: 0.7;
   transition: opacity 0.2s;
+  flex-shrink: 0;
 }
 
 .notification-close:hover {
@@ -92,4 +93,38 @@
 
 .notification-info {
   background: linear-gradient(135deg, #17a2b8 0%, #0dcaf0 100%);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .notification-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+  }
+
+  .notification {
+    min-width: unset;
+    max-width: 100%;
+    width: 100%;
+    padding: 0.875rem 1rem;
+  }
+
+  .notification-message {
+    font-size: 0.9rem;
+  }
+
+  /* Increase touch targets for mobile */
+  .notification-close {
+    padding: 10px;
+    min-width: 44px;
+    min-height: 44px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .notification-action {
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+  }
 }

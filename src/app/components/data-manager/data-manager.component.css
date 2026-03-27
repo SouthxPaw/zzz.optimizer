@@ -285,3 +285,26 @@ h1 {
     font-size: 2em;
   }
 }
+
+@media (max-width: 480px) {
+  .data-manager {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.75em;
+  }
+
+  h2 {
+    font-size: 1.3em;
+  }
+
+  .button-grid button {
+    padding: 14px;
+    font-size: 0.95em;
+  }
+
+  .info-section {
+    padding: 12px;
+  }
+}

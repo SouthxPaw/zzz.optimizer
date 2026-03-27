@@ -144,7 +144,9 @@ const DISC_SET_MAP: { [key: number]: string } = {
   33300: "Dawn's Bloom",
   33400: 'Moonlight Lullaby',
   33500: 'White Water Ballad',
-  33600: 'Shining Aria'
+  33600: 'Shining Aria',
+  33700: 'Bunny in Wonderland',
+  33800: 'Notes From the Chained'
 };
 
 @Injectable({

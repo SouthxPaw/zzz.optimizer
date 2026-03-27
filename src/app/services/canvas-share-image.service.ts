@@ -26,6 +26,9 @@ export interface ShareImageData {
   customAgentImageUrl?: string;
   customBackgroundImageUrl?: string;
   customBarImageUrl?: string;
+  agentImageArtist?: string;
+  backgroundImageArtist?: string;
+  barImageArtist?: string;
   accentColor?: string;
 }
 
@@ -64,6 +67,7 @@ export class CanvasShareImageService {
     await this.drawBackground(ctx, data);
     await this.drawAngledBar(ctx, data);
     await this.drawAgentSection(ctx, data);
+    await this.drawArtistCredits(ctx, data); // Draw before equipment so it's behind
     await this.drawEquipmentSection(ctx, data);
     await this.drawFooter(ctx, data);
 
@@ -1275,8 +1279,8 @@ export class CanvasShareImageService {
       // Format stat text
       const statText = `(${stat.rollCount}) ${stat.name}: ${stat.value}${stat.isPercent ? '%' : ''}`;
 
-      // Draw stat in priority color or normal color
-      ctx.fillStyle = stat.isPriority ? '#ffd93d' : '#eee';
+      // Draw stat in priority color (using accent color) or normal color
+      ctx.fillStyle = stat.isPriority ? accentColor : '#eee';
       ctx.font = stat.isPriority ? 'bold 10px Arial' : '400 10px Arial';
       ctx.fillText(statText, textX, textY);
 
@@ -1299,6 +1303,52 @@ export class CanvasShareImageService {
     ctx.textAlign = 'right';
     const creditsText = 'Made in southxpaw.github.io/zzz.optimizer';
     ctx.fillText(creditsText, this.WIDTH - 12, textY);
+
+    ctx.restore();
+  }
+
+  /**
+   * Draw artist credits on top of the diagonal bar
+   */
+  private async drawArtistCredits(
+    ctx: CanvasRenderingContext2D,
+    data: ShareImageData,
+  ): Promise<void> {
+    // Collect unique artist names
+    const artists: string[] = [];
+    if (data.agentImageArtist?.trim()) artists.push(data.agentImageArtist.trim());
+    if (data.backgroundImageArtist?.trim()) artists.push(data.backgroundImageArtist.trim());
+    if (data.barImageArtist?.trim()) artists.push(data.barImageArtist.trim());
+    const uniqueArtists = [...new Set(artists)];
+
+    if (uniqueArtists.length === 0) return;
+
+    const accentColor = data.accentColor || '#f4b942';
+
+    ctx.save();
+
+    // Position and rotate to match diagonal bar
+    const x = 297;
+    const y = this.HEIGHT - 518;
+    ctx.translate(x, y);
+    ctx.rotate((60 * Math.PI) / 180);
+
+    // Draw semi-transparent background for better readability
+    // ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    // ctx.fillRect(-5, -20, 400, 35);
+
+    // Draw paintbrush emoji in accent color
+    ctx.fillStyle = accentColor;
+    ctx.font = '400 18px Arial';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+    ctx.fillText('🖌️', 0, 0);
+
+    // Draw artist names in accent color
+    ctx.fillStyle = accentColor;
+    ctx.font = 'bold 16px Arial';
+    const artistText = uniqueArtists.join(' | ');
+    ctx.fillText(artistText, 30, 0);
 
     ctx.restore();
   }

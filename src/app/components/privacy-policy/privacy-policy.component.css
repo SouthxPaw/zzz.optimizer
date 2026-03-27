@@ -134,3 +134,25 @@ h1 {
     font-size: 1.3em;
   }
 }
+
+@media (max-width: 480px) {
+  .privacy-policy {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.75em;
+  }
+
+  .privacy-section h2 {
+    font-size: 1.3em;
+  }
+
+  .info-card h3 {
+    font-size: 1.1em;
+  }
+
+  .info-card {
+    padding: 14px;
+  }
+}

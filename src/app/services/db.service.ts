@@ -15,6 +15,9 @@ interface ShareCustomization {
   customAgentImage?: string;
   customBackgroundImage?: string;
   customBarImage?: string;
+  agentImageArtist?: string;
+  backgroundImageArtist?: string;
+  barImageArtist?: string;
   accentColor?: string;
 }
 
