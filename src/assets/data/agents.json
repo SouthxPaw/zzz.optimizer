@@ -1646,13 +1646,25 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole09"
+    "Icon": "Corin"
   },
   {
     "id": 1251,
     "name": "Qingyi",
     "scoring": {
-      "buffs": [],
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "impact",
+            "threshold": 120,
+            "ratio": 6,
+            "cap": 600
+          }
+        }
+      ],
       "debuffs": [
         {
           "type": "StunDMGMult",
@@ -3317,7 +3329,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole29"
+    "Icon": "QingYi"
   },
   {
     "id": 1261,
@@ -5046,7 +5058,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole24"
+    "Icon": "Jane"
   },
   {
     "id": 1131,
@@ -5055,8 +5067,14 @@
       "buffs": [
         {
           "type": "ATKBonus",
-          "value": "1000",
-          "format": "flat"
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 0,
+            "ratio": 0.4,
+            "cap": 1000
+          }
         },
         {
           "type": "ElementDMG",
@@ -6784,7 +6802,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole17"
+    "Icon": "Soukaku"
   },
   {
     "id": 1471,
@@ -8723,7 +8741,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole53"
+    "Icon": "Banyue"
   },
   {
     "id": 1201,
@@ -10576,7 +10594,7 @@
         ]
       }
     ],
-    "Icon": "IconRole35"
+    "Icon": "Harumasa"
   },
   {
     "id": 1421,
@@ -12172,7 +12190,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole45"
+    "Icon": "PanYinhu"
   },
   {
     "id": 1331,
@@ -13779,7 +13797,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole41"
+    "Icon": "Vivian"
   },
   {
     "id": 1081,
@@ -15353,7 +15371,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole10"
+    "Icon": "Billy"
   },
   {
     "id": 1181,
@@ -17033,7 +17051,7 @@
         ]
       }
     ],
-    "Icon": "IconRole20"
+    "Icon": "Grace"
   },
   {
     "id": 1371,
@@ -18842,7 +18860,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole44"
+    "Icon": "YiXuan"
   },
   {
     "id": 1321,
@@ -20548,14 +20566,28 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole37"
+    "Icon": "Evelyn"
   },
   {
     "id": 1401,
     "name": "Alice",
     "scoring": {
       "buffs": [
-        { "type": "AnomalyProficiency", "value": "88", "format": "flat" }
+        {
+          "type": "AnomalyProficiency",
+          "value": "88",
+          "format": "flat"
+        },
+        {
+          "type": "AnomalyProficiency",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "anomalyMastery",
+            "threshold": 140,
+            "ratio": 1.6
+          }
+        }
       ],
       "debuffs": [],
       "dazeBonus": 0
@@ -22212,7 +22244,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole46"
+    "Icon": "Alice"
   },
   {
     "id": 1011,
@@ -23754,13 +23786,13 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole01"
+    "Icon": "Anby"
   },
   {
     "id": 1071,
     "name": "Caesar",
     "scoring": {
-      "buffs": [{ "type": "ATKBonus", "value": "1000", "format": "%" }],
+      "buffs": [{ "type": "ATKBonus", "value": "1000", "format": "flat" }],
       "debuffs": [
         {
           "type": "DamageTaken",
@@ -25514,7 +25546,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole25"
+    "Icon": "Caesar"
   },
   {
     "id": 1391,
@@ -25523,8 +25555,19 @@
       "buffs": [
         {
           "type": "CRITDMG",
-          "value": "50",
+          "value": "20",
           "format": "%"
+        },
+        {
+          "type": "CRITDMGBonus",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 2800,
+            "ratio": 0.05,
+            "cap": 30
+          }
         }
       ],
       "debuffs": [],
@@ -27178,7 +27221,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole43"
+    "Icon": "JuFufu"
   },
   {
     "id": 1031,
@@ -29020,7 +29063,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole12"
+    "Icon": "Nicole"
   },
   {
     "id": 1281,
@@ -30638,7 +30681,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole28"
+    "Icon": "Piper"
   },
   {
     "id": 1021,
@@ -32196,7 +32239,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole11"
+    "Icon": "Nekomata"
   },
   {
     "id": 1241,
@@ -33880,7 +33923,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole23"
+    "Icon": "ZhuYuan"
   },
   {
     "id": 1141,
@@ -35761,7 +35804,7 @@
         ]
       }
     ],
-    "Icon": "IconRole18"
+    "Icon": "Lycaon"
   },
   {
     "id": 1161,
@@ -35771,6 +35814,11 @@
         {
           "type": "ElementDMG",
           "value": "75",
+          "format": "%"
+        },
+        {
+          "type": "ImpactBonus",
+          "value": "20",
           "format": "%"
         }
       ],
@@ -37567,7 +37615,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole26"
+    "Icon": "Lighter"
   },
   {
     "id": 1461,
@@ -39205,7 +39253,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole48"
+    "Icon": "SEED"
   },
   {
     "id": 1111,
@@ -40884,7 +40932,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole15"
+    "Icon": "Anton"
   },
   {
     "id": 1041,
@@ -42742,7 +42790,7 @@
         ]
       }
     ],
-    "Icon": "IconRole05"
+    "Icon": "Soldier11"
   },
   {
     "id": 1451,
@@ -42757,6 +42805,11 @@
         {
           "type": "CRITDMG",
           "value": "30",
+          "format": "%"
+        },
+        {
+          "type": "HPBonus",
+          "value": "5",
           "format": "%"
         }
       ],
@@ -44469,7 +44522,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole50"
+    "Icon": "Lucia"
   },
   {
     "id": 1091,
@@ -46138,13 +46191,25 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole13"
+    "Icon": "Miyabi"
   },
   {
     "id": 1361,
     "name": "Trigger",
     "scoring": {
-      "buffs": [],
+      "buffs": [
+        {
+          "type": "DazeBonus",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "critRate",
+            "threshold": 40,
+            "ratio": 1.5,
+            "cap": 75
+          }
+        }
+      ],
       "debuffs": [
         {
           "type": "StunDMGMult",
@@ -47812,7 +47877,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole39"
+    "Icon": "Trigger"
   },
   {
     "id": 1431,
@@ -49922,7 +49987,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole55"
+    "Icon": "YeShunguang"
   },
   {
     "id": 1121,
@@ -49933,6 +49998,16 @@
           "type": "CRITRate",
           "value": "16",
           "format": "%"
+        },
+        {
+          "type": "ATKBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "def",
+            "threshold": 0,
+            "ratio": 0.8
+          }
         }
       ],
       "debuffs": [],
@@ -51502,7 +51577,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole16"
+    "Icon": "Ben"
   },
   {
     "id": 1211,
@@ -51510,9 +51585,15 @@
     "scoring": {
       "buffs": [
         {
-          "type": "PENRatio",
-          "value": "30",
-          "format": "%"
+          "type": "PENRatioBonus",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "penRatio",
+            "threshold": -48,
+            "ratio": 0.25,
+            "cap": 30
+          }
         },
         {
           "type": "ElementDMG",
@@ -53010,7 +53091,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole22"
+    "Icon": "Rina"
   },
   {
     "id": 1051,
@@ -54754,7 +54835,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole52"
+    "Icon": "Yidhari"
   },
   {
     "id": 1411,
@@ -54763,8 +54844,14 @@
       "buffs": [
         {
           "type": "ATKBonus",
-          "value": "1200",
-          "format": "flat"
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 0,
+            "ratio": 0.4,
+            "cap": 1200
+          }
         },
         {
           "type": "DMGBonus",
@@ -56524,7 +56611,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole47"
+    "Icon": "Yuzuha"
   },
   {
     "id": 1341,
@@ -56543,7 +56630,17 @@
         },
         {
           "type": "CRITRateBonus",
-          "value": "37.8",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "hp",
+            "threshold": 0,
+            "ratio": 0.0014
+          }
+        },
+        {
+          "type": "HPBonus",
+          "value": "5",
           "format": "%"
         }
       ],
@@ -58166,7 +58263,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole56"
+    "Icon": "Zhao"
   },
   {
     "id": 1481,
@@ -58177,6 +58274,17 @@
           "type": "DMGBonus",
           "value": "40",
           "format": "%"
+        },
+        {
+          "type": "ImpactBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "critRate",
+            "threshold": 50,
+            "ratio": 2,
+            "cap": 100
+          }
         }
       ],
       "debuffs": [
@@ -59889,7 +59997,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole54"
+    "Icon": "Dialyn"
   },
   {
     "id": 1291,
@@ -61615,7 +61723,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole42"
+    "Icon": "Hugo"
   },
   {
     "id": 1351,
@@ -63145,7 +63253,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole38"
+    "Icon": "Pulchra"
   },
   {
     "id": 1311,
@@ -63154,8 +63262,14 @@
       "buffs": [
         {
           "type": "ATKBonus",
-          "value": "1200",
-          "format": "flat"
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 0,
+            "ratio": 0.35,
+            "cap": 1200
+          }
         }
       ],
       "debuffs": [],
@@ -64844,13 +64958,35 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole36"
+    "Icon": "AstraYao"
   },
   {
     "id": 1301,
     "name": "Orphie & Magus",
     "scoring": {
-      "buffs": [{ "type": "CRITRateBonus", "value": "25", "format": "%" }],
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "25",
+          "format": "%"
+        },
+        {
+          "type": "ATKBonus",
+          "value": "280",
+          "format": "flat"
+        },
+        {
+          "type": "ATKBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "energyRegen",
+            "threshold": 1.6,
+            "ratio": 200,
+            "cap": 420
+          }
+        }
+      ],
       "debuffs": [],
       "dazeBonus": 0
     },
@@ -66550,7 +66686,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole49"
+    "Icon": "Orphie"
   },
   {
     "id": 1441,
@@ -68319,7 +68455,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole51"
+    "Icon": "Manato"
   },
   {
     "id": 1151,
@@ -70020,7 +70156,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole27"
+    "Icon": "Lucy"
   },
   {
     "id": 1101,
@@ -71705,7 +71841,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole14"
+    "Icon": "Koleda"
   },
   {
     "id": 1221,
@@ -73378,7 +73514,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole31"
+    "Icon": "Yanagi"
   },
   {
     "id": 1271,
@@ -74970,7 +75106,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole30"
+    "Icon": "Seth"
   },
   {
     "id": 1171,
@@ -76829,7 +76965,7 @@
         ]
       }
     ],
-    "Icon": "IconRole32"
+    "Icon": "Burnice"
   },
   {
     "id": 1381,
@@ -78623,7 +78759,7 @@
         ]
       }
     ],
-    "Icon": "IconRole40"
+    "Icon": "Soldier0Anby"
   },
   {
     "id": 1191,
@@ -80609,7 +80745,7 @@
         ]
       }
     ],
-    "Icon": "IconRole21"
+    "Icon": "Ellen"
   },
   {
     "id": 1491,
@@ -80618,8 +80754,14 @@
       "buffs": [
         {
           "type": "ATKBonus",
-          "value": "1100",
-          "format": "flat"
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 0,
+            "ratio": 0.6,
+            "cap": 1050
+          }
         }
       ],
       "debuffs": [],
@@ -82243,7 +82385,7 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole58"
+    "Icon": "Sunna"
   },
   {
     "id": 1501,
@@ -83955,6 +84097,55 @@
       }
     },
     "potentials": [],
-    "Icon": "IconRole57"
+    "Icon": "Aria"
+  },
+  {
+    "id": 1511,
+    "name": "Nangong Yu",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "120",
+          "format": "flat"
+        },
+        {
+          "type": "ImpactBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "anomalyMastery",
+            "threshold": 110,
+            "ratio": 1.0
+          }
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 205,
+      "name": "Ether"
+    },
+    "specialty": {
+      "id": 2,
+      "name": "Stun"
+    },
+    "lvl60_stats": {
+      "HpMax": 8373,
+      "Defence": 622,
+      "Attack": 746,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 120,
+      "ElementAbnormalPower": 126,
+      "ElementMystery": 93,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "NangongYu"
   }
 ]

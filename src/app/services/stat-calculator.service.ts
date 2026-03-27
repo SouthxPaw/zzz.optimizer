@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { Agent, BaseStats, DiscSlot } from '../models/agent.model';
 import { Disc } from '../models/disc.model';
 import { WEngine, RefinementProperty } from '../models/wengine.model';
-import { DISC_SETS } from '../constants/disc-sets';
+// DISC_SETS import removed - now using equipment data from DiscSetDataService
 import { DiscSetDataService, DiscSetEquipmentData } from './disc-set-data.service';
 import { versionedUrl } from '../utils/versioned-url';
 
@@ -115,12 +115,6 @@ export class StatCalculatorService {
     } else {
     }
 
-    // Apply passive scoring bonuses (if enabled)
-    if (includePassiveBonuses && agent.scoring?.buffs) {
-      this.applyPassiveScoringBonuses(stats, agent);
-    } else {
-    }
-
     // Filter out disabled discs
     const enabledDiscsOnly = Object.fromEntries(
       Object.entries(discs).filter(([slot, disc]) => disc && (enabledDiscs[slot] ?? true))
@@ -134,6 +128,15 @@ export class StatCalculatorService {
 
     // Apply set bonuses (this applies percentage bonuses to HP/ATK/DEF, counting only enabled discs)
     this.applySetBonuses(stats, enabledDiscsOnly, agent, wEngine, includeWEngineBonuses);
+
+    // Apply conditional 4pc bonuses AFTER final stats are calculated (so conditions can check final values)
+    this.applyConditional4pcBonuses(stats, enabledDiscsOnly, agent);
+
+    // Apply passive scoring bonuses AFTER discs (for conditional stat conversions that depend on final stat values)
+    if (includePassiveBonuses && agent.scoring?.buffs) {
+      this.applyPassiveScoringBonuses(stats, agent);
+    } else {
+    }
 
     // Calculate final energy regen using correct formula:
     // Energy/sec = Base × (1 + Σ %bonuses/100)
@@ -304,6 +307,7 @@ export class StatCalculatorService {
   /**
    * Apply passive bonuses from agent's scoring buffs
    * These are bonuses that represent the agent's kit at optimal conditions
+   * Supports conditional stat conversion (e.g., Nangong Yu: AM > 110 → +1 Impact per point)
    */
   private applyPassiveScoringBonuses(stats: BaseStats, agent: Agent): void {
     if (!agent.scoring?.buffs) {
@@ -311,8 +315,20 @@ export class StatCalculatorService {
     }
 
     agent.scoring.buffs.forEach(buff => {
-      const value = parseFloat(buff.value);
+      let value = parseFloat(buff.value);
       const isPercentage = buff.format === '%';
+
+      // Handle conditional stat conversion
+      if (buff.condition) {
+        const sourceStat = this.getStatValue(stats, buff.condition.sourceStat);
+        const excess = Math.max(0, sourceStat - buff.condition.threshold);
+        value = excess * buff.condition.ratio;
+
+        // Apply cap if specified
+        if (buff.condition.cap !== undefined) {
+          value = Math.min(value, buff.condition.cap);
+        }
+      }
 
       // Map buff types to stat fields
       switch(buff.type) {
@@ -370,6 +386,28 @@ export class StatCalculatorService {
           break;
       }
     });
+  }
+
+  /**
+   * Helper to get stat value by string key
+   */
+  private getStatValue(stats: BaseStats, statKey: string): number {
+    const statMap: { [key: string]: keyof BaseStats } = {
+      'hp': 'hp',
+      'atk': 'atk',
+      'def': 'def',
+      'impact': 'impact',
+      'anomalyMastery': 'anomalyMastery',
+      'critRate': 'critRate',
+      'critDmg': 'critDmg',
+      'anomalyProficiency': 'anomalyProficiency',
+      'pen': 'pen',
+      'penRatio': 'penRatio',
+      'energyRegen': 'energyRegen'
+    };
+
+    const mappedKey = statMap[statKey];
+    return mappedKey ? stats[mappedKey] : 0;
   }
 
   /**
@@ -614,21 +652,19 @@ export class StatCalculatorService {
 
     // Apply bonuses for sets with 2 or 4 pieces
     setCounts.forEach((count, setName) => {
-      const discSet = DISC_SETS.find(s => s.name === setName);
-      if (!discSet) {
+      const equipmentData = this.discSetDataService.getDiscSet(setName);
+      if (!equipmentData) {
         return;
       }
 
-      discSet.bonuses.forEach(bonus => {
-        if (count >= bonus.pieces) {
-          // Parse bonus description and apply stats (2pc bonuses)
-          this.parseAndApplyBonus(bonus.description, stats);
-        }
-      });
+      // Apply 2pc bonus from equipment data (Desc2)
+      if (count >= 2 && equipmentData.Desc2) {
+        this.parseAndApplyBonus(equipmentData.Desc2, stats);
+      }
 
-      // Apply 4pc effect stat bonuses from equipment data
+      // Apply 4pc effect stat bonuses from equipment data (ONLY unconditional ones)
       if (count >= 4) {
-        this.apply4pcEffectBonuses(setName, stats, agent);
+        this.apply4pcEffectBonuses(setName, stats, agent, false); // false = skip conditional bonuses
       }
     });
 
@@ -693,9 +729,12 @@ export class StatCalculatorService {
 
   /**
    * Apply 4pc effect stat bonuses from equipment data
-   * Only applies conditional bonuses when conditions are met
+   * @param setName - Name of the disc set
+   * @param stats - Current stats object
+   * @param agent - Agent info for specialty checks
+   * @param includeConditional - If false, only apply unconditional bonuses
    */
-  private apply4pcEffectBonuses(setName: string, stats: BaseStats, agent: Agent): void {
+  private apply4pcEffectBonuses(setName: string, stats: BaseStats, agent: Agent, includeConditional: boolean = true): void {
     const equipmentData = this.discSetDataService.getDiscSet(setName);
     if (!equipmentData) {
       return;
@@ -713,12 +752,57 @@ export class StatCalculatorService {
     // Handle conditional format (array of effect objects)
     else {
       effect.forEach((effectPart) => {
+        // Skip conditional bonuses if includeConditional is false
+        if (effectPart.Condition && !includeConditional) {
+          return;
+        }
+
         // Only apply if condition is met or no condition exists
         if (!effectPart.Condition || this.evaluateCondition(effectPart.Condition, stats, agent)) {
           this.applyPropertiesArray(effectPart.Properties, stats);
         }
       });
     }
+  }
+
+  /**
+   * Apply conditional 4pc bonuses AFTER final stats are calculated
+   * This ensures conditionals check final stat values (with percentage bonuses applied)
+   */
+  private applyConditional4pcBonuses(
+    stats: BaseStats,
+    discs: { [key in DiscSlot]?: Disc },
+    agent: Agent
+  ): void {
+    // Count disc sets
+    const setCounts = new Map<string, number>();
+    Object.values(discs).forEach(disc => {
+      if (!disc) return;
+      const count = setCounts.get(disc.set) || 0;
+      setCounts.set(disc.set, count + 1);
+    });
+
+    // Apply ONLY conditional 4pc bonuses
+    setCounts.forEach((count, setName) => {
+      if (count >= 4) {
+        const equipmentData = this.discSetDataService.getDiscSet(setName);
+        if (!equipmentData || !equipmentData['4pcEffect']) {
+          return;
+        }
+
+        const effect = equipmentData['4pcEffect'];
+
+        // Only process if it's an array (conditional format)
+        if (Array.isArray(effect)) {
+          effect.forEach((effectPart) => {
+            // Only apply conditional bonuses
+            if (effectPart.Condition && this.evaluateCondition(effectPart.Condition, stats, agent)) {
+              this.applyPropertiesArray(effectPart.Properties, stats);
+            }
+          });
+        }
+      }
+    });
   }
 
   /**
@@ -911,15 +995,13 @@ export class StatCalculatorService {
 
     const activeBonuses: string[] = [];
     setCounts.forEach((count, setName) => {
-      const discSet = DISC_SETS.find(s => s.name === setName);
-      if (!discSet) return;
+      const equipmentData = this.discSetDataService.getDiscSet(setName);
+      if (!equipmentData) return;
 
       // Only show 2pc bonuses here (4pc bonuses are handled by get4pcEffectBonuses)
-      discSet.bonuses.forEach(bonus => {
-        if (bonus.pieces === 2 && count >= 2) {
-          activeBonuses.push(`${setName} (2pc): ${bonus.description}`);
-        }
-      });
+      if (count >= 2 && equipmentData.Desc2) {
+        activeBonuses.push(`${setName} (2pc): ${equipmentData.Desc2}`);
+      }
     });
 
     return activeBonuses;

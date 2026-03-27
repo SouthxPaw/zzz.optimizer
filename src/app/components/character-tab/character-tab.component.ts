@@ -46,6 +46,7 @@ import {
   CanvasShareImageService,
   ShareImageData,
 } from '../../services/canvas-share-image.service';
+import { getDiscValidationErrors, hasValidationErrors } from '../../utils/disc-validation';
 
 @Component({
   selector: 'app-character-tab',
@@ -206,6 +207,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private previouslyFocusedElement: HTMLElement | null = null;
+  private artistCreditChange$ = new Subject<void>();
 
   // Click guard flags to prevent double-clicking
   private isProcessingDiscAction = false;
@@ -233,6 +235,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Load UID history from local storage
     this.loadUidHistory();
+
+    // Load customizations from local storage
+    this.loadCustomizations();
 
     // Subscribe to user builds
     this.buildService.builds$
@@ -270,6 +275,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         // Create new array reference to ensure change detection
         this.availablePlans = [...plans];
         this.cdr.markForCheck();
+      });
+
+    // Subscribe to artist credit changes with debounce
+    this.artistCreditChange$
+      .pipe(
+        debounceTime(800), // Wait 800ms after user stops typing
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.onShareOptionChange();
       });
 
     // Load reference agents for the "Add Agent" modal
@@ -894,9 +909,27 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return [];
     }
 
-    return agent.scoring.buffs
+    const stats = this.selectedBuild.calculatedStats;
+
+    // First pass: calculate all buff values
+    const calculatedBuffs = agent.scoring.buffs
       .map((buff) => {
         const isPercent = buff.format === '%';
+        let displayValue = buff.value;
+
+        // Calculate conditional bonuses based on current stats
+        if (buff.condition && stats) {
+          const sourceStat = this.getStatValueFromStats(stats, buff.condition.sourceStat);
+          const excess = Math.max(0, sourceStat - buff.condition.threshold);
+          let calculatedValue = excess * buff.condition.ratio;
+
+          // Apply cap if specified
+          if (buff.condition.cap !== undefined) {
+            calculatedValue = Math.min(calculatedValue, buff.condition.cap);
+          }
+
+          displayValue = String(Math.round(calculatedValue * 10) / 10);
+        }
 
         let displayName: string | undefined;
         switch (buff.type) {
@@ -940,14 +973,54 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
         return {
           name: displayName,
-          value: buff.value,
+          value: parseFloat(displayValue),
           isPercent: isPercent,
         };
       })
       .filter(
-        (b): b is { name: string; value: string; isPercent: boolean } =>
+        (b): b is { name: string; value: number; isPercent: boolean } =>
           b !== undefined,
       );
+
+    // Second pass: combine buffs with same name and format
+    const combined = new Map<string, { name: string; value: number; isPercent: boolean }>();
+
+    for (const buff of calculatedBuffs) {
+      const key = `${buff.name}:${buff.isPercent}`;
+      const existing = combined.get(key);
+
+      if (existing) {
+        existing.value += buff.value;
+      } else {
+        combined.set(key, { ...buff });
+      }
+    }
+
+    // Convert back to array and format values as strings
+    return Array.from(combined.values()).map(buff => ({
+      name: buff.name,
+      value: String(Math.round(buff.value * 10) / 10),
+      isPercent: buff.isPercent,
+    }));
+  }
+
+  private getStatValueFromStats(stats: any, statKey: string): number {
+    const statMap: { [key: string]: string } = {
+      'hp': 'hp',
+      'atk': 'atk',
+      'def': 'def',
+      'impact': 'impact',
+      'anomalyMastery': 'anomalyMastery',
+      'critRate': 'critRate',
+      'critDmg': 'critDmg',
+      'anomalyProficiency': 'anomalyProficiency',
+      'pen': 'pen',
+      'penRatio': 'penRatio',
+      'energyRegen': 'energyRegen'
+    };
+
+    const mappedKey = statMap[statKey];
+    return mappedKey ? stats[mappedKey] : 0;
   }
 
   getSubstatBreakdown(): Array<{
@@ -1358,9 +1431,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.showDiscPicker = false;
     this.showDiscForm = true;
 
-    // Only reset form if we're not in edit mode
-    // If we're editing and changing set, preserve the form data
-    if (!this.isEditMode) {
+    // Only reset form if we're creating a brand new disc AND form is currently empty
+    // Preserve data if user is switching sets or editing
+    const isFormEmpty = !this.discFormData.mainStatType &&
+                        !this.discFormData.mainStatValue &&
+                        this.discFormData.subStats.every(s => !s.value || s.value === '');
+
+    if (!this.isEditMode && isFormEmpty) {
       this.discFormData = {
         mainStatType: '',
         mainStatValue: '',
@@ -1372,6 +1449,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         ],
       };
     }
+    // If form has data, preserve it when changing sets
   }
 
   closeDiscForm() {
@@ -1390,6 +1468,17 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       ],
     };
     this.cdr.markForCheck();
+  }
+
+  /**
+   * Opens disc picker to change set while preserving form data
+   * Used when user wants to try a different disc set without losing entered stats
+   */
+  openDiscPickerWithoutClosingForm() {
+    this.showDiscForm = false;
+    this.showDiscPicker = true;
+    // NOTE: We don't clear discFormData here - it gets preserved
+    // When selectDiscSet() is called, it will check if form has data and preserve it
   }
 
   async createAndEquipDisc() {
@@ -1759,6 +1848,100 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Get the base stat type from the main stat
+   * Handles both fixed slots (1-3) and variable slots (4-6)
+   * Returns the base type without % suffix for comparison with substats
+   */
+  getMainStatBaseType(): string | null {
+    let mainStatType: MainStatType;
+
+    // For Drive 1-3, use fixed main stat
+    if (
+      this.selectedDiscSlot === 'Drive1' ||
+      this.selectedDiscSlot === 'Drive2' ||
+      this.selectedDiscSlot === 'Drive3'
+    ) {
+      mainStatType = this.getDefaultMainStatForSlot(this.selectedDiscSlot);
+    } else {
+      // For Drive 4-6, use selected main stat from form
+      if (!this.discFormData.mainStatType) {
+        return null; // No main stat selected yet
+      }
+      mainStatType = this.discFormData.mainStatType as MainStatType;
+    }
+
+    return mainStatType;
+  }
+
+  /**
+   * Check if a substat type conflicts with the main stat type
+   * Handles percent vs flat distinction:
+   * - ATK% main conflicts with ATK% sub (YES)
+   * - ATK% main conflicts with ATK flat sub (NO)
+   * - HP main conflicts with HP sub (YES)
+   * - HP main conflicts with HP% sub (NO)
+   */
+  isMainStatConflict(substatType: SubStatType, mainStatBase: string | null): boolean {
+    if (!mainStatBase) {
+      return false; // No main stat selected, no conflict
+    }
+
+    // Direct match - always a conflict
+    if (mainStatBase === substatType) {
+      return true;
+    }
+
+    // No conflict if they're different stats entirely
+    return false;
+  }
+
+  /**
+   * Get available substat types for a specific substat dropdown index
+   * Filters out:
+   * 1. The main stat (if it matches exactly)
+   * 2. Substats already selected in other dropdown positions
+   */
+  getAvailableSubstatTypesForIndex(index: number): Array<{ value: SubStatType; label: string }> {
+    const mainStatBase = this.getMainStatBaseType();
+
+    // Get already selected substats from OTHER positions (not current index)
+    const selectedSubstats = this.discFormData.subStats
+      .map((s, i) => i !== index ? s.type : null)
+      .filter((t): t is SubStatType => t !== null);
+
+    // Filter out main stat conflicts and already-selected substats
+    return this.availableSubStatTypes.filter(stat =>
+      !this.isMainStatConflict(stat.value, mainStatBase) &&
+      !selectedSubstats.includes(stat.value)
+    );
+  }
+
+  /**
+   * Check if a disc has validation errors (for existing discs)
+   */
+  hasDiscValidationErrors(disc: Disc): boolean {
+    return hasValidationErrors(disc);
+  }
+
+  /**
+   * Get validation error messages for a disc
+   */
+  getDiscValidationErrors(disc: Disc): string[] {
+    return getDiscValidationErrors(disc);
+  }
+
+  /**
+   * Get formatted validation error tooltip for a disc
+   */
+  getDiscValidationTooltip(disc: Disc): string {
+    const errors = getDiscValidationErrors(disc);
+    if (errors.length === 0) {
+      return '';
+    }
+    return `Validation errors:\n${errors.map(e => `• ${e}`).join('\n')}`;
+  }
+
   // Check if a substat type is a priority stat for the selected build's agent
   // Now uses build-aware weights that adapt based on detected build type (CRIT vs Anomaly)
   isPrioritySubstat(substatType: SubStatType): boolean {
@@ -2037,6 +2220,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   async shareAsImage() {
     if (!this.selectedBuild) return;
     this.showShareModal = true;
+
+    // Load agent-specific customizations
+    this.loadCustomizations();
+
     this.cdr.markForCheck();
 
     // Wait for modal and canvas to be rendered
@@ -2045,21 +2232,50 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   closeShareModal() {
     this.showShareModal = false;
+    // Don't clear custom images - they persist until user explicitly resets them
     this.cdr.markForCheck();
   }
 
+  private isShareOptionUpdating = false;
+
   onShareOptionChange() {
+    if (this.isShareOptionUpdating) return;
+    this.isShareOptionUpdating = true;
+
     // Show loading state immediately
     this.isGeneratingShareImage = true;
     this.cdr.markForCheck();
 
     // Add a small delay to allow the change detection cycle to complete
-    setTimeout(() => this.generateShareImage(), 50);
+    setTimeout(() => {
+      this.generateShareImage();
+      setTimeout(() => this.isShareOptionUpdating = false, 100);
+    }, 50);
   }
 
   isGeneratingShareImage = false;
   showBuildRating = true;
   showDiscRatings = true;
+  customAgentImageUrl: string | null = null;
+  customBackgroundImageUrl: string | null = null;
+  customBarImageUrl: string | null = null;
+  agentImageArtist: string = '';
+  backgroundImageArtist: string = '';
+  barImageArtist: string = '';
+  accentColor: string = '#f4b942'; // Default gold
+  customizationOptionsExpanded = true; // Collapsible customization section
+  hexInputValue: string = '#f4b942'; // Separate value for hex input to prevent loops
+
+  presetColors = [
+    { name: 'Gold', color: '#f4b942' },
+    { name: 'Red', color: '#ff4444' },
+    { name: 'Blue', color: '#4d96ff' },
+    { name: 'Purple', color: '#9c00de' },
+    { name: 'Green', color: '#6bcf7f' },
+    { name: 'Orange', color: '#ff8c42' },
+    { name: 'Cyan', color: '#00d9ff' },
+    { name: 'White', color: '#ffffff' },
+  ];
 
 async generateShareImage() {
   if (!this.selectedBuild || !this.shareCanvasRef)
@@ -2102,6 +2318,13 @@ async generateShareImage() {
       substatBreakdown: this.getSubstatBreakdown(),
       showBuildRating: this.showBuildRating,
       showDiscRatings: this.showDiscRatings,
+      customAgentImageUrl: this.customAgentImageUrl || undefined,
+      customBackgroundImageUrl: this.customBackgroundImageUrl || undefined,
+      customBarImageUrl: this.customBarImageUrl || undefined,
+      agentImageArtist: this.agentImageArtist || undefined,
+      backgroundImageArtist: this.backgroundImageArtist || undefined,
+      barImageArtist: this.barImageArtist || undefined,
+      accentColor: this.accentColor,
     };
 
     // Generate image using Canvas service
@@ -2162,6 +2385,367 @@ async generateShareImage() {
         URL.revokeObjectURL(url);
       }
     });
+  }
+
+  // Helper method to compress/resize images before storing
+  private async compressImage(file: File, maxWidth: number, maxHeight: number): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        const img = new Image();
+
+        img.onload = () => {
+          // Calculate new dimensions while maintaining aspect ratio
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            const aspectRatio = width / height;
+
+            if (width > height) {
+              width = maxWidth;
+              height = width / aspectRatio;
+            } else {
+              height = maxHeight;
+              width = height * aspectRatio;
+            }
+          }
+
+          // Create canvas and draw resized image
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Convert to PNG (lossless)
+            const compressedDataUrl = canvas.toDataURL('image/png');
+            resolve(compressedDataUrl);
+          } else {
+            reject(new Error('Failed to get canvas context'));
+          }
+        };
+
+        img.onerror = () => reject(new Error('Failed to load image'));
+        img.src = e.target?.result as string;
+      };
+
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Custom image upload handlers
+  async onCustomAgentImageSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      try {
+        // Compress to max 800x1200 (portrait orientation for character)
+        const compressedImage = await this.compressImage(file, 800, 1200);
+        this.customAgentImageUrl = compressedImage;
+        this.saveCustomizations(); // Persist to localStorage
+        this.onShareOptionChange();
+      } catch (error) {
+        console.error('Failed to compress agent image:', error);
+        alert('Failed to process image. Please try a different file.');
+      }
+    }
+  }
+
+  async onCustomBackgroundImageSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      try {
+        // Compress to max 1920x1080 (landscape for background)
+        const compressedImage = await this.compressImage(file, 1920, 1080);
+        this.customBackgroundImageUrl = compressedImage;
+        this.saveCustomizations(); // Persist to localStorage
+        this.onShareOptionChange();
+      } catch (error) {
+        console.error('Failed to compress background image:', error);
+        alert('Failed to process image. Please try a different file.');
+      }
+    }
+  }
+
+  async onCustomBarImageSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      try {
+        // Compress to max 1000x1500 (portrait for diagonal bar)
+        const compressedImage = await this.compressImage(file, 1000, 1500);
+        this.customBarImageUrl = compressedImage;
+        this.saveCustomizations(); // Persist to localStorage
+        this.onShareOptionChange();
+      } catch (error) {
+        console.error('Failed to compress bar image:', error);
+        alert('Failed to process image. Please try a different file.');
+      }
+    }
+  }
+
+  clearCustomAgentImage() {
+    this.customAgentImageUrl = null;
+    this.agentImageArtist = '';
+    this.saveCustomizations(); // Update IndexedDB
+    // Regenerate the image without the custom image
+    this.onShareOptionChange();
+  }
+
+  clearCustomBackgroundImage() {
+    this.customBackgroundImageUrl = null;
+    this.backgroundImageArtist = '';
+    this.saveCustomizations(); // Update IndexedDB
+    // Regenerate the image without the custom image
+    this.onShareOptionChange();
+  }
+
+  clearCustomBarImage() {
+    this.customBarImageUrl = null;
+    this.barImageArtist = '';
+    this.saveCustomizations(); // Update IndexedDB
+    // Regenerate the image without the custom image
+    this.onShareOptionChange();
+  }
+
+  private isColorUpdating = false;
+
+  // Accent color selection methods
+  selectAccentColor(color: string) {
+    if (this.isColorUpdating) return;
+    this.isColorUpdating = true;
+
+    this.accentColor = color;
+    this.hexInputValue = color; // Sync hex input
+    this.saveCustomizations();
+    this.onShareOptionChange(); // Regenerate preview
+
+    setTimeout(() => this.isColorUpdating = false, 100);
+  }
+
+  onCustomColorSelected() {
+    if (this.isColorUpdating) return;
+    this.isColorUpdating = true;
+
+    this.hexInputValue = this.accentColor; // Sync hex input
+    this.saveCustomizations();
+    this.onShareOptionChange(); // Regenerate preview
+
+    setTimeout(() => this.isColorUpdating = false, 100);
+  }
+
+  isCustomColor(): boolean {
+    return !this.presetColors.some(p => p.color === this.accentColor);
+  }
+
+  onHexInputChange(value: string) {
+    if (!value || this.isColorUpdating) return;
+
+    let formattedValue = value.trim();
+
+    // Auto-add # if user doesn't include it
+    if (formattedValue && !formattedValue.startsWith('#')) {
+      formattedValue = '#' + formattedValue;
+      this.hexInputValue = formattedValue;
+    }
+
+    // Convert to uppercase for consistency
+    formattedValue = formattedValue.toUpperCase();
+    if (formattedValue !== value) {
+      this.hexInputValue = formattedValue;
+    }
+
+    // Only update accent color if it's a valid hex format
+    if (this.isValidHexFormat(formattedValue)) {
+      this.accentColor = formattedValue;
+
+      // Only save and regenerate if it's a complete hex color
+      if (this.isCompleteHex(formattedValue)) {
+        this.isColorUpdating = true;
+        this.saveCustomizations();
+        this.onShareOptionChange();
+        setTimeout(() => this.isColorUpdating = false, 100);
+      }
+    }
+  }
+
+  validateHexInput() {
+    // On blur, ensure we have a valid complete hex color
+    if (!this.isCompleteHex(this.accentColor)) {
+      // Reset to default if invalid
+      this.accentColor = '#f4b942';
+      this.saveCustomizations();
+      this.onShareOptionChange();
+    }
+  }
+
+  private isValidHexFormat(hex: string): boolean {
+    // Allow partial hex input (e.g., #f, #ff, #fff)
+    return /^#[0-9A-Fa-f]{0,6}$/.test(hex);
+  }
+
+  private isCompleteHex(hex: string): boolean {
+    // Check if it's a complete 6-digit hex color
+    return /^#[0-9A-Fa-f]{6}$/.test(hex);
+  }
+
+  hasAnyCustomizations(): boolean {
+    return this.customAgentImageUrl !== null ||
+           this.customBackgroundImageUrl !== null ||
+           this.customBarImageUrl !== null ||
+           this.accentColor !== '#f4b942';
+  }
+
+  async resetAllCustomizations() {
+    if (!this.selectedBuild) return;
+
+    try {
+      // Delete from IndexedDB
+      await this.buildService['db'].deleteShareCustomization(this.selectedBuild.agentId);
+
+      // Reset local state
+      this.customAgentImageUrl = null;
+      this.customBackgroundImageUrl = null;
+      this.customBarImageUrl = null;
+      this.agentImageArtist = '';
+      this.backgroundImageArtist = '';
+      this.barImageArtist = '';
+      this.accentColor = '#F4B942'; // Reset to default gold
+      this.hexInputValue = '#F4B942'; // Sync hex input
+
+      // Regenerate the image with defaults
+      this.onShareOptionChange();
+    } catch (error) {
+      console.error('Failed to reset customizations:', error);
+    }
+  }
+
+  toggleCustomizationOptions() {
+    this.customizationOptionsExpanded = !this.customizationOptionsExpanded;
+  }
+
+  // Check IndexedDB storage quota and warn if approaching limit
+  private async checkStorageQuota(): Promise<void> {
+    try {
+      if ('storage' in navigator && 'estimate' in navigator.storage) {
+        const estimate = await navigator.storage.estimate();
+        const usage = estimate.usage || 0;
+        const quota = estimate.quota || 0;
+
+        if (quota > 0) {
+          const usageInMB = usage / (1024 * 1024);
+          const quotaInMB = quota / (1024 * 1024);
+          const percentUsed = (usage / quota) * 100;
+
+          console.log(`Storage: ${usageInMB.toFixed(2)}MB / ${quotaInMB.toFixed(2)}MB (${percentUsed.toFixed(1)}%)`);
+
+          // Warn if over 80% capacity
+          if (percentUsed > 80) {
+            alert(
+              `Warning: You're approaching the browser storage limit!\n\n` +
+              `Used: ${usageInMB.toFixed(1)}MB / ${quotaInMB.toFixed(1)}MB (${percentUsed.toFixed(1)}%)\n\n` +
+              `Consider clearing some customizations for agents you don't use to free up space.`
+            );
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Failed to check storage quota:', error);
+      // Don't block on error - storage API might not be available
+    }
+  }
+
+  onArtistCreditChange() {
+    // Prevent triggering during image generation to avoid loops
+    if (this.isGeneratingShareImage) return;
+
+    this.saveCustomizations();
+    this.artistCreditChange$.next();
+  }
+
+  async saveCustomizations() {
+    if (!this.selectedBuild) return;
+
+    try {
+      const agentId = this.selectedBuild.agentId;
+
+      await this.buildService['db'].saveShareCustomization({
+        agentId,
+        customAgentImage: this.customAgentImageUrl || undefined,
+        customBackgroundImage: this.customBackgroundImageUrl || undefined,
+        customBarImage: this.customBarImageUrl || undefined,
+        agentImageArtist: this.agentImageArtist || undefined,
+        backgroundImageArtist: this.backgroundImageArtist || undefined,
+        barImageArtist: this.barImageArtist || undefined,
+        accentColor: this.accentColor
+      });
+
+      console.log(`Saved customizations for agent ${agentId}`);
+
+      // Check storage quota after saving
+      await this.checkStorageQuota();
+    } catch (error) {
+      console.error('Failed to save customizations to IndexedDB:', error);
+
+      // Check if it's a quota error
+      if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+        alert(
+          'Storage limit exceeded! Your customizations could not be saved.\n\n' +
+          'Please clear some existing customizations for other agents to free up space.'
+        );
+      } else {
+        alert(
+          'Failed to save customizations. Please try again or contact support if the issue persists.'
+        );
+      }
+    }
+  }
+
+  private async loadCustomizations() {
+    if (!this.selectedBuild) return;
+
+    try {
+      const agentId = this.selectedBuild.agentId;
+      const customization = await this.buildService['db'].getShareCustomization(agentId);
+
+      if (customization) {
+        this.customAgentImageUrl = customization.customAgentImage || null;
+        this.customBackgroundImageUrl = customization.customBackgroundImage || null;
+        this.customBarImageUrl = customization.customBarImage || null;
+        this.agentImageArtist = customization.agentImageArtist || '';
+        this.backgroundImageArtist = customization.backgroundImageArtist || '';
+        this.barImageArtist = customization.barImageArtist || '';
+        this.accentColor = customization.accentColor || '#f4b942';
+      } else {
+        // No customization found, use defaults
+        this.customAgentImageUrl = null;
+        this.customBackgroundImageUrl = null;
+        this.customBarImageUrl = null;
+        this.agentImageArtist = '';
+        this.backgroundImageArtist = '';
+        this.barImageArtist = '';
+        this.accentColor = '#f4b942';
+      }
+
+      this.hexInputValue = this.accentColor; // Sync hex input
+    } catch (error) {
+      console.error('Failed to load customizations from IndexedDB:', error);
+      // Fall back to defaults on error
+      this.customAgentImageUrl = null;
+      this.customBackgroundImageUrl = null;
+      this.customBarImageUrl = null;
+      this.accentColor = '#f4b942';
+      this.hexInputValue = this.accentColor;
+    }
   }
 
   // =====================================
