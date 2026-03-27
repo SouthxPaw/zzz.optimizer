@@ -1344,8 +1344,8 @@ export class CanvasShareImageService {
     ctx.textAlign = 'left';
     ctx.fillText('🖌️', 0, 0);
 
-    // Draw artist names
-    ctx.fillStyle = '#ffffff';
+    // Draw artist names in accent color
+    ctx.fillStyle = accentColor;
     ctx.font = 'bold 16px Arial';
     const artistText = uniqueArtists.join(' | ');
     ctx.fillText(artistText, 30, 0);
