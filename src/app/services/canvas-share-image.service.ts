@@ -26,6 +26,9 @@ export interface ShareImageData {
   customAgentImageUrl?: string;
   customBackgroundImageUrl?: string;
   customBarImageUrl?: string;
+  agentImageArtist?: string;
+  backgroundImageArtist?: string;
+  barImageArtist?: string;
   accentColor?: string;
 }
 
@@ -65,6 +68,7 @@ export class CanvasShareImageService {
     await this.drawAngledBar(ctx, data);
     await this.drawAgentSection(ctx, data);
     await this.drawEquipmentSection(ctx, data);
+    await this.drawArtistCredits(ctx, data);
     await this.drawFooter(ctx, data);
 
     // Ensure all rendering is complete before converting to blob
@@ -1233,6 +1237,53 @@ export class CanvasShareImageService {
       window.location.origin +
       window.location.pathname.replace(/\/[^/]*$/, '/');
     return path.startsWith('/') ? window.location.origin + path : baseUrl + path;
+  }
+
+  /**
+   * Draw artist credits above the footer
+   */
+  private async drawArtistCredits(
+    ctx: CanvasRenderingContext2D,
+    data: ShareImageData,
+  ): Promise<void> {
+    // Collect unique artist names (ignore empty strings)
+    const artists: string[] = [];
+    if (data.agentImageArtist?.trim()) artists.push(data.agentImageArtist.trim());
+    if (data.backgroundImageArtist?.trim()) artists.push(data.backgroundImageArtist.trim());
+    if (data.barImageArtist?.trim()) artists.push(data.barImageArtist.trim());
+
+    // Remove duplicates
+    const uniqueArtists = [...new Set(artists)];
+
+    if (uniqueArtists.length === 0) return; // No artists to display
+
+    const accentColor = data.accentColor || '#f4b942';
+
+    // Position directly under rating badge
+    // Match the positioning from drawAgentSection
+    const ratingX = 30 + 15; // padding + margin-left (matches agent section)
+    const ratingY = 10 + 10; // padding + margin-top
+    const badgeY = ratingY + 24 + 8; // gap of 8px after rating label
+    const badgeHeight = 48;
+    const creditsStartY = badgeY + badgeHeight + 8; // 8px gap below badge
+    const creditsX = ratingX; // Align with rating badge
+
+    ctx.save();
+
+    // Draw paintbrush emoji in accent color
+    ctx.fillStyle = accentColor;
+    ctx.font = '400 14px Arial';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'left';
+    ctx.fillText('🖌️', creditsX, creditsStartY);
+
+    // Draw artist names horizontally with pipe separators, in bold
+    ctx.fillStyle = accentColor;
+    ctx.font = 'bold 12px Arial';
+    const artistText = uniqueArtists.join(' | ');
+    ctx.fillText(artistText, creditsX + 20, creditsStartY + 2);
+
+    ctx.restore();
   }
 
   /**

@@ -207,6 +207,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private previouslyFocusedElement: HTMLElement | null = null;
+  private artistCreditChange$ = new Subject<void>();
 
   // Click guard flags to prevent double-clicking
   private isProcessingDiscAction = false;
@@ -274,6 +275,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         // Create new array reference to ensure change detection
         this.availablePlans = [...plans];
         this.cdr.markForCheck();
+      });
+
+    // Subscribe to artist credit changes with debounce
+    this.artistCreditChange$
+      .pipe(
+        debounceTime(800), // Wait 800ms after user stops typing
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.onShareOptionChange();
       });
 
     // Load reference agents for the "Add Agent" modal
@@ -2248,6 +2259,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   customAgentImageUrl: string | null = null;
   customBackgroundImageUrl: string | null = null;
   customBarImageUrl: string | null = null;
+  agentImageArtist: string = '';
+  backgroundImageArtist: string = '';
+  barImageArtist: string = '';
   accentColor: string = '#f4b942'; // Default gold
   customizationOptionsExpanded = true; // Collapsible customization section
   hexInputValue: string = '#f4b942'; // Separate value for hex input to prevent loops
@@ -2307,6 +2321,9 @@ async generateShareImage() {
       customAgentImageUrl: this.customAgentImageUrl || undefined,
       customBackgroundImageUrl: this.customBackgroundImageUrl || undefined,
       customBarImageUrl: this.customBarImageUrl || undefined,
+      agentImageArtist: this.agentImageArtist || undefined,
+      backgroundImageArtist: this.backgroundImageArtist || undefined,
+      barImageArtist: this.barImageArtist || undefined,
       accentColor: this.accentColor,
     };
 
@@ -2478,21 +2495,24 @@ async generateShareImage() {
 
   clearCustomAgentImage() {
     this.customAgentImageUrl = null;
-    this.saveCustomizations(); // Update localStorage
+    this.agentImageArtist = '';
+    this.saveCustomizations(); // Update IndexedDB
     // Regenerate the image without the custom image
     this.onShareOptionChange();
   }
 
   clearCustomBackgroundImage() {
     this.customBackgroundImageUrl = null;
-    this.saveCustomizations(); // Update localStorage
+    this.backgroundImageArtist = '';
+    this.saveCustomizations(); // Update IndexedDB
     // Regenerate the image without the custom image
     this.onShareOptionChange();
   }
 
   clearCustomBarImage() {
     this.customBarImageUrl = null;
-    this.saveCustomizations(); // Update localStorage
+    this.barImageArtist = '';
+    this.saveCustomizations(); // Update IndexedDB
     // Regenerate the image without the custom image
     this.onShareOptionChange();
   }
@@ -2596,6 +2616,9 @@ async generateShareImage() {
       this.customAgentImageUrl = null;
       this.customBackgroundImageUrl = null;
       this.customBarImageUrl = null;
+      this.agentImageArtist = '';
+      this.backgroundImageArtist = '';
+      this.barImageArtist = '';
       this.accentColor = '#F4B942'; // Reset to default gold
       this.hexInputValue = '#F4B942'; // Sync hex input
 
@@ -2641,7 +2664,15 @@ async generateShareImage() {
     }
   }
 
-  private async saveCustomizations() {
+  onArtistCreditChange() {
+    // Prevent triggering during image generation to avoid loops
+    if (this.isGeneratingShareImage) return;
+
+    this.saveCustomizations();
+    this.artistCreditChange$.next();
+  }
+
+  async saveCustomizations() {
     if (!this.selectedBuild) return;
 
     try {
@@ -2652,6 +2683,9 @@ async generateShareImage() {
         customAgentImage: this.customAgentImageUrl || undefined,
         customBackgroundImage: this.customBackgroundImageUrl || undefined,
         customBarImage: this.customBarImageUrl || undefined,
+        agentImageArtist: this.agentImageArtist || undefined,
+        backgroundImageArtist: this.backgroundImageArtist || undefined,
+        barImageArtist: this.barImageArtist || undefined,
         accentColor: this.accentColor
       });
 
@@ -2687,12 +2721,18 @@ async generateShareImage() {
         this.customAgentImageUrl = customization.customAgentImage || null;
         this.customBackgroundImageUrl = customization.customBackgroundImage || null;
         this.customBarImageUrl = customization.customBarImage || null;
+        this.agentImageArtist = customization.agentImageArtist || '';
+        this.backgroundImageArtist = customization.backgroundImageArtist || '';
+        this.barImageArtist = customization.barImageArtist || '';
         this.accentColor = customization.accentColor || '#f4b942';
       } else {
         // No customization found, use defaults
         this.customAgentImageUrl = null;
         this.customBackgroundImageUrl = null;
         this.customBarImageUrl = null;
+        this.agentImageArtist = '';
+        this.backgroundImageArtist = '';
+        this.barImageArtist = '';
         this.accentColor = '#f4b942';
       }
 
