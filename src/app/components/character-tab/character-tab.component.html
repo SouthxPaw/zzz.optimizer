@@ -1407,6 +1407,16 @@
                 Clear
               </button>
             </label>
+            <input
+              *ngIf="customAgentImageUrl"
+              type="text"
+              class="artist-credit-input"
+              [(ngModel)]="agentImageArtist"
+              (ngModelChange)="onArtistCreditChange()"
+              placeholder="Artist credit"
+              [disabled]="isGeneratingShareImage"
+              title="Credit the artist who created this image"
+            />
           </div>
 
           <div class="custom-image-option">
@@ -1438,6 +1448,16 @@
                 Clear
               </button>
             </label>
+            <input
+              *ngIf="customBackgroundImageUrl"
+              type="text"
+              class="artist-credit-input"
+              [(ngModel)]="backgroundImageArtist"
+              (ngModelChange)="onArtistCreditChange()"
+              placeholder="Artist credit"
+              [disabled]="isGeneratingShareImage"
+              title="Credit the artist who created this image"
+            />
           </div>
 
           <div class="custom-image-option">
@@ -1469,6 +1489,16 @@
                 Clear
               </button>
             </label>
+            <input
+              *ngIf="customBarImageUrl"
+              type="text"
+              class="artist-credit-input"
+              [(ngModel)]="barImageArtist"
+              (ngModelChange)="onArtistCreditChange()"
+              placeholder="Artist credit"
+              [disabled]="isGeneratingShareImage"
+              title="Credit the artist who created this image"
+            />
           </div>
 
           <!-- Accent Color Picker -->

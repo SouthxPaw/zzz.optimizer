@@ -763,8 +763,31 @@
 
 .custom-image-option {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.artist-credit-input {
+  background: var(--bg);
+  color: var(--txt);
+  border: 2px solid var(--bord);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 12px;
+  width: 200px;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.artist-credit-input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.artist-credit-input::placeholder {
+  color: var(--light);
+  opacity: 0.5;
 }
 
 .file-upload-label {
