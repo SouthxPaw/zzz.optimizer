@@ -67,8 +67,8 @@ export class CanvasShareImageService {
     await this.drawBackground(ctx, data);
     await this.drawAngledBar(ctx, data);
     await this.drawAgentSection(ctx, data);
+    await this.drawArtistCredits(ctx, data); // Draw before equipment so it's behind
     await this.drawEquipmentSection(ctx, data);
-    await this.drawArtistCredits(ctx, data);
     await this.drawFooter(ctx, data);
 
     // Ensure all rendering is complete before converting to blob
@@ -1240,53 +1240,6 @@ export class CanvasShareImageService {
   }
 
   /**
-   * Draw artist credits above the footer
-   */
-  private async drawArtistCredits(
-    ctx: CanvasRenderingContext2D,
-    data: ShareImageData,
-  ): Promise<void> {
-    // Collect unique artist names (ignore empty strings)
-    const artists: string[] = [];
-    if (data.agentImageArtist?.trim()) artists.push(data.agentImageArtist.trim());
-    if (data.backgroundImageArtist?.trim()) artists.push(data.backgroundImageArtist.trim());
-    if (data.barImageArtist?.trim()) artists.push(data.barImageArtist.trim());
-
-    // Remove duplicates
-    const uniqueArtists = [...new Set(artists)];
-
-    if (uniqueArtists.length === 0) return; // No artists to display
-
-    const accentColor = data.accentColor || '#f4b942';
-
-    // Position directly under rating badge
-    // Match the positioning from drawAgentSection
-    const ratingX = 30 + 15; // padding + margin-left (matches agent section)
-    const ratingY = 10 + 10; // padding + margin-top
-    const badgeY = ratingY + 24 + 8; // gap of 8px after rating label
-    const badgeHeight = 48;
-    const creditsStartY = badgeY + badgeHeight + 8; // 8px gap below badge
-    const creditsX = ratingX; // Align with rating badge
-
-    ctx.save();
-
-    // Draw paintbrush emoji in accent color
-    ctx.fillStyle = accentColor;
-    ctx.font = '400 14px Arial';
-    ctx.textBaseline = 'top';
-    ctx.textAlign = 'left';
-    ctx.fillText('🖌️', creditsX, creditsStartY);
-
-    // Draw artist names horizontally with pipe separators, in bold
-    ctx.fillStyle = accentColor;
-    ctx.font = 'bold 12px Arial';
-    const artistText = uniqueArtists.join(' | ');
-    ctx.fillText(artistText, creditsX + 20, creditsStartY + 2);
-
-    ctx.restore();
-  }
-
-  /**
    * Draw footer with substats breakdown and credits
    */
   private async drawFooter(
@@ -1350,6 +1303,52 @@ export class CanvasShareImageService {
     ctx.textAlign = 'right';
     const creditsText = 'Made in southxpaw.github.io/zzz.optimizer';
     ctx.fillText(creditsText, this.WIDTH - 12, textY);
+
+    ctx.restore();
+  }
+
+  /**
+   * Draw artist credits on top of the diagonal bar
+   */
+  private async drawArtistCredits(
+    ctx: CanvasRenderingContext2D,
+    data: ShareImageData,
+  ): Promise<void> {
+    // Collect unique artist names
+    const artists: string[] = [];
+    if (data.agentImageArtist?.trim()) artists.push(data.agentImageArtist.trim());
+    if (data.backgroundImageArtist?.trim()) artists.push(data.backgroundImageArtist.trim());
+    if (data.barImageArtist?.trim()) artists.push(data.barImageArtist.trim());
+    const uniqueArtists = [...new Set(artists)];
+
+    if (uniqueArtists.length === 0) return;
+
+    const accentColor = data.accentColor || '#f4b942';
+
+    ctx.save();
+
+    // Position and rotate to match diagonal bar
+    const x = 297;
+    const y = this.HEIGHT - 518;
+    ctx.translate(x, y);
+    ctx.rotate((60 * Math.PI) / 180);
+
+    // Draw semi-transparent background for better readability
+    // ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    // ctx.fillRect(-5, -20, 400, 35);
+
+    // Draw paintbrush emoji in accent color
+    ctx.fillStyle = accentColor;
+    ctx.font = '400 18px Arial';
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'left';
+    ctx.fillText('🖌️', 0, 0);
+
+    // Draw artist names
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 16px Arial';
+    const artistText = uniqueArtists.join(' | ');
+    ctx.fillText(artistText, 30, 0);
 
     ctx.restore();
   }
