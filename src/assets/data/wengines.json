@@ -4051,5 +4051,52 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "13020": {
+    "Id": 13020,
+    "CodeName": "Weapon_A_Common_20",
+    "Name": "The Simmering Pot",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_20.png",
+    "WeaponType": {
+      "2": "Stun"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1500
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "",
+          "Name2": "",
+          "Format": "",
+          "Overclock": {
+            "W1": 0,
+            "W2": 0,
+            "W3": 0,
+            "W4": 0,
+            "W5": 0
+          }
+        }
+      ],
+      "Desc": "When activating an Assist Follow-Up, the equipper's Daze inflicted on the target increases by %, and DMG dealt increases by % for 30s. Repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": 7.2
+    }
   }
 }
