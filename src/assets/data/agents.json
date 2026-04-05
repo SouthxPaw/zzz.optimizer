@@ -84160,7 +84160,7 @@
         },
         {
           "type": "CRITDMGBonus",
-          "value": "5800",
+          "value": "5500",
           "format": "%"
         }
       ],
@@ -84180,7 +84180,7 @@
     "lvl60_stats": {
       "HpMax": 7673,
       "Defence": 606,
-      "Attack": 938,
+      "Attack": 913,
       "Crit": 500,
       "CritDamage": 5000,
       "PenRate": 0,
