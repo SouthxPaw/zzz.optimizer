@@ -6275,6 +6275,21 @@
                   "PEN": 0.17,
                   "Anomaly_Proficiency": 0
                 }
+              },
+              "PEN_Ratio": {
+                "mainStatPoints": 3,
+                "substatWeights": {
+                  "HP%": 0,
+                  "DEF%": 0,
+                  "ATK%": 1,
+                  "CRIT_Rate": 1,
+                  "CRIT_DMG": 1,
+                  "ATK": 0.17,
+                  "HP": 0,
+                  "DEF": 0,
+                  "PEN": 0.17,
+                  "Anomaly_Proficiency": 0
+                }
               }
             },
             "Drive6": {
