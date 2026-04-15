@@ -3997,7 +3997,7 @@
         },
         "atk": {
           "min": 2500,
-          "optimal": 2900
+          "optimal": 2700
         },
         "def": {
           "min": 650,
@@ -4008,20 +4008,20 @@
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 184,
-          "optimal": 244
+          "min": 0,
+          "optimal": 0
         },
         "critRate": {
-          "min": 0,
-          "optimal": 0
+          "min": 50,
+          "optimal": 57
         },
         "critDmg": {
-          "min": 0,
-          "optimal": 0
+          "min": 100,
+          "optimal": 110
         },
         "anomalyProficiency": {
-          "min": 330,
-          "optimal": 420
+          "min": 0,
+          "optimal": 0
         },
         "pen": {
           "min": 0,
