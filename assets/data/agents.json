@@ -84155,12 +84155,12 @@
       "buffs": [
         {
           "type": "CRITRateBonus",
-          "value": "1800",
+          "value": "18",
           "format": "%"
         },
         {
           "type": "CRITDMGBonus",
-          "value": "5500",
+          "value": "55",
           "format": "%"
         }
       ],
