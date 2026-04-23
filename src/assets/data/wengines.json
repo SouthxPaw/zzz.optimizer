@@ -4162,7 +4162,7 @@
     "Rarity": 4,
     "Icon": "Weapon_S_1541.png",
     "WeaponType": {
-      "1": "Attack"
+      "3": "Anomaly"
     },
     "BaseProperty": {
       "Name": "Base ATK",
