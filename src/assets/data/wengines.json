@@ -4151,5 +4151,58 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14154": {
+    "Id": 14154,
+    "CodeName": "Weapon_S_1541",
+    "Name": "Frostfall Sickle",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1541.png",
+    "WeaponType": {
+      "1": "Attack"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Anomaly Mastery",
+      "Name2": "Anomaly Mastery",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "",
+          "Name2": "",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2500,
+            "W2": 2880,
+            "W3": 3250,
+            "W4": 3630,
+            "W5": 4000
+          }
+        }
+      ],
+      "Desc": ""
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "",
+          "value": "",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
