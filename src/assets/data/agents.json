@@ -84198,9 +84198,14 @@
     "scoring": {
       "buffs": [
         {
-          "type": "",
-          "value": "",
-          "format": "%"
+          "type": "AnomalyProficiency",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "anomalyMastery",
+            "threshold": 140,
+            "ratio": 1.5
+          }
         }
       ],
       "debuffs": [],

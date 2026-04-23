@@ -397,6 +397,17 @@
           "note": ""
         }
       ]
+    },
+    "1541": {
+      "comment": "Promeia",
+      "2": [
+        {
+          "type": "Anomaly_Proficiency",
+          "value": 60,
+          "format": "flat",
+          "note": ""
+        }
+      ]
     }
   }
 }

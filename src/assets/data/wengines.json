@@ -4177,21 +4177,8 @@
       "Value": 3000
     },
     "Effect": {
-      "Properties": [
-        {
-          "Name": "",
-          "Name2": "",
-          "Format": "{0:0.#%}",
-          "Overclock": {
-            "W1": 2500,
-            "W2": 2880,
-            "W3": 3250,
-            "W4": 3630,
-            "W5": 4000
-          }
-        }
-      ],
-      "Desc": ""
+      "Properties": [],
+      "Desc": "When an Ice equipper uses [Special Attack] or [EX Special Attack], their Ice DMG increases by % for 40s. Max 2 stacks. Can trigger once per use of a skill. Repeated triggers reset the duration. When at 2 stacks, the character's [Abloom] DMG is additionally increased by %."
     },
     "scoring": {
       "buffs": [
