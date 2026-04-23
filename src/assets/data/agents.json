@@ -84230,5 +84230,44 @@
     },
     "potentials": [],
     "Icon": "Promeia"
+  },
+  {
+    "id": 1541,
+    "name": "Starlight - Billy Kid",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "",
+          "value": "",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 200,
+      "name": "Physical"
+    },
+    "specialty": {
+      "id": 6,
+      "name": "Rupture"
+    },
+    "lvl60_stats": {
+      "HpMax": 8497,
+      "Defence": 445,
+      "Attack": 859,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 95,
+      "ElementAbnormalPower": 90,
+      "ElementMystery": 89,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "StarlightBilly"
   }
 ]

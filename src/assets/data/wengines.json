@@ -4204,5 +4204,58 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14153": {
+    "Id": 14153,
+    "CodeName": "Weapon_S_1531",
+    "Name": "Starlight Rider Faceplate",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1531.png",
+    "WeaponType": {
+      "6": "Rupture"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2300,
+            "W3": 2600,
+            "W4": 2900,
+            "W5": 3200
+          }
+        }
+      ],
+      "Desc": "CRIT Rate increases by %. When the equipper launches a Basic Attack, their Physical Sheer DMG increases by %, stacking up to 2 times and lasting 30s. Repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "2000",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
