@@ -84191,5 +84191,44 @@
     },
     "potentials": [],
     "Icon": "Cissia"
+  },
+  {
+    "id": 1541,
+    "name": "Promeia",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "",
+          "value": "",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 202,
+      "name": "Ice"
+    },
+    "specialty": {
+      "id": 1,
+      "name": "Attack"
+    },
+    "lvl60_stats": {
+      "HpMax": 7788,
+      "Defence": 612,
+      "Attack": 872,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 86,
+      "ElementAbnormalPower": 148,
+      "ElementMystery": 114,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "Promeia"
   }
 ]
