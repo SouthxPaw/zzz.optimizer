@@ -38,6 +38,7 @@ export class StatCalculatorService {
 
   // Mindscape data loaded from mindscape-stats.json (manually curated source of truth)
   private mindscapeData: MindscapeData | null = null;
+  private mindscapeDataPromise: Promise<void> | null = null;
 
   // OPTIMIZATION: Use shared disc set data service
   constructor(
@@ -46,12 +47,13 @@ export class StatCalculatorService {
   ) {
     // Data loading is handled by shared service
     this.discSetDataService.loadDiscSetData();
-    this.loadMindscapeData();
+    this.mindscapeDataPromise = this.loadMindscapeData();
   }
 
   /**
    * Load mindscape stat bonuses from the manually-curated JSON file.
    * This is the source of truth for mindscape bonuses used in stat calculations.
+   * Returns a promise that can be awaited to ensure data is loaded before use.
    */
   private async loadMindscapeData(): Promise<void> {
     try {
@@ -64,10 +66,13 @@ export class StatCalculatorService {
   }
 
   /**
-   * Ensure disc set equipment data is loaded before calculating stats
+   * Ensure disc set equipment data and mindscape data are loaded before calculating stats
    */
   async ensureDataLoaded(): Promise<void> {
     await this.discSetDataService.loadDiscSetData();
+    if (this.mindscapeDataPromise) {
+      await this.mindscapeDataPromise;
+    }
   }
 
   calculateFinalStats(
@@ -110,7 +115,7 @@ export class StatCalculatorService {
     }
 
     // Apply mindscape stat bonuses (if enabled)
-    if (includeMindscapeBonuses && agent.mindscapeEffects && mindscapeLevel > 0) {
+    if (includeMindscapeBonuses && mindscapeLevel > 0) {
       this.applyMindscapeStats(stats, agent, mindscapeLevel);
     } else {
     }
