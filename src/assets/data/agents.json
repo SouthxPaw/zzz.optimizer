@@ -84242,8 +84242,8 @@
     "scoring": {
       "buffs": [
         {
-          "type": "",
-          "value": "",
+          "type": "CRITDMGBonus",
+          "value": "90",
           "format": "%"
         }
       ],
