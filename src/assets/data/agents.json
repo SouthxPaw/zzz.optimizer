@@ -84175,7 +84175,7 @@
     },
     "specialty": {
       "id": 1,
-      "name": "Attack"
+      "name": "Anomaly"
     },
     "lvl60_stats": {
       "HpMax": 7673,
@@ -84213,8 +84213,8 @@
       "name": "Ice"
     },
     "specialty": {
-      "id": 1,
-      "name": "Attack"
+      "id": 3,
+      "name": "Anomaly"
     },
     "lvl60_stats": {
       "HpMax": 7788,
