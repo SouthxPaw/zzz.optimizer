@@ -4151,5 +4151,45 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14154": {
+    "Id": 14154,
+    "CodeName": "Weapon_S_1541",
+    "Name": "Frostfall Sickle",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1541.png",
+    "WeaponType": {
+      "3": "Anomaly"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Anomaly Mastery",
+      "Name2": "Anomaly Mastery",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When an Ice equipper uses [Special Attack] or [EX Special Attack], their Ice DMG increases by % for 40s. Max 2 stacks. Can trigger once per use of a skill. Repeated triggers reset the duration. When at 2 stacks, the character's [Abloom] DMG is additionally increased by %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "",
+          "value": "",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
