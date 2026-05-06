@@ -403,7 +403,7 @@
       "2": [
         {
           "type": "Anomaly_Proficiency",
-          "value": 60,
+          "value": 40,
           "format": "flat",
           "note": ""
         }
