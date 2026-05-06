@@ -1442,10 +1442,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         mainStatType: '',
         mainStatValue: '',
         subStats: [
-          { type: 'ATK%', value: '' },
-          { type: 'ATK%', value: '' },
-          { type: 'ATK%', value: '' },
-          { type: 'ATK%', value: '' },
+          { type: '' as SubStatType, value: '' },
+          { type: '' as SubStatType, value: '' },
+          { type: '' as SubStatType, value: '' },
+          { type: '' as SubStatType, value: '' },
         ],
       };
     }
