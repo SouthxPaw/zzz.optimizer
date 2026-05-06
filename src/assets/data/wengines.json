@@ -1952,13 +1952,13 @@
       "Name": "Base ATK",
       "Name2": "Base ATK",
       "Format": "{0:0.#}",
-      "Value": 42
+      "Value": 624
     },
     "RandProperty": {
       "Name": "ATK",
       "Name2": "Percent ATK",
       "Format": "{0:0.#%}",
-      "Value": 1000
+      "Value": 2500
     },
     "Effect": {
       "Properties": [],
