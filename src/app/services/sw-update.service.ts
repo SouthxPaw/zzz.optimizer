@@ -1,14 +1,14 @@
 // services/sw-update.service.ts
 import { Injectable, ApplicationRef, OnDestroy } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { concat, interval, Subject } from 'rxjs';
+import { concat, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { first, takeUntil, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 /**
  * Service Worker Update Service
  * Handles automatic updates with hourly checks
- * Also detects version changes and forces cache clear automatically
+ * Shows update notification button instead of auto-reloading
  */
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,14 @@ import { environment } from '../../environments/environment';
 export class SwUpdateService implements OnDestroy {
   private destroy$ = new Subject<void>();
   private readonly VERSION_KEY = 'app_version';
+
+  // Observable to track if an update is available
+  private updateAvailable$ = new BehaviorSubject<boolean>(false);
+
+  // Public observable for components to subscribe to
+  public get updateAvailable(): Observable<boolean> {
+    return this.updateAvailable$.asObservable();
+  }
 
   constructor(
     private swUpdate: SwUpdate,
@@ -73,28 +81,15 @@ export class SwUpdateService implements OnDestroy {
       }
     });
 
-    // Listen for version ready events and auto-reload
+    // Listen for version ready events and notify user
     this.swUpdate.versionUpdates.pipe(
       takeUntil(this.destroy$)
     ).subscribe(async evt => {
       if (evt.type === 'VERSION_READY') {
-        console.log('[SW Update] New version ready - clearing caches and reloading');
+        console.log('[SW Update] New version ready - showing update notification');
 
-        // Clear all caches before reloading to ensure fresh data
-        try {
-          const cacheNames = await caches.keys();
-          await Promise.all(
-            cacheNames.map(cacheName => {
-              console.log('[SW Update] Deleting cache:', cacheName);
-              return caches.delete(cacheName);
-            })
-          );
-        } catch (err) {
-          console.error('[SW Update] Failed to clear caches:', err);
-        }
-
-        // Force reload from server (bypass cache)
-        window.location.reload();
+        // Set observable to true to show update button
+        this.updateAvailable$.next(true);
       }
     });
 
@@ -226,20 +221,11 @@ export class SwUpdateService implements OnDestroy {
 
       // Compare versions (newer timestamp = new version)
       if (serverTimestamp > installedTimestamp) {
-        console.log('[SW Update] 🎉 NEW VERSION DETECTED! Reloading page...');
+        console.log('[SW Update] 🎉 NEW VERSION DETECTED! Showing update notification...');
         console.log('[SW Update] Server is newer:', serverTimestamp, 'vs', installedTimestamp);
 
-        // Clear ALL caches before reload to ensure fresh content
-        const cacheNames = await caches.keys();
-        await Promise.all(
-          cacheNames.map(cacheName => {
-            console.log('[SW Update] Clearing cache:', cacheName);
-            return caches.delete(cacheName);
-          })
-        );
-
-        // Reload page - this triggers navigation event which Angular SW handles correctly
-        setTimeout(() => window.location.reload(), 500);
+        // Set observable to true to show update button
+        this.updateAvailable$.next(true);
         return true;
       } else {
         console.log('[SW Update] Already on latest version');
@@ -333,5 +319,29 @@ export class SwUpdateService implements OnDestroy {
   async checkForUpdate(): Promise<boolean> {
     console.log('[SW Update] Manual update check triggered');
     return await this.bustCacheAndCheckForUpdate();
+  }
+
+  /**
+   * Apply the update (reload the page)
+   * Clears all caches before reloading
+   */
+  async applyUpdate(): Promise<void> {
+    console.log('[SW Update] Applying update - clearing caches and reloading');
+
+    try {
+      // Clear all caches before reloading to ensure fresh data
+      const cacheNames = await caches.keys();
+      await Promise.all(
+        cacheNames.map(cacheName => {
+          console.log('[SW Update] Deleting cache:', cacheName);
+          return caches.delete(cacheName);
+        })
+      );
+    } catch (err) {
+      console.error('[SW Update] Failed to clear caches:', err);
+    }
+
+    // Force reload from server (bypass cache)
+    window.location.reload();
   }
 }
