@@ -16,6 +16,7 @@ import { environment } from '../../environments/environment';
 export class SwUpdateService implements OnDestroy {
   private destroy$ = new Subject<void>();
   private readonly VERSION_KEY = 'app_version';
+  private readonly INSTALLED_TIMESTAMP_KEY = 'installed_ngsw_timestamp';
 
   // Observable to track if an update is available
   private updateAvailable$ = new BehaviorSubject<boolean>(false);
@@ -212,16 +213,18 @@ export class SwUpdateService implements OnDestroy {
       const installedTimestamp = await this.getInstalledVersionTimestamp();
 
       if (!installedTimestamp) {
-        console.log('[SW Update] Could not determine installed version - assuming update needed');
-        console.log('[SW Update] 🎉 NEW VERSION DETECTED! Showing update notification...');
+        console.log('[SW Update] Could not determine installed version - storing server timestamp');
 
-        // Can't determine current version - safer to show update notification
-        // This handles first load or when cache lookup fails
-        this.updateAvailable$.next(true);
+        // First load or cache lookup failed
+        // Store the server timestamp as our baseline for future comparisons
+        localStorage.setItem(this.INSTALLED_TIMESTAMP_KEY, serverTimestamp.toString());
 
-        // Also trigger Angular's check in case it can detect the version
+        // Don't show update notification on first load
+        this.updateAvailable$.next(false);
+
+        // Trigger Angular's check in case it can detect a version
         await this.swUpdate.checkForUpdate();
-        return true;
+        return false;
       }
 
       console.log('[SW Update] Installed version timestamp:', installedTimestamp);
@@ -236,6 +239,13 @@ export class SwUpdateService implements OnDestroy {
         return true;
       } else {
         console.log('[SW Update] Already on latest version');
+
+        // Store the current timestamp so we have it for next check
+        localStorage.setItem(this.INSTALLED_TIMESTAMP_KEY, serverTimestamp.toString());
+
+        // Reset the update available flag since we're on the latest version
+        this.updateAvailable$.next(false);
+
         return false;
       }
     } catch (err: any) {
@@ -251,11 +261,21 @@ export class SwUpdateService implements OnDestroy {
 
   /**
    * Get the timestamp of the currently installed Service Worker version
-   * This reads from the cached ngsw.json manifest
+   * This reads from localStorage first (most reliable), then falls back to cache lookup
    */
   private async getInstalledVersionTimestamp(): Promise<number | null> {
     try {
-      // Look for cached ngsw.json in Service Worker caches
+      // Strategy 0: Check localStorage first (most reliable)
+      const storedTimestamp = localStorage.getItem(this.INSTALLED_TIMESTAMP_KEY);
+      if (storedTimestamp) {
+        const timestamp = parseInt(storedTimestamp, 10);
+        if (!isNaN(timestamp)) {
+          console.log('[SW Update] Found installed timestamp in localStorage:', timestamp);
+          return timestamp;
+        }
+      }
+
+      // Strategy 1: Look for cached ngsw.json in Service Worker caches
       const cacheNames = await caches.keys();
 
       // Try multiple strategies to find the cached ngsw.json
@@ -263,7 +283,7 @@ export class SwUpdateService implements OnDestroy {
         if (cacheName.includes('ngsw:')) {
           const cache = await caches.open(cacheName);
 
-          // Strategy 1: Look for ngsw.json in cache keys
+          // Look for ngsw.json in cache keys
           const keys = await cache.keys();
           for (const request of keys) {
             if (request.url.includes('ngsw.json') && !request.url.includes('?')) {
@@ -273,6 +293,8 @@ export class SwUpdateService implements OnDestroy {
                   const manifest = await response.json();
                   if (manifest?.timestamp) {
                     console.log('[SW Update] Found cached manifest in:', cacheName);
+                    // Store it for next time
+                    localStorage.setItem(this.INSTALLED_TIMESTAMP_KEY, manifest.timestamp.toString());
                     return manifest.timestamp;
                   }
                 } catch {
@@ -295,6 +317,8 @@ export class SwUpdateService implements OnDestroy {
           const manifest = await cachedResponse.json();
           if (manifest?.timestamp) {
             console.log('[SW Update] Found manifest via direct cache match');
+            // Store it for next time
+            localStorage.setItem(this.INSTALLED_TIMESTAMP_KEY, manifest.timestamp.toString());
             return manifest.timestamp;
           }
         } catch {
@@ -336,6 +360,9 @@ export class SwUpdateService implements OnDestroy {
     console.log('[SW Update] Applying update - clearing caches and reloading');
 
     try {
+      // Clear the installed timestamp so next load will detect the new version
+      localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
+
       // Clear all caches before reloading to ensure fresh data
       const cacheNames = await caches.keys();
       await Promise.all(
