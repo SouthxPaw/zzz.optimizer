@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { versionedUrl } from '../utils/versioned-url';
+import { environment } from '../../environments/environment';
 
 /**
  * Service to parse agent skill multipliers from character JSON files
@@ -83,7 +84,11 @@ export class SkillParserService {
       };
 
     } catch (error) {
-      console.warn(`Failed to parse skills for agent ${agentId}:`, error);
+      // Silently ignore - character skill files are optional and not currently used
+      // Only log in development mode for debugging
+      if (!environment.production) {
+        console.debug(`Skill data not found for agent ${agentId} (optional)`);
+      }
     }
   }
 
