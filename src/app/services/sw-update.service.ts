@@ -225,11 +225,16 @@ export class SwUpdateService implements OnDestroy {
 
       // Compare versions (newer timestamp = new version)
       if (serverTimestamp > installedTimestamp) {
-        console.log('[SW Update] 🎉 NEW VERSION DETECTED! Showing update notification...');
+        console.log('[SW Update] 🎉 NEW VERSION DETECTED! Triggering download...');
         console.log('[SW Update] Server is newer:', serverTimestamp, 'vs', installedTimestamp);
 
-        // Set observable to true to show update button
-        this.updateAvailable$.next(true);
+        // Trigger Angular's SW update check to download and activate the new version
+        // Angular will automatically call skipWaiting() during install phase
+        // The update button will appear when VERSION_READY event is emitted (not here!)
+        await this.swUpdate.checkForUpdate();
+
+        // Return true to indicate update was found
+        // Note: updateAvailable$ will be set by VERSION_READY listener when SW is ready
         return true;
       } else {
         console.log('[SW Update] Already on latest version');
@@ -398,34 +403,21 @@ export class SwUpdateService implements OnDestroy {
    * Clears all caches before reloading
    */
   async applyUpdate(): Promise<void> {
-    console.log('[SW Update] Applying update - clearing caches and reloading');
+    console.log('[SW Update] Applying update - reloading to use new service worker');
 
     try {
-      // Clear the installed timestamp so next load will detect the new version
+      // Clear the installed timestamp so next load will pick up the new version
       localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
 
-      // Unregister all service workers to ensure fresh install
-      if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        for (const registration of registrations) {
-          await registration.unregister();
-          console.log('[SW Update] Unregistered service worker');
-        }
-      }
+      // NOTE: We don't unregister the service worker here because we already
+      // activated the new one when we detected the update. We just need to reload
+      // to start using it.
 
-      // Clear all caches before reloading to ensure fresh data
-      const cacheNames = await caches.keys();
-      await Promise.all(
-        cacheNames.map(cacheName => {
-          console.log('[SW Update] Deleting cache:', cacheName);
-          return caches.delete(cacheName);
-        })
-      );
     } catch (err) {
-      console.error('[SW Update] Failed to clear caches:', err);
+      console.error('[SW Update] Failed to prepare update:', err);
     }
 
-    // Force reload from server (bypass cache)
+    // Reload to start using the new service worker
     window.location.reload();
   }
 }
