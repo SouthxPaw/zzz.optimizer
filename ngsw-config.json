@@ -26,6 +26,7 @@
         "files": [
           "/assets/data/images/**/*.webp",
           "/assets/data/images/**/*.png",
+          "/assets/data/images/**/*.mp4",
           "/**/*.(svg|cur|jpg|jpeg|apng|avif|gif|otf|ttf|woff|woff2)"
         ]
       }
