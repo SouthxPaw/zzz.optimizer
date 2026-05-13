@@ -39,6 +39,9 @@ export class SwUpdateService implements OnDestroy {
     // Check if app version has changed and clear caches if needed
     await this.checkVersionAndClearCaches();
 
+    // Check for broken service worker and unregister if needed
+    await this.checkForBrokenServiceWorker();
+
     if (!this.swUpdate.isEnabled) {
       console.log('Service Worker is not enabled');
       return;
@@ -350,6 +353,53 @@ export class SwUpdateService implements OnDestroy {
   async checkForUpdate(): Promise<boolean> {
     console.log('[SW Update] Manual update check triggered');
     return await this.bustCacheAndCheckForUpdate();
+  }
+
+  /**
+   * Check for broken service worker (e.g., can't load MP4s) and unregister if needed
+   * This helps users stuck with a broken SW that can't update itself
+   */
+  private async checkForBrokenServiceWorker(): Promise<void> {
+    try {
+      if (!('serviceWorker' in navigator)) {
+        return;
+      }
+
+      // Check if we've marked this SW as broken before
+      const brokenSwMarker = localStorage.getItem('broken_sw_detected');
+      if (brokenSwMarker === 'true') {
+        console.log('[SW Update] Broken service worker detected - unregistering...');
+
+        // Unregister all service workers
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const registration of registrations) {
+          await registration.unregister();
+          console.log('[SW Update] Unregistered service worker');
+        }
+
+        // Clear all caches
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(name => caches.delete(name)));
+        console.log('[SW Update] Cleared all caches');
+
+        // Remove the marker and reload
+        localStorage.removeItem('broken_sw_detected');
+        localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
+
+        console.log('[SW Update] Reloading to get fresh service worker...');
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error('[SW Update] Error checking for broken service worker:', err);
+    }
+  }
+
+  /**
+   * Mark service worker as broken (call this if MP4 loading fails repeatedly)
+   */
+  markServiceWorkerAsBroken(): void {
+    localStorage.setItem('broken_sw_detected', 'true');
+    console.log('[SW Update] Service worker marked as broken - will unregister on next load');
   }
 
   /**
