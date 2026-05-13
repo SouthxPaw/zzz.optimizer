@@ -1249,7 +1249,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Pad with empty substats to always have 4 slots
     while (existingSubStats.length < 4) {
-      existingSubStats.push({ type: 'ATK%', value: '' });
+      existingSubStats.push({ type: '' as SubStatType, value: '' });
     }
 
     this.discFormData = {
@@ -1474,10 +1474,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       mainStatType: '',
       mainStatValue: '',
       subStats: [
-        { type: 'ATK%', value: '' },
-        { type: 'ATK%', value: '' },
-        { type: 'ATK%', value: '' },
-        { type: 'ATK%', value: '' },
+        { type: '' as SubStatType, value: '' },
+        { type: '' as SubStatType, value: '' },
+        { type: '' as SubStatType, value: '' },
+        { type: '' as SubStatType, value: '' },
       ],
     };
     this.cdr.markForCheck();
@@ -1659,7 +1659,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       }
 
       while (this.compareCustomDisc.subStats.length <= index) {
-        this.compareCustomDisc.subStats.push({ type: 'ATK%' as SubStatType, value: 0 });
+        this.compareCustomDisc.subStats.push({ type: '' as SubStatType, value: 0 });
       }
 
       if (subField === 'type') {
