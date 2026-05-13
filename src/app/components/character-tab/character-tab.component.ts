@@ -85,6 +85,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   showDiscPicker = false;
   selectedDiscSlot: DiscSlot | null = null;
   showShareModal = false;
+  showCompareModal = false;
+  compareDiscSlot: DiscSlot | null = null;
+  compareCustomDisc: Partial<Disc> | null = null;
 
   @ViewChild('shareCanvas') shareCanvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('shareCard') shareCardRef!: ElementRef<HTMLDivElement>;
@@ -1429,6 +1432,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     this.selectedDiscSetForCreation = discSet;
     this.showDiscPicker = false;
+
+    // Check if we're coming from comparison modal
+    if (this.compareCustomDisc && this.compareDiscSlot) {
+      // Update the disc set in comparison modal and return to it
+      this.compareCustomDisc.set = discSet.name;
+      this.showCompareModal = true;
+      this.cdr.markForCheck();
+      return;
+    }
+
     this.showDiscForm = true;
 
     // Only reset form if we're creating a brand new disc AND form is currently empty
@@ -1468,6 +1481,273 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       ],
     };
     this.cdr.markForCheck();
+  }
+
+  /**
+   * Opens comparison modal for a disc
+   */
+  openCompareModal(slot: DiscSlot, event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
+    if (!this.selectedBuild) return;
+
+    const equippedDisc = this.selectedBuild.equippedDiscs[slot];
+    if (!equippedDisc) return;
+
+    this.compareDiscSlot = slot;
+    this.selectedDiscSlot = slot; // Set this so disc picker works
+    // Initialize with empty values like the custom disc editor
+    this.compareCustomDisc = {
+      slot: slot,
+      set: equippedDisc.set, // Keep same set for comparison context
+      rarity: 'S',
+      level: 15,
+      mainStat: {
+        type: this.getDefaultMainStatForSlot(slot),
+        value: 0
+      },
+      subStats: [],
+      lock: false,
+    };
+    this.showCompareModal = true;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Closes comparison modal
+   */
+  closeCompareModal() {
+    this.showCompareModal = false;
+    this.compareDiscSlot = null;
+    this.compareCustomDisc = null;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Opens disc picker to change the disc set in comparison modal
+   */
+  openCompareDiscPicker() {
+    // selectedDiscSlot is already set from openCompareModal
+    // Close compare modal and open disc picker
+    this.showCompareModal = false;
+    this.showDiscPicker = true;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Replaces the current disc with the custom comparison disc
+   */
+  async replaceWithCustomDisc() {
+    if (!this.selectedBuild || !this.compareDiscSlot || !this.compareCustomDisc) {
+      return;
+    }
+
+    // Validate that custom disc has valid data
+    if (!this.getCustomDiscScore()) {
+      alert('Please fill in all disc stats before replacing');
+      return;
+    }
+
+    if (this.isProcessingDiscAction) return;
+    this.isProcessingDiscAction = true;
+
+    try {
+      // Get the current disc to unequip it first
+      const currentDisc = this.selectedBuild.equippedDiscs[this.compareDiscSlot];
+
+      // Determine main stat based on slot
+      let mainStat: { type: MainStatType; value: number };
+      if (
+        this.compareDiscSlot === 'Drive1' ||
+        this.compareDiscSlot === 'Drive2' ||
+        this.compareDiscSlot === 'Drive3'
+      ) {
+        // Fixed main stats for slots 1-3
+        mainStat = {
+          type: this.getDefaultMainStatForSlot(this.compareDiscSlot),
+          value: this.getMainStatValueForSlot(this.compareDiscSlot),
+        };
+      } else {
+        // User-provided main stat for slots 4-6
+        mainStat = this.compareCustomDisc.mainStat!;
+      }
+
+      // Create a new disc from the custom disc data
+      const newDisc: Disc = {
+        uid: `custom-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        slot: this.compareCustomDisc.slot!,
+        set: this.compareCustomDisc.set!,
+        rarity: this.compareCustomDisc.rarity || 'S',
+        level: this.compareCustomDisc.level || 15,
+        mainStat: mainStat,
+        subStats: this.compareCustomDisc.subStats!.filter(s => s.value > 0), // Filter out empty substats
+        lock: false,
+      };
+
+      // Calculate rolls for substats
+      newDisc.subStats = newDisc.subStats.map(subStat => ({
+        ...subStat,
+        rolls: calculateRollCount(subStat.type, subStat.value),
+      }));
+
+      // If there was a disc equipped, unequip it first (it will go back to inventory)
+      if (currentDisc) {
+        await this.discService.unequipDisc(currentDisc.uid);
+      }
+
+      // Create and equip the new disc
+      await this.discService.addDisc(newDisc);
+      await this.buildService.equipDisc(this.selectedBuild.id, newDisc);
+
+      this.clearScoreCaches(); // Invalidate caches
+      this.closeCompareModal();
+      this.cdr.markForCheck(); // Trigger change detection to update UI
+    } catch (error) {
+      console.error('Error replacing disc:', error);
+      alert('Error replacing disc. Please try again.');
+    } finally {
+      this.isProcessingDiscAction = false;
+    }
+  }
+
+  /**
+   * Handles main stat type change for comparison modal (Drive 4-6 only)
+   */
+  onCompareMainStatTypeChange(mainStatType: string): void {
+    if (!this.compareCustomDisc || !this.compareDiscSlot) return;
+
+    // Update the main stat type
+    if (this.compareCustomDisc.mainStat) {
+      this.compareCustomDisc.mainStat.type = mainStatType as MainStatType;
+      this.compareCustomDisc.mainStat.value = 0;
+    }
+
+    // Exit if no main stat selected
+    if (!mainStatType) {
+      this.cdr.markForCheck();
+      return;
+    }
+
+    // Only auto-fill for slots 4-6
+    if (
+      this.compareDiscSlot === 'Drive4' ||
+      this.compareDiscSlot === 'Drive5' ||
+      this.compareDiscSlot === 'Drive6'
+    ) {
+      const maxValues = DISC_MAIN_STAT_MAX[this.compareDiscSlot];
+      if (maxValues && maxValues[mainStatType] !== undefined) {
+        this.compareCustomDisc.mainStat!.value = maxValues[mainStatType];
+      }
+    }
+
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Updates custom disc for comparison
+   */
+  updateCompareCustomDisc(field: string, value: any) {
+    if (!this.compareCustomDisc) return;
+
+    if (field.startsWith('subStat')) {
+      const index = parseInt(field.split('-')[1]);
+      const subField = field.split('-')[2]; // 'type' or 'value'
+
+      if (!this.compareCustomDisc.subStats) {
+        this.compareCustomDisc.subStats = [];
+      }
+
+      while (this.compareCustomDisc.subStats.length <= index) {
+        this.compareCustomDisc.subStats.push({ type: 'ATK%' as SubStatType, value: 0 });
+      }
+
+      if (subField === 'type') {
+        this.compareCustomDisc.subStats[index].type = value as SubStatType;
+      } else if (subField === 'value') {
+        this.compareCustomDisc.subStats[index].value = parseFloat(value) || 0;
+      }
+    } else if (field === 'mainStatValue') {
+      if (this.compareCustomDisc.mainStat) {
+        this.compareCustomDisc.mainStat.value = parseFloat(value) || 0;
+      }
+    } else if (field === 'mainStatType') {
+      if (this.compareCustomDisc.mainStat) {
+        this.compareCustomDisc.mainStat.type = value as MainStatType;
+      }
+    }
+
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Get available substat types for comparison modal at given index
+   * Filters out main stat conflicts and already-selected substats
+   */
+  getAvailableCompareSubstatTypesForIndex(index: number): Array<{ value: SubStatType; label: string }> {
+    if (!this.compareCustomDisc || !this.compareCustomDisc.mainStat) {
+      return this.availableSubStatTypes;
+    }
+
+    // Get the main stat base type (e.g., 'ATK%' -> 'ATK', 'CRIT_Rate' -> 'CRIT')
+    const mainStatType = this.compareCustomDisc.mainStat.type;
+    const mainStatBase = mainStatType.replace(/%|_Rate|_DMG|_Ratio|_Proficiency|_Mastery|_Regen/g, '');
+
+    // Get already selected substats from OTHER positions (not current index)
+    const selectedSubstats = (this.compareCustomDisc.subStats || [])
+      .map((s, i) => i !== index ? s.type : null)
+      .filter((t): t is SubStatType => t !== null);
+
+    // Filter out main stat conflicts and already-selected substats
+    return this.availableSubStatTypes.filter(stat =>
+      !this.isMainStatConflict(stat.value, mainStatBase) &&
+      !selectedSubstats.includes(stat.value)
+    );
+  }
+
+  /**
+   * Gets the score for the custom comparison disc
+   */
+  getCustomDiscScore() {
+    if (!this.compareCustomDisc || !this.compareCustomDisc.mainStat) {
+      return null;
+    }
+
+    // Get main stat value - for Drive 1-3, use fixed value
+    let mainStatValue = this.compareCustomDisc.mainStat.value;
+    if (this.compareDiscSlot === 'Drive1' || this.compareDiscSlot === 'Drive2' || this.compareDiscSlot === 'Drive3') {
+      mainStatValue = this.getMainStatValueForSlot(this.compareDiscSlot);
+    }
+
+    // Check if main stat has a value
+    if (!mainStatValue || mainStatValue === 0) {
+      return null;
+    }
+
+    // Filter out empty substats (those with no value or value === 0)
+    const validSubStats = (this.compareCustomDisc.subStats || []).filter(s => s && s.value && s.value > 0);
+
+    // Need ALL 4 substats filled in before showing a rating
+    if (validSubStats.length < 4) {
+      return null;
+    }
+
+    // Create a temporary full disc object for scoring
+    const tempDisc: Disc = {
+      uid: 'temp-compare',
+      slot: this.compareCustomDisc.slot!,
+      set: this.compareCustomDisc.set!,
+      rarity: this.compareCustomDisc.rarity || 'S',
+      level: this.compareCustomDisc.level || 15,
+      mainStat: {
+        type: this.compareCustomDisc.mainStat.type,
+        value: mainStatValue,
+      },
+      subStats: validSubStats,
+      lock: false,
+    };
+
+    return this.getDiscScore(tempDisc);
   }
 
   /**
@@ -2148,6 +2428,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         event.preventDefault();
       } else if (this.showAddAgentModal) {
         this.closeAddAgentModal();
+        event.preventDefault();
+      } else if (this.showCompareModal) {
+        this.closeCompareModal();
         event.preventDefault();
       } else if (this.showDiscPicker) {
         this.closeDiscPicker();
