@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1778703120149,
+  "timestamp": 1778703362877,
   "index": "/zzz.optimizer/index.html",
   "assetGroups": [
     {
@@ -11,20 +11,20 @@
         "ignoreVary": true
       },
       "urls": [
+        "/zzz.optimizer/chunk-5WGN66IV.js",
         "/zzz.optimizer/chunk-BKQ3YWX4.js",
-        "/zzz.optimizer/chunk-FT4OF6DO.js",
-        "/zzz.optimizer/chunk-HC2NRE3Q.js",
-        "/zzz.optimizer/chunk-KA25L3VU.js",
-        "/zzz.optimizer/chunk-OR6ZAHBL.js",
-        "/zzz.optimizer/chunk-SFJLV5ZH.js",
+        "/zzz.optimizer/chunk-MALKRJTY.js",
+        "/zzz.optimizer/chunk-PPQ4SJ6B.js",
+        "/zzz.optimizer/chunk-SHBMTGQ7.js",
         "/zzz.optimizer/chunk-SUQPQZKI.js",
         "/zzz.optimizer/chunk-T2WEN2OD.js",
         "/zzz.optimizer/chunk-TRN4MUWH.js",
-        "/zzz.optimizer/chunk-UOBSMBEG.js",
-        "/zzz.optimizer/chunk-VRQUNJFO.js",
+        "/zzz.optimizer/chunk-W42SL4MD.js",
+        "/zzz.optimizer/chunk-X5EI653G.js",
+        "/zzz.optimizer/chunk-XKW6TBFP.js",
         "/zzz.optimizer/chunk-XXCPVLAB.js",
         "/zzz.optimizer/index.html",
-        "/zzz.optimizer/main-EWWPVMST.js",
+        "/zzz.optimizer/main-NW5UX5CL.js",
         "/zzz.optimizer/manifest.webmanifest",
         "/zzz.optimizer/polyfills-B6TNHZQ6.js",
         "/zzz.optimizer/robots.txt",
@@ -253,6 +253,21 @@
     }
   ],
   "dataGroups": [
+    {
+      "name": "wengine-videos",
+      "patterns": [
+        "https:\\/\\/southxpaw\\.github\\.io\\/zzz\\.optimizer\\/assets\\/data\\/images\\/(?:.+\\/)?[^/]*\\.mp4",
+        "\\/assets\\/data\\/images\\/(?:.+\\/)?[^/]*\\.mp4"
+      ],
+      "strategy": "freshness",
+      "maxSize": 100,
+      "maxAge": 2592000000,
+      "timeoutMs": 30000,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    },
     {
       "name": "api-performance",
       "patterns": [
@@ -488,20 +503,20 @@
     "/zzz.optimizer/assets/data/images/wengines/Weapon_S_Common_03.webp": "0a91b837d53d13ff0524d2ffa4cb62f0388d8470",
     "/zzz.optimizer/assets/fonts/inpinhongmeti.ttf": "14b7eed7cb3d4b0adfd489c70830a4f1ef04ebea",
     "/zzz.optimizer/assets/fonts/inpinhongmeti.woff2": "6c4a472f28cf24037dc24c43ccf84605123ca76b",
+    "/zzz.optimizer/chunk-5WGN66IV.js": "f21338639c63ec4ea3ba96a62d2ff9d7e158faed",
     "/zzz.optimizer/chunk-BKQ3YWX4.js": "405607aa11a4fda4ae4ffc41caf972d1b095f44b",
-    "/zzz.optimizer/chunk-FT4OF6DO.js": "8b9ab48fe92cd960a011aef19068335b2e9f6eed",
-    "/zzz.optimizer/chunk-HC2NRE3Q.js": "04fec67e2dc2e16c96acfecabd239d46ad649be2",
-    "/zzz.optimizer/chunk-KA25L3VU.js": "528e1600926cbe46fe321998660d36e2f4f9d1be",
-    "/zzz.optimizer/chunk-OR6ZAHBL.js": "ee64b24cd19bf256f3e05c54b08b4b7bf98e8d96",
-    "/zzz.optimizer/chunk-SFJLV5ZH.js": "207190b2bee87fd9b8f62a4e61379c7e57f4b58f",
+    "/zzz.optimizer/chunk-MALKRJTY.js": "390eeb80598836825f5de51432ff2a73ecf202ac",
+    "/zzz.optimizer/chunk-PPQ4SJ6B.js": "b56a9b0699046c63e5cee5fcce186c815b7d12b6",
+    "/zzz.optimizer/chunk-SHBMTGQ7.js": "5b77a6d504f8beacf5f9cb138847355cbc0f5781",
     "/zzz.optimizer/chunk-SUQPQZKI.js": "850eaf2cd0e7f51752945e951899ed8f70cbfbb5",
     "/zzz.optimizer/chunk-T2WEN2OD.js": "c84440e338775b9207f1a4fdea16275c7bfa715b",
     "/zzz.optimizer/chunk-TRN4MUWH.js": "7d03588ab33a5b3cab95461fa7e0ae45d4d9df13",
-    "/zzz.optimizer/chunk-UOBSMBEG.js": "77bb7e964f1180b5843664f52f07b10d08087cb8",
-    "/zzz.optimizer/chunk-VRQUNJFO.js": "bdf993c64a88e2b93a9404a716aab49a6c8d1e44",
+    "/zzz.optimizer/chunk-W42SL4MD.js": "c024ed58879a1ea378b7ff687d7620bb99d7d4a7",
+    "/zzz.optimizer/chunk-X5EI653G.js": "a45adaa2b6a481a33bdf297cfcd02af997431507",
+    "/zzz.optimizer/chunk-XKW6TBFP.js": "b234a97d7aa1b408854b85daf01af17769c9358d",
     "/zzz.optimizer/chunk-XXCPVLAB.js": "33a5c22eadf2f9985d79b65c6583ba059e4d2515",
-    "/zzz.optimizer/index.html": "923ba22ed107ee3f738aec9a75949f3d0183d044",
-    "/zzz.optimizer/main-EWWPVMST.js": "91159edda775d01a90ad35d8def62f1851e0b9fd",
+    "/zzz.optimizer/index.html": "9b5c2f0100cc5b661f621cf66d69e656b079597f",
+    "/zzz.optimizer/main-NW5UX5CL.js": "5b24f9366927b8c7c5d38a7c16a7d03ab4b91235",
     "/zzz.optimizer/manifest.webmanifest": "d132f06d9b371831df837443c9414c901762ba1c",
     "/zzz.optimizer/media/inpinhongmeti-3EIWCTD3.woff2": "6c4a472f28cf24037dc24c43ccf84605123ca76b",
     "/zzz.optimizer/media/inpinhongmeti-MNMT2SFW.ttf": "14b7eed7cb3d4b0adfd489c70830a4f1ef04ebea",
