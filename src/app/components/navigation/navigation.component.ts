@@ -1,6 +1,10 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { SwUpdateService } from '../../services/sw-update.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-navigation',
@@ -10,5 +14,46 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./navigation.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavigationComponent {
+export class NavigationComponent implements OnInit, OnDestroy {
+  showWhatsNewBadge = false;
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private swUpdateService: SwUpdateService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit(): void {
+    // Subscribe to update availability
+    this.swUpdateService.updateAvailable
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(available => {
+        if (available) {
+          // Show badge when update is available
+          this.showWhatsNewBadge = true;
+          this.cdr.markForCheck();
+        }
+      });
+
+    // Check if there's a new version the user hasn't seen yet
+    this.checkForUnseenVersion();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  /**
+   * Check if there's a new version that user hasn't visited What's New for
+   */
+  private checkForUnseenVersion(): void {
+    const currentVersion = environment.appVersion;
+    const lastViewedVersion = localStorage.getItem('last_viewed_version');
+
+    if (!lastViewedVersion || lastViewedVersion !== currentVersion) {
+      this.showWhatsNewBadge = true;
+      this.cdr.markForCheck();
+    }
+  }
 }

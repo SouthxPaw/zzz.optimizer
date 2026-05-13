@@ -1,0 +1,237 @@
+{
+  "versions": [
+    {
+      "version": "6.0.5",
+      "date": "2026-05-13",
+      "features": [
+        "Update notification system - get notified when new versions are available",
+        "Disc comparison functionality - compare equipped disc vs custom disc side-by-side"
+      ],
+      "fixes": [
+        "Fixed update button appearing on every refresh",
+        "Fixed default substat dropdown issues",
+        "Fixed preloading issues and UI element bugs",
+        "Fixed infinite loop with checkboxes on share images"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "5.12.x",
+      "date": "2026-04-23",
+      "features": [],
+      "fixes": [
+        "Fixed Mindscapes not applying on newer agents",
+        "Fixed Pulchra agent issues",
+        "Fixed Cissia buff values and stats",
+        "Fixed Nangong Yu breakpoints"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "5.8.x",
+      "date": "2026-03-26",
+      "features": [
+        "Artist credits on share images",
+        "Custom color picker for personalization"
+      ],
+      "fixes": [
+        "Fixed stat calculation bugs with conditionals",
+        "Fixed caching and version checking issues",
+        "Fixed mobile UI issues",
+        "Fixed W-Engine MP4 display issues",
+        "Fixed memory and service worker issues",
+        "Fixed Anomaly Mastery percentage display in UI"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "5.7.x",
+      "date": "2026-03-25",
+      "features": [
+        "Image customization for share build images",
+        "Add custom images to shared builds",
+        "Customizable substat marker colors"
+      ],
+      "fixes": [
+        "Fixed Aria stat breakpoints",
+        "Fixed share image consistency issues"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "5.6.x",
+      "date": "2026-03-24",
+      "features": [
+        "Agent passive system overhaul - improved conditional stat calculations",
+        "Preserve disc values when switching disc sets",
+        "Disc error checking and validation"
+      ],
+      "fixes": [
+        "Fixed disc scoring calculation discrepancies between input and loading",
+        "Fixed rounding issues with disc ratings",
+        "Fixed mindscape data bugs"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "4.x",
+      "date": "2026-03-04",
+      "features": [
+        "Auto-update checks for new versions"
+      ],
+      "fixes": [
+        "Fixed loading screen issues",
+        "Fixed 2-piece disc set effects not applying",
+        "Fixed manually editing discs after importing builds",
+        "Fixed disc animation on GitHub Pages",
+        "Fixed font rendering on GitHub Pages",
+        "Fixed mobile UID modal issues",
+        "Fixed Manato and Zhao stats",
+        "Fixed Zhao passive and mindscape",
+        "Fixed Alice passive bonus"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "3.x",
+      "date": "2026-02-07",
+      "features": [
+        "Toggle build/disc rating visibility on share images"
+      ],
+      "fixes": [
+        "Fixed caching issues",
+        "Fixed flat DEF not being counted in upgrade rolls",
+        "Fixed substat dropdown bugs",
+        "Fixed huge bug with manually entered discs"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "2.x",
+      "date": "2026-01-21",
+      "features": [
+        "Share button with downloadable build images",
+        "Substat breakdown card",
+        "New disc rating algorithm with multiple build paths"
+      ],
+      "fixes": [
+        "Fixed Jane stats and mindscape",
+        "Fixed Seed stats",
+        "Fixed Orphie energy regen"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "1.5.x",
+      "date": "2026-01-20",
+      "features": [
+        "Reworked disc scoring algorithm"
+      ],
+      "fixes": [
+        "Fixed multiple UI issues",
+        "Fixed disc toggle logic"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "1.4.x",
+      "date": "2026-01-18",
+      "features": [
+        "Backwards compatibility for build import/export"
+      ],
+      "fixes": [
+        "Fixed character base stats calculations",
+        "Fixed Anomaly W-Engines not calculating correctly",
+        "Fixed passive abilities missing or not calculating"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "1.3.x",
+      "date": "2026-01-17",
+      "features": [
+        "Damage calculations for overall build rating",
+        "Toggleable conditional stats for agent passives, W-Engines, and disc bonuses"
+      ],
+      "fixes": [
+        "Fixed disc 2-piece bonuses",
+        "Fixed passive and disc set calculations",
+        "Fixed stat addition toggles"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "1.2.x",
+      "date": "2026-01-15",
+      "features": [
+        "Agent stat weights for more accurate disc scoring"
+      ],
+      "fixes": [
+        "Fixed caching issue with damage calculations",
+        "Fixed discs not loading on initial load",
+        "Fixed mobile disc loading issues"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "1.1.x",
+      "date": "2026-01-14",
+      "features": [
+        "VOID HUNTER and LEGENDARY rating tiers added",
+        "Rank filters for Agents and W-Engines",
+        "How Scoring Works explanation section"
+      ],
+      "fixes": [
+        "Fixed Anomaly Mastery not counting percentages correctly",
+        "Fixed main stat changes on discs 4/5/6 not recalculating stats",
+        "Fixed mindscape level changes not triggering build score recalculation",
+        "Fixed base stats not loading correctly"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "1.0.x",
+      "date": "2026-01-13",
+      "features": [
+        "Keyboard shortcuts for navigation",
+        "Tooltips for better user guidance",
+        "Search function for disc effects",
+        "Loading animations"
+      ],
+      "fixes": [
+        "Fixed GitHub Pages deployment errors",
+        "Fixed disc rating/scoring algorithm",
+        "Fixed UI element functionality"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "1.0.0",
+      "date": "2026-01-12",
+      "features": [
+        "Build import/export functionality",
+        "Versioning system",
+        "4-piece disc set effects",
+        "W-Engine selection",
+        "Mindscape system",
+        "Disc optimization"
+      ],
+      "fixes": [
+        "Fixed agent breakpoint calculations"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-01-10",
+      "features": [
+        "Initial release of ZZZ Optimizer",
+        "Agent stat calculation",
+        "Disc management",
+        "Build creation"
+      ],
+      "fixes": [],
+      "improvements": []
+    }
+  ]
+}
