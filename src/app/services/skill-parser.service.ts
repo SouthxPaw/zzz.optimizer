@@ -30,12 +30,17 @@ export class SkillParserService {
 
   /**
    * Load and parse skill multipliers for all agents
+   * NOTE: Currently disabled as character skill files (assets/data/character/*.json) don't exist
+   * The app uses default multipliers instead (see getAgentMultiplier() below)
    */
   async loadSkillMultipliers(agentIds: string[]): Promise<void> {
     if (this.loaded) return;
 
-    const promises = agentIds.map(id => this.parseAgentSkills(id));
-    await Promise.allSettled(promises);
+    // DISABLED: Character skill files don't exist, causes 404 errors
+    // The app works fine with default multipliers
+    // If you want to re-enable this, create the assets/data/character/ folder with JSON files
+    // const promises = agentIds.map(id => this.parseAgentSkills(id));
+    // await Promise.allSettled(promises);
 
     this.loaded = true;
   }
