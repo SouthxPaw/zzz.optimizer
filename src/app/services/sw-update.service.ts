@@ -16,6 +16,7 @@ import { environment } from '../../environments/environment';
 export class SwUpdateService implements OnDestroy {
   private destroy$ = new Subject<void>();
   private readonly VERSION_KEY = 'app_version';
+  private readonly INSTALLED_TIMESTAMP_KEY = 'installed_ngsw_timestamp';
 
   // Observable to track if an update is available
   private updateAvailable$ = new BehaviorSubject<boolean>(false);
@@ -236,6 +237,10 @@ export class SwUpdateService implements OnDestroy {
         return true;
       } else {
         console.log('[SW Update] Already on latest version');
+
+        // Store the current timestamp so we have it for next check
+        localStorage.setItem(this.INSTALLED_TIMESTAMP_KEY, serverTimestamp.toString());
+
         return false;
       }
     } catch (err: any) {
@@ -251,11 +256,21 @@ export class SwUpdateService implements OnDestroy {
 
   /**
    * Get the timestamp of the currently installed Service Worker version
-   * This reads from the cached ngsw.json manifest
+   * This reads from localStorage first (most reliable), then falls back to cache lookup
    */
   private async getInstalledVersionTimestamp(): Promise<number | null> {
     try {
-      // Look for cached ngsw.json in Service Worker caches
+      // Strategy 0: Check localStorage first (most reliable)
+      const storedTimestamp = localStorage.getItem(this.INSTALLED_TIMESTAMP_KEY);
+      if (storedTimestamp) {
+        const timestamp = parseInt(storedTimestamp, 10);
+        if (!isNaN(timestamp)) {
+          console.log('[SW Update] Found installed timestamp in localStorage:', timestamp);
+          return timestamp;
+        }
+      }
+
+      // Strategy 1: Look for cached ngsw.json in Service Worker caches
       const cacheNames = await caches.keys();
 
       // Try multiple strategies to find the cached ngsw.json
@@ -263,7 +278,7 @@ export class SwUpdateService implements OnDestroy {
         if (cacheName.includes('ngsw:')) {
           const cache = await caches.open(cacheName);
 
-          // Strategy 1: Look for ngsw.json in cache keys
+          // Look for ngsw.json in cache keys
           const keys = await cache.keys();
           for (const request of keys) {
             if (request.url.includes('ngsw.json') && !request.url.includes('?')) {
@@ -273,6 +288,8 @@ export class SwUpdateService implements OnDestroy {
                   const manifest = await response.json();
                   if (manifest?.timestamp) {
                     console.log('[SW Update] Found cached manifest in:', cacheName);
+                    // Store it for next time
+                    localStorage.setItem(this.INSTALLED_TIMESTAMP_KEY, manifest.timestamp.toString());
                     return manifest.timestamp;
                   }
                 } catch {
@@ -295,6 +312,8 @@ export class SwUpdateService implements OnDestroy {
           const manifest = await cachedResponse.json();
           if (manifest?.timestamp) {
             console.log('[SW Update] Found manifest via direct cache match');
+            // Store it for next time
+            localStorage.setItem(this.INSTALLED_TIMESTAMP_KEY, manifest.timestamp.toString());
             return manifest.timestamp;
           }
         } catch {
@@ -336,6 +355,9 @@ export class SwUpdateService implements OnDestroy {
     console.log('[SW Update] Applying update - clearing caches and reloading');
 
     try {
+      // Clear the installed timestamp so next load will detect the new version
+      localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
+
       // Clear all caches before reloading to ensure fresh data
       const cacheNames = await caches.keys();
       await Promise.all(
