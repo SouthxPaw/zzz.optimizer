@@ -154,7 +154,8 @@ export class ScoringService {
         await this.skillParserService.loadSkillMultipliers(agentIds);
       }
     } catch (error) {
-      console.warn('Failed to load skill multipliers:', error);
+      // Silently ignore - skill multipliers are optional fallback data
+      // The app works fine without them
     }
   }
 
