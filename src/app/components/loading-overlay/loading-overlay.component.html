@@ -1,6 +1,8 @@
 <div class="loading-overlay" *ngIf="show">
   <div class="loading-content">
-    <img src="assets/data/images/page-icons/fairy-gif.gif" alt="Loading" class="fairy-icon">
+    <video autoplay loop muted playsinline class="bangboo-video">
+      <source src="assets/data/images/page-icons/bangbooloading.mp4" type="video/mp4">
+    </video>
     <div class="loading-text">{{ message }}</div>
   </div>
 </div>
