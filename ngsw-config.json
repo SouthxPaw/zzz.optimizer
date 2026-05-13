@@ -30,21 +30,20 @@
           "/**/*.(svg|cur|jpg|jpeg|apng|avif|gif|otf|ttf|woff|woff2)"
         ]
       }
+    },
+    {
+      "name": "wengine-videos",
+      "installMode": "lazy",
+      "updateMode": "lazy",
+      "resources": {
+        "files": [
+          "/assets/data/images/wengine-gifs/*.mp4",
+          "/assets/data/images/**/*.mp4"
+        ]
+      }
     }
   ],
   "dataGroups": [
-    {
-      "name": "wengine-videos",
-      "urls": [
-        "/assets/data/images/wengine-gifs/*.mp4"
-      ],
-      "cacheConfig": {
-        "maxSize": 1000,
-        "maxAge": "90d",
-        "timeout": "60s",
-        "strategy": "performance"
-      }
-    },
     {
       "name": "api-performance",
       "urls": [
