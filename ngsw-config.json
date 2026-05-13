@@ -34,6 +34,18 @@
   ],
   "dataGroups": [
     {
+      "name": "wengine-videos",
+      "urls": [
+        "/assets/data/images/wengine-gifs/*.mp4"
+      ],
+      "cacheConfig": {
+        "maxSize": 1000,
+        "maxAge": "90d",
+        "timeout": "60s",
+        "strategy": "performance"
+      }
+    },
+    {
       "name": "api-performance",
       "urls": [
         "https://api.hakush.in/**"
