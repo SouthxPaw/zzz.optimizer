@@ -257,9 +257,18 @@
                 (click)="openDiscEdit(slot)"
               >
                 <div class="disc-header">
-                  <span class="disc-slot-number">{{
-                    formatDiscSlot(slot)
-                  }}</span>
+                  <div class="disc-header-left">
+                    <span class="disc-slot-number">{{
+                      formatDiscSlot(slot)
+                    }}</span>
+                    <button
+                      class="compare-btn-inline"
+                      (click)="openCompareModal(slot, $event)"
+                      title="Compare disc"
+                    >
+                      <img src="assets/data/images/page-icons/left-and-right-arrows.png" alt="Compare" class="compare-icon">
+                    </button>
+                  </div>
                   <div class="disc-header-right">
                     <label class="disc-enable-checkbox" (click)="$event.stopPropagation()" title="Enable/Disable disc">
                       <input
@@ -1189,6 +1198,202 @@
     </div>
   </div>
   <!-- End Builds Tab -->
+
+  <!-- Compare Discs Modal -->
+  <div class="modal-overlay" *ngIf="showCompareModal" (click)="closeCompareModal()">
+    <div
+      class="modal-content compare-modal-content"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <h2>Compare Discs - {{ formatDiscSlot(compareDiscSlot!) }}</h2>
+        <button class="close-btn" (click)="closeCompareModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="comparison-grid">
+          <!-- Left Column: Current Disc -->
+          <div class="comparison-column">
+            <h3 class="comparison-column-title">Current Disc</h3>
+            <div class="disc-display" *ngIf="selectedBuild && compareDiscSlot">
+              <div class="disc-info-section">
+                <div class="disc-set-name">
+                  {{ selectedBuild.equippedDiscs[compareDiscSlot]!.set }}
+                  <img
+                    *ngIf="getDiscSetByName(selectedBuild.equippedDiscs[compareDiscSlot]!.set)?.icon"
+                    [src]="getDiscSetByName(selectedBuild.equippedDiscs[compareDiscSlot]!.set)!.icon"
+                    [alt]="selectedBuild.equippedDiscs[compareDiscSlot]!.set"
+                    class="disc-set-icon-inline"
+                    loading="lazy"
+                  />
+                </div>
+                <div
+                  *ngIf="getDiscScore(selectedBuild.equippedDiscs[compareDiscSlot]!) as discScore"
+                  class="disc-rating-badge"
+                  [ngClass]="getDiscRatingClass(discScore.rating)"
+                  [title]="discScore.rating.description"
+                >
+                  <span class="rating-grade">{{ discScore.rating.grade }}</span>
+                  <span class="rating-score">{{ discScore.score }}</span>
+                </div>
+              </div>
+
+              <div class="stat-display">
+                <div class="stat-row main-stat-row">
+                  <span class="stat-label">Main Stat:</span>
+                  <span class="stat-value">
+                    {{ formatStatType(selectedBuild.equippedDiscs[compareDiscSlot]!.mainStat.type) }}
+                    {{ selectedBuild.equippedDiscs[compareDiscSlot]!.mainStat.value }}
+                  </span>
+                </div>
+                <div class="stat-section">
+                  <div class="stat-label">Sub Stats:</div>
+                  <div
+                    *ngFor="let subStat of selectedBuild.equippedDiscs[compareDiscSlot]!.subStats; let i = index"
+                    class="stat-row substat-row"
+                  >
+                    <span class="substat-type">
+                      {{ formatStatType(subStat.type) }}
+                      <span class="roll-count" *ngIf="subStat.rolls && subStat.rolls > 1">+{{ subStat.rolls - 1 }}</span>
+                    </span>
+                    <span class="substat-value">{{ subStat.value }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Custom Disc Input -->
+          <div class="comparison-column">
+            <h3 class="comparison-column-title">Custom Disc</h3>
+            <div class="disc-input-form" *ngIf="compareCustomDisc">
+              <div class="disc-info-section">
+                <div class="disc-set-name">
+                  {{ compareCustomDisc.set }}
+                  <img
+                    *ngIf="compareCustomDisc.set && getDiscSetByName(compareCustomDisc.set)?.icon"
+                    [src]="getDiscSetByName(compareCustomDisc.set!)!.icon"
+                    [alt]="compareCustomDisc.set"
+                    class="disc-set-icon-inline"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="disc-info-right">
+                  <button
+                    class="btn-secondary btn-change-set"
+                    (click)="openCompareDiscPicker()"
+                    title="Change disc set"
+                  >
+                    Change Set
+                  </button>
+                  <div
+                    *ngIf="getCustomDiscScore() as customDiscScore"
+                    class="disc-rating-badge"
+                    [ngClass]="getDiscRatingClass(customDiscScore.rating)"
+                    [title]="customDiscScore.rating.description"
+                  >
+                    <span class="rating-grade">{{ customDiscScore.rating.grade }}</span>
+                    <span class="rating-score">{{ customDiscScore.score }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <label class="section-label">Main Stat:</label>
+                <div class="substat-row">
+                  <!-- Drive 1–3: fixed main stat TYPE -->
+                  <input
+                    *ngIf="compareDiscSlot === 'Drive1' || compareDiscSlot === 'Drive2' || compareDiscSlot === 'Drive3'"
+                    type="text"
+                    [value]="formatStatType(compareCustomDisc.mainStat!.type)"
+                    class="substat-type-select"
+                    readonly
+                    title="Main stat is fixed for this slot"
+                  />
+
+                  <!-- Drive 4–6: selectable main stat TYPE -->
+                  <select
+                    *ngIf="compareDiscSlot !== 'Drive1' && compareDiscSlot !== 'Drive2' && compareDiscSlot !== 'Drive3'"
+                    [value]="compareCustomDisc.mainStat?.type"
+                    (change)="onCompareMainStatTypeChange($any($event.target).value)"
+                    class="substat-type-select"
+                  >
+                    <option value="">Select main stat...</option>
+                    <option
+                      *ngFor="let stat of getMainStatOptionsForSlot()"
+                      [value]="stat"
+                    >
+                      {{ formatStatType(stat) }}
+                    </option>
+                  </select>
+
+                  <!-- Drive 1–3: fixed main stat VALUE (display only) -->
+                  <span
+                    class="main-stat-value"
+                    *ngIf="compareDiscSlot === 'Drive1' || compareDiscSlot === 'Drive2' || compareDiscSlot === 'Drive3'"
+                  >
+                    {{ getMainStatValueForSlot(compareDiscSlot!) }}
+                  </span>
+
+                  <!-- Drive 4–6: main stat VALUE (auto-calculated, display only) -->
+                  <span
+                    class="main-stat-value"
+                    *ngIf="compareDiscSlot !== 'Drive1' && compareDiscSlot !== 'Drive2' && compareDiscSlot !== 'Drive3' && compareCustomDisc.mainStat?.type"
+                  >
+                    {{ compareCustomDisc.mainStat?.value }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <label class="section-label">Sub Stats:</label>
+                <div class="substats-list">
+                  <div *ngFor="let i of [0, 1, 2, 3]" class="substat-row">
+                    <label class="substat-label">Substat {{ i + 1 }}:</label>
+                    <select
+                      [value]="compareCustomDisc.subStats?.[i]?.type || ''"
+                      (change)="updateCompareCustomDisc('subStat-' + i + '-type', $any($event.target).value)"
+                      class="substat-type-select"
+                    >
+                      <option value="">Select substat...</option>
+                      <option
+                        *ngFor="let statType of getAvailableCompareSubstatTypesForIndex(i)"
+                        [value]="statType.value"
+                        [class.priority]="isPrioritySubstat(statType.value)"
+                      >
+                        {{ statType.label }}
+                      </option>
+                    </select>
+                    <input
+                      type="number"
+                      [value]="compareCustomDisc.subStats?.[i]?.value || ''"
+                      (input)="updateCompareCustomDisc('subStat-' + i + '-value', $any($event.target).value)"
+                      placeholder="Value"
+                      class="substat-value-input"
+                      step="0.1"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="closeCompareModal()">
+            Close
+          </button>
+          <button
+            class="btn-primary"
+            (click)="replaceWithCustomDisc()"
+            [disabled]="!getCustomDiscScore()"
+            title="Replace current disc with custom disc"
+          >
+            Replace with Custom Disc
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Confirmation Dialog Modal -->
   <div
