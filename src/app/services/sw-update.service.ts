@@ -129,6 +129,18 @@ export class SwUpdateService implements OnDestroy {
       if (storedVersion && storedVersion !== currentVersion) {
         console.log(`[SW Update] Version changed from ${storedVersion} to ${currentVersion} - clearing all caches`);
 
+        // Clear the installed timestamp so next load will detect the new version
+        localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
+
+        // Unregister all service workers to ensure fresh install
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (const registration of registrations) {
+            await registration.unregister();
+            console.log('[SW Update] Unregistered service worker');
+          }
+        }
+
         // Clear all Service Worker caches (images, fonts, etc.)
         // NOTE: This does NOT affect IndexedDB (ZZZOptimizerDB) which contains:
         // - User's disc inventory (discs table)
@@ -161,6 +173,14 @@ export class SwUpdateService implements OnDestroy {
         });
 
         console.log('[SW Update] Cache clearing complete');
+
+        // Update stored version BEFORE reloading
+        localStorage.setItem(this.VERSION_KEY, currentVersion);
+
+        // Reload the page to get fresh service worker with new config
+        console.log('[SW Update] Reloading to activate new service worker...');
+        window.location.reload();
+        return; // Exit early since we're reloading
       }
 
       // Update stored version
@@ -412,6 +432,15 @@ export class SwUpdateService implements OnDestroy {
     try {
       // Clear the installed timestamp so next load will detect the new version
       localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
+
+      // Unregister all service workers to ensure fresh install
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const registration of registrations) {
+          await registration.unregister();
+          console.log('[SW Update] Unregistered service worker');
+        }
+      }
 
       // Clear all caches before reloading to ensure fresh data
       const cacheNames = await caches.keys();
