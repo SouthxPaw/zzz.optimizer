@@ -7,6 +7,7 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { FooterComponent } from './components/footer/footer.component';
 import { LoadingOverlayComponent } from './components/loading-overlay/loading-overlay.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { UpdateNotificationComponent } from './components/update-notification/update-notification.component';
 import { AppInitService } from './services/app-init.service';
 import { LoadingService } from './services/loading.service';
 import { SwUpdateService } from './services/sw-update.service';
@@ -14,7 +15,7 @@ import { SeoService } from './services/seo.service';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, NavigationComponent, FooterComponent, LoadingOverlayComponent, NotificationComponent],
+  imports: [CommonModule, RouterOutlet, NavigationComponent, FooterComponent, LoadingOverlayComponent, NotificationComponent, UpdateNotificationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
