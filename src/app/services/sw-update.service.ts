@@ -212,9 +212,16 @@ export class SwUpdateService implements OnDestroy {
       const installedTimestamp = await this.getInstalledVersionTimestamp();
 
       if (!installedTimestamp) {
-        console.log('[SW Update] Could not determine installed version, triggering check');
-        // Can't compare, let Angular try
-        return await this.swUpdate.checkForUpdate();
+        console.log('[SW Update] Could not determine installed version - assuming update needed');
+        console.log('[SW Update] 🎉 NEW VERSION DETECTED! Showing update notification...');
+
+        // Can't determine current version - safer to show update notification
+        // This handles first load or when cache lookup fails
+        this.updateAvailable$.next(true);
+
+        // Also trigger Angular's check in case it can detect the version
+        await this.swUpdate.checkForUpdate();
+        return true;
       }
 
       console.log('[SW Update] Installed version timestamp:', installedTimestamp);
