@@ -17,6 +17,7 @@ export class SwUpdateService implements OnDestroy {
   private destroy$ = new Subject<void>();
   private readonly VERSION_KEY = 'app_version';
   private readonly INSTALLED_TIMESTAMP_KEY = 'installed_ngsw_timestamp';
+  private readonly HARD_RELOAD_FLAG = 'sw_needs_hard_reload';
 
   // Observable to track if an update is available
   private updateAvailable$ = new BehaviorSubject<boolean>(false);
@@ -36,6 +37,16 @@ export class SwUpdateService implements OnDestroy {
    * Call this from app initialization
    */
   async init(): Promise<void> {
+    // FIRST: Check if we need to do a hard reload to clear broken service worker
+    const needsHardReload = localStorage.getItem(this.HARD_RELOAD_FLAG);
+    if (needsHardReload === 'true') {
+      console.log('[SW Update] Hard reload flag detected - performing hard reload...');
+      localStorage.removeItem(this.HARD_RELOAD_FLAG);
+      // Use href assignment to force a full navigation (like hard refresh)
+      window.location.href = window.location.href;
+      return; // Exit early since we're reloading
+    }
+
     // Check if app version has changed and clear caches if needed
     await this.checkVersionAndClearCaches();
 
@@ -173,6 +184,17 @@ export class SwUpdateService implements OnDestroy {
         });
 
         console.log('[SW Update] Cache clearing complete');
+
+        // Update stored version BEFORE reloading
+        localStorage.setItem(this.VERSION_KEY, currentVersion);
+
+        // Set flag to trigger hard reload on next load
+        localStorage.setItem(this.HARD_RELOAD_FLAG, 'true');
+
+        // Do a regular reload - the hard reload will happen on next init
+        console.log('[SW Update] Reloading to complete cleanup...');
+        window.location.reload();
+        return; // Exit early since we're reloading
       }
 
       // Update stored version
