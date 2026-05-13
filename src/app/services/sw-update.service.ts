@@ -161,6 +161,14 @@ export class SwUpdateService implements OnDestroy {
         });
 
         console.log('[SW Update] Cache clearing complete');
+
+        // Update stored version BEFORE reloading
+        localStorage.setItem(this.VERSION_KEY, currentVersion);
+
+        // Reload the page to get fresh service worker with new config
+        console.log('[SW Update] Reloading to activate new service worker...');
+        window.location.reload();
+        return; // Exit early since we're reloading
       }
 
       // Update stored version
