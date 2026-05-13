@@ -1,0 +1,170 @@
+.whats-new-page {
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: #eee;
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 {
+  color: #F4B942;
+  font-size: 2.5em;
+  margin: 0 0 40px 0;
+  text-align: center;
+}
+
+.intro {
+  color: #ccc;
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.changelog-section {
+  background: #151515;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  border: 1px solid #222;
+}
+
+.version-card {
+  background: #1a1a1a;
+  border: 2px solid #F4B942;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+}
+
+.version-card:hover {
+  box-shadow: 0 4px 12px rgba(244, 185, 66, 0.3);
+  transform: translateY(-2px);
+}
+
+.version-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #333;
+}
+
+.version-header h2 {
+  color: #F4B942;
+  font-size: 1.5em;
+  margin: 0;
+}
+
+.version-date {
+  color: #888;
+  font-size: 0.9em;
+}
+
+.changelog-category {
+  margin-bottom: 20px;
+}
+
+.changelog-category:last-child {
+  margin-bottom: 0;
+}
+
+.category-title {
+  color: #F4B942;
+  font-size: 1.1em;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.category-title.features {
+  color: #4ade80;
+}
+
+.category-title.fixes {
+  color: #f87171;
+}
+
+.category-title.improvements {
+  color: #60a5fa;
+}
+
+.changelog-category ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.changelog-category li {
+  color: #ccc;
+  padding: 8px 0 8px 24px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.changelog-category li::before {
+  content: '"';
+  position: absolute;
+  left: 8px;
+  color: #F4B942;
+  font-weight: bold;
+}
+
+.no-content {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.no-versions {
+  text-align: center;
+  padding: 40px 20px;
+  color: #888;
+}
+
+.loading-message,
+.error-message {
+  text-align: center;
+  padding: 40px 20px;
+  background: #151515;
+  border-radius: 12px;
+  border: 1px solid #222;
+}
+
+.error-message {
+  color: #f87171;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2em;
+  }
+
+  .version-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .version-date {
+    font-size: 0.85em;
+  }
+
+  .changelog-section {
+    padding: 20px;
+  }
+
+  .version-card {
+    padding: 15px;
+  }
+}
