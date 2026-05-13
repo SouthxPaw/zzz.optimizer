@@ -91,10 +91,36 @@ export class SwUpdateService implements OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(async evt => {
       if (evt.type === 'VERSION_READY') {
-        console.log('[SW Update] New version ready - showing update notification');
+        console.log('[SW Update] New version ready - unregistering old SW and reloading');
 
-        // Set observable to true to show update button
-        this.updateAvailable$.next(true);
+        // NUCLEAR OPTION: The old SW is so broken it won't get replaced properly
+        // Solution: Completely unregister it, clear all caches, and reload
+        // The page will load fresh without ANY service worker, then install the new one
+        try {
+          // Unregister ALL service workers
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (const registration of registrations) {
+            await registration.unregister();
+            console.log('[SW Update] Unregistered broken service worker');
+          }
+
+          // Clear ALL caches (including broken SW caches)
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map(name => caches.delete(name)));
+          console.log('[SW Update] Cleared all caches');
+
+          // Clear the installed timestamp so we start fresh
+          localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
+
+          // Reload - page will load WITHOUT a service worker
+          // Then Angular will install the NEW service worker on this fresh load
+          console.log('[SW Update] Reloading to get fresh service worker...');
+          window.location.reload();
+        } catch (err) {
+          console.error('[SW Update] Error during nuclear SW replacement:', err);
+          // Fall back to showing update button if something fails
+          this.updateAvailable$.next(true);
+        }
       }
     });
 
