@@ -12,6 +12,11 @@
         <img src="assets/data/images/page-icons/fairy.webp" alt="Data Manager" class="nav-icon" loading="lazy">
         <span>Data Manager</span>
       </a>
+      <a routerLink="/whats-new" routerLinkActive="active" class="nav-link">
+        <img src="assets/data/images/page-icons/eous.png" alt="What's New" class="nav-icon" loading="lazy">
+        <span>What's New</span>
+        <span *ngIf="showWhatsNewBadge" class="badge"></span>
+      </a>
       <a routerLink="/credits" routerLinkActive="active" class="nav-link">
         <img src="assets/data/images/page-icons/Achievement_Gold.webp" alt="Credits" class="nav-icon" loading="lazy">
         <span>Credits</span>
