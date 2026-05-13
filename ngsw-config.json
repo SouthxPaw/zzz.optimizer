@@ -33,6 +33,19 @@
   ],
   "dataGroups": [
     {
+      "name": "wengine-videos",
+      "urls": [
+        "https://southxpaw.github.io/zzz.optimizer/assets/data/images/**/*.mp4",
+        "/assets/data/images/**/*.mp4"
+      ],
+      "cacheConfig": {
+        "maxSize": 100,
+        "maxAge": "30d",
+        "timeout": "30s",
+        "strategy": "freshness"
+      }
+    },
+    {
       "name": "api-performance",
       "urls": [
         "https://api.hakush.in/**"
