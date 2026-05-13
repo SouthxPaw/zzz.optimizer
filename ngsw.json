@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1778704053941,
+  "timestamp": 1778704143291,
   "index": "/zzz.optimizer/index.html",
   "assetGroups": [
     {
@@ -253,6 +253,20 @@
     }
   ],
   "dataGroups": [
+    {
+      "name": "wengine-videos",
+      "patterns": [
+        "\\/assets\\/data\\/images\\/wengine-gifs\\/[^/]*\\.mp4"
+      ],
+      "strategy": "performance",
+      "maxSize": 200,
+      "maxAge": 7776000000,
+      "timeoutMs": 60000,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    },
     {
       "name": "api-performance",
       "patterns": [
