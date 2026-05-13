@@ -37,16 +37,6 @@ export class SwUpdateService implements OnDestroy {
    * Call this from app initialization
    */
   async init(): Promise<void> {
-    // FIRST: Check if we need to do a hard reload to clear broken service worker
-    const needsHardReload = localStorage.getItem(this.HARD_RELOAD_FLAG);
-    if (needsHardReload === 'true') {
-      console.log('[SW Update] Hard reload flag detected - performing hard reload...');
-      localStorage.removeItem(this.HARD_RELOAD_FLAG);
-      // Use href assignment to force a full navigation (like hard refresh)
-      window.location.href = window.location.href;
-      return; // Exit early since we're reloading
-    }
-
     // Check if app version has changed and clear caches if needed
     await this.checkVersionAndClearCaches();
 
@@ -138,33 +128,9 @@ export class SwUpdateService implements OnDestroy {
       const storedVersion = localStorage.getItem(this.VERSION_KEY);
 
       if (storedVersion && storedVersion !== currentVersion) {
-        console.log(`[SW Update] Version changed from ${storedVersion} to ${currentVersion} - clearing all caches`);
+        console.log(`[SW Update] Version changed from ${storedVersion} to ${currentVersion} - clearing non-SW caches`);
 
-        // Clear the installed timestamp so next load will detect the new version
-        localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
-
-        // Unregister all service workers to ensure fresh install
-        if ('serviceWorker' in navigator) {
-          const registrations = await navigator.serviceWorker.getRegistrations();
-          for (const registration of registrations) {
-            await registration.unregister();
-            console.log('[SW Update] Unregistered service worker');
-          }
-        }
-
-        // Clear all Service Worker caches (images, fonts, etc.)
-        // NOTE: This does NOT affect IndexedDB (ZZZOptimizerDB) which contains:
-        // - User's disc inventory (discs table)
-        // - Reference data (agents, wEngines, discSets) - will reload from fresh JSON
-        const cacheNames = await caches.keys();
-        await Promise.all(
-          cacheNames.map(cacheName => {
-            console.log('[SW Update] Deleting cache:', cacheName);
-            return caches.delete(cacheName);
-          })
-        );
-
-        // Clear localStorage except for USER DATA
+        // Clear localStorage except for USER DATA and SW-related keys
         // USER DATA TO PRESERVE:
         // - zzz-optimizer-builds: All user's character builds (agents + equipped gear)
         // - zzz-optimizer-upgrade-plans: User's custom upgrade plans
@@ -172,7 +138,9 @@ export class SwUpdateService implements OnDestroy {
         const keysToPreserve = [
           'zzz-optimizer-builds',
           'zzz-optimizer-upgrade-plans',
-          'zzz_uid_history'
+          'zzz_uid_history',
+          this.VERSION_KEY,
+          this.INSTALLED_TIMESTAMP_KEY
         ];
         const allKeys = Object.keys(localStorage);
         allKeys.forEach(key => {
@@ -184,17 +152,6 @@ export class SwUpdateService implements OnDestroy {
         });
 
         console.log('[SW Update] Cache clearing complete');
-
-        // Update stored version BEFORE reloading
-        localStorage.setItem(this.VERSION_KEY, currentVersion);
-
-        // Set flag to trigger hard reload on next load
-        localStorage.setItem(this.HARD_RELOAD_FLAG, 'true');
-
-        // Do a regular reload - the hard reload will happen on next init
-        console.log('[SW Update] Reloading to complete cleanup...');
-        window.location.reload();
-        return; // Exit early since we're reloading
       }
 
       // Update stored version

@@ -30,17 +30,6 @@
           "/**/*.(svg|cur|jpg|jpeg|apng|avif|gif|otf|ttf|woff|woff2)"
         ]
       }
-    },
-    {
-      "name": "wengine-videos",
-      "installMode": "lazy",
-      "updateMode": "lazy",
-      "resources": {
-        "files": [
-          "/assets/data/images/wengine-gifs/*.mp4",
-          "/assets/data/images/**/*.mp4"
-        ]
-      }
     }
   ],
   "dataGroups": [
