@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
 import { SwUpdateService } from '../../services/sw-update.service';
 import { environment } from '../../../environments/environment';
 
@@ -20,7 +20,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   constructor(
     private swUpdateService: SwUpdateService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +38,16 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     // Check if there's a new version the user hasn't seen yet
     this.checkForUnseenVersion();
+
+    // Re-check badge status after every navigation (e.g., after visiting What's New page)
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.checkForUnseenVersion();
+      });
   }
 
   ngOnDestroy(): void {
@@ -51,8 +62,11 @@ export class NavigationComponent implements OnInit, OnDestroy {
     const currentVersion = environment.appVersion;
     const lastViewedVersion = localStorage.getItem('last_viewed_version');
 
-    if (!lastViewedVersion || lastViewedVersion !== currentVersion) {
-      this.showWhatsNewBadge = true;
+    // Show badge if no version stored OR version doesn't match
+    const shouldShowBadge = !lastViewedVersion || lastViewedVersion !== currentVersion;
+
+    if (shouldShowBadge !== this.showWhatsNewBadge) {
+      this.showWhatsNewBadge = shouldShowBadge;
       this.cdr.markForCheck();
     }
   }

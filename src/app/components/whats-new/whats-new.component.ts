@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { versionedUrl } from '../../utils/versioned-url';
+import { environment } from '../../../environments/environment';
 
 interface ChangelogVersion {
   version: string;
@@ -37,10 +38,9 @@ export class WhatsNewComponent implements OnInit {
       this.changelog = data.versions;
       this.loading = false;
 
-      // Mark that user has viewed the latest version
-      if (this.changelog.length > 0) {
-        localStorage.setItem('last_viewed_version', this.changelog[0].version);
-      }
+      // Mark that user has viewed the current app version
+      // Use environment.appVersion to match what navigation checks against
+      localStorage.setItem('last_viewed_version', environment.appVersion);
     } catch (err) {
       console.error('Failed to load changelog:', err);
       this.error = true;
