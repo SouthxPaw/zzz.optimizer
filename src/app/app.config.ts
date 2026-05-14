@@ -12,8 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideRouter(routes),
     provideClientHydration(withEventReplay()), provideServiceWorker('ngsw-worker.js', {
-            enabled: false, // PHASE 1: Temporarily disabled for safety worker cleanup
-            // Register immediately for faster update detection
+            enabled: !isDevMode(),
             registrationStrategy: 'registerImmediately'
           })
   ]
