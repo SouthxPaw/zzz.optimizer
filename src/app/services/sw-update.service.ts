@@ -18,9 +18,14 @@ export class SwUpdateService implements OnDestroy {
   private readonly VERSION_KEY = 'app_version';
   private readonly INSTALLED_TIMESTAMP_KEY = 'installed_ngsw_timestamp';
   private readonly HARD_RELOAD_FLAG = 'sw_needs_hard_reload';
+  private readonly BROKEN_SW_TIMEOUT_MS = 10000; // 10 seconds
 
   // Observable to track if an update is available
   private updateAvailable$ = new BehaviorSubject<boolean>(false);
+
+  // Track if we're waiting for VERSION_READY
+  private waitingForVersionReady = false;
+  private versionReadyTimeout: any;
 
   // Public observable for components to subscribe to
   public get updateAvailable(): Observable<boolean> {
@@ -93,34 +98,17 @@ export class SwUpdateService implements OnDestroy {
       if (evt.type === 'VERSION_READY') {
         console.log('[SW Update] New version ready - unregistering old SW and reloading');
 
+        // Clear the timeout since VERSION_READY fired successfully
+        if (this.versionReadyTimeout) {
+          clearTimeout(this.versionReadyTimeout);
+          this.versionReadyTimeout = null;
+        }
+        this.waitingForVersionReady = false;
+
         // NUCLEAR OPTION: The old SW is so broken it won't get replaced properly
         // Solution: Completely unregister it, clear all caches, and reload
         // The page will load fresh without ANY service worker, then install the new one
-        try {
-          // Unregister ALL service workers
-          const registrations = await navigator.serviceWorker.getRegistrations();
-          for (const registration of registrations) {
-            await registration.unregister();
-            console.log('[SW Update] Unregistered broken service worker');
-          }
-
-          // Clear ALL caches (including broken SW caches)
-          const cacheNames = await caches.keys();
-          await Promise.all(cacheNames.map(name => caches.delete(name)));
-          console.log('[SW Update] Cleared all caches');
-
-          // Clear the installed timestamp so we start fresh
-          localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
-
-          // Reload - page will load WITHOUT a service worker
-          // Then Angular will install the NEW service worker on this fresh load
-          console.log('[SW Update] Reloading to get fresh service worker...');
-          window.location.reload();
-        } catch (err) {
-          console.error('[SW Update] Error during nuclear SW replacement:', err);
-          // Fall back to showing update button if something fails
-          this.updateAvailable$.next(true);
-        }
+        await this.forceNuclearSwReplacement();
       }
     });
 
@@ -258,6 +246,22 @@ export class SwUpdateService implements OnDestroy {
         // Angular will automatically call skipWaiting() during install phase
         // The update button will appear when VERSION_READY event is emitted (not here!)
         await this.swUpdate.checkForUpdate();
+
+        // Set flag that we're waiting for VERSION_READY
+        if (!this.waitingForVersionReady) {
+          this.waitingForVersionReady = true;
+
+          // Start timeout - if VERSION_READY doesn't fire within 10 seconds,
+          // the SW is probably broken and can't update itself
+          console.log(`[SW Update] Starting ${this.BROKEN_SW_TIMEOUT_MS}ms timeout for VERSION_READY`);
+          this.versionReadyTimeout = setTimeout(async () => {
+            if (this.waitingForVersionReady) {
+              console.error('[SW Update] ⚠️ VERSION_READY never fired - SW is broken and cannot update itself');
+              console.log('[SW Update] Forcing nuclear SW replacement...');
+              await this.forceNuclearSwReplacement();
+            }
+          }, this.BROKEN_SW_TIMEOUT_MS);
+        }
 
         // Return true to indicate update was found
         // Note: updateAvailable$ will be set by VERSION_READY listener when SW is ready
@@ -422,6 +426,47 @@ export class SwUpdateService implements OnDestroy {
   markServiceWorkerAsBroken(): void {
     localStorage.setItem('broken_sw_detected', 'true');
     console.log('[SW Update] Service worker marked as broken - will unregister on next load');
+  }
+
+  /**
+   * Force nuclear SW replacement
+   * Completely unregisters all SWs, clears all caches, and reloads
+   */
+  private async forceNuclearSwReplacement(): Promise<void> {
+    try {
+      console.log('[SW Update] 💥 NUCLEAR OPTION: Unregistering all SWs and clearing all caches');
+
+      // Clear timeout and flag
+      if (this.versionReadyTimeout) {
+        clearTimeout(this.versionReadyTimeout);
+        this.versionReadyTimeout = null;
+      }
+      this.waitingForVersionReady = false;
+
+      // Unregister ALL service workers
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const registration of registrations) {
+        await registration.unregister();
+        console.log('[SW Update] ✓ Unregistered service worker');
+      }
+
+      // Clear ALL caches (including broken SW caches)
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map(name => caches.delete(name)));
+      console.log('[SW Update] ✓ Cleared all caches');
+
+      // Clear the installed timestamp so we start fresh
+      localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
+
+      // Reload - page will load WITHOUT a service worker
+      // Then Angular will install the NEW service worker on this fresh load
+      console.log('[SW Update] ✓ Reloading to get fresh service worker...');
+      window.location.reload();
+    } catch (err) {
+      console.error('[SW Update] ❌ Error during nuclear SW replacement:', err);
+      // Still try to reload even if something failed
+      window.location.reload();
+    }
   }
 
   /**
