@@ -1,6 +1,19 @@
 {
   "versions": [
     {
+      "version": "6.1.24",
+      "date": "2026-05-14",
+      "features": [],
+      "fixes": [
+        "Service worker maintenance in progress - fixing MP4 loading issues and update notification system"
+      ],
+      "improvements": [
+        "Phase 1 (May 14-16): Temporary service worker cleanup to fix broken states",
+        "Phase 2 (May 16+): Full service worker restoration with permanent MP4 fix",
+        "Update notifications will be temporarily unavailable during cleanup (48 hours)"
+      ]
+    },
+    {
       "version": "6.1.9",
       "date": "2026-05-13",
       "features": [
