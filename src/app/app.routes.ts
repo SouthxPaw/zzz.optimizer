@@ -11,6 +11,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/data-manager/data-manager.component').then(m => m.DataManagerComponent)
   },
   {
+    path: 'whats-new',
+    loadComponent: () => import('./components/whats-new/whats-new.component').then(m => m.WhatsNewComponent)
+  },
+  {
     path: 'credits',
     loadComponent: () => import('./components/credits/credits.component').then(m => m.CreditsComponent)
   },

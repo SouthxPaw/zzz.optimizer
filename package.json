@@ -1,12 +1,13 @@
 {
   "name": "zzz.optimizer",
-  "version": "5.12.89",
+  "version": "6.2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "build:ghpages": "ng build --configuration=github-pages",
     "deploy:ghpages": "npm run build:ghpages && npx angular-cli-ghpages --dir=dist/zzz.optimizer/browser --no-silent",
+    "deploy:cleanup": "npm run build:ghpages && node -e \"require('fs').copyFileSync('dist/zzz.optimizer/browser/safety-worker.js', 'dist/zzz.optimizer/browser/ngsw-worker.js')\" && npx angular-cli-ghpages --dir=dist/zzz.optimizer/browser --no-silent",
     "watch": "ng build --watch --configuration=development",
     "test": "ng test"
   },

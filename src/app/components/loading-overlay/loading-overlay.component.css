@@ -71,9 +71,10 @@
   }
 }
 
-.fairy-icon {
-  width: 120px;
-  height: 120px;
+.bangboo-video {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
   animation: float 2s ease-in-out infinite;
   filter: drop-shadow(0 0 20px rgba(244, 185, 66, 0.6));
 }

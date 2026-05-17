@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { versionedUrl } from '../utils/versioned-url';
+import { environment } from '../../environments/environment';
 
 /**
  * Service to parse agent skill multipliers from character JSON files
@@ -29,12 +30,17 @@ export class SkillParserService {
 
   /**
    * Load and parse skill multipliers for all agents
+   * NOTE: Currently disabled as character skill files (assets/data/character/*.json) don't exist
+   * The app uses default multipliers instead (see getAgentMultiplier() below)
    */
   async loadSkillMultipliers(agentIds: string[]): Promise<void> {
     if (this.loaded) return;
 
-    const promises = agentIds.map(id => this.parseAgentSkills(id));
-    await Promise.allSettled(promises);
+    // DISABLED: Character skill files don't exist, causes 404 errors
+    // The app works fine with default multipliers
+    // If you want to re-enable this, create the assets/data/character/ folder with JSON files
+    // const promises = agentIds.map(id => this.parseAgentSkills(id));
+    // await Promise.allSettled(promises);
 
     this.loaded = true;
   }
@@ -83,7 +89,11 @@ export class SkillParserService {
       };
 
     } catch (error) {
-      console.warn(`Failed to parse skills for agent ${agentId}:`, error);
+      // Silently ignore - character skill files are optional and not currently used
+      // Only log in development mode for debugging
+      if (!environment.production) {
+        console.debug(`Skill data not found for agent ${agentId} (optional)`);
+      }
     }
   }
 

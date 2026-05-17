@@ -84147,5 +84147,93 @@
     },
     "potentials": [],
     "Icon": "NangongYu"
+  },
+  {
+    "id": 1521,
+    "name": "Cissia",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "18",
+          "format": "%"
+        },
+        {
+          "type": "CRITDMGBonus",
+          "value": "55",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 203,
+      "name": "Electric"
+    },
+    "specialty": {
+      "id": 1,
+      "name": "Anomaly"
+    },
+    "lvl60_stats": {
+      "HpMax": 7673,
+      "Defence": 606,
+      "Attack": 913,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 93,
+      "ElementAbnormalPower": 94,
+      "ElementMystery": 93,
+      "SpBarPoint": 156
+    },
+    "potentials": [],
+    "Icon": "Cissia"
+  },
+  {
+    "id": 1541,
+    "name": "Promeia",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "anomalyMastery",
+            "threshold": 150,
+            "ratio": 1.5
+          }
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 202,
+      "name": "Ice"
+    },
+    "specialty": {
+      "id": 3,
+      "name": "Anomaly"
+    },
+    "lvl60_stats": {
+      "HpMax": 7788,
+      "Defence": 612,
+      "Attack": 872,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 86,
+      "ElementAbnormalPower": 148,
+      "ElementMystery": 114,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "Promeia"
   }
 ]
