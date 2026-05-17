@@ -53,12 +53,6 @@ export class SwUpdateService implements OnDestroy {
       return;
     }
 
-    // Perform immediate update check on app load
-    console.log('[SW Update] Performing immediate update check on app initialization');
-    this.bustCacheAndCheckForUpdate().catch(err => {
-      console.error('[SW Update] Initial update check failed:', err);
-    });
-
     // Check for updates when app becomes stable
     const appIsStable$ = this.appRef.isStable.pipe(
       first(isStable => isStable === true)
