@@ -161,7 +161,7 @@ export class SwUpdateService implements OnDestroy {
           await this.forceNuclearSwReplacement();
         }
       } else if (evt.type === 'NO_NEW_VERSION_DETECTED') {
-        console.log('[SW Update] No new version detected - clearing update notification if shown');
+        console.log('[SW Update] No new version detected');
 
         // Clear timeout if running
         if (this.versionReadyTimeout) {
@@ -171,8 +171,11 @@ export class SwUpdateService implements OnDestroy {
         this.waitingForVersionReady = false;
         this.expectingVersionReady = false; // Reset flag
 
-        // Hide update button if it was shown by mistake
-        this.updateAvailable$.next(false);
+        // Don't clear the button - if it's showing, user has a legitimate update
+        // If button shouldn't be showing, it won't be (because VERSION_READY was ignored)
+        // NO_NEW_VERSION_DETECTED can fire for various reasons (periodic checks, etc)
+        // and shouldn't interfere with a valid update notification
+        console.log('[SW Update] Not clearing update button (if showing, it\'s legitimate)');
       }
     });
 
