@@ -13,7 +13,7 @@
         "Service worker fully restored with MP4 bypass protection",
         "Update notifications re-enabled and working correctly",
         "All W-Engine MP4s now load reliably without caching conflicts",
-        "Implemented Angular's official safety worker cleanup for existing users"
+        "Implemented official safety worker cleanup for existing users"
       ]
     },
     {
