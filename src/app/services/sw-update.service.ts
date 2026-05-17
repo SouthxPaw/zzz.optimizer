@@ -31,8 +31,8 @@ export class SwUpdateService implements OnDestroy {
   private updateRetryCount = 0;
   private readonly MAX_UPDATE_RETRIES = 3;
 
-  // Debounce timer to prevent update button flash on page refresh
-  private updateButtonDebounceTimeout: any;
+  // Track whether we're expecting a VERSION_READY from an intentional update check
+  private expectingVersionReady = false;
 
   // Public observable for components to subscribe to
   public get updateAvailable(): Observable<boolean> {
@@ -97,6 +97,13 @@ export class SwUpdateService implements OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(async evt => {
       if (evt.type === 'VERSION_READY') {
+        // Only show update button if we're expecting this from an intentional update check
+        // This prevents the button from showing on page refresh/SW activation
+        if (!this.expectingVersionReady) {
+          console.log('[SW Update] VERSION_READY received but not from intentional check - ignoring');
+          return;
+        }
+
         console.log('[SW Update] New version ready - showing update notification');
 
         // Clear the timeout since VERSION_READY fired successfully
@@ -105,6 +112,7 @@ export class SwUpdateService implements OnDestroy {
           this.versionReadyTimeout = null;
         }
         this.waitingForVersionReady = false;
+        this.expectingVersionReady = false; // Reset flag
 
         // Reset retry count on success
         this.updateRetryCount = 0;
@@ -124,11 +132,8 @@ export class SwUpdateService implements OnDestroy {
           console.warn('[SW Update] Could not update installed timestamp:', err);
         }
 
-        // Debounce showing the update button to prevent flash on page refresh
-        // If NO_NEW_VERSION_DETECTED fires within 500ms, this will be cancelled
-        this.updateButtonDebounceTimeout = setTimeout(() => {
-          this.updateAvailable$.next(true);
-        }, 500);
+        // Show update button immediately (no debounce needed since we know this is intentional)
+        this.updateAvailable$.next(true);
       } else if (evt.type === 'VERSION_INSTALLATION_FAILED') {
         console.warn('[SW Update] Installation failed (likely GitHub Pages CDN cache issue):', evt.error);
 
@@ -162,12 +167,7 @@ export class SwUpdateService implements OnDestroy {
           this.versionReadyTimeout = null;
         }
         this.waitingForVersionReady = false;
-
-        // Cancel debounced update button show (prevents flash on page refresh)
-        if (this.updateButtonDebounceTimeout) {
-          clearTimeout(this.updateButtonDebounceTimeout);
-          this.updateButtonDebounceTimeout = null;
-        }
+        this.expectingVersionReady = false; // Reset flag
 
         // Hide update button if it was shown by mistake
         this.updateAvailable$.next(false);
@@ -304,6 +304,9 @@ export class SwUpdateService implements OnDestroy {
         console.log('[SW Update] 🎉 NEW VERSION DETECTED! Triggering download...');
         console.log('[SW Update] Server is newer:', serverTimestamp, 'vs', installedTimestamp);
 
+        // Set flag that we're expecting VERSION_READY from THIS intentional check
+        this.expectingVersionReady = true;
+
         // Trigger Angular's SW update check to download and activate the new version
         // Angular will automatically call skipWaiting() during install phase
         // The update button will appear when VERSION_READY event is emitted (not here!)
@@ -313,7 +316,7 @@ export class SwUpdateService implements OnDestroy {
         if (!this.waitingForVersionReady) {
           this.waitingForVersionReady = true;
 
-          // Start timeout - if VERSION_READY doesn't fire within 10 seconds,
+          // Start timeout - if VERSION_READY doesn't fire within 60 seconds,
           // the SW is probably broken and can't update itself
           console.log(`[SW Update] Starting ${this.BROKEN_SW_TIMEOUT_MS}ms timeout for VERSION_READY`);
           this.versionReadyTimeout = setTimeout(async () => {
