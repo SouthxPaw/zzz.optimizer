@@ -96,7 +96,7 @@ export class SwUpdateService implements OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(async evt => {
       if (evt.type === 'VERSION_READY') {
-        console.log('[SW Update] New version ready - unregistering old SW and reloading');
+        console.log('[SW Update] New version ready - showing update notification');
 
         // Clear the timeout since VERSION_READY fired successfully
         if (this.versionReadyTimeout) {
@@ -105,10 +105,23 @@ export class SwUpdateService implements OnDestroy {
         }
         this.waitingForVersionReady = false;
 
-        // NUCLEAR OPTION: The old SW is so broken it won't get replaced properly
-        // Solution: Completely unregister it, clear all caches, and reload
-        // The page will load fresh without ANY service worker, then install the new one
-        await this.forceNuclearSwReplacement();
+        // Show the update button to let user reload when ready
+        // Store the new timestamp so we know this version is installed
+        const baseUrl = document.baseURI || window.location.origin + window.location.pathname;
+        const ngswUrl = new URL('ngsw.json', baseUrl).href + `?v=${Date.now()}`;
+
+        try {
+          const response = await fetch(ngswUrl, { cache: 'no-store' });
+          const manifest = await response.json();
+          if (manifest?.timestamp) {
+            localStorage.setItem(this.INSTALLED_TIMESTAMP_KEY, manifest.timestamp.toString());
+          }
+        } catch (err) {
+          console.warn('[SW Update] Could not update installed timestamp:', err);
+        }
+
+        // Set observable to show update button
+        this.updateAvailable$.next(true);
       }
     });
 
