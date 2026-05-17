@@ -62,17 +62,17 @@ export class SwUpdateService implements OnDestroy {
       first(isStable => isStable === true)
     );
 
-    // Check for updates every 15 minutes after app is stable (for testing)
-    const every15Minutes$ = interval(15 * 60 * 1000);
-    const every15MinutesOnceAppIsStable$ = concat(appIsStable$, every15Minutes$);
+    // Check for updates every 30 minutes after app is stable
+    const every30Minutes$ = interval(30 * 60 * 1000);
+    const every30MinutesOnceAppIsStable$ = concat(appIsStable$, every30Minutes$);
 
     // Subscribe to update checks
-    every15MinutesOnceAppIsStable$.pipe(
+    every30MinutesOnceAppIsStable$.pipe(
       takeUntil(this.destroy$),
       switchMap(() => {
         // Check for new version by comparing server and installed timestamps
         const timestamp = new Date().toLocaleTimeString();
-        console.log(`[SW Update] ${timestamp} - Update check triggered (15min interval)`);
+        console.log(`[SW Update] ${timestamp} - Update check triggered (30min interval)`);
         return this.bustCacheAndCheckForUpdate();
       })
     ).subscribe({
@@ -89,12 +89,10 @@ export class SwUpdateService implements OnDestroy {
       }
     });
 
-    // Listen for ALL version events to debug what's happening
+    // Listen for version update events
     this.swUpdate.versionUpdates.pipe(
       takeUntil(this.destroy$)
     ).subscribe(async evt => {
-      console.log('[SW Update] Version event received:', evt.type, evt);
-
       if (evt.type === 'VERSION_READY') {
         console.log('[SW Update] New version ready - showing update notification');
 
