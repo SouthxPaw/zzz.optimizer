@@ -39,7 +39,14 @@ export class LoadingOverlayComponent implements AfterViewInit {
     // Use setTimeout to ensure DOM is ready
     setTimeout(() => {
       if (this.bangbooVideo?.nativeElement) {
-        this.bangbooVideo.nativeElement.play().catch(err => {
+        const video = this.bangbooVideo.nativeElement;
+
+        // Explicitly set muted to true BEFORE calling play
+        // This is critical for browser autoplay policies
+        video.muted = true;
+        video.setAttribute('muted', 'true');
+
+        video.play().catch(err => {
           // Autoplay failed - this is expected in some browsers/contexts
           console.warn('[Loading Overlay] Video autoplay blocked:', err);
         });
