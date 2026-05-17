@@ -85,10 +85,12 @@ export class SwUpdateService implements OnDestroy {
       }
     });
 
-    // Listen for version ready events and notify user
+    // Listen for ALL version events to debug what's happening
     this.swUpdate.versionUpdates.pipe(
       takeUntil(this.destroy$)
     ).subscribe(async evt => {
+      console.log('[SW Update] Version event received:', evt.type, evt);
+
       if (evt.type === 'VERSION_READY') {
         console.log('[SW Update] New version ready - showing update notification');
 
