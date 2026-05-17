@@ -3424,7 +3424,8 @@ async generateShareImage() {
       const fileName = iconPath.split('/').pop()?.replace(/\.(webp|png)$/, '') || '';
 
       if (fileName) {
-        return `assets/data/images/wengine-gifs/${fileName}.mp4`;
+        // Add ngsw-bypass query parameter to prevent service worker from caching MP4s
+        return `assets/data/images/wengine-gifs/${fileName}.mp4?ngsw-bypass=true`;
       }
     }
 

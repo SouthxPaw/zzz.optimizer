@@ -54,7 +54,8 @@
                   "inlineCritical": true
                 },
                 "fonts": true
-              }
+              },
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
@@ -66,6 +67,7 @@
               "baseHref": "/zzz.optimizer/",
               "outputHashing": "all",
               "optimization": true,
+              "serviceWorker": "ngsw-config.json",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

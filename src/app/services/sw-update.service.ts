@@ -64,17 +64,17 @@ export class SwUpdateService implements OnDestroy {
       first(isStable => isStable === true)
     );
 
-    // Check for updates every hour after app is stable
-    const everyHour$ = interval(60 * 60 * 1000);
-    const everyHourOnceAppIsStable$ = concat(appIsStable$, everyHour$);
+    // Check for updates every 15 minutes after app is stable (for testing)
+    const every15Minutes$ = interval(15 * 60 * 1000);
+    const every15MinutesOnceAppIsStable$ = concat(appIsStable$, every15Minutes$);
 
-    // Subscribe to hourly update checks
-    everyHourOnceAppIsStable$.pipe(
+    // Subscribe to update checks
+    every15MinutesOnceAppIsStable$.pipe(
       takeUntil(this.destroy$),
       switchMap(() => {
         // Check for new version by comparing server and installed timestamps
         const timestamp = new Date().toLocaleTimeString();
-        console.log(`[SW Update] ${timestamp} - Hourly update check triggered`);
+        console.log(`[SW Update] ${timestamp} - Update check triggered (15min interval)`);
         return this.bustCacheAndCheckForUpdate();
       })
     ).subscribe({

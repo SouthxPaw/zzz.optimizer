@@ -1,6 +1,22 @@
 {
   "versions": [
     {
+      "version": "6.1.26",
+      "date": "2026-05-16",
+      "features": [],
+      "fixes": [
+        "Permanently fixed MP4 W-Engine loading issues with service worker bypass",
+        "Fixed service worker update detection and notification system",
+        "Resolved broken service worker states from previous versions"
+      ],
+      "improvements": [
+        "Service worker fully restored with MP4 bypass protection",
+        "Update notifications re-enabled and working correctly",
+        "All W-Engine MP4s now load reliably without caching conflicts",
+        "Implemented Angular's official safety worker cleanup for existing users"
+      ]
+    },
+    {
       "version": "6.1.24",
       "date": "2026-05-14",
       "features": [],
