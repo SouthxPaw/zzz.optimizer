@@ -1,6 +1,17 @@
 {
   "versions": [
     {
+      "version": "6.1.50",
+      "date": "2026-05-17",
+      "features": [],
+      "fixes": [
+        "Fixed update notification button appearing on manual page refresh"
+      ],
+      "improvements": [
+        "Update button now only appears during 30-minute background checks when new version is detected"
+      ]
+    },
+    {
       "version": "6.1.27",
       "date": "2026-05-16",
       "features": [],

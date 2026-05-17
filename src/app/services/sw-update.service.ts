@@ -1,13 +1,13 @@
 // services/sw-update.service.ts
 import { Injectable, ApplicationRef, OnDestroy } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { concat, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
+import { interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { first, takeUntil, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 /**
  * Service Worker Update Service
- * Handles automatic updates with hourly checks
+ * Handles automatic updates with 30-minute background checks
  * Shows update notification button instead of auto-reloading
  */
 @Injectable({
@@ -67,7 +67,8 @@ export class SwUpdateService implements OnDestroy {
     appIsStable$.pipe(
       takeUntil(this.destroy$),
       switchMap(() => {
-        console.log('[SW Update] App is stable - starting 30-minute update check interval');
+        const timestamp = new Date().toLocaleTimeString();
+        console.log(`[SW Update] ${timestamp} - App is stable - starting 30-minute update check interval`);
         // Only start the interval, don't check immediately on page load
         return interval(30 * 60 * 1000);
       }),
