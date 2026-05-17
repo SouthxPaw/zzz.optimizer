@@ -1,7 +1,12 @@
 <div class="loading-overlay" *ngIf="show">
   <div class="loading-content">
-    <video autoplay loop muted playsinline class="bangboo-video">
-      <source src="assets/data/images/page-icons/bangbooloading.mp4?ngsw-bypass=true" type="video/mp4">
+    <video
+      src="assets/data/images/page-icons/bangbooloading.mp4?ngsw-bypass=true"
+      autoplay
+      loop
+      muted
+      playsinline
+      class="bangboo-video">
     </video>
     <div class="loading-text">{{ message }}</div>
   </div>
