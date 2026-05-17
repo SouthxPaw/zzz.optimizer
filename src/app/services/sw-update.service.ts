@@ -149,6 +149,18 @@ export class SwUpdateService implements OnDestroy {
           this.updateRetryCount = 0; // Reset for next time
           await this.forceNuclearSwReplacement();
         }
+      } else if (evt.type === 'NO_NEW_VERSION_DETECTED') {
+        console.log('[SW Update] No new version detected - clearing update notification if shown');
+
+        // Clear timeout if running
+        if (this.versionReadyTimeout) {
+          clearTimeout(this.versionReadyTimeout);
+          this.versionReadyTimeout = null;
+        }
+        this.waitingForVersionReady = false;
+
+        // Hide update button if it was shown by mistake
+        this.updateAvailable$.next(false);
       }
     });
 
