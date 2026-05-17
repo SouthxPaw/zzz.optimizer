@@ -551,6 +551,9 @@ export class SwUpdateService implements OnDestroy {
       // Clear the installed timestamp so next load will pick up the new version
       localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
 
+      // Reset the flag so VERSION_READY on next page load won't show button
+      this.expectingVersionReady = false;
+
       // NOTE: We don't unregister the service worker here because we already
       // activated the new one when we detected the update. We just need to reload
       // to start using it.
