@@ -310,12 +310,7 @@ export class SwUpdateService implements OnDestroy {
         console.log('[SW Update] Setting expectingVersionReady = true');
         this.expectingVersionReady = true;
 
-        // Trigger Angular's SW update check to download and activate the new version
-        // Angular will automatically call skipWaiting() during install phase
-        // The update button will appear when VERSION_READY event is emitted (not here!)
-        await this.swUpdate.checkForUpdate();
-
-        // Set flag that we're waiting for VERSION_READY
+        // Set flag and timeout BEFORE calling checkForUpdate (since VERSION_READY fires immediately)
         if (!this.waitingForVersionReady) {
           this.waitingForVersionReady = true;
 
@@ -330,6 +325,11 @@ export class SwUpdateService implements OnDestroy {
             }
           }, this.BROKEN_SW_TIMEOUT_MS);
         }
+
+        // Trigger Angular's SW update check to download and activate the new version
+        // Angular will automatically call skipWaiting() during install phase
+        // The update button will appear when VERSION_READY event is emitted (not here!)
+        await this.swUpdate.checkForUpdate();
 
         // Return true to indicate update was found
         // Note: updateAvailable$ will be set by VERSION_READY listener when SW is ready
