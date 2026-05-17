@@ -27,6 +27,10 @@ export class SwUpdateService implements OnDestroy {
   private waitingForVersionReady = false;
   private versionReadyTimeout: any;
 
+  // Track update retry attempts for hash mismatch issues
+  private updateRetryCount = 0;
+  private readonly MAX_UPDATE_RETRIES = 3;
+
   // Public observable for components to subscribe to
   public get updateAvailable(): Observable<boolean> {
     return this.updateAvailable$.asObservable();
@@ -101,6 +105,9 @@ export class SwUpdateService implements OnDestroy {
         }
         this.waitingForVersionReady = false;
 
+        // Reset retry count on success
+        this.updateRetryCount = 0;
+
         // Show the update button to let user reload when ready
         // Store the new timestamp so we know this version is installed
         const baseUrl = document.baseURI || window.location.origin + window.location.pathname;
@@ -118,6 +125,30 @@ export class SwUpdateService implements OnDestroy {
 
         // Set observable to show update button
         this.updateAvailable$.next(true);
+      } else if (evt.type === 'VERSION_INSTALLATION_FAILED') {
+        console.warn('[SW Update] Installation failed (likely GitHub Pages CDN cache issue):', evt.error);
+
+        // Clear timeout since we got a response (even if failed)
+        if (this.versionReadyTimeout) {
+          clearTimeout(this.versionReadyTimeout);
+          this.versionReadyTimeout = null;
+        }
+        this.waitingForVersionReady = false;
+
+        // Retry after delay to give GitHub Pages CDN time to propagate all files
+        if (this.updateRetryCount < this.MAX_UPDATE_RETRIES) {
+          this.updateRetryCount++;
+          console.log(`[SW Update] Retrying in 10 seconds (attempt ${this.updateRetryCount}/${this.MAX_UPDATE_RETRIES})...`);
+
+          setTimeout(() => {
+            console.log('[SW Update] Retry attempt starting now');
+            this.bustCacheAndCheckForUpdate();
+          }, 10000);
+        } else {
+          console.error('[SW Update] Max retries reached - forcing nuclear SW replacement');
+          this.updateRetryCount = 0; // Reset for next time
+          await this.forceNuclearSwReplacement();
+        }
       }
     });
 
