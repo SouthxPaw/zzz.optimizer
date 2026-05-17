@@ -18,7 +18,7 @@ export class SwUpdateService implements OnDestroy {
   private readonly VERSION_KEY = 'app_version';
   private readonly INSTALLED_TIMESTAMP_KEY = 'installed_ngsw_timestamp';
   private readonly HARD_RELOAD_FLAG = 'sw_needs_hard_reload';
-  private readonly BROKEN_SW_TIMEOUT_MS = 10000; // 10 seconds
+  private readonly BROKEN_SW_TIMEOUT_MS = 60000; // 60 seconds
 
   // Observable to track if an update is available
   private updateAvailable$ = new BehaviorSubject<boolean>(false);
