@@ -1,6 +1,11 @@
 {
   "$schema": "./node_modules/@angular/service-worker/config/schema.json",
   "index": "/index.html",
+  "navigationRequestStrategy": "freshness",
+  "navigationUrls": [
+    "/**",
+    "!/**/*.mp4"
+  ],
   "assetGroups": [
     {
       "name": "app",
@@ -10,7 +15,6 @@
         "files": [
           "/favicon.ico",
           "/index.html",
-          "/manifest.webmanifest",
           "/robots.txt",
           "/sitemap.xml",
           "/*.css",
@@ -26,7 +30,6 @@
         "files": [
           "/assets/data/images/**/*.webp",
           "/assets/data/images/**/*.png",
-          "/assets/data/images/**/*.mp4",
           "/**/*.(svg|cur|jpg|jpeg|apng|avif|gif|otf|ttf|woff|woff2)"
         ]
       }

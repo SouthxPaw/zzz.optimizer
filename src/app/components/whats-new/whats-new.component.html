@@ -1,0 +1,64 @@
+<div class="whats-new-page">
+  <div class="container">
+    <h1>What's New</h1>
+
+    <!-- Loading state -->
+    <div *ngIf="loading" class="loading-message">
+      <p>Loading changelog...</p>
+    </div>
+
+    <!-- Error state -->
+    <div *ngIf="error" class="error-message">
+      <p>Failed to load changelog. Please try refreshing the page.</p>
+    </div>
+
+    <!-- Changelog content -->
+    <div *ngIf="!loading && !error" class="changelog-section">
+      <p class="intro">
+        Stay up to date with the latest features, bug fixes, and improvements to ZZZ Optimizer.
+      </p>
+
+      <!-- Version cards -->
+      <div *ngFor="let version of changelog" class="version-card">
+        <div class="version-header">
+          <h2>v{{ version.version }}</h2>
+          <span class="version-date">{{ formatDate(version.date) }}</span>
+        </div>
+
+        <!-- Features -->
+        <div *ngIf="version.features.length > 0" class="changelog-category">
+          <h3 class="category-title features">✨ New Features</h3>
+          <ul>
+            <li *ngFor="let feature of version.features">{{ feature }}</li>
+          </ul>
+        </div>
+
+        <!-- Bug Fixes -->
+        <div *ngIf="version.fixes.length > 0" class="changelog-category">
+          <h3 class="category-title fixes">🐛 Bug Fixes</h3>
+          <ul>
+            <li *ngFor="let fix of version.fixes">{{ fix }}</li>
+          </ul>
+        </div>
+
+        <!-- Improvements -->
+        <div *ngIf="version.improvements.length > 0" class="changelog-category">
+          <h3 class="category-title improvements">🔧 Improvements</h3>
+          <ul>
+            <li *ngFor="let improvement of version.improvements">{{ improvement }}</li>
+          </ul>
+        </div>
+
+        <!-- Empty version notice -->
+        <div *ngIf="!hasContent(version)" class="no-content">
+          <p>No detailed changelog available for this version.</p>
+        </div>
+      </div>
+
+      <!-- No versions available -->
+      <div *ngIf="changelog.length === 0" class="no-versions">
+        <p>No changelog entries available yet.</p>
+      </div>
+    </div>
+  </div>
+</div>
