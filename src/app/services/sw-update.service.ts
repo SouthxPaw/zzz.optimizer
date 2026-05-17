@@ -18,6 +18,7 @@ export class SwUpdateService implements OnDestroy {
   private readonly VERSION_KEY = 'app_version';
   private readonly INSTALLED_TIMESTAMP_KEY = 'installed_ngsw_timestamp';
   private readonly HARD_RELOAD_FLAG = 'sw_needs_hard_reload';
+  private readonly EXPECTING_UPDATE_KEY = 'sw_expecting_update'; // Persist across reloads
   private readonly BROKEN_SW_TIMEOUT_MS = 60000; // 60 seconds
 
   // Observable to track if an update is available
@@ -30,9 +31,6 @@ export class SwUpdateService implements OnDestroy {
   // Track update retry attempts for hash mismatch issues
   private updateRetryCount = 0;
   private readonly MAX_UPDATE_RETRIES = 3;
-
-  // Track whether we're expecting a VERSION_READY from an intentional update check
-  private expectingVersionReady = false;
 
   // Public observable for components to subscribe to
   public get updateAvailable(): Observable<boolean> {
@@ -60,18 +58,19 @@ export class SwUpdateService implements OnDestroy {
       return;
     }
 
-    // Check for updates when app becomes stable
+    // Wait for app to become stable, then start 30-minute interval checks
     const appIsStable$ = this.appRef.isStable.pipe(
       first(isStable => isStable === true)
     );
 
-    // Check for updates every 30 minutes after app is stable
-    const every30Minutes$ = interval(30 * 60 * 1000);
-    const every30MinutesOnceAppIsStable$ = concat(appIsStable$, every30Minutes$);
-
-    // Subscribe to update checks
-    every30MinutesOnceAppIsStable$.pipe(
+    // Start 30-minute interval AFTER app is stable (no immediate check on page load)
+    appIsStable$.pipe(
       takeUntil(this.destroy$),
+      switchMap(() => {
+        console.log('[SW Update] App is stable - starting 30-minute update check interval');
+        // Only start the interval, don't check immediately on page load
+        return interval(30 * 60 * 1000);
+      }),
       switchMap(() => {
         // Check for new version by comparing server and installed timestamps
         const timestamp = new Date().toLocaleTimeString();
@@ -97,12 +96,14 @@ export class SwUpdateService implements OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(async evt => {
       if (evt.type === 'VERSION_READY') {
-        console.log(`[SW Update] VERSION_READY received (expecting: ${this.expectingVersionReady})`);
+        // Check localStorage flag to see if we're expecting an update
+        const expectingUpdate = localStorage.getItem(this.EXPECTING_UPDATE_KEY) === 'true';
+        console.log(`[SW Update] VERSION_READY received (expecting from localStorage: ${expectingUpdate})`);
 
-        // Only show update button if we're expecting this from an intentional update check
+        // Only show update button if we detected an update from a background check
         // This prevents the button from showing on page refresh/SW activation
-        if (!this.expectingVersionReady) {
-          console.log('[SW Update] VERSION_READY received but not from intentional check - ignoring');
+        if (!expectingUpdate) {
+          console.log('[SW Update] VERSION_READY received but not from background check - ignoring');
           return;
         }
 
@@ -114,7 +115,6 @@ export class SwUpdateService implements OnDestroy {
           this.versionReadyTimeout = null;
         }
         this.waitingForVersionReady = false;
-        this.expectingVersionReady = false; // Reset flag
 
         // Reset retry count on success
         this.updateRetryCount = 0;
@@ -134,7 +134,7 @@ export class SwUpdateService implements OnDestroy {
           console.warn('[SW Update] Could not update installed timestamp:', err);
         }
 
-        // Show update button immediately (no debounce needed since we know this is intentional)
+        // Show update button immediately
         this.updateAvailable$.next(true);
       } else if (evt.type === 'VERSION_INSTALLATION_FAILED') {
         console.warn('[SW Update] Installation failed (likely GitHub Pages CDN cache issue):', evt.error);
@@ -169,12 +169,9 @@ export class SwUpdateService implements OnDestroy {
           this.versionReadyTimeout = null;
         }
         this.waitingForVersionReady = false;
-        this.expectingVersionReady = false; // Reset flag
 
-        // Don't clear the button - if it's showing, user has a legitimate update
-        // If button shouldn't be showing, it won't be (because VERSION_READY was ignored)
-        // NO_NEW_VERSION_DETECTED can fire for various reasons (periodic checks, etc)
-        // and shouldn't interfere with a valid update notification
+        // Don't clear the button or localStorage flag - if showing, it's legitimate
+        // NO_NEW_VERSION_DETECTED can fire for various reasons
         console.log('[SW Update] Not clearing update button (if showing, it\'s legitimate)');
       }
     });
@@ -221,7 +218,8 @@ export class SwUpdateService implements OnDestroy {
           'zzz-optimizer-upgrade-plans',
           'zzz_uid_history',
           this.VERSION_KEY,
-          this.INSTALLED_TIMESTAMP_KEY
+          this.INSTALLED_TIMESTAMP_KEY,
+          this.EXPECTING_UPDATE_KEY  // Preserve update notification state
         ];
         const allKeys = Object.keys(localStorage);
         allKeys.forEach(key => {
@@ -309,9 +307,10 @@ export class SwUpdateService implements OnDestroy {
         console.log('[SW Update] 🎉 NEW VERSION DETECTED! Triggering download...');
         console.log('[SW Update] Server is newer:', serverTimestamp, 'vs', installedTimestamp);
 
-        // Set flag that we're expecting VERSION_READY from THIS intentional check
-        console.log('[SW Update] Setting expectingVersionReady = true');
-        this.expectingVersionReady = true;
+        // Set localStorage flag so VERSION_READY knows this is from a background check
+        // This persists across page reloads, unlike in-memory variables
+        console.log('[SW Update] Setting localStorage flag: sw_expecting_update = true');
+        localStorage.setItem(this.EXPECTING_UPDATE_KEY, 'true');
 
         // Set flag and timeout BEFORE calling checkForUpdate (since VERSION_READY fires immediately)
         if (!this.waitingForVersionReady) {
@@ -324,6 +323,8 @@ export class SwUpdateService implements OnDestroy {
             if (this.waitingForVersionReady) {
               console.error('[SW Update] ⚠️ VERSION_READY never fired - SW is broken and cannot update itself');
               console.log('[SW Update] Forcing nuclear SW replacement...');
+              // Clear the flag since update failed
+              localStorage.removeItem(this.EXPECTING_UPDATE_KEY);
               await this.forceNuclearSwReplacement();
             }
           }, this.BROKEN_SW_TIMEOUT_MS);
@@ -551,8 +552,9 @@ export class SwUpdateService implements OnDestroy {
       // Clear the installed timestamp so next load will pick up the new version
       localStorage.removeItem(this.INSTALLED_TIMESTAMP_KEY);
 
-      // Reset the flag so VERSION_READY on next page load won't show button
-      this.expectingVersionReady = false;
+      // Clear the expecting update flag so VERSION_READY on next page load won't show button
+      console.log('[SW Update] Clearing localStorage flag: sw_expecting_update');
+      localStorage.removeItem(this.EXPECTING_UPDATE_KEY);
 
       // NOTE: We don't unregister the service worker here because we already
       // activated the new one when we detected the update. We just need to reload
