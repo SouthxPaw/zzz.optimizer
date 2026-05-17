@@ -97,6 +97,8 @@ export class SwUpdateService implements OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(async evt => {
       if (evt.type === 'VERSION_READY') {
+        console.log(`[SW Update] VERSION_READY received (expecting: ${this.expectingVersionReady})`);
+
         // Only show update button if we're expecting this from an intentional update check
         // This prevents the button from showing on page refresh/SW activation
         if (!this.expectingVersionReady) {
@@ -305,6 +307,7 @@ export class SwUpdateService implements OnDestroy {
         console.log('[SW Update] Server is newer:', serverTimestamp, 'vs', installedTimestamp);
 
         // Set flag that we're expecting VERSION_READY from THIS intentional check
+        console.log('[SW Update] Setting expectingVersionReady = true');
         this.expectingVersionReady = true;
 
         // Trigger Angular's SW update check to download and activate the new version
