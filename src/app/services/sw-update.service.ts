@@ -31,6 +31,9 @@ export class SwUpdateService implements OnDestroy {
   private updateRetryCount = 0;
   private readonly MAX_UPDATE_RETRIES = 3;
 
+  // Debounce timer to prevent update button flash on page refresh
+  private updateButtonDebounceTimeout: any;
+
   // Public observable for components to subscribe to
   public get updateAvailable(): Observable<boolean> {
     return this.updateAvailable$.asObservable();
@@ -121,8 +124,11 @@ export class SwUpdateService implements OnDestroy {
           console.warn('[SW Update] Could not update installed timestamp:', err);
         }
 
-        // Set observable to show update button
-        this.updateAvailable$.next(true);
+        // Debounce showing the update button to prevent flash on page refresh
+        // If NO_NEW_VERSION_DETECTED fires within 500ms, this will be cancelled
+        this.updateButtonDebounceTimeout = setTimeout(() => {
+          this.updateAvailable$.next(true);
+        }, 500);
       } else if (evt.type === 'VERSION_INSTALLATION_FAILED') {
         console.warn('[SW Update] Installation failed (likely GitHub Pages CDN cache issue):', evt.error);
 
@@ -156,6 +162,12 @@ export class SwUpdateService implements OnDestroy {
           this.versionReadyTimeout = null;
         }
         this.waitingForVersionReady = false;
+
+        // Cancel debounced update button show (prevents flash on page refresh)
+        if (this.updateButtonDebounceTimeout) {
+          clearTimeout(this.updateButtonDebounceTimeout);
+          this.updateButtonDebounceTimeout = null;
+        }
 
         // Hide update button if it was shown by mistake
         this.updateAvailable$.next(false);
