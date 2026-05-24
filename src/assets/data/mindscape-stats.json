@@ -414,7 +414,7 @@
       "4": [
         {
           "type": "CRIT_DMG",
-          "value": 24,
+          "value": 16,
           "format": "%",
           "note": ""
         }
