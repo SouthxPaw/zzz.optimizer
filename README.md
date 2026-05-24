@@ -43,6 +43,19 @@ A comprehensive build optimizer and character builder for **Zenless Zone Zero** 
   - Export your builds and disc inventory as JSON
   - Import builds from backup files
   - Merge or replace existing data
+  - **Enka Network UID Import**: Search and import character builds directly from Enka Network using player UIDs
+
+- **Build Sharing**:
+  - Generate downloadable build images with stats and disc details
+  - Customize backgrounds and colors to personalize your share images
+  - Toggle visibility of build ratings and scores
+
+- **Automatic Update Notifications**:
+  - Background checks every 30 minutes for new versions
+  - Non-intrusive update button appears when updates are available
+  - Update when convenient - no forced reloads
+
+- **Changelog Viewer**: Track version history, new features, and bug fixes with in-app changelog
 
 - **Persistent Storage**: All data stored locally in IndexedDB (no server required)
 - **Mobile Responsive**: Fully optimized for mobile devices
