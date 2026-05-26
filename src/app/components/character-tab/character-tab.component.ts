@@ -16,11 +16,13 @@ import { Subject, takeUntil, debounceTime, distinctUntilChanged, firstValueFrom 
 import { Agent, DiscSlot } from '../../models/agent.model';
 import { WEngine } from '../../models/wengine.model';
 import { Disc, MainStatType, SubStatType } from '../../models/disc.model';
+import { DiscLoadout } from '../../models/disc-loadout.model';
 import { AgentService } from '../../services/agent.service';
 import { WEngineService } from '../../services/wengine.service';
 import { DiscService } from '../../services/disc.service';
 import { DiscSetService, DiscSet } from '../../services/disc-set.service';
 import { BuildService, AgentBuild } from '../../services/build.service';
+import { DiscLoadoutService } from '../../services/disc-loadout.service';
 import { StatCalculatorService } from '../../services/stat-calculator.service';
 import { ScoringService } from '../../services/scoring.service';
 import { ImagePreloaderService } from '../../services/image-preloader.service';
@@ -39,6 +41,7 @@ import { EnkaApiService } from '../../services/enka-api.service';
 import { EnkaImportService } from '../../services/enka-import.service';
 import { UpgradePlanService } from '../../services/upgrade-plan.service';
 import { LoadingService } from '../../services/loading.service';
+import { NotificationService } from '../../services/notification.service';
 import { UpgradePlan } from '../../models/upgrade-plan.model';
 import { calculateRollCount } from '../../constants/substat-rolls';
 import { UpgradePlansComponent } from '../upgrade-plans/upgrade-plans.component';
@@ -64,6 +67,9 @@ import { getDiscValidationErrors, hasValidationErrors } from '../../utils/disc-v
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CharacterTabComponent implements OnInit, OnDestroy {
+  // Expose Object for template use
+  Object = Object;
+
   // User builds (not reference data!)
   builds: AgentBuild[] = [];
   selectedBuild: AgentBuild | null = null;
@@ -88,6 +94,20 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   showCompareModal = false;
   compareDiscSlot: DiscSlot | null = null;
   compareCustomDisc: Partial<Disc> | null = null;
+
+  // Disc Loadout modal state
+  showLoadoutsModal = false;
+  agentLoadouts: DiscLoadout[] = [];
+  selectedLoadoutForPreview: DiscLoadout | null = null;
+  loadoutPreviewStats: any = null; // Will hold calculated stats for preview
+  loadoutValidation: { isValid: boolean; missingSlots: string[]; availableSlots: string[] } | null = null;
+  newLoadoutName = '';
+
+  // Create/Save loadout flow state
+  showSaveCurrentForm = false;
+  showCreateEmptyForm = false;
+  newLoadoutDiscs: { [slot: string]: Disc } = {};
+  loadoutCreationSlot: DiscSlot | null = null; // Track which slot we're selecting for
 
   @ViewChild('shareCanvas') shareCanvasRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('shareCard') shareCardRef!: ElementRef<HTMLDivElement>;
@@ -147,10 +167,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   // Search subjects for debouncing
   private discSearchSubject$ = new Subject<string>();
   private discEffectSearchSubject$ = new Subject<string>();
+  private wengineSearchSubject$ = new Subject<string>();
 
   // Actual debounced search values
   private debouncedDiscSearch = '';
   private debouncedDiscEffectSearch = '';
+  private debouncedWEngineSearch = '';
 
   // Cached filtered results to avoid re-filtering on every change detection
   cachedFilteredDiscSets: DiscSet[] = [];
@@ -159,6 +181,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   // OPTIMIZATION: Memoization caches for score calculations
   private discScoreCache = new Map<string, { score: number; rating: DiscRating }>();
   private buildScoreCache = new Map<string, { score: number; rating: BuildRating }>();
+  private loadoutSetCountCache = new Map<string, string>();
 
   // OPTIMIZATION: Cached results for expensive template functions
   private cachedSubstatBreakdown: ReturnType<typeof this.computeSubstatBreakdown> | null = null;
@@ -223,6 +246,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private wEngineService: WEngineService,
     private discService: DiscService,
     private discSetService: DiscSetService,
+    private discLoadoutService: DiscLoadoutService,
     private statCalculator: StatCalculatorService,
     private scoringService: ScoringService,
     private imagePreloader: ImagePreloaderService,
@@ -232,6 +256,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private upgradePlanService: UpgradePlanService,
     private canvasShareImageService: CanvasShareImageService,
     private loadingService: LoadingService,
+    private notificationService: NotificationService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -347,6 +372,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .subscribe((searchTerm) => {
         this.debouncedDiscEffectSearch = searchTerm;
         this.updateFilteredDiscSets();
+        this.cdr.markForCheck();
+      });
+
+    // Set up debounced search for W-Engine name
+    this.wengineSearchSubject$
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((searchTerm) => {
+        this.debouncedWEngineSearch = searchTerm;
         this.cdr.markForCheck();
       });
   }
@@ -619,19 +652,19 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return this.cachedFilteredAgents;
     }
 
-    let filtered = this.referenceAgents;
-
-    if (this.agentElementFilter) {
-      filtered = filtered.filter((a) => a.element === this.agentElementFilter);
-    }
-    if (this.agentSpecialtyFilter) {
-      filtered = filtered.filter(
-        (a) => a.specialty === this.agentSpecialtyFilter,
-      );
-    }
-    if (this.agentRarityFilter) {
-      filtered = filtered.filter((a) => a.rarity === this.agentRarityFilter);
-    }
+    // OPTIMIZED: Single-pass filtering instead of 3 sequential filters
+    const filtered = this.referenceAgents.filter((a) => {
+      if (this.agentElementFilter && a.element !== this.agentElementFilter) {
+        return false;
+      }
+      if (this.agentSpecialtyFilter && a.specialty !== this.agentSpecialtyFilter) {
+        return false;
+      }
+      if (this.agentRarityFilter && a.rarity !== this.agentRarityFilter) {
+        return false;
+      }
+      return true;
+    });
 
     this.cachedFilteredAgents = this.sortAgents(filtered);
     this.lastAgentFilterKey = filterKey;
@@ -663,29 +696,29 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   getFilteredWEngines(): WEngine[] {
-    const filterKey = `${this.referenceWEngines.length}|${this.wengineSpecialtyFilter}|${this.wengineRarityFilter}|${this.wengineSearchTerm}|${this.wengineSortBy}`;
+    const filterKey = `${this.referenceWEngines.length}|${this.wengineSpecialtyFilter}|${this.wengineRarityFilter}|${this.debouncedWEngineSearch}|${this.wengineSortBy}`;
     if (this.cachedFilteredWEngines && this.lastWEngineFilterKey === filterKey) {
       return this.cachedFilteredWEngines;
     }
 
-    let filtered = this.referenceWEngines;
+    // OPTIMIZED: Single-pass filtering instead of 3 sequential filters
+    // Pre-compute lowercase search term outside the loop
+    const searchLower = this.debouncedWEngineSearch?.toLowerCase();
 
-    if (this.wengineSpecialtyFilter) {
-      filtered = filtered.filter(
-        (w) => w.specialty === this.wengineSpecialtyFilter,
-      );
-    }
-    if (this.wengineRarityFilter) {
-      filtered = filtered.filter((w) => w.rarity === this.wengineRarityFilter);
-    }
-    if (this.wengineSearchTerm) {
-      const searchLower = this.wengineSearchTerm.toLowerCase();
-      filtered = filtered.filter(
-        (w) =>
-          w.name.toLowerCase().includes(searchLower) ||
-          w.specialty.toLowerCase().includes(searchLower),
-      );
-    }
+    const filtered = this.referenceWEngines.filter((w) => {
+      if (this.wengineSpecialtyFilter && w.specialty !== this.wengineSpecialtyFilter) {
+        return false;
+      }
+      if (this.wengineRarityFilter && w.rarity !== this.wengineRarityFilter) {
+        return false;
+      }
+      if (searchLower &&
+          !w.name.toLowerCase().includes(searchLower) &&
+          !w.specialty.toLowerCase().includes(searchLower)) {
+        return false;
+      }
+      return true;
+    });
 
     this.cachedFilteredWEngines = this.sortWEngines(filtered);
     this.lastWEngineFilterKey = filterKey;
@@ -1327,33 +1360,33 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
    * Called when filters change (debounced search terms)
    */
   private updateFilteredDiscSets(): void {
-    let filtered = this.referenceDiscSets;
+    // OPTIMIZED: Single-pass filtering instead of 3 separate filter() calls
+    const searchLower = this.debouncedDiscSearch?.toLowerCase();
+    const effectSearchLower = this.debouncedDiscEffectSearch?.toLowerCase();
 
-    // Filter by set name
-    if (this.discFilterSet) {
-      filtered = filtered.filter((s) => s.name === this.discFilterSet);
-    }
+    this.cachedFilteredDiscSets = this.referenceDiscSets.filter((s) => {
+      // Filter by set name (exact match)
+      if (this.discFilterSet && s.name !== this.discFilterSet) {
+        return false;
+      }
 
-    // Filter by set name search term (debounced)
-    if (this.debouncedDiscSearch) {
-      const searchLower = this.debouncedDiscSearch.toLowerCase();
-      filtered = filtered.filter((s) =>
-        s.name.toLowerCase().includes(searchLower),
-      );
-    }
+      // Filter by set name search term (debounced)
+      if (searchLower && !s.name.toLowerCase().includes(searchLower)) {
+        return false;
+      }
 
-    // Filter by effect search term (debounced)
-    if (this.debouncedDiscEffectSearch) {
-      const effectSearchLower = this.debouncedDiscEffectSearch.toLowerCase();
-      filtered = filtered.filter((s) => {
-        // Search in bonus descriptions (2pc and 4pc effects)
-        return s.bonuses.some((bonus) =>
+      // Filter by effect search term (debounced)
+      if (effectSearchLower) {
+        const hasMatchingEffect = s.bonuses.some((bonus) =>
           bonus.description.toLowerCase().includes(effectSearchLower),
         );
-      });
-    }
+        if (!hasMatchingEffect) {
+          return false;
+        }
+      }
 
-    this.cachedFilteredDiscSets = filtered;
+      return true;
+    });
   }
 
   /**
@@ -1369,32 +1402,52 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
    * Called when filters change
    */
   private updateFilteredDiscs(): void {
-    let filtered = this.allDiscs;
+    // OPTIMIZED: Single-pass filtering instead of 4 separate filter() calls
+    // Pre-compute lowercase search term outside the loop
+    const searchLower = this.discSearchTerm?.toLowerCase();
 
-    // Filter by selected slot (only show discs that match the slot being filled)
-    if (this.selectedDiscSlot) {
-      filtered = filtered.filter((d) => d.slot === this.selectedDiscSlot);
-    }
+    // OPTIMIZATION: Use DiscService indexed lookups to reduce search space
+    let sourceDiscs: Disc[];
 
-    // Filter by set
-    if (this.discFilterSet) {
-      filtered = filtered.filter((d) => d.set === this.discFilterSet);
-    }
-
-    // Filter by search term
-    if (this.discSearchTerm) {
-      const searchLower = this.discSearchTerm.toLowerCase();
-      filtered = filtered.filter((d) =>
-        d.set.toLowerCase().includes(searchLower),
-      );
-    }
-
-    // Filter unequipped only
+    // Start with the smallest possible set for maximum performance
     if (this.showOnlyUnequipped) {
-      filtered = filtered.filter((d) => !d.equippedBy);
+      // Use pre-filtered unequipped list (O(1) lookup)
+      sourceDiscs = this.discService.getUnequippedDiscs();
+    } else if (this.selectedDiscSlot) {
+      // Use slot index (O(1) lookup) - reduces from ~500 discs to ~80 discs
+      sourceDiscs = this.discService.getDiscsBySlot(this.selectedDiscSlot);
+    } else if (this.discFilterSet) {
+      // Use set index (O(1) lookup) - reduces from ~500 discs to ~30 discs
+      sourceDiscs = this.discService.getDiscsBySet(this.discFilterSet);
+    } else {
+      // No indexes apply, use full array
+      sourceDiscs = this.allDiscs;
     }
 
-    this.cachedFilteredDiscs = filtered;
+    // Single-pass filter on remaining criteria
+    this.cachedFilteredDiscs = sourceDiscs.filter((d) => {
+      // Filter by selected slot (only if not already pre-filtered by index above)
+      if (this.selectedDiscSlot && !this.showOnlyUnequipped && d.slot !== this.selectedDiscSlot) {
+        return false;
+      }
+
+      // Filter by set (only if not already pre-filtered by index above)
+      if (this.discFilterSet && !this.selectedDiscSlot && !this.showOnlyUnequipped && d.set !== this.discFilterSet) {
+        return false;
+      }
+
+      // Filter by search term
+      if (searchLower && !d.set.toLowerCase().includes(searchLower)) {
+        return false;
+      }
+
+      // Filter unequipped only (only if not already pre-filtered by index above)
+      if (this.showOnlyUnequipped && d.equippedBy) {
+        return false;
+      }
+
+      return true;
+    });
   }
 
   /**
@@ -1868,8 +1921,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
         // Add disc to inventory
         await this.discService.addDisc(newDisc);
-        // Equip it to the build
-        await this.buildService.equipDisc(this.selectedBuild.id, newDisc);
+
+        // Check if we're in loadout creation mode
+        if (this.showCreateEmptyForm && this.loadoutCreationSlot) {
+          // Add to the new loadout being created instead of equipping to build
+          this.newLoadoutDiscs[this.loadoutCreationSlot] = newDisc;
+          this.loadoutCreationSlot = null; // Clear the slot
+        } else {
+          // Normal mode: Equip it to the build
+          await this.buildService.equipDisc(this.selectedBuild.id, newDisc);
+        }
 
         // OPTIMIZATION: Clear caches after creating new disc
         this.clearScoreCaches();
@@ -2388,6 +2449,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.discEffectSearchSubject$.next(searchTerm);
   }
 
+  onWEngineSearchChange(searchTerm: string) {
+    this.wengineSearchSubject$.next(searchTerm);
+  }
+
   // Confirmation dialog methods
   showConfirmation(
     title: string,
@@ -2489,6 +2554,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   trackByBonusIndex(index: number, _bonus: unknown): number {
     return index;
+  }
+
+  /**
+   * TrackBy function for loadouts list - prevents unnecessary DOM recreation
+   */
+  trackByLoadoutId(_index: number, loadout: DiscLoadout): string {
+    return loadout.id;
   }
 
   trackByFeedbackIndex(index: number, _item: FeedbackItem): number {
@@ -3484,5 +3556,399 @@ async generateShareImage() {
     event.target.style.display = 'none';
 
     console.warn(`Failed to load W-Engine video: ${videoKey}, falling back to static image`);
+  }
+
+  // ===========================
+  // Disc Loadout Methods
+  // ===========================
+
+  /**
+   * Open the disc loadouts modal
+   */
+  openDiscLoadoutsModal(): void {
+    if (!this.selectedBuild) {
+      return;
+    }
+
+    // Load loadouts for current agent
+    this.agentLoadouts = this.discLoadoutService.getLoadoutsByAgentId(this.selectedBuild.agentId);
+    this.selectedLoadoutForPreview = null;
+    this.loadoutPreviewStats = null;
+    this.loadoutValidation = null;
+    this.newLoadoutName = '';
+    this.showLoadoutsModal = true;
+
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Close the loadouts modal
+   */
+  closeLoadoutsModal(): void {
+    this.showLoadoutsModal = false;
+    this.selectedLoadoutForPreview = null;
+    this.loadoutPreviewStats = null;
+    this.loadoutValidation = null;
+    this.newLoadoutName = '';
+    this.showSaveCurrentForm = false;
+    this.showCreateEmptyForm = false;
+    this.newLoadoutDiscs = {};
+    this.loadoutCreationSlot = null;
+
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Start the "Save Current" flow
+   */
+  startSaveCurrentLoadout(): void {
+    this.showSaveCurrentForm = true;
+    this.showCreateEmptyForm = false;
+    this.newLoadoutName = '';
+    this.newLoadoutDiscs = {};
+    this.selectedLoadoutForPreview = null;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Cancel the "Save Current" flow
+   */
+  cancelSaveCurrentLoadout(): void {
+    this.showSaveCurrentForm = false;
+    this.newLoadoutName = '';
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Confirm and save current disc configuration as a new loadout
+   */
+  confirmSaveCurrentLoadout(): void {
+    if (!this.selectedBuild) {
+      return;
+    }
+
+    // Validate name
+    if (!this.newLoadoutName || this.newLoadoutName.trim().length === 0) {
+      this.notificationService.warning('Please enter a name for this loadout');
+      return;
+    }
+
+    // Check if agent has reached max loadouts
+    if (!this.discLoadoutService.canAddLoadout(this.selectedBuild.agentId)) {
+      this.notificationService.warning('Maximum of 5 loadouts per agent reached. Please delete an existing loadout first.');
+      return;
+    }
+
+    // Check if current build has any discs equipped
+    const equippedDiscs = this.selectedBuild.equippedDiscs || {};
+    if (Object.keys(equippedDiscs).length === 0) {
+      this.notificationService.warning('No discs equipped. Please equip at least one disc before saving a loadout.');
+      return;
+    }
+
+    // Save the loadout
+    const loadout = this.discLoadoutService.saveLoadout(
+      this.newLoadoutName,
+      this.selectedBuild.agentId,
+      equippedDiscs
+    );
+
+    if (loadout) {
+      // Refresh the loadout list
+      this.agentLoadouts = this.discLoadoutService.getLoadoutsByAgentId(this.selectedBuild.agentId);
+      this.newLoadoutName = '';
+      this.showSaveCurrentForm = false;
+      this.loadoutSetCountCache.clear(); // Clear cache when loadouts change
+      this.notificationService.success(`Loadout "${loadout.name}" saved successfully!`);
+      this.cdr.markForCheck();
+    } else {
+      this.notificationService.error('Failed to save loadout. Please try again.');
+    }
+  }
+
+  /**
+   * Start the "Create Empty" flow
+   */
+  startCreateEmptyLoadout(): void {
+    this.showCreateEmptyForm = true;
+    this.showSaveCurrentForm = false;
+    this.newLoadoutName = '';
+    this.newLoadoutDiscs = {};
+    this.selectedLoadoutForPreview = null;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Cancel the "Create Empty" flow
+   */
+  cancelCreateEmptyLoadout(): void {
+    this.showCreateEmptyForm = false;
+    this.newLoadoutName = '';
+    this.newLoadoutDiscs = {};
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Open disc picker for a specific slot when creating an empty loadout
+   */
+  openDiscPickerForLoadout(slot: DiscSlot): void {
+    // Store which slot we're selecting for
+    this.loadoutCreationSlot = slot;
+
+    // Open the existing disc picker
+    this.openDiscPicker(slot);
+  }
+
+  /**
+   * Remove a disc from the new loadout being created
+   */
+  removeDiscFromNewLoadout(slot: string, event: Event): void {
+    event.stopPropagation();
+    delete this.newLoadoutDiscs[slot];
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Confirm and create the empty loadout with selected discs
+   */
+  confirmCreateEmptyLoadout(): void {
+    if (!this.selectedBuild) {
+      return;
+    }
+
+    // Validate name
+    if (!this.newLoadoutName || this.newLoadoutName.trim().length === 0) {
+      this.notificationService.warning('Please enter a name for this loadout');
+      return;
+    }
+
+    // Check if agent has reached max loadouts
+    if (!this.discLoadoutService.canAddLoadout(this.selectedBuild.agentId)) {
+      this.notificationService.warning('Maximum of 5 loadouts per agent reached. Please delete an existing loadout first.');
+      return;
+    }
+
+    // Check if at least one disc is selected
+    if (Object.keys(this.newLoadoutDiscs).length === 0) {
+      this.notificationService.warning('Please select at least one disc for this loadout.');
+      return;
+    }
+
+    // Save the loadout
+    const loadout = this.discLoadoutService.saveLoadout(
+      this.newLoadoutName,
+      this.selectedBuild.agentId,
+      this.newLoadoutDiscs
+    );
+
+    if (loadout) {
+      // Refresh the loadout list
+      this.agentLoadouts = this.discLoadoutService.getLoadoutsByAgentId(this.selectedBuild.agentId);
+      this.newLoadoutName = '';
+      this.newLoadoutDiscs = {};
+      this.showCreateEmptyForm = false;
+      this.loadoutSetCountCache.clear(); // Clear cache when loadouts change
+      this.notificationService.success(`Loadout "${loadout.name}" created successfully!`);
+      this.cdr.markForCheck();
+    } else {
+      this.notificationService.error('Failed to create loadout. Please try again.');
+    }
+  }
+
+  /**
+   * Preview a loadout before applying
+   */
+  previewLoadout(loadout: DiscLoadout): void {
+    if (!this.selectedBuild) {
+      return;
+    }
+
+    this.selectedLoadoutForPreview = loadout;
+
+    // Validate loadout (check if discs still exist)
+    this.loadoutValidation = this.discLoadoutService.validateLoadout(loadout, this.allDiscs);
+
+    // Get the agent object for stat calculation
+    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    if (!agent) {
+      console.error('[DiscLoadout] Could not find agent:', this.selectedBuild.agentId);
+      this.loadoutPreviewStats = null;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    // Set all discs from loadout as enabled
+    const enabledDiscs: { [slot: string]: boolean } = {};
+    Object.keys(loadout.equippedDiscs).forEach(slot => {
+      enabledDiscs[slot] = true;
+    });
+
+    // Calculate stats for this loadout
+    this.loadoutPreviewStats = this.statCalculator.calculateFinalStats(
+      agent,
+      this.selectedBuild.level,
+      this.selectedBuild.equippedWEngine || null,
+      loadout.equippedDiscs,
+      this.selectedBuild.mindscapeLevel,
+      this.selectedBuild.wEngineRefinement,
+      this.selectedBuild.includeWEngineBonuses !== false,
+      this.selectedBuild.includeMindscapeBonuses !== false,
+      this.selectedBuild.includePassiveBonuses !== false,
+      enabledDiscs
+    );
+
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Clear loadout preview
+   */
+  clearLoadoutPreview(): void {
+    this.selectedLoadoutForPreview = null;
+    this.loadoutPreviewStats = null;
+    this.loadoutValidation = null;
+
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Apply a loadout to the current build
+   */
+  async applyLoadout(loadout: DiscLoadout): Promise<void> {
+    if (!this.selectedBuild) {
+      return;
+    }
+
+    // Validate loadout first
+    const validation = this.discLoadoutService.validateLoadout(loadout, this.allDiscs);
+
+    // Show warning if some discs are missing
+    if (!validation.isValid) {
+      const confirmed = confirm(
+        `Warning: ${validation.missingSlots.length} disc(s) from this loadout are missing from your inventory.\n\n` +
+        `Missing slots: ${validation.missingSlots.join(', ')}\n\n` +
+        `Available discs will be equipped. Continue?`
+      );
+
+      if (!confirmed) {
+        return;
+      }
+    }
+
+    // Apply available discs only
+    const discsToEquip: { [slot: string]: Disc } = {};
+    validation.availableSlots.forEach(slot => {
+      if (loadout.equippedDiscs[slot]) {
+        discsToEquip[slot] = loadout.equippedDiscs[slot];
+      }
+    });
+
+    // First, unequip all current discs
+    const currentSlots = Object.keys(this.selectedBuild.equippedDiscs || {});
+    for (const slot of currentSlots) {
+      await this.buildService.unequipDisc(this.selectedBuild.id, slot);
+    }
+
+    // Then equip the loadout discs
+    for (const [slot, disc] of Object.entries(discsToEquip)) {
+      await this.buildService.equipDisc(this.selectedBuild.id, disc);
+    }
+
+    // Close modal first (use setTimeout to ensure it happens after async operations)
+    setTimeout(() => {
+      this.closeLoadoutsModal();
+
+      // Show success message with toast notification AFTER modal closes
+      if (!validation.isValid) {
+        this.notificationService.warning(
+          `Loadout applied with warnings: ${validation.availableSlots.length} disc(s) equipped, ${validation.missingSlots.length} skipped (missing)`,
+          6000
+        );
+      } else {
+        this.notificationService.success(`Loadout "${loadout.name}" applied successfully!`);
+      }
+    }, 0);
+  }
+
+  /**
+   * Delete a loadout
+   */
+  deleteLoadout(loadout: DiscLoadout): void {
+    const confirmed = confirm(`Are you sure you want to delete the loadout "${loadout.name}"?`);
+
+    if (!confirmed) {
+      return;
+    }
+
+    const success = this.discLoadoutService.deleteLoadout(loadout.id);
+
+    if (success) {
+      // Refresh the loadout list
+      if (this.selectedBuild) {
+        this.agentLoadouts = this.discLoadoutService.getLoadoutsByAgentId(this.selectedBuild.agentId);
+      }
+
+      // Clear preview if this was the previewed loadout
+      if (this.selectedLoadoutForPreview?.id === loadout.id) {
+        this.clearLoadoutPreview();
+      }
+
+      this.loadoutSetCountCache.clear(); // Clear cache when loadouts change
+      this.notificationService.success(`Loadout "${loadout.name}" deleted successfully.`);
+      this.cdr.markForCheck();
+    } else {
+      this.notificationService.error('Failed to delete loadout. Please try again.');
+    }
+  }
+
+  /**
+   * Get disc set counts for a loadout (e.g., "Woodpecker x4, Hormone x2")
+   * OPTIMIZED: Memoized to avoid recalculating on every render
+   */
+  getLoadoutDiscSetCounts(loadout: DiscLoadout): string {
+    // Check cache first
+    if (this.loadoutSetCountCache.has(loadout.id)) {
+      return this.loadoutSetCountCache.get(loadout.id)!;
+    }
+
+    const setCounts: { [setName: string]: number } = {};
+
+    // Count each disc set
+    Object.values(loadout.equippedDiscs).forEach(disc => {
+      if (disc && disc.set) {
+        setCounts[disc.set] = (setCounts[disc.set] || 0) + 1;
+      }
+    });
+
+    // Convert to string format: "Woodpecker x4, Hormone x2"
+    const result = Object.entries(setCounts)
+      .sort((a, b) => b[1] - a[1]) // Sort by count descending
+      .map(([setName, count]) => `${setName} x${count}`)
+      .join(', ');
+
+    // Cache the result
+    this.loadoutSetCountCache.set(loadout.id, result);
+
+    return result;
+  }
+
+  /**
+   * Get remaining loadout slots for current agent
+   */
+  getRemainingLoadoutSlots(): number {
+    if (!this.selectedBuild) {
+      return 0;
+    }
+    return this.discLoadoutService.getRemainingSlots(this.selectedBuild.agentId);
+  }
+
+  /**
+   * Check if we can add more loadouts
+   */
+  canAddMoreLoadouts(): boolean {
+    if (!this.selectedBuild) {
+      return false;
+    }
+    return this.discLoadoutService.canAddLoadout(this.selectedBuild.agentId);
   }
 }
