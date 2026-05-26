@@ -347,8 +347,16 @@ export class SwUpdateService implements OnDestroy {
         // Store the current timestamp so we have it for next check
         localStorage.setItem(this.INSTALLED_TIMESTAMP_KEY, serverTimestamp.toString());
 
-        // Reset the update available flag since we're on the latest version
-        this.updateAvailable$.next(false);
+        // Only reset the update available flag if there's no pending update
+        // If EXPECTING_UPDATE_KEY is set, it means an update was downloaded and is ready,
+        // but the user hasn't applied it yet - keep the button visible!
+        const expectingUpdate = localStorage.getItem(this.EXPECTING_UPDATE_KEY) === 'true';
+        if (!expectingUpdate) {
+          console.log('[SW Update] Resetting update button (no pending update)');
+          this.updateAvailable$.next(false);
+        } else {
+          console.log('[SW Update] Keeping update button visible (pending update not applied yet)');
+        }
 
         return false;
       }

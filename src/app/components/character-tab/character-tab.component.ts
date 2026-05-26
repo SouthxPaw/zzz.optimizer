@@ -1689,9 +1689,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return this.availableSubStatTypes;
     }
 
-    // Get the main stat base type (e.g., 'ATK%' -> 'ATK', 'CRIT_Rate' -> 'CRIT')
-    const mainStatType = this.compareCustomDisc.mainStat.type;
-    const mainStatBase = mainStatType.replace(/%|_Rate|_DMG|_Ratio|_Proficiency|_Mastery|_Regen/g, '');
+    // Use the main stat type directly without manipulation
+    const mainStatBase = this.compareCustomDisc.mainStat.type;
 
     // Get already selected substats from OTHER positions (not current index)
     const selectedSubstats = (this.compareCustomDisc.subStats || [])
