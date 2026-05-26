@@ -1,8 +1,8 @@
 {
   "versions": [
     {
-      "version": "6.3.2",
-      "date": "2026-05-26",
+      "version": "6.3.3",
+      "date": "2026-05-28",
       "features": [
         "Disc Loadouts - save and manage multiple disc configurations per agent",
         "Create empty loadouts by manually selecting discs for each slot",
