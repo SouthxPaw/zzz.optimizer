@@ -267,6 +267,30 @@
 .btn-secondary.small {
   padding: 6px 12px;
 }
+
+/* Import from UID button - more prominent with solid orange */
+.btn-import-uid {
+  background: linear-gradient(135deg, var(--gold), #e8a628);
+  color: var(--bg);
+  border: 2px solid var(--gold2);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(244, 185, 66, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  font-weight: bold;
+}
+
+.btn-import-uid:hover {
+  background: linear-gradient(135deg, var(--gold2), var(--gold));
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    0 0 25px rgba(244, 185, 66, 0.6),
+    0 0 40px rgba(244, 185, 66, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: #fff;
+}
+
 .content-grid {
   display: grid;
   grid-template-columns: 350px 1fr 400px;
