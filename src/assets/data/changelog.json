@@ -1,7 +1,7 @@
 {
   "versions": [
     {
-      "version": "6.3.3",
+      "version": "6.3.5",
       "date": "2026-05-28",
       "features": [
         "Disc Loadouts - save and manage multiple disc configurations per agent",
