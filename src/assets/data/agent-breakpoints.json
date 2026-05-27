@@ -4174,8 +4174,8 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 80,
-          "optimal": 100
+          "min": 60,
+          "optimal": 80
         },
         "critDmg": {
           "min": 120,
