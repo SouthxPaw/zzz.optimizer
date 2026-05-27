@@ -4155,7 +4155,7 @@
       "breakpoints": {
         "hp": {
           "min": 18000,
-          "optimal": 22000
+          "optimal": 21500
         },
         "atk": {
           "min": 1800,
@@ -4174,7 +4174,7 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 90,
+          "min": 80,
           "optimal": 100
         },
         "critDmg": {
