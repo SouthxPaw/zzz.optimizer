@@ -408,6 +408,17 @@
           "note": ""
         }
       ]
+    },
+    "1531": {
+      "comment": "StarlightBilly",
+      "4": [
+        {
+          "type": "CRIT_DMG",
+          "value": 16,
+          "format": "%",
+          "note": ""
+        }
+      ]
     }
   }
 }
