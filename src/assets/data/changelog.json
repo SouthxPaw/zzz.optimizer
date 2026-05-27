@@ -1,6 +1,18 @@
 {
   "versions": [
     {
+      "version": "6.2.2",
+      "date": "2026-05-26",
+      "features": [],
+      "fixes": [
+        "Fixed update notification button disappearing when 30-minute background check runs",
+        "Fixed substats not displaying/filtering correctly in disc comparison modal"
+      ],
+      "improvements": [
+        "Update button now persists until user applies the update, regardless of subsequent background checks"
+      ]
+    },
+    {
       "version": "6.1.50",
       "date": "2026-05-17",
       "features": [],
