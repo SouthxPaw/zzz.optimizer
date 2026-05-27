@@ -2432,6 +2432,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Replace underscores with spaces
     let formatted = statType.replace(/_/g, ' ');
 
+    // Remove trailing % since values already include the % symbol
+    formatted = formatted.replace(/%$/, '');
+
     return formatted;
   }
 
