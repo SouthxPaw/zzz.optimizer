@@ -1192,6 +1192,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         isPercent: isPercent,
         rollCount: rollCounts[type] || 0,
         isPriority: isPriority,
+        originalType: type, // Keep the original type for proper matching in share image
       };
     });
 
