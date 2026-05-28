@@ -1908,12 +1908,19 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         const updatedDisc = this.discService.getDiscById(this.editingDiscUid);
 
         if (updatedDisc) {
-          // Update the build's equippedDiscs with the updated disc
-          const currentDiscs = { ...this.selectedBuild.equippedDiscs };
-          currentDiscs[this.selectedDiscSlot] = updatedDisc;
-          await this.buildService.updateBuild(this.selectedBuild.id, {
-            equippedDiscs: currentDiscs,
-          });
+          // Check if we're editing a disc in loadout creation mode
+          if (this.showCreateEmptyForm && this.loadoutCreationSlot) {
+            // Update the disc in the new loadout being created
+            this.newLoadoutDiscs[this.loadoutCreationSlot] = updatedDisc;
+            this.loadoutCreationSlot = null; // Clear the slot
+          } else {
+            // Normal mode: Update the build's equippedDiscs with the updated disc
+            const currentDiscs = { ...this.selectedBuild.equippedDiscs };
+            currentDiscs[this.selectedDiscSlot] = updatedDisc;
+            await this.buildService.updateBuild(this.selectedBuild.id, {
+              equippedDiscs: currentDiscs,
+            });
+          }
         }
 
         // OPTIMIZATION: Clear caches after updating disc stats
@@ -2450,6 +2457,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Text formatting helpers for consistent UI display
   formatStatType(statType: string): string {
+    if (!statType) return '';
+
+    // Replace underscores with spaces
+    let formatted = statType.replace(/_/g, ' ');
+
+    return formatted;
+  }
+
+  // Format W-Engine stat type with normalization (removes trailing %)
+  formatWEngineStatType(statType: string): string {
     if (!statType) return '';
 
     // Replace underscores with spaces
@@ -3480,15 +3497,9 @@ async generateShareImage() {
         wEngine.subStat.type === 'Energy_Regen' ||
         wEngine.subStat.type === 'Anomaly_Mastery';
 
-      // Normalize label: remove % suffix since value already includes it
-      let normalizedLabel = wEngine.subStat.type.replace(/_/g, ' ');
-      if (normalizedLabel.endsWith('%')) {
-        normalizedLabel = normalizedLabel.slice(0, -1);
-      }
-
       stats.push({
         iconName: iconName,
-        label: normalizedLabel,
+        label: this.formatWEngineStatType(wEngine.subStat.type),
         value: isPercent
           ? `${wEngine.subStat.value}%`
           : String(wEngine.subStat.value),
@@ -3730,6 +3741,52 @@ async generateShareImage() {
 
     // Open the existing disc picker
     this.openDiscPicker(slot);
+  }
+
+  /**
+   * Edit an existing disc in the loadout being created
+   */
+  openLoadoutDiscEdit(slot: DiscSlot, event?: Event): void {
+    if (event) event.stopPropagation();
+
+    // Get the disc for this slot in the new loadout
+    const existingDisc = this.newLoadoutDiscs[slot];
+    if (!existingDisc) return;
+
+    // Find the disc set
+    const discSet = this.referenceDiscSets.find(
+      (ds) => ds.name === existingDisc.set,
+    );
+    if (!discSet) return;
+
+    // Set edit mode state
+    this.isEditMode = true;
+    this.editingDiscUid = existingDisc.uid;
+    this.selectedDiscSlot = slot;
+    this.selectedDiscSetForCreation = discSet;
+    this.loadoutCreationSlot = slot; // Keep track that we're in loadout mode
+
+    // Pre-populate form data with existing disc stats
+    const existingSubStats = existingDisc.subStats.map((s) => ({
+      type: s.type,
+      value: s.value as string | number,
+    }));
+
+    // Pad with empty substats to always have 4 slots
+    while (existingSubStats.length < 4) {
+      existingSubStats.push({ type: '' as SubStatType, value: '' });
+    }
+
+    this.discFormData = {
+      mainStatType: existingDisc.mainStat.type,
+      mainStatValue: existingDisc.mainStat.value,
+      subStats: existingSubStats,
+    };
+
+    // Open the form directly (skip picker)
+    this.showDiscForm = true;
+    this.showDiscPicker = false;
+    this.cdr.markForCheck();
   }
 
   /**

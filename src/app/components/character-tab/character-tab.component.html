@@ -519,7 +519,7 @@
             <p>
               <strong
                 >{{
-                  formatStatType(selectedBuild.equippedWEngine.subStat.type)
+                  formatWEngineStatType(selectedBuild.equippedWEngine.subStat.type)
                 }}:</strong
               >
               {{ formatWEngineSubstatValue(selectedBuild.equippedWEngine.subStat) }}
@@ -1891,7 +1891,7 @@
               *ngFor="let slot of discSlots"
               class="empty-loadout-disc-slot"
               [class.has-disc]="newLoadoutDiscs[slot]"
-              (click)="openDiscPickerForLoadout(slot)"
+              (click)="newLoadoutDiscs[slot] ? openLoadoutDiscEdit(slot, $event) : openDiscPickerForLoadout(slot)"
             >
               <div *ngIf="newLoadoutDiscs[slot]; else emptyLoadoutSlot" class="loadout-disc-preview">
                 <div class="disc-header">
