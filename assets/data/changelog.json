@@ -1,7 +1,7 @@
 {
   "versions": [
     {
-      "version": "6.3.9",
+      "version": "6.3.10",
       "date": "2026-05-28",
       "features": [
         "Auto-scroll to agent details when selecting a build on mobile",
