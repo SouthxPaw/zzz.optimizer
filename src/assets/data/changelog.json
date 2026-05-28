@@ -1,6 +1,28 @@
 {
   "versions": [
     {
+      "version": "6.3.8",
+      "date": "2026-05-28",
+      "features": [
+        "Disc Loadouts - save and manage multiple disc configurations per agent",
+        "Create empty loadouts by manually selecting discs for each slot",
+        "Save current equipped discs as a named loadout",
+        "Apply saved loadouts with one click",
+        "Preview loadout stats before applying",
+        "Delete and manage loadouts per agent"
+      ],
+      "fixes": [],
+      "improvements": [
+        "Optimized Agent filtering",
+        "Optimized W-Engine filtering",
+        "Optimized Loadout service",
+        "Optimized Build feedback generation",
+        "Improved visibility of Import UID button",
+        "Normalized percentage naming on W-Engine effects",
+        "Added total effective stats to the share image"
+      ]
+    },
+    {
       "version": "6.2.2",
       "date": "2026-05-26",
       "features": [],

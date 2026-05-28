@@ -2002,23 +2002,28 @@ export class ScoringService {
                                                    .replace('Energy_Regen', 'Energy_Regen')
                                                    .replace('Pen_Ratio', 'PEN_Ratio');
 
+      // OPTIMIZED: Combine two sequential filters into single pass
       Object.entries(statWeightsToUse)
         .filter(([stat, weight]) => {
-          // Always include CRIT Rate if in the "awkward zone" (30-50%), regardless of weight
-          if (stat === 'CRIT_Rate' && stats.critRate > 30 && stats.critRate < 50) return true;
-          // Otherwise only suggest stats with weight >= 1.0
-          return weight >= 1.0;
-        })
-        .filter(([stat]) => {
-          // Skip CRIT Rate if at or above optimal OR 100% (only stat where excess hurts)
-          // But don't skip if it's in the awkward zone (handled above)
-          if (stat === 'CRIT_Rate' && (stats.critRate >= 100 || (stats.critRate >= breakpoints.breakpoints.critRate.optimal && stats.critRate >= 50))) return false;
-          // Skip if this stat is already the main stat (can't have as substat)
-          if (stat === mainStatWeightKey ||
-              (stat.includes('ATK') && disc.mainStat.type.includes('ATK')) ||
-              (stat.includes('HP') && disc.mainStat.type.includes('HP')) ||
-              (stat.includes('DEF') && disc.mainStat.type.includes('DEF'))) return false;
-          return true;
+          // First filter: Check if stat is worth considering
+          const isCritRateAwkwardZone = stat === 'CRIT_Rate' && stats.critRate > 30 && stats.critRate < 50;
+          const hasHighWeight = weight >= 1.0;
+
+          if (!isCritRateAwkwardZone && !hasHighWeight) {
+            return false;
+          }
+
+          // Second filter: Check if stat should be excluded
+          const isCritRateOvercap = stat === 'CRIT_Rate' && (
+            stats.critRate >= 100 ||
+            (stats.critRate >= breakpoints.breakpoints.critRate.optimal && stats.critRate >= 50)
+          );
+          const isMainStatConflict = stat === mainStatWeightKey ||
+            (stat.includes('ATK') && disc.mainStat.type.includes('ATK')) ||
+            (stat.includes('HP') && disc.mainStat.type.includes('HP')) ||
+            (stat.includes('DEF') && disc.mainStat.type.includes('DEF'));
+
+          return !isCritRateOvercap && !isMainStatConflict;
         })
         .sort((a, b) => b[1] - a[1])
         .slice(0, 4)
