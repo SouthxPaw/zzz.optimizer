@@ -189,6 +189,32 @@
   }
 }
 
+/* Tablet adjustments - keep horizontal but reduce spacing */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .nav-container {
+    padding: 0 15px;
+  }
+
+  .nav-brand .site-title {
+    font-size: 1.3em;
+  }
+
+  .nav-links {
+    gap: 6px;
+  }
+
+  .nav-link {
+    padding: 8px 12px;
+    font-size: 0.85em;
+  }
+
+  .nav-link .nav-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Mobile - stack vertically */
 @media (max-width: 768px) {
   .nav-container {
     flex-direction: column;
@@ -205,5 +231,20 @@
   .nav-link {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* Small screens - further reduce padding */
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 10px 15px;
+  }
+
+  .nav-brand .site-title {
+    font-size: 1.2em;
+  }
+
+  .nav-link {
+    padding: 10px 16px;
   }
 }
