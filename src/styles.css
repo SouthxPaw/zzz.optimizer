@@ -43,11 +43,19 @@
   font-weight: 400;
 }
 
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'InpinHongMeti', Arial, sans-serif;
   margin: 0;
   padding: 0;
   line-height: 1.6;
+  overflow-x: hidden;
+  max-width: 100vw;
   /* Cyberpunk background with grid pattern and vignette */
   background:
     radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%),
@@ -56,6 +64,10 @@ body {
     #0a0a0a;
   background-size: 100% 100%, 50px 50px, 50px 50px, 100% 100%;
   background-attachment: fixed;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 /* Use Arial for small text elements where custom font is too thick */

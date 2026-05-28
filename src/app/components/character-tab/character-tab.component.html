@@ -150,6 +150,8 @@
             src="assets/data/images/page-icons/avatar_default.webp"
             alt="No builds"
             class="empty-icon-img"
+            width="80"
+            height="80"
             loading="lazy"
           />
           <h3>No Builds Yet</h3>
@@ -168,7 +170,7 @@
           (cdkDropListDropped)="onBuildDrop($event)"
         >
           <div
-            *ngFor="let build of builds; trackBy: trackByBuildId"
+            *ngFor="let build of builds; let i = index; trackBy: trackByBuildId"
             class="build-card"
             cdkDrag
             [class.selected]="selectedBuild?.id === build.id"
@@ -176,9 +178,29 @@
             [class.a-rank]="getAgentRarity(build.agentId) === 'A'"
             (click)="selectBuild(build)"
           >
-            <!-- Drag Handle Indicator -->
-            <div class="drag-handle" cdkDragHandle title="Drag to reorder">
+            <!-- Drag Handle Indicator (Desktop) -->
+            <div class="drag-handle desktop-only" cdkDragHandle title="Drag to reorder">
               <span class="drag-icon">⋮⋮</span>
+            </div>
+
+            <!-- Mobile Reorder Buttons -->
+            <div class="mobile-reorder-buttons mobile-only">
+              <button
+                class="reorder-btn reorder-up"
+                *ngIf="i > 0"
+                (click)="moveBuildUp(i, $event)"
+                title="Move up"
+              >
+                ↑
+              </button>
+              <button
+                class="reorder-btn reorder-down"
+                *ngIf="i < builds.length - 1"
+                (click)="moveBuildDown(i, $event)"
+                title="Move down"
+              >
+                ↓
+              </button>
             </div>
 
             <button
@@ -194,6 +216,8 @@
                 [src]="getAgentIcon(build.agentId)"
                 [alt]="build.name"
                 class="agent-icon"
+                width="60"
+                height="60"
                 loading="lazy"
               />
               <span *ngIf="!getAgentIcon(build.agentId)" class="build-name">{{
@@ -215,7 +239,7 @@
 
       <!-- Build Content -->
       <div class="section build-content" *ngIf="selectedBuild">
-        <div class="build-header-with-actions">
+        <div class="build-header-with-actions" #buildHeader>
           <h2>{{ selectedBuild.name }}</h2>
           <button class="btn-share" (click)="shareAsImage()" title="Share build as image">
             📤 Share
@@ -271,7 +295,7 @@
                       (click)="openCompareModal(slot, $event)"
                       title="Compare disc"
                     >
-                      <img src="assets/data/images/page-icons/left-and-right-arrows.png" alt="Compare" class="compare-icon">
+                      <img src="assets/data/images/page-icons/left-and-right-arrows.png" alt="Compare" class="compare-icon" width="20" height="20">
                     </button>
                   </div>
                   <div class="disc-header-right">
@@ -313,6 +337,8 @@
                     [src]="getDiscSetByName(selectedBuild.equippedDiscs[slot]!.set)!.icon"
                     [alt]="selectedBuild.equippedDiscs[slot]!.set"
                     class="disc-set-icon-inline"
+                    width="20"
+                    height="20"
                     loading="lazy"
                   />
                 </div>
@@ -440,6 +466,8 @@
                   [src]="engine.icon"
                   [alt]="engine.name"
                   class="wengine-thumbnail"
+                  width="48"
+                  height="48"
                   loading="lazy"
                 />
                 <div class="wengine-list-info">
@@ -452,6 +480,8 @@
                   [src]="getSpecialtyIcon(engine.specialty)"
                   [alt]="engine.specialty"
                   class="wengine-specialty-icon"
+                  width="24"
+                  height="24"
                   [title]="engine.specialty"
                   loading="lazy"
                 />
@@ -483,6 +513,8 @@
                   [alt]="selectedBuild.equippedWEngine.name"
                   [title]="selectedBuild.equippedWEngine.name"
                   class="wengine-icon"
+                  width="128"
+                  height="128"
                   loading="lazy"
                 />
               </div>
@@ -938,6 +970,8 @@
                 [src]="agent.icon"
                 [alt]="agent.name"
                 class="agent-icon"
+                width="60"
+                height="60"
                 loading="lazy"
               />
               <span *ngIf="!agent.icon" class="agent-name">{{
@@ -952,6 +986,8 @@
                   [src]="getAgentElementIcon(agent.id)"
                   [alt]="agent.element"
                   class="element-badge"
+                  width="20"
+                  height="20"
                   [title]="agent.element"
                   loading="lazy"
                 />
@@ -960,6 +996,8 @@
                   [src]="agent.specialtyIcon"
                   [alt]="agent.specialty"
                   class="specialty-badge"
+                  width="20"
+                  height="20"
                   [title]="agent.specialty"
                   loading="lazy"
                 />
@@ -1043,6 +1081,8 @@
                 [src]="discSet.icon"
                 [alt]="discSet.name"
                 class="disc-set-icon"
+                width="48"
+                height="48"
                 loading="lazy"
               />
               <div class="disc-set-name">{{ discSet.name }}</div>
@@ -1233,6 +1273,8 @@
                     [src]="getDiscSetByName(selectedBuild.equippedDiscs[compareDiscSlot]!.set)!.icon"
                     [alt]="selectedBuild.equippedDiscs[compareDiscSlot]!.set"
                     class="disc-set-icon-inline"
+                    width="20"
+                    height="20"
                     loading="lazy"
                   />
                 </div>
@@ -1284,6 +1326,8 @@
                     [src]="getDiscSetByName(compareCustomDisc.set!)!.icon"
                     [alt]="compareCustomDisc.set"
                     class="disc-set-icon-inline"
+                    width="20"
+                    height="20"
                     loading="lazy"
                   />
                 </div>
@@ -1918,6 +1962,8 @@
                     [src]="getDiscSetByName(newLoadoutDiscs[slot].set)!.icon"
                     [alt]="newLoadoutDiscs[slot].set"
                     class="disc-set-icon-inline"
+                    width="20"
+                    height="20"
                     loading="lazy"
                   />
                 </div>
@@ -2067,6 +2113,8 @@
                         [src]="getDiscSetByName(selectedLoadoutForPreview.equippedDiscs[slot].set)!.icon"
                         [alt]="selectedLoadoutForPreview.equippedDiscs[slot].set"
                         class="disc-set-icon-inline"
+                        width="20"
+                        height="20"
                         loading="lazy"
                       />
                     </div>
@@ -2152,5 +2200,16 @@
       </div>
     </div>
   </div>
+
+  <!-- Scroll to Top Button (Mobile Only) -->
+  <button
+    *ngIf="showScrollTopButton"
+    class="scroll-to-top-btn"
+    (click)="scrollToTop()"
+    title="Scroll to top"
+    aria-label="Scroll to top"
+  >
+    ↑
+  </button>
 </div>
 <!-- End character-tab -->

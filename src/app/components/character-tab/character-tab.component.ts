@@ -98,6 +98,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   // Disc Loadout modal state
   showLoadoutsModal = false;
   agentLoadouts: DiscLoadout[] = [];
+
+  // Mobile responsiveness
+  @ViewChild('buildHeader', { read: ElementRef }) buildHeader?: ElementRef;
+  isMobile: boolean = false;
+  showScrollTopButton: boolean = false;
   selectedLoadoutForPreview: DiscLoadout | null = null;
   loadoutPreviewStats: any = null; // Will hold calculated stats for preview
   loadoutValidation: { isValid: boolean; missingSlots: string[]; availableSlots: string[] } | null = null;
@@ -267,6 +272,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Load customizations from local storage
     this.loadCustomizations();
 
+    // Initialize mobile detection
+    this.checkIfMobile();
+
     // Subscribe to user builds
     this.buildService.builds$
       .pipe(takeUntil(this.destroy$))
@@ -392,6 +400,36 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   selectBuild(build: AgentBuild) {
     this.buildService.selectBuild(build);
     this.clearFeedbackCache();
+
+    // Auto-scroll to agent name/build header on mobile when selecting an agent
+    if (this.isMobile && this.buildHeader) {
+      setTimeout(() => {
+        this.buildHeader?.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest'
+        });
+      }, 100);
+    }
+  }
+
+  @HostListener('window:resize')
+  checkIfMobile() {
+    // Include tablets up to 1024px
+    this.isMobile = window.innerWidth <= 1024;
+    this.cdr.markForCheck();
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll() {
+    if (this.isMobile) {
+      this.showScrollTopButton = window.pageYOffset > 300;
+      this.cdr.markForCheck();
+    }
+  }
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   openAddAgentModal() {
@@ -490,6 +528,31 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     await this.buildService.reorderBuilds(this.builds);
 
     this.cdr.markForCheck();
+  }
+
+  // Mobile-friendly reordering methods
+  async moveBuildUp(index: number, event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (index <= 0 || index >= this.builds.length) return;
+
+    // Work directly with service's internal array to avoid double updates
+    const currentBuilds = [...this.builds];
+    moveItemInArray(currentBuilds, index, index - 1);
+    await this.buildService.reorderBuilds(currentBuilds);
+    // Service subscription will update this.builds automatically
+  }
+
+  async moveBuildDown(index: number, event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (index < 0 || index >= this.builds.length - 1) return;
+
+    // Work directly with service's internal array to avoid double updates
+    const currentBuilds = [...this.builds];
+    moveItemInArray(currentBuilds, index, index + 1);
+    await this.buildService.reorderBuilds(currentBuilds);
+    // Service subscription will update this.builds automatically
   }
 
   toggleMindscape(level: number) {
@@ -2661,7 +2724,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   backgroundImageArtist: string = '';
   barImageArtist: string = '';
   accentColor: string = '#f4b942'; // Default gold
-  customizationOptionsExpanded = true; // Collapsible customization section
+  customizationOptionsExpanded = window.innerWidth > 768; // Collapsed on mobile by default
   hexInputValue: string = '#f4b942'; // Separate value for hex input to prevent loops
 
   presetColors = [
