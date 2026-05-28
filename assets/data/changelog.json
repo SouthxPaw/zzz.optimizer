@@ -1,6 +1,22 @@
 {
   "versions": [
     {
+      "version": "6.3.9",
+      "date": "2026-05-28",
+      "features": [
+        "Auto-scroll to agent details when selecting a build on mobile",
+        "Scroll-to-top button for easy navigation on mobile devices",
+        "Up/down arrow buttons for reordering agents on mobile (replaces drag and drop)"
+      ],
+      "fixes": [
+        "Fixed modal button layouts on mobile devices"
+      ],
+      "improvements": [
+        "Enhanced mobile experience with better touch targets and spacing",
+        "Improved page load performance by adding image dimensions"
+      ]
+    },
+    {
       "version": "6.3.8",
       "date": "2026-05-28",
       "features": [
