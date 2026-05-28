@@ -21,6 +21,7 @@ export interface ShareImageData {
     rollCount: number;
     isPriority: boolean;
   }>;
+  totalEffectiveSubstats?: number;
   showBuildRating?: boolean;
   showDiscRatings?: boolean;
   customAgentImageUrl?: string;
@@ -522,7 +523,7 @@ export class CanvasShareImageService {
       // Position: top: 150px, left: 55%, transform: translateX(-50%)
       const menuCenterX = sectionX + (this.WIDTH - sectionX) * 0.55;
       const menuY = 150;
-      const menuWidth = 500;
+      const menuWidth = 475;
       const menuHeight = 400;
       const menuX = menuCenterX - menuWidth / 2;
 
@@ -727,42 +728,42 @@ export class CanvasShareImageService {
         statsX: gridX + 205,
         statsY: gridY,
         imageX: gridX + 359,
-        imageY: gridY + 5 - 3,
+        imageY: gridY - 3,
         imageFirst: false,
       },
       Drive2: {
         statsX: gridX + 148,
         statsY: gridY + 140 - 8,
-        imageX: gridX + 292,
-        imageY: gridY + 131 + 1,
+        imageX: gridX + 295.5,
+        imageY: gridY + 127,
         imageFirst: false,
       },
       Drive3: {
         statsX: gridX + 205,
         statsY: gridY + 270 + 4,
         imageX: gridX + 359,
-        imageY: gridY + 256 + 5,
+        imageY: gridY + 258.5,
         imageFirst: false,
       },
       Drive4: {
         statsX: gridX + 940 - 50 - 180,
         statsY: gridY + 250 + 30,
-        imageX: gridX + 945 - 50 - 327,
-        imageY: gridY + 246 + 16,
+        imageX: gridX + 557.5,
+        imageY: gridY + 257.5,
         imageFirst: true,
       },
       Drive5: {
         statsX: gridX + 940 - 50 - 125,
         statsY: gridY + 125 + 10,
-        imageX: gridX + 953 - 50 - 266,
-        imageY: gridY + 122 + 10,
+        imageX: gridX + 622,
+        imageY: gridY + 128,
         imageFirst: true,
       },
       Drive6: {
         statsX: gridX + 940 - 50 - 180,
         statsY: gridY - 5,
-        imageX: gridX + 946 - 50 - 327,
-        imageY: gridY - 5 + 8,
+        imageX: gridX + 557.2,
+        imageY: gridY - 1.5,
         imageFirst: true,
       },
     };
@@ -784,7 +785,7 @@ export class CanvasShareImageService {
       const pos = discPositions[slot];
       const discScore = data.discScores.get(disc.uid);
 
-      await this.drawDisc(ctx, disc, discScore, pos.statsX, pos.statsY, data.showDiscRatings, data.accentColor);
+      await this.drawDisc(ctx, disc, discScore, pos.statsX, pos.statsY, data.showDiscRatings, data.accentColor, data.substatBreakdown);
       await this.drawDiscImage(
         ctx,
         disc,
@@ -806,8 +807,29 @@ export class CanvasShareImageService {
     y: number,
     showDiscRatings?: boolean,
     accentColor?: string,
+    substatBreakdown?: Array<{
+      name: string;
+      value: string;
+      isPercent: boolean;
+      rollCount: number;
+      isPriority: boolean;
+    }>,
   ): Promise<void> {
     const color = accentColor || '#f4b942';
+
+    // Create a map of priority substats for quick lookup
+    const priorityStats = new Set<string>();
+    if (substatBreakdown) {
+      substatBreakdown.forEach(stat => {
+        if (stat.isPriority) {
+          // Try multiple normalization formats to ensure matching
+          const normalized = stat.name.toLowerCase().replace(/ /g, '_');
+          priorityStats.add(normalized);
+          priorityStats.add(stat.name.toLowerCase().replace(/_/g, ' '));
+          priorityStats.add(stat.name.toLowerCase());
+        }
+      });
+    }
 
     ctx.save();
 
@@ -879,7 +901,15 @@ export class CanvasShareImageService {
     // Substats
     textY += 4;
     for (const subStat of disc.subStats) {
-      ctx.fillStyle = '#aaa';
+      // Check if this substat is a priority stat
+      // Try multiple formats to match against priority stats
+      const statType1 = subStat.type.toLowerCase().replace(/ /g, '_');
+      const statType2 = subStat.type.toLowerCase().replace(/_/g, ' ');
+      const statType3 = subStat.type.toLowerCase();
+      const isPriority = priorityStats.has(statType1) || priorityStats.has(statType2) || priorityStats.has(statType3);
+
+      // Use accent color for priority stats, grey for others
+      ctx.fillStyle = isPriority ? color : '#aaa';
       ctx.font = '300 8px Arial';
       ctx.textAlign = 'left';
 
@@ -899,14 +929,16 @@ export class CanvasShareImageService {
           'bold 8px Arial',
         );
 
-        ctx.fillStyle = '#fff';
+        // Use accent color for priority stat values, white for others
+        ctx.fillStyle = isPriority ? color : '#fff';
         ctx.font = '500 8px Arial';
         ctx.textAlign = 'right';
         ctx.fillText(String(subStat.value), x + 105, textY);
       } else {
         ctx.fillText(subText, x + 5, textY);
 
-        ctx.fillStyle = '#fff';
+        // Use accent color for priority stat values, white for others
+        ctx.fillStyle = isPriority ? color : '#fff';
         ctx.font = '500 8px Arial';
         ctx.textAlign = 'right';
         ctx.fillText(String(subStat.value), x + 105, textY);
@@ -938,19 +970,19 @@ export class CanvasShareImageService {
 
       // Draw semi-transparent background
       ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-      this.roundRect(ctx, x, y, 96, 96, 45);
+      this.roundRect(ctx, x, y, 108, 108, 54);
       ctx.fill();
 
       // Draw white border
       ctx.strokeStyle = '#fff';
       ctx.lineWidth = 2;
-      this.roundRect(ctx, x, y, 96, 96, 45);
+      this.roundRect(ctx, x, y, 108, 108, 54);
       ctx.stroke();
 
       // Draw icon with glow
       ctx.shadowColor = 'rgba(255, 255, 255, 0.6)';
       ctx.shadowBlur = 8;
-      ctx.drawImage(iconImg, x + 3, y + 3, 90, 90);
+      ctx.drawImage(iconImg, x + 3, y + 3, 102, 102);
 
       ctx.restore();
     } catch (error) {
@@ -1264,45 +1296,87 @@ export class CanvasShareImageService {
     ctx.lineTo(this.WIDTH, footerY);
     ctx.stroke();
 
+    // Calculate total width needed for stats at base font size
+    const baseFontSize = 10;
+    const minFontSize = 7;
+    const leftPadding = 12;
+    const rightPadding = 12;
+    const creditsText = 'Made in southxpaw.github.io/zzz.optimizer';
+
+    // Measure credits width
+    ctx.font = 'italic 9px Arial';
+    const creditsWidth = this.measureTextWidth(ctx, creditsText, 'italic 9px Arial');
+
+    // Calculate available space for stats
+    const availableWidth = this.WIDTH - leftPadding - rightPadding - creditsWidth - 20; // 20px gap between stats and credits
+
+    // Calculate required width for all stats at base font size
+    let requiredWidth = 0;
+
+    for (let i = 0; i < data.substatBreakdown.length; i++) {
+      const stat = data.substatBreakdown[i];
+      const statText = `(${stat.rollCount}) ${stat.name}: ${stat.value}${stat.isPercent ? '%' : ''}`;
+      const font = stat.isPriority ? `bold ${baseFontSize}px Arial` : `400 ${baseFontSize}px Arial`;
+      requiredWidth += this.measureTextWidth(ctx, statText, font);
+      requiredWidth += this.measureTextWidth(ctx, ' | ', `bold ${baseFontSize}px Arial`);
+    }
+
+    // Add total effective substats width if present
+    if (data.totalEffectiveSubstats !== undefined && data.totalEffectiveSubstats > 0) {
+      const effectiveText = `Total Effective Substats: ${data.totalEffectiveSubstats}`;
+      requiredWidth += this.measureTextWidth(ctx, effectiveText, `bold ${baseFontSize}px Arial`);
+    }
+
+    // Calculate scale factor
+    let fontSize = baseFontSize;
+    if (requiredWidth > availableWidth) {
+      const scaleFactor = availableWidth / requiredWidth;
+      fontSize = Math.max(minFontSize, Math.floor(baseFontSize * scaleFactor));
+    }
+
     // Draw substats breakdown (left side)
     ctx.fillStyle = '#eee';
-    ctx.font = '400 10px Arial';
+    ctx.font = `400 ${fontSize}px Arial`;
     ctx.textBaseline = 'middle';
 
-    let textX = 12;
+    let textX = leftPadding;
     const textY = footerY + footerHeight / 2;
 
     for (let i = 0; i < data.substatBreakdown.length; i++) {
       const stat = data.substatBreakdown[i];
-      const isLast = i === data.substatBreakdown.length - 1;
 
       // Format stat text
       const statText = `(${stat.rollCount}) ${stat.name}: ${stat.value}${stat.isPercent ? '%' : ''}`;
 
       // Draw stat in priority color (using accent color) or normal color
       ctx.fillStyle = stat.isPriority ? accentColor : '#eee';
-      ctx.font = stat.isPriority ? 'bold 10px Arial' : '400 10px Arial';
+      ctx.font = stat.isPriority ? `bold ${fontSize}px Arial` : `400 ${fontSize}px Arial`;
       ctx.fillText(statText, textX, textY);
 
       // Measure text width for next position
       const textWidth = this.measureTextWidth(ctx, statText, ctx.font);
       textX += textWidth;
 
-      // Add separator if not last
-      if (!isLast) {
-        ctx.fillStyle = accentColor;
-        ctx.font = 'bold 10px Arial';
-        ctx.fillText(' | ', textX, textY);
-        textX += this.measureTextWidth(ctx, ' | ', 'bold 10px Arial');
-      }
+      // Add separator
+      ctx.fillStyle = accentColor;
+      ctx.font = `bold ${fontSize}px Arial`;
+      ctx.fillText(' | ', textX, textY);
+      textX += this.measureTextWidth(ctx, ' | ', `bold ${fontSize}px Arial`);
+    }
+
+    // Add total effective substats at the end (if available)
+    if (data.totalEffectiveSubstats !== undefined && data.totalEffectiveSubstats > 0) {
+      const effectiveText = `Total Effective Substats: ${data.totalEffectiveSubstats}`;
+      ctx.fillStyle = accentColor;
+      ctx.font = `bold ${fontSize}px Arial`;
+      ctx.fillText(effectiveText, textX, textY);
     }
 
     // Draw credits (right side)
     ctx.fillStyle = '#aaa';
     ctx.font = 'italic 9px Arial';
     ctx.textAlign = 'right';
-    const creditsText = 'Made in southxpaw.github.io/zzz.optimizer';
-    ctx.fillText(creditsText, this.WIDTH - 12, textY);
+    ctx.fillText(creditsText, this.WIDTH - rightPadding, textY);
 
     ctx.restore();
   }
