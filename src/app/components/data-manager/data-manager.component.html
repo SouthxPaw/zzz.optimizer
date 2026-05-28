@@ -37,7 +37,7 @@
     <div class="section">
       <h2>💾 Import User Data</h2>
       <p class="section-description">
-        Import your builds and disc inventory from a backup file.
+        Import your builds, disc inventory, and loadouts from a backup file.
       </p>
 
       <div class="button-grid">
@@ -45,7 +45,7 @@
           class="btn-secondary"
           (click)="fileInput.click()"
           [disabled]="isLoading">
-          Import Builds & Discs
+          Import Builds, Discs & Loadouts
         </button>
       </div>
       <input
@@ -60,7 +60,7 @@
         <div class="import-options">
           <label>
             <input type="checkbox" [(ngModel)]="replaceExisting">
-            Replace existing builds and discs (will clear current data)
+            Replace existing builds, discs, and loadouts (will clear current data)
           </label>
         </div>
         <div class="button-grid">
@@ -78,7 +78,7 @@
     <div class="section">
       <h2>📤 Export User Data</h2>
       <p class="section-description">
-        Backup your builds and disc inventory. Save this file to restore your data later.
+        Backup your builds, disc inventory, and loadouts. Save this file to restore your data later.
       </p>
 
       <div class="button-grid">
@@ -86,10 +86,10 @@
           class="btn-primary"
           (click)="exportBuilds()"
           [disabled]="isLoading">
-          Export Builds & Discs
+          Export Builds, Discs & Loadouts
         </button>
       </div>
-      <p class="note">Export includes all your builds and disc inventory. Reference data (agents, W-Engines) loads automatically.</p>
+      <p class="note">Export includes all your builds, disc inventory, and loadouts. Reference data (agents, W-Engines) loads automatically.</p>
     </div>
 
     <!-- Danger Zone -->
@@ -127,7 +127,7 @@
       <h3>Data Types:</h3>
       <ul>
         <li><strong>Reference Data:</strong> Game database - auto-loaded from our database</li>
-        <li><strong>User Data:</strong> Your personal disc inventory and builds - stored in browser cache</li>
+        <li><strong>User Data:</strong> Your personal disc inventory, builds, and loadouts - stored in browser cache</li>
       </ul>
       <h3>Getting Started:</h3>
       <ol>

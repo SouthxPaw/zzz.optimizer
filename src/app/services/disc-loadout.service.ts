@@ -295,6 +295,48 @@ export class DiscLoadoutService {
   }
 
   /**
+   * Import a single loadout (for build import/export service)
+   */
+  importLoadout(loadout: DiscLoadout): void {
+    // Convert date strings to Date objects if needed
+    if (typeof loadout.createdAt === 'string') {
+      loadout.createdAt = new Date(loadout.createdAt);
+    }
+    if (typeof loadout.updatedAt === 'string') {
+      loadout.updatedAt = new Date(loadout.updatedAt);
+    }
+
+    // Check if loadout already exists
+    const existingLoadouts = this.loadoutsSubject.value;
+    const existingIndex = existingLoadouts.findIndex(l => l.id === loadout.id);
+
+    if (existingIndex >= 0) {
+      // Update existing loadout
+      const updated = [...existingLoadouts];
+      updated[existingIndex] = loadout;
+      this.loadoutsSubject.next(updated);
+    } else {
+      // Add new loadout
+      this.loadoutsSubject.next([...existingLoadouts, loadout]);
+    }
+
+    this.saveLoadouts();
+
+    // Clear cache for this agent
+    this.loadoutsByAgentCache.delete(loadout.agentId);
+  }
+
+  /**
+   * Clear all loadouts (for data management)
+   */
+  clearAllLoadouts(): void {
+    this.loadoutsSubject.next([]);
+    this.loadoutsByAgentCache.clear();
+    this.saveLoadouts();
+    console.log('[DiscLoadoutService] All loadouts cleared');
+  }
+
+  /**
    * Delete all loadouts for a specific agent
    */
   deleteAllLoadoutsByAgentId(agentId: string): number {
