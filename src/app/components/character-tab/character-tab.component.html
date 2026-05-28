@@ -42,7 +42,7 @@
     <!-- Import Action Bar -->
     <div class="import-action-bar">
       <div class="import-uid-group">
-        <button class="btn-secondary btn-compact" (click)="openEnkaImportModal()" title="Import builds from UID">
+        <button class="btn-import-uid btn-compact" (click)="openEnkaImportModal()" title="Import builds from UID">
           Import from UID
         </button>
 
@@ -244,7 +244,12 @@
 
         <!-- Disc Drives -->
         <div class="disc-section">
-          <h3>Disc Drives ({{ getEquippedDiscsCount(selectedBuild) }}/6)</h3>
+          <div class="section-header-inline">
+            <h3>Disc Drives ({{ getEquippedDiscsCount(selectedBuild) }}/6)</h3>
+            <button class="btn-secondary btn-compact" (click)="openDiscLoadoutsModal()">
+              Loadouts
+            </button>
+          </div>
           <div class="disc-grid">
             <div
               *ngFor="let slot of discSlots; trackBy: trackByDiscSlot"
@@ -374,6 +379,7 @@
               <input
                 type="text"
                 [(ngModel)]="wengineSearchTerm"
+                (ngModelChange)="onWEngineSearchChange($event)"
                 placeholder="Search W-Engines..."
                 class="search-input"
               />
@@ -981,6 +987,7 @@
   <!-- Disc Picker Modal -->
   <div
     class="modal-overlay"
+    [class.modal-overlay-high-z]="showLoadoutsModal"
     *ngIf="showDiscPicker"
     (click)="closeDiscPicker()"
     role="dialog"
@@ -1064,7 +1071,10 @@
   </div>
 
   <!-- Disc Stats Form Modal -->
-  <div class="modal-overlay" *ngIf="showDiscForm" (click)="closeDiscForm()">
+  <div class="modal-overlay"
+       [class.modal-overlay-high-z]="showLoadoutsModal"
+       *ngIf="showDiscForm"
+       (click)="closeDiscForm()">
     <div
       class="modal-content disc-form-modal"
       (click)="$event.stopPropagation()"
@@ -1792,6 +1802,351 @@
           <div class="share-buttons-group">
             <button class="btn-secondary" (click)="closeShareModal()">Cancel</button>
             <button class="btn-primary" (click)="downloadShareImage()" [disabled]="isGeneratingShareImage">Download Image</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Disc Loadouts Modal -->
+  <div class="modal-overlay" *ngIf="showLoadoutsModal" (click)="closeLoadoutsModal()">
+    <div class="modal-content loadouts-modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Disc Loadouts - {{ selectedBuild?.name }}</h2>
+        <button class="close-btn" (click)="closeLoadoutsModal()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Action Buttons -->
+        <div class="loadout-actions-section">
+          <button
+            class="btn-primary btn-action"
+            (click)="startSaveCurrentLoadout()"
+            [disabled]="!canAddMoreLoadouts()"
+            title="Save your currently equipped discs as a loadout"
+          >
+            💾 Save Current as Loadout
+          </button>
+          <button
+            class="btn-secondary btn-action"
+            (click)="startCreateEmptyLoadout()"
+            [disabled]="!canAddMoreLoadouts()"
+            title="Create a new loadout by selecting discs"
+          >
+            ➕ Create Empty Loadout
+          </button>
+        </div>
+
+        <div class="loadout-limit-info">
+          <span *ngIf="canAddMoreLoadouts()">
+            {{ getRemainingLoadoutSlots() }} slot(s) remaining (max 5 per agent)
+          </span>
+          <span *ngIf="!canAddMoreLoadouts()" class="limit-reached">
+            Maximum loadouts reached (5/5). Delete a loadout to save a new one.
+          </span>
+        </div>
+
+        <div class="loadouts-divider"></div>
+
+        <!-- Save Current Flow -->
+        <div *ngIf="showSaveCurrentForm" class="save-current-form-section">
+          <h3>Save Current Configuration</h3>
+          <p class="form-description">Save your currently equipped discs ({{ getEquippedDiscsCount(selectedBuild!) }}/6) as a loadout</p>
+          <div class="save-loadout-form">
+            <input
+              type="text"
+              [(ngModel)]="newLoadoutName"
+              placeholder="Enter loadout name (e.g., 'Crit DPS', 'Energy Regen')"
+              maxlength="50"
+              class="loadout-name-input"
+              (keyup.enter)="confirmSaveCurrentLoadout()"
+            />
+            <button class="btn-primary" (click)="confirmSaveCurrentLoadout()" [disabled]="!newLoadoutName.trim()">
+              Save
+            </button>
+            <button class="btn-secondary" (click)="cancelSaveCurrentLoadout()">
+              Cancel
+            </button>
+          </div>
+        </div>
+
+        <!-- Create Empty Flow -->
+        <div *ngIf="showCreateEmptyForm" class="create-empty-form-section">
+          <h3>Create Empty Loadout</h3>
+          <p class="form-description">Name your loadout, then select discs for each slot</p>
+
+          <div class="save-loadout-form">
+            <input
+              type="text"
+              [(ngModel)]="newLoadoutName"
+              placeholder="Enter loadout name (e.g., 'Crit DPS', 'Energy Regen')"
+              maxlength="50"
+              class="loadout-name-input"
+            />
+          </div>
+
+          <!-- Disc Selection Grid for Empty Loadout -->
+          <div class="empty-loadout-disc-grid">
+            <div
+              *ngFor="let slot of discSlots"
+              class="empty-loadout-disc-slot"
+              [class.has-disc]="newLoadoutDiscs[slot]"
+              (click)="openDiscPickerForLoadout(slot)"
+            >
+              <div *ngIf="newLoadoutDiscs[slot]; else emptyLoadoutSlot" class="loadout-disc-preview">
+                <div class="disc-header">
+                  <div class="disc-header-left">
+                    <span class="disc-slot-number">{{ formatDiscSlot(slot) }}</span>
+                  </div>
+                  <div class="disc-header-right">
+                    <div
+                      *ngIf="getDiscScore(newLoadoutDiscs[slot]) as discScore"
+                      class="disc-rating-badge"
+                      [ngClass]="getDiscRatingClass(discScore.rating)"
+                      [title]="discScore.rating.description"
+                    >
+                      <span class="rating-grade">{{ discScore.rating.grade }}</span>
+                      <span class="rating-score">{{ discScore.score }}</span>
+                    </div>
+                    <button class="remove-disc-btn" (click)="removeDiscFromNewLoadout(slot, $event)" title="Remove disc">×</button>
+                  </div>
+                </div>
+                <div class="disc-set">
+                  {{ newLoadoutDiscs[slot].set }}
+                  <img
+                    *ngIf="getDiscSetByName(newLoadoutDiscs[slot].set)?.icon"
+                    [src]="getDiscSetByName(newLoadoutDiscs[slot].set)!.icon"
+                    [alt]="newLoadoutDiscs[slot].set"
+                    class="disc-set-icon-inline"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="disc-main-stat">
+                  <span class="stat-type">{{ formatStatType(newLoadoutDiscs[slot].mainStat.type) }}</span>
+                  <span class="stat-value">{{ newLoadoutDiscs[slot].mainStat.value }}</span>
+                </div>
+                <div class="disc-substats">
+                  <div
+                    *ngFor="let subStat of newLoadoutDiscs[slot].subStats; trackBy: trackBySubStatIndex"
+                    class="substat"
+                    [class.priority]="isPrioritySubstat(subStat.type)"
+                  >
+                    <span class="substat-type">
+                      {{ formatStatType(subStat.type) }}
+                      <span class="roll-count" *ngIf="subStat.rolls && subStat.rolls > 1">+{{ subStat.rolls - 1 }}</span>
+                    </span>
+                    <span class="substat-value">{{ subStat.value }}</span>
+                  </div>
+                </div>
+              </div>
+              <ng-template #emptyLoadoutSlot>
+                <div class="empty-loadout-slot-content">
+                  <span class="slot-number">{{ formatDiscSlot(slot) }}</span>
+                  <span class="slot-action">Click to Select</span>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="create-empty-actions">
+            <button
+              class="btn-primary"
+              (click)="confirmCreateEmptyLoadout()"
+              [disabled]="!newLoadoutName.trim() || Object.keys(newLoadoutDiscs).length === 0"
+            >
+              Create Loadout ({{ Object.keys(newLoadoutDiscs).length }}/6 discs)
+            </button>
+            <button class="btn-secondary" (click)="cancelCreateEmptyLoadout()">
+              Cancel
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="showSaveCurrentForm || showCreateEmptyForm" class="loadouts-divider"></div>
+
+        <!-- Saved Loadouts Section -->
+        <div class="saved-loadouts-section">
+          <h3>Saved Loadouts ({{ agentLoadouts.length }}/5)</h3>
+
+          <!-- Empty State -->
+          <div *ngIf="agentLoadouts.length === 0" class="empty-loadouts-state">
+            <p>No saved loadouts yet.</p>
+            <p>Equip discs and save your first configuration above!</p>
+          </div>
+
+          <!-- Loadouts Grid -->
+          <div *ngIf="agentLoadouts.length > 0" class="loadouts-grid">
+            <div
+              *ngFor="let loadout of agentLoadouts; trackBy: trackByLoadoutId"
+              class="loadout-card"
+              [class.selected]="selectedLoadoutForPreview?.id === loadout.id"
+              (click)="previewLoadout(loadout)"
+              title="Click to preview loadout"
+            >
+              <div class="loadout-card-header">
+                <h4 class="loadout-name">{{ loadout.name }}</h4>
+                <div class="loadout-actions">
+                  <button class="btn-delete-loadout" (click)="deleteLoadout(loadout); $event.stopPropagation()" title="Delete loadout">
+                    ×
+                  </button>
+                </div>
+              </div>
+
+              <div class="loadout-card-body">
+                <div class="loadout-disc-count">
+                  {{ Object.keys(loadout.equippedDiscs).length }} disc(s)
+                </div>
+                <div class="loadout-disc-sets-simplified">
+                  {{ getLoadoutDiscSetCounts(loadout) }}
+                </div>
+                <div class="loadout-timestamp">
+                  Saved: {{ loadout.createdAt | date:'short' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div *ngIf="selectedLoadoutForPreview" class="loadout-preview-section">
+          <div class="preview-header">
+            <h3>Preview: {{ selectedLoadoutForPreview.name }}</h3>
+            <button class="btn-secondary btn-compact" (click)="clearLoadoutPreview()">
+              Clear Preview
+            </button>
+          </div>
+
+          <!-- Validation Warnings -->
+          <div *ngIf="loadoutValidation && !loadoutValidation.isValid" class="validation-warning">
+            <strong>⚠️ Warning:</strong> {{ loadoutValidation.missingSlots.length }} disc(s) missing from inventory
+            <div class="missing-slots">
+              Missing: {{ loadoutValidation.missingSlots.join(', ') }}
+            </div>
+          </div>
+
+          <!-- Two-column layout: Discs + Stats -->
+          <div class="preview-grid">
+            <!-- Left: Disc Grid -->
+            <div class="preview-discs">
+              <h4>Discs</h4>
+              <div class="preview-disc-grid">
+                <div
+                  *ngFor="let slot of discSlots"
+                  class="preview-disc-slot"
+                  [class.missing]="loadoutValidation && loadoutValidation.missingSlots.includes(slot)"
+                  [class.available]="loadoutValidation && loadoutValidation.availableSlots.includes(slot)"
+                >
+                  <div *ngIf="selectedLoadoutForPreview.equippedDiscs[slot]; else emptyPreviewSlot">
+                    <div class="disc-header">
+                      <div class="disc-header-left">
+                        <span class="disc-slot-number">{{ formatDiscSlot(slot) }}</span>
+                      </div>
+                      <div class="disc-header-right">
+                        <div
+                          *ngIf="getDiscScore(selectedLoadoutForPreview.equippedDiscs[slot]) as discScore"
+                          class="disc-rating-badge"
+                          [ngClass]="getDiscRatingClass(discScore.rating)"
+                          [title]="discScore.rating.description"
+                        >
+                          <span class="rating-grade">{{ discScore.rating.grade }}</span>
+                          <span class="rating-score">{{ discScore.score }}</span>
+                        </div>
+                        <span
+                          *ngIf="loadoutValidation && loadoutValidation.missingSlots.includes(slot)"
+                          class="missing-badge"
+                          title="This disc is missing from inventory"
+                        >
+                          Missing
+                        </span>
+                      </div>
+                    </div>
+                    <div class="disc-set">
+                      {{ selectedLoadoutForPreview.equippedDiscs[slot].set }}
+                      <img
+                        *ngIf="getDiscSetByName(selectedLoadoutForPreview.equippedDiscs[slot].set)?.icon"
+                        [src]="getDiscSetByName(selectedLoadoutForPreview.equippedDiscs[slot].set)!.icon"
+                        [alt]="selectedLoadoutForPreview.equippedDiscs[slot].set"
+                        class="disc-set-icon-inline"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div class="disc-main-stat">
+                      <span class="stat-type">{{ formatStatType(selectedLoadoutForPreview.equippedDiscs[slot].mainStat.type) }}</span>
+                      <span class="stat-value">{{ selectedLoadoutForPreview.equippedDiscs[slot].mainStat.value }}</span>
+                    </div>
+                    <div class="disc-substats">
+                      <div
+                        *ngFor="let substat of selectedLoadoutForPreview.equippedDiscs[slot].subStats; trackBy: trackBySubStatIndex"
+                        class="substat"
+                        [class.priority]="isPrioritySubstat(substat.type)"
+                      >
+                        <span class="substat-type">
+                          {{ formatStatType(substat.type) }}
+                          <span class="roll-count" *ngIf="substat.rolls && substat.rolls > 1">+{{ substat.rolls - 1 }}</span>
+                        </span>
+                        <span class="substat-value">{{ substat.value }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-template #emptyPreviewSlot>
+                    <div class="empty-preview-slot">
+                      <span class="slot-number">{{ formatDiscSlot(slot) }}</span>
+                      <span class="slot-label">Empty</span>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Calculated Stats -->
+            <div class="preview-stats">
+              <h4>Calculated Stats</h4>
+              <div *ngIf="loadoutPreviewStats" class="stats-display">
+                <div class="stat-row">
+                  <span class="stat-label">HP:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.hp | number:'1.0-0' }}</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">ATK:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.atk | number:'1.0-0' }}</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">DEF:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.def | number:'1.0-0' }}</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">CRIT Rate:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.critRate }}%</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">CRIT DMG:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.critDmg }}%</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">PEN Ratio:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.penRatio }}%</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">Anomaly Proficiency:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.anomalyProficiency | number:'1.0-0' }}</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">Energy Regen:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.energyRegen }}%</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">Impact:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.impact }}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Apply Button -->
+          <div class="preview-actions">
+            <button class="btn-primary btn-large" (click)="applyLoadout(selectedLoadoutForPreview)">
+              Apply Loadout
+            </button>
           </div>
         </div>
       </div>

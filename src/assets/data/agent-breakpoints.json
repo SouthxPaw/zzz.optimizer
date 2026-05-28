@@ -4154,16 +4154,16 @@
       "name": "StarlightBilly",
       "breakpoints": {
         "hp": {
-          "min": 7840,
-          "optimal": 8500
+          "min": 17000,
+          "optimal": 18000
         },
         "atk": {
-          "min": 2500,
-          "optimal": 2700
+          "min": 1800,
+          "optimal": 1950
         },
         "def": {
-          "min": 650,
-          "optimal": 750
+          "min": 400,
+          "optimal": 600
         },
         "impact": {
           "min": 0,
@@ -4174,12 +4174,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 0,
-          "optimal": 0
+          "min": 60,
+          "optimal": 80
         },
         "critDmg": {
-          "min": 0,
-          "optimal": 0
+          "min": 100,
+          "optimal": 120
         },
         "anomalyProficiency": {
           "min": 0,
@@ -4201,8 +4201,6 @@
       "priorityStats": [
         "HP%",
         "HP",
-        "ATK%",
-        "ATK",
         "Element_DMG",
         "CRIT_DMG",
         "CRIT_Rate"
