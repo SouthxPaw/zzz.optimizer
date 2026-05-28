@@ -1068,22 +1068,35 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }> {
     const key = this.getBuildStateKey();
     if (this.cachedSubstatBreakdown && this.lastBuildStateKey === key) {
-      return this.cachedSubstatBreakdown;
+      return this.cachedSubstatBreakdown.breakdown;
     }
     this.cachedSubstatBreakdown = this.computeSubstatBreakdown();
     this.lastBuildStateKey = key;
-    return this.cachedSubstatBreakdown;
+    return this.cachedSubstatBreakdown.breakdown;
   }
 
-  private computeSubstatBreakdown(): Array<{
-    name: string;
-    value: string;
-    isPercent: boolean;
-    rollCount: number;
-    isPriority: boolean;
-  }> {
+  getTotalEffectiveSubstats(): number {
+    const key = this.getBuildStateKey();
+    if (this.cachedSubstatBreakdown && this.lastBuildStateKey === key) {
+      return this.cachedSubstatBreakdown.totalEffectiveSubstats;
+    }
+    this.cachedSubstatBreakdown = this.computeSubstatBreakdown();
+    this.lastBuildStateKey = key;
+    return this.cachedSubstatBreakdown.totalEffectiveSubstats;
+  }
+
+  private computeSubstatBreakdown(): {
+    breakdown: Array<{
+      name: string;
+      value: string;
+      isPercent: boolean;
+      rollCount: number;
+      isPriority: boolean;
+    }>;
+    totalEffectiveSubstats: number;
+  } {
     if (!this.selectedBuild || !this.selectedBuild.equippedDiscs) {
-      return [];
+      return { breakdown: [], totalEffectiveSubstats: 0 };
     }
 
     const substatTotals: { [key: string]: number } = {};
@@ -1184,7 +1197,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     const percentOrder = ['ATK', 'HP', 'DEF', 'CRIT Rate', 'CRIT DMG'];
 
-    return result.sort((a, b) => {
+    const sortedBreakdown = result.sort((a, b) => {
       if (a.isPercent && !b.isPercent) return -1;
       if (!a.isPercent && b.isPercent) return 1;
 
@@ -1202,6 +1215,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
       return a.name.localeCompare(b.name);
     });
+
+    // Calculate total effective substats (sum of roll counts for priority stats only)
+    const totalEffectiveSubstats = sortedBreakdown
+      .filter(stat => stat.isPriority)
+      .reduce((sum, stat) => sum + stat.rollCount, 0);
+
+    return {
+      breakdown: sortedBreakdown,
+      totalEffectiveSubstats: totalEffectiveSubstats,
+    };
   }
 
   getEquippedDiscsCount(build: AgentBuild): number {
@@ -2673,6 +2696,7 @@ async generateShareImage() {
       wEngineStats: this.getWEngineStats(),
       discSets: this.referenceDiscSets,
       substatBreakdown: this.getSubstatBreakdown(),
+      totalEffectiveSubstats: this.getTotalEffectiveSubstats(),
       showBuildRating: this.showBuildRating,
       showDiscRatings: this.showDiscRatings,
       customAgentImageUrl: this.customAgentImageUrl || undefined,
@@ -3456,9 +3480,15 @@ async generateShareImage() {
         wEngine.subStat.type === 'Energy_Regen' ||
         wEngine.subStat.type === 'Anomaly_Mastery';
 
+      // Normalize label: remove % suffix since value already includes it
+      let normalizedLabel = wEngine.subStat.type.replace(/_/g, ' ');
+      if (normalizedLabel.endsWith('%')) {
+        normalizedLabel = normalizedLabel.slice(0, -1);
+      }
+
       stats.push({
         iconName: iconName,
-        label: wEngine.subStat.type.replace(/_/g, ' '),
+        label: normalizedLabel,
         value: isPercent
           ? `${wEngine.subStat.value}%`
           : String(wEngine.subStat.value),

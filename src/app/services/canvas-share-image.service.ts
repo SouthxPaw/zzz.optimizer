@@ -21,6 +21,7 @@ export interface ShareImageData {
     rollCount: number;
     isPriority: boolean;
   }>;
+  totalEffectiveSubstats?: number;
   showBuildRating?: boolean;
   showDiscRatings?: boolean;
   customAgentImageUrl?: string;
@@ -1295,45 +1296,87 @@ export class CanvasShareImageService {
     ctx.lineTo(this.WIDTH, footerY);
     ctx.stroke();
 
+    // Calculate total width needed for stats at base font size
+    const baseFontSize = 10;
+    const minFontSize = 7;
+    const leftPadding = 12;
+    const rightPadding = 12;
+    const creditsText = 'Made in southxpaw.github.io/zzz.optimizer';
+
+    // Measure credits width
+    ctx.font = 'italic 9px Arial';
+    const creditsWidth = this.measureTextWidth(ctx, creditsText, 'italic 9px Arial');
+
+    // Calculate available space for stats
+    const availableWidth = this.WIDTH - leftPadding - rightPadding - creditsWidth - 20; // 20px gap between stats and credits
+
+    // Calculate required width for all stats at base font size
+    let requiredWidth = 0;
+
+    for (let i = 0; i < data.substatBreakdown.length; i++) {
+      const stat = data.substatBreakdown[i];
+      const statText = `(${stat.rollCount}) ${stat.name}: ${stat.value}${stat.isPercent ? '%' : ''}`;
+      const font = stat.isPriority ? `bold ${baseFontSize}px Arial` : `400 ${baseFontSize}px Arial`;
+      requiredWidth += this.measureTextWidth(ctx, statText, font);
+      requiredWidth += this.measureTextWidth(ctx, ' | ', `bold ${baseFontSize}px Arial`);
+    }
+
+    // Add total effective substats width if present
+    if (data.totalEffectiveSubstats !== undefined && data.totalEffectiveSubstats > 0) {
+      const effectiveText = `Total Effective Substats: ${data.totalEffectiveSubstats}`;
+      requiredWidth += this.measureTextWidth(ctx, effectiveText, `bold ${baseFontSize}px Arial`);
+    }
+
+    // Calculate scale factor
+    let fontSize = baseFontSize;
+    if (requiredWidth > availableWidth) {
+      const scaleFactor = availableWidth / requiredWidth;
+      fontSize = Math.max(minFontSize, Math.floor(baseFontSize * scaleFactor));
+    }
+
     // Draw substats breakdown (left side)
     ctx.fillStyle = '#eee';
-    ctx.font = '400 10px Arial';
+    ctx.font = `400 ${fontSize}px Arial`;
     ctx.textBaseline = 'middle';
 
-    let textX = 12;
+    let textX = leftPadding;
     const textY = footerY + footerHeight / 2;
 
     for (let i = 0; i < data.substatBreakdown.length; i++) {
       const stat = data.substatBreakdown[i];
-      const isLast = i === data.substatBreakdown.length - 1;
 
       // Format stat text
       const statText = `(${stat.rollCount}) ${stat.name}: ${stat.value}${stat.isPercent ? '%' : ''}`;
 
       // Draw stat in priority color (using accent color) or normal color
       ctx.fillStyle = stat.isPriority ? accentColor : '#eee';
-      ctx.font = stat.isPriority ? 'bold 10px Arial' : '400 10px Arial';
+      ctx.font = stat.isPriority ? `bold ${fontSize}px Arial` : `400 ${fontSize}px Arial`;
       ctx.fillText(statText, textX, textY);
 
       // Measure text width for next position
       const textWidth = this.measureTextWidth(ctx, statText, ctx.font);
       textX += textWidth;
 
-      // Add separator if not last
-      if (!isLast) {
-        ctx.fillStyle = accentColor;
-        ctx.font = 'bold 10px Arial';
-        ctx.fillText(' | ', textX, textY);
-        textX += this.measureTextWidth(ctx, ' | ', 'bold 10px Arial');
-      }
+      // Add separator
+      ctx.fillStyle = accentColor;
+      ctx.font = `bold ${fontSize}px Arial`;
+      ctx.fillText(' | ', textX, textY);
+      textX += this.measureTextWidth(ctx, ' | ', `bold ${fontSize}px Arial`);
+    }
+
+    // Add total effective substats at the end (if available)
+    if (data.totalEffectiveSubstats !== undefined && data.totalEffectiveSubstats > 0) {
+      const effectiveText = `Total Effective Substats: ${data.totalEffectiveSubstats}`;
+      ctx.fillStyle = accentColor;
+      ctx.font = `bold ${fontSize}px Arial`;
+      ctx.fillText(effectiveText, textX, textY);
     }
 
     // Draw credits (right side)
     ctx.fillStyle = '#aaa';
     ctx.font = 'italic 9px Arial';
     ctx.textAlign = 'right';
-    const creditsText = 'Made in southxpaw.github.io/zzz.optimizer';
-    ctx.fillText(creditsText, this.WIDTH - 12, textY);
+    ctx.fillText(creditsText, this.WIDTH - rightPadding, textY);
 
     ctx.restore();
   }
