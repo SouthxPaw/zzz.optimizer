@@ -1,6 +1,17 @@
 {
   "versions": [
     {
+      "version": "6.4.12",
+      "date": "2026-05-29",
+      "features": [
+        "In-Game Stats toggle - easily match your character's in-game stats"
+      ],
+      "fixes": [
+        "Fixed Impact stat calculation (now uses percentage bonuses correctly)"
+      ],
+      "improvements": []
+    },
+    {
       "version": "6.3.10",
       "date": "2026-05-28",
       "features": [
