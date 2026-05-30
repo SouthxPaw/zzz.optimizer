@@ -9,7 +9,9 @@
       "fixes": [
         "Fixed Impact stat calculation (now uses percentage bonuses correctly)"
       ],
-      "improvements": []
+      "improvements": [
+        "Build rating and improvement tips are now dimmed/hidden when In-Game Stats mode is active"
+      ]
     },
     {
       "version": "6.3.10",

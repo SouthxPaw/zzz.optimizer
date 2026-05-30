@@ -296,26 +296,14 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.buildService.selectedBuild$
       .pipe(takeUntil(this.destroy$))
       .subscribe(async (build) => {
-        this.selectedBuild = build;
-        this.invalidateBuildCaches();
-
-        // Load toggle flags from build (default true if not set)
+        // Check if this build needs to be fixed BEFORE assigning it
         if (build) {
-          this.includeWEngineBonuses = build.includeWEngineBonuses ?? true;
-          this.includeMindscapeBonuses = build.includeMindscapeBonuses ?? true;
-          this.includePassiveBonuses = build.includePassiveBonuses ?? true;
-          this.includeSetBonuses = build.includeSetBonuses ?? true;
-
-          // Reset In-Game Stats mode if this build doesn't have 4pc bonuses enabled
-          // This happens when switching back to a build that had In-Game Stats mode active
+          // On page refresh, inGameStatsMode is always false (not persisted)
+          // If build has In-Game Stats settings but toggle is off, restore full stats
           const has4pcDisabled = build.include4pcBonuses === false;
           if (has4pcDisabled && !this.inGameStatsMode) {
-            // Build is in In-Game Stats mode but toggle is off - restore full stats
-            this.includeWEngineBonuses = true;
-            this.includeMindscapeBonuses = true;
-            this.includePassiveBonuses = true;
-            this.includeSetBonuses = true;
-
+            // Build has In-Game Stats mode settings but toggle is off - restore full stats
+            // Update the build first, which will recalculate stats and re-emit through observable
             await this.buildService.updateBuild(build.id, {
               includeWEngineBonuses: true,
               includeMindscapeBonuses: true,
@@ -323,8 +311,20 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
               includeSetBonuses: true,
               include4pcBonuses: true
             });
+            // Don't process this build further - wait for the updated build to come through
+            return;
           }
+
+          // Load toggle flags normally
+          this.includeWEngineBonuses = build.includeWEngineBonuses ?? true;
+          this.includeMindscapeBonuses = build.includeMindscapeBonuses ?? true;
+          this.includePassiveBonuses = build.includePassiveBonuses ?? true;
+          this.includeSetBonuses = build.includeSetBonuses ?? true;
         }
+
+        // Now assign the build and invalidate caches
+        this.selectedBuild = build;
+        this.invalidateBuildCaches();
         this.cdr.markForCheck();
       });
 
@@ -2876,7 +2876,7 @@ async generateShareImage() {
       discSets: this.referenceDiscSets,
       substatBreakdown: this.getSubstatBreakdown(),
       totalEffectiveSubstats: this.getTotalEffectiveSubstats(),
-      showBuildRating: this.showBuildRating,
+      showBuildRating: this.showBuildRating && !this.inGameStatsMode,
       showDiscRatings: this.showDiscRatings,
       customAgentImageUrl: this.customAgentImageUrl || undefined,
       customBackgroundImageUrl: this.customBackgroundImageUrl || undefined,

@@ -658,6 +658,7 @@
           <div
             class="summary-item build-rating-display"
             *ngIf="getBuildScore() as buildScore"
+            [class.disabled-ingame-mode]="inGameStatsMode"
           >
             <strong
               data-tooltip="Overall rating of your build based on disc quality and optimization for this agent"
@@ -666,7 +667,7 @@
             <div
               class="build-rating-badge"
               [ngClass]="getBuildRatingClass(buildScore.rating)"
-              [title]="buildScore.rating.description"
+              [title]="inGameStatsMode ? 'Not available in In-Game Stats mode' : buildScore.rating.description"
             >
               <span class="rating-grade-large">{{
                 buildScore.rating.grade
@@ -675,15 +676,18 @@
                 >{{ buildScore.score.toFixed(1) }}%</span
               >
             </div>
-            <p class="rating-description">
+            <p class="rating-description" *ngIf="!inGameStatsMode">
               {{ buildScore.rating.description }}
+            </p>
+            <p class="rating-description ingame-notice" *ngIf="inGameStatsMode">
+              Not available in In-Game Stats mode
             </p>
           </div>
 
           <!-- Build Feedback Section -->
           <div
             class="build-feedback-section"
-            *ngIf="getBuildFeedback().length > 0"
+            *ngIf="getBuildFeedback().length > 0 && !inGameStatsMode"
           >
             <h4>How to Improve</h4>
             <div class="feedback-list">
@@ -1855,12 +1859,15 @@
 
         <div class="share-action-buttons">
           <div class="share-options">
-            <label class="checkbox-label">
+            <label
+              class="checkbox-label"
+              [class.disabled-checkbox]="inGameStatsMode"
+              [title]="inGameStatsMode ? 'Not available in In-Game Stats mode' : ''">
               <input
                 type="checkbox"
                 [(ngModel)]="showBuildRating"
                 (change)="onShareOptionChange()"
-                [disabled]="isGeneratingShareImage"
+                [disabled]="isGeneratingShareImage || inGameStatsMode"
               />
               <span>Show Build Rating</span>
             </label>
