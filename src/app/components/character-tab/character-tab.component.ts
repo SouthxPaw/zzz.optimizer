@@ -121,6 +121,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   includeWEngineBonuses = true;
   includeMindscapeBonuses = true;
   includePassiveBonuses = true;
+  includeSetBonuses = true;
+
+  // In-game stats mode (matches in-game character screen)
+  // When enabled: only base stats + W-Engine base ATK & substat + disc stats + 2pc bonuses
+  inGameStatsMode = false;
 
   // Track failed video loads to prevent infinite error loops
   private failedVideoLoads = new Set<string>();
@@ -299,6 +304,26 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           this.includeWEngineBonuses = build.includeWEngineBonuses ?? true;
           this.includeMindscapeBonuses = build.includeMindscapeBonuses ?? true;
           this.includePassiveBonuses = build.includePassiveBonuses ?? true;
+          this.includeSetBonuses = build.includeSetBonuses ?? true;
+
+          // Reset In-Game Stats mode if this build doesn't have 4pc bonuses enabled
+          // This happens when switching back to a build that had In-Game Stats mode active
+          const has4pcDisabled = build.include4pcBonuses === false;
+          if (has4pcDisabled && !this.inGameStatsMode) {
+            // Build is in In-Game Stats mode but toggle is off - restore full stats
+            this.includeWEngineBonuses = true;
+            this.includeMindscapeBonuses = true;
+            this.includePassiveBonuses = true;
+            this.includeSetBonuses = true;
+
+            await this.buildService.updateBuild(build.id, {
+              includeWEngineBonuses: true,
+              includeMindscapeBonuses: true,
+              includePassiveBonuses: true,
+              includeSetBonuses: true,
+              include4pcBonuses: true
+            });
+          }
         }
         this.cdr.markForCheck();
       });
@@ -397,9 +422,30 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  selectBuild(build: AgentBuild) {
+  async selectBuild(build: AgentBuild) {
     this.buildService.selectBuild(build);
     this.clearFeedbackCache();
+
+    // Reset In-Game Stats mode when switching agents to prevent weird display behavior
+    if (this.inGameStatsMode) {
+      this.inGameStatsMode = false;
+
+      // Restore full stats mode for the build
+      this.includeWEngineBonuses = true;
+      this.includeMindscapeBonuses = true;
+      this.includePassiveBonuses = true;
+      this.includeSetBonuses = true;
+
+      await this.buildService.updateBuild(build.id, {
+        includeWEngineBonuses: true,
+        includeMindscapeBonuses: true,
+        includePassiveBonuses: true,
+        includeSetBonuses: true,
+        include4pcBonuses: true
+      });
+
+      this.cdr.markForCheck();
+    }
 
     // Auto-scroll to agent name/build header on mobile when selecting an agent
     if (this.isMobile && this.buildHeader) {
@@ -605,6 +651,55 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       });
       this.clearScoreCaches(); // OPTIMIZATION: Clear caches when stats change
     }
+  }
+
+  async onSetBonusesToggle() {
+    // Update build with new toggle state and recalculate
+    if (this.selectedBuild) {
+      await this.buildService.updateBuild(this.selectedBuild.id, {
+        includeSetBonuses: this.includeSetBonuses,
+      });
+      this.clearScoreCaches(); // OPTIMIZATION: Clear caches when stats change
+    }
+  }
+
+  async toggleInGameStatsMode() {
+    // ngModelChange fires after the value is already updated, so don't toggle again
+    if (this.inGameStatsMode) {
+      // In-game mode: Enable base stats + W-Engine base/substat + disc stats + 2pc only
+      this.includeWEngineBonuses = false; // Disable refinement bonuses
+      this.includeMindscapeBonuses = false;
+      this.includePassiveBonuses = false;
+      this.includeSetBonuses = true; // Enable 2pc
+
+      if (this.selectedBuild) {
+        await this.buildService.updateBuild(this.selectedBuild.id, {
+          includeWEngineBonuses: false,
+          includeMindscapeBonuses: false,
+          includePassiveBonuses: false,
+          includeSetBonuses: true,
+          include4pcBonuses: false // Disable 4pc
+        });
+      }
+    } else {
+      // Full mode: Enable all bonuses
+      this.includeWEngineBonuses = true;
+      this.includeMindscapeBonuses = true;
+      this.includePassiveBonuses = true;
+      this.includeSetBonuses = true;
+
+      if (this.selectedBuild) {
+        await this.buildService.updateBuild(this.selectedBuild.id, {
+          includeWEngineBonuses: true,
+          includeMindscapeBonuses: true,
+          includePassiveBonuses: true,
+          includeSetBonuses: true,
+          include4pcBonuses: true
+        });
+      }
+    }
+
+    this.clearScoreCaches();
   }
 
   isDiscEnabled(slot: DiscSlot): boolean {
@@ -1238,7 +1333,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           displayName = type;
       }
 
-      const isPriority = priorityStats.some((priorityStat: string) => {
+      // Flat HP, ATK, DEF should never be considered priority stats for highlighting/counting
+      const isFlatStat = ['HP', 'ATK', 'DEF'].includes(type);
+
+      const isPriority = !isFlatStat && priorityStats.some((priorityStat: string) => {
         const normalizedType = type.replace(/_/g, ' ').toLowerCase();
         const normalizedPriority = priorityStat
           .replace(/_/g, ' ')
@@ -3948,7 +4046,9 @@ async generateShareImage() {
       this.selectedBuild.includeWEngineBonuses !== false,
       this.selectedBuild.includeMindscapeBonuses !== false,
       this.selectedBuild.includePassiveBonuses !== false,
-      enabledDiscs
+      enabledDiscs,
+      this.selectedBuild.includeSetBonuses !== false,
+      this.selectedBuild.include4pcBonuses !== false
     );
 
     this.cdr.markForCheck();

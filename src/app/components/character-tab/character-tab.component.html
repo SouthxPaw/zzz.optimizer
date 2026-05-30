@@ -565,7 +565,21 @@
 
         <!-- Stats -->
         <div class="stats-section">
-          <h3>Calculated Stats</h3>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 10px; flex-wrap: wrap;">
+            <h3 style="margin: 0;">Calculated Stats</h3>
+            <label
+              class="enable-toggle"
+              style="margin: 0; flex-shrink: 0;"
+              title="Match in-game character screen stats (2pc bonuses only, no 4pc/W-Engine refinement/Mindscape/Passive)">
+              <input
+                type="checkbox"
+                [(ngModel)]="inGameStatsMode"
+                (ngModelChange)="toggleInGameStatsMode()"
+              />
+              <span class="toggle-switch"></span>
+              <span class="toggle-label" style="white-space: nowrap;">In-Game Stats</span>
+            </label>
+          </div>
           <div class="stats-grid">
             <div class="stat-row">
               <span class="stat-label">HP:</span>
@@ -704,11 +718,12 @@
           >
             <div class="bonus-header">
               <h4>W-Engine Bonuses:</h4>
-              <label class="enable-toggle">
+              <label class="enable-toggle" [class.disabled]="inGameStatsMode">
                 <input
                   type="checkbox"
                   [(ngModel)]="includeWEngineBonuses"
                   (change)="onWEngineBonusesToggle()"
+                  [disabled]="inGameStatsMode"
                 />
                 <span class="toggle-switch"></span>
                 <span class="toggle-label">Enable</span>
@@ -772,11 +787,12 @@
             <div class="bonus-header">
               <h4>Mindscape Bonuses:</h4>
               <div class="bonus-header-controls">
-                <label class="enable-toggle">
+                <label class="enable-toggle" [class.disabled]="inGameStatsMode">
                   <input
                     type="checkbox"
                     [(ngModel)]="includeMindscapeBonuses"
                     (change)="onMindscapeBonusesToggle()"
+                    [disabled]="inGameStatsMode"
                   />
                   <span class="toggle-switch"></span>
                   <span class="toggle-label">Enable</span>
@@ -820,11 +836,12 @@
           >
             <div class="bonus-header">
               <h4>Active Passive Bonuses:</h4>
-              <label class="enable-toggle">
+              <label class="enable-toggle" [class.disabled]="inGameStatsMode">
                 <input
                   type="checkbox"
                   [(ngModel)]="includePassiveBonuses"
                   (change)="onPassiveBonusesToggle()"
+                  [disabled]="inGameStatsMode"
                 />
                 <span class="toggle-switch"></span>
                 <span class="toggle-label">Enable</span>
@@ -848,21 +865,35 @@
             "
             class="set-bonuses"
           >
-            <h4>Active Set Bonuses:</h4>
-            <div
-              *ngFor="let bonus of getSetBonuses(); trackBy: trackByBonusIndex"
-              class="set-bonus"
-            >
-              {{ bonus }}
+            <div class="bonus-header">
+              <h4>Active Set Bonuses:</h4>
+              <label class="enable-toggle" [class.disabled]="inGameStatsMode">
+                <input
+                  type="checkbox"
+                  [(ngModel)]="includeSetBonuses"
+                  (change)="onSetBonusesToggle()"
+                  [disabled]="inGameStatsMode"
+                />
+                <span class="toggle-switch"></span>
+                <span class="toggle-label">Enable</span>
+              </label>
             </div>
-            <div
-              *ngFor="
-                let bonus of get4pcEffectBonuses();
-                trackBy: trackByBonusIndex
-              "
-              class="set-bonus"
-            >
-              {{ bonus }}
+            <div class="set-bonus-box">
+              <div
+                *ngFor="let bonus of getSetBonuses(); trackBy: trackByBonusIndex"
+                class="set-bonus"
+              >
+                {{ bonus }}
+              </div>
+              <div
+                *ngFor="
+                  let bonus of get4pcEffectBonuses();
+                  trackBy: trackByBonusIndex
+                "
+                class="set-bonus"
+              >
+                {{ bonus }}
+              </div>
             </div>
           </div>
 
