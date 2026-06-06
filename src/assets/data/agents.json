@@ -20575,11 +20575,6 @@
       "buffs": [
         {
           "type": "AnomalyProficiency",
-          "value": "88",
-          "format": "flat"
-        },
-        {
-          "type": "AnomalyProficiency",
           "value": "0",
           "format": "flat",
           "condition": {
@@ -25555,7 +25550,7 @@
       "buffs": [
         {
           "type": "CRITDMG",
-          "value": "20",
+          "value": "10",
           "format": "%"
         },
         {
@@ -25568,6 +25563,11 @@
             "ratio": 0.05,
             "cap": 30
           }
+        },
+        {
+          "type": "ImpactBonus",
+          "value": "25",
+          "format": "flat"
         }
       ],
       "debuffs": [],
@@ -64983,7 +64983,7 @@
             "sourceStat": "energyRegen",
             "threshold": 1.6,
             "ratio": 200,
-            "cap": 420
+            "cap": 700
           }
         }
       ],
