@@ -430,6 +430,17 @@
           "note": ""
         }
       ]
+    },
+    "1561": {
+      "comment": "Velina",
+      "1": [
+        {
+          "type": "ATK%",
+          "value": 15,
+          "format": "%",
+          "note": ""
+        }
+      ]
     }
   }
 }

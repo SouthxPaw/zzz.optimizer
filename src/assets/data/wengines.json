@@ -4297,5 +4297,63 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14156": {
+    "Id": 14156,
+    "CodeName": "Weapon_S_1561",
+    "Name": "Joyau Dore",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1561.png",
+    "WeaponType": {
+      "3": "Anomaly"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 6000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 60,
+            "W2": 69,
+            "W3": 78,
+            "W4": 87,
+            "W5": 96
+          }
+        }
+      ],
+      "Desc": "The equipper's Anomaly Proficiency increases by [NUMBER]. When the equipper uses an [EX Special Attack], the [Vortex] and [Windswept] DMG they deal increases by % for 40s, stacking up to 2 times, and repeated triggers reset the duration. While at 2 stacks of this effect, the whole squad's Anomaly Proficiency increases by [NUMBER]. This Anomaly Proficiency boost for the whole squad is unique to the squad."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "60",
+          "format": "flat"
+        },
+        {
+          "type": "DMGBonus",
+          "value": "14",
+          "format":"%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
