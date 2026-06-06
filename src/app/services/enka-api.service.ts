@@ -92,6 +92,9 @@ const MAIN_STAT_PROPERTY_MAP: { [key: number]: MainStatType } = {
   31703: 'Element_DMG', // Ice DMG Bonus [Flat]
   31801: 'Element_DMG', // Electric DMG Bonus [Base]
   31803: 'Element_DMG', // Electric DMG Bonus [Flat]
+  // TODO (v3.0): Verify Wind property IDs when v3.0 releases - see TODO_WIND_ELEMENT_VERIFICATION.md
+  32001: 'Element_DMG', // Wind DMG Bonus [Base] - UNCONFIRMED (educated guess based on pattern)
+  32003: 'Element_DMG', // Wind DMG Bonus [Flat] - UNCONFIRMED (educated guess based on pattern)
   31901: 'Element_DMG', // Ether DMG Bonus [Base]
   31903: 'Element_DMG', // Ether DMG Bonus [Flat]
 };
