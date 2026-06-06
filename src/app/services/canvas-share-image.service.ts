@@ -20,6 +20,7 @@ export interface ShareImageData {
     isPercent: boolean;
     rollCount: number;
     isPriority: boolean;
+    originalType?: string; // Original stat type before display name conversion (e.g., "HP%" vs "HP")
   }>;
   totalEffectiveSubstats?: number;
   showBuildRating?: boolean;
@@ -813,6 +814,7 @@ export class CanvasShareImageService {
       isPercent: boolean;
       rollCount: number;
       isPriority: boolean;
+      originalType?: string;
     }>,
   ): Promise<void> {
     const color = accentColor || '#f4b942';
@@ -822,11 +824,14 @@ export class CanvasShareImageService {
     if (substatBreakdown) {
       substatBreakdown.forEach(stat => {
         if (stat.isPriority) {
+          // Use the original type if available (e.g., "HP%" instead of display name "HP")
+          const typeToUse = stat.originalType || stat.name;
+
           // Try multiple normalization formats to ensure matching
-          const normalized = stat.name.toLowerCase().replace(/ /g, '_');
+          const normalized = typeToUse.toLowerCase().replace(/ /g, '_');
           priorityStats.add(normalized);
-          priorityStats.add(stat.name.toLowerCase().replace(/_/g, ' '));
-          priorityStats.add(stat.name.toLowerCase());
+          priorityStats.add(typeToUse.toLowerCase().replace(/_/g, ' '));
+          priorityStats.add(typeToUse.toLowerCase());
         }
       });
     }

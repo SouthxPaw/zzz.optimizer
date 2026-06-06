@@ -72,9 +72,9 @@ export interface DiscRating {
 }
 
 export const DISC_RATING_THRESHOLDS: DiscRating[] = [
-  { grade: 'VH', minPoints: 134, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection (GOD tier)' },
-  { grade: 'PHT', minPoints: 118, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Phaethon - Near-perfect disc (ZERO tier)' },
-  { grade: 'SSS', minPoints: 114, color: '#FF6B9D', description: 'Perfect - Outstanding disc (SSS tier)' },
+  { grade: 'VH', minPoints: 134, color: 'linear-gradient(135deg, #E0BBE4 0%, #957DAD 25%, #D291BC 50%, #FEC8D8 75%, #FFDFD3 100%)', description: 'Void Hunter - Absolute perfection with god-roll stats or perfect balance' },
+  { grade: 'PHT', minPoints: 118, color: 'linear-gradient(135deg, #FFD700 0%, #E5E4E2 33%, #B9F2FF 66%, #FFD700 100%)', description: 'Phaethon - Exceptional disc with high-roll concentrations' },
+  { grade: 'SSS', minPoints: 114, color: '#FF6B9D', description: 'Perfect - Outstanding disc with very good rolls' },
   { grade: 'SS', minPoints: 98, color: '#FF8C42', description: 'Excellent - Great disc (SS tier)' },
   { grade: 'S', minPoints: 89, color: '#FFD93D', description: 'Very Good - Above average disc (S tier)' },
   { grade: 'A', minPoints: 77, color: '#6BCF7F', description: 'Good - Decent disc (A tier)' },

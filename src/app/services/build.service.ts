@@ -31,6 +31,8 @@ export interface AgentBuild {
   includeWEngineBonuses?: boolean;
   includeMindscapeBonuses?: boolean;
   includePassiveBonuses?: boolean;
+  includeSetBonuses?: boolean;
+  include4pcBonuses?: boolean;
   // Active upgrade plan (overrides default weight system)
   activeUpgradePlanId?: string; // Reference to UpgradePlan ID
 }
@@ -235,6 +237,8 @@ export class BuildService {
         updates.includeWEngineBonuses !== undefined ||
         updates.includeMindscapeBonuses !== undefined ||
         updates.includePassiveBonuses !== undefined ||
+        updates.includeSetBonuses !== undefined ||
+        updates.include4pcBonuses !== undefined ||
         updates.enabledDiscs !== undefined) {
       this.statCalculator.clearCache();
       await this.recalculateStats(builds[index]);
@@ -275,7 +279,9 @@ export class BuildService {
       build.includeWEngineBonuses ?? true,
       build.includeMindscapeBonuses ?? true,
       build.includePassiveBonuses ?? true,
-      build.enabledDiscs ?? {}
+      build.enabledDiscs ?? {},
+      build.includeSetBonuses ?? true,
+      build.include4pcBonuses ?? true
     );
 
 

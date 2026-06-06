@@ -34,8 +34,8 @@
           "optimal": 90
         },
         "anomalyProficiency": {
-          "min": 0,
-          "optimal": 0
+          "min": 158,
+          "optimal": 158
         },
         "pen": {
           "min": 0,
@@ -184,8 +184,8 @@
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 0,
-          "optimal": 0
+          "min": 72,
+          "optimal": 72
         },
         "critRate": {
           "min": 0,
@@ -1005,8 +1005,8 @@
           "optimal": 90
         },
         "anomalyProficiency": {
-          "min": 0,
-          "optimal": 0
+          "min": 158,
+          "optimal": 158
         },
         "pen": {
           "min": 0,
@@ -1078,8 +1078,8 @@
           "optimal": 90
         },
         "anomalyProficiency": {
-          "min": 0,
-          "optimal": 0
+          "min": 158,
+          "optimal": 158
         },
         "pen": {
           "min": 0,
@@ -1239,8 +1239,8 @@
           "optimal": 90
         },
         "anomalyProficiency": {
-          "min": 0,
-          "optimal": 0
+          "min": 158,
+          "optimal": 158
         },
         "pen": {
           "min": 0,
@@ -1875,8 +1875,8 @@
           "optimal": 90
         },
         "anomalyProficiency": {
-          "min": 0,
-          "optimal": 0
+          "min": 158,
+          "optimal": 158
         },
         "pen": {
           "min": 0,
