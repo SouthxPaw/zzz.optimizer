@@ -63,7 +63,10 @@ export class WhatsNewComponent implements OnInit {
    * Format date for display
    */
   formatDate(dateString: string): string {
-    const date = new Date(dateString);
+    // Parse as local date (not UTC) to avoid timezone shifts
+    // Split YYYY-MM-DD and create date with local timezone
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
