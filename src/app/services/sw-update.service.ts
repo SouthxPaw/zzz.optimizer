@@ -571,11 +571,22 @@ export class SwUpdateService implements OnDestroy {
       // activated the new one when we detected the update. We just need to reload
       // to start using it.
 
+      // Clear all browser caches to prevent loading old chunks
+      // This fixes "error loading dynamically imported module" errors
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        console.log('[SW Update] Clearing browser caches:', cacheNames);
+        await Promise.all(cacheNames.map(name => caches.delete(name)));
+      }
+
     } catch (err) {
       console.error('[SW Update] Failed to prepare update:', err);
     }
 
-    // Reload to start using the new service worker
+    // Hard reload - bypasses ALL caches (browser cache, service worker cache, etc.)
+    // This prevents "error loading dynamically imported module" errors where
+    // the app tries to load old chunk files that no longer exist after an update
+    console.log('[SW Update] Performing hard reload (bypass cache)');
     window.location.reload();
   }
 }

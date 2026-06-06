@@ -1,6 +1,47 @@
 {
   "versions": [
     {
+      "version": "6.5.17",
+      "date": "2026-06-06",
+      "features": [],
+      "fixes": [],
+      "improvements": [
+        "Disc rating algorithm now rewards god-roll concentrations (4+ rolls in a priority stat)",
+        "Added bonus for discs with all useful substats (no wasted stats)",
+        "Improved roll bonus system - now more accessible at 4+ upgrade rolls",
+        "Discs with exceptional high-rolls now properly reach VH/PHT tiers"
+      ]
+    },
+    {
+      "version": "6.4.13",
+      "date": "2026-05-29",
+      "features": [
+        "In-Game Stats toggle - easily match your character's in-game stats"
+      ],
+      "fixes": [
+        "Fixed Impact stat calculation (now uses percentage bonuses correctly)"
+      ],
+      "improvements": [
+        "Build rating and improvement tips are now dimmed/hidden when In-Game Stats mode is active"
+      ]
+    },
+    {
+      "version": "6.3.10",
+      "date": "2026-05-28",
+      "features": [
+        "Auto-scroll to agent details when selecting a build on mobile",
+        "Scroll-to-top button for easy navigation on mobile devices",
+        "Up/down arrow buttons for reordering agents on mobile (replaces drag and drop)"
+      ],
+      "fixes": [
+        "Fixed modal button layouts on mobile devices"
+      ],
+      "improvements": [
+        "Enhanced mobile experience with better touch targets and spacing",
+        "Improved page load performance by adding image dimensions"
+      ]
+    },
+    {
       "version": "6.3.8",
       "date": "2026-05-28",
       "features": [

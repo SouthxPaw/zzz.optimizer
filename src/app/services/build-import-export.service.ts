@@ -1,42 +1,49 @@
 import { Injectable } from '@angular/core';
 import { BuildService, AgentBuild } from './build.service';
 import { DiscService } from './disc.service';
+import { DiscLoadoutService } from './disc-loadout.service';
 import { Disc } from '../models/disc.model';
+import { DiscLoadout } from '../models/disc-loadout.model';
 
 export interface ExportData {
   version: string;
   exportDate: string;
   builds: AgentBuild[];
   discs: Disc[];
+  loadouts?: DiscLoadout[]; // Optional for backwards compatibility
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class BuildImportExportService {
-  private readonly EXPORT_VERSION = '2.0';  // Updated for W-Engine refinement properties & mindscape effects
+  private readonly EXPORT_VERSION = '3.0';  // Updated for disc loadouts
 
   // Version history:
   // 1.0 - Initial version (basic builds and discs)
   // 2.0 - Added W-Engine refinement properties, mindscape effects, icons
+  // 3.0 - Added disc loadouts support
 
   constructor(
     private buildService: BuildService,
-    private discService: DiscService
+    private discService: DiscService,
+    private discLoadoutService: DiscLoadoutService
   ) { }
 
   /**
-   * Export all builds and discs to JSON
+   * Export all builds, discs, and loadouts to JSON
    */
   async exportBuilds(): Promise<string> {
     const builds = await this.buildService.getAllBuilds();
     const discs = await this.discService.getAllDiscs();
+    const loadouts = this.discLoadoutService.getAllLoadouts();
 
     const exportData: ExportData = {
       version: this.EXPORT_VERSION,
       exportDate: new Date().toISOString(),
       builds: builds,
-      discs: discs
+      discs: discs,
+      loadouts: loadouts
     };
 
     return JSON.stringify(exportData, null, 2);
@@ -62,7 +69,7 @@ export class BuildImportExportService {
   /**
    * Import builds from JSON data
    */
-  async importBuilds(jsonData: string, replaceExisting: boolean = false): Promise<{ success: boolean; message: string; buildsImported: number; discsImported: number }> {
+  async importBuilds(jsonData: string, replaceExisting: boolean = false): Promise<{ success: boolean; message: string; buildsImported: number; discsImported: number; loadoutsImported: number }> {
     try {
       const data: ExportData = JSON.parse(jsonData);
 
@@ -73,7 +80,8 @@ export class BuildImportExportService {
           success: false,
           message: `Invalid import file: ${validation.message}`,
           buildsImported: 0,
-          discsImported: 0
+          discsImported: 0,
+          loadoutsImported: 0
         };
       }
 
@@ -86,7 +94,8 @@ export class BuildImportExportService {
           success: false,
           message: compatibilityCheck.message,
           buildsImported: 0,
-          discsImported: 0
+          discsImported: 0,
+          loadoutsImported: 0
         };
       }
 
@@ -97,9 +106,10 @@ export class BuildImportExportService {
       if (replaceExisting) {
         await this.buildService.clearAllBuilds();
         await this.discService.clearAllDiscs();
+        this.discLoadoutService.clearAllLoadouts();
       }
 
-      // Import discs first (builds reference them)
+      // Import discs first (builds and loadouts reference them)
       let discsImported = 0;
       for (const disc of migratedData.discs) {
         try {
@@ -121,22 +131,39 @@ export class BuildImportExportService {
         }
       }
 
+      // Import loadouts (if present in the export file)
+      let loadoutsImported = 0;
+      if (migratedData.loadouts && migratedData.loadouts.length > 0) {
+        for (const loadout of migratedData.loadouts) {
+          try {
+            this.discLoadoutService.importLoadout(loadout);
+            loadoutsImported++;
+          } catch (error) {
+            console.warn('Failed to import loadout:', loadout, error);
+          }
+        }
+      }
+
       const versionWarning = fileVersion !== this.EXPORT_VERSION
         ? ` (migrated from version ${fileVersion})`
         : '';
 
+      const loadoutMessage = loadoutsImported > 0 ? `, ${loadoutsImported} loadouts` : '';
+
       return {
         success: true,
-        message: `Successfully imported ${buildsImported} builds and ${discsImported} discs${versionWarning}`,
+        message: `Successfully imported ${buildsImported} builds, ${discsImported} discs${loadoutMessage}${versionWarning}`,
         buildsImported,
-        discsImported
+        discsImported,
+        loadoutsImported
       };
     } catch (error) {
       return {
         success: false,
         message: `Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         buildsImported: 0,
-        discsImported: 0
+        discsImported: 0,
+        loadoutsImported: 0
       };
     }
   }
@@ -145,7 +172,7 @@ export class BuildImportExportService {
    * Check if the import file version is compatible with the current app version
    */
   private checkVersionCompatibility(fileVersion: string): { compatible: boolean; message: string } {
-    const supportedVersions = ['1.0', '2.0'];  // List of versions we can import
+    const supportedVersions = ['1.0', '2.0', '3.0'];  // List of versions we can import
 
     // Parse version numbers for comparison
     const parseVersion = (version: string): number => {
@@ -210,6 +237,11 @@ export class BuildImportExportService {
       return { valid: false, message: 'Discs data must be an array' };
     }
 
+    // Validate loadouts if present (optional for backwards compatibility)
+    if (data.loadouts !== undefined && !Array.isArray(data.loadouts)) {
+      return { valid: false, message: 'Loadouts data must be an array' };
+    }
+
     // Validate each build has required fields
     for (let i = 0; i < data.builds.length; i++) {
       const build = data.builds[i];
@@ -235,6 +267,25 @@ export class BuildImportExportService {
       }
       if (!disc.set) {
         return { valid: false, message: `Disc at index ${i} missing required field: set` };
+      }
+    }
+
+    // Validate each loadout has required fields (if present)
+    if (data.loadouts) {
+      for (let i = 0; i < data.loadouts.length; i++) {
+        const loadout = data.loadouts[i];
+        if (!loadout.id) {
+          return { valid: false, message: `Loadout at index ${i} missing required field: id` };
+        }
+        if (!loadout.name) {
+          return { valid: false, message: `Loadout at index ${i} missing required field: name` };
+        }
+        if (!loadout.agentId) {
+          return { valid: false, message: `Loadout at index ${i} missing required field: agentId` };
+        }
+        if (!loadout.equippedDiscs) {
+          return { valid: false, message: `Loadout at index ${i} missing required field: equippedDiscs` };
+        }
       }
     }
 
@@ -264,14 +315,26 @@ export class BuildImportExportService {
         }
         return build;
       });
-
     }
 
-    // Future migrations can be added here
-    // Example:
-    // if (fromVersion === '2.0' && currentVersion === '3.0') {
-    //   // Migration logic for 2.0 -> 3.0
-    // }
+    // Migrate from version 2.0 to 3.0
+    if (fromVersion === '2.0' || fromVersion === '1.0') {
+      // Version 3.0 adds loadouts support
+      // Initialize loadouts array if not present (will be empty for old exports)
+      if (!migratedData.loadouts) {
+        migratedData.loadouts = [];
+      }
+
+      // Ensure all builds have the new optional fields with defaults
+      migratedData.builds = migratedData.builds.map(build => {
+        // enabledDiscs defaults to all enabled (true for all slots)
+        if (build.enabledDiscs === undefined) {
+          build.enabledDiscs = {};
+        }
+        // activeUpgradePlanId is optional, no default needed
+        return build;
+      });
+    }
 
     // Update version to current
     migratedData.version = this.EXPORT_VERSION;

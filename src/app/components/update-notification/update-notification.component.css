@@ -2,7 +2,7 @@
 .dev-test-button {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  left: 20px;
   z-index: 9999;
   background: #ff6b6b;
   color: white;
@@ -24,7 +24,7 @@
 
 .update-notification {
   position: fixed;
-  bottom: 20px;
+  bottom: 90px;
   right: 20px;
   z-index: 10000;
   animation: slideIn 0.3s ease-out;
@@ -119,8 +119,15 @@
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+  .dev-test-button {
+    bottom: 16px;
+    left: 16px;
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+
   .update-notification {
-    bottom: 10px;
+    bottom: 80px;
     right: 10px;
     left: 10px;
   }
@@ -142,5 +149,11 @@
   .update-button {
     font-size: 12px;
     padding: 8px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .update-notification {
+    bottom: 76px;
   }
 }
