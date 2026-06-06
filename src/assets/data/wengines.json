@@ -4297,5 +4297,39 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "13018": {
+    "Id": 13018,
+    "CodeName": "Weapon_A_Common_18",
+    "Name": "Boisterous Echoes",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_18.png",
+    "WeaponType": {
+      "3": "Anomaly"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Anomaly Proficiency",
+      "Name2": "Anomaly Proficiency",
+      "Format": "{0:0.#}",
+      "Value": 75
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When the equipper triggers [Vortex], restore [NUMBER] Energy. This effect can trigger once every 10s. When the equipper attacks enemies afflicted with Attribute Anomaly, DMG dealt increases by %."
+    },
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
