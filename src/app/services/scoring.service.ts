@@ -323,6 +323,8 @@ export class ScoringService {
       mainStatPoints: 0,
       subStatPoints: 0,
       rollBonusPoints: 0,
+      godRollBonus: 0,
+      allGoodBonus: 0,
       normalized_score: 0,
       detectedBuild: null as string | null,
       totalRolls: 0,
@@ -428,13 +430,13 @@ export class ScoringService {
     breakdown.mainStatPoints = mainStatPoints;
 
     // STEP 2: Substat Points (ONLY count priority stats)
-    // Formula: rolls × weight × 3.0 per priority stat
+    // Formula: rolls × weight × multiplier per stat
     let substatPoints = 0;
     let totalRollCount = 0;
 
-    // Detect if we're using new scaled weights (> 1.5) or old system (≤ 1.5)
+    // Detect multiplier based on weight range (for backward compatibility)
     const maxWeight = Math.max(...Object.values(statWeights).filter(w => typeof w === 'number'));
-    const useNewScaling = maxWeight > 1.5;
+    const multiplier = maxWeight > 1.5 ? 1.0 : 3.0;
 
     disc.subStats.forEach((substat) => {
       // Calculate total roll count for this substat
@@ -442,15 +444,11 @@ export class ScoringService {
       totalRollCount += rolls;
       breakdown.totalRolls += rolls;
 
-      // Get stat weight (0.7-1.0 range for old system, or 3.5-4.25 for new system)
+      // Get stat weight
       const statWeight = statWeights[substat.type];
 
       // Only award points for priority stats (weight > 0)
       if (statWeight !== undefined && statWeight > 0) {
-        // FORMULA: rolls × weight × multiplier
-        // New scaled weights (3.5, 4.25, etc.) use multiplier = 1.0
-        // Old system weights (0.7-1.0) need multiplier = 3.0
-        const multiplier = useNewScaling ? 1.0 : 3.0;
         const points = rolls * statWeight * multiplier;
         substatPoints += points;
 
@@ -462,15 +460,14 @@ export class ScoringService {
           rolls: rolls,
         });
       } else {
-        // BLACK tier - wasted stat gets minimal points
-        const BLACK_TIER_WEIGHT = useNewScaling ? 0.5 : 0.17;
-        const multiplier = useNewScaling ? 1.0 : 3.0;
+        // Wasted stat gets minimal points
+        const BLACK_TIER_WEIGHT = multiplier === 1.0 ? 0.5 : 0.17;
         const points = rolls * BLACK_TIER_WEIGHT * multiplier;
         substatPoints += points;
 
         breakdown.subStatPoints += points;
         breakdown.details.push({
-          stat: `${substat.type} (wasted, BLACK tier)`,
+          stat: `${substat.type} (wasted)`,
           value: substat.value,
           points: Math.round(points * 10) / 10,
           rolls: rolls,
@@ -478,26 +475,116 @@ export class ScoringService {
       }
     });
 
-    // STEP 3: Total Rolls Bonus (1 point if 5+ UPGRADE rolls, not total rolls)
+    // STEP 3: God Roll Concentration Bonus
+    // Reward high UPGRADE rolls (4+) in a single priority stat
+    // Note: We count UPGRADE rolls only (not including initial roll)
+    let godRollBonus = 0;
+    let godRollStat = '';
+    disc.subStats.forEach((substat) => {
+      const totalRolls = calculateRollCount(substat.type, substat.value);
+      const upgradeRolls = totalRolls - 1; // Subtract initial roll
+      const weight = statWeights[substat.type] || 0;
+
+      // Only apply to priority stats (weight >= 1.0)
+      if (weight >= 1.0) {
+        let bonus = 0;
+        if (upgradeRolls >= 5) {
+          bonus = 15; // Maxed stat (5 upgrade rolls)
+        } else if (upgradeRolls >= 4) {
+          bonus = 11; // 4 upgrade rolls
+        } else if (upgradeRolls >= 3) {
+          bonus = 7; // 3 upgrade rolls (god-roll)
+        }
+
+        if (bonus > godRollBonus) {
+          godRollBonus = bonus;
+          godRollStat = substat.type;
+        }
+      }
+    });
+
+    if (godRollBonus > 0) {
+      breakdown.godRollBonus = godRollBonus;
+      breakdown.details.push({
+        stat: `God Roll Bonus (${godRollStat})`,
+        value: godRollBonus,
+        points: godRollBonus,
+        rolls: 0,
+      });
+    }
+
+    // STEP 4: All Good Substats Bonus (Context-Aware)
+    // Count priority stats (weight >= 1.0) to determine build type
+    const priorityStatCount = Object.values(statWeights).filter(w => w >= 1.0).length;
+
+    let allGoodBonus = 0;
+    let qualifiesForBonus = false;
+
+    if (priorityStatCount <= 2) {
+      // Anomaly builds (≤2 priority stats): Allow up to 1 wasted stat (weight = 0)
+      // This is more lenient since Anomaly builds only have 2 priority stats to work with
+      const wastedStatCount = disc.subStats.filter((substat) => {
+        const weight = statWeights[substat.type] || 0;
+        return weight === 0;
+      }).length;
+
+      if (wastedStatCount === 0) {
+        // Perfect Anomaly disc - no wasted stats
+        qualifiesForBonus = true;
+        allGoodBonus = 5;
+      } else if (wastedStatCount === 1) {
+        // Good Anomaly disc - 1 wasted stat is acceptable but gets reduced bonus
+        qualifiesForBonus = true;
+        allGoodBonus = 3;
+      }
+    } else {
+      // CRIT builds (≥3 priority stats): Strict - all substats must be useful (≥ 0.17)
+      qualifiesForBonus = disc.subStats.every((substat) => {
+        const weight = statWeights[substat.type] || 0;
+        return weight >= 0.17;
+      });
+
+      if (qualifiesForBonus) {
+        allGoodBonus = 5;
+      }
+    }
+
+    if (qualifiesForBonus) {
+      breakdown.allGoodBonus = allGoodBonus;
+      breakdown.details.push({
+        stat: `All Good Substats Bonus (${priorityStatCount <= 2 ? 'Anomaly' : 'CRIT'} build)`,
+        value: allGoodBonus,
+        points: allGoodBonus,
+        rolls: 0,
+      });
+    }
+
+    // STEP 5: Improved Roll Bonus (progressive based on upgrade rolls)
     // Count upgrade rolls only (enhancements), not initial substat rolls
     const upgradeRolls = totalRollCount - disc.subStats.length;
     let rollBonus = 0;
     if (upgradeRolls >= 5) {
-      rollBonus = 1;
+      rollBonus = 1.5; // normalized points
+    } else if (upgradeRolls >= 4) {
+      rollBonus = 1.0; // normalized points
+    }
+
+    if (rollBonus > 0) {
       breakdown.rollBonusPoints = rollBonus;
       breakdown.details.push({
-        stat: `Upgrade Rolls Bonus (${upgradeRolls}/5+)`,
+        stat: `Upgrade Rolls Bonus (${upgradeRolls} rolls)`,
         value: upgradeRolls,
         points: rollBonus,
         rolls: totalRollCount,
       });
     }
 
-    // STEP 4: Calculate normalized score (0-30 scale)
-    const normalized_score = mainStatPoints + substatPoints + rollBonus;
+    // STEP 6: Calculate normalized score (0-30 scale)
+    // Add god-roll and all-good bonuses (divide by 4.8 to normalize)
+    const normalized_score = mainStatPoints + substatPoints + rollBonus + (godRollBonus / 4.8) + (allGoodBonus / 4.8);
     breakdown.normalized_score = Math.round(normalized_score * 10) / 10;
 
-    // STEP 5: Convert to our 0-140+ scale (multiply by 4.8)
+    // STEP 7: Convert to our 0-140+ scale (multiply by 4.8)
     // Use the already-rounded normalized_score to ensure consistency
     const finalScore = breakdown.normalized_score * 4.8;
 
