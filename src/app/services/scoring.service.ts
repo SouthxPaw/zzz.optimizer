@@ -245,12 +245,27 @@ export class ScoringService {
       return buildStatWeights;
     }
 
-    // Aggregate max weight for each stat across all disc slots/main stats
-    Object.values(buildData.contextualWeights || {}).forEach((slotData: any) => {
-      Object.values(slotData || {}).forEach((mainStatData: any) => {
-        Object.entries(mainStatData.substatWeights || {}).forEach(([stat, weight]) => {
-          buildStatWeights[stat] = Math.max(buildStatWeights[stat] || 0, weight as number);
-        });
+    // Standard main stats per slot (exclude edge cases like HP% main on Drive 4)
+    const standardMainStats: { [slot: string]: string[] } = {
+      'Drive1': ['HP', 'ATK', 'DEF'], // Fixed main stats (all variants)
+      'Drive2': ['HP', 'ATK', 'DEF'], // Fixed main stats (all variants)
+      'Drive3': ['HP', 'ATK', 'DEF'], // Fixed main stats (all variants)
+      'Drive4': ['CRIT_Rate', 'CRIT_DMG', 'ATK%'], // Most common main stats for Drive 4
+      'Drive5': ['ATK%', 'PEN_Ratio', 'Element_DMG'], // Most common main stats for Drive 5
+      'Drive6': ['Anomaly_Mastery', 'Energy_Regen', 'Impact'], // Most common main stats for Drive 6
+    };
+
+    // Aggregate max weight for each stat across STANDARD main stat configurations only
+    Object.entries(buildData.contextualWeights || {}).forEach(([slot, slotData]: [string, any]) => {
+      const allowedMainStats = standardMainStats[slot] || [];
+
+      Object.entries(slotData || {}).forEach(([mainStat, mainStatData]: [string, any]) => {
+        // Only consider standard main stat configurations
+        if (allowedMainStats.length === 0 || allowedMainStats.includes(mainStat)) {
+          Object.entries(mainStatData.substatWeights || {}).forEach(([stat, weight]) => {
+            buildStatWeights[stat] = Math.max(buildStatWeights[stat] || 0, weight as number);
+          });
+        }
       });
     });
 
