@@ -1,6 +1,18 @@
 {
   "versions": [
     {
+      "version": "6.5.17",
+      "date": "2026-06-06",
+      "features": [],
+      "fixes": [],
+      "improvements": [
+        "Disc rating algorithm now rewards god-roll concentrations (4+ rolls in a priority stat)",
+        "Added bonus for discs with all useful substats (no wasted stats)",
+        "Improved roll bonus system - now more accessible at 4+ upgrade rolls",
+        "Discs with exceptional high-rolls now properly reach VH/PHT tiers"
+      ]
+    },
+    {
       "version": "6.4.13",
       "date": "2026-05-29",
       "features": [
