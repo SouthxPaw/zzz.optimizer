@@ -84358,5 +84358,50 @@
     },
     "potentials": [],
     "Icon": "Velina"
+  },
+  {
+    "id": 1571,
+    "name": "Norma",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMGBonus",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "crit",
+            "threshold": 50,
+            "ratio": 1.7,
+            "cap": 85
+          }
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 40
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 201,
+      "name": "Fire"
+    },
+    "specialty": {
+      "id": 2,
+      "name": "Stun"
+    },
+    "lvl60_stats": {
+      "HpMax": 7799,
+      "Defence": 582,
+      "Attack": 762,
+      "Crit": 1940,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 106,
+      "ElementAbnormalPower": 99,
+      "ElementMystery": 98,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "Norma"
   }
 ]

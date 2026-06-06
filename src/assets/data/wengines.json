@@ -4349,7 +4349,65 @@
         {
           "type": "DMGBonus",
           "value": "14",
-          "format":"%"
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
+  },
+  "14157": {
+    "Id": 14157,
+    "CodeName": "Weapon_S_1571",
+    "Name": "Head Lackey",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1571.png",
+    "WeaponType": {
+      "2": "Stun"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2400
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Impact",
+          "Name2": "Impact",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 30,
+            "W2": 33,
+            "W3": 36,
+            "W4": 39,
+            "W5": 42
+          }
+        }
+      ],
+      "Desc": "Increases the equipper's Impact by [NUMBER]. DMG dealt ignores % of the target's Fire RES. When the equipper is not the on-field character, Energy Regen is increased by /s. When the equipper deals Fire DMG with an [EX Special Attack], increases DMG dealt by the whole squad by % for 30s. Max 2 stacks. Repeated triggers reset the duration. Can be triggered once per skill at most. Only one instance of this effect can exist in the same squad."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ImpactBonus",
+          "value": "30",
+          "format": "flat"
+        },
+        {
+          "type": "DMGBonus",
+          "value": "25",
+          "format": "%"
         }
       ],
       "debuffs": [],
