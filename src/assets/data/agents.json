@@ -84274,5 +84274,44 @@
     },
     "potentials": [],
     "Icon": "StarlightBilly"
+  },
+  {
+    "id": 1551,
+    "name": "Pyrois",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMGBonus",
+          "value": "40",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 205,
+      "name": "Ether"
+    },
+    "specialty": {
+      "id": 1,
+      "name": "Attack"
+    },
+    "lvl60_stats": {
+      "HpMax": 7673,
+      "Defence": 612,
+      "Attack": 924,
+      "Crit": 1940,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 94,
+      "ElementAbnormalPower": 94,
+      "ElementMystery": 93,
+      "SpBarPoint": 1
+    },
+    "potentials": [],
+    "Icon": "Pyrois"
   }
 ]
