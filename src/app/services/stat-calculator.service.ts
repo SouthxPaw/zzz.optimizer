@@ -85,12 +85,14 @@ export class StatCalculatorService {
     includeWEngineBonuses: boolean = true,
     includeMindscapeBonuses: boolean = true,
     includePassiveBonuses: boolean = true,
-    enabledDiscs: { [slot: string]: boolean } = {}
+    enabledDiscs: { [slot: string]: boolean } = {},
+    includeSetBonuses: boolean = true,
+    include4pcBonuses: boolean = true
   ): BaseStats {
 
     // Generate cache key (include all bonus flags and enabled discs in cache)
     const enabledDiscsKey = Object.keys(discs).map(slot => `${slot}:${enabledDiscs[slot] ?? true}`).join(',');
-    const cacheKey = this.generateCacheKey(agent.id, level, wEngine?.id, discs, mindscapeLevel, wEngineRefinement) + `:${includeWEngineBonuses}:${includeMindscapeBonuses}:${includePassiveBonuses}:${enabledDiscsKey}`;
+    const cacheKey = this.generateCacheKey(agent.id, level, wEngine?.id, discs, mindscapeLevel, wEngineRefinement) + `:${includeWEngineBonuses}:${includeMindscapeBonuses}:${includePassiveBonuses}:${includeSetBonuses}:${include4pcBonuses}:${enabledDiscsKey}`;
 
     // Check cache
     const cached = this.statCache.get(cacheKey);
@@ -103,15 +105,20 @@ export class StatCalculatorService {
     // Initialize percent bonuses to 0 since they may not exist in older data
     const stats: BaseStats = {
       ...agent.lvl60Stats,
+      impactpercent: 0,
       anomalyMasteryPercent: 0,
       energyRegenPercent: 0
     };
 
 
-    // Apply W-Engine stats (if enabled)
-    if (includeWEngineBonuses && wEngine) {
-      this.applyWEngineStats(stats, wEngine, agent, wEngineRefinement);
-    } else {
+    // Apply W-Engine base stats and substat (always applied if W-Engine equipped)
+    if (wEngine) {
+      this.applyWEngineBaseStats(stats, wEngine);
+
+      // Apply refinement bonuses only if enabled and specialty matches
+      if (includeWEngineBonuses && wEngine.specialty === agent.specialty && wEngine.effect.properties) {
+        this.applyRefinementBonuses(stats, wEngine.effect.properties, wEngineRefinement);
+      }
     }
 
     // Apply mindscape stat bonuses (if enabled)
@@ -132,10 +139,17 @@ export class StatCalculatorService {
     this.applyDiscSubStats(stats, enabledDiscsOnly);
 
     // Apply set bonuses (this applies percentage bonuses to HP/ATK/DEF, counting only enabled discs)
-    this.applySetBonuses(stats, enabledDiscsOnly, agent, wEngine, includeWEngineBonuses);
+    if (includeSetBonuses) {
+      this.applySetBonuses(stats, enabledDiscsOnly, agent, wEngine, include4pcBonuses);
+    } else {
+      // Still need to apply the percentage formula even without set bonuses
+      this.applyPercentageFormula(stats, agent, wEngine, enabledDiscsOnly);
+    }
 
     // Apply conditional 4pc bonuses AFTER final stats are calculated (so conditions can check final values)
-    this.applyConditional4pcBonuses(stats, enabledDiscsOnly, agent);
+    if (includeSetBonuses && include4pcBonuses) {
+      this.applyConditional4pcBonuses(stats, enabledDiscsOnly, agent);
+    }
 
     // Apply passive scoring bonuses AFTER discs (for conditional stat conversions that depend on final stat values)
     if (includePassiveBonuses && agent.scoring?.buffs) {
@@ -156,6 +170,7 @@ export class StatCalculatorService {
       def: Math.round(stats.def),
       defpercent: Math.round(stats.defpercent * 10) / 10,
       impact: Math.round(stats.impact),
+      impactpercent: Math.round(stats.impactpercent * 10) / 10,
       anomalyMastery: Math.round(stats.anomalyMastery),
       anomalyMasteryPercent: Math.round(stats.anomalyMasteryPercent * 10) / 10,
       critRate: Math.round(stats.critRate * 10) / 10,
@@ -209,11 +224,15 @@ export class StatCalculatorService {
     this.statCache.clear();
   }
 
-  private applyWEngineStats(stats: BaseStats, wEngine: WEngine, agent: Agent, refinement: number = 1): void {
-    // Add base ATK from W-Engine
+  /**
+   * Apply W-Engine base ATK and substat (BaseProperty and RandProperty)
+   * These are ALWAYS applied when a W-Engine is equipped (included in in-game stats)
+   */
+  private applyWEngineBaseStats(stats: BaseStats, wEngine: WEngine): void {
+    // Add base ATK from W-Engine (BaseProperty)
     stats.atk += wEngine.baseAtk;
 
-    // Apply W-Engine substat
+    // Apply W-Engine substat (RandProperty)
     const subStatType = wEngine.subStat.type;
     const subStatValue = wEngine.subStat.value;
 
@@ -250,11 +269,6 @@ export class StatCalculatorService {
         // W-Engine Anomaly Mastery is a percentage bonus
         stats.anomalyMasteryPercent += subStatValue;
         break;
-    }
-
-    // Apply refinement bonuses ONLY if W-Engine specialty matches agent specialty
-    if (wEngine.specialty === agent.specialty && wEngine.effect.properties) {
-      this.applyRefinementBonuses(stats, wEngine.effect.properties, refinement);
     }
   }
 
@@ -581,7 +595,8 @@ export class StatCalculatorService {
           stats.penRatio += mainStat.value;
           break;
         case 'Impact':
-          stats.impact += mainStat.value;
+          // Disc 6 Impact is a percentage bonus (e.g. 18%)
+          stats.impactpercent += mainStat.value;
           break;
         case 'Energy_Regen':
           // Disc main stat Energy Regen is a percentage bonus
@@ -645,7 +660,7 @@ export class StatCalculatorService {
     discs: { [key in DiscSlot]?: Disc },
     agent: Agent,
     wEngine: WEngine | null,
-    includeWEngineBonuses: boolean = true
+    include4pcBonuses: boolean = true
   ): void {
     // Count disc sets
     const setCounts = new Map<string, number>();
@@ -668,22 +683,34 @@ export class StatCalculatorService {
       }
 
       // Apply 4pc effect stat bonuses from equipment data (ONLY unconditional ones)
-      if (count >= 4) {
+      if (count >= 4 && include4pcBonuses) {
         this.apply4pcEffectBonuses(setName, stats, agent, false); // false = skip conditional bonuses
       }
     });
 
-    // Apply percentage-based stats according to ZZZ wiki formula:
-    // Final Stat = (Base Value × (1 + Percentage Bonuses %)) + Additive Bonuses
-    //
-    // Where:
-    // - Base Value = Agent base stats + W-Engine base ATK (for ATK only)
-    // - Percentage Bonuses = All %HP, %ATK, %DEF from discs, W-Engine, mindscape, set bonuses
-    // - Additive Bonuses = Flat HP/ATK/DEF from discs ONLY
+    // Apply the percentage formula
+    this.applyPercentageFormula(stats, agent, wEngine, discs);
+  }
 
+  /**
+   * Apply percentage-based stats according to ZZZ wiki formula:
+   * Final Stat = (Base Value × (1 + Percentage Bonuses %)) + Additive Bonuses
+   *
+   * Where:
+   * - Base Value = Agent base stats + W-Engine base ATK (for ATK only)
+   * - Percentage Bonuses = All %HP, %ATK, %DEF from discs, W-Engine, mindscape, set bonuses
+   * - Additive Bonuses = Flat HP/ATK/DEF from discs ONLY
+   */
+  private applyPercentageFormula(
+    stats: BaseStats,
+    agent: Agent,
+    wEngine: WEngine | null,
+    discs: { [key in DiscSlot]?: Disc }
+  ): void {
     const baseHP = agent.lvl60Stats.hp;
     const baseATK = agent.lvl60Stats.atk;
     const baseDEF = agent.lvl60Stats.def;
+    const baseImpact = agent.lvl60Stats.impact;
     const baseAnomalyMastery = agent.lvl60Stats.anomalyMastery;
 
     // At this point, stats.hp/atk/def contains:
@@ -694,8 +721,8 @@ export class StatCalculatorService {
     // We need to separate flat disc bonuses and apply the ZZZ formula correctly
 
     // Calculate flat disc bonuses by subtracting base values
-    // Only include W-Engine base ATK if W-Engine bonuses are enabled
-    const wEngineBaseATK = (includeWEngineBonuses && wEngine?.baseAtk) ? wEngine.baseAtk : 0;
+    // W-Engine base ATK is always included when W-Engine is equipped
+    const wEngineBaseATK = wEngine?.baseAtk || 0;
 
     const flatHPFromDiscs = stats.hp - baseHP;
     const flatATKFromDiscs = stats.atk - baseATK - wEngineBaseATK;
@@ -730,6 +757,11 @@ export class StatCalculatorService {
     // Percentage sources: Disc 6 main stat (30%), Set bonuses (e.g., Phaethon 2pc 8%)
     // Flat sources: Mindscape effects
     stats.anomalyMastery = baseAnomalyMastery * (1 + stats.anomalyMasteryPercent / 100) + flatAnomalyMasteryBonuses;
+
+    // Apply Impact percentage formula:
+    // Final = Base × (1 + Impact%)
+    // Percentage sources: Disc 6 main stat (18%), Set bonuses (e.g., Shockstar Disco 2pc 6%)
+    stats.impact = Math.round(baseImpact * (1 + stats.impactpercent / 100));
   }
 
   /**
@@ -973,7 +1005,8 @@ export class StatCalculatorService {
           stats.energyRegenPercent += numValue;
           break;
         case 'IMPACT':
-          stats.impact += numValue;
+          // Impact from set bonuses is percentage-based
+          stats.impactpercent += numValue;
           break;
         case 'ANOMALY MASTERY':
           // Anomaly Mastery from set bonuses is percentage-based

@@ -234,11 +234,11 @@ export class DataManagerComponent {
   async exportBuilds() {
     this.isLoading = true;
     this.cdr.markForCheck();
-    this.setMessage('Exporting builds and discs...', 'info');
+    this.setMessage('Exporting builds, discs, and loadouts...', 'info');
 
     try {
       await this.buildImportExportService.downloadBuilds();
-      this.setMessage('Builds and discs exported successfully', 'success');
+      this.setMessage('Builds, discs, and loadouts exported successfully', 'success');
     } catch (error) {
       console.error('Export error:', error);
       this.setMessage('Error exporting builds', 'error');
@@ -269,7 +269,7 @@ export class DataManagerComponent {
 
     this.isLoading = true;
     this.cdr.markForCheck();
-    this.setMessage('Importing builds and discs...', 'info');
+    this.setMessage('Importing builds, discs, and loadouts...', 'info');
 
     try {
       const fileContent = await this.buildImportExportService.readFileAsText(this.selectedFile);

@@ -98,6 +98,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   // Disc Loadout modal state
   showLoadoutsModal = false;
   agentLoadouts: DiscLoadout[] = [];
+
+  // Mobile responsiveness
+  @ViewChild('buildHeader', { read: ElementRef }) buildHeader?: ElementRef;
+  isMobile: boolean = false;
+  showScrollTopButton: boolean = false;
   selectedLoadoutForPreview: DiscLoadout | null = null;
   loadoutPreviewStats: any = null; // Will hold calculated stats for preview
   loadoutValidation: { isValid: boolean; missingSlots: string[]; availableSlots: string[] } | null = null;
@@ -116,6 +121,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   includeWEngineBonuses = true;
   includeMindscapeBonuses = true;
   includePassiveBonuses = true;
+  includeSetBonuses = true;
+
+  // In-game stats mode (matches in-game character screen)
+  // When enabled: only base stats + W-Engine base ATK & substat + disc stats + 2pc bonuses
+  inGameStatsMode = false;
 
   // Track failed video loads to prevent infinite error loops
   private failedVideoLoads = new Set<string>();
@@ -267,6 +277,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Load customizations from local storage
     this.loadCustomizations();
 
+    // Initialize mobile detection
+    this.checkIfMobile();
+
     // Subscribe to user builds
     this.buildService.builds$
       .pipe(takeUntil(this.destroy$))
@@ -283,15 +296,35 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.buildService.selectedBuild$
       .pipe(takeUntil(this.destroy$))
       .subscribe(async (build) => {
-        this.selectedBuild = build;
-        this.invalidateBuildCaches();
-
-        // Load toggle flags from build (default true if not set)
+        // Check if this build needs to be fixed BEFORE assigning it
         if (build) {
+          // On page refresh, inGameStatsMode is always false (not persisted)
+          // If build has In-Game Stats settings but toggle is off, restore full stats
+          const has4pcDisabled = build.include4pcBonuses === false;
+          if (has4pcDisabled && !this.inGameStatsMode) {
+            // Build has In-Game Stats mode settings but toggle is off - restore full stats
+            // Update the build first, which will recalculate stats and re-emit through observable
+            await this.buildService.updateBuild(build.id, {
+              includeWEngineBonuses: true,
+              includeMindscapeBonuses: true,
+              includePassiveBonuses: true,
+              includeSetBonuses: true,
+              include4pcBonuses: true
+            });
+            // Don't process this build further - wait for the updated build to come through
+            return;
+          }
+
+          // Load toggle flags normally
           this.includeWEngineBonuses = build.includeWEngineBonuses ?? true;
           this.includeMindscapeBonuses = build.includeMindscapeBonuses ?? true;
           this.includePassiveBonuses = build.includePassiveBonuses ?? true;
+          this.includeSetBonuses = build.includeSetBonuses ?? true;
         }
+
+        // Now assign the build and invalidate caches
+        this.selectedBuild = build;
+        this.invalidateBuildCaches();
         this.cdr.markForCheck();
       });
 
@@ -389,9 +422,60 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  selectBuild(build: AgentBuild) {
+  async selectBuild(build: AgentBuild) {
     this.buildService.selectBuild(build);
     this.clearFeedbackCache();
+
+    // Reset In-Game Stats mode when switching agents to prevent weird display behavior
+    if (this.inGameStatsMode) {
+      this.inGameStatsMode = false;
+
+      // Restore full stats mode for the build
+      this.includeWEngineBonuses = true;
+      this.includeMindscapeBonuses = true;
+      this.includePassiveBonuses = true;
+      this.includeSetBonuses = true;
+
+      await this.buildService.updateBuild(build.id, {
+        includeWEngineBonuses: true,
+        includeMindscapeBonuses: true,
+        includePassiveBonuses: true,
+        includeSetBonuses: true,
+        include4pcBonuses: true
+      });
+
+      this.cdr.markForCheck();
+    }
+
+    // Auto-scroll to agent name/build header on mobile when selecting an agent
+    if (this.isMobile && this.buildHeader) {
+      setTimeout(() => {
+        this.buildHeader?.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest'
+        });
+      }, 100);
+    }
+  }
+
+  @HostListener('window:resize')
+  checkIfMobile() {
+    // Include tablets up to 1024px
+    this.isMobile = window.innerWidth <= 1024;
+    this.cdr.markForCheck();
+  }
+
+  @HostListener('window:scroll')
+  onWindowScroll() {
+    if (this.isMobile) {
+      this.showScrollTopButton = window.pageYOffset > 300;
+      this.cdr.markForCheck();
+    }
+  }
+
+  scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   openAddAgentModal() {
@@ -492,6 +576,31 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  // Mobile-friendly reordering methods
+  async moveBuildUp(index: number, event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (index <= 0 || index >= this.builds.length) return;
+
+    // Work directly with service's internal array to avoid double updates
+    const currentBuilds = [...this.builds];
+    moveItemInArray(currentBuilds, index, index - 1);
+    await this.buildService.reorderBuilds(currentBuilds);
+    // Service subscription will update this.builds automatically
+  }
+
+  async moveBuildDown(index: number, event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (index < 0 || index >= this.builds.length - 1) return;
+
+    // Work directly with service's internal array to avoid double updates
+    const currentBuilds = [...this.builds];
+    moveItemInArray(currentBuilds, index, index + 1);
+    await this.buildService.reorderBuilds(currentBuilds);
+    // Service subscription will update this.builds automatically
+  }
+
   toggleMindscape(level: number) {
     if (!this.selectedBuild) return;
 
@@ -542,6 +651,55 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       });
       this.clearScoreCaches(); // OPTIMIZATION: Clear caches when stats change
     }
+  }
+
+  async onSetBonusesToggle() {
+    // Update build with new toggle state and recalculate
+    if (this.selectedBuild) {
+      await this.buildService.updateBuild(this.selectedBuild.id, {
+        includeSetBonuses: this.includeSetBonuses,
+      });
+      this.clearScoreCaches(); // OPTIMIZATION: Clear caches when stats change
+    }
+  }
+
+  async toggleInGameStatsMode() {
+    // ngModelChange fires after the value is already updated, so don't toggle again
+    if (this.inGameStatsMode) {
+      // In-game mode: Enable base stats + W-Engine base/substat + disc stats + 2pc only
+      this.includeWEngineBonuses = false; // Disable refinement bonuses
+      this.includeMindscapeBonuses = false;
+      this.includePassiveBonuses = false;
+      this.includeSetBonuses = true; // Enable 2pc
+
+      if (this.selectedBuild) {
+        await this.buildService.updateBuild(this.selectedBuild.id, {
+          includeWEngineBonuses: false,
+          includeMindscapeBonuses: false,
+          includePassiveBonuses: false,
+          includeSetBonuses: true,
+          include4pcBonuses: false // Disable 4pc
+        });
+      }
+    } else {
+      // Full mode: Enable all bonuses
+      this.includeWEngineBonuses = true;
+      this.includeMindscapeBonuses = true;
+      this.includePassiveBonuses = true;
+      this.includeSetBonuses = true;
+
+      if (this.selectedBuild) {
+        await this.buildService.updateBuild(this.selectedBuild.id, {
+          includeWEngineBonuses: true,
+          includeMindscapeBonuses: true,
+          includePassiveBonuses: true,
+          includeSetBonuses: true,
+          include4pcBonuses: true
+        });
+      }
+    }
+
+    this.clearScoreCaches();
   }
 
   isDiscEnabled(slot: DiscSlot): boolean {
@@ -1175,7 +1333,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           displayName = type;
       }
 
-      const isPriority = priorityStats.some((priorityStat: string) => {
+      // Flat HP, ATK, DEF should never be considered priority stats for highlighting/counting
+      const isFlatStat = ['HP', 'ATK', 'DEF'].includes(type);
+
+      const isPriority = !isFlatStat && priorityStats.some((priorityStat: string) => {
         const normalizedType = type.replace(/_/g, ' ').toLowerCase();
         const normalizedPriority = priorityStat
           .replace(/_/g, ' ')
@@ -1192,6 +1353,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         isPercent: isPercent,
         rollCount: rollCounts[type] || 0,
         isPriority: isPriority,
+        originalType: type, // Keep the original type for proper matching in share image
       };
     });
 
@@ -1908,12 +2070,19 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         const updatedDisc = this.discService.getDiscById(this.editingDiscUid);
 
         if (updatedDisc) {
-          // Update the build's equippedDiscs with the updated disc
-          const currentDiscs = { ...this.selectedBuild.equippedDiscs };
-          currentDiscs[this.selectedDiscSlot] = updatedDisc;
-          await this.buildService.updateBuild(this.selectedBuild.id, {
-            equippedDiscs: currentDiscs,
-          });
+          // Check if we're editing a disc in loadout creation mode
+          if (this.showCreateEmptyForm && this.loadoutCreationSlot) {
+            // Update the disc in the new loadout being created
+            this.newLoadoutDiscs[this.loadoutCreationSlot] = updatedDisc;
+            this.loadoutCreationSlot = null; // Clear the slot
+          } else {
+            // Normal mode: Update the build's equippedDiscs with the updated disc
+            const currentDiscs = { ...this.selectedBuild.equippedDiscs };
+            currentDiscs[this.selectedDiscSlot] = updatedDisc;
+            await this.buildService.updateBuild(this.selectedBuild.id, {
+              equippedDiscs: currentDiscs,
+            });
+          }
         }
 
         // OPTIMIZATION: Clear caches after updating disc stats
@@ -2455,6 +2624,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Replace underscores with spaces
     let formatted = statType.replace(/_/g, ' ');
 
+    return formatted;
+  }
+
+  // Format W-Engine stat type with normalization (removes trailing %)
+  formatWEngineStatType(statType: string): string {
+    if (!statType) return '';
+
+    // Replace underscores with spaces
+    let formatted = statType.replace(/_/g, ' ');
+
     // Remove trailing % since values already include the % symbol
     formatted = formatted.replace(/%$/, '');
 
@@ -2643,7 +2822,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   backgroundImageArtist: string = '';
   barImageArtist: string = '';
   accentColor: string = '#f4b942'; // Default gold
-  customizationOptionsExpanded = true; // Collapsible customization section
+  customizationOptionsExpanded = window.innerWidth > 768; // Collapsed on mobile by default
   hexInputValue: string = '#f4b942'; // Separate value for hex input to prevent loops
 
   presetColors = [
@@ -2697,7 +2876,7 @@ async generateShareImage() {
       discSets: this.referenceDiscSets,
       substatBreakdown: this.getSubstatBreakdown(),
       totalEffectiveSubstats: this.getTotalEffectiveSubstats(),
-      showBuildRating: this.showBuildRating,
+      showBuildRating: this.showBuildRating && !this.inGameStatsMode,
       showDiscRatings: this.showDiscRatings,
       customAgentImageUrl: this.customAgentImageUrl || undefined,
       customBackgroundImageUrl: this.customBackgroundImageUrl || undefined,
@@ -3480,15 +3659,9 @@ async generateShareImage() {
         wEngine.subStat.type === 'Energy_Regen' ||
         wEngine.subStat.type === 'Anomaly_Mastery';
 
-      // Normalize label: remove % suffix since value already includes it
-      let normalizedLabel = wEngine.subStat.type.replace(/_/g, ' ');
-      if (normalizedLabel.endsWith('%')) {
-        normalizedLabel = normalizedLabel.slice(0, -1);
-      }
-
       stats.push({
         iconName: iconName,
-        label: normalizedLabel,
+        label: this.formatWEngineStatType(wEngine.subStat.type),
         value: isPercent
           ? `${wEngine.subStat.value}%`
           : String(wEngine.subStat.value),
@@ -3733,6 +3906,52 @@ async generateShareImage() {
   }
 
   /**
+   * Edit an existing disc in the loadout being created
+   */
+  openLoadoutDiscEdit(slot: DiscSlot, event?: Event): void {
+    if (event) event.stopPropagation();
+
+    // Get the disc for this slot in the new loadout
+    const existingDisc = this.newLoadoutDiscs[slot];
+    if (!existingDisc) return;
+
+    // Find the disc set
+    const discSet = this.referenceDiscSets.find(
+      (ds) => ds.name === existingDisc.set,
+    );
+    if (!discSet) return;
+
+    // Set edit mode state
+    this.isEditMode = true;
+    this.editingDiscUid = existingDisc.uid;
+    this.selectedDiscSlot = slot;
+    this.selectedDiscSetForCreation = discSet;
+    this.loadoutCreationSlot = slot; // Keep track that we're in loadout mode
+
+    // Pre-populate form data with existing disc stats
+    const existingSubStats = existingDisc.subStats.map((s) => ({
+      type: s.type,
+      value: s.value as string | number,
+    }));
+
+    // Pad with empty substats to always have 4 slots
+    while (existingSubStats.length < 4) {
+      existingSubStats.push({ type: '' as SubStatType, value: '' });
+    }
+
+    this.discFormData = {
+      mainStatType: existingDisc.mainStat.type,
+      mainStatValue: existingDisc.mainStat.value,
+      subStats: existingSubStats,
+    };
+
+    // Open the form directly (skip picker)
+    this.showDiscForm = true;
+    this.showDiscPicker = false;
+    this.cdr.markForCheck();
+  }
+
+  /**
    * Remove a disc from the new loadout being created
    */
   removeDiscFromNewLoadout(slot: string, event: Event): void {
@@ -3827,7 +4046,9 @@ async generateShareImage() {
       this.selectedBuild.includeWEngineBonuses !== false,
       this.selectedBuild.includeMindscapeBonuses !== false,
       this.selectedBuild.includePassiveBonuses !== false,
-      enabledDiscs
+      enabledDiscs,
+      this.selectedBuild.includeSetBonuses !== false,
+      this.selectedBuild.include4pcBonuses !== false
     );
 
     this.cdr.markForCheck();
