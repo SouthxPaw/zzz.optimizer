@@ -2865,6 +2865,28 @@ async generateShareImage() {
       }
     });
 
+    // Get priority stats for highlighting (stats with weight >= 1.0)
+    // Use the same logic as isPrioritySubstat() to ensure consistency
+
+    // Detect build type from equipped discs
+    const equippedDiscsList: Disc[] = [];
+    Object.values(this.selectedBuild.equippedDiscs).forEach((disc) => {
+      if (disc) equippedDiscsList.push(disc);
+    });
+
+    const detectedBuildType = equippedDiscsList.length > 0
+      ? this.scoringService.detectBuildType(equippedDiscsList, this.selectedBuild.agentId)
+      : 'CRIT';
+
+    const buildWeights = this.scoringService.getBuildStatWeights(
+      this.selectedBuild.agentId,
+      detectedBuildType,
+    );
+
+    // Build list of priority stats (weight >= 1.0)
+    const priorityStats = Object.keys(buildWeights)
+      .filter(stat => buildWeights[stat] >= 1.0);
+
     // Prepare data for Canvas renderer
     const shareData: ShareImageData = {
       build: this.selectedBuild,
@@ -2875,6 +2897,7 @@ async generateShareImage() {
       wEngineStats: this.getWEngineStats(),
       discSets: this.referenceDiscSets,
       substatBreakdown: this.getSubstatBreakdown(),
+      priorityStats: priorityStats,
       totalEffectiveSubstats: this.getTotalEffectiveSubstats(),
       showBuildRating: this.showBuildRating && !this.inGameStatsMode,
       showDiscRatings: this.showDiscRatings,
