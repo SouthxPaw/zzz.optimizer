@@ -10553,14 +10553,14 @@
                 "substatWeights": {
                   "HP%": 0,
                   "DEF%": 0,
-                  "ATK%": 0.83,
+                  "ATK%": 1.17,
                   "CRIT_Rate": 0,
                   "CRIT_DMG": 0,
                   "ATK": 0.17,
                   "HP": 0,
                   "DEF": 0,
                   "PEN": 0.17,
-                  "Anomaly_Proficiency": 1.25
+                  "Anomaly_Proficiency": 1.17
                 }
               }
             }
