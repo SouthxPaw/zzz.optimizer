@@ -171,9 +171,16 @@ export class SwUpdateService implements OnDestroy {
         }
         this.waitingForVersionReady = false;
 
-        // Don't clear the button or localStorage flag - if showing, it's legitimate
-        // NO_NEW_VERSION_DETECTED can fire for various reasons
-        console.log('[SW Update] Not clearing update button (if showing, it\'s legitimate)');
+        // Check if we're expecting an update (manual fetch detected new version)
+        // but Angular SW didn't detect it (GitHub Pages CDN inconsistency)
+        const expectingUpdate = localStorage.getItem(this.EXPECTING_UPDATE_KEY) === 'true';
+        if (expectingUpdate) {
+          console.log('[SW Update] Manual check found update but Angular SW did not - showing button anyway');
+          // Show the update button since our manual check found a new version
+          this.updateAvailable$.next(true);
+        } else {
+          console.log('[SW Update] Not clearing update button (if showing, it\'s legitimate)');
+        }
       }
     });
 
