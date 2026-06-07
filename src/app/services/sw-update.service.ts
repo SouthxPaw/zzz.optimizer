@@ -220,6 +220,10 @@ export class SwUpdateService implements OnDestroy {
       if (storedVersion && storedVersion !== currentVersion) {
         console.log(`[SW Update] Version changed from ${storedVersion} to ${currentVersion} - clearing non-SW caches`);
 
+        // Clear the expecting update flag since we're now on the new version
+        localStorage.removeItem(this.EXPECTING_UPDATE_KEY);
+        console.log('[SW Update] Cleared expecting update flag (version updated)');
+
         // Clear localStorage except for USER DATA and SW-related keys
         // USER DATA TO PRESERVE:
         // - zzz-optimizer-builds: All user's character builds (agents + equipped gear)
@@ -230,8 +234,7 @@ export class SwUpdateService implements OnDestroy {
           'zzz-optimizer-upgrade-plans',
           'zzz_uid_history',
           this.VERSION_KEY,
-          this.INSTALLED_TIMESTAMP_KEY,
-          this.EXPECTING_UPDATE_KEY  // Preserve update notification state
+          this.INSTALLED_TIMESTAMP_KEY
         ];
         const allKeys = Object.keys(localStorage);
         allKeys.forEach(key => {
