@@ -523,7 +523,17 @@ export class ScoringService {
       if (weight >= 1.0) {
         let bonus = 0;
         if (upgradeRolls >= 5) {
-          bonus = 15; // Maxed stat (5 upgrade rolls) - perfect
+          // 5 upgrade rolls (6 total rolls) - absolutely maxed stat
+          // Apply same coverage requirements as 4 upgrade rolls for CRIT builds
+          if (tierSStatsAvailable >= 3) {
+            // CRIT build - require good stat coverage
+            if (priorityStatsOnDisc >= 3) {
+              bonus = 15; // Maxed stat with good coverage
+            }
+          } else {
+            // Anomaly build - allow bonus with single stat concentration
+            bonus = 15; // Maxed stat
+          }
         } else if (upgradeRolls >= 4) {
           // For CRIT builds (3+ priority stats), require at least 3 priority stats PRESENT on disc
           // to prevent rewarding discs that hyper-rolled one stat but lack other critical stats
@@ -532,12 +542,12 @@ export class ScoringService {
           if (tierSStatsAvailable >= 3) {
             // CRIT build - stricter requirements
             if (priorityStatsOnDisc >= 3) {
-              bonus = 11; // 4 upgrade rolls - true god-roll (with good stat coverage)
+              bonus = 12; // 4 upgrade rolls - true god-roll (with good stat coverage)
             }
             // If less than 3 priority stats present, no god-roll bonus (disc lacks stat coverage)
           } else {
             // Anomaly build - allow god-roll bonus with single stat concentration
-            bonus = 11; // 4 upgrade rolls - true god-roll
+            bonus = 12; // 4 upgrade rolls - true god-roll
           }
         } else if (upgradeRolls >= 3 && tierSStatsAvailable === 1) {
           // Special case: If only 1 Tier-S stat available (e.g., D4 AP main for Anomaly),
