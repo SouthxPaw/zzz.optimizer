@@ -114,11 +114,6 @@ export class StatCalculatorService {
     // Apply W-Engine base stats and substat (always applied if W-Engine equipped)
     if (wEngine) {
       this.applyWEngineBaseStats(stats, wEngine);
-
-      // Apply refinement bonuses only if enabled and specialty matches
-      if (includeWEngineBonuses && wEngine.specialty === agent.specialty && wEngine.effect.properties) {
-        this.applyRefinementBonuses(stats, wEngine.effect.properties, wEngineRefinement);
-      }
     }
 
     // Apply mindscape stat bonuses (if enabled)
@@ -139,6 +134,7 @@ export class StatCalculatorService {
     this.applyDiscSubStats(stats, enabledDiscsOnly);
 
     // Apply set bonuses (this applies percentage bonuses to HP/ATK/DEF, counting only enabled discs)
+    // BUT do NOT apply W-Engine refinement bonuses yet - passive conversions shouldn't include them
     if (includeSetBonuses) {
       this.applySetBonuses(stats, enabledDiscsOnly, agent, wEngine, include4pcBonuses);
     } else {
@@ -151,10 +147,31 @@ export class StatCalculatorService {
       this.applyConditional4pcBonuses(stats, enabledDiscsOnly, agent);
     }
 
-    // Apply passive scoring bonuses AFTER discs (for conditional stat conversions that depend on final stat values)
+    // Save stats BEFORE W-Engine refinement bonuses are applied
+    // Passive conversions (e.g., Alice: AM > 140 → +1.6 AP) should use these values
+    // This includes: base + W-Engine secondary + discs + mindscape + set bonuses
+    // But excludes: W-Engine refinement/effect bonuses
+    const statsBeforeRefinement = {
+      hp: stats.hp,
+      atk: stats.atk,
+      def: stats.def,
+      impact: stats.impact,
+      anomalyMastery: stats.anomalyMastery
+    };
+
+    // Apply passive scoring bonuses BEFORE refinement bonuses (using pre-refinement stats)
     if (includePassiveBonuses && agent.scoring?.buffs) {
-      this.applyPassiveScoringBonuses(stats, agent);
+      this.applyPassiveScoringBonuses(stats, agent, statsBeforeRefinement);
     } else {
+    }
+
+    // NOW apply W-Engine refinement bonuses (effect bonuses based on specialty)
+    // These should NOT be included in passive conversions
+    if (wEngine && includeWEngineBonuses && wEngine.specialty === agent.specialty && wEngine.effect.properties) {
+      this.applyRefinementBonuses(stats, wEngine.effect.properties, wEngineRefinement);
+
+      // Re-apply percentage formula to convert the refinement percentages to actual values
+      this.applyPercentageFormula(stats, agent, wEngine, enabledDiscsOnly);
     }
 
     // Calculate final energy regen using correct formula:
@@ -326,9 +343,14 @@ export class StatCalculatorService {
   /**
    * Apply passive bonuses from agent's scoring buffs
    * These are bonuses that represent the agent's kit at optimal conditions
-   * Supports conditional stat conversion (e.g., Nangong Yu: AM > 110 → +1 Impact per point)
+   * Supports conditional stat conversion (e.g., Alice: AM > 140 → +1.6 AP, Astra: ATK → +35% ATK)
+   * @param statsBeforeRefinement - Stat values before W-Engine refinement bonuses (includes base + secondary stat + discs + set bonuses)
    */
-  private applyPassiveScoringBonuses(stats: BaseStats, agent: Agent): void {
+  private applyPassiveScoringBonuses(
+    stats: BaseStats,
+    agent: Agent,
+    statsBeforeRefinement?: { hp: number; atk: number; def: number; impact: number; anomalyMastery: number }
+  ): void {
     if (!agent.scoring?.buffs) {
       return;
     }
@@ -339,7 +361,19 @@ export class StatCalculatorService {
 
       // Handle conditional stat conversion
       if (buff.condition) {
-        const sourceStat = this.getStatValue(stats, buff.condition.sourceStat);
+        // For stats affected by W-Engine refinement bonuses (HP, ATK, DEF, Impact, AM),
+        // use values before refinement bonuses to avoid including W-Engine effect stats
+        let sourceStat = this.getStatValue(stats, buff.condition.sourceStat);
+
+        if (statsBeforeRefinement) {
+          const sourceStatKey = buff.condition.sourceStat;
+          if (sourceStatKey === 'hp') sourceStat = statsBeforeRefinement.hp;
+          else if (sourceStatKey === 'atk') sourceStat = statsBeforeRefinement.atk;
+          else if (sourceStatKey === 'def') sourceStat = statsBeforeRefinement.def;
+          else if (sourceStatKey === 'impact') sourceStat = statsBeforeRefinement.impact;
+          else if (sourceStatKey === 'anomalyMastery') sourceStat = statsBeforeRefinement.anomalyMastery;
+        }
+
         const excess = Math.max(0, sourceStat - buff.condition.threshold);
         value = excess * buff.condition.ratio;
 

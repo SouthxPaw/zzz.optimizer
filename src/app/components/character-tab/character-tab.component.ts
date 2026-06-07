@@ -1105,15 +1105,34 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     const stats = this.selectedBuild.calculatedStats;
 
+    // Calculate stats WITHOUT passive bonuses AND without W-Engine refinement bonuses for display purposes
+    // This ensures the passive bonus display matches what the stat calculator actually uses
+    // (The stat calculator uses pre-refinement stats for passive conversions)
+    const statsWithoutPassives = this.statCalculator.calculateFinalStats(
+      agent,
+      60,
+      this.selectedBuild.equippedWEngine || null,
+      this.selectedBuild.equippedDiscs,
+      this.selectedBuild.mindscapeLevel,
+      this.selectedBuild.wEngineRefinement,
+      false, // includeWEngineBonuses = false (to exclude refinement bonuses from passive calculation)
+      this.selectedBuild.includeMindscapeBonuses ?? true,
+      false, // includePassiveBonuses = false
+      this.selectedBuild.enabledDiscs || {},
+      this.selectedBuild.includeSetBonuses ?? true,
+      this.selectedBuild.include4pcBonuses ?? true
+    );
+
     // First pass: calculate all buff values
     const calculatedBuffs = agent.scoring.buffs
       .map((buff) => {
         const isPercent = buff.format === '%';
         let displayValue = buff.value;
 
-        // Calculate conditional bonuses based on current stats
-        if (buff.condition && stats) {
-          const sourceStat = this.getStatValueFromStats(stats, buff.condition.sourceStat);
+        // Calculate conditional bonuses based on stats WITHOUT passive bonuses
+        // This matches the behavior in stat-calculator.service.ts where conditions use pre-refinement values
+        if (buff.condition && statsWithoutPassives) {
+          const sourceStat = this.getStatValueFromStats(statsWithoutPassives, buff.condition.sourceStat);
           const excess = Math.max(0, sourceStat - buff.condition.threshold);
           let calculatedValue = excess * buff.condition.ratio;
 
