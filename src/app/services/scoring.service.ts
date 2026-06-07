@@ -491,8 +491,9 @@ export class ScoringService {
     });
 
     // STEP 3: God Roll Concentration Bonus
-    // Reward high UPGRADE rolls (4+) in a single priority stat
+    // Reward exceptionally high UPGRADE rolls (4-5) in a single priority stat
     // Note: We count UPGRADE rolls only (not including initial roll)
+    // Threshold raised to 4+ to make god-roll bonus more exclusive
     let godRollBonus = 0;
     let godRollStat = '';
     disc.subStats.forEach((substat) => {
@@ -504,12 +505,11 @@ export class ScoringService {
       if (weight >= 1.0) {
         let bonus = 0;
         if (upgradeRolls >= 5) {
-          bonus = 15; // Maxed stat (5 upgrade rolls)
+          bonus = 15; // Maxed stat (5 upgrade rolls) - perfect
         } else if (upgradeRolls >= 4) {
-          bonus = 11; // 4 upgrade rolls
-        } else if (upgradeRolls >= 3) {
-          bonus = 7; // 3 upgrade rolls (god-roll)
+          bonus = 11; // 4 upgrade rolls - true god-roll
         }
+        // Removed: upgradeRolls >= 3 (balanced rolls are already rewarded by base system)
 
         if (bonus > godRollBonus) {
           godRollBonus = bonus;
@@ -574,20 +574,15 @@ export class ScoringService {
       });
     }
 
-    // STEP 5: Improved Roll Bonus (progressive based on upgrade rolls)
+    // STEP 5: Total Rolls Bonus (1 point if 5+ UPGRADE rolls, not total rolls)
     // Count upgrade rolls only (enhancements), not initial substat rolls
     const upgradeRolls = totalRollCount - disc.subStats.length;
     let rollBonus = 0;
     if (upgradeRolls >= 5) {
-      rollBonus = 1.5; // normalized points
-    } else if (upgradeRolls >= 4) {
-      rollBonus = 1.0; // normalized points
-    }
-
-    if (rollBonus > 0) {
+      rollBonus = 1; // Simple +1 bonus for maxed disc (matching old system)
       breakdown.rollBonusPoints = rollBonus;
       breakdown.details.push({
-        stat: `Upgrade Rolls Bonus (${upgradeRolls} rolls)`,
+        stat: `Upgrade Rolls Bonus (${upgradeRolls}/5+)`,
         value: upgradeRolls,
         points: rollBonus,
         rolls: totalRollCount,
