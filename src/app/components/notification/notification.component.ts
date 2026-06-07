@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NotificationService, Notification } from '../../services/notification.service';
+import { slideInRight } from '../../animations/route-animations';
 
 @Component({
   selector: 'app-notification',
@@ -10,7 +11,8 @@ import { NotificationService, Notification } from '../../services/notification.s
   templateUrl: './notification.component.html',
   styleUrl: './notification.component.css',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [slideInRight]
 })
 export class NotificationComponent implements OnInit, OnDestroy {
   notification: Notification | null = null;

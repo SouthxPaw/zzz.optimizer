@@ -50,6 +50,7 @@ import {
   ShareImageData,
 } from '../../services/canvas-share-image.service';
 import { getDiscValidationErrors, hasValidationErrors } from '../../utils/disc-validation';
+import { fadeIn, scaleIn, fadeInUp, expandCollapse, fadeInFast, slideInRight } from '../../animations/route-animations';
 
 @Component({
   selector: 'app-character-tab',
@@ -65,6 +66,7 @@ import { getDiscValidationErrors, hasValidationErrors } from '../../utils/disc-v
   templateUrl: './character-tab.component.html',
   styleUrls: ['./character-tab.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [fadeIn, scaleIn, fadeInUp, expandCollapse, fadeInFast, slideInRight],
 })
 export class CharacterTabComponent implements OnInit, OnDestroy {
   // Expose Object for template use
@@ -392,7 +394,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Set up debounced search for disc set name
     this.discSearchSubject$
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(150), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe((searchTerm) => {
         this.debouncedDiscSearch = searchTerm;
         this.updateFilteredDiscSets();
@@ -401,7 +403,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Set up debounced search for disc effects
     this.discEffectSearchSubject$
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(150), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe((searchTerm) => {
         this.debouncedDiscEffectSearch = searchTerm;
         this.updateFilteredDiscSets();
@@ -700,6 +702,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     this.clearScoreCaches();
+    this.cdr.markForCheck();
   }
 
   isDiscEnabled(slot: DiscSlot): boolean {
@@ -1608,7 +1611,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private updateFilteredDiscs(): void {
     // OPTIMIZED: Single-pass filtering instead of 4 separate filter() calls
     // Pre-compute lowercase search term outside the loop
-    const searchLower = this.discSearchTerm?.toLowerCase();
+    const searchLower = this.debouncedDiscSearch?.toLowerCase();
 
     // OPTIMIZATION: Use DiscService indexed lookups to reduce search space
     let sourceDiscs: Disc[];

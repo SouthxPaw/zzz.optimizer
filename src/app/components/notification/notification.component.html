@@ -1,9 +1,23 @@
-<div class="notification-container" *ngIf="notification">
-  <div class="notification" [class]="'notification-' + notification.type">
-    <span class="notification-message">{{ notification.message }}</span>
-    <button *ngIf="notification.action" class="notification-action" (click)="onAction()">
+<div class="fixed top-5 right-5 z-[10000] md:left-2.5 md:top-2.5" *ngIf="notification" @slideInRight>
+  <div class="notification flex items-center gap-3 px-6 py-4 rounded-lg shadow-2xl min-w-[300px] max-w-[500px] md:min-w-0 md:w-full transition-all duration-300 hover:scale-105"
+       [ngClass]="{
+         'bg-gradient-to-br from-success to-green-400': notification.type === 'success',
+         'bg-gradient-to-br from-danger to-red-400': notification.type === 'error',
+         'bg-gradient-to-br from-warning to-orange-400': notification.type === 'warning',
+         'bg-gradient-to-br from-cyber to-cyan-400': notification.type === 'info'
+       }">
+
+    <span class="flex-1 text-[0.95rem] text-white font-medium md:text-sm">{{ notification.message }}</span>
+
+    <button *ngIf="notification.action"
+            class="notification-action px-4 py-2 bg-white/20 border border-white/30 text-white text-sm font-semibold rounded-md cursor-pointer transition-all duration-200 whitespace-nowrap hover:bg-white/30 hover:border-white/50 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 touch-target"
+            (click)="onAction()">
       {{ notification.action.label }}
     </button>
-    <button class="notification-close" (click)="close()">&times;</button>
+
+    <button class="notification-close bg-transparent border-0 text-white text-2xl cursor-pointer p-0 w-6 h-6 flex items-center justify-center opacity-70 transition-opacity duration-200 flex-shrink-0 hover:opacity-100 md:touch-target md:w-11 md:h-11 md:min-w-11 md:min-h-11"
+            (click)="close()">
+      &times;
+    </button>
   </div>
 </div>

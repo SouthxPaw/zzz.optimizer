@@ -95,7 +95,7 @@
   border-radius: 8px;
   font-weight: 600;
   font-size: 0.95em;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   border: 2px solid transparent;
   position: relative;
   overflow: hidden;
@@ -123,6 +123,7 @@
   width: 24px;
   height: 24px;
   object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
 .nav-link:hover {
@@ -138,6 +139,10 @@
 
 .nav-link:hover::before {
   width: 80%;
+}
+
+.nav-link:hover .nav-icon {
+  transform: scale(1.1);
 }
 
 .nav-link.active {
@@ -231,6 +236,7 @@
   .nav-link {
     width: 100%;
     justify-content: center;
+    min-height: 44px; /* Touch-friendly mobile target */
   }
 }
 

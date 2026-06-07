@@ -1,5 +1,19 @@
-/* Shared button styles to reduce CSS duplication across components */
+/* Shared button styles - Refactored for Tailwind compatibility */
 
+/*
+  TAILWIND EQUIVALENTS:
+
+  .btn-primary -> Use these Tailwind classes:
+  class="bg-gradient-to-br from-purple-500 to-purple-700 text-white border-0 px-5 py-2.5 rounded-lg cursor-pointer transition-all duration-200 relative overflow-hidden shadow-lg hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+
+  .btn-secondary -> Use these Tailwind classes:
+  class="bg-transparent text-cyan-400 border-2 border-cyan-400 px-4 py-2 rounded-lg cursor-pointer font-semibold transition-all duration-200 shadow-sm hover:bg-cyan-400/10 hover:-translate-y-px hover:shadow-cyan-400/40 disabled:opacity-50 disabled:cursor-not-allowed"
+
+  .btn-danger -> Use these Tailwind classes:
+  class="bg-gradient-to-br from-red-500 to-red-600 text-white border-0 px-5 py-2.5 rounded-lg cursor-pointer transition-all duration-200 shadow-lg hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+*/
+
+/* Legacy support - keeping for backward compatibility */
 .btn-primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;

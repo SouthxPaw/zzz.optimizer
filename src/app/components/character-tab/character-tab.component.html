@@ -56,7 +56,7 @@
           >
             <span class="history-icon">▼</span>
           </button>
-          <div *ngIf="showUidHistoryDropdown" class="uid-history-dropdown-main">
+          <div *ngIf="showUidHistoryDropdown" class="uid-history-dropdown-main" @expandCollapse>
             <div class="uid-history-header">
               <span>Recent UIDs</span>
               <button
@@ -98,7 +98,7 @@
       </div>
     </div>
     <!-- Important Assumptions Notice -->
-    <div *ngIf="showAssumptionsNotice" class="assumptions-notice">
+    <div *ngIf="showAssumptionsNotice" class="assumptions-notice" @expandCollapse>
       <div class="notice-icon">ℹ️</div>
       <div class="notice-content">
         <h3>Important Assumptions</h3>
@@ -400,7 +400,7 @@
           </div>
 
           <!-- W-Engine Picker -->
-          <div *ngIf="showWEnginePicker" class="wengine-picker">
+          <div *ngIf="showWEnginePicker" class="wengine-picker" @expandCollapse>
             <div class="wengine-picker-controls">
               <input
                 type="text"
@@ -927,11 +927,12 @@
     class="modal-overlay"
     *ngIf="showAddAgentModal"
     (click)="closeAddAgentModal()"
+    @fadeIn
     role="dialog"
     aria-labelledby="add-agent-title"
     aria-modal="true"
   >
-    <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-content" (click)="$event.stopPropagation()" @scaleIn>
       <div class="modal-header">
         <h2 id="add-agent-title">Add Agent</h2>
         <button
@@ -1063,6 +1064,7 @@
     [class.modal-overlay-high-z]="showLoadoutsModal"
     *ngIf="showDiscPicker"
     (click)="closeDiscPicker()"
+    @fadeIn
     role="dialog"
     aria-labelledby="disc-picker-title"
     aria-modal="true"
@@ -1070,6 +1072,7 @@
     <div
       class="modal-content disc-picker-modal"
       (click)="$event.stopPropagation()"
+      @scaleIn
     >
       <div class="modal-header">
         <h2 id="disc-picker-title">
@@ -1149,10 +1152,12 @@
   <div class="modal-overlay"
        [class.modal-overlay-high-z]="showLoadoutsModal"
        *ngIf="showDiscForm"
-       (click)="closeDiscForm()">
+       (click)="closeDiscForm()"
+       @fadeIn>
     <div
       class="modal-content disc-form-modal"
       (click)="$event.stopPropagation()"
+      @scaleIn
     >
       <div class="modal-header">
         <h2>{{ isEditMode ? "Edit Disc Stats" : "Configure Disc Stats" }}</h2>
@@ -1285,10 +1290,11 @@
   <!-- End Builds Tab -->
 
   <!-- Compare Discs Modal -->
-  <div class="modal-overlay" *ngIf="showCompareModal" (click)="closeCompareModal()">
+  <div class="modal-overlay" *ngIf="showCompareModal" (click)="closeCompareModal()" @fadeIn>
     <div
       class="modal-content compare-modal-content"
       (click)="$event.stopPropagation()"
+      @scaleIn
     >
       <div class="modal-header">
         <h2>Compare Discs - {{ formatDiscSlot(compareDiscSlot!) }}</h2>
@@ -1489,6 +1495,7 @@
     class="modal-overlay"
     *ngIf="showConfirmDialog"
     (click)="closeConfirmDialog()"
+    @fadeIn
     role="alertdialog"
     aria-labelledby="confirm-dialog-title"
     aria-describedby="confirm-dialog-message"
@@ -1497,6 +1504,7 @@
     <div
       class="modal-content confirm-dialog-modal"
       (click)="$event.stopPropagation()"
+      @scaleIn
     >
       <div class="modal-header">
         <h2 id="confirm-dialog-title">{{ confirmDialogData.title }}</h2>
@@ -1537,8 +1545,9 @@
     *ngIf="showEnkaImportModal"
     class="modal-overlay"
     (click)="closeEnkaImportModal()"
+    @fadeIn
   >
-    <div class="modal-content enka-import-modal" (click)="$event.stopPropagation()">
+    <div class="modal-content enka-import-modal" (click)="$event.stopPropagation()" @scaleIn>
       <button
         class="modal-close-btn"
         (click)="closeEnkaImportModal()"
@@ -1632,11 +1641,12 @@
     class="modal-overlay"
     *ngIf="showShareModal"
     (click)="closeShareModal()"
+    @fadeIn
     role="dialog"
     aria-labelledby="share-modal-title"
     aria-modal="true"
   >
-    <div class="modal-content share-modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-content share-modal-content" (click)="$event.stopPropagation()" @scaleIn>
       <div class="modal-header">
         <h2 id="share-modal-title">Share Build</h2>
         <button
@@ -1891,8 +1901,8 @@
   </div>
 
   <!-- Disc Loadouts Modal -->
-  <div class="modal-overlay" *ngIf="showLoadoutsModal" (click)="closeLoadoutsModal()">
-    <div class="modal-content loadouts-modal-content" (click)="$event.stopPropagation()">
+  <div class="modal-overlay" *ngIf="showLoadoutsModal" (click)="closeLoadoutsModal()" @fadeIn>
+    <div class="modal-content loadouts-modal-content" (click)="$event.stopPropagation()" @scaleIn>
       <div class="modal-header">
         <h2>Disc Loadouts - {{ selectedBuild?.name }}</h2>
         <button class="close-btn" (click)="closeLoadoutsModal()">×</button>
@@ -1931,7 +1941,7 @@
         <div class="loadouts-divider"></div>
 
         <!-- Save Current Flow -->
-        <div *ngIf="showSaveCurrentForm" class="save-current-form-section">
+        <div *ngIf="showSaveCurrentForm" class="save-current-form-section" @expandCollapse>
           <h3>Save Current Configuration</h3>
           <p class="form-description">Save your currently equipped discs ({{ getEquippedDiscsCount(selectedBuild!) }}/6) as a loadout</p>
           <div class="save-loadout-form">
@@ -1953,7 +1963,7 @@
         </div>
 
         <!-- Create Empty Flow -->
-        <div *ngIf="showCreateEmptyForm" class="create-empty-form-section">
+        <div *ngIf="showCreateEmptyForm" class="create-empty-form-section" @expandCollapse>
           <h3>Create Empty Loadout</h3>
           <p class="form-description">Name your loadout, then select discs for each slot</p>
 
@@ -2092,7 +2102,7 @@
         </div>
 
         <!-- Preview Section -->
-        <div *ngIf="selectedLoadoutForPreview" class="loadout-preview-section">
+        <div *ngIf="selectedLoadoutForPreview" class="loadout-preview-section" @slideInRight>
           <div class="preview-header">
             <h3>Preview: {{ selectedLoadoutForPreview.name }}</h3>
             <button class="btn-secondary btn-compact" (click)="clearLoadoutPreview()">

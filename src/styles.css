@@ -1,4 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+/* Tailwind CSS v4 */
+@import "tailwindcss";
 
 /* Custom Font */
 @font-face {
@@ -8,32 +9,6 @@
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-}
-
-/* Accessibility: Skip to main content link */
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: #f4b942;
-  color: #000;
-  padding: 8px 16px;
-  text-decoration: none;
-  font-weight: bold;
-  z-index: 10000;
-  border-radius: 0 0 4px 0;
-}
-
-.skip-link:focus {
-  top: 0;
-  outline: 3px solid #fff;
-  outline-offset: 2px;
-}
-
-/* Accessibility: Focus visible improvements */
-*:focus-visible {
-  outline: 2px solid #f4b942;
-  outline-offset: 2px;
 }
 
 /* Global font family */
@@ -81,71 +56,30 @@ body {
   font-family: Arial, sans-serif !important;
 }
 
-/* Cyberpunk Keyframe Animations */
-@keyframes neon-pulse {
-  0%, 100% {
-    box-shadow:
-      0 0 5px rgba(244, 185, 66, 0.5),
-      0 0 10px rgba(244, 185, 66, 0.3),
-      0 0 15px rgba(244, 185, 66, 0.2);
-  }
-  50% {
-    box-shadow:
-      0 0 10px rgba(244, 185, 66, 0.8),
-      0 0 20px rgba(244, 185, 66, 0.5),
-      0 0 30px rgba(244, 185, 66, 0.3);
-  }
+/* Accessibility: Focus visible improvements */
+*:focus-visible {
+  outline: 2px solid #f4b942;
+  outline-offset: 2px;
 }
 
-@keyframes neon-pulse-cyan {
-  0%, 100% {
-    box-shadow:
-      0 0 5px rgba(0, 217, 255, 0.5),
-      0 0 10px rgba(0, 217, 255, 0.3),
-      0 0 15px rgba(0, 217, 255, 0.2);
-  }
-  50% {
-    box-shadow:
-      0 0 10px rgba(0, 217, 255, 0.8),
-      0 0 20px rgba(0, 217, 255, 0.5),
-      0 0 30px rgba(0, 217, 255, 0.3);
-  }
+/* Accessibility: Skip to main content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #f4b942;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 10000;
+  border-radius: 0 0 4px 0;
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -200% center;
-  }
-  100% {
-    background-position: 200% center;
-  }
-}
-
-@keyframes scanline {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-@keyframes glow-intensify {
-  from {
-    filter: drop-shadow(0 0 2px rgba(244, 185, 66, 0.3));
-  }
-  to {
-    filter: drop-shadow(0 0 8px rgba(244, 185, 66, 0.8));
-  }
-}
-
-@keyframes global-disc-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid #fff;
+  outline-offset: 2px;
 }
 
 /* Custom Scrollbar - Cyberpunk Style */
@@ -170,94 +104,90 @@ body {
   box-shadow: 0 0 10px rgba(244, 185, 66, 0.8);
 }
 
-/* Utility Classes for Cyberpunk Effects */
-.tech-panel {
-  position: relative;
-  border: 1px solid #2a2a2a;
-  box-shadow:
-    0 4px 6px rgba(0,0,0,.5),
-    inset 0 1px 0 rgba(244, 185, 66, 0.1);
+/* Custom Animations */
+@keyframes neon-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(244, 185, 66, 0.5), 0 0 10px rgba(244, 185, 66, 0.3), 0 0 15px rgba(244, 185, 66, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(244, 185, 66, 0.8), 0 0 20px rgba(244, 185, 66, 0.5), 0 0 30px rgba(244, 185, 66, 0.3);
+  }
 }
 
-.tech-panel::before,
-.tech-panel::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #F4B942;
-  opacity: 0.6;
+@keyframes neon-pulse-cyan {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(0, 217, 255, 0.5), 0 0 10px rgba(0, 217, 255, 0.3), 0 0 15px rgba(0, 217, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.8), 0 0 20px rgba(0, 217, 255, 0.5), 0 0 30px rgba(0, 217, 255, 0.3);
+  }
 }
 
-.tech-panel::before {
-  top: -1px;
-  left: -1px;
-  border-right: none;
-  border-bottom: none;
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+    filter: drop-shadow(0 0 20px rgba(244, 185, 66, 0.6));
+  }
+  50% {
+    transform: translateY(-20px);
+    filter: drop-shadow(0 0 30px rgba(244, 185, 66, 0.8));
+  }
 }
 
-.tech-panel::after {
-  bottom: -1px;
-  right: -1px;
-  border-left: none;
-  border-top: none;
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(244, 185, 66, 0.5);
+  }
+  50% {
+    opacity: 0.8;
+    text-shadow: 0 0 20px rgba(244, 185, 66, 0.8);
+  }
 }
 
-.neon-glow-gold {
-  box-shadow:
-    0 0 5px rgba(244, 185, 66, 0.4),
-    0 0 10px rgba(244, 185, 66, 0.2),
-    0 4px 6px rgba(0,0,0,.5);
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.neon-glow-cyan {
-  box-shadow:
-    0 0 5px rgba(0, 217, 255, 0.4),
-    0 0 10px rgba(0, 217, 255, 0.2),
-    0 4px 6px rgba(0,0,0,.5);
+@keyframes corner-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
 }
 
-/* Enhanced Tooltips */
-[data-tooltip] {
-  position: relative;
-  cursor: help;
+/* Utility animations */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
 
-[data-tooltip]::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1a1a1a;
-  color: #f4f4f4;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 0.85em;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  border: 1px solid #333;
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
-[data-tooltip]::before {
-  content: '';
-  position: absolute;
-  bottom: 115%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-top-color: #1a1a1a;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-  z-index: 1000;
+.animate-neon-pulse {
+  animation: neon-pulse 2s ease-in-out infinite;
 }
 
-[data-tooltip]:hover::after,
-[data-tooltip]:hover::before {
-  opacity: 1;
+.animate-neon-pulse-cyan {
+  animation: neon-pulse-cyan 2s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.animate-corner-pulse {
+  animation: corner-pulse 2s ease-in-out infinite;
 }

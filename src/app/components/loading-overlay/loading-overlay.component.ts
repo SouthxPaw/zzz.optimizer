@@ -1,5 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { scaleIn } from '../../animations/route-animations';
 
 @Component({
   selector: 'app-loading-overlay',
@@ -7,7 +8,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './loading-overlay.component.html',
   styleUrl: './loading-overlay.component.css',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [scaleIn]
 })
 export class LoadingOverlayComponent implements AfterViewInit {
   @ViewChild('bangbooVideo') bangbooVideo?: ElementRef<HTMLVideoElement>;
