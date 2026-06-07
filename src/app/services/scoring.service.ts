@@ -503,6 +503,17 @@ export class ScoringService {
     // Count how many Tier-S stats (weight >= 1.0) exist in the weights
     const tierSStatsAvailable = Object.values(statWeights).filter(w => w >= 1.0).length;
 
+    // For CRIT builds (3+ priority stats), count how many priority stats are present on disc
+    // The point of god-roll bonus: high concentration in ONE stat, but OTHER good stats exist
+    let priorityStatsOnDisc = 0;
+
+    disc.subStats.forEach((substat) => {
+      const weight = statWeights[substat.type] || 0;
+      if (weight >= 1.0) {
+        priorityStatsOnDisc++;
+      }
+    });
+
     disc.subStats.forEach((substat) => {
       const totalRolls = calculateRollCount(substat.type, substat.value);
       const upgradeRolls = totalRolls - 1; // Subtract initial roll
@@ -514,7 +525,20 @@ export class ScoringService {
         if (upgradeRolls >= 5) {
           bonus = 15; // Maxed stat (5 upgrade rolls) - perfect
         } else if (upgradeRolls >= 4) {
-          bonus = 11; // 4 upgrade rolls - true god-roll
+          // For CRIT builds (3+ priority stats), require at least 3 priority stats PRESENT on disc
+          // to prevent rewarding discs that hyper-rolled one stat but lack other critical stats
+          // The god-roll bonus rewards: high concentration in one stat + other good stats existing
+          // CRIT builds have way more stats to roll into, so we need stricter requirements
+          if (tierSStatsAvailable >= 3) {
+            // CRIT build - stricter requirements
+            if (priorityStatsOnDisc >= 3) {
+              bonus = 11; // 4 upgrade rolls - true god-roll (with good stat coverage)
+            }
+            // If less than 3 priority stats present, no god-roll bonus (disc lacks stat coverage)
+          } else {
+            // Anomaly build - allow god-roll bonus with single stat concentration
+            bonus = 11; // 4 upgrade rolls - true god-roll
+          }
         } else if (upgradeRolls >= 3 && tierSStatsAvailable === 1) {
           // Special case: If only 1 Tier-S stat available (e.g., D4 AP main for Anomaly),
           // give partial credit for 3 upgrade rolls to avoid harsh cliff from SS to VH
