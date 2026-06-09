@@ -19,12 +19,19 @@ export interface Notification {
 export class NotificationService {
   private notificationSubject = new BehaviorSubject<Notification | null>(null);
   notification$ = this.notificationSubject.asObservable();
+  private hideTimeout: any;
 
   show(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info', duration: number = 5000, action?: NotificationAction) {
+    // Clear any existing timeout to prevent memory leaks
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = null;
+    }
+
     this.notificationSubject.next({ message, type, duration, action });
 
     if (duration > 0) {
-      setTimeout(() => this.hide(), duration);
+      this.hideTimeout = setTimeout(() => this.hide(), duration);
     }
   }
 
@@ -45,6 +52,11 @@ export class NotificationService {
   }
 
   hide() {
+    // Clear timeout when manually hiding
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = null;
+    }
     this.notificationSubject.next(null);
   }
 }

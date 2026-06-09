@@ -1,17 +1,17 @@
-<div class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-lg" *ngIf="show" @scaleIn
-     style="background-image: repeating-linear-gradient(0deg, transparent 0px, transparent 1px, rgba(244, 185, 66, 0.03) 1px, rgba(244, 185, 66, 0.03) 2px), repeating-linear-gradient(90deg, transparent 0px, transparent 1px, rgba(244, 185, 66, 0.03) 1px, rgba(244, 185, 66, 0.03) 2px), radial-gradient(ellipse at center, rgba(244, 185, 66, 0.1) 0%, transparent 70%); background-size: 50px 50px, 50px 50px, 100% 100%;">
+<!-- Full-screen black loading overlay (in-game style) -->
+<div class="loading-screen" *ngIf="show" @slideOut>
+  <!-- ZZZ Logo in center with radial fade -->
+  <div class="logo-center">
+    <div class="logo-fade-mask">
+      <img
+        src="assets/data/images/page-icons/zzz-zenless-zone-zero.gif"
+        alt="Zenless Zone Zero"
+        class="zzz-logo">
+    </div>
+  </div>
 
-  <!-- Loading content with glassmorphism -->
-  <div class="glass-strong flex flex-col items-center gap-4 px-16 py-10 rounded-2xl shadow-2xl relative animate-fade-in-up"
-       style="box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 60px rgba(244, 185, 66, 0.2), inset 0 1px 0 rgba(244, 185, 66, 0.2);">
-
-    <!-- Tech corner decorations with pulse animation -->
-    <div class="absolute -top-0.5 -left-0.5 w-8 h-8 border-3 border-gold opacity-80 border-r-0 border-b-0 rounded-tl-2xl animate-pulse"
-         style="animation: corner-pulse 2s ease-in-out infinite;"></div>
-    <div class="absolute -bottom-0.5 -right-0.5 w-8 h-8 border-3 border-gold opacity-80 border-l-0 border-t-0 rounded-br-2xl animate-pulse"
-         style="animation: corner-pulse 2s ease-in-out infinite;"></div>
-
-    <!-- Bangboo video with float animation -->
+  <!-- Bangboo video in bottom right corner -->
+  <div class="bangboo-container">
     <video
       #bangbooVideo
       [src]="'assets/data/images/page-icons/bangbooloading.mp4'"
@@ -19,27 +19,7 @@
       [loop]="true"
       [muted]="true"
       [attr.playsinline]="true"
-      class="w-52 h-52 object-contain animate-float"
-      style="filter: drop-shadow(0 0 20px rgba(244, 185, 66, 0.6));">
+      class="bangboo-video">
     </video>
-
-    <!-- Loading text with glow -->
-    <div class="text-gold-light text-xl font-semibold text-center tracking-wider animate-pulse-glow"
-         style="text-shadow: 0 0 10px rgba(244, 185, 66, 0.8), 0 0 20px rgba(244, 185, 66, 0.5), 0 2px 4px rgba(0, 0, 0, 0.5);">
-      {{ message }}
-    </div>
   </div>
 </div>
-
-<style>
-@keyframes corner-pulse {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-}
-</style>

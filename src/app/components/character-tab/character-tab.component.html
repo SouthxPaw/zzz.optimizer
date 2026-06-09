@@ -1951,9 +1951,11 @@
               placeholder="Enter loadout name (e.g., 'Crit DPS', 'Energy Regen')"
               maxlength="50"
               class="loadout-name-input"
+              [class.error]="errorFields.has('newLoadoutName')"
+              (input)="errorFields.delete('newLoadoutName')"
               (keyup.enter)="confirmSaveCurrentLoadout()"
             />
-            <button class="btn-primary" (click)="confirmSaveCurrentLoadout()" [disabled]="!newLoadoutName.trim()">
+            <button class="btn-primary" (click)="confirmSaveCurrentLoadout()">
               Save
             </button>
             <button class="btn-secondary" (click)="cancelSaveCurrentLoadout()">
@@ -1974,6 +1976,8 @@
               placeholder="Enter loadout name (e.g., 'Crit DPS', 'Energy Regen')"
               maxlength="50"
               class="loadout-name-input"
+              [class.error]="errorFields.has('newLoadoutName')"
+              (input)="errorFields.delete('newLoadoutName')"
             />
           </div>
 
@@ -2046,7 +2050,6 @@
             <button
               class="btn-primary"
               (click)="confirmCreateEmptyLoadout()"
-              [disabled]="!newLoadoutName.trim() || Object.keys(newLoadoutDiscs).length === 0"
             >
               Create Loadout ({{ Object.keys(newLoadoutDiscs).length }}/6 discs)
             </button>

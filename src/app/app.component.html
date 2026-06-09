@@ -1,5 +1,7 @@
 <app-navigation></app-navigation>
-<router-outlet />
+<div [@routeAnimations]="getRouteAnimationData()">
+  <router-outlet #outlet="outlet" />
+</div>
 <app-footer></app-footer>
 
 <!-- Global components -->

@@ -18,10 +18,14 @@
         [(ngModel)]="newPlanName"
         placeholder="Plan Name"
         class="form-input"
+        [class.error]="errorFields.has('newPlanName')"
+        (input)="errorFields.delete('newPlanName')"
       />
       <select
         [(ngModel)]="newPlanAgentId"
         class="form-select"
+        [class.error]="errorFields.has('newPlanAgentId')"
+        (change)="errorFields.delete('newPlanAgentId')"
       >
         <option value="">Select Agent</option>
         <option *ngFor="let agent of referenceAgents; trackBy: trackByAgentId" [value]="agent.id">

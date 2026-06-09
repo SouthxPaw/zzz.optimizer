@@ -252,6 +252,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private isProcessingWEngineAction = false;
   private isProcessingAgentAction = false;
 
+  // Error field highlighting
+  errorFields: Set<string> = new Set();
+
   constructor(
     private buildService: BuildService,
     private agentService: AgentService,
@@ -3880,9 +3883,12 @@ async generateShareImage() {
 
     // Validate name
     if (!this.newLoadoutName || this.newLoadoutName.trim().length === 0) {
+      this.errorFields.add('newLoadoutName');
       this.notificationService.warning('Please enter a name for this loadout');
+      this.cdr.markForCheck();
       return;
     }
+    this.errorFields.delete('newLoadoutName');
 
     // Check if agent has reached max loadouts
     if (!this.discLoadoutService.canAddLoadout(this.selectedBuild.agentId)) {
@@ -4015,9 +4021,12 @@ async generateShareImage() {
 
     // Validate name
     if (!this.newLoadoutName || this.newLoadoutName.trim().length === 0) {
+      this.errorFields.add('newLoadoutName');
       this.notificationService.warning('Please enter a name for this loadout');
+      this.cdr.markForCheck();
       return;
     }
+    this.errorFields.delete('newLoadoutName');
 
     // Check if agent has reached max loadouts
     if (!this.discLoadoutService.canAddLoadout(this.selectedBuild.agentId)) {

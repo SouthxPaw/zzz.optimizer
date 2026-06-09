@@ -24,6 +24,12 @@
 
 .form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--gold)}
 
+.form-input.error,.form-select.error{border-color:#ff6b6b;background:rgba(255,107,107,0.05);animation:shake .4s ease-in-out}
+
+.form-input.error:focus,.form-select.error:focus{border-color:#ff6b6b;box-shadow:0 0 0 3px rgba(255,107,107,0.2)}
+
+@keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-5px)}20%,40%,60%,80%{transform:translateX(5px)}}
+
 .form-textarea{resize:vertical;font-family:inherit}
 
 .btn-create{width:100%;background:var(--gold);color:var(--bg);border:none;padding:10px;border-radius:6px;cursor:pointer;font-weight:600;font-size:.95em;transition:all .15s}
