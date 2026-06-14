@@ -4363,27 +4363,22 @@
           "Name2": "Anomaly Proficiency",
           "Format": "{0:0.#}",
           "Overclock": {
-            "W1": 60,
-            "W2": 69,
-            "W3": 78,
-            "W4": 87,
-            "W5": 96
+            "W1": 70,
+            "W2": 80,
+            "W3": 90,
+            "W4": 100,
+            "W5": 110
           }
         }
       ],
-      "Desc": "The equipper's Anomaly Proficiency increases by [NUMBER]. When the equipper uses an [EX Special Attack], the [Vortex] and [Windswept] DMG they deal increases by % for 40s, stacking up to 2 times, and repeated triggers reset the duration. While at 2 stacks of this effect, the whole squad's Anomaly Proficiency increases by [NUMBER]. This Anomaly Proficiency boost for the whole squad is unique to the squad."
+      "Desc": "The equipper's Anomaly Proficiency increases by [NUMBER]. When the equipper's EX Special Attack deals Wind DMG, the DMG dealt by their Vortex and Windswept increases by % for 40s, stacking up to 2 times. Repeated triggers reset the duration. This effect can trigger once per skill use. At 2 stacks, all squad members gain [NUMBER] Anomaly Proficiency. Only one instance of this effect can exist in the same squad"
     },
     "scoring": {
       "buffs": [
         {
           "type": "AnomalyProficiency",
-          "value": "60",
+          "value": "70",
           "format": "flat"
-        },
-        {
-          "type": "DMGBonus",
-          "value": "14",
-          "format": "%"
         }
       ],
       "debuffs": [],
