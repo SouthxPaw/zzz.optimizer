@@ -419,6 +419,17 @@
           "note": ""
         }
       ]
+    },
+    "1551": {
+      "comment": "Pyrois",
+      "1": [
+        {
+          "type": "CRIT_Rate",
+          "value": 8,
+          "format": "%",
+          "note": ""
+        }
+      ]
     }
   }
 }
