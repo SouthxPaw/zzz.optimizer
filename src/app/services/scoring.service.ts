@@ -245,14 +245,14 @@ export class ScoringService {
       return buildStatWeights;
     }
 
-    // Standard main stats per slot (exclude edge cases like HP%/DEF% main on Drive 4/5/6)
+    // Standard main stats per slot
     const standardMainStats: { [slot: string]: string[] } = {
       'Drive1': ['HP', 'ATK', 'DEF'], // Fixed main stats (all variants)
       'Drive2': ['HP', 'ATK', 'DEF'], // Fixed main stats (all variants)
       'Drive3': ['HP', 'ATK', 'DEF'], // Fixed main stats (all variants)
-      'Drive4': ['CRIT_Rate', 'CRIT_DMG', 'ATK%', 'Anomaly_Proficiency'], // Common main stats for Drive 4
-      'Drive5': ['ATK%', 'PEN_Ratio', 'Element_DMG'], // Common main stats for Drive 5
-      'Drive6': ['Anomaly_Mastery', 'Energy_Regen', 'Impact'], // Common main stats for Drive 6
+      'Drive4': ['CRIT_Rate', 'CRIT_DMG', 'ATK%', 'Anomaly_Proficiency', 'HP%', 'DEF%'],
+      'Drive5': ['ATK%', 'PEN_Ratio', 'Element_DMG', 'HP%', 'DEF%'],
+      'Drive6': ['Anomaly_Mastery', 'Energy_Regen', 'Impact', 'ATK%', 'HP%', 'DEF%'],
     };
 
     // Aggregate max weight for each stat across STANDARD main stat configurations only
