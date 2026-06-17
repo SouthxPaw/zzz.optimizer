@@ -1,0 +1,12 @@
+{
+  "Id": 34000,
+  "Name": "Dawn Chronicles",
+  "Desc2": "Ether DMG +10%",
+  "Desc4": "The equipper's Ether DMG CRIT DMG increases by 30%. When the equipper uses an [EX Special Attack] or [Ultimate], the equipper's ATK increases by 10% for 30s. Repeated triggers reset the duration.",
+    "4pcEffect": {
+    "Properties": []
+  },
+  "Story": "",
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitDawnChronicles.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitDawnChronicles.png"
+}

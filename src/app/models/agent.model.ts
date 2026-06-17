@@ -1,5 +1,5 @@
 // models/agent.model.ts
-export type Element = 'Physical' | 'Fire' | 'Ice' | 'Electric' | 'Ether';
+export type Element = 'Physical' | 'Fire' | 'Ice' | 'Electric' | 'Wind' | 'Ether';
 export type Specialty = 'Attack' | 'Stun' | 'Support' | 'Defense' | 'Anomaly' | 'Rupture';
 export type DiscSlot = 'Drive1' | 'Drive2' | 'Drive3' | 'Drive4' | 'Drive5' | 'Drive6';
 
