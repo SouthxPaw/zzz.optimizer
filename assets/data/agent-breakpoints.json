@@ -4227,16 +4227,16 @@
       "name": "Pyrois",
       "breakpoints": {
         "hp": {
-          "min": 17000,
-          "optimal": 18000
+          "min": 7500,
+          "optimal": 8500
         },
         "atk": {
-          "min": 1800,
-          "optimal": 1950
+          "min": 2600,
+          "optimal": 2800
         },
         "def": {
-          "min": 400,
-          "optimal": 600
+          "min": 650,
+          "optimal": 700
         },
         "impact": {
           "min": 0,
@@ -4247,12 +4247,12 @@
           "optimal": 0
         },
         "critRate": {
-          "min": 60,
-          "optimal": 80
+          "min": 50,
+          "optimal": 60
         },
         "critDmg": {
-          "min": 100,
-          "optimal": 120
+          "min": 120,
+          "optimal": 160
         },
         "anomalyProficiency": {
           "min": 0,
@@ -4300,12 +4300,12 @@
       "name": "Velina",
       "breakpoints": {
         "hp": {
-          "min": 7840,
+          "min": 7500,
           "optimal": 8500
         },
         "atk": {
-          "min": 2600,
-          "optimal": 2900
+          "min": 2300,
+          "optimal": 2500
         },
         "def": {
           "min": 650,
@@ -4316,8 +4316,8 @@
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 184,
-          "optimal": 248
+          "min": 0,
+          "optimal": 0
         },
         "critRate": {
           "min": 0,
@@ -4328,7 +4328,7 @@
           "optimal": 0
         },
         "anomalyProficiency": {
-          "min": 287,
+          "min": 300,
           "optimal": 350
         },
         "pen": {
@@ -4340,8 +4340,8 @@
           "optimal": 0
         },
         "energyRegen": {
-          "min": 0,
-          "optimal": 0
+          "min": 225,
+          "optimal": 250
         }
       },
       "priorityStats": [
