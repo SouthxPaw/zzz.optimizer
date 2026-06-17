@@ -4198,12 +4198,160 @@
           "optimal": 0
         }
       },
+      "priorityStats": ["HP%", "HP", "Element_DMG", "CRIT_DMG", "CRIT_Rate"],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.5,
+        "PEN": 0.15,
+        "ATK": 0.15,
+        "ATK%": 1.5
+      },
+      "mainStatWeights": {
+        "Drive4": {
+          "Anomaly_Proficiency": 3,
+          "PEN_Ratio": 2,
+          "ATK%": 2
+        },
+        "Drive5": {
+          "Element_DMG": 3,
+          "ATK%": 3,
+          "PEN_Ratio": 3
+        },
+        "Drive6": {
+          "ATK%": 2,
+          "Energy_Regen": 3
+        }
+      }
+    },
+    "1551": {
+      "comment": "Pyrois",
+      "name": "Pyrois",
+      "breakpoints": {
+        "hp": {
+          "min": 17000,
+          "optimal": 18000
+        },
+        "atk": {
+          "min": 1800,
+          "optimal": 1950
+        },
+        "def": {
+          "min": 400,
+          "optimal": 600
+        },
+        "impact": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyMastery": {
+          "min": 0,
+          "optimal": 0
+        },
+        "critRate": {
+          "min": 60,
+          "optimal": 80
+        },
+        "critDmg": {
+          "min": 100,
+          "optimal": 120
+        },
+        "anomalyProficiency": {
+          "min": 0,
+          "optimal": 0
+        },
+        "pen": {
+          "min": 0,
+          "optimal": 0
+        },
+        "penRatio": {
+          "min": 0,
+          "optimal": 0
+        },
+        "energyRegen": {
+          "min": 0,
+          "optimal": 0
+        }
+      },
+      "priorityStats": ["ATK%", "ATK", "Element_DMG", "CRIT_DMG", "CRIT_Rate"],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.5,
+        "PEN": 0.15,
+        "ATK": 0.15,
+        "ATK%": 1.5
+      },
+      "mainStatWeights": {
+        "Drive4": {
+          "Anomaly_Proficiency": 3,
+          "PEN_Ratio": 2,
+          "ATK%": 2
+        },
+        "Drive5": {
+          "Element_DMG": 3,
+          "ATK%": 3,
+          "PEN_Ratio": 3
+        },
+        "Drive6": {
+          "ATK%": 2,
+          "Energy_Regen": 3
+        }
+      }
+    },
+    "1561": {
+      "comment": "Velina",
+      "name": "Velina",
+      "breakpoints": {
+        "hp": {
+          "min": 7840,
+          "optimal": 8500
+        },
+        "atk": {
+          "min": 2600,
+          "optimal": 2900
+        },
+        "def": {
+          "min": 650,
+          "optimal": 750
+        },
+        "impact": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyMastery": {
+          "min": 184,
+          "optimal": 248
+        },
+        "critRate": {
+          "min": 0,
+          "optimal": 0
+        },
+        "critDmg": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyProficiency": {
+          "min": 287,
+          "optimal": 350
+        },
+        "pen": {
+          "min": 0,
+          "optimal": 0
+        },
+        "penRatio": {
+          "min": 0,
+          "optimal": 0
+        },
+        "energyRegen": {
+          "min": 0,
+          "optimal": 0
+        }
+      },
       "priorityStats": [
-        "HP%",
-        "HP",
+        "ATK%",
+        "ATK",
+        "PEN",
+        "PEN_Ratio",
         "Element_DMG",
-        "CRIT_DMG",
-        "CRIT_Rate"
+        "Anomaly_Mastery",
+        "Anomaly_Proficiency"
       ],
       "statWeights": {
         "Anomaly_Proficiency": 1.5,
