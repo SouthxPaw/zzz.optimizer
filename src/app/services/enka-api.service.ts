@@ -92,6 +92,9 @@ const MAIN_STAT_PROPERTY_MAP: { [key: number]: MainStatType } = {
   31703: 'Element_DMG', // Ice DMG Bonus [Flat]
   31801: 'Element_DMG', // Electric DMG Bonus [Base]
   31803: 'Element_DMG', // Electric DMG Bonus [Flat]
+  // TODO (v3.0): Verify Wind property IDs when v3.0 releases - see TODO_WIND_ELEMENT_VERIFICATION.md
+  32001: 'Element_DMG', // Wind DMG Bonus [Base] - UNCONFIRMED (educated guess based on pattern)
+  32003: 'Element_DMG', // Wind DMG Bonus [Flat] - UNCONFIRMED (educated guess based on pattern)
   31901: 'Element_DMG', // Ether DMG Bonus [Base]
   31903: 'Element_DMG', // Ether DMG Bonus [Flat]
 };
@@ -146,7 +149,9 @@ const DISC_SET_MAP: { [key: number]: string } = {
   33500: 'White Water Ballad',
   33600: 'Shining Aria',
   33700: 'Bunny in Wonderland',
-  33800: 'Notes From the Chained'
+  33800: 'Notes From the Chained',
+  33900: 'Howlin\' Salon',
+  34000: 'Dawn Chronicles'
 };
 
 @Injectable({

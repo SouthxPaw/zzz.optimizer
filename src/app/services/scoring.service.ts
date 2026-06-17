@@ -491,10 +491,29 @@ export class ScoringService {
     });
 
     // STEP 3: God Roll Concentration Bonus
-    // Reward high UPGRADE rolls (4+) in a single priority stat
+    // Reward exceptionally high UPGRADE rolls (4-5) in a single priority stat
     // Note: We count UPGRADE rolls only (not including initial roll)
+    // Threshold raised to 4+ to make god-roll bonus more exclusive
+    //
+    // Special case: For Anomaly builds with only 1 Tier-S stat available (e.g., D4 with AP main),
+    // provide a graduated bonus to avoid harsh cliff effects between SS and VH tiers
     let godRollBonus = 0;
     let godRollStat = '';
+
+    // Count how many Tier-S stats (weight >= 1.0) exist in the weights
+    const tierSStatsAvailable = Object.values(statWeights).filter(w => w >= 1.0).length;
+
+    // For CRIT builds (3+ priority stats), count how many priority stats are present on disc
+    // The point of god-roll bonus: high concentration in ONE stat, but OTHER good stats exist
+    let priorityStatsOnDisc = 0;
+
+    disc.subStats.forEach((substat) => {
+      const weight = statWeights[substat.type] || 0;
+      if (weight >= 1.0) {
+        priorityStatsOnDisc++;
+      }
+    });
+
     disc.subStats.forEach((substat) => {
       const totalRolls = calculateRollCount(substat.type, substat.value);
       const upgradeRolls = totalRolls - 1; // Subtract initial roll
@@ -504,12 +523,39 @@ export class ScoringService {
       if (weight >= 1.0) {
         let bonus = 0;
         if (upgradeRolls >= 5) {
-          bonus = 15; // Maxed stat (5 upgrade rolls)
+          // 5 upgrade rolls (6 total rolls) - absolutely maxed stat
+          // Apply same coverage requirements as 4 upgrade rolls for CRIT builds
+          if (tierSStatsAvailable >= 3) {
+            // CRIT build - require good stat coverage
+            if (priorityStatsOnDisc >= 3) {
+              bonus = 15; // Maxed stat with good coverage
+            }
+          } else {
+            // Anomaly build - allow bonus with single stat concentration
+            bonus = 15; // Maxed stat
+          }
         } else if (upgradeRolls >= 4) {
-          bonus = 11; // 4 upgrade rolls
-        } else if (upgradeRolls >= 3) {
-          bonus = 7; // 3 upgrade rolls (god-roll)
+          // For CRIT builds (3+ priority stats), require at least 3 priority stats PRESENT on disc
+          // to prevent rewarding discs that hyper-rolled one stat but lack other critical stats
+          // The god-roll bonus rewards: high concentration in one stat + other good stats existing
+          // CRIT builds have way more stats to roll into, so we need stricter requirements
+          if (tierSStatsAvailable >= 3) {
+            // CRIT build - stricter requirements
+            if (priorityStatsOnDisc >= 3) {
+              bonus = 12; // 4 upgrade rolls - true god-roll (with good stat coverage)
+            }
+            // If less than 3 priority stats present, no god-roll bonus (disc lacks stat coverage)
+          } else {
+            // Anomaly build - allow god-roll bonus with single stat concentration
+            bonus = 12; // 4 upgrade rolls - true god-roll
+          }
+        } else if (upgradeRolls >= 3 && tierSStatsAvailable === 1) {
+          // Special case: If only 1 Tier-S stat available (e.g., D4 AP main for Anomaly),
+          // give partial credit for 3 upgrade rolls to avoid harsh cliff from SS to VH
+          // This helps discs that got 75% of possible upgrades into the right stat
+          bonus = 9; // Partial god-roll - bridges the gap to PHT tier
         }
+        // Standard case: upgradeRolls < 3 gets no bonus (balanced rolls already rewarded by base system)
 
         if (bonus > godRollBonus) {
           godRollBonus = bonus;
@@ -536,14 +582,47 @@ export class ScoringService {
     let qualifiesForBonus = false;
 
     if (priorityStatCount <= 2) {
-      // Anomaly builds (≤2 priority stats): Allow up to 1 wasted stat (weight = 0)
-      // This is more lenient since Anomaly builds only have 2 priority stats to work with
+      // Anomaly builds (≤2 priority stats): More nuanced evaluation
+      // Problem: Anomaly builds have limited useful substats (typically AP, ATK%, Flat ATK)
+      // When main stat removes one of these (e.g., D2 has Flat ATK main), only 2 Tier-S stats remain
+      // CRIT stats become unavoidable filler, not true "wasted" stats
+
       const wastedStatCount = disc.subStats.filter((substat) => {
         const weight = statWeights[substat.type] || 0;
         return weight === 0;
       }).length;
 
-      if (wastedStatCount === 0) {
+      // Check if disc has god-roll concentration (for special exception)
+      const hasGodRollConcentration = disc.subStats.some((substat) => {
+        const totalRolls = calculateRollCount(substat.type, substat.value);
+        const upgradeRolls = totalRolls - 1;
+        const weight = statWeights[substat.type] || 0;
+        return weight >= 1.0 && upgradeRolls >= 4; // Tier-S stat with 4+ upgrade rolls
+      });
+
+      // Count how many Tier-S stats (weight >= 1.0) are present on disc
+      const tierSStatsPresent = disc.subStats.filter((substat) => {
+        const weight = statWeights[substat.type] || 0;
+        return weight >= 1.0;
+      }).length;
+
+      // Calculate total upgrade rolls in Tier-S stats
+      const tierSUpgradeRolls = disc.subStats.reduce((sum, substat) => {
+        const weight = statWeights[substat.type] || 0;
+        if (weight >= 1.0) {
+          const totalRolls = calculateRollCount(substat.type, substat.value);
+          const upgradeRolls = totalRolls - 1; // Subtract initial roll
+          return sum + upgradeRolls;
+        }
+        return sum;
+      }, 0);
+
+      // Special case: If disc has god-roll concentration AND has both available Tier-S stats,
+      // allow 2 wasted stats (recognizing that with only 2 Tier-S options, filler is unavoidable)
+      if (hasGodRollConcentration && tierSStatsPresent >= 2 && tierSUpgradeRolls >= 4 && wastedStatCount === 2) {
+        qualifiesForBonus = true;
+        allGoodBonus = 5;
+      } else if (wastedStatCount === 0) {
         // Perfect Anomaly disc - no wasted stats
         qualifiesForBonus = true;
         allGoodBonus = 5;
@@ -574,20 +653,15 @@ export class ScoringService {
       });
     }
 
-    // STEP 5: Improved Roll Bonus (progressive based on upgrade rolls)
+    // STEP 5: Total Rolls Bonus (1 point if 5+ UPGRADE rolls, not total rolls)
     // Count upgrade rolls only (enhancements), not initial substat rolls
     const upgradeRolls = totalRollCount - disc.subStats.length;
     let rollBonus = 0;
     if (upgradeRolls >= 5) {
-      rollBonus = 1.5; // normalized points
-    } else if (upgradeRolls >= 4) {
-      rollBonus = 1.0; // normalized points
-    }
-
-    if (rollBonus > 0) {
+      rollBonus = 1; // Simple +1 bonus for maxed disc (matching old system)
       breakdown.rollBonusPoints = rollBonus;
       breakdown.details.push({
-        stat: `Upgrade Rolls Bonus (${upgradeRolls} rolls)`,
+        stat: `Upgrade Rolls Bonus (${upgradeRolls}/5+)`,
         value: upgradeRolls,
         points: rollBonus,
         rolls: totalRollCount,
