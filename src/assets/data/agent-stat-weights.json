@@ -11062,7 +11062,7 @@
             },
             "Drive6": {
               "ATK%": {
-                "mainStatPoints": 3,
+                "mainStatPoints": 2,
                 "substatWeights": {
                   "HP%": 0,
                   "DEF%": 0,
@@ -11077,7 +11077,7 @@
                 }
               },
               "Anomaly_Mastery": {
-                "mainStatPoints": 3,
+                "mainStatPoints": 2,
                 "substatWeights": {
                   "HP%": 0,
                   "DEF%": 0,
