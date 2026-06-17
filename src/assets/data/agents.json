@@ -84313,5 +84313,50 @@
     },
     "potentials": [],
     "Icon": "Pyrois"
+  },
+  {
+    "id": 1561,
+    "name": "Velina",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyMastery",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "energyRegen",
+            "threshold": 120,
+            "ratio": 50,
+            "cap": 84
+          }
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 204,
+      "name": "Wind"
+    },
+    "specialty": {
+      "id": 3,
+      "name": "Anomaly"
+    },
+    "lvl60_stats": {
+      "HpMax": 7788,
+      "Defence": 612,
+      "Attack": 872,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 86,
+      "ElementAbnormalPower": 112,
+      "ElementMystery": 165,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "Velina"
   }
 ]
