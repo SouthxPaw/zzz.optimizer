@@ -6,6 +6,10 @@
   animation: slideIn 0.3s ease-out;
 }
 
+.notification-container.closing {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
 @keyframes slideIn {
   from {
     transform: translateX(400px);
@@ -14,6 +18,17 @@
   to {
     transform: translateX(0);
     opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100px);
   }
 }
 

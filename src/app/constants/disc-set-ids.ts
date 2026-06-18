@@ -29,4 +29,6 @@ export const DISC_SET_EQUIPMENT_IDS = [
   '33600', // Shining Aria
   '33700', // Bunny in Wonderland
   '33800', // Notes From the Chained
+  '33900', // Howlin' Salon
+  '34000', // Dawn Chronicles
 ] as const;
