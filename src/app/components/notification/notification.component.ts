@@ -16,6 +16,7 @@ import { slideInRight } from '../../animations/route-animations';
 })
 export class NotificationComponent implements OnInit, OnDestroy {
   notification: Notification | null = null;
+  isClosing: boolean = false;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -28,7 +29,17 @@ export class NotificationComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(notification => {
         this.notification = notification;
+        this.isClosing = false; // Reset closing state when new notification appears
         this.cdr.markForCheck();
+      });
+
+    // Listen for hide trigger
+    this.notificationService.hide$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(shouldHide => {
+        if (shouldHide) {
+          this.close();
+        }
       });
   }
 
@@ -38,7 +49,15 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   close() {
-    this.notificationService.hide();
+    // Trigger fade-out animation
+    this.isClosing = true;
+    this.cdr.markForCheck();
+
+    // Wait for animation to complete before actually hiding
+    setTimeout(() => {
+      this.notificationService.completeHide();
+      this.isClosing = false;
+    }, 300); // Match the CSS animation duration
   }
 
   onAction() {

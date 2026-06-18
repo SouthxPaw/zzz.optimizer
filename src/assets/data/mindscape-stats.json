@@ -419,6 +419,28 @@
           "note": ""
         }
       ]
+    },
+    "1551": {
+      "comment": "Pyrois",
+      "1": [
+        {
+          "type": "CRIT_Rate",
+          "value": 8,
+          "format": "%",
+          "note": ""
+        }
+      ]
+    },
+    "1561": {
+      "comment": "Velina",
+      "4": [
+        {
+          "type": "ATK%",
+          "value": 15,
+          "format": "%",
+          "note": ""
+        }
+      ]
     }
   }
 }

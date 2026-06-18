@@ -92,6 +92,9 @@ const MAIN_STAT_PROPERTY_MAP: { [key: number]: MainStatType } = {
   31703: 'Element_DMG', // Ice DMG Bonus [Flat]
   31801: 'Element_DMG', // Electric DMG Bonus [Base]
   31803: 'Element_DMG', // Electric DMG Bonus [Flat]
+  // Wind element property IDs (v3.0) - Verified via Enka import for UID 1000016935 (Velina)
+  32301: 'Element_DMG', // Wind DMG Bonus [Base] - ASSUMED (following pattern, not yet observed)
+  32303: 'Element_DMG', // Wind DMG Bonus [Flat] - CONFIRMED (observed on Velina disc slot 5)
   31901: 'Element_DMG', // Ether DMG Bonus [Base]
   31903: 'Element_DMG', // Ether DMG Bonus [Flat]
 };
@@ -146,7 +149,9 @@ const DISC_SET_MAP: { [key: number]: string } = {
   33500: 'White Water Ballad',
   33600: 'Shining Aria',
   33700: 'Bunny in Wonderland',
-  33800: 'Notes From the Chained'
+  33800: 'Notes From the Chained',
+  33900: 'Howlin\' Salon',
+  34000: 'Dawn Chronicles'
 };
 
 @Injectable({

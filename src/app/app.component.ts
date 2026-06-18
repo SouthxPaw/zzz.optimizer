@@ -13,6 +13,7 @@ import { LoadingService } from './services/loading.service';
 import { SwUpdateService } from './services/sw-update.service';
 import { SeoService } from './services/seo.service';
 import { routeAnimations } from './animations/route-animations';
+import { AnniversaryService } from './services/anniversary.service';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +33,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private swUpdate: SwUpdateService,
     private seo: SeoService,
-    private contexts: ChildrenOutletContexts
+    private contexts: ChildrenOutletContexts,
+    private anniversary: AnniversaryService
   ) {}
 
   getRouteAnimationData() {
@@ -61,6 +63,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // Auto-load reference data on app startup
     await this.appInit.initialize();
+
+    // Check for anniversary celebration (January 10th)
+    this.anniversary.checkAndCelebrate();
   }
 
   ngOnDestroy() {
