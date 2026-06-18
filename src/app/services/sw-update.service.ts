@@ -239,7 +239,9 @@ export class SwUpdateService implements OnDestroy {
         const allKeys = Object.keys(localStorage);
         allKeys.forEach(key => {
           // Only remove if NOT in the preserve list
-          if (!keysToPreserve.includes(key)) {
+          // Also preserve anniversary confetti flags (anniversary_confetti_shown_*)
+          const isAnniversaryFlag = key.startsWith('anniversary_confetti_shown_');
+          if (!keysToPreserve.includes(key) && !isAnniversaryFlag) {
             console.log(`[SW Update] Removing localStorage key: ${key}`);
             localStorage.removeItem(key);
           }
