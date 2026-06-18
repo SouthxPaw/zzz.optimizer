@@ -10,6 +10,9 @@ export class AnniversaryService {
   private readonly ANNIVERSARY_DAY = 10;
   private readonly FLAG_KEY_PREFIX = 'anniversary_confetti_shown_';
 
+  private animationFrameId: number | null = null;
+  private messageTimeoutId: any = null;
+
   constructor(private notificationService: NotificationService) {}
 
   /**
@@ -41,53 +44,86 @@ export class AnniversaryService {
   }
 
   /**
+   * TEST ONLY: Manually trigger celebration (ignores date and localStorage flag)
+   * Usage: Open browser console and run: window['testAnniversary']()
+   */
+  testCelebration(): void {
+    this.triggerCelebration();
+  }
+
+  /**
    * Trigger the confetti animation and thank you message
    * Uses the same approach as the working gachavfortnite implementation
    */
   private triggerCelebration(): void {
-    // Beautiful confetti burst covering the screen
-    const duration = 3000; // 3 seconds
-    const end = Date.now() + duration;
-    let animationFrame = 0;
+    // Clean up any existing animations
+    this.cleanup();
 
-    const frame = () => {
-      animationFrame++;
+    // Check for reduced motion preference (accessibility + performance)
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Fire confetti every 3 frames to reduce lag while maintaining visual density
-      if (animationFrame % 3 === 0) {
-        // Create 3 bursts spread across the screen
-        for (let i = 0; i < 3; i++) {
-          confetti({
-            particleCount: 5,
-            angle: 90,
-            spread: 120,
-            origin: { x: Math.random(), y: 0 },
-            colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F38181', '#95E1D3'],
-            gravity: 2.2,
-            scalar: 1.8,
-            drift: Math.random() * 0.3 - 0.15,
-            ticks: 250,
-            startVelocity: 60,
-            decay: 0.92,
-            flat: false
-          });
+    if (!prefersReducedMotion) {
+      // Beautiful confetti burst covering the screen
+      const duration = 3000; // 3 seconds
+      const end = Date.now() + duration;
+      let animationFrame = 0;
+
+      const frame = () => {
+        animationFrame++;
+
+        // Fire confetti every 3 frames to reduce lag while maintaining visual density
+        if (animationFrame % 3 === 0) {
+          // Create 3 bursts spread across the screen
+          for (let i = 0; i < 3; i++) {
+            confetti({
+              particleCount: 5,
+              angle: 90,
+              spread: 120,
+              origin: { x: Math.random(), y: 0 },
+              colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F38181', '#95E1D3'],
+              gravity: 2.2,
+              scalar: 1.8,
+              drift: Math.random() * 0.3 - 0.15,
+              ticks: 250,
+              startVelocity: 60,
+              decay: 0.92,
+              flat: false
+            });
+          }
         }
-      }
 
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
-    };
+        if (Date.now() < end) {
+          this.animationFrameId = requestAnimationFrame(frame);
+        } else {
+          this.animationFrameId = null;
+        }
+      };
 
-    frame();
+      frame();
+    }
 
     // Show thank you message after 500ms so user sees confetti first
-    setTimeout(() => {
+    this.messageTimeoutId = setTimeout(() => {
       this.notificationService.show(
-        '🎉 Happy 1 Year Anniversary! 🎉\n\nThank you so much for using ZZZ Optimizer! Your support means the world to me. Here\'s to another year of optimizing builds together!',
+        '🎉 Happy 1 Year Anniversary! 🎉 Thank you so much for using ZZZ Optimizer! Your support means the world to me. Here\'s to another year of optimizing builds together!',
         'success',
         12000 // Show for 12 seconds
       );
+      this.messageTimeoutId = null;
     }, 500);
+  }
+
+  /**
+   * Clean up animation frame and timeout to prevent memory leaks
+   */
+  private cleanup(): void {
+    if (this.animationFrameId !== null) {
+      cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
+    }
+    if (this.messageTimeoutId !== null) {
+      clearTimeout(this.messageTimeoutId);
+      this.messageTimeoutId = null;
+    }
   }
 }

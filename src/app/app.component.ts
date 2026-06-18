@@ -66,6 +66,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // Check for anniversary celebration (January 10th)
     this.anniversary.checkAndCelebrate();
+
+    // TEST ONLY: Expose anniversary test to window for console testing
+    // Usage: Open console and run window['testAnniversary']()
+    (window as any)['testAnniversary'] = () => this.anniversary.testCelebration();
   }
 
   ngOnDestroy() {
