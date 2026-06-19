@@ -10855,6 +10855,21 @@
                   "PEN": 0.17,
                   "Anomaly_Proficiency": 0
                 }
+              },
+              "CRIT_Rate": {
+                "mainStatPoints": 3,
+                "substatWeights": {
+                  "HP%": 0,
+                  "DEF%": 0,
+                  "ATK%": 1.17,
+                  "CRIT_Rate": 0,
+                  "CRIT_DMG": 1.17,
+                  "ATK": 0.17,
+                  "HP": 0,
+                  "DEF": 0,
+                  "PEN": 0.17,
+                  "Anomaly_Proficiency": 0
+                }
               }
             },
             "Drive5": {
