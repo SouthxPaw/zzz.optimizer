@@ -113,6 +113,7 @@
 }
 .tab-content {
   animation: f 0.3s;
+  will-change: opacity, transform;
 }
 @keyframes f {
   from {
@@ -122,6 +123,13 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+/* Mobile: Disable tab animation for performance */
+@media (max-width: 768px) {
+  .tab-content {
+    animation: none;
+    will-change: auto;
   }
 }
 @media (max-width: 768px) {
@@ -440,7 +448,7 @@
 .agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
 .agent-card{border:2px solid transparent}
 .delete-btn,.unequip-btn,.compare-btn{position:absolute;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;z-index:10;opacity:0}
-.delete-btn{top:5px;right:5px;width:28px;height:28px;font-size:16px;line-height:1;background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.05)),linear-gradient(135deg,rgba(244,185,66,.2),rgba(0,217,255,.2)),rgba(30,30,30,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:6px;border:1px solid rgba(244,185,66,.4);box-shadow:0 4px 12px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.3),0 0 12px rgba(244,185,66,.2);color:var(--gold);font-weight:600}
+.delete-btn{top:5px;right:5px;width:28px;height:28px;font-size:12px;line-height:1;background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.05)),linear-gradient(135deg,rgba(244,185,66,.2),rgba(0,217,255,.2)),rgba(30,30,30,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:4px;border:1px solid rgba(244,185,66,.4);box-shadow:0 4px 12px rgba(0,0,0,.5),inset 0 1px 1px rgba(255,255,255,.3),0 0 12px rgba(244,185,66,.2);color:var(--gold);font-weight:600}
 .unequip-btn{top:8px;right:8px;width:24px;height:24px;font-size:1.2em;font-weight:bold;line-height:1;padding:0}
 .compare-btn{top:8px;right:40px;width:24px;height:24px;font-size:1em;font-weight:bold;line-height:1;padding:0;background:#4a90e2}
 .delete-btn:hover{background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.08)),linear-gradient(135deg,rgba(244,185,66,.3),rgba(0,217,255,.3)),rgba(40,40,40,.95);transform:scale(1.05);box-shadow:0 6px 16px rgba(244,185,66,.4),inset 0 1px 1px rgba(255,255,255,.4),0 0 20px rgba(244,185,66,.3);border-color:var(--gold)}
@@ -735,6 +743,11 @@
 }
 
 @media(max-width:1200px){.content-grid{grid-template-columns:1fr;height:auto}.section.builds-list{max-height:400px}.section.build-content,.section.summary-panel{overflow-y:visible;height:auto}.disc-grid{grid-template-columns:repeat(2,1fr)}}
+/* Touch devices (tablets/iPads): Always show delete buttons since no hover */
+@media (hover: none) and (pointer: coarse) {
+  .build-card .delete-btn,.agent-card .delete-btn{opacity:1!important;z-index:20}
+  .delete-btn{width:20px!important;height:20px!important;padding:0!important;border-radius:2px!important;border-width:0.5px!important;box-shadow:0 1px 2px rgba(0,0,0,.5)!important}
+}
 @media(max-width:768px){.character-tab{padding:16px}.content-grid{gap:15px}.disc-grid{grid-template-columns:1fr}.disc-picker-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}.wengine-header{flex-direction:column;align-items:flex-start}.disc-set-icon{width:50px;height:50px}.substat-row{grid-template-columns:1fr;gap:8px}.substat-label{min-width:auto}.import-action-bar{flex-direction:column;gap:12px;align-items:stretch}.import-uid-group{flex-direction:column;width:100%}.import-uid-group button{width:100%}.upgrade-plan-selector{flex-direction:column;gap:8px;align-items:flex-start}.plan-select{min-width:100%;width:100%}.uid-history-dropdown-main{left:0;right:0;max-width:100%}.build-header-with-actions{flex-wrap:wrap;gap:10px}.btn-share{width:100%}}
 @media(max-width:480px){.character-tab{padding:12px}.section{padding:14px}.section h2,.section h3{font-size:1.1em}.disc-picker-grid{grid-template-columns:1fr;gap:10px}.refinement-buttons{gap:6px}.refinement-btn{width:36px;height:36px;font-size:.9em}.build-rating-badge .rating-grade-large{font-size:2em}.build-rating-badge .rating-score-large{font-size:1em}.wengine-icon{width:60px;height:60px}.wengine-thumbnail{width:40px;height:40px}.disc-set-icon{width:40px;height:40px}.upgrade-plan-selector label{font-size:0.9em}.share-modal-content{max-width:95vw}.share-modal-content .modal-header,.share-modal-content .modal-actions{padding:16px}.share-image-container{padding:12px}}
 @media(max-width:1200px){.content-grid{grid-template-columns:1fr;height:auto}.section.builds-list{max-height:none;height:auto;overflow:visible}.builds-grid{height:auto;overflow-y:visible}.section.build-content,.section.summary-panel{overflow-y:visible;height:auto}.disc-grid{grid-template-columns:repeat(2,1fr)}}
@@ -748,8 +761,63 @@
     display: flex !important;
   }
 
-  .character-tab{padding:16px}.content-grid{gap:15px}.disc-grid{grid-template-columns:1fr}.disc-picker-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}.wengine-header{flex-direction:column;align-items:flex-start}.disc-set-icon{width:50px;height:50px}.substat-row{grid-template-columns:1fr;gap:8px}.substat-label{min-width:auto}.import-action-bar{flex-direction:column;gap:12px;align-items:stretch}.import-uid-group{flex-direction:column;width:100%}.import-uid-group button{width:100%}.upgrade-plan-selector{flex-direction:column;gap:8px;align-items:flex-start}.plan-select{min-width:100%;width:100%}.uid-history-dropdown-main{left:0;right:0;max-width:100%}.build-header-with-actions{flex-wrap:wrap;gap:10px}.btn-share{width:100%}.builds-grid{grid-template-columns:1fr;gap:20px;padding:16px;-webkit-overflow-scrolling:touch}.build-card{min-height:320px;padding:12px}.build-portrait{height:240px}.build-icon{width:100%;height:100%;object-fit:cover}.build-info{padding:16px 14px}.build-name{font-size:1.4em;font-weight:bold}.build-stats{gap:12px;margin-top:10px}.stat-badge{font-size:1.05em;padding:8px 14px}.agent-select-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));max-height:55vh;-webkit-overflow-scrolling:touch}.modal-content{width:95%;max-height:85vh}.modal-header{padding:16px}.close-btn{font-size:28px;width:44px;height:44px;min-width:44px;min-height:44px;padding:8px;display:flex;align-items:center;justify-content:center}.modal-body{padding:16px}.wengine-select,.search-input,.filter-select,.substat-type-select,.stat-input,.substat-value-input{padding:10px 14px}}
-@media(max-width:480px){.character-tab{padding:12px}.section{padding:14px}.section h2,.section h3{font-size:1.1em}.disc-picker-grid{grid-template-columns:1fr;gap:10px}.refinement-buttons{gap:6px}.refinement-btn{width:36px;height:36px;font-size:.9em}.build-rating-badge .rating-grade-large{font-size:2em}.build-rating-badge .rating-score-large{font-size:1em}.wengine-icon{width:60px;height:60px}.wengine-thumbnail{width:40px;height:40px}.disc-set-icon{width:40px;height:40px}.upgrade-plan-selector label{font-size:0.9em}.share-modal-content{max-width:95vw}.share-modal-content .modal-header,.share-modal-content .modal-actions{padding:16px}.share-image-container{padding:12px}.builds-grid{grid-template-columns:1fr;gap:24px;padding:18px}.build-card{min-height:360px;padding:14px}.build-portrait{height:260px}.build-icon{width:100%;height:100%;object-fit:cover}.build-info{padding:18px 16px}.build-name{font-size:1.5em;font-weight:bold;line-height:1.2}.build-stats{gap:14px;margin-top:12px;flex-wrap:wrap}.stat-badge{font-size:1.1em;padding:9px 16px}.agent-select-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));max-height:50vh;gap:10px}.modal-content{width:96%;max-height:80vh}.modal-header{padding:14px 16px}.close-btn{font-size:26px;width:44px;height:44px;min-width:44px;min-height:44px}.modal-body{padding:14px}}
+  .character-tab{padding:16px}.content-grid{gap:15px}.disc-grid{grid-template-columns:1fr}.disc-picker-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}.wengine-header{flex-direction:column;align-items:flex-start}.disc-set-icon{width:50px;height:50px}.substat-row{grid-template-columns:1fr;gap:8px}.substat-label{min-width:auto}.import-action-bar{flex-direction:column;gap:12px;align-items:stretch}.import-uid-group{flex-direction:column;width:100%}.import-uid-group button{width:100%}.upgrade-plan-selector{flex-direction:column;gap:8px;align-items:flex-start}.plan-select{min-width:100%;width:100%}.uid-history-dropdown-main{left:0;right:0;max-width:100%}.build-header-with-actions{flex-wrap:wrap;gap:10px}.btn-share{width:100%}.builds-grid{grid-template-columns:1fr;gap:14px;padding:14px;-webkit-overflow-scrolling:touch}.agent-select-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));max-height:55vh;-webkit-overflow-scrolling:touch}.modal-content{width:95%;max-height:85vh}.modal-header{padding:16px}.close-btn{font-size:28px;width:44px;height:44px;min-width:44px;min-height:44px;padding:8px;display:flex;align-items:center;justify-content:center}.modal-body{padding:16px}.wengine-select,.search-input,.filter-select,.substat-type-select,.stat-input,.substat-value-input{padding:10px 14px}
+  /* New: Mobile optimizations for build badges */
+  .build-badges{gap:3px;padding:0 4px 3px 4px}.build-element-badge,.build-specialty-badge{width:16px;height:16px}
+  /* New: Mobile optimizations for Important Assumptions button */
+  .assumptions-notice{padding:16px;gap:12px}.btn-acknowledge{padding:10px 24px;font-size:0.95em}
+  /* New: Delete button on mobile - removed, using more specific rules below */
+  /* Mobile: Reduce backdrop-filter blur for better performance */
+  .disc-slot,.wengine-details,.delete-btn,.btn-acknowledge{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  /* Mobile: Faster transitions for snappier feel */
+  .build-card,.agent-card,.disc-slot,.wengine-list-item,.disc-picker-card,.disc-set-card,.refinement-btn,.toggle-switch,.toggle-switch::after{transition-duration:0.15s}
+  /* Mobile: Fix build card layout in side nav */
+  .builds-grid .build-card{min-height:auto;height:80px;padding:0;border-width:2px}
+  .builds-grid .build-portrait{width:80px;height:80px}
+  .builds-grid .build-info{padding:8px;gap:4px}
+  .builds-grid .info-content{gap:2px}
+  .builds-grid .agent-name-label{font-size:0.75em!important}
+  .builds-grid .stat-badge{font-size:0.7em;padding:3px 6px}
+  .builds-grid .drag-handle-icon{font-size:1em;padding:0 4px}
+  .builds-grid .build-portrait .agent-icon{object-fit:cover;object-position:center top}
+  /* Mobile: Always show delete button (no hover on touch devices) */
+  .build-card .delete-btn,.agent-card .delete-btn{opacity:1!important;z-index:20}
+  /* Mobile: Make ALL delete buttons small */
+  .delete-btn{width:18px!important;height:18px!important;padding:0!important;border-radius:2px!important;border-width:0.5px!important;box-shadow:0 1px 2px rgba(0,0,0,.5)!important}
+  /* Mobile: Position build card delete button */
+  .builds-grid .build-card .delete-btn{top:2px;right:82px}
+  /* Mobile: Performance optimizations */
+  .builds-grid{will-change:scroll-position;-webkit-overflow-scrolling:touch}
+  .build-card,.agent-card{will-change:transform;transform:translateZ(0)}
+  .disc-slot,.wengine-details{will-change:transform;transform:translateZ(0)}
+  /* Mobile: Optimize touch interactions */
+  .build-card,.agent-card,.disc-slot,.delete-btn,.btn-acknowledge,button{touch-action:manipulation}
+}
+@media(max-width:480px){.character-tab{padding:12px}.section{padding:14px}.section h2,.section h3{font-size:1.1em}.disc-picker-grid{grid-template-columns:1fr;gap:10px}.refinement-buttons{gap:6px}.refinement-btn{width:36px;height:36px;font-size:.9em}.build-rating-badge .rating-grade-large{font-size:2em}.build-rating-badge .rating-score-large{font-size:1em}.wengine-icon{width:60px;height:60px}.wengine-thumbnail{width:40px;height:40px}.disc-set-icon{width:40px;height:40px}.upgrade-plan-selector label{font-size:0.9em}.share-modal-content{max-width:95vw}.share-modal-content .modal-header,.share-modal-content .modal-actions{padding:16px}.share-image-container{padding:12px}.builds-grid{grid-template-columns:1fr;gap:12px;padding:12px}.agent-select-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));max-height:50vh;gap:10px}.modal-content{width:96%;max-height:80vh}.modal-header{padding:14px 16px}.close-btn{font-size:26px;width:44px;height:44px;min-width:44px;min-height:44px}.modal-body{padding:14px}
+  /* New: Mobile optimizations for build badges on small screens */
+  .build-badges{gap:2px;padding:0 3px 2px 3px}.build-element-badge,.build-specialty-badge{width:14px;height:14px}
+  /* New: Important Assumptions button on small screens */
+  .assumptions-notice{padding:14px;gap:10px;font-size:0.95em}.btn-acknowledge{padding:8px 20px;font-size:0.9em}  .notice-icon{font-size:1.6em}
+  /* New: Delete button on small screens - removed, using more specific rules below */
+  /* Mobile: Reduce backdrop-filter blur on small screens for better performance */
+  .disc-slot,.wengine-details,.delete-btn,.btn-acknowledge{backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+  /* Mobile: Fix build card layout in side nav for small screens */
+  .builds-grid .build-card{min-height:auto;height:75px;padding:0;border-width:2px}
+  .builds-grid .build-portrait{width:75px;height:75px}
+  .builds-grid .build-info{padding:6px;gap:3px}
+  .builds-grid .info-content{gap:2px}
+  .builds-grid .agent-name-label{font-size:0.7em!important}
+  .builds-grid .stat-badge{font-size:0.65em;padding:2px 5px}
+  .builds-grid .drag-handle-icon{font-size:0.9em;padding:0 3px}
+  .builds-grid .build-badges{padding:0 2px 2px 2px}
+  .builds-grid .build-portrait .agent-icon{object-fit:cover;object-position:center top}
+  /* Mobile: Always show delete button (no hover on touch devices) */
+  .build-card .delete-btn,.agent-card .delete-btn{opacity:1!important;z-index:20}
+  /* Mobile: Make ALL delete buttons small */
+  .delete-btn{width:16px!important;height:16px!important;padding:0!important;border-radius:2px!important;border-width:0.5px!important;box-shadow:0 1px 2px rgba(0,0,0,.5)!important}
+  /* Mobile: Position build card delete button */
+  .builds-grid .build-card .delete-btn{top:2px;right:77px}
+}
 .disc-picker-modal{max-width:900px;max-height:80vh;overflow:hidden;display:flex;flex-direction:column}
 .disc-picker-modal .modal-body{overflow-y:auto;flex-grow:1}
 .share-modal-content{max-width:min(1400px,95vw);max-height:95vh;display:flex;flex-direction:column;overflow:hidden}
@@ -1577,13 +1645,7 @@
     font-size: 0.85em;
   }
 
-  /* Increase touch targets for mobile */
-  .delete-btn {
-    min-width: 44px;
-    min-height: 44px;
-    width: 44px;
-    height: 44px;
-  }
+  /* Increase touch targets for mobile - REMOVED, using smaller buttons above */
 
   .unequip-btn {
     min-width: 44px;

@@ -213,25 +213,25 @@
 /* Tablet adjustments - keep horizontal but reduce spacing */
 @media (max-width: 1024px) and (min-width: 769px) {
   .nav-container {
-    padding: 0 15px;
+    padding: 0 12px;
   }
 
   .nav-brand .site-title {
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
 
   .nav-links {
-    gap: 6px;
+    gap: 4px;
   }
 
   .nav-link {
-    padding: 8px 12px;
-    font-size: 0.85em;
+    padding: 6px 10px;
+    font-size: 0.8em;
   }
 
   .nav-link .nav-icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
 }
 
