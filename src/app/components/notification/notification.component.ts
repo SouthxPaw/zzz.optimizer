@@ -66,4 +66,23 @@ export class NotificationComponent implements OnInit, OnDestroy {
       this.close();
     }
   }
+
+  getNotificationBackground(): string {
+    if (!this.notification) {
+      return '';
+    }
+
+    switch (this.notification.type) {
+      case 'success':
+        return 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+      case 'error':
+        return 'linear-gradient(135deg, #dc3545 0%, #e74c3c 100%)';
+      case 'warning':
+        return 'linear-gradient(135deg, #ffc107 0%, #ff9800 100%)';
+      case 'info':
+        return 'linear-gradient(135deg, #17a2b8 0%, #0dcaf0 100%)';
+      default:
+        return 'linear-gradient(135deg, #17a2b8 0%, #0dcaf0 100%)';
+    }
+  }
 }

@@ -213,11 +213,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   wengineRarityFilter = '';
   wengineSortBy = 'name';
 
-  // Agent picker filters
-  agentElementFilter = '';
-  agentSpecialtyFilter = '';
+  // Agent picker filters (multi-select for desktop)
+  agentElementFilters: Set<string> = new Set();
+  agentSpecialtyFilters: Set<string> = new Set();
   agentRarityFilter = '';
   agentSortBy = 'name';
+  agentSearchTerm = ''; // Search by agent name
+
+  // Legacy single-select filters (for mobile dropdowns)
+  agentElementFilter = '';
+  agentSpecialtyFilter = '';
 
   // Assumptions notice
   showAssumptionsNotice = true;
@@ -811,19 +816,42 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   getFilteredAgents(): Agent[] {
-    const filterKey = `${this.referenceAgents.length}|${this.agentElementFilter}|${this.agentSpecialtyFilter}|${this.agentRarityFilter}|${this.agentSortBy}`;
+    const elementFiltersKey = Array.from(this.agentElementFilters).sort().join(',');
+    const specialtyFiltersKey = Array.from(this.agentSpecialtyFilters).sort().join(',');
+    const searchKey = this.agentSearchTerm.toLowerCase().trim();
+    const filterKey = `${this.referenceAgents.length}|${elementFiltersKey}|${specialtyFiltersKey}|${this.agentElementFilter}|${this.agentSpecialtyFilter}|${this.agentRarityFilter}|${this.agentSortBy}|${searchKey}`;
     if (this.cachedFilteredAgents && this.lastAgentFilterKey === filterKey) {
       return this.cachedFilteredAgents;
     }
 
-    // OPTIMIZED: Single-pass filtering instead of 3 sequential filters
+    // OPTIMIZED: Single-pass filtering with multi-select support
     const filtered = this.referenceAgents.filter((a) => {
+      // Search term filter (searches name, element, specialty)
+      if (searchKey) {
+        const nameMatch = a.name.toLowerCase().includes(searchKey);
+        const elementMatch = a.element.toLowerCase().includes(searchKey);
+        const specialtyMatch = a.specialty.toLowerCase().includes(searchKey);
+        if (!nameMatch && !elementMatch && !specialtyMatch) {
+          return false;
+        }
+      }
+      // Multi-select element filter (desktop) - if any selected, agent must match one of them
+      if (this.agentElementFilters.size > 0 && !this.agentElementFilters.has(a.element)) {
+        return false;
+      }
+      // Single-select element filter (mobile fallback)
       if (this.agentElementFilter && a.element !== this.agentElementFilter) {
         return false;
       }
+      // Multi-select specialty filter (desktop) - if any selected, agent must match one of them
+      if (this.agentSpecialtyFilters.size > 0 && !this.agentSpecialtyFilters.has(a.specialty)) {
+        return false;
+      }
+      // Single-select specialty filter (mobile fallback)
       if (this.agentSpecialtyFilter && a.specialty !== this.agentSpecialtyFilter) {
         return false;
       }
+      // Rarity filter (both desktop and mobile)
       if (this.agentRarityFilter && a.rarity !== this.agentRarityFilter) {
         return false;
       }
@@ -833,6 +861,25 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.cachedFilteredAgents = this.sortAgents(filtered);
     this.lastAgentFilterKey = filterKey;
     return this.cachedFilteredAgents;
+  }
+
+  // Toggle filter selection for desktop icon filters
+  toggleElementFilter(element: string): void {
+    if (this.agentElementFilters.has(element)) {
+      this.agentElementFilters.delete(element);
+    } else {
+      this.agentElementFilters.add(element);
+    }
+    this.cdr.markForCheck();
+  }
+
+  toggleSpecialtyFilter(specialty: string): void {
+    if (this.agentSpecialtyFilters.has(specialty)) {
+      this.agentSpecialtyFilters.delete(specialty);
+    } else {
+      this.agentSpecialtyFilters.add(specialty);
+    }
+    this.cdr.markForCheck();
   }
 
   sortAgents(agents: Agent[]): Agent[] {

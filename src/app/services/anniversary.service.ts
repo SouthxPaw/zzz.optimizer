@@ -48,6 +48,7 @@ export class AnniversaryService {
    * Usage: Open browser console and run: window['testAnniversary']()
    */
   testCelebration(): void {
+    console.log('[Anniversary] Test celebration triggered');
     this.triggerCelebration();
   }
 
@@ -60,20 +61,21 @@ export class AnniversaryService {
     this.cleanup();
 
     // Check for reduced motion preference (accessibility + performance)
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // NOTE: Skip this check for now since we want to always show confetti during testing
+    const prefersReducedMotion = false; // Disabled for now
 
     if (!prefersReducedMotion) {
       // Beautiful confetti burst covering the screen
       const duration = 3000; // 3 seconds
       const end = Date.now() + duration;
-      let animationFrame = 0;
+      let frameCount = 0;
 
       const frame = () => {
-        animationFrame++;
+        frameCount++;
 
         // Fire confetti every 3 frames to reduce lag while maintaining visual density
-        if (animationFrame % 3 === 0) {
-          // Create 3 bursts spread across the screen
+        if (frameCount % 3 === 0) {
+          // Create bursts from top of screen falling down (3 positions across)
           for (let i = 0; i < 3; i++) {
             confetti({
               particleCount: 5,

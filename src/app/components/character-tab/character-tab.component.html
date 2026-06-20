@@ -946,8 +946,157 @@
       <div class="modal-body">
         <p>Select an agent to create a new build:</p>
 
-        <!-- Agent Filters -->
-        <div class="agent-picker-controls">
+        <!-- Desktop Icon Filters (hidden on mobile) - Dynamic single-row layout that wraps if needed -->
+        <div class="agent-icon-filters desktop-only">
+          <!-- Element Filters -->
+          <div class="filter-section-inline">
+            <label class="filter-section-label">Element:</label>
+            <div class="icon-filter-group">
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Fire')"
+                (click)="toggleElementFilter('Fire')"
+                title="Fire">
+                <img src="assets/data/images/elements/IconFire.webp" alt="Fire" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Ice')"
+                (click)="toggleElementFilter('Ice')"
+                title="Ice">
+                <img src="assets/data/images/elements/IconIce.webp" alt="Ice" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Electric')"
+                (click)="toggleElementFilter('Electric')"
+                title="Electric">
+                <img src="assets/data/images/elements/IconElectric.webp" alt="Electric" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Physical')"
+                (click)="toggleElementFilter('Physical')"
+                title="Physical">
+                <img src="assets/data/images/elements/IconPhysical.webp" alt="Physical" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Ether')"
+                (click)="toggleElementFilter('Ether')"
+                title="Ether">
+                <img src="assets/data/images/elements/IconEther.webp" alt="Ether" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Wind')"
+                (click)="toggleElementFilter('Wind')"
+                title="Wind">
+                <img src="assets/data/images/elements/IconWind.webp" alt="Wind" width="32" height="32" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="filter-divider"></div>
+
+          <!-- Specialty Filters -->
+          <div class="filter-section-inline">
+            <label class="filter-section-label">Specialty:</label>
+            <div class="icon-filter-group">
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Attack')"
+                (click)="toggleSpecialtyFilter('Attack')"
+                title="Attack">
+                <img src="assets/data/images/roles/IconAttackType.webp" alt="Attack" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Stun')"
+                (click)="toggleSpecialtyFilter('Stun')"
+                title="Stun">
+                <img src="assets/data/images/roles/IconStun.webp" alt="Stun" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Anomaly')"
+                (click)="toggleSpecialtyFilter('Anomaly')"
+                title="Anomaly">
+                <img src="assets/data/images/roles/IconAnomaly.webp" alt="Anomaly" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Support')"
+                (click)="toggleSpecialtyFilter('Support')"
+                title="Support">
+                <img src="assets/data/images/roles/IconSupport.webp" alt="Support" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Defense')"
+                (click)="toggleSpecialtyFilter('Defense')"
+                title="Defense">
+                <img src="assets/data/images/roles/IconDefense.webp" alt="Defense" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Rupture')"
+                (click)="toggleSpecialtyFilter('Rupture')"
+                title="Rupture">
+                <img src="assets/data/images/roles/IconRupture.webp" alt="Rupture" width="32" height="32" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="filter-divider"></div>
+
+          <!-- Controls -->
+          <div class="filter-section-inline">
+            <label class="filter-section-label">Filters:</label>
+            <select [(ngModel)]="agentRarityFilter" class="filter-select compact">
+              <option value="">All Ranks</option>
+              <option value="S">S-Rank</option>
+              <option value="A">A-Rank</option>
+            </select>
+            <select [(ngModel)]="agentSortBy" class="filter-select compact">
+              <option value="name">Sort: Name</option>
+              <option value="element">Sort: Element</option>
+              <option value="specialty">Sort: Specialty</option>
+              <option value="rarity">Sort: Rarity</option>
+            </select>
+          </div>
+
+          <!-- Divider -->
+          <div class="filter-divider"></div>
+
+          <!-- Search Bar -->
+          <div class="filter-section-inline search-section">
+            <label class="filter-section-label">Search:</label>
+            <input
+              type="text"
+              [(ngModel)]="agentSearchTerm"
+              placeholder="Search by name, element, or specialty..."
+              class="agent-search-input"
+            />
+          </div>
+        </div>
+
+        <!-- Mobile Dropdown Filters (hidden on desktop) -->
+        <div class="agent-picker-controls mobile-only">
           <div class="filter-group">
             <label>Element:</label>
             <select [(ngModel)]="agentElementFilter" class="filter-select">
@@ -988,6 +1137,15 @@
               <option value="specialty">Specialty</option>
               <option value="rarity">Rarity</option>
             </select>
+          </div>
+          <div class="filter-group search-group">
+            <label>Search:</label>
+            <input
+              type="text"
+              [(ngModel)]="agentSearchTerm"
+              placeholder="Search agents..."
+              class="filter-input"
+            />
           </div>
         </div>
 
