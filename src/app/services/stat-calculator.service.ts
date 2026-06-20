@@ -889,6 +889,11 @@ export class StatCalculatorService {
       return agent.specialty === condition.Value;
     }
 
+    // Handle Element condition (e.g., Sky Ablaze - Ether element)
+    if (condition.Type === 'Element') {
+      return agent.element === condition.Value;
+    }
+
     // Handle StatThreshold condition (e.g., King of the Summit - CRIT_RATE >= 50)
     if (condition.Type === 'StatThreshold' && condition.Stat && condition.Operator) {
       // Map condition stat names to BaseStats properties
