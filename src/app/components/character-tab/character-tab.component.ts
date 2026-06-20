@@ -225,7 +225,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   agentSpecialtyFilter = '';
 
   // Assumptions notice
-  showAssumptionsNotice = true;
+  showAssumptionsNotice = !localStorage.getItem('assumptionsAcknowledged');
 
   // Confirmation dialog
   showConfirmDialog = false;
@@ -510,6 +510,12 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   dismissAssumptionsNotice() {
+    this.showAssumptionsNotice = false;
+    this.cdr.markForCheck();
+  }
+
+  acknowledgeAssumptions() {
+    localStorage.setItem('assumptionsAcknowledged', 'true');
     this.showAssumptionsNotice = false;
     this.cdr.markForCheck();
   }
@@ -1495,6 +1501,43 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   getAgentRarity(agentId: string): 'A' | 'S' | undefined {
     const agent = this.referenceAgents.find((a) => a.id === agentId);
     return agent?.rarity;
+  }
+
+  // Helper to get agent element
+  getAgentElement(agentId: string): string | undefined {
+    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    return agent?.element;
+  }
+
+  // Helper to get agent specialty
+  getAgentSpecialty(agentId: string): string | undefined {
+    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    return agent?.specialty;
+  }
+
+  // Helper to get agent specialty icon
+  getAgentSpecialtyIcon(agentId: string): string | undefined {
+    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    return agent?.specialtyIcon;
+  }
+
+  // Helper to calculate dynamic font size based on name length
+  getAgentNameFontSize(name: string): string {
+    const baseSize = 0.75; // em
+    const minSize = 0.45; // em
+    const comfortableLength = 12; // characters before scaling starts
+
+    if (name.length <= comfortableLength) {
+      return `${baseSize}em`;
+    }
+
+    // Scale down for longer names
+    // For every character over comfortableLength, reduce font size by 4%
+    const overageChars = name.length - comfortableLength;
+    const reductionFactor = 1 - (overageChars * 0.04);
+    const scaledSize = Math.max(minSize, baseSize * reductionFactor);
+
+    return `${scaledSize}em`;
   }
 
   // Disc management methods

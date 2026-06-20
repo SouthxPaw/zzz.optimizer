@@ -125,13 +125,14 @@
           credits page for more information.
         </p>
       </div>
-      <button
-        class="notice-close-btn"
-        (click)="dismissAssumptionsNotice()"
-        title="Dismiss notice"
-      >
-        ×
-      </button>
+      <div class="notice-actions">
+        <button
+          class="btn-acknowledge"
+          (click)="acknowledgeAssumptions()"
+        >
+          Understood
+        </button>
+      </div>
     </div>
 
     <div class="content-grid">
@@ -178,38 +179,42 @@
             [class.a-rank]="getAgentRarity(build.agentId) === 'A'"
             (click)="selectBuild(build)"
           >
-            <!-- Drag Handle Indicator (Desktop) -->
-            <div class="drag-handle desktop-only" cdkDragHandle title="Drag to reorder">
-              <span class="drag-icon">⋮⋮</span>
+            <!-- Info Section with Drag Handle -->
+            <div class="build-info" cdkDragHandle>
+              <div class="drag-handle-icon" title="Drag to reorder">
+                <span>☰</span>
+              </div>
+              <div class="info-content">
+                <div class="agent-name-label" [style.font-size]="getAgentNameFontSize(build.name)">{{ build.name }}</div>
+                <div class="build-stats">
+                  <div class="stat-badge">M{{ build.mindscapeLevel }}</div>
+                </div>
+              </div>
+              <div class="build-badges">
+                <img
+                  *ngIf="getAgentElementIcon(build.agentId)"
+                  [src]="getAgentElementIcon(build.agentId)"
+                  [alt]="getAgentElement(build.agentId)"
+                  class="build-element-badge"
+                  width="20"
+                  height="20"
+                  [title]="getAgentElement(build.agentId)"
+                  loading="lazy"
+                />
+                <img
+                  *ngIf="getAgentSpecialtyIcon(build.agentId)"
+                  [src]="getAgentSpecialtyIcon(build.agentId)"
+                  [alt]="getAgentSpecialty(build.agentId)"
+                  class="build-specialty-badge"
+                  width="20"
+                  height="20"
+                  [title]="getAgentSpecialty(build.agentId)"
+                  loading="lazy"
+                />
+              </div>
             </div>
 
-            <!-- Mobile Reorder Buttons -->
-            <div class="mobile-reorder-buttons mobile-only">
-              <button
-                class="reorder-btn reorder-up"
-                *ngIf="i > 0"
-                (click)="moveBuildUp(i, $event)"
-                title="Move up"
-              >
-                ↑
-              </button>
-              <button
-                class="reorder-btn reorder-down"
-                *ngIf="i < builds.length - 1"
-                (click)="moveBuildDown(i, $event)"
-                title="Move down"
-              >
-                ↓
-              </button>
-            </div>
-
-            <button
-              class="delete-btn"
-              (click)="deleteBuild(build.id, $event)"
-              title="Delete build"
-            >
-              ×
-            </button>
+            <!-- Portrait -->
             <div class="build-portrait">
               <img
                 *ngIf="getAgentIcon(build.agentId)"
@@ -224,15 +229,15 @@
                 build.name
               }}</span>
             </div>
-            <div class="build-info">
-              <div class="agent-name-label">{{ build.name }}</div>
-              <div class="build-stats">
-                <div class="stat-badge">M{{ build.mindscapeLevel }}</div>
-                <div class="stat-badge">
-                  {{ getEquippedDiscsCount(build) }}/6 Discs
-                </div>
-              </div>
-            </div>
+
+            <!-- Delete Button -->
+            <button
+              class="delete-btn"
+              (click)="deleteBuild(build.id, $event)"
+              title="Delete build"
+            >
+              ×
+            </button>
           </div>
         </div>
       </div>
@@ -1174,7 +1179,7 @@
               }}</span>
             </div>
             <div class="agent-info">
-              <div class="agent-name-label">{{ agent.name }}</div>
+              <div class="agent-name">{{ agent.name }}</div>
               <div class="agent-badges">
                 <img
                   *ngIf="getAgentElementIcon(agent.id)"

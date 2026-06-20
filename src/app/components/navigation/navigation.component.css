@@ -37,6 +37,21 @@
   height: 70px;
 }
 
+.site-title-link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.site-title-link:hover .site-title {
+  color: #FFD666;
+  text-shadow:
+    0 0 15px rgba(244, 185, 66, 0.7),
+    0 0 25px rgba(244, 185, 66, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  transform: scale(1.02);
+}
+
 .nav-brand .site-title {
   color: #F4B942;
   font-size: 1.5em;
@@ -49,6 +64,7 @@
     0 2px 4px rgba(0, 0, 0, 0.5);
   position: relative;
   display: block;
+  transition: all 0.3s ease;
 }
 
 .nav-brand {
