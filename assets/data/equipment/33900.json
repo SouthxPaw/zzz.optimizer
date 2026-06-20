@@ -1,12 +1,12 @@
 {
   "Id": 33900,
-  "Name": "Howlin' Salon",
+  "Name": "Wuthering Salon",
   "Desc2": "Wind DMG +10%",
   "Desc4": "When the equipper activates an [EX Special Attack], their Anomaly Proficiency increases by 25, stacking up to 2 times for 40s; repeated triggers reset the duration. After the equipper triggers a [Windswept] effect, their DMG dealt increases by 18% for 40s; repeated triggers reset the duration.",
     "4pcEffect": {
     "Properties": []
   },
   "Story": "",
-  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitHowlinSalon.png",
-  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitHowlinSalon.png"
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitWutheringSalon.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitWutheringSalon.png"
 }
