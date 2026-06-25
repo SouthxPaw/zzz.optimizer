@@ -1,12 +1,35 @@
 {
   "Id": 34000,
-  "Name": "Dawn Chronicles",
+  "Name": "The Sky Ablaze",
   "Desc2": "Ether DMG +10%",
-  "Desc4": "The equipper's Ether DMG CRIT DMG increases by 30%. When the equipper uses an [EX Special Attack] or [Ultimate], the equipper's ATK increases by 10% for 30s. Repeated triggers reset the duration.",
-    "4pcEffect": {
-    "Properties": []
-  },
+  "Desc4": "When the equipper is an Ether attribute Agent, their CRIT DMG increases by 30%. When the equipper uses an EX Special Attack or Ultimate, their ATK increases by 10% for 30s. Repeated triggers reset the duration.",
+  "4pcEffect": [
+    {
+      "Condition": {
+        "Type": "Element",
+        "Value": "Ether"
+      },
+      "Properties": [
+        {
+          "Name": "CRIT_DMG",
+          "Name2": "CRIT_DMG",
+          "Format": "{0:0.#}%",
+          "Value": 3000
+        }
+      ]
+    },
+    {
+      "Properties": [
+        {
+          "Name": "ATK%",
+          "Name2": "ATK%",
+          "Format": "{0:0.#}%",
+          "Value": 1000
+        }
+      ]
+    }
+  ],
   "Story": "",
-  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitDawnChronicles.png",
-  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitDawnChronicles.png"
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitTheSkyAblaze.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitTheSkyAblaze.png"
 }

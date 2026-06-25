@@ -2332,17 +2332,8 @@ export class ScoringService {
           targetValue: optimal,
         });
       }
-      // Below minimum for non-priority stats (low priority)
-      else if (current < min && !isPriority) {
-        feedback.push({
-          priority: 'low',
-          category: 'stat',
-          message: `${statInfo.label} is below target (${Math.round(current)}${statInfo.unit} / ${min}${statInfo.unit})`,
-          stat: statKey,
-          currentValue: current,
-          targetValue: min,
-        });
-      }
+      // Removed: Non-priority stats should NOT generate tips, regardless of breakpoints
+      // This ensures build-aware tips (e.g., no AP suggestions for CRIT builds)
     });
 
     // Sort by priority and category: disc feedback first (especially C-F rated discs), then stat feedback
