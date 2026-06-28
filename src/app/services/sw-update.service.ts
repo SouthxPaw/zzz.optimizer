@@ -53,6 +53,10 @@ export class SwUpdateService implements OnDestroy {
     // Check for broken service worker and unregister if needed
     await this.checkForBrokenServiceWorker();
 
+    // Clear the expecting update flag if we're already on the latest version
+    // This prevents showing the update button when user refreshes and loads the new version
+    await this.clearExpectingUpdateIfCurrent();
+
     if (!this.swUpdate.isEnabled) {
       console.log('Service Worker is not enabled');
       return;
@@ -171,9 +175,16 @@ export class SwUpdateService implements OnDestroy {
         }
         this.waitingForVersionReady = false;
 
-        // Don't clear the button or localStorage flag - if showing, it's legitimate
-        // NO_NEW_VERSION_DETECTED can fire for various reasons
-        console.log('[SW Update] Not clearing update button (if showing, it\'s legitimate)');
+        // Check if we're expecting an update (manual fetch detected new version)
+        // but Angular SW didn't detect it (GitHub Pages CDN inconsistency)
+        const expectingUpdate = localStorage.getItem(this.EXPECTING_UPDATE_KEY) === 'true';
+        if (expectingUpdate) {
+          console.log('[SW Update] Manual check found update but Angular SW did not - showing button anyway');
+          // Show the update button since our manual check found a new version
+          this.updateAvailable$.next(true);
+        } else {
+          console.log('[SW Update] Not clearing update button (if showing, it\'s legitimate)');
+        }
       }
     });
 
@@ -209,6 +220,10 @@ export class SwUpdateService implements OnDestroy {
       if (storedVersion && storedVersion !== currentVersion) {
         console.log(`[SW Update] Version changed from ${storedVersion} to ${currentVersion} - clearing non-SW caches`);
 
+        // Clear the expecting update flag since we're now on the new version
+        localStorage.removeItem(this.EXPECTING_UPDATE_KEY);
+        console.log('[SW Update] Cleared expecting update flag (version updated)');
+
         // Clear localStorage except for USER DATA and SW-related keys
         // USER DATA TO PRESERVE:
         // - zzz-optimizer-builds: All user's character builds (agents + equipped gear)
@@ -219,13 +234,14 @@ export class SwUpdateService implements OnDestroy {
           'zzz-optimizer-upgrade-plans',
           'zzz_uid_history',
           this.VERSION_KEY,
-          this.INSTALLED_TIMESTAMP_KEY,
-          this.EXPECTING_UPDATE_KEY  // Preserve update notification state
+          this.INSTALLED_TIMESTAMP_KEY
         ];
         const allKeys = Object.keys(localStorage);
         allKeys.forEach(key => {
           // Only remove if NOT in the preserve list
-          if (!keysToPreserve.includes(key)) {
+          // Also preserve anniversary confetti flags (anniversary_confetti_shown_*)
+          const isAnniversaryFlag = key.startsWith('anniversary_confetti_shown_');
+          if (!keysToPreserve.includes(key) && !isAnniversaryFlag) {
             console.log(`[SW Update] Removing localStorage key: ${key}`);
             localStorage.removeItem(key);
           }
@@ -507,6 +523,53 @@ export class SwUpdateService implements OnDestroy {
   markServiceWorkerAsBroken(): void {
     localStorage.setItem('broken_sw_detected', 'true');
     console.log('[SW Update] Service worker marked as broken - will unregister on next load');
+  }
+
+  /**
+   * Clear the expecting update flag if we're already on the latest version
+   * This prevents showing the update button when user refreshes and loads the new version
+   */
+  private async clearExpectingUpdateIfCurrent(): Promise<void> {
+    try {
+      const expectingUpdate = localStorage.getItem(this.EXPECTING_UPDATE_KEY) === 'true';
+      if (!expectingUpdate) {
+        return; // Nothing to do
+      }
+
+      // Compare current installed version with server version
+      const installedTimestamp = await this.getInstalledVersionTimestamp();
+      if (!installedTimestamp) {
+        // Can't determine, clear the flag to be safe
+        console.log('[SW Update] Cannot determine installed version - clearing expecting update flag');
+        localStorage.removeItem(this.EXPECTING_UPDATE_KEY);
+        return;
+      }
+
+      // Fetch server version
+      const baseUrl = document.baseURI || window.location.origin + window.location.pathname;
+      const ngswUrl = new URL('ngsw.json', baseUrl).href + `?v=${Date.now()}`;
+      const response = await fetch(ngswUrl, { cache: 'no-store' });
+      const manifest = await response.json();
+      const serverTimestamp = manifest?.timestamp;
+
+      if (!serverTimestamp) {
+        console.log('[SW Update] Cannot determine server version - clearing expecting update flag');
+        localStorage.removeItem(this.EXPECTING_UPDATE_KEY);
+        return;
+      }
+
+      // If we're already on the latest version, clear the flag
+      if (installedTimestamp >= serverTimestamp) {
+        console.log('[SW Update] Already on latest version - clearing expecting update flag');
+        localStorage.removeItem(this.EXPECTING_UPDATE_KEY);
+      } else {
+        console.log('[SW Update] Update still pending:', installedTimestamp, '<', serverTimestamp);
+      }
+    } catch (err) {
+      // If we can't check, clear the flag to avoid showing stale update button
+      console.log('[SW Update] Error checking version - clearing expecting update flag:', err);
+      localStorage.removeItem(this.EXPECTING_UPDATE_KEY);
+    }
   }
 
   /**

@@ -4244,5 +4244,145 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14155": {
+    "Id": 14155,
+    "CodeName": "Weapon_S_Common_04",
+    "Name": "Sol Exuvia",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_Common_04.png",
+    "WeaponType": {
+      "1": "Attack"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "Percent ATK",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2000,
+            "W3": 2000,
+            "W4": 2000,
+            "W5": 2000
+          }
+        }
+      ],
+      "Desc": "CRIT Rate increases by %. If Pyrois equips this W-Engine, using [Ultimate] grants the [Solar Eclipse] effect. Under [Solar Eclipse], the equipper's DMG ignores % of DEF, lasting 45s. Repeated triggers reset the duration. Entering combat also grants the [Solar Eclipse] effect."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "2000",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
+  },
+  "13018": {
+    "Id": 13018,
+    "CodeName": "Weapon_A_Common_18",
+    "Name": "Boisterous Echoes",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_18.png",
+    "WeaponType": {
+      "3": "Anomaly"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Anomaly Proficiency",
+      "Name2": "Anomaly Proficiency",
+      "Format": "{0:0.#}",
+      "Value": 75
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When the equipper triggers [Vortex], restore [NUMBER] Energy. This effect can trigger once every 10s. When the equipper attacks enemies afflicted with Attribute Anomaly, DMG dealt increases by %."
+    },
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
+  },
+  "14156": {
+    "Id": 14156,
+    "CodeName": "Weapon_S_1561",
+    "Name": "Joyau Dore",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1561.png",
+    "WeaponType": {
+      "3": "Anomaly"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 6000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 70,
+            "W2": 80,
+            "W3": 90,
+            "W4": 100,
+            "W5": 110
+          }
+        }
+      ],
+      "Desc": "The equipper's Anomaly Proficiency increases by [NUMBER]. When the equipper's EX Special Attack deals Wind DMG, the DMG dealt by their Vortex and Windswept increases by % for 40s, stacking up to 2 times. Repeated triggers reset the duration. This effect can trigger once per skill use. At 2 stacks, all squad members gain [NUMBER] Anomaly Proficiency. Only one instance of this effect can exist in the same squad"
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "70",
+          "format": "flat"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }

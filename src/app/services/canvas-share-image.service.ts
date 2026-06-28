@@ -22,6 +22,7 @@ export interface ShareImageData {
     isPriority: boolean;
     originalType?: string; // Original stat type before display name conversion (e.g., "HP%" vs "HP")
   }>;
+  priorityStats?: string[]; // Direct list of priority stat types for highlighting
   totalEffectiveSubstats?: number;
   showBuildRating?: boolean;
   showDiscRatings?: boolean;
@@ -786,7 +787,7 @@ export class CanvasShareImageService {
       const pos = discPositions[slot];
       const discScore = data.discScores.get(disc.uid);
 
-      await this.drawDisc(ctx, disc, discScore, pos.statsX, pos.statsY, data.showDiscRatings, data.accentColor, data.substatBreakdown);
+      await this.drawDisc(ctx, disc, discScore, pos.statsX, pos.statsY, data.showDiscRatings, data.accentColor, data.priorityStats);
       await this.drawDiscImage(
         ctx,
         disc,
@@ -808,31 +809,18 @@ export class CanvasShareImageService {
     y: number,
     showDiscRatings?: boolean,
     accentColor?: string,
-    substatBreakdown?: Array<{
-      name: string;
-      value: string;
-      isPercent: boolean;
-      rollCount: number;
-      isPriority: boolean;
-      originalType?: string;
-    }>,
+    priorityStatsList?: string[],
   ): Promise<void> {
     const color = accentColor || '#f4b942';
 
-    // Create a map of priority substats for quick lookup
+    // Create a set of priority substats for quick lookup (normalized for matching)
     const priorityStats = new Set<string>();
-    if (substatBreakdown) {
-      substatBreakdown.forEach(stat => {
-        if (stat.isPriority) {
-          // Use the original type if available (e.g., "HP%" instead of display name "HP")
-          const typeToUse = stat.originalType || stat.name;
-
-          // Try multiple normalization formats to ensure matching
-          const normalized = typeToUse.toLowerCase().replace(/ /g, '_');
-          priorityStats.add(normalized);
-          priorityStats.add(typeToUse.toLowerCase().replace(/_/g, ' '));
-          priorityStats.add(typeToUse.toLowerCase());
-        }
+    if (priorityStatsList) {
+      priorityStatsList.forEach(stat => {
+        // Add multiple normalized formats to ensure matching
+        priorityStats.add(stat.toLowerCase().replace(/ /g, '_'));
+        priorityStats.add(stat.toLowerCase().replace(/_/g, ' '));
+        priorityStats.add(stat.toLowerCase());
       });
     }
 
@@ -1315,7 +1303,7 @@ export class CanvasShareImageService {
     // Calculate available space for stats
     const availableWidth = this.WIDTH - leftPadding - rightPadding - creditsWidth - 20; // 20px gap between stats and credits
 
-    // Calculate required width for all stats at base font size
+    // Calculate required width for all stats + total effective substats at base font size
     let requiredWidth = 0;
 
     for (let i = 0; i < data.substatBreakdown.length; i++) {
@@ -1326,7 +1314,7 @@ export class CanvasShareImageService {
       requiredWidth += this.measureTextWidth(ctx, ' | ', `bold ${baseFontSize}px Arial`);
     }
 
-    // Add total effective substats width if present
+    // Add total effective substats width if present (it goes at the end)
     if (data.totalEffectiveSubstats !== undefined && data.totalEffectiveSubstats > 0) {
       const effectiveText = `Total Effective Substats: ${data.totalEffectiveSubstats}`;
       requiredWidth += this.measureTextWidth(ctx, effectiveText, `bold ${baseFontSize}px Arial`);
@@ -1369,15 +1357,16 @@ export class CanvasShareImageService {
       textX += this.measureTextWidth(ctx, ' | ', `bold ${fontSize}px Arial`);
     }
 
-    // Add total effective substats at the end (if available)
+    // Draw total effective substats at the end (if available)
     if (data.totalEffectiveSubstats !== undefined && data.totalEffectiveSubstats > 0) {
       const effectiveText = `Total Effective Substats: ${data.totalEffectiveSubstats}`;
       ctx.fillStyle = accentColor;
       ctx.font = `bold ${fontSize}px Arial`;
+      ctx.textAlign = 'left';
       ctx.fillText(effectiveText, textX, textY);
     }
 
-    // Draw credits (right side)
+    // Draw credits (right side, vertically centered)
     ctx.fillStyle = '#aaa';
     ctx.font = 'italic 9px Arial';
     ctx.textAlign = 'right';
