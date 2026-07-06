@@ -84369,7 +84369,7 @@
           "value": "0",
           "format": "%",
           "condition": {
-            "sourceStat": "crit",
+            "sourceStat": "critRate",
             "threshold": 50,
             "ratio": 1.7,
             "cap": 85
