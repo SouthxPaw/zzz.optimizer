@@ -11292,6 +11292,21 @@
                   "Anomaly_Proficiency": 0
                 }
               },
+              "Energy_Regen": {
+                "mainStatPoints": 3,
+                "substatWeights": {
+                  "HP%": 0,
+                  "DEF%": 0,
+                  "ATK%": 0,
+                  "CRIT_Rate": 1.17,
+                  "CRIT_DMG": 1,
+                  "ATK": 0.5,
+                  "HP": 0,
+                  "DEF": 0,
+                  "PEN": 0,
+                  "Anomaly_Proficiency": 0
+                }
+              },
               "Impact": {
                 "mainStatPoints": 3,
                 "substatWeights": {

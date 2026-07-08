@@ -4393,20 +4393,20 @@
           "optimal": 700
         },
         "impact": {
-          "min": 115,
-          "optimal": 120
+          "min": 0,
+          "optimal": 0
         },
         "anomalyMastery": {
           "min": 0,
           "optimal": 0
         },
         "critRate": {
-          "min": 41,
-          "optimal": 41
+          "min": 70,
+          "optimal": 80
         },
         "critDmg": {
-          "min": 0,
-          "optimal": 0
+          "min": 100,
+          "optimal": 100
         },
         "anomalyProficiency": {
           "min": 0,
