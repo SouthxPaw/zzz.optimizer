@@ -4375,6 +4375,88 @@
           "Energy_Regen": 3
         }
       }
+    },
+    "1571": {
+      "comment": "Norma",
+      "name": "Norma",
+      "breakpoints": {
+        "hp": {
+          "min": 9080,
+          "optimal": 9080
+        },
+        "atk": {
+          "min": 1900,
+          "optimal": 2200
+        },
+        "def": {
+          "min": 700,
+          "optimal": 700
+        },
+        "impact": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyMastery": {
+          "min": 0,
+          "optimal": 0
+        },
+        "critRate": {
+          "min": 70,
+          "optimal": 80
+        },
+        "critDmg": {
+          "min": 100,
+          "optimal": 100
+        },
+        "anomalyProficiency": {
+          "min": 0,
+          "optimal": 0
+        },
+        "pen": {
+          "min": 0,
+          "optimal": 0
+        },
+        "penRatio": {
+          "min": 0,
+          "optimal": 0
+        },
+        "energyRegen": {
+          "min": 0,
+          "optimal": 0
+        }
+      },
+      "priorityStats": [
+        "CRIT_Rate",
+        "ATK%",
+        "ATK",
+        "CRIT_DMG",
+        "PEN_Ratio",
+        "PEN",
+        "Impact",
+        "Element_DMG"
+      ],
+      "statWeights": {
+        "CRIT_DMG": 1,
+        "CRIT_Rate": 1,
+        "ATK": 0.15,
+        "PEN": 0.15,
+        "ATK%": 0.85
+      },
+      "mainStatWeights": {
+        "Drive4": {
+          "CRIT_Rate": 3,
+          "CRIT_DMG": 3,
+          "ATK%": 3
+        },
+        "Drive5": {
+          "Element_DMG": 2,
+          "ATK%": 3
+        },
+        "Drive6": {
+          "ATK%": 3,
+          "Impact": 3
+        }
+      }
     }
   }
 }
