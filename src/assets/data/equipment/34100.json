@@ -1,0 +1,19 @@
+{
+  "Id": 34100,
+  "Name": "Feathered Fate",
+  "Desc2": "Anomaly Proficiency +10%",
+  "Desc4": "When the equipper enters the battlefield or is switched to as the active character, they gain a buff: Anomaly Proficiency increases by 50, and if the equipper is a Lumen Attribute character, Attribute Anomaly Damage Dealt increases by 15%, lasting 15s; When the equipper is not the active character, they always retain this buff.",
+    "4pcEffect": {
+    "Properties": [
+      {
+        "Name": "Anomaly_Proficiency",
+        "Name2": "Anomaly_Proficiency",
+        "Format": "{0:0}",
+        "Value": 50
+      }
+    ]
+  },
+  "Story": "",
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitFeatheredFate.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitFeatheredFate.png"
+}

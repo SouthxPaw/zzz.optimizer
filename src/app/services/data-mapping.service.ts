@@ -18,7 +18,8 @@ export class DataMappingService {
     202: 'Ice',
     203: 'Electric',
     204: 'Wind',
-    205: 'Ether'
+    205: 'Ether',
+    206: 'Lumen'
   };
 
   /**
@@ -190,7 +191,8 @@ export class DataMappingService {
       'Ice': 'IconIce.webp',
       'Electric': 'IconElectric.webp',
       'Wind': 'IconWind.webp',
-      'Ether': 'IconEther.webp'
+      'Ether': 'IconEther.webp',
+      'Lumen': 'IconLumen.webp'
     };
     return `assets/data/images/elements/${iconMap[element as Element]}`;
   }

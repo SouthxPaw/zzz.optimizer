@@ -30687,7 +30687,7 @@
     "id": 1021,
     "name": "Nekomata",
     "scoring": {
-      "buffs": [],
+      "buffs": [{ "type": "CRITDMGBonus", "value": "60", "format": "%" }],
       "debuffs": [],
       "dazeBonus": 0
     },
@@ -51599,6 +51599,33 @@
           "type": "ElementDMG",
           "value": "10",
           "format": "%"
+        },
+        {
+          "type": "PENRatioBonus",
+          "value": "1.6",
+          "format": "%"
+        },
+        {
+          "type": "ATKBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "penRatio",
+            "threshold": 0,
+            "ratio": 7.8,
+            "cap": 630
+          }
+        },
+        {
+          "type": "DEFBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "penRatio",
+            "threshold": 0,
+            "ratio": 6.5,
+            "cap": 525
+          }
         }
       ],
       "debuffs": [],
