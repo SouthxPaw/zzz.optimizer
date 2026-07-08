@@ -4442,5 +4442,58 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14158": {
+    "Id": 14158,
+    "CodeName": "Weapon_S_1581",
+    "Name": "Poem of the Empty Feather Return",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1581.png",
+    "WeaponType": {
+      "3": "Anomaly"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 743
+    },
+    "RandProperty": {
+      "Name": "ATK",
+      "Name2": "ATK",
+      "Format": "{0:0.#%}",
+      "Value": 3600
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 96,
+            "W2": 100,
+            "W3": 105,
+            "W4": 110,
+            "W5": 115
+          }
+        }
+      ],
+      "Desc": "Anomaly Proficiency increases by 96; When the equipper triggers a [Mutation] reaction, they gain Attribute Anomaly DMG Boost of 20%, and apply a DMG Boost of 30% to the whole squad. Both effects last 30s; repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "96",
+          "format": "flat"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
