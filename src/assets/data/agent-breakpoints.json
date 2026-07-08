@@ -4539,5 +4539,78 @@
         }
       }
     }
+  },
+  "1591": {
+    "comment": "Sigrid",
+    "name": "Sigrid",
+    "breakpoints": {
+      "hp": {
+        "min": 7500,
+        "optimal": 8500
+      },
+      "atk": {
+        "min": 2600,
+        "optimal": 2800
+      },
+      "def": {
+        "min": 650,
+        "optimal": 700
+      },
+      "impact": {
+        "min": 0,
+        "optimal": 0
+      },
+      "anomalyMastery": {
+        "min": 0,
+        "optimal": 0
+      },
+      "critRate": {
+        "min": 50,
+        "optimal": 60
+      },
+      "critDmg": {
+        "min": 120,
+        "optimal": 160
+      },
+      "anomalyProficiency": {
+        "min": 0,
+        "optimal": 0
+      },
+      "pen": {
+        "min": 0,
+        "optimal": 0
+      },
+      "penRatio": {
+        "min": 0,
+        "optimal": 0
+      },
+      "energyRegen": {
+        "min": 0,
+        "optimal": 0
+      }
+    },
+    "priorityStats": ["ATK%", "ATK", "Element_DMG", "CRIT_DMG", "CRIT_Rate"],
+    "statWeights": {
+      "Anomaly_Proficiency": 1.5,
+      "PEN": 0.15,
+      "ATK": 0.15,
+      "ATK%": 1.5
+    },
+    "mainStatWeights": {
+      "Drive4": {
+        "Anomaly_Proficiency": 3,
+        "PEN_Ratio": 2,
+        "ATK%": 2
+      },
+      "Drive5": {
+        "Element_DMG": 3,
+        "ATK%": 3,
+        "PEN_Ratio": 3
+      },
+      "Drive6": {
+        "ATK%": 2,
+        "Energy_Regen": 3
+      }
+    }
   }
 }
