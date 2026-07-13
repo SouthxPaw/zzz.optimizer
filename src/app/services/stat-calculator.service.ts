@@ -277,7 +277,8 @@ export class StatCalculatorService {
         stats.energyRegenPercent += subStatValue;
         break;
       case 'Impact':
-        stats.impact += subStatValue;
+        // W-Engine Impact substat is a percentage bonus (e.g., 12% or 18%)
+        stats.impactpercent += subStatValue;
         break;
       case 'Anomaly_Proficiency':
         stats.anomalyProficiency += subStatValue;
@@ -326,7 +327,8 @@ export class StatCalculatorService {
           stats.energyRegenPercent += value;
           break;
         case 'Impact':
-          stats.impact += value;
+          // W-Engine passive Impact bonuses are percentage bonuses (e.g., Ice-Jade Teapot stacking buff)
+          stats.impactpercent += value;
           break;
         case 'Anomaly_Proficiency':
           stats.anomalyProficiency += value;
@@ -794,7 +796,7 @@ export class StatCalculatorService {
 
     // Apply Impact percentage formula:
     // Final = Base × (1 + Impact%)
-    // Percentage sources: Disc 6 main stat (18%), Set bonuses (e.g., Shockstar Disco 2pc 6%)
+    // Percentage sources: Disc 6 main stat (18%), W-Engine substat (12-18%), Set bonuses (e.g., Shockstar Disco 2pc 6%)
     stats.impact = Math.round(baseImpact * (1 + stats.impactpercent / 100));
   }
 
@@ -982,7 +984,8 @@ export class StatCalculatorService {
           stats.energyRegenPercent += value;
           break;
         case 'Impact':
-          stats.impact += value;
+          // Set bonus Impact is a percentage bonus (e.g., Shockstar Disco 2pc +6%)
+          stats.impactpercent += value;
           break;
         case 'Anomaly_Proficiency':
           stats.anomalyProficiency += value;
