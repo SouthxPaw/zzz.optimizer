@@ -1,6 +1,16 @@
 {
   "versions": [
     {
+      "version": "6.5.41",
+      "date": "2026-07-13",
+      "features": [],
+      "fixes": [
+        "Fixed mindscape bonuses not showing toggle boxes for certain agents",
+        "Fixed mindscape names not showing for all agents"
+      ],
+      "improvements": []
+    },
+    {
       "version": "6.5.40",
       "date": "2026-07-13",
       "features": [],
