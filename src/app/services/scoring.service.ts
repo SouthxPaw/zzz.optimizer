@@ -1532,6 +1532,11 @@ export class ScoringService {
       energyRegen: ['Energy_Regen'],
     };
 
+    // Special case: Miyabi (1091) - always treat Anomaly_Proficiency as priority
+    if (agentId === '1091' && statKey === 'anomalyProficiency') {
+      return true;
+    }
+
     // Try to get build-specific weights from agent-stat-weights.json
     if (agentId && this.agentStatWeights[agentId]) {
       // If buildType not provided, use first available build
