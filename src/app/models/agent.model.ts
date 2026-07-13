@@ -21,6 +21,7 @@ export interface BaseStats {
   penRatio: number;
   energyRegen: number;  // Base energy regen (SpBarPoint) - stored as energy/sec
   energyRegenPercent: number;  // Percentage bonuses to energy regen
+  sheerForce: number;  // Sheer Force for Rupture agents: floor(ATK × 0.3) + floor(HP × 0.1)
 }
 
 export interface Agent {
@@ -76,7 +77,7 @@ export interface MindscapeStatBonus {
 // models/wengine.model.ts
 export interface WEngineRefinementProperty {
   name: string;
-  type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency' | 'Anomaly_Mastery';
+  type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency' | 'Anomaly_Mastery' | 'Sheer_Force' | 'Sheer Force';
   values: {
     W1: number;
     W2: number;
@@ -93,7 +94,7 @@ export interface WEngine {
   specialty: 'Attack' | 'Stun' | 'Anomaly' | 'Support' | 'Defense' | 'Rupture';
   baseAtk: number;
   subStat: {
-    type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency' | 'Anomaly_Mastery';
+    type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency' | 'Anomaly_Mastery' | 'Sheer_Force' | 'Sheer Force';
     value: number;
   };
   effect: {

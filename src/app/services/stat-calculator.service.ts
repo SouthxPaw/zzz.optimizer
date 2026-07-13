@@ -102,12 +102,13 @@ export class StatCalculatorService {
 
 
     // Start with base stats at level 60
-    // Initialize percent bonuses to 0 since they may not exist in older data
+    // Initialize percent bonuses and sheerForce to 0 since they may not exist in older data
     const stats: BaseStats = {
       ...agent.lvl60Stats,
       impactpercent: 0,
       anomalyMasteryPercent: 0,
-      energyRegenPercent: 0
+      energyRegenPercent: 0,
+      sheerForce: 0  // Always reset to 0, will be calculated later
     };
 
 
@@ -115,6 +116,13 @@ export class StatCalculatorService {
     if (wEngine) {
       this.applyWEngineBaseStats(stats, wEngine);
     }
+
+    // Save ATK/HP BEFORE mindscape for Sheer Force calculation
+    // Will update these after discs/sets are applied
+    let inGameScreenATK = 0;
+    let inGameScreenHP = 0;
+    const atkBeforeMindscape = stats.atk;
+    const hpBeforeMindscape = stats.hp;
 
     // Apply mindscape stat bonuses (if enabled)
     if (includeMindscapeBonuses && mindscapeLevel > 0) {
@@ -145,6 +153,44 @@ export class StatCalculatorService {
     // Apply conditional 4pc bonuses AFTER final stats are calculated (so conditions can check final values)
     if (includeSetBonuses && include4pcBonuses) {
       this.applyConditional4pcBonuses(stats, enabledDiscsOnly, agent);
+    }
+
+    // NOW save in-game screen stats for Sheer Force
+    // Sheer Force should ALWAYS use in-game screen values (no mindscape/passives/refinement)
+    // Recalculate stats as if mindscape/passive bonuses were never applied
+    if (includeMindscapeBonuses && mindscapeLevel > 0) {
+      // Mindscape was applied - need to recalculate without it for Sheer Force
+      // Create a temporary stats object without mindscape bonuses
+      const tempStats: BaseStats = {
+        ...agent.lvl60Stats,
+        impactpercent: 0,
+        anomalyMasteryPercent: 0,
+        energyRegenPercent: 0,
+        sheerForce: 0
+      };
+
+      // Apply W-Engine
+      if (wEngine) {
+        this.applyWEngineBaseStats(tempStats, wEngine);
+      }
+
+      // Apply discs
+      this.applyDiscMainStats(tempStats, enabledDiscsOnly);
+      this.applyDiscSubStats(tempStats, enabledDiscsOnly);
+
+      // Apply set bonuses and percentage formula
+      if (includeSetBonuses) {
+        this.applySetBonuses(tempStats, enabledDiscsOnly, agent, wEngine, include4pcBonuses);
+      } else {
+        this.applyPercentageFormula(tempStats, agent, wEngine, enabledDiscsOnly);
+      }
+
+      inGameScreenATK = tempStats.atk;
+      inGameScreenHP = tempStats.hp;
+    } else {
+      // Mindscape was not applied - current stats are correct (base + W-Engine + discs + sets)
+      inGameScreenATK = stats.atk;
+      inGameScreenHP = stats.hp;
     }
 
     // Save stats BEFORE W-Engine refinement bonuses are applied
@@ -178,11 +224,25 @@ export class StatCalculatorService {
     // Energy/sec = Base × (1 + Σ %bonuses/100)
     const finalEnergyRegen = stats.energyRegen * (1 + stats.energyRegenPercent / 100);
 
+    // Calculate Sheer Force for Rupture agents using IN-GAME SCREEN values
+    // Formula: floor(in_game_ATK × 0.3) + floor(in_game_HP × 0.1) + Flat bonuses
+    // Use the saved values that match the in-game character screen (base + W-Engine + discs + sets)
+    // This ensures Sheer Force matches in-game regardless of mindscape/passive/refinement toggles
+    const roundedInGameATK = Math.round(inGameScreenATK);
+    const roundedInGameHP = Math.round(inGameScreenHP);
+    const sheerForceFromATK = Math.floor(roundedInGameATK * 0.3);
+    const sheerForceFromHP = Math.floor(roundedInGameHP * 0.1);
+    const finalSheerForce = sheerForceFromATK + sheerForceFromHP + stats.sheerForce;
+
+    // Round ATK and HP from current stats (for display)
+    const roundedATK = Math.round(stats.atk);
+    const roundedHP = Math.round(stats.hp);
+
     // Round all stats to avoid decimals
     const finalStats: BaseStats = {
-      hp: Math.round(stats.hp),
+      hp: roundedHP,
       hppercent: Math.round(stats.hppercent * 10) / 10, // Round to 1 decimal
-      atk: Math.round(stats.atk),
+      atk: roundedATK,
       atkpercent: Math.round(stats.atkpercent * 10) / 10,
       def: Math.round(stats.def),
       defpercent: Math.round(stats.defpercent * 10) / 10,
@@ -196,7 +256,8 @@ export class StatCalculatorService {
       pen: Math.round(stats.pen),
       penRatio: Math.round(stats.penRatio * 10) / 10,
       energyRegen: Math.round(finalEnergyRegen * 10) / 10,
-      energyRegenPercent: Math.round(stats.energyRegenPercent * 10) / 10
+      energyRegenPercent: Math.round(stats.energyRegenPercent * 10) / 10,
+      sheerForce: finalSheerForce
     };
 
     // Store in cache
@@ -337,6 +398,11 @@ export class StatCalculatorService {
           // Refinement Anomaly Mastery bonuses are flat values (Format does not include %)
           // The value has already been processed by extractRefinementProperties
           stats.anomalyMastery += value;
+          break;
+        case 'Sheer_Force':
+        case 'Sheer Force':
+          // W-Engine passive Sheer Force bonuses are flat values (e.g., Radiowave Journey)
+          stats.sheerForce += value;
           break;
       }
     });
