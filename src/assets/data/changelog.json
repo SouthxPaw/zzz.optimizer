@@ -1,6 +1,15 @@
 {
   "versions": [
     {
+      "version": "6.5.40",
+      "date": "2026-07-13",
+      "features": [],
+      "fixes": [
+        "Fixed an issue with Hugo's M1 not giving stats"
+      ],
+      "improvements": []
+    },
+    {
       "version": "6.5.17",
       "date": "2026-06-06",
       "features": [],
@@ -33,9 +42,7 @@
         "Scroll-to-top button for easy navigation on mobile devices",
         "Up/down arrow buttons for reordering agents on mobile (replaces drag and drop)"
       ],
-      "fixes": [
-        "Fixed modal button layouts on mobile devices"
-      ],
+      "fixes": ["Fixed modal button layouts on mobile devices"],
       "improvements": [
         "Enhanced mobile experience with better touch targets and spacing",
         "Improved page load performance by adding image dimensions"
@@ -191,9 +198,7 @@
     {
       "version": "4.x",
       "date": "2026-03-04",
-      "features": [
-        "Auto-update checks for new versions"
-      ],
+      "features": ["Auto-update checks for new versions"],
       "fixes": [
         "Fixed loading screen issues",
         "Fixed 2-piece disc set effects not applying",
@@ -210,9 +215,7 @@
     {
       "version": "3.x",
       "date": "2026-02-07",
-      "features": [
-        "Toggle build/disc rating visibility on share images"
-      ],
+      "features": ["Toggle build/disc rating visibility on share images"],
       "fixes": [
         "Fixed caching issues",
         "Fixed flat DEF not being counted in upgrade rolls",
@@ -239,21 +242,14 @@
     {
       "version": "1.5.x",
       "date": "2026-01-20",
-      "features": [
-        "Reworked disc scoring algorithm"
-      ],
-      "fixes": [
-        "Fixed multiple UI issues",
-        "Fixed disc toggle logic"
-      ],
+      "features": ["Reworked disc scoring algorithm"],
+      "fixes": ["Fixed multiple UI issues", "Fixed disc toggle logic"],
       "improvements": []
     },
     {
       "version": "1.4.x",
       "date": "2026-01-18",
-      "features": [
-        "Backwards compatibility for build import/export"
-      ],
+      "features": ["Backwards compatibility for build import/export"],
       "fixes": [
         "Fixed character base stats calculations",
         "Fixed Anomaly W-Engines not calculating correctly",
@@ -278,9 +274,7 @@
     {
       "version": "1.2.x",
       "date": "2026-01-15",
-      "features": [
-        "Agent stat weights for more accurate disc scoring"
-      ],
+      "features": ["Agent stat weights for more accurate disc scoring"],
       "fixes": [
         "Fixed caching issue with damage calculations",
         "Fixed discs not loading on initial load",
@@ -331,9 +325,7 @@
         "Mindscape system",
         "Disc optimization"
       ],
-      "fixes": [
-        "Fixed agent breakpoint calculations"
-      ],
+      "fixes": ["Fixed agent breakpoint calculations"],
       "improvements": []
     },
     {

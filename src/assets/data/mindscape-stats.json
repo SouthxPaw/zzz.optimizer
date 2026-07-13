@@ -441,6 +441,23 @@
           "note": ""
         }
       ]
+    },
+    "1291": {
+      "comment": "Hugo",
+      "1": [
+        {
+          "type": "CRIT_Rate",
+          "value": 12,
+          "format": "%",
+          "note": ""
+        },
+        {
+          "type": "CRIT_DMG",
+          "value": 30,
+          "format": "%",
+          "note": ""
+        }
+      ]
     }
   }
 }
