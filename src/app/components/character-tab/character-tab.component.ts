@@ -2961,6 +2961,11 @@ async generateShareImage() {
     const priorityStats = Object.keys(buildWeights)
       .filter(stat => buildWeights[stat] >= 1.0);
 
+    // Special case: Miyabi (1091) - always include Anomaly_Proficiency as priority
+    if (this.selectedBuild.agentId === '1091' && !priorityStats.includes('Anomaly_Proficiency')) {
+      priorityStats.push('Anomaly_Proficiency');
+    }
+
     // Prepare data for Canvas renderer
     const shareData: ShareImageData = {
       build: this.selectedBuild,
