@@ -8,7 +8,8 @@
           "type": "CRIT_Rate",
           "value": 15,
           "format": "%",
-          "note": "Upon entering the battlefield, CRIT Rate increases by 15%"
+          "note": "Upon entering the battlefield, CRIT Rate increases by 15%",
+          "name": "Breath Technique"
         }
       ]
     },
@@ -19,7 +20,8 @@
           "type": "ATK%",
           "value": 15,
           "format": "%",
-          "note": "Unconditional ATK increase"
+          "note": "Unconditional ATK increase",
+          "name": "Dance of Fire"
         }
       ],
       "4": [
@@ -27,7 +29,8 @@
           "type": "CRIT_DMG",
           "value": 40,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Fate's Melody"
         }
       ]
     },
@@ -38,7 +41,8 @@
           "type": "CRIT_DMG",
           "value": 50,
           "format": "%",
-          "note": "Unconditional CRIT DMG increase"
+          "note": "Unconditional CRIT DMG increase",
+          "name": "Theory of the Heart"
         }
       ]
     },
@@ -49,7 +53,8 @@
           "type": "CRIT_DMG",
           "value": 40,
           "format": "%",
-          "note": "Unconditional CRIT DMG increase"
+          "note": "Unconditional CRIT DMG increase",
+          "name": "Who Lingers Here, Lost in Thought?"
         }
       ]
     },
@@ -60,7 +65,8 @@
           "type": "CRIT_Rate",
           "value": 12,
           "format": "%",
-          "note": "Unconditional CRIT Rate increase"
+          "note": "Unconditional CRIT Rate increase",
+          "name": "Fail-Safe Protocol"
         }
       ]
     },
@@ -71,7 +77,8 @@
           "type": "CRIT_Rate",
           "value": 12,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Glacial Omen"
         }
       ],
       "6": [
@@ -79,7 +86,8 @@
           "type": "PEN_Ratio",
           "value": 20,
           "format": "%",
-          "note": "When using certain attacks (treated as unconditional for simplicity)"
+          "note": "When using certain attacks (treated as unconditional for simplicity)",
+          "name": "The Feast Begins"
         }
       ]
     },
@@ -90,7 +98,8 @@
           "type": "CRIT_Rate",
           "value": 10,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Self-Interest"
         }
       ],
       "2": [
@@ -98,7 +107,8 @@
           "type": "ATK%",
           "value": 15,
           "format": "%",
-          "note": "While in Hunter's Gait state"
+          "note": "While in Hunter's Gait state",
+          "name": "Opportunistic"
         }
       ]
     },
@@ -109,7 +119,8 @@
           "type": "HP%",
           "value": 8,
           "format": "%",
-          "note": "Unconditional Max HP increase"
+          "note": "Unconditional Max HP increase",
+          "name": "Childhood Oath"
         }
       ]
     },
@@ -120,7 +131,8 @@
           "type": "Energy_Regen",
           "value": 12,
           "format": "%",
-          "note": "4th hit of basic"
+          "note": "4th hit of basic",
+          "name": "Rapid Charge Mode"
         }
       ]
     },
@@ -131,7 +143,8 @@
           "type": "CRIT_Rate",
           "value": 10,
           "format": "%",
-          "note": "When Anton uses a Chain Attack or Ultimate, all squad members' CRIT Rate increases by 10% for 12s."
+          "note": "When Anton uses a Chain Attack or Ultimate, all squad members' CRIT Rate increases by 10% for 12s.",
+          "name": "Everyone Get Fired Up!"
         }
       ]
     },
@@ -142,7 +155,8 @@
           "type": "ATK%",
           "value": 19,
           "format": "%",
-          "note": "The ATK buff from Core Passive: Graceful Andante is further increased by 19%, with an increased maximum of 400. While in the Idyllic Cadenza state, when other characters switch in through a Quick Assist, Chain Attack, Defensive Assist, or Evasive Assist, Astra Yao will additionally follow up with 1 Tremolo and 3 Tone Clusters to attack. This effect can trigger once every 3s."
+          "note": "The ATK buff from Core Passive: Graceful Andante is further increased by 19%, with an increased maximum of 400. While in the Idyllic Cadenza state, when other characters switch in through a Quick Assist, Chain Attack, Defensive Assist, or Evasive Assist, Astra Yao will additionally follow up with 1 Tremolo and 3 Tone Clusters to attack. This effect can trigger once every 3s.",
+          "name": "Art of Greed"
         }
       ]
     },
@@ -153,7 +167,8 @@
           "type": "CRIT_DMG",
           "value": 15,
           "format": "%",
-          "note": "The CRIT DMG bonus from the Core Passive is increased by an additional 15%, and the Fire DMG bonus is increased by an additional 15%. While in the Visage of Wrath state, Banyue restores an additional 5 Adrenaline when consuming Mountain's Might to unleash an EX Special Attack."
+          "note": "The CRIT DMG bonus from the Core Passive is increased by an additional 15%, and the Fire DMG bonus is increased by an additional 15%. While in the Visage of Wrath state, Banyue restores an additional 5 Adrenaline when consuming Mountain's Might to unleash an EX Special Attack.",
+          "name": "Anger Cuts Like a Blade"
         }
       ]
     },
@@ -164,7 +179,8 @@
           "type": "CRIT_Rate",
           "value": 32,
           "format": "%",
-          "note": "When Billy hits an enemy with his EX Special Attack, the skill's CRIT Rate increases based on the distance from the enemy. The closer he is to the target, the greater the effect, up to a maximum increase of 32%."
+          "note": "When Billy hits an enemy with his EX Special Attack, the skill's CRIT Rate increases based on the distance from the enemy. The closer he is to the target, the greater the effect, up to a maximum increase of 32%.",
+          "name": "Starlight Ballistics"
         }
       ]
     },
@@ -175,7 +191,8 @@
           "type": "Energy_Regen",
           "value": 10,
           "format": "%",
-          "note": "While Radiant Aegis is active during Core Passive: Barrier of Resilience, Caesar's Energy Generation increases by 10%, and the shield bearer's attack boost is increased to 150% of its original value."
+          "note": "While Radiant Aegis is active during Core Passive: Barrier of Resilience, Caesar's Energy Generation increases by 10%, and the shield bearer's attack boost is increased to 150% of its original value.",
+          "name": "Legacy of the Far Lands"
         }
       ],
       "6": [
@@ -183,13 +200,15 @@
           "type": "CRIT_Rate",
           "value": 30,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Overlord's Will"
         },
         {
           "type": "CRIT_DMG",
           "value": 60,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Overlord's Will"
         }
       ]
     },
@@ -200,7 +219,8 @@
           "type": "CRIT_Rate",
           "value": 12,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Super Scary Little Tiger"
         }
       ],
       "2": [
@@ -208,7 +228,8 @@
           "type": "CRIT_DMG",
           "value": 22,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Almighty Qingming Warrior"
         }
       ],
       "4": [
@@ -216,7 +237,8 @@
           "type": "CRIT_DMG",
           "value": 35,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Monster-Slaying Tiger Mystic"
         }
       ]
     },
@@ -227,7 +249,8 @@
           "type": "CRIT_DMG",
           "value": 10,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Chaos Ball Game"
         }
       ]
     },
@@ -238,7 +261,8 @@
           "type": "CRIT_Rate",
           "value": 14,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Sharpen Claws"
         }
       ],
       "6": [
@@ -246,7 +270,8 @@
           "type": "CRIT_DMG",
           "value": 54,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Predator Lineage"
         }
       ]
     },
@@ -257,7 +282,8 @@
           "type": "CRIT_Rate",
           "value": 15,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Corrupting Energy Field"
         }
       ]
     },
@@ -268,7 +294,8 @@
           "type": "ATK%",
           "value": 20,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Weird Food List"
         }
       ]
     },
@@ -279,7 +306,8 @@
           "type": "CRIT_Rate",
           "value": 20,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Insulation Breakdown"
         }
       ]
     },
@@ -290,7 +318,8 @@
           "type": "Energy_Regen",
           "value": 0.5,
           "format": "flat",
-          "note": ""
+          "note": "",
+          "name": "Needle and Hammer"
         }
       ]
     },
@@ -301,7 +330,8 @@
           "type": "CRIT_DMG",
           "value": 24,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Ether Vision"
         }
       ]
     },
@@ -312,7 +342,8 @@
           "type": "Anomaly_Proficiency",
           "value": 80,
           "format": "flat",
-          "note": ""
+          "note": "",
+          "name": "Know Thy Self, Know Thy Enemy"
         }
       ],
       "4": [
@@ -320,7 +351,8 @@
           "type": "PEN_Ratio",
           "value": 16,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Chessmaster"
         }
       ]
     },
@@ -331,7 +363,8 @@
           "type": "CRIT_Rate",
           "value": 10,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Spiritual Path"
         }
       ]
     },
@@ -342,7 +375,8 @@
           "type": "ATK%",
           "value": 20,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Krampus Senior"
         }
       ],
       "4": [
@@ -350,7 +384,8 @@
           "type": "CRIT_DMG",
           "value": 40,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Featherlight Footsteps"
         }
       ],
       "6": [
@@ -358,7 +393,8 @@
           "type": "CRIT_Rate",
           "value": 9.45,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "No Value Has Its Own Value"
         }
       ]
     },
@@ -369,7 +405,8 @@
           "type": "ATK%",
           "value": 10,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Feline Go-With-the-Flow"
         }
       ],
       "6": [
@@ -377,13 +414,15 @@
           "type": "CRIT_Rate",
           "value": 100,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Hollow Big Bang"
         },
         {
           "type": "CRIT_DMG",
           "value": 105,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Hollow Big Bang"
         }
       ]
     },
@@ -394,7 +433,8 @@
           "type": "Anomaly_Proficiency",
           "value": 40,
           "format": "flat",
-          "note": ""
+          "note": "",
+          "name": "Accomplice's Dance Step"
         }
       ]
     },
@@ -405,7 +445,8 @@
           "type": "Anomaly_Proficiency",
           "value": 40,
           "format": "flat",
-          "note": ""
+          "note": "",
+          "name": "Faltering Conviction"
         }
       ]
     },
@@ -416,7 +457,8 @@
           "type": "CRIT_DMG",
           "value": 16,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Flames of Justice"
         }
       ]
     },
@@ -427,7 +469,8 @@
           "type": "CRIT_Rate",
           "value": 8,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Shadows of Twilight Past"
         }
       ]
     },
@@ -438,7 +481,8 @@
           "type": "ATK%",
           "value": 15,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Tea Party Tribunal"
         }
       ]
     },
@@ -449,13 +493,15 @@
           "type": "CRIT_Rate",
           "value": 12,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Child of Hatred"
         },
         {
           "type": "CRIT_DMG",
           "value": 30,
           "format": "%",
-          "note": ""
+          "note": "",
+          "name": "Child of Hatred"
         }
       ]
     }
