@@ -2550,6 +2550,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return false;
     }
 
+    // Special case: Miyabi (1091) - always treat Anomaly_Proficiency as priority
+    if (this.selectedBuild.agentId === '1091' && substatType === 'Anomaly_Proficiency') {
+      return true;
+    }
+
     // Get all equipped discs for build detection
     const equippedDiscs: Disc[] = [];
     if (this.selectedBuild.equippedDiscs) {
