@@ -293,11 +293,27 @@ export class ScoringService {
       return buildTypes[0];
     }
 
-    // Count total rolls in CRIT stats vs Anomaly stats (substats only)
+    // Count total rolls in CRIT stats vs Anomaly stats (substats + main stats)
     let anomalyRolls = 0;
     let critRolls = 0;
 
     discs.forEach(disc => {
+      // Check main stats as strong build indicators
+      // Main stats are intentional choices that signal build direction
+      if (disc.mainStat) {
+        const mainStatType = disc.mainStat.type;
+
+        // Anomaly build indicators (weight heavily: +10 rolls equivalent)
+        if (mainStatType === 'Anomaly_Mastery' || mainStatType === 'Anomaly_Proficiency') {
+          anomalyRolls += 10;
+        }
+        // CRIT build indicators (weight heavily: +10 rolls equivalent)
+        else if (mainStatType === 'CRIT_Rate' || mainStatType === 'CRIT_DMG') {
+          critRolls += 10;
+        }
+      }
+
+      // Count substat rolls
       disc.subStats.forEach(substat => {
         const rolls = calculateRollCount(substat.type, substat.value);
 
@@ -310,7 +326,7 @@ export class ScoringService {
       });
     });
 
-    // Return build type with higher roll count
+    // Return build type with higher roll count (including main stat bonuses)
     return (anomalyRolls > critRolls) ? 'Anomaly' : 'CRIT';
   }
 

@@ -8752,6 +8752,16 @@
           "type": "ATKBonus",
           "value": "30",
           "format": "%"
+        },
+        {
+          "type": "CRITRateBonus",
+          "value": "25",
+          "format": "%"
+        },
+        {
+          "type": "CRITDMGBonus",
+          "value": "36",
+          "format": "%"
         }
       ],
       "debuffs": [],
