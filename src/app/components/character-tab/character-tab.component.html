@@ -641,10 +641,18 @@
                 >{{ selectedBuild.calculatedStats.critDmg }}%</span
               >
             </div>
-            <div class="stat-row">
+            <!-- Energy Regen for non-Rupture agents -->
+            <div class="stat-row" *ngIf="!isRuptureAgent()">
               <span class="stat-label">Energy Regen:</span>
               <span class="stat-value"
                 >{{ selectedBuild.calculatedStats.energyRegen }}%</span
+              >
+            </div>
+            <!-- Sheer Force for Rupture agents -->
+            <div class="stat-row" *ngIf="isRuptureAgent()">
+              <span class="stat-label">Sheer Force:</span>
+              <span class="stat-value"
+                >{{ selectedBuild.calculatedStats.sheerForce || 0 }}</span
               >
             </div>
           </div>
@@ -2218,9 +2226,15 @@
                   <span class="stat-label">Anomaly Proficiency:</span>
                   <span class="stat-value">{{ loadoutPreviewStats.anomalyProficiency | number:'1.0-0' }}</span>
                 </div>
-                <div class="stat-row">
+                <!-- Energy Regen for non-Rupture agents -->
+                <div class="stat-row" *ngIf="!isRuptureAgent()">
                   <span class="stat-label">Energy Regen:</span>
                   <span class="stat-value">{{ loadoutPreviewStats.energyRegen }}%</span>
+                </div>
+                <!-- Sheer Force for Rupture agents -->
+                <div class="stat-row" *ngIf="isRuptureAgent()">
+                  <span class="stat-label">Sheer Force:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.sheerForce || 0 }}</span>
                 </div>
                 <div class="stat-row">
                   <span class="stat-label">Impact:</span>
