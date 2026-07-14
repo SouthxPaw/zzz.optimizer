@@ -1,7 +1,7 @@
 {
   "versions": [
     {
-      "version": "6.5.48",
+      "version": "6.5.49",
       "date": "2026-07-14",
       "features": [
         "Added Sheer Force stat display for Rupture agents"
