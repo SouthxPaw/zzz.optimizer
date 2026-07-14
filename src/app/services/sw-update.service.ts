@@ -4,6 +4,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { first, takeUntil, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { DbService } from './db.service';
 
 /**
  * Service Worker Update Service
@@ -39,7 +40,8 @@ export class SwUpdateService implements OnDestroy {
 
   constructor(
     private swUpdate: SwUpdate,
-    private appRef: ApplicationRef
+    private appRef: ApplicationRef,
+    private db: DbService
   ) {}
 
   /**
@@ -246,6 +248,13 @@ export class SwUpdateService implements OnDestroy {
             localStorage.removeItem(key);
           }
         });
+
+        // Clear IndexedDB reference data (agents, wEngines, discSets) on version change
+        // This ensures users always get fresh game data after updates
+        // USER DATA (discs, shareCustomizations) is preserved
+        console.log('[SW Update] Clearing IndexedDB reference data on version change');
+        await this.db.clearReferenceData();
+        console.log('[SW Update] IndexedDB reference data cleared - will reload on next init');
 
         console.log('[SW Update] Cache clearing complete');
       }
