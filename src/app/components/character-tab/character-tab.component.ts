@@ -1049,7 +1049,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return this.selectedBuild.equippedWEngine.effect.properties.map((prop) => {
       const value = prop.values[refinementKey];
       const isPercent =
-        prop.type !== 'Impact' && prop.type !== 'Anomaly_Proficiency';
+        prop.type !== 'Impact' &&
+        prop.type !== 'Anomaly_Proficiency' &&
+        prop.type !== 'Sheer_Force' &&
+        prop.type !== 'Sheer Force';
 
       return {
         name: prop.name,
@@ -3794,6 +3797,14 @@ async generateShareImage() {
   // SHARE IMAGE HELPER METHODS
   // ============================================================================
 
+  isRuptureAgent(): boolean {
+    if (!this.selectedBuild) return false;
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
+    return agent?.specialty === 'Rupture';
+  }
+
   getMainStats(): Array<{ iconName: string; label: string; value: string }> {
     if (!this.selectedBuild) return [];
 
@@ -3816,7 +3827,10 @@ async generateShareImage() {
         value: String(stats.anomalyProficiency),
       },
       { iconName: 'PEN_Ratio', label: 'PEN%', value: `${stats.penRatio}%` },
-      { iconName: 'Energy_Regen', label: 'ER', value: `${stats.energyRegen}%` },
+      // Conditionally show Sheer Force (Rupture) or Energy Regen (others)
+      ...(this.isRuptureAgent()
+        ? [{ iconName: 'Sheer_Force', label: 'SF', value: String(stats.sheerForce || 0) }]
+        : [{ iconName: 'Energy_Regen', label: 'ER', value: `${stats.energyRegen}%` }])
     ];
   }
 
@@ -3877,7 +3891,8 @@ async generateShareImage() {
       subStat.type === 'CRIT_DMG' ||
       subStat.type === 'PEN_Ratio' ||
       subStat.type === 'Energy_Regen' ||
-      subStat.type === 'Anomaly_Mastery';
+      subStat.type === 'Anomaly_Mastery' ||
+      subStat.type === 'Impact';
 
     return isPercent ? `${subStat.value}%` : String(subStat.value);
   }

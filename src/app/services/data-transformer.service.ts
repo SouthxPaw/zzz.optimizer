@@ -182,7 +182,8 @@ export class DataTransformerService {
         pen: Math.round(lvl60.PenDelta || 0),
         penRatio: (lvl60.PenRate || 0) / 100,
         energyRegen: (lvl60.SpBarPoint || 12) / 10,  // 12 / 10 = 1.2
-        energyRegenPercent: 0
+        energyRegenPercent: 0,
+        sheerForce: 0
       };
     }
 
@@ -256,7 +257,8 @@ export class DataTransformerService {
         pen: Math.round(stats.PenDelta || 0),
         penRatio: penRatio,
         energyRegen: energyRegen,
-        energyRegenPercent: 0
+        energyRegenPercent: 0,
+        sheerForce: 0
       };
     }
 
@@ -286,7 +288,8 @@ export class DataTransformerService {
       pen: 0,
       penRatio: 0,
       energyRegen: 1.2,
-      energyRegenPercent: 0
+      energyRegenPercent: 0,
+      sheerForce: 0
     };
   }
 
@@ -440,6 +443,9 @@ export class DataTransformerService {
     // Get effect description from Effect field
     const effectDesc = rawWEngine.Effect?.Desc || rawWEngine.desc || 'No description available';
 
+    // Get name from Name field or fallback to EN
+    const name = rawWEngine.Name || rawWEngine.EN || `W-Engine ${id}`;
+
     // Extract refinement properties from Effect.Properties
     const refinementProperties = this.extractRefinementProperties(rawWEngine.Effect?.Properties || []);
 
@@ -459,9 +465,6 @@ export class DataTransformerService {
       const rarityLetter = rarity === 'S' ? 'S' : rarity === 'A' ? 'A' : 'B';
       icon = `assets/data/images/wengines/Weapon_${rarityLetter}_${id}.webp`;
     }
-
-    // Get name from Name field or fallback to EN
-    const name = rawWEngine.Name || rawWEngine.EN || `W-Engine ${id}`;
 
     return {
       id: id,
@@ -831,6 +834,8 @@ export class DataTransformerService {
         type = 'CRIT_Rate';
       } else if (name === 'CRIT DMG') {
         type = 'CRIT_DMG';
+      } else if (name.includes('Sheer Force')) {
+        type = 'Sheer Force';
       } else if (name.includes('ATK')) {
         type = 'ATK%';
       } else if (name.includes('DEF')) {
