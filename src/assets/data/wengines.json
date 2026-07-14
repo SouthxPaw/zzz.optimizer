@@ -4090,20 +4090,7 @@
       "Value": 1500
     },
     "Effect": {
-      "Properties": [
-        {
-          "Name": "",
-          "Name2": "",
-          "Format": "",
-          "Overclock": {
-            "W1": 0,
-            "W2": 0,
-            "W3": 0,
-            "W4": 0,
-            "W5": 0
-          }
-        }
-      ],
+      "Properties": [],
       "Desc": "When activating an Assist Follow-Up, the equipper's Daze inflicted on the target increases by %, and DMG dealt increases by % for 30s. Repeated triggers reset the duration."
     },
     "scoring": {
