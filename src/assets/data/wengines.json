@@ -1348,7 +1348,20 @@
       "Value": 2500
     },
     "Effect": {
-      "Properties": [],
+      "Properties": [
+        {
+          "Name": "Sheer Force",
+          "Name2": "Sheer Force",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 240,
+            "W2": 276,
+            "W3": 312,
+            "W4": 348,
+            "W5": 384
+          }
+        }
+      ],
       "Desc": "When launching a Chain Attack or Ultimate, the equipper gains 1 stack of a buff effect. Each stack increases the equipper's Sheer Force by [NUMBER], stacking up to 3 times, and lasting 12s. The duration of each stack is calculated separately."
     }
   },
