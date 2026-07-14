@@ -12,6 +12,7 @@ export interface BaseStats {
   defpercent: number;
   impact: number;
   impactpercent: number;  // Percentage bonuses (disc 6 main stat, set bonuses)
+  flatImpact: number;  // Flat Impact bonuses from passives (Nangong Yu, Dialyn, Zhu Yuan)
   anomalyMastery: number;
   anomalyMasteryPercent: number;  // Percentage bonuses (disc 6 main stat, set bonuses)
   critRate: number;
@@ -40,6 +41,7 @@ export interface Agent {
   scoring?: AgentScoring;
   hasHPAscension?: boolean;      // true for agents with HP% ascension bonus (Zhao, Manato)
   hpAscensionPercent?: number;   // HP ascension percentage (e.g., 18 for 18%)
+  extra_ascension?: any[];       // Core passive bonuses unlocked at levels 15, 25, 35, 45, 55
 }
 
 export interface AgentScoring {
