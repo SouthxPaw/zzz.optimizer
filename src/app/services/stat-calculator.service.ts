@@ -196,6 +196,10 @@ export class StatCalculatorService {
       inGameScreenHP = stats.hp;
     }
 
+    // Calculate final energy regen BEFORE passive bonuses (for Energy Regen-based passives like Velina)
+    // Energy/sec = Base × (1 + Σ %bonuses/100)
+    const finalEnergyRegenBeforePassives = stats.energyRegen * (1 + stats.energyRegenPercent / 100);
+
     // Save stats BEFORE W-Engine refinement bonuses are applied
     // Passive conversions (e.g., Alice: AM > 140 → +1.6 AP) should use these values
     // This includes: base + W-Engine secondary + discs + mindscape + set bonuses
@@ -205,7 +209,8 @@ export class StatCalculatorService {
       atk: stats.atk,
       def: stats.def,
       impact: stats.impact,
-      anomalyMastery: stats.anomalyMastery
+      anomalyMastery: stats.anomalyMastery,
+      energyRegen: finalEnergyRegenBeforePassives  // Use final calculated Energy Regen for passive conditions
     };
 
     // Apply passive scoring bonuses BEFORE refinement bonuses (using pre-refinement stats)
@@ -424,7 +429,7 @@ export class StatCalculatorService {
   private applyPassiveScoringBonuses(
     stats: BaseStats,
     agent: Agent,
-    statsBeforeRefinement?: { hp: number; atk: number; def: number; impact: number; anomalyMastery: number }
+    statsBeforeRefinement?: { hp: number; atk: number; def: number; impact: number; anomalyMastery: number; energyRegen: number }
   ): void {
     if (!agent.scoring?.buffs) {
       return;
@@ -447,6 +452,7 @@ export class StatCalculatorService {
           else if (sourceStatKey === 'def') sourceStat = statsBeforeRefinement.def;
           else if (sourceStatKey === 'impact') sourceStat = statsBeforeRefinement.impact;
           else if (sourceStatKey === 'anomalyMastery') sourceStat = statsBeforeRefinement.anomalyMastery;
+          else if (sourceStatKey === 'energyRegen') sourceStat = statsBeforeRefinement.energyRegen;
         }
 
         const excess = Math.max(0, sourceStat - buff.condition.threshold);
