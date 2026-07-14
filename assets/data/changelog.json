@@ -1,7 +1,7 @@
 {
   "versions": [
     {
-      "version": "6.5.48",
+      "version": "6.5.49",
       "date": "2026-07-14",
       "features": [
         "Added Sheer Force stat display for Rupture agents"
@@ -10,8 +10,6 @@
         "Fixed Sunna's in-game stats displaying incorrect ATK value when using the In-Game Stats toggle",
         "Fixed W-Engine Impact bonuses not being removed correctly when toggling off W-Engine effects",
         "Fixed agent passive Impact bonuses not being removed correctly when toggling off passive abilities",
-        "Fixed Radiowave Journey W-Engine not applying Sheer Force bonuses when changing refinement levels",
-        "Fixed Sheer Force bonuses displaying as percentages instead of flat values",
         "Fixed W-Engine Impact substats not displaying with percentage symbol (e.g., Ice-Jade Teapot)",
         "Fixed Velina's passive ability never activating due to incorrect Energy Regen threshold",
         "Fixed Energy Regen displaying as a percentage instead of a flat decimal value",
