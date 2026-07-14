@@ -106,6 +106,7 @@ export class StatCalculatorService {
     const stats: BaseStats = {
       ...agent.lvl60Stats,
       impactpercent: 0,
+      flatImpact: 0,  // Flat Impact bonuses from passives
       anomalyMasteryPercent: 0,
       energyRegenPercent: 0,
       sheerForce: 0  // Always reset to 0, will be calculated later
@@ -113,6 +114,7 @@ export class StatCalculatorService {
 
 
     // Apply W-Engine base stats and substat (always applied if W-Engine equipped)
+    // These are part of the in-game character screen stats
     if (wEngine) {
       this.applyWEngineBaseStats(stats, wEngine);
     }
@@ -164,12 +166,13 @@ export class StatCalculatorService {
       const tempStats: BaseStats = {
         ...agent.lvl60Stats,
         impactpercent: 0,
+        flatImpact: 0,
         anomalyMasteryPercent: 0,
         energyRegenPercent: 0,
         sheerForce: 0
       };
 
-      // Apply W-Engine
+      // Apply W-Engine (always applied for in-game screen stats)
       if (wEngine) {
         this.applyWEngineBaseStats(tempStats, wEngine);
       }
@@ -215,8 +218,11 @@ export class StatCalculatorService {
     // These should NOT be included in passive conversions
     if (wEngine && includeWEngineBonuses && wEngine.specialty === agent.specialty && wEngine.effect.properties) {
       this.applyRefinementBonuses(stats, wEngine.effect.properties, wEngineRefinement);
+    }
 
-      // Re-apply percentage formula to convert the refinement percentages to actual values
+    // Re-apply percentage formula after passive bonuses and refinement bonuses
+    // This ensures passive flatImpact bonuses are included in the final Impact calculation
+    if ((includePassiveBonuses && agent.scoring?.buffs) || (wEngine && includeWEngineBonuses && wEngine.specialty === agent.specialty && wEngine.effect.properties)) {
       this.applyPercentageFormula(stats, agent, wEngine, enabledDiscsOnly);
     }
 
@@ -248,6 +254,7 @@ export class StatCalculatorService {
       defpercent: Math.round(stats.defpercent * 10) / 10,
       impact: Math.round(stats.impact),
       impactpercent: Math.round(stats.impactpercent * 10) / 10,
+      flatImpact: Math.round(stats.flatImpact),
       anomalyMastery: Math.round(stats.anomalyMastery),
       anomalyMasteryPercent: Math.round(stats.anomalyMasteryPercent * 10) / 10,
       critRate: Math.round(stats.critRate * 10) / 10,
@@ -496,7 +503,11 @@ export class StatCalculatorService {
           }
           break;
         case 'ImpactBonus':
-          stats.impact += value;
+          if (isPercentage) {
+            stats.impactpercent += value;
+          } else {
+            stats.flatImpact += value;
+          }
           break;
         case 'EnergyRegenBonus':
           if (isPercentage) {
@@ -851,7 +862,8 @@ export class StatCalculatorService {
     } else {
       stats.hp = baseHP * (1 + stats.hppercent / 100) + flatHPFromDiscs;
     }
-    stats.atk = (baseATK + wEngineBaseATK) * (1 + stats.atkpercent / 100) + flatATKFromDiscs;
+    const calculatedATK = (baseATK + wEngineBaseATK) * (1 + stats.atkpercent / 100) + flatATKFromDiscs;
+    stats.atk = calculatedATK;
     stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFFromDiscs;
 
     // Apply Anomaly Mastery percentage formula:
@@ -861,9 +873,10 @@ export class StatCalculatorService {
     stats.anomalyMastery = baseAnomalyMastery * (1 + stats.anomalyMasteryPercent / 100) + flatAnomalyMasteryBonuses;
 
     // Apply Impact percentage formula:
-    // Final = Base × (1 + Impact%)
+    // Final = Base × (1 + Impact%) + Flat Bonuses
     // Percentage sources: Disc 6 main stat (18%), W-Engine substat (12-18%), Set bonuses (e.g., Shockstar Disco 2pc 6%)
-    stats.impact = Math.round(baseImpact * (1 + stats.impactpercent / 100));
+    // Flat sources: Passive effects (Nangong Yu, Dialyn, Zhu Yuan)
+    stats.impact = Math.round(baseImpact * (1 + stats.impactpercent / 100) + stats.flatImpact);
   }
 
   /**
