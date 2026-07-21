@@ -2,7 +2,7 @@
   "Id": 34200,
   "Name": "Thorned Rose",
   "Desc2": "DEF +16%",
-  "Desc4": "Increases DMG Bonus by 16%. When DEF exceeds or equals 2000/3200, the equipper's CRIT RATE increases by 12%/20%.",
+  "Desc4": "Increases DMG Bonus by 15%. When DEF exceeds or equals 1000/1800, the equipper's CRIT RATE increases by 8%/16%.",
     "4pcEffect": [
     {
       "Condition": {
