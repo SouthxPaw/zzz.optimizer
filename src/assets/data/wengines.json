@@ -4499,7 +4499,7 @@
   "14159": {
     "Id": 14155,
     "CodeName": "Weapon_S_1591",
-    "Name": "...",
+    "Name": "Knight's Extolment",
     "Desc": "",
     "Desc2": "",
     "Desc3": "",
@@ -4527,21 +4527,21 @@
           "Name2": "CRIT DMG",
           "Format": "{0:0.#%}",
           "Overclock": {
-            "W1": 5600,
-            "W2": 6440,
-            "W3": 7280,
-            "W4": 8120,
-            "W5": 8960
+            "W1": 6400,
+            "W2": 7360,
+            "W3": 8320,
+            "W4": 9280,
+            "W5": 10240
           }
         }
       ],
-      "Desc": "When the equipper lands a Heavy Strike using [Basic Attack] or [EX Special Attack], they gain 1 stack of [Blade's Edge]. [Blade's Edge] stacks up to 2 times, with each skill type providing at most 1 stack. Each stack increases CRIT DMG by %, lasting 25s; Using the aforementioned skills refreshes the duration of [Blade's Edge]; When the equipper has 2 stacks of [Blade's Edge], they gain [Bone-Piercing]: Ice DMG dealt is increased by %, and ignores 14% of the target's Ice RES."
+      "Desc": "When the equipper lands a Heavy Strike using [Basic Attack] or [EX Special Attack], they gain 1 stack of [Vanguard]. [Vanguard] stacks up to 2 times, with each skill type providing at most 1 stack. Each stack increases CRIT DMG by %, lasting 25s; Using the above skills refreshes [Vanguard] duration; When at 2 stacks of [Vanguard], gain [Bone-Piercing]: ignore % of the target's ICE Res. "
     },
     "scoring": {
       "buffs": [
         {
           "type": "CRITDMGBonus",
-          "value": "5600",
+          "value": "6400",
           "format": "%"
         }
       ],
