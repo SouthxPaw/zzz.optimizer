@@ -51622,8 +51622,8 @@
           "condition": {
             "sourceStat": "penRatio",
             "threshold": 0,
-            "ratio": 7.8,
-            "cap": 630
+            "ratio": 8,
+            "cap": 576
           }
         },
         {
@@ -51634,7 +51634,7 @@
             "sourceStat": "penRatio",
             "threshold": 0,
             "ratio": 6.5,
-            "cap": 525
+            "cap": 468
           }
         }
       ],

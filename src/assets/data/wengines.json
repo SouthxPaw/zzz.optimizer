@@ -4446,7 +4446,7 @@
   "14158": {
     "Id": 14158,
     "CodeName": "Weapon_S_1581",
-    "Name": "Poem of the Empty Feather Return",
+    "Name": "Ode of Resurrected Wings",
     "Desc": "",
     "Desc2": "",
     "Desc3": "",
@@ -4475,14 +4475,14 @@
           "Format": "{0:0.#}",
           "Overclock": {
             "W1": 96,
-            "W2": 100,
-            "W3": 105,
-            "W4": 110,
-            "W5": 115
+            "W2": 105,
+            "W3": 115,
+            "W4": 125,
+            "W5": 135
           }
         }
       ],
-      "Desc": "Anomaly Proficiency increases by 96; When the equipper triggers a [Mutation] reaction, they gain Attribute Anomaly DMG Boost of 20%, and apply a DMG Boost of 30% to the whole squad. Both effects last 30s; repeated triggers reset the duration."
+      "Desc": "Anomaly Proficiency increases by 96; When the equipper triggers a [Refringe], they gain % increased Attribute Anomaly DMG, and all squad members gain % increased DMG dealt. Both effects last 30s. Repeated triggers reset the duration."
     },
     "scoring": {
       "buffs": [
