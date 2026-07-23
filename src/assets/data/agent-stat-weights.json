@@ -10470,7 +10470,7 @@
             },
             "Drive4": {
               "ATK%": {
-                "mainStatPoints": 0.5,
+                "mainStatPoints": 2,
                 "substatWeights": {
                   "HP%": 0,
                   "DEF%": 0,
@@ -11013,7 +11013,7 @@
             },
             "Drive4": {
               "ATK%": {
-                "mainStatPoints": 0.5,
+                "mainStatPoints": 2,
                 "substatWeights": {
                   "HP%": 0,
                   "DEF%": 0,
