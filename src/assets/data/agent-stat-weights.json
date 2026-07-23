@@ -11400,7 +11400,7 @@
             },
             "Drive4": {
               "ATK%": {
-                "mainStatPoints": 0.5,
+                "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
                   "DEF%": 0,
@@ -11462,7 +11462,7 @@
                 }
               },
               "PEN_Ratio": {
-                "mainStatPoints": 3,
+                "mainStatPoints": 2,
                 "substatWeights": {
                   "HP%": 0,
                   "DEF%": 0,
@@ -11494,6 +11494,21 @@
                 }
               },
               "Anomaly_Mastery": {
+                "mainStatPoints": 3,
+                "substatWeights": {
+                  "HP%": 0,
+                  "DEF%": 0,
+                  "ATK%": 1.17,
+                  "CRIT_Rate": 0,
+                  "CRIT_DMG": 0,
+                  "ATK": 0.17,
+                  "HP": 0,
+                  "DEF": 0,
+                  "PEN": 0.17,
+                  "Anomaly_Proficiency": 1.17
+                }
+              },
+              "Energy_Regen": {
                 "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
