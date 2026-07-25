@@ -11431,21 +11431,6 @@
               }
             },
             "Drive5": {
-              "Element_DMG": {
-                "mainStatPoints": 3,
-                "substatWeights": {
-                  "HP%": 0,
-                  "DEF%": 0,
-                  "ATK%": 0.83,
-                  "CRIT_Rate": 0,
-                  "CRIT_DMG": 0,
-                  "ATK": 0.17,
-                  "HP": 0,
-                  "DEF": 0,
-                  "PEN": 0.17,
-                  "Anomaly_Proficiency": 1.25
-                }
-              },
               "ATK%": {
                 "mainStatPoints": 3,
                 "substatWeights": {
