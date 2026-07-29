@@ -4457,6 +4457,87 @@
           "Impact": 3
         }
       }
+    },
+    "1581": {
+      "comment": "Remielle",
+      "name": "Remielle",
+      "breakpoints": {
+        "hp": {
+          "min": 7840,
+          "optimal": 8500
+        },
+        "atk": {
+          "min": 3000,
+          "optimal": 3800
+        },
+        "def": {
+          "min": 650,
+          "optimal": 750
+        },
+        "impact": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyMastery": {
+          "min": 100,
+          "optimal": 100
+        },
+        "critRate": {
+          "min": 0,
+          "optimal": 0
+        },
+        "critDmg": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyProficiency": {
+          "min": 350,
+          "optimal": 370
+        },
+        "pen": {
+          "min": 0,
+          "optimal": 0
+        },
+        "penRatio": {
+          "min": 0,
+          "optimal": 0
+        },
+        "energyRegen": {
+          "min": 0,
+          "optimal": 0
+        }
+      },
+      "priorityStats": [
+        "ATK%",
+        "ATK",
+        "PEN",
+        "PEN_Ratio",
+        "Element_DMG",
+        "Anomaly_Mastery",
+        "Anomaly_Proficiency"
+      ],
+      "statWeights": {
+        "Anomaly_Proficiency": 1.5,
+        "PEN": 0.15,
+        "ATK": 0.15,
+        "ATK%": 1.5
+      },
+      "mainStatWeights": {
+        "Drive4": {
+          "Anomaly_Proficiency": 3,
+          "PEN_Ratio": 2,
+          "ATK%": 2
+        },
+        "Drive5": {
+          "Element_DMG": 3,
+          "ATK%": 3,
+          "PEN_Ratio": 3
+        },
+        "Drive6": {
+          "ATK%": 2,
+          "Energy_Regen": 3
+        }
+      }
     }
   }
 }
