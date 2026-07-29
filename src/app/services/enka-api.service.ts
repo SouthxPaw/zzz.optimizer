@@ -151,7 +151,9 @@ const DISC_SET_MAP: { [key: number]: string } = {
   33700: 'Bunny in Wonderland',
   33800: 'Notes From the Chained',
   33900: 'Wuthering Salon',
-  34000: 'The Sky Ablaze'
+  34000: 'The Sky Ablaze',
+  34100: 'Feathered Fate',
+  34200: 'Thorned Rose'
 };
 
 @Injectable({
