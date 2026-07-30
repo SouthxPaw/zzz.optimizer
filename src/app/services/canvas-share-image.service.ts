@@ -47,7 +47,12 @@ export class CanvasShareImageService {
   // Image cache to avoid reloading
   private imageCache = new Map<string, HTMLImageElement>();
 
-  constructor() {}
+  // Preload common images at service initialization
+  private preloadInProgress = false;
+
+  constructor() {
+    this.preloadCommonImages();
+  }
 
   /**
    * Main entry point: Generate share image as PNG blob
@@ -1444,5 +1449,44 @@ export class CanvasShareImageService {
     const b = parseInt(hex.substring(4, 6), 16);
 
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  /**
+   * Preload common images to improve performance
+   */
+  private async preloadCommonImages(): Promise<void> {
+    if (this.preloadInProgress) return;
+    this.preloadInProgress = true;
+
+    // Common stat icons that appear in most builds
+    const commonStatIcons = [
+      'HP', 'ATK', 'DEF', 'HP_', 'ATK_', 'DEF_',
+      'CRIT_Rate', 'CRIT_DMG', 'PEN_Ratio',
+      'Energy_Regen', 'Anomaly_Proficiency',
+      'Impact', 'Anomaly_Mastery'
+    ];
+
+    // Preload stat icons in background
+    const iconPromises = commonStatIcons.map(icon =>
+      this.loadImage(`assets/data/images/share-image/Icon_Stat_${icon}.webp`)
+        .catch(() => {}) // Silently fail for missing icons
+    );
+
+    // Preload equipment menu background
+    iconPromises.push(
+      this.loadImage('assets/data/images/share-image/Equipment_Menu_Screen.webp')
+        .catch(() => {})
+    );
+
+    // Preload default background
+    iconPromises.push(
+      this.loadImage('assets/data/images/share-image/ZZZTV.jpg')
+        .catch(() => {})
+    );
+
+    // Don't wait for preloading to complete - let it happen in background
+    Promise.all(iconPromises).finally(() => {
+      console.log('[Canvas] Preloaded common images for faster share image generation');
+    });
   }
 }

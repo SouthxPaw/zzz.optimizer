@@ -1013,6 +1013,14 @@
                 title="Wind">
                 <img src="assets/data/images/elements/IconWind.webp" alt="Wind" width="32" height="32" />
               </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Lumen')"
+                (click)="toggleElementFilter('Lumen')"
+                title="Lumen">
+                <img src="assets/data/images/elements/IconLumen.webp" alt="Lumen" width="32" height="32" />
+              </button>
             </div>
           </div>
 
