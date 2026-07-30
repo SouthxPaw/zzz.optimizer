@@ -9,6 +9,7 @@ import {
   EXTERNAL_STAT_WEIGHTS,
   BUILD_SCORE_WEIGHTS,
   BREAKPOINT_PENALTIES,
+  ANOMALY_SCORING,
   DiscRating,
   BuildRating,
   FeedbackItem,
@@ -356,6 +357,7 @@ export class ScoringService {
       rollBonusPoints: 0,
       godRollBonus: 0,
       allGoodBonus: 0,
+      secondaryBonus: 0,
       normalized_score: 0,
       detectedBuild: null as string | null,
       totalRolls: 0,
@@ -460,10 +462,20 @@ export class ScoringService {
 
     breakdown.mainStatPoints = mainStatPoints;
 
+    // ANOMALY EXCEPTION GATE
+    // Anomaly builds have far fewer stats worth rolling into than CRIT builds: 47% of Anomaly
+    // weight contexts expose only ONE Tier-S stat (and 42 of 45 Drive4 contexts do), versus 93%
+    // of CRIT contexts exposing two or more. That makes "wasted" substats largely unavoidable
+    // rather than a player mistake, so a few scoring rules below are relaxed for Anomaly only.
+    // Derived from breakdown.detectedBuild (the RESOLVED build) rather than the raw buildType
+    // parameter, so custom upgrade plans ('Custom Plan') correctly fall through to the old path.
+    const isAnomalyBuild = breakdown.detectedBuild === 'Anomaly';
+
     // STEP 2: Substat Points (ONLY count priority stats)
     // Formula: rolls × weight × multiplier per stat
     let substatPoints = 0;
     let totalRollCount = 0;
+    let secondaryBonus = 0;
 
     // Detect multiplier based on weight range (for backward compatibility)
     const maxWeight = Math.max(...Object.values(statWeights).filter(w => typeof w === 'number'));
@@ -483,6 +495,13 @@ export class ScoringService {
         const points = rolls * statWeight * multiplier;
         substatPoints += points;
 
+        // Anomaly builds: reward upgrade rolls spent on a genuinely useful but non-Tier-S stat
+        // (flat ATK, PEN, ...). With only one Tier-S option available, spreading into these is
+        // often the best remaining play, and the base formula alone under-credits it.
+        if (isAnomalyBuild && statWeight < 1.0 && rolls > 1) {
+          secondaryBonus += (rolls - 1) * ANOMALY_SCORING.SECONDARY_INVESTMENT_BONUS;
+        }
+
         breakdown.subStatPoints += points;
         breakdown.details.push({
           stat: `${substat.type} (×${statWeight.toFixed(2)})`,
@@ -493,7 +512,16 @@ export class ScoringService {
       } else {
         // Wasted stat gets minimal points
         const BLACK_TIER_WEIGHT = multiplier === 1.0 ? 0.5 : 0.17;
-        const points = rolls * BLACK_TIER_WEIGHT * multiplier;
+        let points: number;
+
+        if (isAnomalyBuild) {
+          // Split the unavoidable first roll from deliberate re-investment. Every disc is dealt
+          // its substats at random, so the initial roll is not a player choice and gets a softer
+          // floor; each upgrade roll after it IS a choice and is still charged the normal rate.
+          points = (ANOMALY_SCORING.INITIAL_FILLER + (rolls - 1) * BLACK_TIER_WEIGHT) * multiplier;
+        } else {
+          points = rolls * BLACK_TIER_WEIGHT * multiplier;
+        }
         substatPoints += points;
 
         breakdown.subStatPoints += points;
@@ -505,6 +533,16 @@ export class ScoringService {
         });
       }
     });
+
+    if (secondaryBonus > 0) {
+      breakdown.secondaryBonus = Math.round(secondaryBonus * 10) / 10;
+      breakdown.details.push({
+        stat: 'Secondary Stat Investment (Anomaly build)',
+        value: breakdown.secondaryBonus,
+        points: breakdown.secondaryBonus,
+        rolls: 0,
+      });
+    }
 
     // STEP 3: God Roll Concentration Bonus
     // Reward exceptionally high UPGRADE rolls (4-5) in a single priority stat
@@ -686,7 +724,8 @@ export class ScoringService {
 
     // STEP 6: Calculate normalized score (0-30 scale)
     // Add god-roll and all-good bonuses (divide by 4.8 to normalize)
-    const normalized_score = mainStatPoints + substatPoints + rollBonus + (godRollBonus / 4.8) + (allGoodBonus / 4.8);
+    // secondaryBonus is already expressed on this 0-30 scale, so it is added directly.
+    const normalized_score = mainStatPoints + substatPoints + secondaryBonus + rollBonus + (godRollBonus / 4.8) + (allGoodBonus / 4.8);
     breakdown.normalized_score = Math.round(normalized_score * 10) / 10;
 
     // STEP 7: Convert to our 0-140+ scale (multiply by 4.8)
