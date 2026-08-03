@@ -11,6 +11,31 @@ export const BREAKPOINT_PENALTIES = {
 };
 
 /**
+ * Anomaly build scoring adjustments
+ *
+ * Anomaly agents have far fewer stats worth rolling into than CRIT agents. Across the weight
+ * dataset, 47% of Anomaly contexts expose only ONE Tier-S stat (42 of 45 Drive4 contexts do),
+ * versus 93% of CRIT contexts exposing two or more. Without these adjustments, an Anomaly disc
+ * scores roughly 20 points below a CRIT disc built with identical player effort, because the
+ * unavoidable filler substats are charged as if the player had chosen them.
+ *
+ * These are applied ONLY when the resolved build type is 'Anomaly' (see calculateDiscScore).
+ * Values are calibrated against real account data, not derived - retune with care.
+ */
+export const ANOMALY_SCORING = {
+  // Floor for the FIRST roll of a wasted (weight-0) substat. A disc's four substats are dealt
+  // at random, so the initial roll is not a player choice and gets a softer floor than the
+  // standard BLACK_TIER_WEIGHT (0.17). Upgrade rolls after it are choices, and still pay 0.17.
+  INITIAL_FILLER: 0.4,
+
+  // Added per upgrade roll spent on a useful-but-not-Tier-S substat (0 < weight < 1.0), e.g.
+  // flat ATK or PEN. With one Tier-S option available, spreading into these is often the best
+  // remaining play. Flat per roll regardless of the stat's exact weight - a known simplification
+  // that slightly over-credits higher-weight (0.83) stats relative to lower-weight (0.17) ones.
+  SECONDARY_INVESTMENT_BONUS: 0.7,
+};
+
+/**
  * Weight multipliers for external stat sources in build rating
  * These sources contribute to calculated stats but with reduced impact
  */
