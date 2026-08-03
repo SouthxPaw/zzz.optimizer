@@ -8752,6 +8752,16 @@
           "type": "ATKBonus",
           "value": "30",
           "format": "%"
+        },
+        {
+          "type": "CRITRateBonus",
+          "value": "25",
+          "format": "%"
+        },
+        {
+          "type": "CRITDMGBonus",
+          "value": "36",
+          "format": "%"
         }
       ],
       "debuffs": [],
@@ -30687,7 +30697,7 @@
     "id": 1021,
     "name": "Nekomata",
     "scoring": {
-      "buffs": [],
+      "buffs": [{ "type": "CRITDMGBonus", "value": "60", "format": "%" }],
       "debuffs": [],
       "dazeBonus": 0
     },
@@ -51599,6 +51609,33 @@
           "type": "ElementDMG",
           "value": "10",
           "format": "%"
+        },
+        {
+          "type": "PENRatioBonus",
+          "value": "1.6",
+          "format": "%"
+        },
+        {
+          "type": "ATKBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "penRatio",
+            "threshold": 0,
+            "ratio": 8,
+            "cap": 576
+          }
+        },
+        {
+          "type": "DEFBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "penRatio",
+            "threshold": 0,
+            "ratio": 6.5,
+            "cap": 468
+          }
         }
       ],
       "debuffs": [],
@@ -80815,7 +80852,7 @@
     "lvl60_stats": {
       "HpMax": 8477,
       "Defence": 600,
-      "Attack": 750,
+      "Attack": 908,
       "Crit": 500,
       "CritDamage": 5000,
       "PenRate": 0,
@@ -84309,7 +84346,7 @@
       "BreakStun": 94,
       "ElementAbnormalPower": 94,
       "ElementMystery": 93,
-      "SpBarPoint": 1
+      "SpBarPoint": 10
     },
     "potentials": [],
     "Icon": "Pyrois"
@@ -84325,7 +84362,7 @@
           "format": "flat",
           "condition": {
             "sourceStat": "energyRegen",
-            "threshold": 120,
+            "threshold": 1.2,
             "ratio": 50,
             "cap": 84
           }
@@ -84358,5 +84395,95 @@
     },
     "potentials": [],
     "Icon": "Velina"
+  },
+  {
+    "id": 1571,
+    "name": "Norma",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMGBonus",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "critRate",
+            "threshold": 50,
+            "ratio": 1.7,
+            "cap": 85
+          }
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 40
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 201,
+      "name": "Fire"
+    },
+    "specialty": {
+      "id": 2,
+      "name": "Stun"
+    },
+    "lvl60_stats": {
+      "HpMax": 7799,
+      "Defence": 582,
+      "Attack": 762,
+      "Crit": 1940,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 106,
+      "ElementAbnormalPower": 99,
+      "ElementMystery": 98,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "Norma"
+  },
+    {
+    "id": 1581,
+    "name": "Remielle",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 0,
+            "ratio": 0.4,
+            "cap": 1600
+          }
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 206,
+      "name": "Lumen"
+    },
+    "specialty": {
+      "id": 3,
+      "name": "Anomaly"
+    },
+    "lvl60_stats": {
+      "HpMax": 7482,
+      "Defence": 600,
+      "Attack": 823,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 83,
+      "ElementAbnormalPower": 115,
+      "ElementMystery": 170,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "Remielle"
   }
 ]

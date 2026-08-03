@@ -31,4 +31,6 @@ export const DISC_SET_EQUIPMENT_IDS = [
   '33800', // Notes From the Chained
   '33900', // Wuthering Salon
   '34000', // The Sky Ablaze
+  '34100', // Feathered Fate
+  '34200', // Thorned Rose
 ] as const;

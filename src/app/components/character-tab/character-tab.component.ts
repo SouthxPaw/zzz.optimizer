@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged, firstValueFrom } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Agent, DiscSlot } from '../../models/agent.model';
 import { WEngine } from '../../models/wengine.model';
 import { Disc, MainStatType, SubStatType } from '../../models/disc.model';
@@ -27,6 +28,7 @@ import { StatCalculatorService } from '../../services/stat-calculator.service';
 import { ScoringService } from '../../services/scoring.service';
 import { ImagePreloaderService } from '../../services/image-preloader.service';
 import { DataMappingService } from '../../services/data-mapping.service';
+import { versionedUrl } from '../../utils/versioned-url';
 import {
   DiscRating,
   BuildRating,
@@ -50,6 +52,20 @@ import {
   ShareImageData,
 } from '../../services/canvas-share-image.service';
 import { getDiscValidationErrors, hasValidationErrors } from '../../utils/disc-validation';
+
+interface MindscapeData {
+  mindscapes: {
+    [agentId: string]: {
+      [level: string]: Array<{
+        type: string;
+        value: number;
+        format: string;
+        note?: string;
+        name?: string;
+      }>;
+    };
+  };
+}
 
 @Component({
   selector: 'app-character-tab',
@@ -250,6 +266,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private isProcessingWEngineAction = false;
   private isProcessingAgentAction = false;
 
+  // Mindscape data from mindscape-stats.json
+  private mindscapeData: MindscapeData | null = null;
+
   constructor(
     private buildService: BuildService,
     private agentService: AgentService,
@@ -268,7 +287,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private notificationService: NotificationService,
     private cdr: ChangeDetectorRef,
-  ) {}
+    private http: HttpClient,
+  ) {
+    // Load mindscape data
+    this.loadMindscapeData();
+  }
 
   ngOnInit() {
     // Load UID history from local storage
@@ -967,7 +990,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return this.selectedBuild.equippedWEngine.effect.properties.map((prop) => {
       const value = prop.values[refinementKey];
       const isPercent =
-        prop.type !== 'Impact' && prop.type !== 'Anomaly_Proficiency';
+        prop.type !== 'Impact' &&
+        prop.type !== 'Anomaly_Proficiency' &&
+        prop.type !== 'Sheer_Force' &&
+        prop.type !== 'Sheer Force';
 
       return {
         name: prop.name,
@@ -975,6 +1001,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
         isPercent: isPercent,
       };
     });
+  }
+
+  private async loadMindscapeData(): Promise<void> {
+    try {
+      this.mindscapeData = await firstValueFrom(
+        this.http.get<MindscapeData>(versionedUrl('assets/data/mindscape-stats.json'))
+      );
+    } catch (error) {
+      console.error('Failed to load mindscape data:', error);
+    }
   }
 
   getMindscapeBonuses(): Array<{
@@ -1003,74 +1039,91 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     const agent = this.referenceAgents.find(
       (a) => a.id === this.selectedBuild!.agentId,
     );
-    if (!agent || !agent.mindscapeEffects) {
+    if (!agent) {
       return [];
     }
 
-    const activeMindscapes = agent.mindscapeEffects.filter(
-      (m) =>
-        m.level <= this.selectedBuild!.mindscapeLevel &&
-        m.statBonuses &&
-        m.statBonuses.length > 0 &&
-        m.statBonuses.some((b) => !b.conditional),
-    );
+    // Use mindscape-stats.json as the source of truth
+    if (!this.mindscapeData) {
+      return [];
+    }
 
-    return activeMindscapes.map((mindscape) => {
-      const stats = mindscape
-        .statBonuses!.filter((b) => !b.conditional)
-        .map((bonus) => {
-          const isPercent = bonus.format === '%';
+    const agentMindscapes = this.mindscapeData.mindscapes[agent.id];
+    if (!agentMindscapes) {
+      return [];
+    }
 
-          let displayName: string;
-          switch (bonus.type) {
-            case 'ATK%':
-              displayName = 'ATK';
-              break;
-            case 'HP%':
-              displayName = 'HP';
-              break;
-            case 'DEF%':
-              displayName = 'DEF';
-              break;
-            case 'CRIT_Rate':
-              displayName = 'CRIT Rate';
-              break;
-            case 'CRIT_DMG':
-              displayName = 'CRIT DMG';
-              break;
-            case 'PEN_Ratio':
-              displayName = 'PEN Ratio';
-              break;
-            case 'Energy_Regen':
-              displayName = 'Energy Regen';
-              break;
-            case 'Anomaly_Proficiency':
-              displayName = 'Anomaly Proficiency';
-              break;
-            case 'Anomaly_Mastery':
-              displayName = 'Anomaly Mastery';
-              break;
-            case 'Impact':
-              displayName = 'Impact';
-              break;
-            default:
-              displayName = bonus.type;
-              break;
-          }
+    const result: Array<{
+      level: number;
+      name: string;
+      stats: Array<{ name: string; value: string; isPercent: boolean }>;
+    }> = [];
 
-          return {
-            name: displayName,
-            value: bonus.value.toFixed(1),
-            isPercent: isPercent,
-          };
-        });
+    // Iterate through all unlocked mindscape levels
+    for (let level = 1; level <= this.selectedBuild.mindscapeLevel; level++) {
+      const bonuses = agentMindscapes[level];
+      if (!bonuses || bonuses.length === 0) {
+        continue;
+      }
 
-      return {
-        level: mindscape.level,
-        name: mindscape.name,
+      // Get the name from the first bonus (all bonuses in same level should have same name)
+      const mindscapeName = bonuses[0].name || `M${level}`;
+
+      const stats = bonuses.map((bonus) => {
+        const isPercent = bonus.format === '%';
+
+        let displayName: string;
+        switch (bonus.type) {
+          case 'ATK%':
+            displayName = 'ATK';
+            break;
+          case 'HP%':
+            displayName = 'HP';
+            break;
+          case 'DEF%':
+            displayName = 'DEF';
+            break;
+          case 'CRIT_Rate':
+            displayName = 'CRIT Rate';
+            break;
+          case 'CRIT_DMG':
+            displayName = 'CRIT DMG';
+            break;
+          case 'PEN_Ratio':
+            displayName = 'PEN Ratio';
+            break;
+          case 'Energy_Regen':
+            displayName = 'Energy Regen';
+            break;
+          case 'Anomaly_Proficiency':
+            displayName = 'Anomaly Proficiency';
+            break;
+          case 'Anomaly_Mastery':
+            displayName = 'Anomaly Mastery';
+            break;
+          case 'Impact':
+            displayName = 'Impact';
+            break;
+          default:
+            displayName = bonus.type;
+            break;
+        }
+
+        return {
+          name: displayName,
+          value: bonus.value.toFixed(1),
+          isPercent: isPercent,
+        };
+      });
+
+      result.push({
+        level: level,
+        name: mindscapeName,
         stats: stats,
-      };
-    });
+      });
+    }
+
+    return result;
   }
 
   getPassiveBonuses(): Array<{
@@ -2500,6 +2553,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return false;
     }
 
+    // Special case: Miyabi (1091) - always treat Anomaly_Proficiency as priority
+    if (this.selectedBuild.agentId === '1091' && substatType === 'Anomaly_Proficiency') {
+      return true;
+    }
+
     // Get all equipped discs for build detection
     const equippedDiscs: Disc[] = [];
     if (this.selectedBuild.equippedDiscs) {
@@ -2905,6 +2963,11 @@ async generateShareImage() {
     // Build list of priority stats (weight >= 1.0)
     const priorityStats = Object.keys(buildWeights)
       .filter(stat => buildWeights[stat] >= 1.0);
+
+    // Special case: Miyabi (1091) - always include Anomaly_Proficiency as priority
+    if (this.selectedBuild.agentId === '1091' && !priorityStats.includes('Anomaly_Proficiency')) {
+      priorityStats.push('Anomaly_Proficiency');
+    }
 
     // Prepare data for Canvas renderer
     const shareData: ShareImageData = {
@@ -3638,6 +3701,14 @@ async generateShareImage() {
   // SHARE IMAGE HELPER METHODS
   // ============================================================================
 
+  isRuptureAgent(): boolean {
+    if (!this.selectedBuild) return false;
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
+    return agent?.specialty === 'Rupture';
+  }
+
   getMainStats(): Array<{ iconName: string; label: string; value: string }> {
     if (!this.selectedBuild) return [];
 
@@ -3660,7 +3731,10 @@ async generateShareImage() {
         value: String(stats.anomalyProficiency),
       },
       { iconName: 'PEN_Ratio', label: 'PEN%', value: `${stats.penRatio}%` },
-      { iconName: 'Energy_Regen', label: 'ER', value: `${stats.energyRegen}%` },
+      // Conditionally show Sheer Force (Rupture) or Energy Regen (others)
+      ...(this.isRuptureAgent()
+        ? [{ iconName: 'Sheer_Force', label: 'SF', value: String(stats.sheerForce || 0) }]
+        : [{ iconName: 'Energy_Regen', label: 'ER', value: `${stats.energyRegen}%` }])
     ];
   }
 
@@ -3721,7 +3795,8 @@ async generateShareImage() {
       subStat.type === 'CRIT_DMG' ||
       subStat.type === 'PEN_Ratio' ||
       subStat.type === 'Energy_Regen' ||
-      subStat.type === 'Anomaly_Mastery';
+      subStat.type === 'Anomaly_Mastery' ||
+      subStat.type === 'Impact';
 
     return isPercent ? `${subStat.value}%` : String(subStat.value);
   }

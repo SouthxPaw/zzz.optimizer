@@ -1246,8 +1246,18 @@ export class CanvasShareImageService {
       return `assets/data/images/elements/${specialIconMap[elementIcon]}`;
     }
 
-    // Standard element icon
-    return `assets/data/images/elements/${elementIcon}.webp`;
+    // Standard element icons
+    const iconMap: { [key: string]: string } = {
+      'Physical': 'IconPhysical.webp',
+      'Fire': 'IconFire.webp',
+      'Ice': 'IconIce.webp',
+      'Electric': 'IconElectric.webp',
+      'Wind': 'IconWind.webp',
+      'Ether': 'IconEther.webp',
+      'Lumen': 'IconLumen.webp'
+    };
+
+    return `assets/data/images/elements/${iconMap[elementIcon] || elementIcon + '.webp'}`;
   }
 
   /**

@@ -102,19 +102,29 @@ export class StatCalculatorService {
 
 
     // Start with base stats at level 60
-    // Initialize percent bonuses to 0 since they may not exist in older data
+    // Initialize percent bonuses and sheerForce to 0 since they may not exist in older data
     const stats: BaseStats = {
       ...agent.lvl60Stats,
       impactpercent: 0,
+      flatImpact: 0,  // Flat Impact bonuses from passives
       anomalyMasteryPercent: 0,
-      energyRegenPercent: 0
+      energyRegenPercent: 0,
+      sheerForce: 0  // Always reset to 0, will be calculated later
     };
 
 
     // Apply W-Engine base stats and substat (always applied if W-Engine equipped)
+    // These are part of the in-game character screen stats
     if (wEngine) {
       this.applyWEngineBaseStats(stats, wEngine);
     }
+
+    // Save ATK/HP BEFORE mindscape for Sheer Force calculation
+    // Will update these after discs/sets are applied
+    let inGameScreenATK = 0;
+    let inGameScreenHP = 0;
+    const atkBeforeMindscape = stats.atk;
+    const hpBeforeMindscape = stats.hp;
 
     // Apply mindscape stat bonuses (if enabled)
     if (includeMindscapeBonuses && mindscapeLevel > 0) {
@@ -147,6 +157,49 @@ export class StatCalculatorService {
       this.applyConditional4pcBonuses(stats, enabledDiscsOnly, agent);
     }
 
+    // NOW save in-game screen stats for Sheer Force
+    // Sheer Force should ALWAYS use in-game screen values (no mindscape/passives/refinement)
+    // Recalculate stats as if mindscape/passive bonuses were never applied
+    if (includeMindscapeBonuses && mindscapeLevel > 0) {
+      // Mindscape was applied - need to recalculate without it for Sheer Force
+      // Create a temporary stats object without mindscape bonuses
+      const tempStats: BaseStats = {
+        ...agent.lvl60Stats,
+        impactpercent: 0,
+        flatImpact: 0,
+        anomalyMasteryPercent: 0,
+        energyRegenPercent: 0,
+        sheerForce: 0
+      };
+
+      // Apply W-Engine (always applied for in-game screen stats)
+      if (wEngine) {
+        this.applyWEngineBaseStats(tempStats, wEngine);
+      }
+
+      // Apply discs
+      this.applyDiscMainStats(tempStats, enabledDiscsOnly);
+      this.applyDiscSubStats(tempStats, enabledDiscsOnly);
+
+      // Apply set bonuses and percentage formula
+      if (includeSetBonuses) {
+        this.applySetBonuses(tempStats, enabledDiscsOnly, agent, wEngine, include4pcBonuses);
+      } else {
+        this.applyPercentageFormula(tempStats, agent, wEngine, enabledDiscsOnly);
+      }
+
+      inGameScreenATK = tempStats.atk;
+      inGameScreenHP = tempStats.hp;
+    } else {
+      // Mindscape was not applied - current stats are correct (base + W-Engine + discs + sets)
+      inGameScreenATK = stats.atk;
+      inGameScreenHP = stats.hp;
+    }
+
+    // Calculate final energy regen BEFORE passive bonuses (for Energy Regen-based passives like Velina)
+    // Energy/sec = Base × (1 + Σ %bonuses/100)
+    const finalEnergyRegenBeforePassives = stats.energyRegen * (1 + stats.energyRegenPercent / 100);
+
     // Save stats BEFORE W-Engine refinement bonuses are applied
     // Passive conversions (e.g., Alice: AM > 140 → +1.6 AP) should use these values
     // This includes: base + W-Engine secondary + discs + mindscape + set bonuses
@@ -156,7 +209,8 @@ export class StatCalculatorService {
       atk: stats.atk,
       def: stats.def,
       impact: stats.impact,
-      anomalyMastery: stats.anomalyMastery
+      anomalyMastery: stats.anomalyMastery,
+      energyRegen: finalEnergyRegenBeforePassives  // Use final calculated Energy Regen for passive conditions
     };
 
     // Apply passive scoring bonuses BEFORE refinement bonuses (using pre-refinement stats)
@@ -169,8 +223,11 @@ export class StatCalculatorService {
     // These should NOT be included in passive conversions
     if (wEngine && includeWEngineBonuses && wEngine.specialty === agent.specialty && wEngine.effect.properties) {
       this.applyRefinementBonuses(stats, wEngine.effect.properties, wEngineRefinement);
+    }
 
-      // Re-apply percentage formula to convert the refinement percentages to actual values
+    // Re-apply percentage formula after passive bonuses and refinement bonuses
+    // This ensures passive flatImpact bonuses are included in the final Impact calculation
+    if ((includePassiveBonuses && agent.scoring?.buffs) || (wEngine && includeWEngineBonuses && wEngine.specialty === agent.specialty && wEngine.effect.properties)) {
       this.applyPercentageFormula(stats, agent, wEngine, enabledDiscsOnly);
     }
 
@@ -178,16 +235,31 @@ export class StatCalculatorService {
     // Energy/sec = Base × (1 + Σ %bonuses/100)
     const finalEnergyRegen = stats.energyRegen * (1 + stats.energyRegenPercent / 100);
 
+    // Calculate Sheer Force for Rupture agents using IN-GAME SCREEN values
+    // Formula: floor(in_game_ATK × 0.3) + floor(in_game_HP × 0.1) + Flat bonuses
+    // Use the saved values that match the in-game character screen (base + W-Engine + discs + sets)
+    // This ensures Sheer Force matches in-game regardless of mindscape/passive/refinement toggles
+    const roundedInGameATK = Math.round(inGameScreenATK);
+    const roundedInGameHP = Math.round(inGameScreenHP);
+    const sheerForceFromATK = Math.floor(roundedInGameATK * 0.3);
+    const sheerForceFromHP = Math.floor(roundedInGameHP * 0.1);
+    const finalSheerForce = sheerForceFromATK + sheerForceFromHP + stats.sheerForce;
+
+    // Round ATK and HP from current stats (for display)
+    const roundedATK = Math.round(stats.atk);
+    const roundedHP = Math.round(stats.hp);
+
     // Round all stats to avoid decimals
     const finalStats: BaseStats = {
-      hp: Math.round(stats.hp),
+      hp: roundedHP,
       hppercent: Math.round(stats.hppercent * 10) / 10, // Round to 1 decimal
-      atk: Math.round(stats.atk),
+      atk: roundedATK,
       atkpercent: Math.round(stats.atkpercent * 10) / 10,
       def: Math.round(stats.def),
       defpercent: Math.round(stats.defpercent * 10) / 10,
       impact: Math.round(stats.impact),
       impactpercent: Math.round(stats.impactpercent * 10) / 10,
+      flatImpact: Math.round(stats.flatImpact),
       anomalyMastery: Math.round(stats.anomalyMastery),
       anomalyMasteryPercent: Math.round(stats.anomalyMasteryPercent * 10) / 10,
       critRate: Math.round(stats.critRate * 10) / 10,
@@ -196,7 +268,8 @@ export class StatCalculatorService {
       pen: Math.round(stats.pen),
       penRatio: Math.round(stats.penRatio * 10) / 10,
       energyRegen: Math.round(finalEnergyRegen * 10) / 10,
-      energyRegenPercent: Math.round(stats.energyRegenPercent * 10) / 10
+      energyRegenPercent: Math.round(stats.energyRegenPercent * 10) / 10,
+      sheerForce: finalSheerForce
     };
 
     // Store in cache
@@ -277,7 +350,8 @@ export class StatCalculatorService {
         stats.energyRegenPercent += subStatValue;
         break;
       case 'Impact':
-        stats.impact += subStatValue;
+        // W-Engine Impact substat is a percentage bonus (e.g., 12% or 18%)
+        stats.impactpercent += subStatValue;
         break;
       case 'Anomaly_Proficiency':
         stats.anomalyProficiency += subStatValue;
@@ -326,7 +400,8 @@ export class StatCalculatorService {
           stats.energyRegenPercent += value;
           break;
         case 'Impact':
-          stats.impact += value;
+          // W-Engine passive Impact bonuses are percentage bonuses (e.g., Ice-Jade Teapot stacking buff)
+          stats.impactpercent += value;
           break;
         case 'Anomaly_Proficiency':
           stats.anomalyProficiency += value;
@@ -335,6 +410,11 @@ export class StatCalculatorService {
           // Refinement Anomaly Mastery bonuses are flat values (Format does not include %)
           // The value has already been processed by extractRefinementProperties
           stats.anomalyMastery += value;
+          break;
+        case 'Sheer_Force':
+        case 'Sheer Force':
+          // W-Engine passive Sheer Force bonuses are flat values (e.g., Radiowave Journey)
+          stats.sheerForce += value;
           break;
       }
     });
@@ -349,7 +429,7 @@ export class StatCalculatorService {
   private applyPassiveScoringBonuses(
     stats: BaseStats,
     agent: Agent,
-    statsBeforeRefinement?: { hp: number; atk: number; def: number; impact: number; anomalyMastery: number }
+    statsBeforeRefinement?: { hp: number; atk: number; def: number; impact: number; anomalyMastery: number; energyRegen: number }
   ): void {
     if (!agent.scoring?.buffs) {
       return;
@@ -372,6 +452,7 @@ export class StatCalculatorService {
           else if (sourceStatKey === 'def') sourceStat = statsBeforeRefinement.def;
           else if (sourceStatKey === 'impact') sourceStat = statsBeforeRefinement.impact;
           else if (sourceStatKey === 'anomalyMastery') sourceStat = statsBeforeRefinement.anomalyMastery;
+          else if (sourceStatKey === 'energyRegen') sourceStat = statsBeforeRefinement.energyRegen;
         }
 
         const excess = Math.max(0, sourceStat - buff.condition.threshold);
@@ -428,7 +509,11 @@ export class StatCalculatorService {
           }
           break;
         case 'ImpactBonus':
-          stats.impact += value;
+          if (isPercentage) {
+            stats.impactpercent += value;
+          } else {
+            stats.flatImpact += value;
+          }
           break;
         case 'EnergyRegenBonus':
           if (isPercentage) {
@@ -783,7 +868,8 @@ export class StatCalculatorService {
     } else {
       stats.hp = baseHP * (1 + stats.hppercent / 100) + flatHPFromDiscs;
     }
-    stats.atk = (baseATK + wEngineBaseATK) * (1 + stats.atkpercent / 100) + flatATKFromDiscs;
+    const calculatedATK = (baseATK + wEngineBaseATK) * (1 + stats.atkpercent / 100) + flatATKFromDiscs;
+    stats.atk = calculatedATK;
     stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFFromDiscs;
 
     // Apply Anomaly Mastery percentage formula:
@@ -793,9 +879,10 @@ export class StatCalculatorService {
     stats.anomalyMastery = baseAnomalyMastery * (1 + stats.anomalyMasteryPercent / 100) + flatAnomalyMasteryBonuses;
 
     // Apply Impact percentage formula:
-    // Final = Base × (1 + Impact%)
-    // Percentage sources: Disc 6 main stat (18%), Set bonuses (e.g., Shockstar Disco 2pc 6%)
-    stats.impact = Math.round(baseImpact * (1 + stats.impactpercent / 100));
+    // Final = Base × (1 + Impact%) + Flat Bonuses
+    // Percentage sources: Disc 6 main stat (18%), W-Engine substat (12-18%), Set bonuses (e.g., Shockstar Disco 2pc 6%)
+    // Flat sources: Passive effects (Nangong Yu, Dialyn, Zhu Yuan)
+    stats.impact = Math.round(baseImpact * (1 + stats.impactpercent / 100) + stats.flatImpact);
   }
 
   /**
@@ -982,7 +1069,8 @@ export class StatCalculatorService {
           stats.energyRegenPercent += value;
           break;
         case 'Impact':
-          stats.impact += value;
+          // Set bonus Impact is a percentage bonus (e.g., Shockstar Disco 2pc +6%)
+          stats.impactpercent += value;
           break;
         case 'Anomaly_Proficiency':
           stats.anomalyProficiency += value;

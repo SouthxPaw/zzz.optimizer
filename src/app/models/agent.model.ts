@@ -1,5 +1,5 @@
 // models/agent.model.ts
-export type Element = 'Physical' | 'Fire' | 'Ice' | 'Electric' | 'Wind' | 'Ether';
+export type Element = 'Physical' | 'Fire' | 'Ice' | 'Electric' | 'Wind' | 'Ether' | 'Lumen';
 export type Specialty = 'Attack' | 'Stun' | 'Support' | 'Defense' | 'Anomaly' | 'Rupture';
 export type DiscSlot = 'Drive1' | 'Drive2' | 'Drive3' | 'Drive4' | 'Drive5' | 'Drive6';
 
@@ -12,6 +12,7 @@ export interface BaseStats {
   defpercent: number;
   impact: number;
   impactpercent: number;  // Percentage bonuses (disc 6 main stat, set bonuses)
+  flatImpact: number;  // Flat Impact bonuses from passives (Nangong Yu, Dialyn, Zhu Yuan)
   anomalyMastery: number;
   anomalyMasteryPercent: number;  // Percentage bonuses (disc 6 main stat, set bonuses)
   critRate: number;
@@ -21,6 +22,7 @@ export interface BaseStats {
   penRatio: number;
   energyRegen: number;  // Base energy regen (SpBarPoint) - stored as energy/sec
   energyRegenPercent: number;  // Percentage bonuses to energy regen
+  sheerForce: number;  // Sheer Force for Rupture agents: floor(ATK × 0.3) + floor(HP × 0.1)
 }
 
 export interface Agent {
@@ -39,6 +41,7 @@ export interface Agent {
   scoring?: AgentScoring;
   hasHPAscension?: boolean;      // true for agents with HP% ascension bonus (Zhao, Manato)
   hpAscensionPercent?: number;   // HP ascension percentage (e.g., 18 for 18%)
+  extra_ascension?: any[];       // Core passive bonuses unlocked at levels 15, 25, 35, 45, 55
 }
 
 export interface AgentScoring {
@@ -76,7 +79,7 @@ export interface MindscapeStatBonus {
 // models/wengine.model.ts
 export interface WEngineRefinementProperty {
   name: string;
-  type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency' | 'Anomaly_Mastery';
+  type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency' | 'Anomaly_Mastery' | 'Sheer_Force' | 'Sheer Force';
   values: {
     W1: number;
     W2: number;
@@ -93,7 +96,7 @@ export interface WEngine {
   specialty: 'Attack' | 'Stun' | 'Anomaly' | 'Support' | 'Defense' | 'Rupture';
   baseAtk: number;
   subStat: {
-    type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency' | 'Anomaly_Mastery';
+    type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency' | 'Anomaly_Mastery' | 'Sheer_Force' | 'Sheer Force';
     value: number;
   };
   effect: {
