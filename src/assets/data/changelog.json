@@ -1,6 +1,15 @@
 {
   "versions": [
     {
+      "version": "6.5.59",
+      "date": "2026-08-16",
+      "features": [],
+      "fixes": [],
+      "improvements": [
+        "Improved Anomaly disc rating accuracy for discs with heavy investment into a priority stat"
+      ]
+    },
+    {
       "version": "6.5.49",
       "date": "2026-07-14",
       "features": [

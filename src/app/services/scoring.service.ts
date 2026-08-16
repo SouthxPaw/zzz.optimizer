@@ -676,6 +676,13 @@ export class ScoringService {
       if (hasGodRollConcentration && tierSStatsPresent >= 2 && tierSUpgradeRolls >= 4 && wastedStatCount === 2) {
         qualifiesForBonus = true;
         allGoodBonus = 5;
+      } else if (tierSStatsPresent >= 2 && tierSUpgradeRolls >= 3 && wastedStatCount === 2) {
+        // Softer version of the above: strong (3 upgrade rolls) but not maxed concentration in a
+        // Tier-S stat, with both Tier-S stats present. Still charged the 2-wasted-stat penalty
+        // via base substatPoints, but no longer denied the coverage bonus outright - a 2-Tier-S
+        // Anomaly disc with 3 rolls into one of them is a strong outcome, not a middling one.
+        qualifiesForBonus = true;
+        allGoodBonus = 3;
       } else if (wastedStatCount === 0) {
         // Perfect Anomaly disc - no wasted stats
         qualifiesForBonus = true;
