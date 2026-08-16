@@ -683,6 +683,14 @@ export class ScoringService {
         // Anomaly disc with 3 rolls into one of them is a strong outcome, not a middling one.
         qualifiesForBonus = true;
         allGoodBonus = 3;
+      } else if (tierSStatsAvailable === 1 && tierSStatsPresent === 1 && tierSUpgradeRolls >= 2 && wastedStatCount === 2) {
+        // Contexts where the main stat itself removes one of the two normal Tier-S options (e.g.
+        // AP main on a slot that would otherwise roll AP, or ATK% main leaving only AP) collapse
+        // to a single Tier-S substat. Landing 3+ total rolls (2+ upgrades) in it plus any secondary
+        // investment (flat ATK/PEN) is close to the ceiling for these discs - 2 wasted stats are
+        // structurally unavoidable, not a player mistake, so don't deny coverage credit outright.
+        qualifiesForBonus = true;
+        allGoodBonus = 2;
       } else if (wastedStatCount === 0) {
         // Perfect Anomaly disc - no wasted stats
         qualifiesForBonus = true;
