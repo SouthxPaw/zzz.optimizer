@@ -11556,7 +11556,7 @@
                 }
               },
               "CRIT_Rate": {
-                "mainStatPoints": 3,
+                "mainStatPoints": 2,
                 "substatWeights": {
                   "HP%": 0,
                   "DEF%": 0,
@@ -11573,7 +11573,7 @@
             },
             "Drive5": {
               "Element_DMG": {
-                "mainStatPoints": 3,
+                "mainStatPoints": 2,
                 "substatWeights": {
                   "HP%": 0,
                   "DEF%": 0,

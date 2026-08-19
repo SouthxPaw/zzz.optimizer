@@ -4549,8 +4549,8 @@
         "optimal": 8500
       },
       "atk": {
-        "min": 2600,
-        "optimal": 2800
+        "min": 3000,
+        "optimal": 3200
       },
       "def": {
         "min": 650,
@@ -4565,12 +4565,12 @@
         "optimal": 0
       },
       "critRate": {
-        "min": 50,
-        "optimal": 60
+        "min": 20,
+        "optimal": 31
       },
       "critDmg": {
-        "min": 120,
-        "optimal": 160
+        "min": 150,
+        "optimal": 210
       },
       "anomalyProficiency": {
         "min": 0,
