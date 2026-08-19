@@ -21,6 +21,7 @@ import { DiscLoadout } from '../../models/disc-loadout.model';
 import { AgentService } from '../../services/agent.service';
 import { WEngineService } from '../../services/wengine.service';
 import { DiscService } from '../../services/disc.service';
+import { DbService } from '../../services/db.service';
 import { DiscSetService, DiscSet } from '../../services/disc-set.service';
 import { BuildService, AgentBuild } from '../../services/build.service';
 import { DiscLoadoutService } from '../../services/disc-loadout.service';
@@ -39,8 +40,8 @@ import {
   MAIN_STAT_BY_SLOT,
 } from '../../constants/main-stat-possibilities';
 import { OptimizerComponent } from '../optimizer/optimizer.component';
-import { EnkaApiService } from '../../services/enka-api.service';
-import { EnkaImportService } from '../../services/enka-import.service';
+import { EnkaApiService, EnkaImportResult } from '../../services/enka-api.service';
+import { EnkaImportService, ImportComparison } from '../../services/enka-import.service';
 import { UpgradePlanService } from '../../services/upgrade-plan.service';
 import { LoadingService } from '../../services/loading.service';
 import { NotificationService } from '../../services/notification.service';
@@ -298,6 +299,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
+    private dbService: DbService,
   ) {
     // Load mindscape data
     this.loadMindscapeData();
@@ -3582,8 +3584,9 @@ async generateShareImage() {
         comparison.newBuilds.length > 0 ||
         comparison.updatedBuilds.length > 0
       ) {
-        const summary =
-          this.enkaImportService.generateImportSummary(comparison);
+        const summary = this.buildImportSummaryMessage(comparison, enkaResult);
+
+        await this.handleUnknownAgents(enkaResult);
 
         this.showConfirmation(
           'Import from UID',
@@ -3617,7 +3620,8 @@ async generateShareImage() {
           'Cancel',
         );
       } else {
-        alert('All builds are already up to date!');
+        await this.handleUnknownAgents(enkaResult);
+        alert(this.buildNoChangesMessage(enkaResult));
       }
     } catch (error) {
       this.loadingService.hide();
@@ -3627,6 +3631,77 @@ async generateShareImage() {
           ? error.message
           : 'Failed to fetch data from provided UID'
       );
+    }
+  }
+
+  /**
+   * Build the message shown when an import produced no importable changes.
+   *
+   * "All builds are already up to date" is only true when we actually recognised
+   * every agent on the profile. If agents were dropped because they're missing
+   * from local game data, saying "up to date" hides the real problem - the user
+   * sees brand new agents in game and no explanation for why they never import.
+   */
+  private buildNoChangesMessage(enkaResult: EnkaImportResult): string {
+    const skipped = enkaResult.unknownAgentIds.length;
+
+    if (skipped === 0) {
+      return 'All builds are already up to date!';
+    }
+
+    return `No builds were imported. ${this.buildSkippedAgentNotice(skipped)}`;
+  }
+
+  /**
+   * Shared wording for agents dropped because local game data is out of date.
+   * Used both when nothing imported and when only some agents imported.
+   */
+  private buildSkippedAgentNotice(skipped: number): string {
+    const agentWord = skipped === 1 ? 'agent' : 'agents';
+    const verb = skipped === 1 ? 'was' : 'were';
+
+    return (
+      `${skipped} ${agentWord} on this profile ${verb} skipped because your ` +
+      `game data is out of date. Reload the page to update it, then import again.`
+    );
+  }
+
+  /**
+   * Import summary plus a warning about any agents that were skipped, so a
+   * partial import doesn't look like a complete one.
+   */
+  private buildImportSummaryMessage(
+    comparison: ImportComparison,
+    enkaResult: EnkaImportResult,
+  ): string {
+    const summary = this.enkaImportService.generateImportSummary(comparison);
+    const skipped = enkaResult.unknownAgentIds.length;
+
+    if (skipped === 0) {
+      return summary;
+    }
+
+    return `${summary}\n\nNote: ${this.buildSkippedAgentNotice(skipped)}`;
+  }
+
+  /**
+   * Flag reference data as stale so the next startup re-seeds it from assets.
+   * Recovers users whose local agent list predates a newly released agent.
+   */
+  private async handleUnknownAgents(enkaResult: EnkaImportResult): Promise<void> {
+    if (enkaResult.unknownAgentIds.length === 0) {
+      return;
+    }
+
+    console.warn(
+      `Enka import skipped ${enkaResult.unknownAgentIds.length} unknown agent(s):`,
+      enkaResult.unknownAgentIds,
+    );
+
+    try {
+      await this.dbService.invalidateReferenceData();
+    } catch (error) {
+      console.error('Failed to invalidate reference data:', error);
     }
   }
 
@@ -3695,8 +3770,9 @@ async generateShareImage() {
         comparison.newBuilds.length > 0 ||
         comparison.updatedBuilds.length > 0
       ) {
-        const summary =
-          this.enkaImportService.generateImportSummary(comparison);
+        const summary = this.buildImportSummaryMessage(comparison, enkaResult);
+
+        await this.handleUnknownAgents(enkaResult);
 
         // Close the Enka import modal before showing confirmation dialog
         this.closeEnkaImportModal();
@@ -3732,13 +3808,22 @@ async generateShareImage() {
           'Cancel',
         );
       } else {
-        this.enkaImportSuccess = 'All builds are already up to date!';
-        this.cdr.markForCheck();
+        await this.handleUnknownAgents(enkaResult);
 
-        // Close modal after 2 seconds
-        setTimeout(() => {
-          this.closeEnkaImportModal();
-        }, 2000);
+        // Stale game data is a problem the user needs to act on, so surface it
+        // as an error and leave the modal open rather than auto-dismissing it.
+        if (enkaResult.unknownAgentIds.length > 0) {
+          this.enkaImportError = this.buildNoChangesMessage(enkaResult);
+          this.cdr.markForCheck();
+        } else {
+          this.enkaImportSuccess = this.buildNoChangesMessage(enkaResult);
+          this.cdr.markForCheck();
+
+          // Close modal after 2 seconds
+          setTimeout(() => {
+            this.closeEnkaImportModal();
+          }, 2000);
+        }
       }
     } catch (error) {
       console.error('Enka API error:', error);

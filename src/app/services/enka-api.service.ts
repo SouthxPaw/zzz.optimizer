@@ -243,6 +243,7 @@ export class EnkaApiService {
   private async transformEnkaData(uid: string, data: EnkaResponse): Promise<EnkaImportResult> {
     const builds: EnkaBuildData[] = [];
     const discs: Disc[] = [];
+    const unknownAgentIds: string[] = [];
 
     const avatarList = data.PlayerInfo?.ShowcaseDetail?.AvatarList || [];
 
@@ -258,7 +259,11 @@ export class EnkaApiService {
       const agent = referenceAgents.find(a => a.id === agentId);
 
       if (!agent) {
+        // Agent is missing from local reference data - usually means the app's
+        // game data predates this agent's release. Track it so the caller can
+        // tell the user instead of silently reporting "everything up to date".
         console.warn(`Unknown agent ID from Enka: ${agentId}`);
+        unknownAgentIds.push(agentId);
         continue;
       }
 
@@ -320,6 +325,8 @@ export class EnkaApiService {
       playerLevel: playerInfo?.Level || 0,
       builds,
       totalDiscs: discs.length,
+      unknownAgentIds,
+      showcaseCount: avatarList.length,
       timestamp: new Date().toISOString()
     };
   }
@@ -479,6 +486,10 @@ export interface EnkaImportResult {
   playerLevel: number;
   builds: EnkaBuildData[];
   totalDiscs: number;
+  /** Agent IDs present on the profile but missing from local reference data. */
+  unknownAgentIds: string[];
+  /** Number of agents on the Enka showcase before any were filtered out. */
+  showcaseCount: number;
   timestamp: string;
 }
 
