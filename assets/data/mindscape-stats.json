@@ -504,6 +504,17 @@
           "name": "Child of Hatred"
         }
       ]
+    },
+    "1591": {
+      "comment": "Sigrid",
+      "1": [
+        {
+          "type": "ATK%",
+          "value": 25,
+          "format": "%",
+          "note": ""
+        }
+      ]
     }
   }
 }
