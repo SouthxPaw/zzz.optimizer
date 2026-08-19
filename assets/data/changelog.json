@@ -1,6 +1,17 @@
 {
   "versions": [
     {
+      "version": "6.5.62",
+      "date": "2026-08-19",
+      "features": [],
+      "fixes": [
+        "Fixed UID import saying \"All builds are already up to date\" when newly released agents were actually being skipped",
+        "Newly released agents are no longer silently ignored during UID import when your game data is out of date",
+        "UID import now tells you when agents were skipped, and refreshes your game data automatically so they import after a page reload"
+      ],
+      "improvements": []
+    },
+    {
       "version": "6.5.59",
       "date": "2026-08-16",
       "features": [],
