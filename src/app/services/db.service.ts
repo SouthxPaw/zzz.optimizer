@@ -262,6 +262,19 @@ export class DbService extends Dexie {
     return false;
   }
 
+  /**
+   * Force the next startup to re-seed reference data from assets.
+   *
+   * The version gate above only fires when the app version changes, so game data
+   * that drifts within a single release (a new agent added to agents.json, or a
+   * service worker that served a stale copy during the last reseed) stays stale
+   * indefinitely. Callers that detect such drift - e.g. an Enka import returning
+   * agent IDs we don't recognise - use this to recover on the next reload.
+   */
+  async invalidateReferenceData(): Promise<void> {
+    await this.metadata.delete('dataVersion');
+  }
+
   // Share customization operations
   async getShareCustomization(agentId: string): Promise<ShareCustomization | undefined> {
     return await this.shareCustomizations.get(agentId);
