@@ -4495,5 +4495,58 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14159": {
+    "Id": 14155,
+    "CodeName": "Weapon_S_1591",
+    "Name": "Knight's Extolment",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1591.png",
+    "WeaponType": {
+      "1": "Attack"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "CRIT DMG",
+      "Name2": "CRIT DMG",
+      "Format": "{0:0.#%}",
+      "Value": 4800
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT DMG",
+          "Name2": "CRIT DMG",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 6400,
+            "W2": 7360,
+            "W3": 8320,
+            "W4": 9280,
+            "W5": 10240
+          }
+        }
+      ],
+      "Desc": "When the equipper lands a Heavy Strike using [Basic Attack] or [EX Special Attack], they gain 1 stack of [Vanguard]. [Vanguard] stacks up to 2 times, with each skill type providing at most 1 stack. Each stack increases CRIT DMG by %, lasting 25s; Using the above skills refreshes [Vanguard] duration; When at 2 stacks of [Vanguard], gain [Bone-Piercing]: ignore % of the target's ICE Res. "
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMGBonus",
+          "value": "6400",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
