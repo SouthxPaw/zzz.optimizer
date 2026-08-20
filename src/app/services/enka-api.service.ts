@@ -183,9 +183,12 @@ export class EnkaApiService {
    * Uses Cloudflare Worker if configured, otherwise uses CORS proxy fallback
    */
   private buildRequestUrl(uid: string): string {
-    // If Cloudflare Worker is configured, use it
+    // If Cloudflare Worker is configured, use it.
+    // fresh=1 bypasses the worker's 5 minute cache - imports are always user
+    // initiated, and serving a stale profile makes the app report that builds
+    // are up to date when the user just changed their gear in game.
     if (this.CLOUDFLARE_WORKER) {
-      return `${this.CLOUDFLARE_WORKER}?uid=${uid}`;
+      return `${this.CLOUDFLARE_WORKER}?uid=${uid}&fresh=1`;
     }
 
     // Otherwise, use fallback CORS proxy

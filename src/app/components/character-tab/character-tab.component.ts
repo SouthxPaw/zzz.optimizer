@@ -3547,6 +3547,19 @@ async generateShareImage() {
    * sees brand new agents in game and no explanation for why they never import.
    */
   private buildNoChangesMessage(enkaResult: EnkaImportResult): string {
+    // An empty showcase is the most common reason an import finds nothing. The
+    // profile loads fine, so this is not an error - the agents simply were not
+    // published in game. Saying "up to date" here sends the user looking for a
+    // bug in the app instead of at their in-game showcase settings.
+    if (enkaResult.showcaseCount === 0) {
+      return (
+        'No agents found in your in-game Character Showcase, so there was ' +
+        'nothing to import. In ZZZ, open your profile, add the agents you ' +
+        'want to import to your showcase, and make sure "Show Character ' +
+        'Details" is enabled. Then wait a few minutes and try again.'
+      );
+    }
+
     const skipped = enkaResult.unknownAgentIds.length;
 
     if (skipped === 0) {
@@ -3714,9 +3727,13 @@ async generateShareImage() {
       } else {
         await this.handleUnknownAgents(enkaResult);
 
-        // Stale game data is a problem the user needs to act on, so surface it
-        // as an error and leave the modal open rather than auto-dismissing it.
-        if (enkaResult.unknownAgentIds.length > 0) {
+        // An empty showcase or stale game data are both problems the user needs
+        // to act on, so surface them as errors and leave the modal open rather
+        // than auto-dismissing. Only a genuine "nothing changed" is a success.
+        if (
+          enkaResult.showcaseCount === 0 ||
+          enkaResult.unknownAgentIds.length > 0
+        ) {
           this.enkaImportError = this.buildNoChangesMessage(enkaResult);
           this.cdr.markForCheck();
         } else {
