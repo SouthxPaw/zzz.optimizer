@@ -223,18 +223,22 @@ export class EnkaImportService {
       return true;
     }
 
-    // Check each slot
-    for (const slot of existingDiscSlots) {
+    // Check every slot present on either side. Iterating only the existing
+    // slots would miss a disc equipped into a previously empty slot whenever
+    // the slot counts happen to match.
+    const allSlots = new Set([...existingDiscSlots, ...incomingDiscSlots]);
+
+    for (const slot of allSlots) {
       const existingDisc = existing.equippedDiscs[slot];
       const incomingDisc = incoming.discs[slot as keyof typeof incoming.discs];
 
-      // Slot missing in incoming
-      if (!incomingDisc) {
+      // Slot filled on one side only
+      if (!existingDisc || !incomingDisc) {
         return true;
       }
 
       // Compare disc properties
-      if (!existingDisc || this.hasDiscPropertyChanges(existingDisc, incomingDisc)) {
+      if (this.hasDiscPropertyChanges(existingDisc, incomingDisc)) {
         return true;
       }
     }
@@ -271,22 +275,36 @@ export class EnkaImportService {
       return true;
     }
 
-    // Compare substats
-    for (let i = 0; i < existing.subStats.length; i++) {
-      const existingSub = existing.subStats[i];
+    // Compare substats. Matching is by type rather than position because the
+    // order Enka returns substats in is not guaranteed to be stable.
+    for (const existingSub of existing.subStats) {
       const incomingSub = incoming.subStats.find(s => s.type === existingSub.type);
 
       if (!incomingSub) {
         return true; // Substat type missing
       }
 
+      // Rolls are the clearest signal that a disc was upgraded, so check them
+      // before value. Value is derived from rolls, so a roll change usually
+      // moves the value too - but not always (see convertSubstatValue
+      // rounding), and relying on that coupling would silently miss upgrades.
+      if (existingSub.rolls !== incomingSub.rolls) {
+        return true;
+      }
+
       // Check if value changed significantly (allow small tolerance)
       if (Math.abs(existingSub.value - incomingSub.value) > 0.1) {
         return true;
       }
+    }
 
-      // Check if rolls changed
-      if (existingSub.rolls !== incomingSub.rolls) {
+    // Check the reverse direction too. The length guard above does not catch a
+    // substat being *replaced* by a different type (4 vs 4 still matches), and
+    // the loop above only asks whether each existing type exists in incoming.
+    // A newly rolled substat type is exactly the "they upgraded this" case we
+    // want to detect, so look for incoming types absent from existing.
+    for (const incomingSub of incoming.subStats) {
+      if (!existing.subStats.some(s => s.type === incomingSub.type)) {
         return true;
       }
     }

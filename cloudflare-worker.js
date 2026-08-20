@@ -28,6 +28,11 @@ export default {
     const url = new URL(request.url);
     const uid = url.searchParams.get('uid');
 
+    // Callers can opt out of caching with ?fresh=1. A user who just changed
+    // gear in game and imports immediately would otherwise get a cached
+    // pre-change response and be told their builds are already up to date.
+    const wantsFresh = url.searchParams.get('fresh') === '1';
+
     // Validate UID parameter
     if (!uid) {
       return new Response(
@@ -62,11 +67,13 @@ export default {
 
       console.log(`Proxying request to: ${enkaUrl}`);
 
-      // Fetch from Enka API
+      // Fetch from Enka API. On a fresh request also bypass Cloudflare's own
+      // edge cache, otherwise the worker can still be served a stored copy.
       const enkaResponse = await fetch(enkaUrl, {
         headers: {
           'User-Agent': 'ZZZ-Optimizer-Cloudflare-Worker/1.0'
-        }
+        },
+        ...(wantsFresh ? { cf: { cacheTtl: 0, cacheEverything: false } } : {})
       });
 
       // Get the response data
@@ -78,9 +85,12 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           ...corsHeaders(),
-          // Cache for 5 minutes (300 seconds) to reduce API calls
-          // Adjust if you need fresher data or want to cache longer
-          'Cache-Control': 'public, max-age=300, s-maxage=300'
+          // Cache for 5 minutes (300 seconds) to reduce API calls.
+          // ?fresh=1 skips the cache so a manual import always sees current
+          // data. Enka applies its own TTL on top of this either way.
+          'Cache-Control': wantsFresh
+            ? 'no-store, max-age=0'
+            : 'public, max-age=300, s-maxage=300'
         }
       });
 
