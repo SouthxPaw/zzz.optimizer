@@ -1,13 +1,15 @@
 {
   "versions": [
     {
-      "version": "6.5.62",
+      "version": "6.5.64",
       "date": "2026-08-19",
       "features": [],
       "fixes": [
+        "UID import now tells you when your in-game Character Showcase is empty, instead of saying all builds are up to date",
         "Fixed UID import saying \"All builds are already up to date\" when newly released agents were actually being skipped",
         "Newly released agents are no longer silently ignored during UID import when your game data is out of date",
-        "UID import now tells you when agents were skipped, and refreshes your game data automatically so they import after a page reload"
+        "UID import now tells you when agents were skipped, and refreshes your game data automatically so they import after a page reload",
+        "Fixed disc changes not always being detected on re-import, including substat reroll changes and discs moved between slots"
       ],
       "improvements": []
     },
