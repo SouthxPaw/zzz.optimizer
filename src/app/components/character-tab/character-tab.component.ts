@@ -823,6 +823,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       Support: 'assets/data/images/roles/IconSupport.webp',
       Defense: 'assets/data/images/roles/IconDefense.webp',
       Rupture: 'assets/data/images/roles/IconRupture.webp',
+      Armorer: 'assets/data/images/roles/IconArmorer.webp',
     };
     return (
       specialtyMap[specialty] || 'assets/data/images/roles/IconAttackType.webp'
@@ -3811,6 +3812,17 @@ async generateShareImage() {
     return agent?.specialty === 'Rupture';
   }
 
+  /**
+   * Armorer agents show Sharpness (which auto-accumulates) in place of Energy Regen.
+   */
+  isArmorerAgent(): boolean {
+    if (!this.selectedBuild) return false;
+    const agent = this.referenceAgents.find(
+      (a) => a.id === this.selectedBuild!.agentId,
+    );
+    return agent?.specialty === 'Armorer';
+  }
+
   getMainStats(): Array<{ iconName: string; label: string; value: string }> {
     if (!this.selectedBuild) return [];
 
@@ -3833,9 +3845,11 @@ async generateShareImage() {
         value: String(stats.anomalyProficiency),
       },
       { iconName: 'PEN_Ratio', label: 'PEN%', value: `${stats.penRatio}%` },
-      // Conditionally show Sheer Force (Rupture) or Energy Regen (others)
+      // Conditionally show Sheer Force (Rupture), Sharpness (Armorer), or Energy Regen (others)
       ...(this.isRuptureAgent()
         ? [{ iconName: 'Sheer_Force', label: 'SF', value: String(stats.sheerForce || 0) }]
+        : this.isArmorerAgent()
+        ? [{ iconName: 'Energy_Regen', label: 'Sharp', value: String(stats.energyRegen) }]
         : [{ iconName: 'Energy_Regen', label: 'ER', value: `${stats.energyRegen}%` }])
     ];
   }

@@ -1,6 +1,6 @@
 // models/agent.model.ts
 export type Element = 'Physical' | 'Fire' | 'Ice' | 'Electric' | 'Wind' | 'Ether' | 'Lumen';
-export type Specialty = 'Attack' | 'Stun' | 'Support' | 'Defense' | 'Anomaly' | 'Rupture';
+export type Specialty = 'Attack' | 'Stun' | 'Support' | 'Defense' | 'Anomaly' | 'Rupture' | 'Armorer';
 export type DiscSlot = 'Drive1' | 'Drive2' | 'Drive3' | 'Drive4' | 'Drive5' | 'Drive6';
 
 export interface BaseStats {
@@ -93,7 +93,7 @@ export interface WEngine {
   id: string;
   name: string;
   rarity: 'S' | 'A' | 'B';
-  specialty: 'Attack' | 'Stun' | 'Anomaly' | 'Support' | 'Defense' | 'Rupture';
+  specialty: 'Attack' | 'Stun' | 'Anomaly' | 'Support' | 'Defense' | 'Rupture' | 'Armorer';
   baseAtk: number;
   subStat: {
     type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency' | 'Anomaly_Mastery' | 'Sheer_Force' | 'Sheer Force';

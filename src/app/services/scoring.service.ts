@@ -21,6 +21,7 @@ import {
   estimateDamage,
   calculateStatusDamage,
   calculateSheerForce,
+  calculateSharpDamage,
   calculateDazeContribution,
   calculateAnomalyBuildup,
 } from '../constants/damage-formulas';
@@ -969,6 +970,7 @@ export class ScoringService {
    * @param agentScoring - Agent's scoring buffs/debuffs from agents.json
    * @param wengineScoring - W-Engine's scoring buffs/debuffs from wengines.json
    * @param HP - Character's HP (needed for Rupture Sheer Force calculation)
+   * @param DEF - Character's DEF (needed for Armorer Sharp DMG calculation)
    * @param impact - Character's Impact stat (needed for Stun daze calculation)
    * @returns Damage estimation object
    */
@@ -976,6 +978,7 @@ export class ScoringService {
     stats: {
       ATK: number;
       HP?: number;
+      DEF?: number;
       critRate: number;
       critDMG: number;
       penRatio?: number;
@@ -996,6 +999,7 @@ export class ScoringService {
     directDamage: number;
     statusDamage?: number;
     sheerForceDamage?: number;
+    sharpDamage?: number;
     dazeContribution?: number;
     totalDamage: number;
     damageType: string;
@@ -1017,6 +1021,7 @@ export class ScoringService {
     let damageTaken = 0;
     let stunDMGMult = 0;
     let dazeBonus = 0;
+    let lacerationBonus = 0;
 
     // Combine agent and w-engine scoring
     const allScoringData = [agentScoring, wengineScoring].filter(Boolean);
@@ -1037,6 +1042,12 @@ export class ScoringService {
             case 'SheerForceBonus':
               if (agentRole === 'Rupture') {
                 dmgBonuses.push(value);
+              }
+              break;
+            case 'LacerationBonus':
+              // Armorer-only: raises the Laceration multiplier rather than DMG%
+              if (agentRole === 'Armorer') {
+                lacerationBonus += value;
               }
               break;
             case 'ATKBonus':
@@ -1082,6 +1093,7 @@ export class ScoringService {
     let weightedDirectDamage = 0;
     let weightedStatusDamage = 0;
     let weightedSheerForceDamage = 0;
+    let weightedSharpDamage = 0;
     let weightedDazeContribution = 0;
     let damageType = 'direct';
 
@@ -1091,10 +1103,30 @@ export class ScoringService {
       let directDamage = 0;
       let statusDamage = 0;
       let sheerForceDamage = 0;
+      let sharpDamage = 0;
       let dazeContribution = 0;
 
       // Role-specific damage calculations
       switch (agentRole) {
+        case 'Armorer':
+          // Armorer agents deal Sharp DMG, which scales off DEF instead of ATK
+          // and uses Laceration in place of CRIT DMG.
+          damageType = 'sharp';
+          sharpDamage = calculateSharpDamage(
+            stats.DEF || 0,
+            skillMultiplier,
+            stats.critRate / 100,
+            dmgBonuses,
+            defShred,
+            (stats.penRatio || 0) / 100,
+            stats.flatPEN || 0,
+            lacerationBonus,
+            enemy.def,
+            enemy.res,
+            resShred
+          );
+          break;
+
         case 'Rupture':
           // Rupture agents use Sheer Force - ignores DEF entirely
           // Formula: (ATK × 0.30) + (HP × 0.10)
@@ -1247,18 +1279,22 @@ export class ScoringService {
         directDamage *= (1 + damageTaken);
         if (statusDamage > 0) statusDamage *= (1 + damageTaken);
         if (sheerForceDamage > 0) sheerForceDamage *= (1 + damageTaken);
+        if (sharpDamage > 0) sharpDamage *= (1 + damageTaken);
       }
 
       // Accumulate weighted damage
       weightedDirectDamage += directDamage * weight;
       weightedStatusDamage += statusDamage * weight;
       weightedSheerForceDamage += sheerForceDamage * weight;
+      weightedSharpDamage += sharpDamage * weight;
       weightedDazeContribution += dazeContribution * weight;
     }
 
     // Calculate total damage based on damage type
     let totalDamage = 0;
-    if (weightedSheerForceDamage > 0) {
+    if (weightedSharpDamage > 0) {
+      totalDamage = weightedSharpDamage;
+    } else if (weightedSheerForceDamage > 0) {
       totalDamage = weightedSheerForceDamage;
     } else if (weightedDazeContribution > 0) {
       // For Stun, use direct damage but also track daze
@@ -1271,6 +1307,7 @@ export class ScoringService {
       directDamage: Math.round(weightedDirectDamage),
       statusDamage: weightedStatusDamage > 0 ? Math.round(weightedStatusDamage) : undefined,
       sheerForceDamage: weightedSheerForceDamage > 0 ? Math.round(weightedSheerForceDamage) : undefined,
+      sharpDamage: weightedSharpDamage > 0 ? Math.round(weightedSharpDamage) : undefined,
       dazeContribution: weightedDazeContribution > 0 ? Math.round(weightedDazeContribution * 100) / 100 : undefined,
       totalDamage: Math.round(totalDamage),
       damageType: damageType,
@@ -1300,6 +1337,9 @@ export class ScoringService {
       Stun: 30000,      // Moderate direct damage
       Support: 15000,   // Lower expected damage (they contribute buffs instead)
       Defense: 20000,   // Low-moderate damage
+      Armorer: 28000,   // PROVISIONAL: Sharp DMG scales off DEF, a much smaller stat pool
+                        // than ATK, so a built Armorer lands around 55% of an Attack
+                        // agent's output. Recalibrate against real numbers on release.
     };
 
     // For Stun agents, also factor in Daze contribution
@@ -1951,6 +1991,7 @@ export class ScoringService {
         {
           ATK: weightedStats.atk,
           HP: weightedStats.hp,
+          DEF: weightedStats.def,
           critRate: weightedStats.critRate,
           critDMG: weightedStats.critDmg,
           penRatio: weightedStats.penRatio,

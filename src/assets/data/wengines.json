@@ -4548,5 +4548,58 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14161": {
+    "Id": 14155,
+    "CodeName": "Weapon_S_1611",
+    "Name": "Crimson Craving",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1611.png",
+    "WeaponType": {
+      "7": "Armorer"
+    },
+    "BaseProperty": {
+      "Name": "Base DEF",
+      "Name2": "Base DEF",
+      "Format": "{0:0.#}",
+      "Value": 431
+    },
+    "RandProperty": {
+      "Name": "DEF%",
+      "Name2": "DEF%",
+      "Format": "{0:0.#%}",
+      "Value": 4800
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2500,
+            "W2": 2750,
+            "W3": 3000,
+            "W4": 3250,
+            "W5": 3500
+          }
+        }
+      ],
+      "Desc": "The equipper's CRIT Rate increases by %; Electric DMG increases by %; when the equipper launches an [EX Special Attack] or triggers [Maim], the Electric Sharp DMG dealt increases by %, lasting 40s. Repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "2500",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }

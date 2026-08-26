@@ -422,6 +422,7 @@
                   <option value="Support">Support</option>
                   <option value="Defense">Defense</option>
                   <option value="Rupture">Rupture</option>
+                  <option value="Armorer">Armorer</option>
                 </select>
               </div>
               <div class="filter-group">
@@ -641,9 +642,16 @@
                 >{{ selectedBuild.calculatedStats.critDmg }}%</span
               >
             </div>
-            <!-- Energy Regen for non-Rupture agents -->
-            <div class="stat-row" *ngIf="!isRuptureAgent()">
+            <!-- Energy Regen for non-Rupture, non-Armorer agents -->
+            <div class="stat-row" *ngIf="!isRuptureAgent() && !isArmorerAgent()">
               <span class="stat-label">Energy Regen:</span>
+              <span class="stat-value"
+                >{{ selectedBuild.calculatedStats.energyRegen }}</span
+              >
+            </div>
+            <!-- Sharpness for Armorer agents (auto-accumulates) -->
+            <div class="stat-row" *ngIf="isArmorerAgent()">
+              <span class="stat-label">Sharpness Auto-Accumulates:</span>
               <span class="stat-value"
                 >{{ selectedBuild.calculatedStats.energyRegen }}</span
               >
@@ -978,6 +986,7 @@
               <option value="Support">Support</option>
               <option value="Defense">Defense</option>
               <option value="Rupture">Rupture</option>
+              <option value="Armorer">Armorer</option>
             </select>
           </div>
           <div class="filter-group">
@@ -2226,9 +2235,14 @@
                   <span class="stat-label">Anomaly Proficiency:</span>
                   <span class="stat-value">{{ loadoutPreviewStats.anomalyProficiency | number:'1.0-0' }}</span>
                 </div>
-                <!-- Energy Regen for non-Rupture agents -->
-                <div class="stat-row" *ngIf="!isRuptureAgent()">
+                <!-- Energy Regen for non-Rupture, non-Armorer agents -->
+                <div class="stat-row" *ngIf="!isRuptureAgent() && !isArmorerAgent()">
                   <span class="stat-label">Energy Regen:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.energyRegen }}</span>
+                </div>
+                <!-- Sharpness for Armorer agents (auto-accumulates) -->
+                <div class="stat-row" *ngIf="isArmorerAgent()">
+                  <span class="stat-label">Sharpness Auto-Accumulates:</span>
                   <span class="stat-value">{{ loadoutPreviewStats.energyRegen }}</span>
                 </div>
                 <!-- Sheer Force for Rupture agents -->
