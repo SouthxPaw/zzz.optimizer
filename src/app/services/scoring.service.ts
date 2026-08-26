@@ -969,6 +969,8 @@ export class ScoringService {
    * @param elementalDMGBonus - Elemental DMG% from discs/buffs
    * @param agentScoring - Agent's scoring buffs/debuffs from agents.json
    * @param wengineScoring - W-Engine's scoring buffs/debuffs from wengines.json
+   * @param wEngineRefinement - Equipped W-Engine refinement (1-5), used to resolve
+   *                            conditionals whose ratio/cap scale with Overclock
    * @param HP - Character's HP (needed for Rupture Sheer Force calculation)
    * @param DEF - Character's DEF (needed for Armorer Sharp DMG calculation)
    * @param impact - Character's Impact stat (needed for Stun daze calculation)
@@ -994,7 +996,8 @@ export class ScoringService {
     agentElement: string,
     elementalDMGBonus: number = 0,
     agentScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number },
-    wengineScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number }
+    wengineScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number },
+    wEngineRefinement?: number
   ): {
     directDamage: number;
     statusDamage?: number;
@@ -1023,10 +1026,14 @@ export class ScoringService {
     let dazeBonus = 0;
     let lacerationBonus = 0;
 
-    // Combine agent and w-engine scoring
-    const allScoringData = [agentScoring, wengineScoring].filter(Boolean);
+    // Combine agent and w-engine scoring, tracking the source so that W-Engine
+    // conditionals can be resolved at the equipped refinement level
+    const allScoringData: Array<{ scoring: any; isWEngine: boolean }> = [
+      { scoring: agentScoring, isWEngine: false },
+      { scoring: wengineScoring, isWEngine: true },
+    ].filter((entry) => Boolean(entry.scoring));
 
-    allScoringData.forEach((scoring) => {
+    allScoringData.forEach(({ scoring, isWEngine: isWEngineBuff }) => {
       if (!scoring) return;
 
       // Apply buffs (DMG bonuses, stat bonuses, etc.)
@@ -1037,7 +1044,30 @@ export class ScoringService {
           switch (buff.type) {
             case 'DMGBonus':
             case 'ElementDMG':
-              dmgBonuses.push(value);
+              // A DMG% buff may be conditional on a stat threshold rather than
+              // flat (e.g. Bloodmarrow Coffer: every 1% CRIT Rate above 100%
+              // grants DMG%, up to a cap). Unlike the conditional buffs handled
+              // in stat-calculator.service.ts, this one multiplies final damage
+              // rather than feeding a stat field, so it is resolved here.
+              if (buff.condition) {
+                // W-Engine conditionals may scale with Overclock; agent conditionals
+                // never do, so isWEngineBuff gates which refinement applies.
+                const { ratio, cap } = this.resolveConditionScaling(
+                  buff.condition,
+                  isWEngineBuff ? wEngineRefinement : undefined
+                );
+                const sourceStat = this.getConditionSourceStat(stats, buff.condition.sourceStat);
+                const excess = Math.max(0, sourceStat - (buff.condition.threshold ?? 0));
+                let conditionalValue = excess * ratio;
+                if (cap !== undefined) {
+                  conditionalValue = Math.min(conditionalValue, cap);
+                }
+                if (conditionalValue > 0) {
+                  dmgBonuses.push(conditionalValue / 100);
+                }
+              } else {
+                dmgBonuses.push(value);
+              }
               break;
             case 'SheerForceBonus':
               if (agentRole === 'Rupture') {
@@ -1312,6 +1342,59 @@ export class ScoringService {
       totalDamage: Math.round(totalDamage),
       damageType: damageType,
     };
+  }
+
+  /**
+   * Resolve a conditional buff's ratio and cap at a given W-Engine refinement.
+   *
+   * Most conditionals are flat: their ratio/cap do not change with Overclock, so
+   * the values on the condition itself are used. Where a condition carries an
+   * Overclock map (e.g. Bloodmarrow Coffer, whose per-1% DMG and cap both scale),
+   * the entry for the equipped refinement wins.
+   *
+   * Falls back to the flat ratio/cap - which hold the W5 values - whenever the
+   * refinement is unknown or absent from the map, preserving previous behaviour.
+   */
+  private resolveConditionScaling(
+    condition: { ratio?: number; cap?: number; Overclock?: { [rank: string]: { ratio?: number; cap?: number } } },
+    refinement?: number
+  ): { ratio: number; cap?: number } {
+    let ratio = condition.ratio ?? 0;
+    let cap = condition.cap;
+
+    if (condition.Overclock && refinement !== undefined) {
+      const rank = condition.Overclock[`W${refinement}`];
+      if (rank) {
+        if (rank.ratio !== undefined) ratio = rank.ratio;
+        if (rank.cap !== undefined) cap = rank.cap;
+      }
+    }
+
+    return { ratio, cap };
+  }
+
+  /**
+   * Resolve a conditional buff's source stat from the damage-estimation stats object.
+   * Values are in whole-number percent where applicable (e.g. critRate 120 = 120%),
+   * matching how thresholds/ratios are expressed in the JSON data.
+   */
+  private getConditionSourceStat(
+    stats: { ATK: number; HP?: number; DEF?: number; critRate: number; critDMG: number;
+             penRatio?: number; anomalyProficiency?: number; anomalyMastery?: number; impact?: number },
+    sourceStat: string
+  ): number {
+    switch (sourceStat) {
+      case 'critRate': return stats.critRate;
+      case 'critDmg': return stats.critDMG;
+      case 'atk': return stats.ATK;
+      case 'hp': return stats.HP || 0;
+      case 'def': return stats.DEF || 0;
+      case 'penRatio': return stats.penRatio || 0;
+      case 'anomalyProficiency': return stats.anomalyProficiency || 0;
+      case 'anomalyMastery': return stats.anomalyMastery || 0;
+      case 'impact': return stats.impact || 0;
+      default: return 0;
+    }
   }
 
   /**
@@ -1892,7 +1975,7 @@ export class ScoringService {
     stats: BaseStats,
     equippedDiscs: Disc[],
     wEngine?: WEngine,
-    _wEngineRefinement?: number,
+    wEngineRefinement?: number,
     mindscapeLevel: number = 0,
     agentName?: string,
     agentRole?: string,
@@ -2007,7 +2090,8 @@ export class ScoringService {
         agentElement,
         elementalDMGBonus,
         agentScoring,
-        wengineScoring
+        wengineScoring,
+        wEngineRefinement
       );
 
       // Normalize damage to 0-100 score

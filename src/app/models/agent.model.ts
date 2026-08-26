@@ -57,8 +57,16 @@ export interface AgentBuff {
   condition?: {
     sourceStat: string;      // Source stat to read (e.g., 'anomalyMastery')
     threshold: number;       // Minimum value before conversion starts
-    ratio: number;           // Conversion ratio (e.g., 1.0 for 1:1)
-    cap?: number;            // Maximum value the bonus can provide
+    ratio: number;           // Conversion ratio (e.g., 1.0 for 1:1) - W5 / default
+    cap?: number;            // Maximum value the bonus can provide - W5 / default
+    // Optional per-refinement values for W-Engine conditionals whose ratio and/or
+    // cap scale with Overclock (e.g. Bloodmarrow Coffer). When present and the
+    // equipped refinement is known, these override the flat ratio/cap above.
+    // The top-level ratio/cap remain the W5 fallback for callers that do not
+    // supply a refinement.
+    Overclock?: {
+      [rank: string]: { ratio?: number; cap?: number };
+    };
   };
 }
 

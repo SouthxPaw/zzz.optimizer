@@ -4497,7 +4497,7 @@
     }
   },
   "14159": {
-    "Id": 14155,
+    "Id": 14159,
     "CodeName": "Weapon_S_1591",
     "Name": "Knight's Extolment",
     "Desc": "",
@@ -4550,7 +4550,7 @@
     }
   },
   "14161": {
-    "Id": 14155,
+    "Id": 14161,
     "CodeName": "Weapon_S_1611",
     "Name": "Crimson Craving",
     "Desc": "",
@@ -4568,8 +4568,8 @@
       "Value": 431
     },
     "RandProperty": {
-      "Name": "DEF%",
-      "Name2": "DEF%",
+      "Name": "DEF",
+      "Name2": "DEF",
       "Format": "{0:0.#%}",
       "Value": 4800
     },
@@ -4594,8 +4594,114 @@
       "buffs": [
         {
           "type": "CRITRateBonus",
-          "value": "2500",
+          "value": "25",
           "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
+  },
+  "13017": {
+    "Id": 13017,
+    "CodeName": "Weapon_A_Common_17",
+    "Name": "Catty Luck",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_17.png",
+    "WeaponType": {
+      "7": "Armorer"
+    },
+    "BaseProperty": {
+      "Name": "Base DEF",
+      "Name2": "Base DEF",
+      "Format": "{0:0.#}",
+      "Value": 356
+    },
+    "RandProperty": {
+      "Name": "DEF",
+      "Name2": "DEF",
+      "Format": "{0:0.#%}",
+      "Value": 4000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "DEF",
+          "Name2": "DEF",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1600,
+            "W2": 1800,
+            "W3": 2000,
+            "W4": 2200,
+            "W5": 2400
+          }
+        }
+      ],
+      "Desc": "DEF increases by %; when casting [EX Special Attack], DEF additionally increases by % for 40 sec; repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "DEFBonus",
+          "value": "24",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
+  },
+  "13021": {
+    "Id": 13021,
+    "CodeName": "Weapon_A_Common_21",
+    "Name": "Bloodmarrow Coffer",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_21.png",
+    "WeaponType": {
+      "7": "Armorer"
+    },
+    "BaseProperty": {
+      "Name": "Base DEF",
+      "Name2": "Base DEF",
+      "Format": "{0:0.#}",
+      "Value": 356
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When the equipper's CRIT Rate exceeds 100%, every 1% of CRIT Rate above that increases DMG dealt by the equipper by %, up to a max increase of %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "DMGBonus",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "critRate",
+            "threshold": 100,
+            "ratio": 0.8,
+            "cap": 40,
+            "Overclock": {
+              "W1": { "ratio": 0.48, "cap": 24 },
+              "W2": { "ratio": 0.56, "cap": 28 },
+              "W3": { "ratio": 0.64, "cap": 32 },
+              "W4": { "ratio": 0.72, "cap": 36 },
+              "W5": { "ratio": 0.8, "cap": 40 }
+            }
+          }
         }
       ],
       "debuffs": [],
