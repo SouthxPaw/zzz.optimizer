@@ -84578,5 +84578,61 @@
     },
     "potentials": [],
     "Icon": "Claret"
+  },
+  {
+    "id": 1621,
+    "name": "Roxy",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "energyRegen",
+            "threshold": 1.2,
+            "ratio": 500,
+            "cap": 960
+          }
+        },
+        {
+          "type": "ImpactBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "energyRegen",
+            "threshold": 1.2,
+            "ratio": 40,
+            "cap": 76.8
+          }
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 203,
+      "name": "Electric"
+    },
+    "specialty": {
+      "id": 7,
+      "name": "Armorer"
+    },
+    "lvl60_stats": {
+      "HpMax": 8418,
+      "Defence": 641,
+      "Attack": 741,
+      "Crit": 1940,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 100,
+      "ElementAbnormalPower": 110,
+      "ElementMystery": 63,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "Roxy"
   }
 ]

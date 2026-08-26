@@ -4601,5 +4601,58 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14162": {
+    "Id": 14162,
+    "CodeName": "Weapon_S_1621",
+    "Name": "Crimson Craving",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1611.png",
+    "WeaponType": {
+      "7": "Armorer"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 6000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2400,
+            "W2": 2600,
+            "W3": 2800,
+            "W4": 3000,
+            "W5": 3200
+          }
+        }
+      ],
+      "Desc": "Increases the equipper's CRIT Rate by %. DMG dealt ignores % of the target's Wind Attribute RES. When the equipper launches an [EX Special Attack] that deals Wind DMG, the Daze inflicted is increased by %, and DMG dealt by all other characters in the squad is increased by %, lasting 50s. Repeated triggers reset the duration. The DMG increase effect is unique across the whole squad."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "2400",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
