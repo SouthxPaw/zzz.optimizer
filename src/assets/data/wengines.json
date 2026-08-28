@@ -4707,5 +4707,45 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "12016": {
+    "Id": 12016,
+    "CodeName": "Weapon_B_Common_16",
+    "Name": "[Lunar] Semiluna",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_16.png",
+    "WeaponType": {
+      "7": "Armorer"
+    },
+    "BaseProperty": {
+      "Name": "Base DEF",
+      "Name2": "Base DEF",
+      "Format": "{0:0.#}",
+      "Value": 282
+    },
+    "RandProperty": {
+      "Name": "DEF",
+      "Name2": "DEF",
+      "Format": "{0:0.#%}",
+      "Value": 3200
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When an [EX Special Attack] is activated, [Basic Attack] DMG increases by % for 10s; repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "DMGBonus",
+          "value": "30",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
