@@ -437,7 +437,10 @@
 .build-name{font-size:.95em;padding:0 5px}
 .agent-name{font-size:.9em}
 .build-info{background:#101010;padding:10px;display:flex;flex-direction:row;align-items:center;gap:8px;flex:1;min-width:0;box-sizing:border-box}
-.drag-handle-icon{display:flex;align-items:center;justify-content:center;cursor:grab;color:var(--gold);font-size:1.2em;padding:0 8px;opacity:.7;transition:opacity .2s;user-select:none}
+/* touch-action:none only on the grip itself - when cdkDragHandle was on the
+   whole card, touch-dragging anywhere over a card reordered instead of
+   scrolling the list */
+.drag-handle-icon{display:flex;align-items:center;justify-content:center;cursor:grab;color:var(--gold);font-size:1.2em;padding:0 8px;opacity:.7;transition:opacity .2s;user-select:none;touch-action:none}
 .drag-handle-icon:hover{opacity:1}
 .build-info:active .drag-handle-icon{cursor:grabbing}
 .info-content{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
@@ -786,10 +789,13 @@
   .delete-btn{width:18px!important;height:18px!important;padding:0!important;border-radius:2px!important;border-width:0.5px!important;box-shadow:0 1px 2px rgba(0,0,0,.5)!important}
   /* Mobile: Position build card delete button */
   .builds-grid .build-card .delete-btn{top:2px;right:82px}
-  /* Mobile: Performance optimizations */
-  .builds-grid{will-change:scroll-position;-webkit-overflow-scrolling:touch}
-  .build-card,.agent-card{will-change:transform;transform:translateZ(0)}
-  .disc-slot,.wengine-details{will-change:transform;transform:translateZ(0)}
+  /* Mobile: Performance optimizations.
+     will-change/translateZ(0) are deliberately NOT applied per-card here. They
+     promote every matched element to its own permanent compositor layer, so a
+     full roster meant dozens of layers held in GPU memory for the whole session
+     - on mobile that costs more than the paint it saved. Add back only to a
+     specific element that measures faster. */
+  .builds-grid{-webkit-overflow-scrolling:touch}
   /* Mobile: Optimize touch interactions */
   .build-card,.agent-card,.disc-slot,.delete-btn,.btn-acknowledge,button{touch-action:manipulation}
 }
@@ -845,7 +851,7 @@
 .wengine-header{display:flex;gap:15px;align-items:center;margin-bottom:15px;padding:12px;background:rgba(0,217,255,.05);border-radius:8px}
 .wengine-info h4{margin:0 0 5px;color:var(--gold);font-size:1.1em}
 .wengine-rarity{color:#ffd700;font-size:.9em;margin:0}
-.disc-set-icon{width:60px;height:60px;object-fit:contain;border-radius:6px;background:rgba(0,0,0,.3);padding:6px;animation:global-disc-spin 8s linear infinite}
+.disc-set-icon{width:60px;height:60px;object-fit:contain;border-radius:6px;background:rgba(0,0,0,.3);padding:6px}
 .disc-set-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .disc-set-card{background:var(--bg);border:2px solid #151515;border-radius:8px;padding:15px;cursor:pointer;transition:all .1s}
 .disc-set-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,217,255,.3)}

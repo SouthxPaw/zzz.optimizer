@@ -71,6 +71,13 @@ export class CanvasShareImageService {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
+    // Warm the image cache in parallel before drawing. The draw calls below are
+    // strictly ordered (each layer paints over the last), so they must stay
+    // sequential - but their image loads do not. Without this, every loadImage()
+    // is serialized behind the previous layer's drawing, including the per-stat
+    // and per-disc icons that load one at a time inside their loops.
+    await this.prefetchImages(data);
+
     // Draw all layers in order
     await this.drawBackground(ctx, data);
     await this.drawAngledBar(ctx, data);
@@ -119,6 +126,82 @@ export class CanvasShareImageService {
         1.0,
       );
     });
+  }
+
+  /**
+   * Warm the image cache for a single render.
+   *
+   * Collects every image URL the draw layers will request and loads them
+   * concurrently, so the ordered draw calls afterwards all hit the cache.
+   * Mirrors the URL construction in the draw methods - if a draw method changes
+   * which image it asks for, update it here too (a miss is only a slow path,
+   * not a failure).
+   *
+   * Failures are swallowed on purpose: the draw methods each have their own
+   * try/catch fallbacks (solid colour, skipped icon), and prefetching must not
+   * turn a missing optional icon into a rejected render.
+   */
+  private async prefetchImages(data: ShareImageData): Promise<void> {
+    const urls = new Set<string>();
+
+    // Background layer
+    urls.add(data.customBackgroundImageUrl || 'assets/data/images/share-image/ZZZTV.jpg');
+
+    // Angled bar (only when a custom image is supplied)
+    if (data.customBarImageUrl) {
+      urls.add(data.customBarImageUrl);
+    }
+
+    // Agent art
+    const agentImageUrl = data.customAgentImageUrl || data.agent.icon;
+    if (agentImageUrl) {
+      urls.add(agentImageUrl);
+    }
+
+    // Element + specialty icons
+    if (data.agent.elementIcon || data.agent.specialElementIcon) {
+      const elementIconPath = data.agent.specialElementIcon
+        ? this.getElementIconPath(data.agent.specialElementIcon)
+        : data.agent.elementIcon;
+      if (elementIconPath) {
+        urls.add(elementIconPath);
+      }
+    }
+    if (data.agent.specialty) {
+      urls.add(this.getSpecialtyIcon(data.agent.specialty));
+    }
+
+    // Equipment menu background
+    urls.add('assets/data/images/share-image/Equipment_Menu_Screen.webp');
+
+    // Stat icons - these are the ones that otherwise load one-at-a-time inside
+    // their draw loops.
+    for (const stat of data.mainStats) {
+      urls.add(`assets/data/images/share-image/Icon_Stat_${stat.iconName}.webp`);
+    }
+    if (data.build.equippedWEngine) {
+      for (const stat of data.wEngineStats) {
+        urls.add(`assets/data/images/share-image/Icon_Stat_${stat.iconName}.webp`);
+      }
+      if (data.build.equippedWEngine.icon) {
+        urls.add(data.build.equippedWEngine.icon);
+      }
+    }
+
+    // Disc set icons, one per equipped slot
+    const slots: DiscSlot[] = ['Drive1', 'Drive2', 'Drive3', 'Drive4', 'Drive5', 'Drive6'];
+    for (const slot of slots) {
+      const disc = data.build.equippedDiscs[slot];
+      if (!disc) continue;
+      const discSet = data.discSets.find((s) => s.name === disc.set);
+      if (discSet?.icon) {
+        urls.add(this.getAbsoluteUrl(discSet.icon));
+      }
+    }
+
+    await Promise.allSettled(
+      [...urls].map((src) => this.loadImage(src).catch(() => {})),
+    );
   }
 
   /**

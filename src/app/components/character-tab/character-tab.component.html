@@ -164,6 +164,7 @@
         <!-- Builds Grid -->
         <div
           class="builds-grid"
+          #buildsGrid
           *ngIf="builds.length > 0"
           cdkDropList
           cdkDropListOrientation="mixed"
@@ -180,8 +181,8 @@
             (click)="selectBuild(build)"
           >
             <!-- Info Section with Drag Handle -->
-            <div class="build-info" cdkDragHandle>
-              <div class="drag-handle-icon" title="Drag to reorder">
+            <div class="build-info">
+              <div class="drag-handle-icon" cdkDragHandle title="Drag to reorder">
                 <span>☰</span>
               </div>
               <div class="info-content">

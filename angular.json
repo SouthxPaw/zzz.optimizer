@@ -69,7 +69,18 @@
             "github-pages": {
               "baseHref": "/zzz.optimizer/",
               "outputHashing": "all",
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                },
+                "fonts": {
+                  "inline": true
+                }
+              },
+              "sourceMap": false,
+              "namedChunks": false,
               "serviceWorker": "ngsw-config.json",
               "fileReplacements": [
                 {

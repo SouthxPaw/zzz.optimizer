@@ -120,6 +120,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Mobile responsiveness
   @ViewChild('buildHeader', { read: ElementRef }) buildHeader?: ElementRef;
+  @ViewChild('buildsGrid', { read: ElementRef }) buildsGrid?: ElementRef;
   isMobile: boolean = false;
   showScrollTopButton: boolean = false;
   selectedLoadoutForPreview: DiscLoadout | null = null;
@@ -268,6 +269,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private previouslyFocusedElement: HTMLElement | null = null;
   private artistCreditChange$ = new Subject<void>();
+
+  // Deferred DOM callbacks (scroll-into-view, focus). Tracked so they can be
+  // cancelled on destroy - they capture element refs and would otherwise run
+  // against a torn-down view if the user navigates away first.
+  private pendingDomTimeouts = new Set<ReturnType<typeof setTimeout>>();
 
   // Click guard flags to prevent double-clicking
   private isProcessingDiscAction = false;
@@ -455,6 +461,22 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+
+    for (const id of this.pendingDomTimeouts) {
+      clearTimeout(id);
+    }
+    this.pendingDomTimeouts.clear();
+  }
+
+  /**
+   * setTimeout for deferred DOM work, cancelled automatically on destroy.
+   */
+  private deferDom(fn: () => void, delay: number): void {
+    const id = setTimeout(() => {
+      this.pendingDomTimeouts.delete(id);
+      fn();
+    }, delay);
+    this.pendingDomTimeouts.add(id);
   }
 
   async selectBuild(build: AgentBuild) {
@@ -484,7 +506,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Auto-scroll to agent name/build header on mobile when selecting an agent
     if (this.isMobile && this.buildHeader) {
-      setTimeout(() => {
+      this.deferDom(() => {
         this.buildHeader?.nativeElement.scrollIntoView({
           behavior: 'smooth',
           block: 'start',
@@ -497,19 +519,43 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   @HostListener('window:resize')
   checkIfMobile() {
     // Include tablets up to 1024px
+    const wasMobile = this.isMobile;
     this.isMobile = window.innerWidth <= 1024;
-    this.cdr.markForCheck();
+
+    // Resize fires continuously while dragging a desktop window and on every
+    // mobile URL-bar show/hide; only mark when we actually cross the breakpoint.
+    if (wasMobile !== this.isMobile) {
+      this.cdr.markForCheck();
+    }
   }
 
   @HostListener('window:scroll')
   onWindowScroll() {
-    if (this.isMobile) {
-      this.showScrollTopButton = window.pageYOffset > 300;
+    if (!this.isMobile) return;
+
+    // Only run change detection when the button actually toggles, not on every
+    // scroll event - this component's template is large enough that a CD pass
+    // per scroll frame is visible as jank on mobile.
+    const shouldShow = window.pageYOffset > 300;
+    if (shouldShow !== this.showScrollTopButton) {
+      this.showScrollTopButton = shouldShow;
       this.cdr.markForCheck();
     }
   }
 
   scrollToTop() {
+    // Scroll back to the agent list rather than the very top of the page - on
+    // mobile the builds grid is what the user wants to get back to, and the
+    // page header above it is not worth the extra scrolling.
+    if (this.buildsGrid?.nativeElement) {
+      this.buildsGrid.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest',
+      });
+      return;
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -518,7 +564,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.showAddAgentModal = true;
     this.selectedAgentForAdd = null;
     // Focus first interactive element after modal renders
-    setTimeout(() => {
+    this.deferDom(() => {
       const firstFocusable = document.querySelector(
         '.modal-content button, .modal-content input, .modal-content select',
       ) as HTMLElement;
