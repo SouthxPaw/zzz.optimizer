@@ -580,11 +580,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.previouslyFocusedElement = null;
   }
 
-  dismissAssumptionsNotice() {
-    this.showAssumptionsNotice = false;
-    this.cdr.markForCheck();
-  }
-
   acknowledgeAssumptions() {
     localStorage.setItem('assumptionsAcknowledged', 'true');
     this.showAssumptionsNotice = false;
@@ -876,6 +871,68 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error setting W-Engine refinement:', error);
     }
+  }
+
+  /**
+   * Build types this agent has weight profiles for. Empty or single-entry means
+   * there is nothing to choose between, so the pin control stays hidden.
+   */
+  getAvailableBuildTypes(): string[] {
+    if (!this.selectedBuild) return [];
+    return this.scoringService.getAvailableBuildTypes(this.selectedBuild.agentId);
+  }
+
+  hasMultipleBuildTypes(): boolean {
+    return this.getAvailableBuildTypes().length > 1;
+  }
+
+  /**
+   * What scoring currently resolves to, whether pinned or auto-detected.
+   * Used to show the user which profile 'Auto' actually picked.
+   */
+  getActiveBuildType(): string {
+    if (!this.selectedBuild) return 'CRIT';
+    const equippedDiscs = Object.values(
+      this.selectedBuild.equippedDiscs || {},
+    ).filter((d) => d) as Disc[];
+    return this.scoringService.resolveBuildType(
+      equippedDiscs,
+      this.selectedBuild.agentId,
+      this.selectedBuild.preferredBuildType,
+    );
+  }
+
+  // Tap-to-reveal state for the build type explanation. Needed because `title`
+  // tooltips never fire on touch devices, where this hint matters just as much.
+  showBuildTypeHint = false;
+
+  /**
+   * Explanatory tooltip for the build type control. Mentions auto-detection only
+   * while the build is still unpinned.
+   */
+  getBuildTypeHint(): string {
+    const base = 'Disc ratings and stat weights are based on this profile.';
+    return this.selectedBuild?.preferredBuildType
+      ? base
+      : `${base} Auto-detected from your equipped discs - select one to lock it in.`;
+  }
+
+  /**
+   * Pin a scoring profile. Until the user picks one the build stays on
+   * auto-detection - the UI simply highlights whatever detection resolved.
+   */
+  async setPreferredBuildType(buildType: string) {
+    if (!this.selectedBuild) return;
+    // Already pinned to this type - nothing to do. Note an unpinned build whose
+    // detection matches still writes, so clicking the highlighted option commits it.
+    if (this.selectedBuild.preferredBuildType === buildType) return;
+
+    await this.buildService.updateBuild(this.selectedBuild.id, {
+      preferredBuildType: buildType,
+    });
+    this.clearScoreCaches();
+    this.clearFeedbackCache();
+    this.cdr.markForCheck();
   }
 
   getSpecialtyIcon(specialty: string): string {
@@ -1574,11 +1631,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   // Helper to get agent rank display
-  getRankDisplay(agentId: string): string {
-    const agent = this.referenceAgents.find((a) => a.id === agentId);
-    return agent?.rarity === 'S' ? 'S-Rank' : 'A-Rank';
-  }
-
   // Helper to get agent icon
   getAgentIcon(agentId: string): string | undefined {
     const agent = this.referenceAgents.find((a) => a.id === agentId);
@@ -1856,10 +1908,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
    * Returns cached filtered discs (used in template)
    * This is fast because it just returns the pre-computed array
    */
-  getFilteredDiscs(): Disc[] {
-    return this.cachedFilteredDiscs;
-  }
-
   async equipDiscToBuild(disc: Disc) {
     if (
       !this.selectedBuild ||
@@ -2399,9 +2447,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     ).filter((d) => d);
     const detectedBuildType =
       allDiscs.length > 0
-        ? this.scoringService.detectBuildType(
+        ? this.scoringService.resolveBuildType(
             allDiscs,
             this.selectedBuild.agentId,
+            this.selectedBuild.preferredBuildType,
           )
         : undefined;
 
@@ -2485,6 +2534,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       undefined, // agentScoring - not used here
       undefined, // wengineScoring - not used here
       activePlan, // Pass upgrade plan to override default weights and breakpoints
+      this.selectedBuild.preferredBuildType,
     );
 
     const cachedResult = {
@@ -2531,9 +2581,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     ).filter((d) => d);
     const detectedBuildType =
       allDiscs.length > 0
-        ? this.scoringService.detectBuildType(
+        ? this.scoringService.resolveBuildType(
             allDiscs,
             this.selectedBuild.agentId,
+            this.selectedBuild.preferredBuildType,
           )
         : 'unknown';
 
@@ -2568,6 +2619,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       !!this.selectedBuild.equippedWEngine,
       this.isWEngineSpecialtyMatch(),
       activePlan,
+      this.selectedBuild.preferredBuildType,
     );
     this.lastFeedbackBuildHash = currentHash;
 
@@ -2581,22 +2633,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   // Input validation and formatting methods
-  validateAndFormatMainStat(): void {
-    const value = this.discFormData.mainStatValue;
-    if (typeof value === 'string') {
-      // Remove any non-numeric characters except decimal point and negative sign
-      const cleaned = value.replace(/[^\d.-]/g, '');
-      const parsed = parseFloat(cleaned);
-
-      if (isNaN(parsed)) {
-        this.discFormData.mainStatValue = 0;
-      } else {
-        // Round to 1 decimal place
-        this.discFormData.mainStatValue = Math.round(parsed * 10) / 10;
-      }
-    }
-  }
-
   /**
    * Get the base stat type from the main stat
    * Handles both fixed slots (1-3) and variable slots (4-6)
@@ -2714,9 +2750,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Detect build type (CRIT, Anomaly, or Support) based on equipped discs
     const detectedBuildType =
       equippedDiscs.length > 0
-        ? this.scoringService.detectBuildType(
+        ? this.scoringService.resolveBuildType(
             equippedDiscs,
             this.selectedBuild.agentId,
+            this.selectedBuild.preferredBuildType,
           )
         : 'CRIT';
 
@@ -3097,7 +3134,7 @@ async generateShareImage() {
     });
 
     const detectedBuildType = equippedDiscsList.length > 0
-      ? this.scoringService.detectBuildType(equippedDiscsList, this.selectedBuild.agentId)
+      ? this.scoringService.resolveBuildType(equippedDiscsList, this.selectedBuild.agentId, this.selectedBuild.preferredBuildType)
       : 'CRIT';
 
     const buildWeights = this.scoringService.getBuildStatWeights(

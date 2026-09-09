@@ -33,9 +33,6 @@ export class StatCalculatorService {
   private statCache = new Map<string, BaseStats>();
   private readonly CACHE_SIZE_LIMIT = 10000; // Up from 1000 for 20-30% speedup
 
-  // OPTIMIZATION 5: Set bonus caching
-  private setBonusCache = new Map<string, any>();
-
   // Mindscape data loaded from mindscape-stats.json (manually curated source of truth)
   private mindscapeData: MindscapeData | null = null;
   private mindscapeDataPromise: Promise<void> | null = null;

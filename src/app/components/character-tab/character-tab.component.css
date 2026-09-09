@@ -3086,3 +3086,166 @@
     min-width: 100%;
   }
 }
+
+/* Build type pin - only shown for agents with multiple scoring profiles.
+   Sits at the top of the build panel because it determines how every disc
+   below it is rated. */
+.build-type-section {
+  background: rgba(0, 217, 255, 0.06);
+  border-left: 3px solid var(--cyan);
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-bottom: 16px;
+}
+
+.build-type-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.build-type-label {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--gold);
+  font-size: 0.9em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: help;
+}
+
+.build-type-hint {
+  margin: 8px 0 0;
+  color: var(--txt);
+  opacity: 0.75;
+  font-size: 0.78em;
+  line-height: 1.4;
+}
+
+.build-type-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  margin-left: 5px;
+  border: 1px solid rgba(244, 185, 66, 0.5);
+  border-radius: 50%;
+  font-size: 0.75em;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.build-type-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.build-type-btn {
+  background: rgba(26, 26, 26, 0.9);
+  border: 2px solid rgba(244, 185, 66, 0.2);
+  border-radius: 6px;
+  padding: 4px 12px;
+  color: var(--txt);
+  font-size: 0.8em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.build-type-btn:hover {
+  border-color: var(--gold);
+  background: rgba(244, 185, 66, 0.1);
+}
+
+.build-type-btn.active {
+  border-color: var(--cyan);
+  background: rgba(0, 217, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.5);
+}
+
+/* Build type pin - touch sizing.
+   Keyed off pointer capability rather than width so tablets are covered too:
+   they sit in the 769-1200px range where the phone breakpoint never applies,
+   but still have no hover and need 44px targets. The width query below handles
+   narrow non-touch windows. `title` tooltips do not fire without hover, so the
+   hint is tap-revealed instead (see .build-type-hint in the template). */
+@media (hover: none) and (pointer: coarse), (max-width: 768px) {
+  .build-type-btn {
+    padding: 10px 18px;
+    font-size: 0.9em;
+    min-height: 44px;
+  }
+
+  .build-type-label {
+    min-height: 44px;
+    font-size: 0.95em;
+  }
+
+  .build-type-info {
+    width: 18px;
+    height: 18px;
+    margin-left: 7px;
+  }
+
+  .build-type-hint {
+    font-size: 0.85em;
+  }
+}
+
+/* Tablet layout: the content grid collapses to a single column at 1200px, so
+   give the control room to breathe at that width without shrinking targets. */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .build-type-section {
+    padding: 12px 15px;
+  }
+}
+
+/* Tooltip for [data-tooltip] elements. These attributes already existed in the
+   template but had no styling, so the hints never appeared on hover. */
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  width: max-content;
+  max-width: 260px;
+  padding: 8px 10px;
+  background: rgba(10, 10, 10, 0.97);
+  border: 1px solid rgba(244, 185, 66, 0.4);
+  border-radius: 6px;
+  color: var(--txt);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+  white-space: normal;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Touch devices have no hover, so the tooltip can never be triggered - hide it
+   rather than leaving an element that only some users can reach. */
+@media (hover: none) and (pointer: coarse) {
+  [data-tooltip]::after {
+    display: none;
+  }
+}

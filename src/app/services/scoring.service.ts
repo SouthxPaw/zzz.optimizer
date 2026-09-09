@@ -279,6 +279,34 @@ export class ScoringService {
    * This determines which weight profile to use for scoring
    * Public method so UI components can also detect build type
    */
+  /**
+   * Resolve which weight profile to score against.
+   * A user-pinned build type wins over disc-based detection, but only if that
+   * profile actually exists for the agent - a stale pin (e.g. from an imported
+   * build, or a profile since removed) falls back to detection rather than
+   * looking up a missing profile.
+   */
+  resolveBuildType(discs: Disc[], agentId?: string, preferredBuildType?: string): string {
+    if (preferredBuildType && agentId) {
+      const availableBuilds = this.agentStatWeights[agentId]?.builds;
+      if (availableBuilds && preferredBuildType in availableBuilds) {
+        return preferredBuildType;
+      }
+    }
+    return this.detectBuildType(discs, agentId);
+  }
+
+  /**
+   * Build types that have a weight profile defined for this agent.
+   * Used by the UI to decide whether a build-type choice is meaningful.
+   */
+  getAvailableBuildTypes(agentId?: string): string[] {
+    if (!agentId) {
+      return [];
+    }
+    return Object.keys(this.agentStatWeights[agentId]?.builds || {});
+  }
+
   detectBuildType(discs: Disc[], agentId?: string): string {
     if (!agentId || !this.agentStatWeights[agentId]) {
       return 'CRIT'; // Default to CRIT if no agent data
@@ -1467,7 +1495,8 @@ export class ScoringService {
   private calculateDiscQualityScore(
     equippedDiscs: Disc[],
     agentId: string,
-    upgradePlan?: UpgradePlan  // NEW: Use upgrade plan if provided
+    upgradePlan?: UpgradePlan,  // NEW: Use upgrade plan if provided
+    preferredBuildType?: string
   ): number {
     if (!equippedDiscs || equippedDiscs.length === 0) {
       return 0;
@@ -1475,8 +1504,9 @@ export class ScoringService {
 
     // Detect build type based on total stats across all 6 discs
     // This determines which weight profile (CRIT, Anomaly, or Support) to use
-    // NOTE: If upgrade plan is provided, this detection is not used
-    const detectedBuildType = upgradePlan ? undefined : this.detectBuildType(equippedDiscs, agentId);
+    // NOTE: If upgrade plan is provided, this detection is not used - a custom
+    // plan is the most explicit signal available and outranks a pinned build type
+    const detectedBuildType = upgradePlan ? undefined : this.resolveBuildType(equippedDiscs, agentId, preferredBuildType);
 
     // Convert disc ratings to numeric scores
     const ratingToScore: { [key: string]: number } = {
@@ -1985,7 +2015,8 @@ export class ScoringService {
     agentLevel?: number,
     agentScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number },
     wengineScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number },
-    upgradePlan?: UpgradePlan  // NEW: Use upgrade plan if provided
+    upgradePlan?: UpgradePlan,  // NEW: Use upgrade plan if provided
+    preferredBuildType?: string
   ): { score: number; rating: BuildRating; breakdown: any } {
     // Check if build has all 6 discs equipped
     if (!equippedDiscs || equippedDiscs.length < 6) {
@@ -2041,7 +2072,7 @@ export class ScoringService {
 
     // Detect build type for contextual scoring (CRIT, Anomaly, Support, etc.)
     // This determines which stat weights to use for disc and stat efficiency scoring
-    const detectedBuildType = upgradePlan ? undefined : this.detectBuildType(equippedDiscs, agentId);
+    const detectedBuildType = upgradePlan ? undefined : this.resolveBuildType(equippedDiscs, agentId, preferredBuildType);
 
     // Calculate each component using weighted stats
     const breakpointResult = this.calculateBuildScore(agentId, weightedStats, detectedBuildType);
@@ -2049,7 +2080,8 @@ export class ScoringService {
     const discQualityScore = this.calculateDiscQualityScore(
       equippedDiscs,
       agentId,
-      upgradePlan  // Pass upgrade plan to use custom priorities
+      upgradePlan,  // Pass upgrade plan to use custom priorities
+      preferredBuildType
     ); // 0-100
 
     const statEfficiencyScore = this.calculateStatEfficiencyScore(
@@ -2143,7 +2175,8 @@ export class ScoringService {
     equippedDiscs: { [slot: string]: Disc | undefined },
     hasWEngine: boolean,
     isWEngineSpecialtyMatch: boolean,
-    upgradePlan?: UpgradePlan
+    upgradePlan?: UpgradePlan,
+    preferredBuildType?: string
   ): FeedbackItem[] {
     const feedback: FeedbackItem[] = [];
     const breakpoints = this.agentBreakpoints[agentId];
@@ -2189,7 +2222,7 @@ export class ScoringService {
     // Check disc quality and find worst discs
     // First, detect build type based on all equipped discs
     const allDiscs = discSlots.map(slot => equippedDiscs[slot]).filter(d => d) as Disc[];
-    const detectedBuildType = allDiscs.length > 0 ? this.detectBuildType(allDiscs, agentId) : undefined;
+    const detectedBuildType = allDiscs.length > 0 ? this.resolveBuildType(allDiscs, agentId, preferredBuildType) : undefined;
 
     const discScores: Array<{ slot: string; score: number; grade: string }> = [];
     discSlots.forEach(slot => {
