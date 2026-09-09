@@ -21,6 +21,7 @@ import {
   estimateDamage,
   calculateStatusDamage,
   calculateSheerForce,
+  calculateSharpDamage,
   calculateDazeContribution,
   calculateAnomalyBuildup,
 } from '../constants/damage-formulas';
@@ -968,7 +969,10 @@ export class ScoringService {
    * @param elementalDMGBonus - Elemental DMG% from discs/buffs
    * @param agentScoring - Agent's scoring buffs/debuffs from agents.json
    * @param wengineScoring - W-Engine's scoring buffs/debuffs from wengines.json
+   * @param wEngineRefinement - Equipped W-Engine refinement (1-5), used to resolve
+   *                            conditionals whose ratio/cap scale with Overclock
    * @param HP - Character's HP (needed for Rupture Sheer Force calculation)
+   * @param DEF - Character's DEF (needed for Armorer Sharp DMG calculation)
    * @param impact - Character's Impact stat (needed for Stun daze calculation)
    * @returns Damage estimation object
    */
@@ -976,6 +980,7 @@ export class ScoringService {
     stats: {
       ATK: number;
       HP?: number;
+      DEF?: number;
       critRate: number;
       critDMG: number;
       penRatio?: number;
@@ -984,6 +989,7 @@ export class ScoringService {
       anomalyMastery?: number;
       impact?: number;
       level?: number;
+      lacerationDamage?: number;  // Armorer only: static Laceration DMG % (150 = 150%)
     },
     agentId: string,
     agentName: string,
@@ -991,11 +997,13 @@ export class ScoringService {
     agentElement: string,
     elementalDMGBonus: number = 0,
     agentScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number },
-    wengineScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number }
+    wengineScoring?: { buffs: any[]; debuffs: any[]; dazeBonus: number },
+    wEngineRefinement?: number
   ): {
     directDamage: number;
     statusDamage?: number;
     sheerForceDamage?: number;
+    sharpDamage?: number;
     dazeContribution?: number;
     totalDamage: number;
     damageType: string;
@@ -1017,11 +1025,16 @@ export class ScoringService {
     let damageTaken = 0;
     let stunDMGMult = 0;
     let dazeBonus = 0;
+    let lacerationBonus = 0;
 
-    // Combine agent and w-engine scoring
-    const allScoringData = [agentScoring, wengineScoring].filter(Boolean);
+    // Combine agent and w-engine scoring, tracking the source so that W-Engine
+    // conditionals can be resolved at the equipped refinement level
+    const allScoringData: Array<{ scoring: any; isWEngine: boolean }> = [
+      { scoring: agentScoring, isWEngine: false },
+      { scoring: wengineScoring, isWEngine: true },
+    ].filter((entry) => Boolean(entry.scoring));
 
-    allScoringData.forEach((scoring) => {
+    allScoringData.forEach(({ scoring, isWEngine: isWEngineBuff }) => {
       if (!scoring) return;
 
       // Apply buffs (DMG bonuses, stat bonuses, etc.)
@@ -1032,11 +1045,40 @@ export class ScoringService {
           switch (buff.type) {
             case 'DMGBonus':
             case 'ElementDMG':
-              dmgBonuses.push(value);
+              // A DMG% buff may be conditional on a stat threshold rather than
+              // flat (e.g. Bloodmarrow Coffer: every 1% CRIT Rate above 100%
+              // grants DMG%, up to a cap). Unlike the conditional buffs handled
+              // in stat-calculator.service.ts, this one multiplies final damage
+              // rather than feeding a stat field, so it is resolved here.
+              if (buff.condition) {
+                // W-Engine conditionals may scale with Overclock; agent conditionals
+                // never do, so isWEngineBuff gates which refinement applies.
+                const { ratio, cap } = this.resolveConditionScaling(
+                  buff.condition,
+                  isWEngineBuff ? wEngineRefinement : undefined
+                );
+                const sourceStat = this.getConditionSourceStat(stats, buff.condition.sourceStat);
+                const excess = Math.max(0, sourceStat - (buff.condition.threshold ?? 0));
+                let conditionalValue = excess * ratio;
+                if (cap !== undefined) {
+                  conditionalValue = Math.min(conditionalValue, cap);
+                }
+                if (conditionalValue > 0) {
+                  dmgBonuses.push(conditionalValue / 100);
+                }
+              } else {
+                dmgBonuses.push(value);
+              }
               break;
             case 'SheerForceBonus':
               if (agentRole === 'Rupture') {
                 dmgBonuses.push(value);
+              }
+              break;
+            case 'LacerationBonus':
+              // Armorer-only: raises the Laceration multiplier rather than DMG%
+              if (agentRole === 'Armorer') {
+                lacerationBonus += value;
               }
               break;
             case 'ATKBonus':
@@ -1082,6 +1124,7 @@ export class ScoringService {
     let weightedDirectDamage = 0;
     let weightedStatusDamage = 0;
     let weightedSheerForceDamage = 0;
+    let weightedSharpDamage = 0;
     let weightedDazeContribution = 0;
     let damageType = 'direct';
 
@@ -1091,10 +1134,31 @@ export class ScoringService {
       let directDamage = 0;
       let statusDamage = 0;
       let sheerForceDamage = 0;
+      let sharpDamage = 0;
       let dazeContribution = 0;
 
       // Role-specific damage calculations
       switch (agentRole) {
+        case 'Armorer':
+          // Armorer agents deal Sharp DMG, which scales off DEF instead of ATK
+          // and uses Laceration in place of CRIT DMG.
+          damageType = 'sharp';
+          sharpDamage = calculateSharpDamage(
+            stats.DEF || 0,
+            skillMultiplier,
+            stats.critRate / 100,
+            dmgBonuses,
+            defShred,
+            (stats.penRatio || 0) / 100,
+            stats.flatPEN || 0,
+            lacerationBonus,
+            enemy.def,
+            enemy.res,
+            resShred,
+            stats.lacerationDamage !== undefined ? stats.lacerationDamage / 100 : undefined
+          );
+          break;
+
         case 'Rupture':
           // Rupture agents use Sheer Force - ignores DEF entirely
           // Formula: (ATK × 0.30) + (HP × 0.10)
@@ -1247,18 +1311,22 @@ export class ScoringService {
         directDamage *= (1 + damageTaken);
         if (statusDamage > 0) statusDamage *= (1 + damageTaken);
         if (sheerForceDamage > 0) sheerForceDamage *= (1 + damageTaken);
+        if (sharpDamage > 0) sharpDamage *= (1 + damageTaken);
       }
 
       // Accumulate weighted damage
       weightedDirectDamage += directDamage * weight;
       weightedStatusDamage += statusDamage * weight;
       weightedSheerForceDamage += sheerForceDamage * weight;
+      weightedSharpDamage += sharpDamage * weight;
       weightedDazeContribution += dazeContribution * weight;
     }
 
     // Calculate total damage based on damage type
     let totalDamage = 0;
-    if (weightedSheerForceDamage > 0) {
+    if (weightedSharpDamage > 0) {
+      totalDamage = weightedSharpDamage;
+    } else if (weightedSheerForceDamage > 0) {
       totalDamage = weightedSheerForceDamage;
     } else if (weightedDazeContribution > 0) {
       // For Stun, use direct damage but also track daze
@@ -1271,10 +1339,64 @@ export class ScoringService {
       directDamage: Math.round(weightedDirectDamage),
       statusDamage: weightedStatusDamage > 0 ? Math.round(weightedStatusDamage) : undefined,
       sheerForceDamage: weightedSheerForceDamage > 0 ? Math.round(weightedSheerForceDamage) : undefined,
+      sharpDamage: weightedSharpDamage > 0 ? Math.round(weightedSharpDamage) : undefined,
       dazeContribution: weightedDazeContribution > 0 ? Math.round(weightedDazeContribution * 100) / 100 : undefined,
       totalDamage: Math.round(totalDamage),
       damageType: damageType,
     };
+  }
+
+  /**
+   * Resolve a conditional buff's ratio and cap at a given W-Engine refinement.
+   *
+   * Most conditionals are flat: their ratio/cap do not change with Overclock, so
+   * the values on the condition itself are used. Where a condition carries an
+   * Overclock map (e.g. Bloodmarrow Coffer, whose per-1% DMG and cap both scale),
+   * the entry for the equipped refinement wins.
+   *
+   * Falls back to the flat ratio/cap - which hold the W5 values - whenever the
+   * refinement is unknown or absent from the map, preserving previous behaviour.
+   */
+  private resolveConditionScaling(
+    condition: { ratio?: number; cap?: number; Overclock?: { [rank: string]: { ratio?: number; cap?: number } } },
+    refinement?: number
+  ): { ratio: number; cap?: number } {
+    let ratio = condition.ratio ?? 0;
+    let cap = condition.cap;
+
+    if (condition.Overclock && refinement !== undefined) {
+      const rank = condition.Overclock[`W${refinement}`];
+      if (rank) {
+        if (rank.ratio !== undefined) ratio = rank.ratio;
+        if (rank.cap !== undefined) cap = rank.cap;
+      }
+    }
+
+    return { ratio, cap };
+  }
+
+  /**
+   * Resolve a conditional buff's source stat from the damage-estimation stats object.
+   * Values are in whole-number percent where applicable (e.g. critRate 120 = 120%),
+   * matching how thresholds/ratios are expressed in the JSON data.
+   */
+  private getConditionSourceStat(
+    stats: { ATK: number; HP?: number; DEF?: number; critRate: number; critDMG: number;
+             penRatio?: number; anomalyProficiency?: number; anomalyMastery?: number; impact?: number },
+    sourceStat: string
+  ): number {
+    switch (sourceStat) {
+      case 'critRate': return stats.critRate;
+      case 'critDmg': return stats.critDMG;
+      case 'atk': return stats.ATK;
+      case 'hp': return stats.HP || 0;
+      case 'def': return stats.DEF || 0;
+      case 'penRatio': return stats.penRatio || 0;
+      case 'anomalyProficiency': return stats.anomalyProficiency || 0;
+      case 'anomalyMastery': return stats.anomalyMastery || 0;
+      case 'impact': return stats.impact || 0;
+      default: return 0;
+    }
   }
 
   /**
@@ -1300,6 +1422,9 @@ export class ScoringService {
       Stun: 30000,      // Moderate direct damage
       Support: 15000,   // Lower expected damage (they contribute buffs instead)
       Defense: 20000,   // Low-moderate damage
+      Armorer: 28000,   // PROVISIONAL: Sharp DMG scales off DEF, a much smaller stat pool
+                        // than ATK, so a built Armorer lands around 55% of an Attack
+                        // agent's output. Recalibrate against real numbers on release.
     };
 
     // For Stun agents, also factor in Daze contribution
@@ -1852,7 +1977,7 @@ export class ScoringService {
     stats: BaseStats,
     equippedDiscs: Disc[],
     wEngine?: WEngine,
-    _wEngineRefinement?: number,
+    wEngineRefinement?: number,
     mindscapeLevel: number = 0,
     agentName?: string,
     agentRole?: string,
@@ -1951,6 +2076,7 @@ export class ScoringService {
         {
           ATK: weightedStats.atk,
           HP: weightedStats.hp,
+          DEF: weightedStats.def,
           critRate: weightedStats.critRate,
           critDMG: weightedStats.critDmg,
           penRatio: weightedStats.penRatio,
@@ -1959,6 +2085,7 @@ export class ScoringService {
           anomalyMastery: weightedStats.anomalyMastery,
           impact: weightedStats.impact,
           level: agentLevel || 60,
+          lacerationDamage: weightedStats.lacerationDamage,
         },
         agentId,
         agentName,
@@ -1966,7 +2093,8 @@ export class ScoringService {
         agentElement,
         elementalDMGBonus,
         agentScoring,
-        wengineScoring
+        wengineScoring,
+        wEngineRefinement
       );
 
       // Normalize damage to 0-100 score

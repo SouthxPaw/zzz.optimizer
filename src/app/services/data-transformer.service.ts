@@ -168,6 +168,9 @@ export class DataTransformerService {
       return {
         hp: displayHP,
         hppercent: 0,
+        // Armorer agents (e.g. Claret) have no ATK stat at all - the game shows
+        // Laceration DMG in its place. A 0 here is intentional, not missing data:
+        // their Sharp DMG scales off DEF instead. See calculateSharpDamage().
         atk: Math.round(lvl60.Attack || 0),
         atkpercent: 0,
         def: Math.round(lvl60.Defence || 0),
@@ -184,7 +187,14 @@ export class DataTransformerService {
         penRatio: (lvl60.PenRate || 0) / 100,
         energyRegen: (lvl60.SpBarPoint || 12) / 10,  // 12 / 10 = 1.2
         energyRegenPercent: 0,
-        sheerForce: 0
+        sheerForce: 0,
+        // Armorer display stats - static per agent, absent for non-Armorers
+        lacerationDamage: lvl60.LacerationDamage !== undefined
+          ? lvl60.LacerationDamage / 100   // 15000 -> 150%
+          : undefined,
+        sharpnessAutoAccumulation: lvl60.SharpnessAutoAccumulation !== undefined
+          ? lvl60.SharpnessAutoAccumulation / 10  // 15 -> 1.5
+          : undefined
       };
     }
 
