@@ -989,6 +989,7 @@ export class ScoringService {
       anomalyMastery?: number;
       impact?: number;
       level?: number;
+      lacerationDamage?: number;  // Armorer only: static Laceration DMG % (150 = 150%)
     },
     agentId: string,
     agentName: string,
@@ -1153,7 +1154,8 @@ export class ScoringService {
             lacerationBonus,
             enemy.def,
             enemy.res,
-            resShred
+            resShred,
+            stats.lacerationDamage !== undefined ? stats.lacerationDamage / 100 : undefined
           );
           break;
 
@@ -2083,6 +2085,7 @@ export class ScoringService {
           anomalyMastery: weightedStats.anomalyMastery,
           impact: weightedStats.impact,
           level: agentLevel || 60,
+          lacerationDamage: weightedStats.lacerationDamage,
         },
         agentId,
         agentName,

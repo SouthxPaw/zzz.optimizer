@@ -23,6 +23,15 @@ export interface BaseStats {
   energyRegen: number;  // Base energy regen (SpBarPoint) - stored as energy/sec
   energyRegenPercent: number;  // Percentage bonuses to energy regen
   sheerForce: number;  // Sheer Force for Rupture agents: floor(ATK × 0.3) + floor(HP × 0.1)
+  // Armorer-only display stats. In game these occupy the ATK and Energy Regen slots
+  // on the stat screen, but they do not replace those stats - ATK and Energy Regen
+  // still exist on Armorers, they are simply not useful to them.
+  //
+  // Both are static per agent: nothing (discs, W-Engine, substats, levels) changes
+  // them. They are stored per agent rather than as shared constants because other
+  // Armorers are expected to have different values than Claret's 150% / 1.5.
+  lacerationDamage?: number;              // Laceration DMG % (replaces CRIT DMG on a CRIT)
+  sharpnessAutoAccumulation?: number;     // Sharpness gained per second
 }
 
 export interface Agent {

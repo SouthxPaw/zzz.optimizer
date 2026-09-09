@@ -588,11 +588,18 @@
                 selectedBuild.calculatedStats.hp
               }}</span>
             </div>
-            <div class="stat-row">
+            <!-- Armorers show Laceration DMG in place of ATK -->
+            <div class="stat-row" *ngIf="!isArmorerAgent()">
               <span class="stat-label">ATK:</span>
               <span class="stat-value">{{
                 selectedBuild.calculatedStats.atk
               }}</span>
+            </div>
+            <div class="stat-row" *ngIf="isArmorerAgent()">
+              <span class="stat-label">Laceration DMG:</span>
+              <span class="stat-value"
+                >{{ selectedBuild.calculatedStats.lacerationDamage ?? 0 }}%</span
+              >
             </div>
             <div class="stat-row">
               <span class="stat-label">DEF:</span>
@@ -651,9 +658,9 @@
             </div>
             <!-- Sharpness for Armorer agents (auto-accumulates) -->
             <div class="stat-row" *ngIf="isArmorerAgent()">
-              <span class="stat-label">Sharpness Auto-Accumulates:</span>
+              <span class="stat-label">Automatic Sharpness Accumulation:</span>
               <span class="stat-value"
-                >{{ selectedBuild.calculatedStats.energyRegen }}</span
+                >{{ selectedBuild.calculatedStats.sharpnessAutoAccumulation ?? 0 }}</span
               >
             </div>
             <!-- Sheer Force for Rupture agents -->
@@ -2211,9 +2218,14 @@
                   <span class="stat-label">HP:</span>
                   <span class="stat-value">{{ loadoutPreviewStats.hp | number:'1.0-0' }}</span>
                 </div>
-                <div class="stat-row">
+                <!-- Armorers show Laceration DMG in place of ATK -->
+                <div class="stat-row" *ngIf="!isArmorerAgent()">
                   <span class="stat-label">ATK:</span>
                   <span class="stat-value">{{ loadoutPreviewStats.atk | number:'1.0-0' }}</span>
+                </div>
+                <div class="stat-row" *ngIf="isArmorerAgent()">
+                  <span class="stat-label">Laceration DMG:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.lacerationDamage ?? 0 }}%</span>
                 </div>
                 <div class="stat-row">
                   <span class="stat-label">DEF:</span>
@@ -2242,8 +2254,8 @@
                 </div>
                 <!-- Sharpness for Armorer agents (auto-accumulates) -->
                 <div class="stat-row" *ngIf="isArmorerAgent()">
-                  <span class="stat-label">Sharpness Auto-Accumulates:</span>
-                  <span class="stat-value">{{ loadoutPreviewStats.energyRegen }}</span>
+                  <span class="stat-label">Automatic Sharpness Accumulation:</span>
+                  <span class="stat-value">{{ loadoutPreviewStats.sharpnessAutoAccumulation ?? 0 }}</span>
                 </div>
                 <!-- Sheer Force for Rupture agents -->
                 <div class="stat-row" *ngIf="isRuptureAgent()">

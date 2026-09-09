@@ -3829,7 +3829,10 @@ async generateShareImage() {
     const stats = this.selectedBuild.calculatedStats;
     return [
       { iconName: 'HP', label: 'HP', value: String(stats.hp) },
-      { iconName: 'ATK', label: 'ATK', value: String(stats.atk) },
+      // Armorers show Laceration DMG where ATK would normally sit
+      ...(this.isArmorerAgent()
+        ? [{ iconName: 'Laceration_DMG', label: 'Lac', value: `${stats.lacerationDamage ?? 0}%` }]
+        : [{ iconName: 'ATK', label: 'ATK', value: String(stats.atk) }]),
       { iconName: 'DEF', label: 'DEF', value: String(stats.def) },
       { iconName: 'CRIT_Rate', label: 'CRIT', value: `${stats.critRate}%` },
       { iconName: 'CRIT_DMG', label: 'CD', value: `${stats.critDmg}%` },
@@ -3849,7 +3852,7 @@ async generateShareImage() {
       ...(this.isRuptureAgent()
         ? [{ iconName: 'Sheer_Force', label: 'SF', value: String(stats.sheerForce || 0) }]
         : this.isArmorerAgent()
-        ? [{ iconName: 'Energy_Regen', label: 'Sharp', value: String(stats.energyRegen) }]
+        ? [{ iconName: 'Automatic_Sharpness_Accumulation', label: 'ASA', value: String(stats.sharpnessAutoAccumulation ?? 0) }]
         : [{ iconName: 'Energy_Regen', label: 'ER', value: `${stats.energyRegen}%` }])
     ];
   }

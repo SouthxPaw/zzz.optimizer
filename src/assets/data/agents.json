@@ -84567,14 +84567,16 @@
     "lvl60_stats": {
       "HpMax": 5651,
       "Defence": 441,
-      "Attack": 0,
+      "Attack": 626,
       "Crit": 3380,
       "CritDamage": 5000,
       "PenRate": 0,
       "BreakStun": 93,
       "ElementAbnormalPower": 80,
       "ElementMystery": 79,
-      "SpBarPoint": 15
+      "SpBarPoint": 15,
+      "LacerationDamage": 15000,
+      "SharpnessAutoAccumulation": 15
     },
     "potentials": [],
     "Icon": "Claret"

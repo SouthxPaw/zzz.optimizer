@@ -4588,7 +4588,7 @@
           }
         }
       ],
-      "Desc": "The equipper's CRIT Rate increases by %; Electric DMG increases by %; when the equipper launches an [EX Special Attack] or triggers [Maim], the Electric Sharp DMG dealt increases by %, lasting 40s. Repeated triggers reset the duration."
+      "Desc": "The equipper's CRIT Rate increases by %; Electric DMG increases by %; when the equipper launches an EX Special Attack or triggers Maim, the Electric Sharp DMG dealt increases by %, lasting 40s. Repeated triggers reset the duration."
     },
     "scoring": {
       "buffs": [
@@ -4641,7 +4641,7 @@
           }
         }
       ],
-      "Desc": "DEF increases by %; when casting [EX Special Attack], DEF additionally increases by % for 40 sec; repeated triggers reset the duration."
+      "Desc": "DEF increases by %; when casting EX Special Attack, DEF additionally increases by % for 40 sec; repeated triggers reset the duration."
     },
     "scoring": {
       "buffs": [
