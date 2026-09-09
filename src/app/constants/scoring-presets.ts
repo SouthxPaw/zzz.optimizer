@@ -92,5 +92,32 @@ export const SCORING_PRESETS: Record<Specialty, ScoringAlgorithm> = {
       Drive5: ['Element_DMG', 'HP%'],
       Drive6: ['HP%']
     },
+  },
+  // PROVISIONAL: Armorer is a new specialty introduced with Claret.
+  //
+  // Armorer agents deal Sharp DMG, which uses DEF as the damage multiplier instead
+  // of ATK - so ATK is a dead stat and is weighted 0. Sharp DMG also ignores CRIT DMG
+  // Bonus, using a fixed Laceration multiplier on CRIT instead. CRIT DMG therefore
+  // only matters as a feeder for Claret's core passive (0.35% CRIT Rate per 1% initial
+  // CRIT DMG), which is why it sits below DEF% rather than at the top.
+  //
+  // Priority follows published guidance: CRIT Rate > DEF% > CRIT DMG > PEN > DEF.
+  // Revisit once Armorer kits beyond Claret are known.
+  Armorer: {
+    name: 'Armorer Build',
+    weights: {
+      CRIT_Rate: 2.0,
+      'DEF%': 1.5,
+      CRIT_DMG: 1.0,
+      PEN: 0.7,
+      DEF: 0.5,
+      'ATK%': 0.0,
+      ATK: 0.0,
+    },
+    mainStatPreferences: {
+      Drive4: ['CRIT_Rate', 'CRIT_DMG'],
+      Drive5: ['PEN_Ratio', 'Element_DMG', 'DEF%'],
+      Drive6: ['DEF%'],
+    },
   }
 };

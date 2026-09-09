@@ -1,6 +1,6 @@
 // models/agent.model.ts
 export type Element = 'Physical' | 'Fire' | 'Ice' | 'Electric' | 'Wind' | 'Ether' | 'Lumen';
-export type Specialty = 'Attack' | 'Stun' | 'Support' | 'Defense' | 'Anomaly' | 'Rupture';
+export type Specialty = 'Attack' | 'Stun' | 'Support' | 'Defense' | 'Anomaly' | 'Rupture' | 'Armorer';
 export type DiscSlot = 'Drive1' | 'Drive2' | 'Drive3' | 'Drive4' | 'Drive5' | 'Drive6';
 
 export interface BaseStats {
@@ -23,6 +23,15 @@ export interface BaseStats {
   energyRegen: number;  // Base energy regen (SpBarPoint) - stored as energy/sec
   energyRegenPercent: number;  // Percentage bonuses to energy regen
   sheerForce: number;  // Sheer Force for Rupture agents: floor(ATK × 0.3) + floor(HP × 0.1)
+  // Armorer-only display stats. In game these occupy the ATK and Energy Regen slots
+  // on the stat screen, but they do not replace those stats - ATK and Energy Regen
+  // still exist on Armorers, they are simply not useful to them.
+  //
+  // Both are static per agent: nothing (discs, W-Engine, substats, levels) changes
+  // them. They are stored per agent rather than as shared constants because other
+  // Armorers are expected to have different values than Claret's 150% / 1.5.
+  lacerationDamage?: number;              // Laceration DMG % (replaces CRIT DMG on a CRIT)
+  sharpnessAutoAccumulation?: number;     // Sharpness gained per second
 }
 
 export interface Agent {
@@ -57,8 +66,16 @@ export interface AgentBuff {
   condition?: {
     sourceStat: string;      // Source stat to read (e.g., 'anomalyMastery')
     threshold: number;       // Minimum value before conversion starts
-    ratio: number;           // Conversion ratio (e.g., 1.0 for 1:1)
-    cap?: number;            // Maximum value the bonus can provide
+    ratio: number;           // Conversion ratio (e.g., 1.0 for 1:1) - W5 / default
+    cap?: number;            // Maximum value the bonus can provide - W5 / default
+    // Optional per-refinement values for W-Engine conditionals whose ratio and/or
+    // cap scale with Overclock (e.g. Bloodmarrow Coffer). When present and the
+    // equipped refinement is known, these override the flat ratio/cap above.
+    // The top-level ratio/cap remain the W5 fallback for callers that do not
+    // supply a refinement.
+    Overclock?: {
+      [rank: string]: { ratio?: number; cap?: number };
+    };
   };
 }
 
@@ -93,7 +110,7 @@ export interface WEngine {
   id: string;
   name: string;
   rarity: 'S' | 'A' | 'B';
-  specialty: 'Attack' | 'Stun' | 'Anomaly' | 'Support' | 'Defense' | 'Rupture';
+  specialty: 'Attack' | 'Stun' | 'Anomaly' | 'Support' | 'Defense' | 'Rupture' | 'Armorer';
   baseAtk: number;
   subStat: {
     type: 'ATK%' | 'HP%' | 'DEF%' | 'CRIT_Rate' | 'CRIT_DMG' | 'PEN_Ratio' | 'Energy_Regen' | 'Impact' | 'Anomaly_Proficiency' | 'Anomaly_Mastery' | 'Sheer_Force' | 'Sheer Force';

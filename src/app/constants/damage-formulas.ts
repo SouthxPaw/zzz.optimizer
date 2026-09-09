@@ -297,6 +297,109 @@ export function calculateSheerForce(
 }
 
 /**
+ * Default Laceration multiplier for Armorer agents.
+ *
+ * Sharp DMG does not benefit from CRIT DMG Bonus - it calculates Laceration DMG
+ * Bonus instead. The value is static per agent (nothing in a build changes it),
+ * and is stored per agent as lvl60Stats.lacerationDamage. This constant is only
+ * the fallback for an Armorer missing that field.
+ *
+ * Claret's value is 150%, confirmed post-release. Other Armorers may differ,
+ * which is why the real value lives in the agent data rather than here.
+ */
+export const LACERATION_MULTIPLIER = 1.50;
+
+/**
+ * Calculate the average Laceration modifier for Armorer agents.
+ *
+ * Armorer replaces the usual CRIT calculation:
+ *  - Sharp DMG ignores CRIT DMG Bonus entirely, using a fixed Laceration
+ *    multiplier instead.
+ *  - CRIT Rate above 100% is not wasted: the excess rolls a second, independent
+ *    Laceration check ("CRIT twice"), so overcapping CRIT Rate keeps scaling.
+ *
+ * Formula: 1 + (min(CR, 1) x LACERATION) + (max(CR - 1, 0) x LACERATION)
+ * which simplifies to 1 + (CR x LACERATION) for CR up to 200%.
+ *
+ * Note this means CRIT DMG contributes nothing here. For Claret it is still
+ * valuable, but only via her core passive converting initial CRIT DMG into
+ * CRIT Rate - that conversion happens upstream in stat-calculator.service.ts.
+ *
+ * @param critRate - CRIT Rate as decimal (1.20 = 120%)
+ * @param lacerationBonus - Additional Laceration DMG Bonus as decimal (0.20 = 20%)
+ * @returns Average Laceration multiplier
+ */
+export function calculateLacerationModifier(
+  critRate: number,
+  lacerationBonus: number = 0,
+  lacerationBase: number = LACERATION_MULTIPLIER
+): number {
+  const multiplier = lacerationBase + lacerationBonus;
+
+  // First CRIT check, capped at 100%
+  const firstCheck = Math.min(Math.max(critRate, 0), 1.0);
+
+  // Excess CRIT Rate rolls a second Laceration check, also capped at 100%
+  const secondCheck = Math.min(Math.max(critRate - 1.0, 0), 1.0);
+
+  return 1 + (firstCheck * multiplier) + (secondCheck * multiplier);
+}
+
+/**
+ * Calculate Sharp DMG for Armorer agents.
+ *
+ * All DMG dealt by an Armorer's skills is Sharp DMG, which uses DEF as the
+ * DMG Multiplier instead of ATK. ATK is a dead stat for these agents.
+ *
+ * Because DEF replaces ATK as the scaling stat, it is also DEF that competes
+ * with the enemy's DEF in the defense modifier.
+ *
+ * @param DEF - Character's total DEF stat (the scaling stat)
+ * @param skillMultiplier - Skill motion value (e.g. 2.5 for 250% DEF)
+ * @param critRate - CRIT Rate as decimal (1.20 = 120%)
+ * @param dmgBonuses - Applicable damage% bonuses
+ * @param defShred - DEF Shred from debuffs as decimal
+ * @param penRatio - PEN Ratio as decimal
+ * @param flatPEN - Flat PEN value
+ * @param lacerationBonus - Additional Laceration DMG Bonus as decimal
+ * @param enemyDEF - Enemy DEF
+ * @param enemyRES - Enemy RES
+ * @param resShred - RES Shred as decimal
+ * @param lacerationBase - Agent's Laceration DMG as decimal (1.50 = 150%); static
+ *                         per agent, taken from lvl60Stats.lacerationDamage
+ * @returns Estimated Sharp DMG per hit
+ */
+export function calculateSharpDamage(
+  DEF: number,
+  skillMultiplier: number = 2.5,
+  critRate: number = 0,
+  dmgBonuses: number[] = [],
+  defShred: number = 0,
+  penRatio: number = 0,
+  flatPEN: number = 0,
+  lacerationBonus: number = 0,
+  enemyDEF: number = STANDARD_ENEMY.baseDEF,
+  enemyRES: number = STANDARD_ENEMY.attributeRES,
+  resShred: number = 0,
+  lacerationBase: number = LACERATION_MULTIPLIER
+): number {
+  // Base damage scales off DEF rather than ATK
+  const baseDMG = calculateBaseDamage(skillMultiplier, DEF);
+
+  // Laceration replaces the standard CRIT modifier
+  const critMod = calculateLacerationModifier(critRate, lacerationBonus, lacerationBase);
+
+  // DEF modifier - the character's DEF is what competes with enemy DEF here
+  const effectiveDEF = calculateEffectiveDEF(enemyDEF, defShred, penRatio, flatPEN);
+  const defMod = calculateDEFModifier(DEF, effectiveDEF);
+
+  const resMod = calculateRESModifier(enemyRES, STANDARD_ENEMY.allTypeRES, resShred, 0);
+  const dmgMod = calculateDMGModifier(dmgBonuses);
+
+  return calculateFinalDamage(baseDMG, critMod, defMod, resMod, dmgMod);
+}
+
+/**
  * Calculate Anomaly Buildup rate
  *
  * Formula: BaseAnomaly × (1 + AP%)

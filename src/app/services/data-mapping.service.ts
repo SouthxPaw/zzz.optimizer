@@ -24,7 +24,10 @@ export class DataMappingService {
 
   /**
    * Map raw game type codes to Specialty types
-   * 1 = Attack, 2 = Stun, 3 = Anomaly, 4 = Support, 5 = Defense, 6 = Rupture
+   * 1 = Attack, 2 = Stun, 3 = Anomaly, 4 = Support, 5 = Defense, 6 = Rupture, 7 = Armorer
+   *
+   * NOTE: 7 is an ASSUMED id for Armorer (Claret). The real game code is unknown
+   * until Claret releases - verify and correct if it differs.
    */
   readonly specialtyMap: { [key: number]: Specialty } = {
     1: 'Attack',
@@ -32,7 +35,8 @@ export class DataMappingService {
     3: 'Anomaly',
     4: 'Support',
     5: 'Defense',
-    6: 'Rupture'
+    6: 'Rupture',
+    7: 'Armorer'
   };
 
   /**
@@ -70,7 +74,8 @@ export class DataMappingService {
       'Anomaly': 'Anomaly',
       'Support': 'Support',
       'Defense': 'Defense',
-      'Rupture': 'Rupture'
+      'Rupture': 'Rupture',
+      'Armorer': 'Armorer'
     };
     return nameMap[name] || 'Attack';
   }
@@ -143,7 +148,8 @@ export class DataMappingService {
       'Anomaly': 'IconAnomaly.webp',
       'Support': 'IconSupport.webp',
       'Defense': 'IconDefense.webp',
-      'Rupture': 'IconRupture.webp'
+      'Rupture': 'IconRupture.webp',
+      'Armorer': 'IconArmorer.webp'
     };
     return `assets/data/images/roles/${iconMap[specialty]}`;
   }

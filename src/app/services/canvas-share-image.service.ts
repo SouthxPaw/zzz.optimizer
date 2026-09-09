@@ -1224,6 +1224,7 @@ export class CanvasShareImageService {
       Support: 'assets/data/images/roles/IconSupport.webp',
       Defense: 'assets/data/images/roles/IconDefense.webp',
       Rupture: 'assets/data/images/roles/IconRupture.webp',
+      Armorer: 'assets/data/images/roles/IconArmorer.webp',
     };
     return (
       specialtyMap[specialty] || 'assets/data/images/roles/IconAttackType.webp'

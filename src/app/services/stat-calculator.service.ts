@@ -269,7 +269,10 @@ export class StatCalculatorService {
       penRatio: Math.round(stats.penRatio * 10) / 10,
       energyRegen: Math.round(finalEnergyRegen * 10) / 10,
       energyRegenPercent: Math.round(stats.energyRegenPercent * 10) / 10,
-      sheerForce: finalSheerForce
+      sheerForce: finalSheerForce,
+      // Armorer display stats - static, so they pass through untouched by the build
+      lacerationDamage: stats.lacerationDamage,
+      sharpnessAutoAccumulation: stats.sharpnessAutoAccumulation
     };
 
     // Store in cache
@@ -544,8 +547,10 @@ export class StatCalculatorService {
       'energyRegen': 'energyRegen'
     };
 
+    // Every key in statMap points at a required numeric field; the ?? 0 is only
+    // to satisfy the optional Armorer display fields now present on BaseStats.
     const mappedKey = statMap[statKey];
-    return mappedKey ? stats[mappedKey] : 0;
+    return mappedKey ? stats[mappedKey] ?? 0 : 0;
   }
 
   /**
