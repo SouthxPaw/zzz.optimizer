@@ -1,11 +1,12 @@
 {
   "name": "zzz.optimizer",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "build:ghpages": "ng build --configuration=github-pages",
+    "thumbs": "node scripts/generate-agent-thumbnails.js",
+    "build": "npm run thumbs && ng build",
+    "build:ghpages": "npm run thumbs && ng build --configuration=github-pages",
     "deploy:ghpages": "npm run build:ghpages && npx angular-cli-ghpages --dir=dist/zzz.optimizer/browser --no-silent",
     "deploy:cleanup": "npm run build:ghpages && node -e \"require('fs').copyFileSync('dist/zzz.optimizer/browser/safety-worker.js', 'dist/zzz.optimizer/browser/ngsw-worker.js')\" && npx angular-cli-ghpages --dir=dist/zzz.optimizer/browser --no-silent",
     "watch": "ng build --watch --configuration=development",
@@ -45,6 +46,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "postcss": "^8.5.15",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.3.0",
     "typescript": "~5.7.2",
     "webpack-bundle-analyzer": "^5.2.0"

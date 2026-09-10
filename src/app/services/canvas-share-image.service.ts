@@ -47,11 +47,23 @@ export class CanvasShareImageService {
   // Image cache to avoid reloading
   private imageCache = new Map<string, HTMLImageElement>();
 
-  // Preload common images at service initialization
   private preloadInProgress = false;
 
-  constructor() {
-    this.preloadCommonImages();
+  constructor() {}
+
+  /**
+   * Warm the cache for the icons and backgrounds every share image needs.
+   *
+   * Deliberately NOT called from the constructor: this service is injected on
+   * page load, so preloading there put ~15 requests in flight competing with
+   * the initial render for a feature the user may never open. Callers should
+   * invoke this when the share UI becomes reachable instead.
+   *
+   * Safe to call repeatedly - it no-ops after the first call, and
+   * generateShareImage() still prefetches whatever it needs regardless.
+   */
+  warmImageCache(): void {
+    void this.preloadCommonImages();
   }
 
   /**

@@ -219,12 +219,13 @@
             <div class="build-portrait">
               <img
                 *ngIf="getAgentIcon(build.agentId)"
-                [src]="getAgentIcon(build.agentId)"
+                [src]="getAgentIconThumb(build.agentId)"
                 [alt]="build.name"
                 class="agent-icon"
                 width="60"
                 height="60"
                 loading="lazy"
+                decoding="async"
               />
               <span *ngIf="!getAgentIcon(build.agentId)" class="build-name">{{
                 build.name
@@ -1234,12 +1235,13 @@
             <div class="agent-portrait">
               <img
                 *ngIf="agent.icon"
-                [src]="agent.icon"
+                [src]="agent.iconThumb || agent.icon"
                 [alt]="agent.name"
                 class="agent-icon"
                 width="60"
                 height="60"
                 loading="lazy"
+                decoding="async"
               />
               <span *ngIf="!agent.icon" class="agent-name">{{
                 agent.name

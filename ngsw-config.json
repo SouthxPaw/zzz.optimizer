@@ -33,6 +33,16 @@
           "/**/*.(svg|cur|jpg|jpeg|apng|avif|gif|otf|ttf|woff|woff2)"
         ]
       }
+    },
+    {
+      "name": "assets-data",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/data/*.json"
+        ]
+      }
     }
   ],
   "dataGroups": [

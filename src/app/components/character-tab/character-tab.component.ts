@@ -1637,6 +1637,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return agent?.icon;
   }
 
+  /**
+   * Small portrait for list/grid views. Falls back to the full-size art so a
+   * missing thumbnail is only slow, never a broken image.
+   */
+  getAgentIconThumb(agentId: string): string | undefined {
+    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    return agent?.iconThumb || agent?.icon;
+  }
+
   // Helper to get agent element icon (with special element support)
   getAgentElementIcon(agentId: string): string | undefined {
     const agent = this.referenceAgents.find((a) => a.id === agentId);
@@ -3038,6 +3047,11 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   async shareAsImage() {
     if (!this.selectedBuild) return;
     this.showShareModal = true;
+
+    // Start fetching the shared icons/backgrounds now rather than at app start.
+    // No await - generateShareImage() prefetches what it needs anyway, this just
+    // gives those requests a head start while the modal renders.
+    this.canvasShareImageService.warmImageCache();
 
     // Load agent-specific customizations
     this.loadCustomizations();

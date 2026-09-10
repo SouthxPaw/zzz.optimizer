@@ -1,6 +1,18 @@
 {
   "versions": [
     {
+      "version": "7.0.1",
+      "date": "2026-09-10",
+      "features": [],
+      "fixes": [],
+      "improvements": [
+        "Agent images in the Add Agent window and your build list now load almost instantly",
+        "Fixed scrolling being choppy in the Add Agent window",
+        "Agent and W-Engine data is now saved offline after your first visit, so return visits load faster",
+        "Share image assets no longer load in the background on every visit - they now load when you open the share window"
+      ]
+    },
+    {
       "version": "7.0.0",
       "date": "2026-09-10",
       "features": [
