@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ImagePreloaderService {
+export class ImagePreloaderService implements OnDestroy {
   private preloadedImages: Set<string> = new Set();
   private preloadPromises: Map<string, Promise<void>> = new Map();
   private intersectionObserver?: IntersectionObserver;
@@ -134,8 +134,13 @@ export class ImagePreloaderService {
   }
 
   /**
-   * Cleanup
+   * Cleanup. Called by Angular when the root injector is destroyed; also safe to
+   * call manually.
    */
+  ngOnDestroy(): void {
+    this.destroy();
+  }
+
   destroy(): void {
     if (this.intersectionObserver) {
       this.intersectionObserver.disconnect();

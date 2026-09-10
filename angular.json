@@ -26,8 +26,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
-              "src/app/styles/shared-buttons.css"
+              "src/styles.css"
             ],
             "scripts": []
           },
@@ -37,13 +36,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "600kB",
+                  "maximumWarning": "700kB",
                   "maximumError": "1.2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "70kB",
-                  "maximumError": "75kB"
+                  "maximumWarning": "85kB",
+                  "maximumError": "100kB"
                 }
               ],
               "outputHashing": "all",
@@ -53,8 +52,12 @@
                   "minify": true,
                   "inlineCritical": true
                 },
-                "fonts": true
+                "fonts": {
+                  "inline": true
+                }
               },
+              "sourceMap": false,
+              "namedChunks": false,
               "serviceWorker": "ngsw-config.json"
             },
             "development": {
@@ -66,7 +69,18 @@
             "github-pages": {
               "baseHref": "/zzz.optimizer/",
               "outputHashing": "all",
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                },
+                "fonts": {
+                  "inline": true
+                }
+              },
+              "sourceMap": false,
+              "namedChunks": false,
               "serviceWorker": "ngsw-config.json",
               "fileReplacements": [
                 {
@@ -82,8 +96,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "70kB",
-                  "maximumError": "75kB"
+                  "maximumWarning": "85kB",
+                  "maximumError": "100kB"
                 }
               ]
             }

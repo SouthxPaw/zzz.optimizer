@@ -144,6 +144,20 @@ export class BuildImportExportService {
         }
       }
 
+      // Recalculate every imported build against current reference data.
+      // Imported builds carry the score they were exported with, which goes stale
+      // if agent stats or stat weights changed since the export was taken.
+      // Runs after discs are imported so disc lookups resolve.
+      if (buildsImported > 0) {
+        try {
+          await this.buildService.recalculateAllBuilds();
+        } catch (error) {
+          // A failed recalculation should not fail the import - the builds are
+          // already saved, they just keep their exported scores until next edit.
+          console.warn('Failed to recalculate builds after import:', error);
+        }
+      }
+
       const versionWarning = fileVersion !== this.EXPORT_VERSION
         ? ` (migrated from version ${fileVersion})`
         : '';

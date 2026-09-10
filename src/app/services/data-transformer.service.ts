@@ -112,6 +112,13 @@ export class DataTransformerService {
       icon = `assets/data/images/agents/${iconFileName}.webp`;
     }
 
+    // Thumbnail path for list/grid views, derived from the full-size path.
+    // Thumbnails are always .webp even when the source is not (one portrait is a
+    // PNG with a .webp extension), so normalise the extension here too.
+    const iconThumb = icon
+      .replace('/images/agents/', '/images/agents/thumbs/')
+      .replace(/\.(png|jpg|jpeg)$/i, '.webp');
+
     // Map element icon
     const elementIcon = `assets/data/images/elements/Icon${mappedElement}.webp`;
 
@@ -140,6 +147,7 @@ export class DataTransformerService {
       specialty: mappedSpecialty,
       lvl60Stats: lvl60Stats,
       icon: icon,
+      iconThumb: iconThumb,
       elementIcon: elementIcon,
       specialElementIcon: specialElementIcon,
       specialtyIcon: specialtyIcon,
@@ -187,7 +195,14 @@ export class DataTransformerService {
         penRatio: (lvl60.PenRate || 0) / 100,
         energyRegen: (lvl60.SpBarPoint || 12) / 10,  // 12 / 10 = 1.2
         energyRegenPercent: 0,
-        sheerForce: 0
+        sheerForce: 0,
+        // Armorer display stats - static per agent, absent for non-Armorers
+        lacerationDamage: lvl60.LacerationDamage !== undefined
+          ? lvl60.LacerationDamage / 100   // 15000 -> 150%
+          : undefined,
+        sharpnessAutoAccumulation: lvl60.SharpnessAutoAccumulation !== undefined
+          ? lvl60.SharpnessAutoAccumulation / 10  // 15 -> 1.5
+          : undefined
       };
     }
 
@@ -647,6 +662,11 @@ export class DataTransformerService {
       icon = `assets/data/images/agents/${iconFileName}.webp`;
     }
 
+    // Thumbnail path for list/grid views - see the note in transformAgent above.
+    const iconThumb = icon
+      .replace('/images/agents/', '/images/agents/thumbs/')
+      .replace(/\.(png|jpg|jpeg)$/i, '.webp');
+
     // Map element icon
     const elementIcon = `assets/data/images/elements/Icon${element}.webp`;
 
@@ -678,6 +698,7 @@ export class DataTransformerService {
       specialty: specialty,
       lvl60Stats: lvl60Stats,
       icon: icon,
+      iconThumb: iconThumb,
       elementIcon: elementIcon,
       specialElementIcon: specialElementIcon,
       specialtyIcon: specialtyIcon,

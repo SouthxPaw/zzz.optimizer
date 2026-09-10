@@ -47,7 +47,24 @@ export class CanvasShareImageService {
   // Image cache to avoid reloading
   private imageCache = new Map<string, HTMLImageElement>();
 
+  private preloadInProgress = false;
+
   constructor() {}
+
+  /**
+   * Warm the cache for the icons and backgrounds every share image needs.
+   *
+   * Deliberately NOT called from the constructor: this service is injected on
+   * page load, so preloading there put ~15 requests in flight competing with
+   * the initial render for a feature the user may never open. Callers should
+   * invoke this when the share UI becomes reachable instead.
+   *
+   * Safe to call repeatedly - it no-ops after the first call, and
+   * generateShareImage() still prefetches whatever it needs regardless.
+   */
+  warmImageCache(): void {
+    void this.preloadCommonImages();
+  }
 
   /**
    * Main entry point: Generate share image as PNG blob
@@ -65,6 +82,13 @@ export class CanvasShareImageService {
     // Enable high-quality rendering
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
+
+    // Warm the image cache in parallel before drawing. The draw calls below are
+    // strictly ordered (each layer paints over the last), so they must stay
+    // sequential - but their image loads do not. Without this, every loadImage()
+    // is serialized behind the previous layer's drawing, including the per-stat
+    // and per-disc icons that load one at a time inside their loops.
+    await this.prefetchImages(data);
 
     // Draw all layers in order
     await this.drawBackground(ctx, data);
@@ -114,6 +138,82 @@ export class CanvasShareImageService {
         1.0,
       );
     });
+  }
+
+  /**
+   * Warm the image cache for a single render.
+   *
+   * Collects every image URL the draw layers will request and loads them
+   * concurrently, so the ordered draw calls afterwards all hit the cache.
+   * Mirrors the URL construction in the draw methods - if a draw method changes
+   * which image it asks for, update it here too (a miss is only a slow path,
+   * not a failure).
+   *
+   * Failures are swallowed on purpose: the draw methods each have their own
+   * try/catch fallbacks (solid colour, skipped icon), and prefetching must not
+   * turn a missing optional icon into a rejected render.
+   */
+  private async prefetchImages(data: ShareImageData): Promise<void> {
+    const urls = new Set<string>();
+
+    // Background layer
+    urls.add(data.customBackgroundImageUrl || 'assets/data/images/share-image/ZZZTV.jpg');
+
+    // Angled bar (only when a custom image is supplied)
+    if (data.customBarImageUrl) {
+      urls.add(data.customBarImageUrl);
+    }
+
+    // Agent art
+    const agentImageUrl = data.customAgentImageUrl || data.agent.icon;
+    if (agentImageUrl) {
+      urls.add(agentImageUrl);
+    }
+
+    // Element + specialty icons
+    if (data.agent.elementIcon || data.agent.specialElementIcon) {
+      const elementIconPath = data.agent.specialElementIcon
+        ? this.getElementIconPath(data.agent.specialElementIcon)
+        : data.agent.elementIcon;
+      if (elementIconPath) {
+        urls.add(elementIconPath);
+      }
+    }
+    if (data.agent.specialty) {
+      urls.add(this.getSpecialtyIcon(data.agent.specialty));
+    }
+
+    // Equipment menu background
+    urls.add('assets/data/images/share-image/Equipment_Menu_Screen.webp');
+
+    // Stat icons - these are the ones that otherwise load one-at-a-time inside
+    // their draw loops.
+    for (const stat of data.mainStats) {
+      urls.add(`assets/data/images/share-image/Icon_Stat_${stat.iconName}.webp`);
+    }
+    if (data.build.equippedWEngine) {
+      for (const stat of data.wEngineStats) {
+        urls.add(`assets/data/images/share-image/Icon_Stat_${stat.iconName}.webp`);
+      }
+      if (data.build.equippedWEngine.icon) {
+        urls.add(data.build.equippedWEngine.icon);
+      }
+    }
+
+    // Disc set icons, one per equipped slot
+    const slots: DiscSlot[] = ['Drive1', 'Drive2', 'Drive3', 'Drive4', 'Drive5', 'Drive6'];
+    for (const slot of slots) {
+      const disc = data.build.equippedDiscs[slot];
+      if (!disc) continue;
+      const discSet = data.discSets.find((s) => s.name === disc.set);
+      if (discSet?.icon) {
+        urls.add(this.getAbsoluteUrl(discSet.icon));
+      }
+    }
+
+    await Promise.allSettled(
+      [...urls].map((src) => this.loadImage(src).catch(() => {})),
+    );
   }
 
   /**
@@ -367,6 +467,9 @@ export class CanvasShareImageService {
         this.roundRect(ctx, ratingX, badgeY, badgeWidth, 48, 8);
         ctx.fill();
 
+        // Gloss sits over the fill but under the border and the grade text.
+        this.drawBadgeGloss(ctx, ratingX, badgeY, badgeWidth, 48, 8);
+
         // Draw accent-colored border
         ctx.strokeStyle = accentColor;
         ctx.lineWidth = 3;
@@ -374,7 +477,7 @@ export class CanvasShareImageService {
         ctx.stroke();
 
         // Draw grade text
-        ctx.fillStyle = '#0a0a0a';
+        ctx.fillStyle = this.getRatingTextColor(grade);
         ctx.font = 'bold 28px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -857,7 +960,10 @@ export class CanvasShareImageService {
       this.roundRect(ctx, badgeX, badgeY, badgeWidth, 18, 4);
       ctx.fill();
 
-      ctx.fillStyle = '#0a0a0a';
+      // Gloss sits over the fill but under the grade text.
+      this.drawBadgeGloss(ctx, badgeX, badgeY, badgeWidth, 18, 4);
+
+      ctx.fillStyle = this.getRatingTextColor(grade);
       ctx.font = 'bold 12px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -1069,6 +1175,112 @@ export class CanvasShareImageService {
   }
 
   /**
+   * Shine ramp for SSS and below, mirroring the badge CSS in
+   * character-tab.component.css. Each grade sweeps from a lighter tint,
+   * through its identity colour at the midpoint, into a deeper shade, so the
+   * badge reads as lit rather than flat while staying recognisably its grade.
+   *
+   * VH/PHT are absent on purpose - they have their own multi-stop gradients.
+   */
+  private static readonly RATING_SHINE: {
+    [grade: string]: { light: string; base: string; deep: string };
+  } = {
+    SSS: { light: '#ff9dbe', base: '#ff6b9d', deep: '#e14c7e' },
+    SS: { light: '#ffb06b', base: '#ff8c42', deep: '#e06a1e' },
+    S: { light: '#ffe87a', base: '#ffd93d', deep: '#e0b415' },
+    A: { light: '#98e3a8', base: '#6bcf7f', deep: '#44a857' },
+    B: { light: '#84b6ff', base: '#4d96ff', deep: '#2a6fd6' },
+    C: { light: '#4a50f0', base: '#1920e6', deep: '#0e13a8' },
+    D: { light: '#b93bee', base: '#9c00de', deep: '#6d009c' },
+    F: { light: '#9a4020', base: '#6b1f00', deep: '#431300' },
+  };
+
+  /**
+   * Text colour for a rating badge.
+   *
+   * C, D and F are dark fills, so the near-black used on the bright grades is
+   * close to unreadable on them - the badge CSS already switches those to
+   * white and this keeps the share image consistent with it.
+   */
+  private getRatingTextColor(grade: string): string {
+    const gradeUpper = grade.toUpperCase();
+    return gradeUpper === 'C' || gradeUpper === 'D' || gradeUpper === 'F'
+      ? '#ffffff'
+      : '#0a0a0a';
+  }
+
+  /**
+   * Build the shine gradient for a grade, or null when the grade has none
+   * (VH/PHT, INCOMPLETE, or anything unrecognised).
+   *
+   * The CSS uses a 160deg sweep, which is close to vertical - matched here
+   * with a mostly-vertical gradient rather than the corner-to-corner one
+   * VH/PHT use.
+   */
+  private createRatingShineGradient(
+    ctx: CanvasRenderingContext2D,
+    grade: string,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+  ): CanvasGradient | null {
+    const ramp = CanvasShareImageService.RATING_SHINE[grade.toUpperCase()];
+    if (!ramp) {
+      return null;
+    }
+
+    const gradient = ctx.createLinearGradient(x + width * 0.18, y, x, y + height);
+    gradient.addColorStop(0, ramp.light);
+    gradient.addColorStop(0.52, ramp.base);
+    gradient.addColorStop(1, ramp.deep);
+    return gradient;
+  }
+
+  /**
+   * Paint the glossy highlight over a badge that was just filled.
+   *
+   * Mirrors the ::after layer in the CSS: a diagonal white sweep across the
+   * upper-left that fades out before the midpoint, plus a bright top edge.
+   * Call after filling the badge and with the badge path still describable,
+   * since this re-clips to the same rounded rect.
+   */
+  private drawBadgeGloss(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    radius: number,
+  ): void {
+    ctx.save();
+
+    // Confine the gloss to the badge shape so it cannot bleed past the corners.
+    this.roundRect(ctx, x, y, width, height, radius);
+    ctx.clip();
+
+    const gloss = ctx.createLinearGradient(x, y, x + width * 0.75, y + height);
+    gloss.addColorStop(0, 'rgba(255,255,255,0.38)');
+    gloss.addColorStop(0.42, 'rgba(255,255,255,0.10)');
+    gloss.addColorStop(0.55, 'rgba(255,255,255,0)');
+    ctx.fillStyle = gloss;
+    ctx.fillRect(x, y, width, height);
+
+    // Lit top edge - the canvas equivalent of the inset white highlight.
+    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.fillRect(x + radius * 0.5, y, width - radius, 1);
+
+    // Shaded bottom edge, matching the inset dark inset in the CSS.
+    const shade = ctx.createLinearGradient(x, y + height - 4, x, y + height);
+    shade.addColorStop(0, 'rgba(0,0,0,0)');
+    shade.addColorStop(1, 'rgba(0,0,0,0.22)');
+    ctx.fillStyle = shade;
+    ctx.fillRect(x, y + height - 4, width, 4);
+
+    ctx.restore();
+  }
+
+  /**
    * Get build rating color or gradient
    */
   private getBuildRatingColor(grade: string): string | CanvasGradient {
@@ -1134,8 +1346,12 @@ export class CanvasShareImageService {
       return gradient;
     }
 
-    // All other grades use solid colors
-    return this.getBuildRatingColor(grade);
+    // SSS and below get the shine ramp; anything without one (INCOMPLETE,
+    // unknown grades) still falls back to its solid colour.
+    return (
+      this.createRatingShineGradient(ctx, grade, x, y, width, height) ??
+      this.getBuildRatingColor(grade)
+    );
   }
 
   /**
@@ -1202,8 +1418,12 @@ export class CanvasShareImageService {
       return gradient;
     }
 
-    // All other grades use solid colors
-    return this.getDiscRatingColor(grade);
+    // SSS and below get the shine ramp; anything without one (INCOMPLETE,
+    // unknown grades) still falls back to its solid colour.
+    return (
+      this.createRatingShineGradient(ctx, grade, x, y, width, height) ??
+      this.getDiscRatingColor(grade)
+    );
   }
 
   /**
@@ -1445,5 +1665,44 @@ export class CanvasShareImageService {
     const b = parseInt(hex.substring(4, 6), 16);
 
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  /**
+   * Preload common images to improve performance
+   */
+  private async preloadCommonImages(): Promise<void> {
+    if (this.preloadInProgress) return;
+    this.preloadInProgress = true;
+
+    // Common stat icons that appear in most builds
+    const commonStatIcons = [
+      'HP', 'ATK', 'DEF', 'HP_', 'ATK_', 'DEF_',
+      'CRIT_Rate', 'CRIT_DMG', 'PEN_Ratio',
+      'Energy_Regen', 'Anomaly_Proficiency',
+      'Impact', 'Anomaly_Mastery'
+    ];
+
+    // Preload stat icons in background
+    const iconPromises = commonStatIcons.map(icon =>
+      this.loadImage(`assets/data/images/share-image/Icon_Stat_${icon}.webp`)
+        .catch(() => {}) // Silently fail for missing icons
+    );
+
+    // Preload equipment menu background
+    iconPromises.push(
+      this.loadImage('assets/data/images/share-image/Equipment_Menu_Screen.webp')
+        .catch(() => {})
+    );
+
+    // Preload default background
+    iconPromises.push(
+      this.loadImage('assets/data/images/share-image/ZZZTV.jpg')
+        .catch(() => {})
+    );
+
+    // Don't wait for preloading to complete - let it happen in background
+    Promise.all(iconPromises).finally(() => {
+      console.log('[Canvas] Preloaded common images for faster share image generation');
+    });
   }
 }

@@ -33,9 +33,6 @@ export class StatCalculatorService {
   private statCache = new Map<string, BaseStats>();
   private readonly CACHE_SIZE_LIMIT = 10000; // Up from 1000 for 20-30% speedup
 
-  // OPTIMIZATION 5: Set bonus caching
-  private setBonusCache = new Map<string, any>();
-
   // Mindscape data loaded from mindscape-stats.json (manually curated source of truth)
   private mindscapeData: MindscapeData | null = null;
   private mindscapeDataPromise: Promise<void> | null = null;
@@ -269,7 +266,10 @@ export class StatCalculatorService {
       penRatio: Math.round(stats.penRatio * 10) / 10,
       energyRegen: Math.round(finalEnergyRegen * 10) / 10,
       energyRegenPercent: Math.round(stats.energyRegenPercent * 10) / 10,
-      sheerForce: finalSheerForce
+      sheerForce: finalSheerForce,
+      // Armorer display stats - static, so they pass through untouched by the build
+      lacerationDamage: stats.lacerationDamage,
+      sharpnessAutoAccumulation: stats.sharpnessAutoAccumulation
     };
 
     // Store in cache
@@ -544,8 +544,10 @@ export class StatCalculatorService {
       'energyRegen': 'energyRegen'
     };
 
+    // Every key in statMap points at a required numeric field; the ?? 0 is only
+    // to satisfy the optional Armorer display fields now present on BaseStats.
     const mappedKey = statMap[statKey];
-    return mappedKey ? stats[mappedKey] : 0;
+    return mappedKey ? stats[mappedKey] ?? 0 : 0;
   }
 
   /**

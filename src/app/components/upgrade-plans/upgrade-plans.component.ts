@@ -45,6 +45,9 @@ export class UpgradePlansComponent implements OnInit, OnDestroy {
   newPlanAgentId = '';
   newPlanDescription = '';
 
+  // Error field highlighting
+  errorFields: Set<string> = new Set();
+
   // Available options
   discSlots = ['Drive1', 'Drive2', 'Drive3', 'Drive4', 'Drive5', 'Drive6'];
   priorityLevels = ['Essential', 'Important', 'Nice', 'Ignore'];
@@ -121,9 +124,18 @@ export class UpgradePlansComponent implements OnInit, OnDestroy {
 
   createNewPlan() {
     if (!this.newPlanName.trim() || !this.newPlanAgentId) {
+      if (!this.newPlanName.trim()) {
+        this.errorFields.add('newPlanName');
+      }
+      if (!this.newPlanAgentId) {
+        this.errorFields.add('newPlanAgentId');
+      }
       this.notificationService.warning('Please enter a plan name and select an agent', 3000);
+      this.cdr.markForCheck();
       return;
     }
+    this.errorFields.delete('newPlanName');
+    this.errorFields.delete('newPlanAgentId');
 
     const plan = this.upgradePlanService.createPlan(
       this.newPlanAgentId,

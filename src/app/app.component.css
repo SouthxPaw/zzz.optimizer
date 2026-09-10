@@ -3,6 +3,12 @@
   flex-direction: column;
   min-height: 100vh;
   background: #0a0a0a;
+  background-image:
+    radial-gradient(ellipse at top, rgba(244, 185, 66, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom, rgba(244, 185, 66, 0.02) 0%, transparent 50%),
+    repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(244, 185, 66, 0.01) 2px, rgba(244, 185, 66, 0.01) 4px);
+  background-size: 100% 100%, 100% 100%, 100px 100px;
+  background-position: top center, bottom center, 0 0;
 }
 
 router-outlet + * {

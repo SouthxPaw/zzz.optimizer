@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError, from, timer } from 'rxjs';
-import { switchMap, catchError, retryWhen, mergeMap } from 'rxjs/operators';
+import { switchMap, catchError, retryWhen, mergeMap, map } from 'rxjs/operators';
 import { Disc, MainStatType, SubStat, SubStatType } from '../models/disc.model';
 import { DiscSlot, WEngine } from '../models/agent.model';
 import { DbService } from './db.service';
@@ -220,24 +220,122 @@ export class EnkaApiService {
           })
         )
       ),
+      // A public CORS proxy can answer 200 while carrying an error, so the
+      // body has to be inspected before it is treated as a profile.
+      map(response => this.assertUsableResponse(response)),
       switchMap(response => from(this.transformEnkaData(uid, response))),
       catchError(error => {
         console.error('Enka API error:', error);
-        let errorMessage = 'Failed to fetch data from provided UID';
 
-        if (error.status === 404) {
-          errorMessage = 'UID not found. Make sure your profile is public in game settings or double check your UID.';
-        } else if (error.status === 429) {
-          errorMessage = 'Rate limited after 3 retries. Please wait a moment and try again.';
-        } else if (error.status === 0) {
-          errorMessage = 'CORS error. The API might be blocking requests. Try again later or contact support.';
-        } else if (error.status >= 500) {
-          errorMessage = 'Server error. Please try again later.';
+        // Move to the next fallback proxy so a proxy that is down or has
+        // started rejecting us is not retried on every subsequent import.
+        // Only relevant when no Cloudflare Worker is configured.
+        if (!this.CLOUDFLARE_WORKER && this.isProxyFailure(error)) {
+          this.currentProxyIndex++;
         }
 
-        return throwError(() => new Error(errorMessage));
+        return throwError(() => new Error(this.describeError(error)));
       })
     );
+  }
+
+  /**
+   * Guard against a proxy handing back something that is not a profile.
+   *
+   * The Cloudflare Worker already rejects non-JSON upstream responses, but the
+   * fallback CORS proxies do not preserve status codes: allorigins in
+   * particular answers 200 with an error payload, or with an HTML page that
+   * Angular surfaces as a string rather than an object. Without this check the
+   * failure would surface much later as a confusing transform error.
+   */
+  private assertUsableResponse(response: EnkaResponse): EnkaResponse {
+    if (!response || typeof response !== 'object') {
+      throw { status: 502, proxyFailure: true };
+    }
+
+    // Every real ZZZ profile response carries PlayerInfo. Its absence means
+    // the proxy returned an error envelope, or Enka returned an error body
+    // that the proxy flattened into a 200.
+    if (!('PlayerInfo' in response) || !response.PlayerInfo) {
+      throw { status: 502, proxyFailure: true };
+    }
+
+    return response;
+  }
+
+  /**
+   * Whether a failure suggests the proxy itself is at fault, rather than the
+   * request being something Enka legitimately rejected. Rotating away on a
+   * 404 would be wrong - the next proxy would give the same answer.
+   */
+  private isProxyFailure(error: { status?: number; proxyFailure?: boolean }): boolean {
+    if (error.proxyFailure) {
+      return true;
+    }
+
+    return error.status === 0 || error.status === 403 || (error.status ?? 0) >= 500;
+  }
+
+  /**
+   * Turn a failed request into a message that tells the user what actually
+   * went wrong and what (if anything) they can do about it.
+   *
+   * The status codes below are the ones Enka documents for
+   * /api/zzz/uid/{uid}, plus the codes our own Cloudflare Worker adds when it
+   * cannot reach Enka at all. Keeping them distinct matters because the fixes
+   * are completely different: a 404 is the user's problem to solve, a 424 is
+   * miHoYo's, and a 502 is ours.
+   */
+  private describeError(error: { status?: number; proxyFailure?: boolean }): string {
+    switch (error.status) {
+      case 0:
+        // No HTTP response reached us — offline, DNS failure, blocked by an
+        // extension, or the proxy rejected the preflight.
+        return 'Could not reach the import service. Check your internet connection, ' +
+          'disable any ad blockers for this site, and try again.';
+
+      case 400:
+        return 'That UID is not formatted correctly. A ZZZ UID is numbers only, ' +
+          'usually 8-10 digits, shown in the bottom right of the in-game menu.';
+
+      case 403:
+        return 'Enka Network refused the request. If this keeps happening, ' +
+          'please report it so the import service can be updated.';
+
+      case 404:
+        return 'UID not found. Make sure your profile is public in game settings ' +
+          'or double check your UID.';
+
+      case 424:
+        // Enka's documented "cannot get data from the game" code. Nearly always
+        // ZZZ version maintenance, which lasts hours - retrying now is pointless.
+        return 'Zenless Zone Zero is currently in maintenance, so the API ' +
+          'cannot read your profile. Please try importing again once the API is back online.';
+
+      case 429:
+        return 'the API is rate limiting us. We already retried 3 times - ' +
+          'please wait a minute or two and try again.';
+
+      case 500:
+        return 'API hit an internal error. This is usually temporary, ' +
+          'so please try again in a few minutes.';
+
+      case 502:
+      case 503:
+      case 504:
+        // Three sources: the worker's fetch to Enka threw (502), the worker
+        // got a non-JSON 200 from Enka (503), or a fallback proxy returned
+        // something unusable (502). In all of them the API is effectively
+        // unreachable rather than reporting a problem with the request.
+        return 'The API is not responding right now. It may be down or ' +
+          'restarting - please try again in a few minutes.';
+    }
+
+    if (typeof error.status === 'number' && error.status >= 500) {
+      return 'The import service returned a server error. Please try again later.';
+    }
+
+    return 'Failed to fetch data from provided UID. Please double check the UID and try again.';
   }
 
   /**

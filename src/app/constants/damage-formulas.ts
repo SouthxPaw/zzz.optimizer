@@ -297,12 +297,15 @@ export function calculateSheerForce(
 }
 
 /**
- * Laceration multiplier for Armorer agents.
+ * Default Laceration multiplier for Armorer agents.
  *
  * Sharp DMG does not benefit from CRIT DMG Bonus - it calculates Laceration DMG
- * Bonus instead, which is a fixed 150% multiplier on a CRIT.
+ * Bonus instead. The value is static per agent (nothing in a build changes it),
+ * and is stored per agent as lvl60Stats.lacerationDamage. This constant is only
+ * the fallback for an Armorer missing that field.
  *
- * PROVISIONAL: sourced from pre-release 3.2 beta data for Claret. Verify on release.
+ * Claret's value is 150%, confirmed post-release. Other Armorers may differ,
+ * which is why the real value lives in the agent data rather than here.
  */
 export const LACERATION_MULTIPLIER = 1.50;
 
@@ -328,9 +331,10 @@ export const LACERATION_MULTIPLIER = 1.50;
  */
 export function calculateLacerationModifier(
   critRate: number,
-  lacerationBonus: number = 0
+  lacerationBonus: number = 0,
+  lacerationBase: number = LACERATION_MULTIPLIER
 ): number {
-  const multiplier = LACERATION_MULTIPLIER + lacerationBonus;
+  const multiplier = lacerationBase + lacerationBonus;
 
   // First CRIT check, capped at 100%
   const firstCheck = Math.min(Math.max(critRate, 0), 1.0);
@@ -361,6 +365,8 @@ export function calculateLacerationModifier(
  * @param enemyDEF - Enemy DEF
  * @param enemyRES - Enemy RES
  * @param resShred - RES Shred as decimal
+ * @param lacerationBase - Agent's Laceration DMG as decimal (1.50 = 150%); static
+ *                         per agent, taken from lvl60Stats.lacerationDamage
  * @returns Estimated Sharp DMG per hit
  */
 export function calculateSharpDamage(
@@ -374,13 +380,14 @@ export function calculateSharpDamage(
   lacerationBonus: number = 0,
   enemyDEF: number = STANDARD_ENEMY.baseDEF,
   enemyRES: number = STANDARD_ENEMY.attributeRES,
-  resShred: number = 0
+  resShred: number = 0,
+  lacerationBase: number = LACERATION_MULTIPLIER
 ): number {
   // Base damage scales off DEF rather than ATK
   const baseDMG = calculateBaseDamage(skillMultiplier, DEF);
 
   // Laceration replaces the standard CRIT modifier
-  const critMod = calculateLacerationModifier(critRate, lacerationBonus);
+  const critMod = calculateLacerationModifier(critRate, lacerationBonus, lacerationBase);
 
   // DEF modifier - the character's DEF is what competes with enemy DEF here
   const effectiveDEF = calculateEffectiveDEF(enemyDEF, defShred, penRatio, flatPEN);

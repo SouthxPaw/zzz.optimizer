@@ -1,6 +1,46 @@
 {
   "versions": [
     {
+      "version": "7.0.1",
+      "date": "2026-09-10",
+      "features": [],
+      "fixes": [],
+      "improvements": [
+        "Agent images in the Add Agent window and your build list now load almost instantly",
+        "Fixed scrolling being choppy in the Add Agent window",
+        "Agent and W-Engine data is now saved offline after your first visit, so return visits load faster",
+        "Share image assets no longer load in the background on every visit - they now load when you open the share window"
+      ]
+    },
+    {
+      "version": "7.0.0",
+      "date": "2026-09-10",
+      "features": [
+        "UI overhaul - refreshed styling across the whole site",
+        "Build Type selector - lock an agent to CRIT or Anomaly scoring instead of relying on auto-detection",
+        "Element and Specialty badges now show on each agent card in your build list",
+        "Search bar in the Add Agent window - find agents by name, element, or specialty",
+        "Click multiple Element or Specialty icons to filter the agent list by more than one at a time",
+        "New in-game style loading screen",
+        "Page transition animations when moving between tabs",
+        "Clicking the ZZZ Optimizer title now takes you back to the Agents page"
+      ],
+      "fixes": [
+        "UID import errors now explain what actually went wrong - bad UID, game maintenance, rate limiting, or the service being down",
+        "UID import no longer fails with a confusing error when a backup import service returns a bad response",
+        "Fixed imported builds keeping their old scores - builds are now rescored against current agent data on import",
+        "Fixed disc search filtering as you type instead of waiting for you to finish"
+      ],
+      "improvements": [
+        "Rating badges on share images now have a shine effect matching the site",
+        "Share images generate faster by loading all their images at once",
+        "The Important Assumptions notice now stays dismissed after you click Understood",
+        "Scroll-to-top button on mobile now returns you to your agent list rather than the top of the page",
+        "Faster, smoother searching and scrolling on the Agents page",
+        "Loadout and Upgrade Plan forms now highlight the field you missed"
+      ]
+    },
+    {
       "version": "6.5.64",
       "date": "2026-08-19",
       "features": [],

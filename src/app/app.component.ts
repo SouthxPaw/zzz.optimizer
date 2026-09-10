@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, ChildrenOutletContexts } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -12,13 +12,15 @@ import { AppInitService } from './services/app-init.service';
 import { LoadingService } from './services/loading.service';
 import { SwUpdateService } from './services/sw-update.service';
 import { SeoService } from './services/seo.service';
+import { routeAnimations } from './animations/route-animations';
 import { AnniversaryService } from './services/anniversary.service';
 
 @Component({
   selector: 'app-root',
   imports: [CommonModule, RouterOutlet, NavigationComponent, FooterComponent, LoadingOverlayComponent, NotificationComponent, UpdateNotificationComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
+  animations: [routeAnimations]
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'zzz.optimizer';
@@ -31,8 +33,13 @@ export class AppComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private swUpdate: SwUpdateService,
     private seo: SeoService,
+    private contexts: ChildrenOutletContexts,
     private anniversary: AnniversaryService
   ) {}
+
+  getRouteAnimationData() {
+    return this.contexts.getContext('primary')?.route?.snapshot?.data?.['animation'];
+  }
 
   async ngOnInit() {
     // Initialize SEO structured data
@@ -59,6 +66,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     // Check for anniversary celebration (January 10th)
     this.anniversary.checkAndCelebrate();
+
+    // TEST ONLY: Expose anniversary test to window for console testing
+    // Usage: Open console and run window['testAnniversary']()
+    (window as any)['testAnniversary'] = () => this.anniversary.testCelebration();
   }
 
   ngOnDestroy() {

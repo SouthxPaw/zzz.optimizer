@@ -1,5 +1,6 @@
-import { Component, Input, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { trigger, transition, style, animate, state } from '@angular/animations';
 
 @Component({
   selector: 'app-loading-overlay',
@@ -7,13 +8,23 @@ import { CommonModule } from '@angular/common';
   templateUrl: './loading-overlay.component.html',
   styleUrl: './loading-overlay.component.css',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('slideOut', [
+      transition(':leave', [
+        animate('600ms cubic-bezier(0.4, 0, 0.2, 1)', style({
+          transform: 'translateX(100%)'
+        }))
+      ])
+    ])
+  ]
 })
-export class LoadingOverlayComponent implements AfterViewInit {
+export class LoadingOverlayComponent implements AfterViewInit, OnDestroy {
   @ViewChild('bangbooVideo') bangbooVideo?: ElementRef<HTMLVideoElement>;
   @Input() message = 'Loading...';
 
   private _show = false;
+  private playVideoTimeout: any;
 
   @Input()
   set show(value: boolean) {
@@ -36,8 +47,13 @@ export class LoadingOverlayComponent implements AfterViewInit {
   }
 
   private playVideo(): void {
+    // Clear any existing timeout
+    if (this.playVideoTimeout) {
+      clearTimeout(this.playVideoTimeout);
+    }
+
     // Use setTimeout to ensure DOM is ready
-    setTimeout(() => {
+    this.playVideoTimeout = setTimeout(() => {
       if (this.bangbooVideo?.nativeElement) {
         const video = this.bangbooVideo.nativeElement;
 
@@ -52,5 +68,12 @@ export class LoadingOverlayComponent implements AfterViewInit {
         });
       }
     }, 0);
+  }
+
+  ngOnDestroy(): void {
+    // Clean up timeout on component destruction
+    if (this.playVideoTimeout) {
+      clearTimeout(this.playVideoTimeout);
+    }
   }
 }

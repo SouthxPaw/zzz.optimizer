@@ -26,9 +26,10 @@ export class NotificationService {
   private hideTimeout: any = null;
 
   show(message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info', duration: number = 5000, action?: NotificationAction) {
-    // Clear any existing timeout
+    // Clear any existing timeout to prevent memory leaks
     if (this.hideTimeout) {
       clearTimeout(this.hideTimeout);
+      this.hideTimeout = null;
     }
 
     this.notificationSubject.next({ message, type, duration, action });
@@ -61,6 +62,11 @@ export class NotificationService {
 
   // Actually hide the notification (called after animation completes)
   completeHide() {
+    // Clear timeout when manually hiding
+    if (this.hideTimeout) {
+      clearTimeout(this.hideTimeout);
+      this.hideTimeout = null;
+    }
     this.notificationSubject.next(null);
     this.hideSubject.next(false);
   }

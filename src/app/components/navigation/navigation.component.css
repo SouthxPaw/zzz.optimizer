@@ -37,6 +37,21 @@
   height: 70px;
 }
 
+.site-title-link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.site-title-link:hover .site-title {
+  color: #FFD666;
+  text-shadow:
+    0 0 15px rgba(244, 185, 66, 0.7),
+    0 0 25px rgba(244, 185, 66, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  transform: scale(1.02);
+}
+
 .nav-brand .site-title {
   color: #F4B942;
   font-size: 1.5em;
@@ -49,6 +64,7 @@
     0 2px 4px rgba(0, 0, 0, 0.5);
   position: relative;
   display: block;
+  transition: all 0.3s ease;
 }
 
 .nav-brand {
@@ -95,7 +111,7 @@
   border-radius: 8px;
   font-weight: 600;
   font-size: 0.95em;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   border: 2px solid transparent;
   position: relative;
   overflow: hidden;
@@ -123,6 +139,7 @@
   width: 24px;
   height: 24px;
   object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
 .nav-link:hover {
@@ -138,6 +155,10 @@
 
 .nav-link:hover::before {
   width: 80%;
+}
+
+.nav-link:hover .nav-icon {
+  transform: scale(1.1);
 }
 
 .nav-link.active {
@@ -192,25 +213,25 @@
 /* Tablet adjustments - keep horizontal but reduce spacing */
 @media (max-width: 1024px) and (min-width: 769px) {
   .nav-container {
-    padding: 0 15px;
+    padding: 0 12px;
   }
 
   .nav-brand .site-title {
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
 
   .nav-links {
-    gap: 6px;
+    gap: 4px;
   }
 
   .nav-link {
-    padding: 8px 12px;
-    font-size: 0.85em;
+    padding: 6px 10px;
+    font-size: 0.8em;
   }
 
   .nav-link .nav-icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
 }
 
@@ -231,6 +252,7 @@
   .nav-link {
     width: 100%;
     justify-content: center;
+    min-height: 44px; /* Touch-friendly mobile target */
   }
 }
 

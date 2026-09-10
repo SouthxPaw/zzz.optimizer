@@ -35,6 +35,9 @@ export interface AgentBuild {
   include4pcBonuses?: boolean;
   // Active upgrade plan (overrides default weight system)
   activeUpgradePlanId?: string; // Reference to UpgradePlan ID
+  // User-pinned scoring profile for agents with more than one build type.
+  // Undefined = auto-detect from equipped discs (the default).
+  preferredBuildType?: string; // 'CRIT' | 'Anomaly'
 }
 
 @Injectable({
@@ -239,6 +242,8 @@ export class BuildService {
         updates.includePassiveBonuses !== undefined ||
         updates.includeSetBonuses !== undefined ||
         updates.include4pcBonuses !== undefined ||
+        updates.preferredBuildType !== undefined ||
+        'preferredBuildType' in updates ||
         updates.enabledDiscs !== undefined) {
       this.statCalculator.clearCache();
       await this.recalculateStats(builds[index]);
@@ -297,7 +302,11 @@ export class BuildService {
       agent.name,
       agent.specialty,
       agent.element,
-      build.level
+      build.level,
+      undefined, // agentScoring
+      undefined, // wengineScoring
+      undefined, // upgradePlan
+      build.preferredBuildType
     );
     build.score = scoreResult.score;
   }
