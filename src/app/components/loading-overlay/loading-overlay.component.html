@@ -1,5 +1,17 @@
-<div class="loading-overlay" *ngIf="show">
-  <div class="loading-content">
+<!-- Full-screen black loading overlay (in-game style) -->
+<div class="loading-screen" *ngIf="show" @slideOut>
+  <!-- ZZZ Logo in center with radial fade -->
+  <div class="logo-center">
+    <div class="logo-fade-mask">
+      <img
+        src="assets/data/images/page-icons/zzz-zenless-zone-zero.gif"
+        alt="Zenless Zone Zero"
+        class="zzz-logo">
+    </div>
+  </div>
+
+  <!-- Bangboo video in bottom right corner -->
+  <div class="bangboo-container">
     <video
       #bangbooVideo
       [src]="'assets/data/images/page-icons/bangbooloading.mp4'"
@@ -9,6 +21,5 @@
       [attr.playsinline]="true"
       class="bangboo-video">
     </video>
-    <div class="loading-text">{{ message }}</div>
   </div>
 </div>

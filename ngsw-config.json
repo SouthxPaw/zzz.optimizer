@@ -25,7 +25,7 @@
     {
       "name": "assets-images",
       "installMode": "lazy",
-      "updateMode": "prefetch",
+      "updateMode": "lazy",
       "resources": {
         "files": [
           "/assets/data/images/**/*.webp",

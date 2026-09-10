@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NotificationService, Notification } from '../../services/notification.service';
+import { slideInRight } from '../../animations/route-animations';
 
 @Component({
   selector: 'app-notification',
@@ -10,7 +11,8 @@ import { NotificationService, Notification } from '../../services/notification.s
   templateUrl: './notification.component.html',
   styleUrl: './notification.component.css',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [slideInRight]
 })
 export class NotificationComponent implements OnInit, OnDestroy {
   notification: Notification | null = null;
@@ -62,6 +64,25 @@ export class NotificationComponent implements OnInit, OnDestroy {
     if (this.notification?.action) {
       this.notification.action.callback();
       this.close();
+    }
+  }
+
+  getNotificationBackground(): string {
+    if (!this.notification) {
+      return '';
+    }
+
+    switch (this.notification.type) {
+      case 'success':
+        return 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+      case 'error':
+        return 'linear-gradient(135deg, #dc3545 0%, #e74c3c 100%)';
+      case 'warning':
+        return 'linear-gradient(135deg, #ffc107 0%, #ff9800 100%)';
+      case 'info':
+        return 'linear-gradient(135deg, #17a2b8 0%, #0dcaf0 100%)';
+      default:
+        return 'linear-gradient(135deg, #17a2b8 0%, #0dcaf0 100%)';
     }
   }
 }

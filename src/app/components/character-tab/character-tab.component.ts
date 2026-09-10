@@ -53,6 +53,7 @@ import {
   ShareImageData,
 } from '../../services/canvas-share-image.service';
 import { getDiscValidationErrors, hasValidationErrors } from '../../utils/disc-validation';
+import { fadeIn, scaleIn, fadeInUp, expandCollapse, fadeInFast, slideInRight } from '../../animations/route-animations';
 
 interface MindscapeData {
   mindscapes: {
@@ -82,6 +83,7 @@ interface MindscapeData {
   templateUrl: './character-tab.component.html',
   styleUrls: ['./character-tab.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [fadeIn, scaleIn, fadeInUp, expandCollapse, fadeInFast, slideInRight],
 })
 export class CharacterTabComponent implements OnInit, OnDestroy {
   // Expose Object for template use
@@ -118,6 +120,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Mobile responsiveness
   @ViewChild('buildHeader', { read: ElementRef }) buildHeader?: ElementRef;
+  @ViewChild('buildsGrid', { read: ElementRef }) buildsGrid?: ElementRef;
   isMobile: boolean = false;
   showScrollTopButton: boolean = false;
   selectedLoadoutForPreview: DiscLoadout | null = null;
@@ -228,14 +231,19 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   wengineRarityFilter = '';
   wengineSortBy = 'name';
 
-  // Agent picker filters
-  agentElementFilter = '';
-  agentSpecialtyFilter = '';
+  // Agent picker filters (multi-select for desktop)
+  agentElementFilters: Set<string> = new Set();
+  agentSpecialtyFilters: Set<string> = new Set();
   agentRarityFilter = '';
   agentSortBy = 'name';
+  agentSearchTerm = ''; // Search by agent name
+
+  // Legacy single-select filters (for mobile dropdowns)
+  agentElementFilter = '';
+  agentSpecialtyFilter = '';
 
   // Assumptions notice
-  showAssumptionsNotice = true;
+  showAssumptionsNotice = !localStorage.getItem('assumptionsAcknowledged');
 
   // Confirmation dialog
   showConfirmDialog = false;
@@ -262,10 +270,18 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private previouslyFocusedElement: HTMLElement | null = null;
   private artistCreditChange$ = new Subject<void>();
 
+  // Deferred DOM callbacks (scroll-into-view, focus). Tracked so they can be
+  // cancelled on destroy - they capture element refs and would otherwise run
+  // against a torn-down view if the user navigates away first.
+  private pendingDomTimeouts = new Set<ReturnType<typeof setTimeout>>();
+
   // Click guard flags to prevent double-clicking
   private isProcessingDiscAction = false;
   private isProcessingWEngineAction = false;
   private isProcessingAgentAction = false;
+
+  // Error field highlighting
+  errorFields: Set<string> = new Set();
 
   // Mindscape data from mindscape-stats.json
   private mindscapeData: MindscapeData | null = null;
@@ -417,7 +433,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Set up debounced search for disc set name
     this.discSearchSubject$
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(150), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe((searchTerm) => {
         this.debouncedDiscSearch = searchTerm;
         this.updateFilteredDiscSets();
@@ -426,7 +442,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Set up debounced search for disc effects
     this.discEffectSearchSubject$
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+      .pipe(debounceTime(150), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe((searchTerm) => {
         this.debouncedDiscEffectSearch = searchTerm;
         this.updateFilteredDiscSets();
@@ -445,6 +461,22 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+
+    for (const id of this.pendingDomTimeouts) {
+      clearTimeout(id);
+    }
+    this.pendingDomTimeouts.clear();
+  }
+
+  /**
+   * setTimeout for deferred DOM work, cancelled automatically on destroy.
+   */
+  private deferDom(fn: () => void, delay: number): void {
+    const id = setTimeout(() => {
+      this.pendingDomTimeouts.delete(id);
+      fn();
+    }, delay);
+    this.pendingDomTimeouts.add(id);
   }
 
   async selectBuild(build: AgentBuild) {
@@ -474,7 +506,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
     // Auto-scroll to agent name/build header on mobile when selecting an agent
     if (this.isMobile && this.buildHeader) {
-      setTimeout(() => {
+      this.deferDom(() => {
         this.buildHeader?.nativeElement.scrollIntoView({
           behavior: 'smooth',
           block: 'start',
@@ -487,19 +519,43 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   @HostListener('window:resize')
   checkIfMobile() {
     // Include tablets up to 1024px
+    const wasMobile = this.isMobile;
     this.isMobile = window.innerWidth <= 1024;
-    this.cdr.markForCheck();
+
+    // Resize fires continuously while dragging a desktop window and on every
+    // mobile URL-bar show/hide; only mark when we actually cross the breakpoint.
+    if (wasMobile !== this.isMobile) {
+      this.cdr.markForCheck();
+    }
   }
 
   @HostListener('window:scroll')
   onWindowScroll() {
-    if (this.isMobile) {
-      this.showScrollTopButton = window.pageYOffset > 300;
+    if (!this.isMobile) return;
+
+    // Only run change detection when the button actually toggles, not on every
+    // scroll event - this component's template is large enough that a CD pass
+    // per scroll frame is visible as jank on mobile.
+    const shouldShow = window.pageYOffset > 300;
+    if (shouldShow !== this.showScrollTopButton) {
+      this.showScrollTopButton = shouldShow;
       this.cdr.markForCheck();
     }
   }
 
   scrollToTop() {
+    // Scroll back to the agent list rather than the very top of the page - on
+    // mobile the builds grid is what the user wants to get back to, and the
+    // page header above it is not worth the extra scrolling.
+    if (this.buildsGrid?.nativeElement) {
+      this.buildsGrid.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest',
+      });
+      return;
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -508,7 +564,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.showAddAgentModal = true;
     this.selectedAgentForAdd = null;
     // Focus first interactive element after modal renders
-    setTimeout(() => {
+    this.deferDom(() => {
       const firstFocusable = document.querySelector(
         '.modal-content button, .modal-content input, .modal-content select',
       ) as HTMLElement;
@@ -524,7 +580,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.previouslyFocusedElement = null;
   }
 
-  dismissAssumptionsNotice() {
+  acknowledgeAssumptions() {
+    localStorage.setItem('assumptionsAcknowledged', 'true');
     this.showAssumptionsNotice = false;
     this.cdr.markForCheck();
   }
@@ -725,6 +782,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
 
     this.clearScoreCaches();
+    this.cdr.markForCheck();
   }
 
   isDiscEnabled(slot: DiscSlot): boolean {
@@ -815,6 +873,68 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Build types this agent has weight profiles for. Empty or single-entry means
+   * there is nothing to choose between, so the pin control stays hidden.
+   */
+  getAvailableBuildTypes(): string[] {
+    if (!this.selectedBuild) return [];
+    return this.scoringService.getAvailableBuildTypes(this.selectedBuild.agentId);
+  }
+
+  hasMultipleBuildTypes(): boolean {
+    return this.getAvailableBuildTypes().length > 1;
+  }
+
+  /**
+   * What scoring currently resolves to, whether pinned or auto-detected.
+   * Used to show the user which profile 'Auto' actually picked.
+   */
+  getActiveBuildType(): string {
+    if (!this.selectedBuild) return 'CRIT';
+    const equippedDiscs = Object.values(
+      this.selectedBuild.equippedDiscs || {},
+    ).filter((d) => d) as Disc[];
+    return this.scoringService.resolveBuildType(
+      equippedDiscs,
+      this.selectedBuild.agentId,
+      this.selectedBuild.preferredBuildType,
+    );
+  }
+
+  // Tap-to-reveal state for the build type explanation. Needed because `title`
+  // tooltips never fire on touch devices, where this hint matters just as much.
+  showBuildTypeHint = false;
+
+  /**
+   * Explanatory tooltip for the build type control. Mentions auto-detection only
+   * while the build is still unpinned.
+   */
+  getBuildTypeHint(): string {
+    const base = 'Disc ratings and stat weights are based on this profile.';
+    return this.selectedBuild?.preferredBuildType
+      ? base
+      : `${base} Auto-detected from your equipped discs - select one to lock it in.`;
+  }
+
+  /**
+   * Pin a scoring profile. Until the user picks one the build stays on
+   * auto-detection - the UI simply highlights whatever detection resolved.
+   */
+  async setPreferredBuildType(buildType: string) {
+    if (!this.selectedBuild) return;
+    // Already pinned to this type - nothing to do. Note an unpinned build whose
+    // detection matches still writes, so clicking the highlighted option commits it.
+    if (this.selectedBuild.preferredBuildType === buildType) return;
+
+    await this.buildService.updateBuild(this.selectedBuild.id, {
+      preferredBuildType: buildType,
+    });
+    this.clearScoreCaches();
+    this.clearFeedbackCache();
+    this.cdr.markForCheck();
+  }
+
   getSpecialtyIcon(specialty: string): string {
     const specialtyMap: { [key: string]: string } = {
       Attack: 'assets/data/images/roles/IconAttackType.webp',
@@ -831,19 +951,42 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   getFilteredAgents(): Agent[] {
-    const filterKey = `${this.referenceAgents.length}|${this.agentElementFilter}|${this.agentSpecialtyFilter}|${this.agentRarityFilter}|${this.agentSortBy}`;
+    const elementFiltersKey = Array.from(this.agentElementFilters).sort().join(',');
+    const specialtyFiltersKey = Array.from(this.agentSpecialtyFilters).sort().join(',');
+    const searchKey = this.agentSearchTerm.toLowerCase().trim();
+    const filterKey = `${this.referenceAgents.length}|${elementFiltersKey}|${specialtyFiltersKey}|${this.agentElementFilter}|${this.agentSpecialtyFilter}|${this.agentRarityFilter}|${this.agentSortBy}|${searchKey}`;
     if (this.cachedFilteredAgents && this.lastAgentFilterKey === filterKey) {
       return this.cachedFilteredAgents;
     }
 
-    // OPTIMIZED: Single-pass filtering instead of 3 sequential filters
+    // OPTIMIZED: Single-pass filtering with multi-select support
     const filtered = this.referenceAgents.filter((a) => {
+      // Search term filter (searches name, element, specialty)
+      if (searchKey) {
+        const nameMatch = a.name.toLowerCase().includes(searchKey);
+        const elementMatch = a.element.toLowerCase().includes(searchKey);
+        const specialtyMatch = a.specialty.toLowerCase().includes(searchKey);
+        if (!nameMatch && !elementMatch && !specialtyMatch) {
+          return false;
+        }
+      }
+      // Multi-select element filter (desktop) - if any selected, agent must match one of them
+      if (this.agentElementFilters.size > 0 && !this.agentElementFilters.has(a.element)) {
+        return false;
+      }
+      // Single-select element filter (mobile fallback)
       if (this.agentElementFilter && a.element !== this.agentElementFilter) {
         return false;
       }
+      // Multi-select specialty filter (desktop) - if any selected, agent must match one of them
+      if (this.agentSpecialtyFilters.size > 0 && !this.agentSpecialtyFilters.has(a.specialty)) {
+        return false;
+      }
+      // Single-select specialty filter (mobile fallback)
       if (this.agentSpecialtyFilter && a.specialty !== this.agentSpecialtyFilter) {
         return false;
       }
+      // Rarity filter (both desktop and mobile)
       if (this.agentRarityFilter && a.rarity !== this.agentRarityFilter) {
         return false;
       }
@@ -853,6 +996,25 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.cachedFilteredAgents = this.sortAgents(filtered);
     this.lastAgentFilterKey = filterKey;
     return this.cachedFilteredAgents;
+  }
+
+  // Toggle filter selection for desktop icon filters
+  toggleElementFilter(element: string): void {
+    if (this.agentElementFilters.has(element)) {
+      this.agentElementFilters.delete(element);
+    } else {
+      this.agentElementFilters.add(element);
+    }
+    this.cdr.markForCheck();
+  }
+
+  toggleSpecialtyFilter(specialty: string): void {
+    if (this.agentSpecialtyFilters.has(specialty)) {
+      this.agentSpecialtyFilters.delete(specialty);
+    } else {
+      this.agentSpecialtyFilters.add(specialty);
+    }
+    this.cdr.markForCheck();
   }
 
   sortAgents(agents: Agent[]): Agent[] {
@@ -1469,11 +1631,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   // Helper to get agent rank display
-  getRankDisplay(agentId: string): string {
-    const agent = this.referenceAgents.find((a) => a.id === agentId);
-    return agent?.rarity === 'S' ? 'S-Rank' : 'A-Rank';
-  }
-
   // Helper to get agent icon
   getAgentIcon(agentId: string): string | undefined {
     const agent = this.referenceAgents.find((a) => a.id === agentId);
@@ -1498,6 +1655,43 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   getAgentRarity(agentId: string): 'A' | 'S' | undefined {
     const agent = this.referenceAgents.find((a) => a.id === agentId);
     return agent?.rarity;
+  }
+
+  // Helper to get agent element
+  getAgentElement(agentId: string): string | undefined {
+    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    return agent?.element;
+  }
+
+  // Helper to get agent specialty
+  getAgentSpecialty(agentId: string): string | undefined {
+    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    return agent?.specialty;
+  }
+
+  // Helper to get agent specialty icon
+  getAgentSpecialtyIcon(agentId: string): string | undefined {
+    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    return agent?.specialtyIcon;
+  }
+
+  // Helper to calculate dynamic font size based on name length
+  getAgentNameFontSize(name: string): string {
+    const baseSize = 0.75; // em
+    const minSize = 0.45; // em
+    const comfortableLength = 12; // characters before scaling starts
+
+    if (name.length <= comfortableLength) {
+      return `${baseSize}em`;
+    }
+
+    // Scale down for longer names
+    // For every character over comfortableLength, reduce font size by 4%
+    const overageChars = name.length - comfortableLength;
+    const reductionFactor = 1 - (overageChars * 0.04);
+    const scaledSize = Math.max(minSize, baseSize * reductionFactor);
+
+    return `${scaledSize}em`;
   }
 
   // Disc management methods
@@ -1664,7 +1858,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private updateFilteredDiscs(): void {
     // OPTIMIZED: Single-pass filtering instead of 4 separate filter() calls
     // Pre-compute lowercase search term outside the loop
-    const searchLower = this.discSearchTerm?.toLowerCase();
+    const searchLower = this.debouncedDiscSearch?.toLowerCase();
 
     // OPTIMIZATION: Use DiscService indexed lookups to reduce search space
     let sourceDiscs: Disc[];
@@ -1714,10 +1908,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
    * Returns cached filtered discs (used in template)
    * This is fast because it just returns the pre-computed array
    */
-  getFilteredDiscs(): Disc[] {
-    return this.cachedFilteredDiscs;
-  }
-
   async equipDiscToBuild(disc: Disc) {
     if (
       !this.selectedBuild ||
@@ -2257,9 +2447,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     ).filter((d) => d);
     const detectedBuildType =
       allDiscs.length > 0
-        ? this.scoringService.detectBuildType(
+        ? this.scoringService.resolveBuildType(
             allDiscs,
             this.selectedBuild.agentId,
+            this.selectedBuild.preferredBuildType,
           )
         : undefined;
 
@@ -2343,6 +2534,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       undefined, // agentScoring - not used here
       undefined, // wengineScoring - not used here
       activePlan, // Pass upgrade plan to override default weights and breakpoints
+      this.selectedBuild.preferredBuildType,
     );
 
     const cachedResult = {
@@ -2389,9 +2581,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     ).filter((d) => d);
     const detectedBuildType =
       allDiscs.length > 0
-        ? this.scoringService.detectBuildType(
+        ? this.scoringService.resolveBuildType(
             allDiscs,
             this.selectedBuild.agentId,
+            this.selectedBuild.preferredBuildType,
           )
         : 'unknown';
 
@@ -2426,6 +2619,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       !!this.selectedBuild.equippedWEngine,
       this.isWEngineSpecialtyMatch(),
       activePlan,
+      this.selectedBuild.preferredBuildType,
     );
     this.lastFeedbackBuildHash = currentHash;
 
@@ -2439,22 +2633,6 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   }
 
   // Input validation and formatting methods
-  validateAndFormatMainStat(): void {
-    const value = this.discFormData.mainStatValue;
-    if (typeof value === 'string') {
-      // Remove any non-numeric characters except decimal point and negative sign
-      const cleaned = value.replace(/[^\d.-]/g, '');
-      const parsed = parseFloat(cleaned);
-
-      if (isNaN(parsed)) {
-        this.discFormData.mainStatValue = 0;
-      } else {
-        // Round to 1 decimal place
-        this.discFormData.mainStatValue = Math.round(parsed * 10) / 10;
-      }
-    }
-  }
-
   /**
    * Get the base stat type from the main stat
    * Handles both fixed slots (1-3) and variable slots (4-6)
@@ -2572,9 +2750,10 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Detect build type (CRIT, Anomaly, or Support) based on equipped discs
     const detectedBuildType =
       equippedDiscs.length > 0
-        ? this.scoringService.detectBuildType(
+        ? this.scoringService.resolveBuildType(
             equippedDiscs,
             this.selectedBuild.agentId,
+            this.selectedBuild.preferredBuildType,
           )
         : 'CRIT';
 
@@ -2955,7 +3134,7 @@ async generateShareImage() {
     });
 
     const detectedBuildType = equippedDiscsList.length > 0
-      ? this.scoringService.detectBuildType(equippedDiscsList, this.selectedBuild.agentId)
+      ? this.scoringService.resolveBuildType(equippedDiscsList, this.selectedBuild.agentId, this.selectedBuild.preferredBuildType)
       : 'CRIT';
 
     const buildWeights = this.scoringService.getBuildStatWeights(
@@ -4071,9 +4250,12 @@ async generateShareImage() {
 
     // Validate name
     if (!this.newLoadoutName || this.newLoadoutName.trim().length === 0) {
+      this.errorFields.add('newLoadoutName');
       this.notificationService.warning('Please enter a name for this loadout');
+      this.cdr.markForCheck();
       return;
     }
+    this.errorFields.delete('newLoadoutName');
 
     // Check if agent has reached max loadouts
     if (!this.discLoadoutService.canAddLoadout(this.selectedBuild.agentId)) {
@@ -4206,9 +4388,12 @@ async generateShareImage() {
 
     // Validate name
     if (!this.newLoadoutName || this.newLoadoutName.trim().length === 0) {
+      this.errorFields.add('newLoadoutName');
       this.notificationService.warning('Please enter a name for this loadout');
+      this.cdr.markForCheck();
       return;
     }
+    this.errorFields.delete('newLoadoutName');
 
     // Check if agent has reached max loadouts
     if (!this.discLoadoutService.canAddLoadout(this.selectedBuild.agentId)) {

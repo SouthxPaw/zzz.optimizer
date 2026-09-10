@@ -56,7 +56,7 @@
           >
             <span class="history-icon">▼</span>
           </button>
-          <div *ngIf="showUidHistoryDropdown" class="uid-history-dropdown-main">
+          <div *ngIf="showUidHistoryDropdown" class="uid-history-dropdown-main" @expandCollapse>
             <div class="uid-history-header">
               <span>Recent UIDs</span>
               <button
@@ -98,7 +98,7 @@
       </div>
     </div>
     <!-- Important Assumptions Notice -->
-    <div *ngIf="showAssumptionsNotice" class="assumptions-notice">
+    <div *ngIf="showAssumptionsNotice" class="assumptions-notice" @expandCollapse>
       <div class="notice-icon">ℹ️</div>
       <div class="notice-content">
         <h3>Important Assumptions</h3>
@@ -125,13 +125,14 @@
           credits page for more information.
         </p>
       </div>
-      <button
-        class="notice-close-btn"
-        (click)="dismissAssumptionsNotice()"
-        title="Dismiss notice"
-      >
-        ×
-      </button>
+      <div class="notice-actions">
+        <button
+          class="btn-acknowledge"
+          (click)="acknowledgeAssumptions()"
+        >
+          Understood
+        </button>
+      </div>
     </div>
 
     <div class="content-grid">
@@ -163,6 +164,7 @@
         <!-- Builds Grid -->
         <div
           class="builds-grid"
+          #buildsGrid
           *ngIf="builds.length > 0"
           cdkDropList
           cdkDropListOrientation="mixed"
@@ -178,38 +180,42 @@
             [class.a-rank]="getAgentRarity(build.agentId) === 'A'"
             (click)="selectBuild(build)"
           >
-            <!-- Drag Handle Indicator (Desktop) -->
-            <div class="drag-handle desktop-only" cdkDragHandle title="Drag to reorder">
-              <span class="drag-icon">⋮⋮</span>
+            <!-- Info Section with Drag Handle -->
+            <div class="build-info">
+              <div class="drag-handle-icon" cdkDragHandle title="Drag to reorder">
+                <span>☰</span>
+              </div>
+              <div class="info-content">
+                <div class="agent-name-label" [style.font-size]="getAgentNameFontSize(build.name)">{{ build.name }}</div>
+                <div class="build-stats">
+                  <div class="stat-badge">M{{ build.mindscapeLevel }}</div>
+                </div>
+              </div>
+              <div class="build-badges">
+                <img
+                  *ngIf="getAgentElementIcon(build.agentId)"
+                  [src]="getAgentElementIcon(build.agentId)"
+                  [alt]="getAgentElement(build.agentId)"
+                  class="build-element-badge"
+                  width="20"
+                  height="20"
+                  [title]="getAgentElement(build.agentId)"
+                  loading="lazy"
+                />
+                <img
+                  *ngIf="getAgentSpecialtyIcon(build.agentId)"
+                  [src]="getAgentSpecialtyIcon(build.agentId)"
+                  [alt]="getAgentSpecialty(build.agentId)"
+                  class="build-specialty-badge"
+                  width="20"
+                  height="20"
+                  [title]="getAgentSpecialty(build.agentId)"
+                  loading="lazy"
+                />
+              </div>
             </div>
 
-            <!-- Mobile Reorder Buttons -->
-            <div class="mobile-reorder-buttons mobile-only">
-              <button
-                class="reorder-btn reorder-up"
-                *ngIf="i > 0"
-                (click)="moveBuildUp(i, $event)"
-                title="Move up"
-              >
-                ↑
-              </button>
-              <button
-                class="reorder-btn reorder-down"
-                *ngIf="i < builds.length - 1"
-                (click)="moveBuildDown(i, $event)"
-                title="Move down"
-              >
-                ↓
-              </button>
-            </div>
-
-            <button
-              class="delete-btn"
-              (click)="deleteBuild(build.id, $event)"
-              title="Delete build"
-            >
-              ×
-            </button>
+            <!-- Portrait -->
             <div class="build-portrait">
               <img
                 *ngIf="getAgentIcon(build.agentId)"
@@ -224,15 +230,15 @@
                 build.name
               }}</span>
             </div>
-            <div class="build-info">
-              <div class="agent-name-label">{{ build.name }}</div>
-              <div class="build-stats">
-                <div class="stat-badge">M{{ build.mindscapeLevel }}</div>
-                <div class="stat-badge">
-                  {{ getEquippedDiscsCount(build) }}/6 Discs
-                </div>
-              </div>
-            </div>
+
+            <!-- Delete Button -->
+            <button
+              class="delete-btn"
+              (click)="deleteBuild(build.id, $event)"
+              title="Delete build"
+            >
+              ×
+            </button>
           </div>
         </div>
       </div>
@@ -244,6 +250,30 @@
           <button class="btn-share" (click)="shareAsImage()" title="Share build as image">
             📤 Share
           </button>
+        </div>
+
+        <!-- Build Type - shown first because it determines how every disc below is rated -->
+        <div *ngIf="hasMultipleBuildTypes()" class="build-type-section">
+          <div class="build-type-row">
+            <button
+              type="button"
+              class="build-type-label"
+              [title]="getBuildTypeHint()"
+              [attr.aria-expanded]="showBuildTypeHint"
+              (click)="showBuildTypeHint = !showBuildTypeHint">Build Type:<span class="build-type-info" aria-hidden="true">?</span></button>
+            <div class="build-type-options">
+              <button
+                *ngFor="let buildType of getAvailableBuildTypes()"
+                type="button"
+                class="build-type-btn"
+                [class.active]="getActiveBuildType() === buildType"
+                (click)="setPreferredBuildType(buildType)"
+                [title]="'Score this build as ' + buildType">
+                {{ buildType }}
+              </button>
+            </div>
+          </div>
+          <p *ngIf="showBuildTypeHint" class="build-type-hint">{{ getBuildTypeHint() }}</p>
         </div>
 
         <!-- Mindscape Cinema -->
@@ -400,7 +430,7 @@
           </div>
 
           <!-- W-Engine Picker -->
-          <div *ngIf="showWEnginePicker" class="wengine-picker">
+          <div *ngIf="showWEnginePicker" class="wengine-picker" @expandCollapse>
             <div class="wengine-picker-controls">
               <input
                 type="text"
@@ -581,6 +611,7 @@
               <span class="toggle-label" style="white-space: nowrap;">In-Game Stats</span>
             </label>
           </div>
+
           <div class="stats-grid">
             <div class="stat-row">
               <span class="stat-label">HP:</span>
@@ -950,11 +981,12 @@
     class="modal-overlay"
     *ngIf="showAddAgentModal"
     (click)="closeAddAgentModal()"
+    @fadeIn
     role="dialog"
     aria-labelledby="add-agent-title"
     aria-modal="true"
   >
-    <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-content" (click)="$event.stopPropagation()" @scaleIn>
       <div class="modal-header">
         <h2 id="add-agent-title">Add Agent</h2>
         <button
@@ -968,8 +1000,173 @@
       <div class="modal-body">
         <p>Select an agent to create a new build:</p>
 
-        <!-- Agent Filters -->
-        <div class="agent-picker-controls">
+        <!-- Desktop Icon Filters (hidden on mobile) - Dynamic single-row layout that wraps if needed -->
+        <div class="agent-icon-filters desktop-only">
+          <!-- Element Filters -->
+          <div class="filter-section-inline">
+            <label class="filter-section-label">Element:</label>
+            <div class="icon-filter-group">
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Fire')"
+                (click)="toggleElementFilter('Fire')"
+                title="Fire">
+                <img src="assets/data/images/elements/IconFire.webp" alt="Fire" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Ice')"
+                (click)="toggleElementFilter('Ice')"
+                title="Ice">
+                <img src="assets/data/images/elements/IconIce.webp" alt="Ice" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Electric')"
+                (click)="toggleElementFilter('Electric')"
+                title="Electric">
+                <img src="assets/data/images/elements/IconElectric.webp" alt="Electric" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Physical')"
+                (click)="toggleElementFilter('Physical')"
+                title="Physical">
+                <img src="assets/data/images/elements/IconPhysical.webp" alt="Physical" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Ether')"
+                (click)="toggleElementFilter('Ether')"
+                title="Ether">
+                <img src="assets/data/images/elements/IconEther.webp" alt="Ether" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Wind')"
+                (click)="toggleElementFilter('Wind')"
+                title="Wind">
+                <img src="assets/data/images/elements/IconWind.webp" alt="Wind" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentElementFilters.has('Lumen')"
+                (click)="toggleElementFilter('Lumen')"
+                title="Lumen">
+                <img src="assets/data/images/elements/IconLumen.webp" alt="Lumen" width="32" height="32" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="filter-divider"></div>
+
+          <!-- Specialty Filters -->
+          <div class="filter-section-inline">
+            <label class="filter-section-label">Specialty:</label>
+            <div class="icon-filter-group">
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Attack')"
+                (click)="toggleSpecialtyFilter('Attack')"
+                title="Attack">
+                <img src="assets/data/images/roles/IconAttackType.webp" alt="Attack" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Stun')"
+                (click)="toggleSpecialtyFilter('Stun')"
+                title="Stun">
+                <img src="assets/data/images/roles/IconStun.webp" alt="Stun" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Anomaly')"
+                (click)="toggleSpecialtyFilter('Anomaly')"
+                title="Anomaly">
+                <img src="assets/data/images/roles/IconAnomaly.webp" alt="Anomaly" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Support')"
+                (click)="toggleSpecialtyFilter('Support')"
+                title="Support">
+                <img src="assets/data/images/roles/IconSupport.webp" alt="Support" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Defense')"
+                (click)="toggleSpecialtyFilter('Defense')"
+                title="Defense">
+                <img src="assets/data/images/roles/IconDefense.webp" alt="Defense" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Rupture')"
+                (click)="toggleSpecialtyFilter('Rupture')"
+                title="Rupture">
+                <img src="assets/data/images/roles/IconRupture.webp" alt="Rupture" width="32" height="32" />
+              </button>
+              <button
+                type="button"
+                class="icon-filter-btn"
+                [class.active]="agentSpecialtyFilters.has('Armorer')"
+                (click)="toggleSpecialtyFilter('Armorer')"
+                title="Armorer">
+                <img src="assets/data/images/roles/IconArmorer.webp" alt="Armorer" width="32" height="32" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="filter-divider"></div>
+
+          <!-- Controls -->
+          <div class="filter-section-inline">
+            <label class="filter-section-label">Filters:</label>
+            <select [(ngModel)]="agentRarityFilter" class="filter-select compact">
+              <option value="">All Ranks</option>
+              <option value="S">S-Rank</option>
+              <option value="A">A-Rank</option>
+            </select>
+            <select [(ngModel)]="agentSortBy" class="filter-select compact">
+              <option value="name">Sort: Name</option>
+              <option value="element">Sort: Element</option>
+              <option value="specialty">Sort: Specialty</option>
+              <option value="rarity">Sort: Rarity</option>
+            </select>
+          </div>
+
+          <!-- Divider -->
+          <div class="filter-divider"></div>
+
+          <!-- Search Bar -->
+          <div class="filter-section-inline search-section">
+            <label class="filter-section-label">Search:</label>
+            <input
+              type="text"
+              [(ngModel)]="agentSearchTerm"
+              placeholder="Search by name, element, or specialty..."
+              class="agent-search-input"
+            />
+          </div>
+        </div>
+
+        <!-- Mobile Dropdown Filters (hidden on desktop) -->
+        <div class="agent-picker-controls mobile-only">
           <div class="filter-group">
             <label>Element:</label>
             <select [(ngModel)]="agentElementFilter" class="filter-select">
@@ -1013,6 +1210,15 @@
               <option value="rarity">Rarity</option>
             </select>
           </div>
+          <div class="filter-group search-group">
+            <label>Search:</label>
+            <input
+              type="text"
+              [(ngModel)]="agentSearchTerm"
+              placeholder="Search agents..."
+              class="filter-input"
+            />
+          </div>
         </div>
 
         <!-- Agent Selection Grid -->
@@ -1040,7 +1246,7 @@
               }}</span>
             </div>
             <div class="agent-info">
-              <div class="agent-name-label">{{ agent.name }}</div>
+              <div class="agent-name">{{ agent.name }}</div>
               <div class="agent-badges">
                 <img
                   *ngIf="getAgentElementIcon(agent.id)"
@@ -1089,6 +1295,7 @@
     [class.modal-overlay-high-z]="showLoadoutsModal"
     *ngIf="showDiscPicker"
     (click)="closeDiscPicker()"
+    @fadeIn
     role="dialog"
     aria-labelledby="disc-picker-title"
     aria-modal="true"
@@ -1096,6 +1303,7 @@
     <div
       class="modal-content disc-picker-modal"
       (click)="$event.stopPropagation()"
+      @scaleIn
     >
       <div class="modal-header">
         <h2 id="disc-picker-title">
@@ -1175,10 +1383,12 @@
   <div class="modal-overlay"
        [class.modal-overlay-high-z]="showLoadoutsModal"
        *ngIf="showDiscForm"
-       (click)="closeDiscForm()">
+       (click)="closeDiscForm()"
+       @fadeIn>
     <div
       class="modal-content disc-form-modal"
       (click)="$event.stopPropagation()"
+      @scaleIn
     >
       <div class="modal-header">
         <h2>{{ isEditMode ? "Edit Disc Stats" : "Configure Disc Stats" }}</h2>
@@ -1311,10 +1521,11 @@
   <!-- End Builds Tab -->
 
   <!-- Compare Discs Modal -->
-  <div class="modal-overlay" *ngIf="showCompareModal" (click)="closeCompareModal()">
+  <div class="modal-overlay" *ngIf="showCompareModal" (click)="closeCompareModal()" @fadeIn>
     <div
       class="modal-content compare-modal-content"
       (click)="$event.stopPropagation()"
+      @scaleIn
     >
       <div class="modal-header">
         <h2>Compare Discs - {{ formatDiscSlot(compareDiscSlot!) }}</h2>
@@ -1515,6 +1726,7 @@
     class="modal-overlay"
     *ngIf="showConfirmDialog"
     (click)="closeConfirmDialog()"
+    @fadeIn
     role="alertdialog"
     aria-labelledby="confirm-dialog-title"
     aria-describedby="confirm-dialog-message"
@@ -1523,6 +1735,7 @@
     <div
       class="modal-content confirm-dialog-modal"
       (click)="$event.stopPropagation()"
+      @scaleIn
     >
       <div class="modal-header">
         <h2 id="confirm-dialog-title">{{ confirmDialogData.title }}</h2>
@@ -1563,8 +1776,9 @@
     *ngIf="showEnkaImportModal"
     class="modal-overlay"
     (click)="closeEnkaImportModal()"
+    @fadeIn
   >
-    <div class="modal-content enka-import-modal" (click)="$event.stopPropagation()">
+    <div class="modal-content enka-import-modal" (click)="$event.stopPropagation()" @scaleIn>
       <button
         class="modal-close-btn"
         (click)="closeEnkaImportModal()"
@@ -1658,11 +1872,12 @@
     class="modal-overlay"
     *ngIf="showShareModal"
     (click)="closeShareModal()"
+    @fadeIn
     role="dialog"
     aria-labelledby="share-modal-title"
     aria-modal="true"
   >
-    <div class="modal-content share-modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-content share-modal-content" (click)="$event.stopPropagation()" @scaleIn>
       <div class="modal-header">
         <h2 id="share-modal-title">Share Build</h2>
         <button
@@ -1917,8 +2132,8 @@
   </div>
 
   <!-- Disc Loadouts Modal -->
-  <div class="modal-overlay" *ngIf="showLoadoutsModal" (click)="closeLoadoutsModal()">
-    <div class="modal-content loadouts-modal-content" (click)="$event.stopPropagation()">
+  <div class="modal-overlay" *ngIf="showLoadoutsModal" (click)="closeLoadoutsModal()" @fadeIn>
+    <div class="modal-content loadouts-modal-content" (click)="$event.stopPropagation()" @scaleIn>
       <div class="modal-header">
         <h2>Disc Loadouts - {{ selectedBuild?.name }}</h2>
         <button class="close-btn" (click)="closeLoadoutsModal()">×</button>
@@ -1957,7 +2172,7 @@
         <div class="loadouts-divider"></div>
 
         <!-- Save Current Flow -->
-        <div *ngIf="showSaveCurrentForm" class="save-current-form-section">
+        <div *ngIf="showSaveCurrentForm" class="save-current-form-section" @expandCollapse>
           <h3>Save Current Configuration</h3>
           <p class="form-description">Save your currently equipped discs ({{ getEquippedDiscsCount(selectedBuild!) }}/6) as a loadout</p>
           <div class="save-loadout-form">
@@ -1967,9 +2182,11 @@
               placeholder="Enter loadout name (e.g., 'Crit DPS', 'Energy Regen')"
               maxlength="50"
               class="loadout-name-input"
+              [class.error]="errorFields.has('newLoadoutName')"
+              (input)="errorFields.delete('newLoadoutName')"
               (keyup.enter)="confirmSaveCurrentLoadout()"
             />
-            <button class="btn-primary" (click)="confirmSaveCurrentLoadout()" [disabled]="!newLoadoutName.trim()">
+            <button class="btn-primary" (click)="confirmSaveCurrentLoadout()">
               Save
             </button>
             <button class="btn-secondary" (click)="cancelSaveCurrentLoadout()">
@@ -1979,7 +2196,7 @@
         </div>
 
         <!-- Create Empty Flow -->
-        <div *ngIf="showCreateEmptyForm" class="create-empty-form-section">
+        <div *ngIf="showCreateEmptyForm" class="create-empty-form-section" @expandCollapse>
           <h3>Create Empty Loadout</h3>
           <p class="form-description">Name your loadout, then select discs for each slot</p>
 
@@ -1990,6 +2207,8 @@
               placeholder="Enter loadout name (e.g., 'Crit DPS', 'Energy Regen')"
               maxlength="50"
               class="loadout-name-input"
+              [class.error]="errorFields.has('newLoadoutName')"
+              (input)="errorFields.delete('newLoadoutName')"
             />
           </div>
 
@@ -2062,7 +2281,6 @@
             <button
               class="btn-primary"
               (click)="confirmCreateEmptyLoadout()"
-              [disabled]="!newLoadoutName.trim() || Object.keys(newLoadoutDiscs).length === 0"
             >
               Create Loadout ({{ Object.keys(newLoadoutDiscs).length }}/6 discs)
             </button>
@@ -2118,7 +2336,7 @@
         </div>
 
         <!-- Preview Section -->
-        <div *ngIf="selectedLoadoutForPreview" class="loadout-preview-section">
+        <div *ngIf="selectedLoadoutForPreview" class="loadout-preview-section" @slideInRight>
           <div class="preview-header">
             <h3>Preview: {{ selectedLoadoutForPreview.name }}</h3>
             <button class="btn-secondary btn-compact" (click)="clearLoadoutPreview()">
