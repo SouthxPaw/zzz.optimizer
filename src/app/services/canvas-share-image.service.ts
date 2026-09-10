@@ -455,6 +455,9 @@ export class CanvasShareImageService {
         this.roundRect(ctx, ratingX, badgeY, badgeWidth, 48, 8);
         ctx.fill();
 
+        // Gloss sits over the fill but under the border and the grade text.
+        this.drawBadgeGloss(ctx, ratingX, badgeY, badgeWidth, 48, 8);
+
         // Draw accent-colored border
         ctx.strokeStyle = accentColor;
         ctx.lineWidth = 3;
@@ -462,7 +465,7 @@ export class CanvasShareImageService {
         ctx.stroke();
 
         // Draw grade text
-        ctx.fillStyle = '#0a0a0a';
+        ctx.fillStyle = this.getRatingTextColor(grade);
         ctx.font = 'bold 28px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -945,7 +948,10 @@ export class CanvasShareImageService {
       this.roundRect(ctx, badgeX, badgeY, badgeWidth, 18, 4);
       ctx.fill();
 
-      ctx.fillStyle = '#0a0a0a';
+      // Gloss sits over the fill but under the grade text.
+      this.drawBadgeGloss(ctx, badgeX, badgeY, badgeWidth, 18, 4);
+
+      ctx.fillStyle = this.getRatingTextColor(grade);
       ctx.font = 'bold 12px Arial';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -1157,6 +1163,112 @@ export class CanvasShareImageService {
   }
 
   /**
+   * Shine ramp for SSS and below, mirroring the badge CSS in
+   * character-tab.component.css. Each grade sweeps from a lighter tint,
+   * through its identity colour at the midpoint, into a deeper shade, so the
+   * badge reads as lit rather than flat while staying recognisably its grade.
+   *
+   * VH/PHT are absent on purpose - they have their own multi-stop gradients.
+   */
+  private static readonly RATING_SHINE: {
+    [grade: string]: { light: string; base: string; deep: string };
+  } = {
+    SSS: { light: '#ff9dbe', base: '#ff6b9d', deep: '#e14c7e' },
+    SS: { light: '#ffb06b', base: '#ff8c42', deep: '#e06a1e' },
+    S: { light: '#ffe87a', base: '#ffd93d', deep: '#e0b415' },
+    A: { light: '#98e3a8', base: '#6bcf7f', deep: '#44a857' },
+    B: { light: '#84b6ff', base: '#4d96ff', deep: '#2a6fd6' },
+    C: { light: '#4a50f0', base: '#1920e6', deep: '#0e13a8' },
+    D: { light: '#b93bee', base: '#9c00de', deep: '#6d009c' },
+    F: { light: '#9a4020', base: '#6b1f00', deep: '#431300' },
+  };
+
+  /**
+   * Text colour for a rating badge.
+   *
+   * C, D and F are dark fills, so the near-black used on the bright grades is
+   * close to unreadable on them - the badge CSS already switches those to
+   * white and this keeps the share image consistent with it.
+   */
+  private getRatingTextColor(grade: string): string {
+    const gradeUpper = grade.toUpperCase();
+    return gradeUpper === 'C' || gradeUpper === 'D' || gradeUpper === 'F'
+      ? '#ffffff'
+      : '#0a0a0a';
+  }
+
+  /**
+   * Build the shine gradient for a grade, or null when the grade has none
+   * (VH/PHT, INCOMPLETE, or anything unrecognised).
+   *
+   * The CSS uses a 160deg sweep, which is close to vertical - matched here
+   * with a mostly-vertical gradient rather than the corner-to-corner one
+   * VH/PHT use.
+   */
+  private createRatingShineGradient(
+    ctx: CanvasRenderingContext2D,
+    grade: string,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+  ): CanvasGradient | null {
+    const ramp = CanvasShareImageService.RATING_SHINE[grade.toUpperCase()];
+    if (!ramp) {
+      return null;
+    }
+
+    const gradient = ctx.createLinearGradient(x + width * 0.18, y, x, y + height);
+    gradient.addColorStop(0, ramp.light);
+    gradient.addColorStop(0.52, ramp.base);
+    gradient.addColorStop(1, ramp.deep);
+    return gradient;
+  }
+
+  /**
+   * Paint the glossy highlight over a badge that was just filled.
+   *
+   * Mirrors the ::after layer in the CSS: a diagonal white sweep across the
+   * upper-left that fades out before the midpoint, plus a bright top edge.
+   * Call after filling the badge and with the badge path still describable,
+   * since this re-clips to the same rounded rect.
+   */
+  private drawBadgeGloss(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    radius: number,
+  ): void {
+    ctx.save();
+
+    // Confine the gloss to the badge shape so it cannot bleed past the corners.
+    this.roundRect(ctx, x, y, width, height, radius);
+    ctx.clip();
+
+    const gloss = ctx.createLinearGradient(x, y, x + width * 0.75, y + height);
+    gloss.addColorStop(0, 'rgba(255,255,255,0.38)');
+    gloss.addColorStop(0.42, 'rgba(255,255,255,0.10)');
+    gloss.addColorStop(0.55, 'rgba(255,255,255,0)');
+    ctx.fillStyle = gloss;
+    ctx.fillRect(x, y, width, height);
+
+    // Lit top edge - the canvas equivalent of the inset white highlight.
+    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.fillRect(x + radius * 0.5, y, width - radius, 1);
+
+    // Shaded bottom edge, matching the inset dark inset in the CSS.
+    const shade = ctx.createLinearGradient(x, y + height - 4, x, y + height);
+    shade.addColorStop(0, 'rgba(0,0,0,0)');
+    shade.addColorStop(1, 'rgba(0,0,0,0.22)');
+    ctx.fillStyle = shade;
+    ctx.fillRect(x, y + height - 4, width, 4);
+
+    ctx.restore();
+  }
+
+  /**
    * Get build rating color or gradient
    */
   private getBuildRatingColor(grade: string): string | CanvasGradient {
@@ -1222,8 +1334,12 @@ export class CanvasShareImageService {
       return gradient;
     }
 
-    // All other grades use solid colors
-    return this.getBuildRatingColor(grade);
+    // SSS and below get the shine ramp; anything without one (INCOMPLETE,
+    // unknown grades) still falls back to its solid colour.
+    return (
+      this.createRatingShineGradient(ctx, grade, x, y, width, height) ??
+      this.getBuildRatingColor(grade)
+    );
   }
 
   /**
@@ -1290,8 +1406,12 @@ export class CanvasShareImageService {
       return gradient;
     }
 
-    // All other grades use solid colors
-    return this.getDiscRatingColor(grade);
+    // SSS and below get the shine ramp; anything without one (INCOMPLETE,
+    // unknown grades) still falls back to its solid colour.
+    return (
+      this.createRatingShineGradient(ctx, grade, x, y, width, height) ??
+      this.getDiscRatingColor(grade)
+    );
   }
 
   /**

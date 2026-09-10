@@ -79,6 +79,33 @@ export default {
       // Get the response data
       const data = await enkaResponse.text();
 
+      // Enka sometimes answers 200 with an HTML page instead of JSON - a
+      // maintenance notice, a Cloudflare challenge, or an edge error page.
+      // Passing that through means the client tries to parse HTML as a profile
+      // and fails deep inside the transform with an unreadable error, so
+      // translate it into a status the client already explains properly.
+      //
+      // Only 2xx is rewritten: an error status that happens to carry an HTML
+      // body still has a meaningful code (404, 424, ...) that must survive.
+      if (enkaResponse.ok && !looksLikeJson(enkaResponse, data)) {
+        console.error('Enka returned a non-JSON 200 response; treating as unavailable.');
+
+        return new Response(
+          JSON.stringify({
+            error: 'upstream_not_json',
+            details: 'Enka Network returned a non-JSON response.'
+          }),
+          {
+            status: 503,
+            headers: {
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-store, max-age=0',
+              ...corsHeaders()
+            }
+          }
+        );
+      }
+
       // Return response with CORS headers
       return new Response(data, {
         status: enkaResponse.status,
@@ -97,9 +124,13 @@ export default {
     } catch (error) {
       console.error('Error fetching from Enka API:', error);
 
+      // A throw here means we never got an HTTP response from Enka at all
+      // (DNS, TLS, connection refused, timeout). That is distinct from Enka
+      // answering with an error status, which is passed through untouched
+      // above so the client can tell 404 from 424 from 500.
       return new Response(
         JSON.stringify({
-          error: 'Failed to fetch data from Enka API',
+          error: 'upstream_unreachable',
           details: error.message
         }),
         {
@@ -113,6 +144,24 @@ export default {
     }
   }
 };
+
+/**
+ * Decide whether an upstream response is really JSON.
+ *
+ * The body is checked as well as the header because an edge error page can be
+ * served with a JSON content type, and Enka's own 200s are always objects.
+ */
+function looksLikeJson(response, body) {
+  const contentType = response.headers.get('Content-Type') || '';
+
+  if (!contentType.toLowerCase().includes('json')) {
+    return false;
+  }
+
+  // A ZZZ profile is always a JSON object. Anything else at the top level
+  // (most obviously a leading "<" from HTML) is not a profile.
+  return body.trimStart().startsWith('{');
+}
 
 /**
  * Handle CORS preflight OPTIONS requests
