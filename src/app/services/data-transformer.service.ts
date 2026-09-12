@@ -425,8 +425,11 @@ export class DataTransformerService {
       specialty = this.mappingService.getSpecialty(rawWEngine.type) as any;
     }
 
-    // Extract base ATK from BaseProperty (already at level 60)
+    // Extract base stat from BaseProperty (already at level 60)
+    // Armorer W-Engines carry Base DEF here instead of Base ATK
     const baseAtk = rawWEngine.BaseProperty?.Value || (rarity === 'S' ? 713 : rarity === 'A' ? 594 : 475);
+    const baseStatType: 'ATK' | 'DEF' =
+      (rawWEngine.BaseProperty?.Name || '').includes('DEF') ? 'DEF' : 'ATK';
 
     // Extract substat from RandProperty (already at level 60)
     const randProp = rawWEngine.RandProperty || {};
@@ -493,6 +496,7 @@ export class DataTransformerService {
       rarity: rarity,
       specialty: specialty,
       baseAtk: baseAtk,
+      baseStatType: baseStatType,
       subStat: {
         type: subStatType,
         value: subStatValue
@@ -527,6 +531,9 @@ export class DataTransformerService {
     const level60 = raw.Level?.['60'];
     const rateMultiplier = level60 ? (level60.Rate / 10000) : 0;
     const baseAtk = Math.round(baseValue * (1 + rateMultiplier));
+    // Armorer W-Engines carry Base DEF here instead of Base ATK
+    const baseStatType: 'ATK' | 'DEF' =
+      (raw.BaseProperty?.Name || '').includes('DEF') ? 'DEF' : 'ATK';
 
     // Extract substat from RandProperty
     // RandProperty.Name is like "ATK" or "CRIT Rate"
@@ -595,6 +602,7 @@ export class DataTransformerService {
       rarity: rarity,
       specialty: specialty,
       baseAtk: baseAtk,
+      baseStatType: baseStatType,
       subStat: {
         type: subStatType,
         value: subStatValue

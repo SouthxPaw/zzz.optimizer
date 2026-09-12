@@ -577,7 +577,14 @@
             </div>
 
             <p>
-              <strong>Base ATK:</strong>
+              <strong
+                >Base
+                {{
+                  selectedBuild.equippedWEngine.baseStatType === 'DEF'
+                    ? 'DEF'
+                    : 'ATK'
+                }}:</strong
+              >
               {{ selectedBuild.equippedWEngine.baseAtk }}
             </p>
             <p>
