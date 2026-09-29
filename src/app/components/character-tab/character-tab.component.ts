@@ -2629,6 +2629,8 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       this.isWEngineSpecialtyMatch(),
       activePlan,
       this.selectedBuild.preferredBuildType,
+      this.referenceAgents.find((a) => a.id === this.selectedBuild!.agentId)
+        ?.specialty,
     );
     this.lastFeedbackBuildHash = currentHash;
 
@@ -4056,10 +4058,11 @@ async generateShareImage() {
     const wEngine = this.selectedBuild.equippedWEngine;
     const stats: Array<{ iconName: string; label: string; value: string }> = [];
 
-    // Add base ATK
+    // Add the base stat - Armorer W-Engines carry Base DEF where others have Base ATK
+    const isDefBase = wEngine.baseStatType === 'DEF';
     stats.push({
-      iconName: 'ATK',
-      label: 'Base ATK',
+      iconName: isDefBase ? 'DEF' : 'ATK',
+      label: isDefBase ? 'Base DEF' : 'Base ATK',
       value: String(wEngine.baseAtk),
     });
 

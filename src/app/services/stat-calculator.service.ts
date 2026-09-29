@@ -319,8 +319,14 @@ export class StatCalculatorService {
    * These are ALWAYS applied when a W-Engine is equipped (included in in-game stats)
    */
   private applyWEngineBaseStats(stats: BaseStats, wEngine: WEngine): void {
-    // Add base ATK from W-Engine (BaseProperty)
-    stats.atk += wEngine.baseAtk;
+    // Add the BaseProperty to whichever stat it belongs to. Armorer W-Engines
+    // (e.g. Crimson Thirst) provide Base DEF, not Base ATK - adding those to ATK
+    // both inflates a dead stat and starves the DEF that their Sharp DMG scales off.
+    if (wEngine.baseStatType === 'DEF') {
+      stats.def += wEngine.baseAtk;
+    } else {
+      stats.atk += wEngine.baseAtk;
+    }
 
     // Apply W-Engine substat (RandProperty)
     const subStatType = wEngine.subStat.type;
@@ -836,26 +842,30 @@ export class StatCalculatorService {
 
     // At this point, stats.hp/atk/def contains:
     // - Agent base stats
-    // - W-Engine base ATK (for ATK only)
+    // - W-Engine base stat (ATK, or DEF for Armorer W-Engines)
     // - Flat HP/ATK/DEF from discs
     //
     // We need to separate flat disc bonuses and apply the ZZZ formula correctly
 
     // Calculate flat disc bonuses by subtracting base values
-    // W-Engine base ATK is always included when W-Engine is equipped
-    const wEngineBaseATK = wEngine?.baseAtk || 0;
+    // The W-Engine base stat is always included when a W-Engine is equipped, and
+    // lands on DEF rather than ATK for Armorer W-Engines (see applyWEngineBaseStats)
+    const wEngineBase = wEngine?.baseAtk || 0;
+    const wEngineBaseIsDef = wEngine?.baseStatType === 'DEF';
+    const wEngineBaseATK = wEngineBaseIsDef ? 0 : wEngineBase;
+    const wEngineBaseDEF = wEngineBaseIsDef ? wEngineBase : 0;
 
     const flatHPFromDiscs = stats.hp - baseHP;
     const flatATKFromDiscs = stats.atk - baseATK - wEngineBaseATK;
-    const flatDEFFromDiscs = stats.def - baseDEF;
+    const flatDEFFromDiscs = stats.def - baseDEF - wEngineBaseDEF;
 
     // For Anomaly Mastery, flat bonuses come from mindscape effects only
     // (there are no flat Anomaly Mastery substats or W-Engine bonuses)
     const flatAnomalyMasteryBonuses = stats.anomalyMastery - baseAnomalyMastery;
 
     // Apply ZZZ formula: Final = (Base × (1 + %)) + Flat Bonuses
-    // Base for HP/DEF = Agent base only
-    // Base for ATK = Agent base + W-Engine base
+    // Base for HP = Agent base only
+    // Base for ATK/DEF = Agent base + W-Engine base (whichever one the W-Engine feeds)
 
     // Special handling for HP: Some agents (Zhao, Manato) have HP% ascension bonuses
     // For these agents, baseHP already includes the ascension bonus (naked HP for display)
@@ -872,7 +882,7 @@ export class StatCalculatorService {
     }
     const calculatedATK = (baseATK + wEngineBaseATK) * (1 + stats.atkpercent / 100) + flatATKFromDiscs;
     stats.atk = calculatedATK;
-    stats.def = baseDEF * (1 + stats.defpercent / 100) + flatDEFFromDiscs;
+    stats.def = (baseDEF + wEngineBaseDEF) * (1 + stats.defpercent / 100) + flatDEFFromDiscs;
 
     // Apply Anomaly Mastery percentage formula:
     // Final = Base × (1 + Anomaly Mastery%) + Flat Bonuses

@@ -1826,8 +1826,13 @@ export class ScoringService {
     const contribution: Partial<BaseStats> = {};
     const weight = EXTERNAL_STAT_WEIGHTS.WENGINE;
 
-    // Add base ATK contribution (always present on W-Engines)
-    contribution.atk = (wEngine.baseAtk || 0) * weight;
+    // Add base stat contribution (always present on W-Engines). Armorer W-Engines
+    // carry Base DEF here instead of Base ATK.
+    if (wEngine.baseStatType === 'DEF') {
+      contribution.def = (wEngine.baseAtk || 0) * weight;
+    } else {
+      contribution.atk = (wEngine.baseAtk || 0) * weight;
+    }
 
     // Add substat contribution
     if (wEngine.subStat) {
@@ -2176,10 +2181,19 @@ export class ScoringService {
     hasWEngine: boolean,
     isWEngineSpecialtyMatch: boolean,
     upgradePlan?: UpgradePlan,
-    preferredBuildType?: string
+    preferredBuildType?: string,
+    agentRole?: string
   ): FeedbackItem[] {
     const feedback: FeedbackItem[] = [];
     const breakpoints = this.agentBreakpoints[agentId];
+
+    // Armorers "CRIT twice": CRIT Rate past 100% rolls a second Laceration check,
+    // so it keeps scaling instead of being wasted - they actively want to build
+    // well past 100%. The formula only flattens at 200%, which is not reachable
+    // in practice, so for feedback purposes an Armorer simply cannot overcap.
+    // None of the CRIT Rate overcap/wasted-stat rules below apply to them.
+    // See calculateLacerationModifier() in damage-formulas.ts.
+    const isArmorer = agentRole === 'Armorer';
 
     // If no breakpoints defined, we can't give stat-specific feedback
     if (!breakpoints) {
@@ -2253,8 +2267,10 @@ export class ScoringService {
       energyRegen: { value: stats.energyRegen, label: 'Energy Regen', unit: '%', substatName: 'Energy Regen' },
     };
 
-    // Check for CRIT Rate overcap (warn if > 100%)
-    if (stats.critRate > 100) {
+    // Check for CRIT Rate overcap (warn if > 100%).
+    // Armorers are never warned: they want CRIT Rate well past 100%, and the
+    // formula only flattens at 200%, which is not reachable in practice.
+    if (!isArmorer && stats.critRate > 100) {
       const overcap = stats.critRate - 100;
       // Only show the specific overcap value if it's >= 1% (i.e., total critRate >= 101%)
       const message = stats.critRate >= 101
@@ -2393,8 +2409,9 @@ export class ScoringService {
           lowRollPriorityStats.push(displayName);
         }
 
-        // Skip CRIT Rate check if overcapped - it's now a wasted stat
-        if (sub.type === 'CRIT_Rate' && stats.critRate >= 100) {
+        // Skip CRIT Rate check if overcapped - it's now a wasted stat.
+        // Never applies to Armorers: CRIT Rate is never a wasted stat for them.
+        if (sub.type === 'CRIT_Rate' && !isArmorer && stats.critRate >= 100) {
           wastedStats.push('CRIT Rate');
         } else if (weight < 1.0) {
           // Only flag as wasted if weight < 1.0 (not highly valued in this build)
@@ -2425,8 +2442,11 @@ export class ScoringService {
             return false;
           }
 
-          // Second filter: Check if stat should be excluded
-          const isCritRateOvercap = stat === 'CRIT_Rate' && (
+          // Second filter: Check if stat should be excluded.
+          // CRIT Rate never stops paying off for an Armorer, so it is never
+          // dropped from their suggestions - not at 100%, and not at their
+          // "optimal" breakpoint either.
+          const isCritRateOvercap = stat === 'CRIT_Rate' && !isArmorer && (
             stats.critRate >= 100 ||
             (stats.critRate >= breakpoints.breakpoints.critRate.optimal && stats.critRate >= 50)
           );

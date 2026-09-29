@@ -1,7 +1,17 @@
 {
   "versions": [
     {
-      "version": "7.0.1",
+      "version": "7.0.3",
+      "date": "2026-09-12",
+      "features": [],
+      "fixes": [
+        "Fixed Armorer W-Engines like Crimson Thirst giving flat ATK instead of DEF - their base stat is Base DEF, and it now correctly boosts DEF",
+        "Armorers no longer get the CRIT Rate overcap warning - they want well over 100% CRIT Rate, so it was never actually overcapped"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "7.0.2",
       "date": "2026-09-10",
       "features": [],
       "fixes": [],
