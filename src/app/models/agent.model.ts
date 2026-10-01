@@ -42,7 +42,7 @@ export interface Agent {
   specialty: Specialty;
   lvl60Stats: BaseStats;
   icon?: string;
-  iconThumb?: string;           // 120px thumbnail for list/grid views (see scripts/generate-agent-thumbnails.js)
+  iconThumb?: string;           // 400px-wide thumbnail for list/grid views (see build-scripts/generate-agent-thumbnails.js)
   elementIcon?: string;
   specialElementIcon?: string;  // For special element variants (Frost, AuricInk, HonedEdge)
   specialtyIcon?: string;
