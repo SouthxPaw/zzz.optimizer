@@ -667,6 +667,46 @@
       "dazeBonus": 0
     }
   },
+  "12016": {
+    "Id": 12016,
+    "CodeName": "Weapon_B_Common_16",
+    "Name": "[Lunar] Semiluna",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 2,
+    "Icon": "Weapon_B_Common_16.png",
+    "WeaponType": {
+      "7": "Armorer"
+    },
+    "BaseProperty": {
+      "Name": "Base DEF",
+      "Name2": "Base DEF",
+      "Format": "{0:0.#}",
+      "Value": 282
+    },
+    "RandProperty": {
+      "Name": "DEF",
+      "Name2": "DEF",
+      "Format": "{0:0.#%}",
+      "Value": 3200
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When an [EX Special Attack] is activated, [Basic Attack] DMG increases by % for 10s; repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "DMGBonus",
+          "value": "30",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
+  },
   "13001": {
     "Id": 13001,
     "CodeName": "Weapon_A_Common_01",
@@ -1447,6 +1487,93 @@
       "Desc": "When a squad member's HP is greater than or equal to 50%, they take % less DMG, and % less Miasma Contamination. Only one instance of this effect can exist in the same squad."
     }
   },
+  "13017": {
+    "Id": 13017,
+    "CodeName": "Weapon_A_Common_17",
+    "Name": "Catty Luck",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_17.png",
+    "WeaponType": {
+      "7": "Armorer"
+    },
+    "BaseProperty": {
+      "Name": "Base DEF",
+      "Name2": "Base DEF",
+      "Format": "{0:0.#}",
+      "Value": 356
+    },
+    "RandProperty": {
+      "Name": "DEF",
+      "Name2": "DEF",
+      "Format": "{0:0.#%}",
+      "Value": 4000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "DEF",
+          "Name2": "DEF",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 1600,
+            "W2": 1800,
+            "W3": 2000,
+            "W4": 2200,
+            "W5": 2400
+          }
+        }
+      ],
+      "Desc": "DEF increases by %; when casting [EX Special Attack], DEF additionally increases by % for 40 sec; repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "DEFBonus",
+          "value": "24",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
+  },
+  "13018": {
+    "Id": 13018,
+    "CodeName": "Weapon_A_Common_18",
+    "Name": "Boisterous Echoes",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_18.png",
+    "WeaponType": {
+      "3": "Anomaly"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Anomaly Proficiency",
+      "Name2": "Anomaly Proficiency",
+      "Format": "{0:0.#}",
+      "Value": 75
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When the equipper triggers [Vortex], restore [NUMBER] Energy. This effect can trigger once every 10s. When the equipper attacks enemies afflicted with Attribute Anomaly, DMG dealt increases by %."
+    },
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
+  },
   "13019": {
     "Id": 13019,
     "CodeName": "Weapon_A_Common_19",
@@ -1494,6 +1621,108 @@
           "type": "CRITRateBonus",
           "value": "10.4",
           "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
+  },
+  "13020": {
+    "Id": 13020,
+    "CodeName": "Weapon_A_Common_20",
+    "Name": "The Simmering Pot",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_20.png",
+    "WeaponType": {
+      "2": "Stun"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 594
+    },
+    "RandProperty": {
+      "Name": "Impact",
+      "Name2": "Impact",
+      "Format": "{0:0.#%}",
+      "Value": 1500
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When activating an Assist Follow-Up, the equipper's Daze inflicted on the target increases by %, and DMG dealt increases by % for 30s. Repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": 7.2
+    }
+  },
+  "13021": {
+    "Id": 13021,
+    "CodeName": "Weapon_A_Common_21",
+    "Name": "Bloodmarrow Coffer",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_21.png",
+    "WeaponType": {
+      "7": "Armorer"
+    },
+    "BaseProperty": {
+      "Name": "Base DEF",
+      "Name2": "Base DEF",
+      "Format": "{0:0.#}",
+      "Value": 356
+    },
+    "RandProperty": {
+      "Name": "CRIT Rate",
+      "Name2": "CRIT Rate",
+      "Format": "{0:0.#%}",
+      "Value": 2000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When the equipper's CRIT Rate exceeds 100%, every 1% of CRIT Rate above that increases DMG dealt by the equipper by %, up to a max increase of %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "DMGBonus",
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "critRate",
+            "threshold": 100,
+            "ratio": 0.8,
+            "cap": 40,
+            "Overclock": {
+              "W1": {
+                "ratio": 0.48,
+                "cap": 24
+              },
+              "W2": {
+                "ratio": 0.56,
+                "cap": 28
+              },
+              "W3": {
+                "ratio": 0.64,
+                "cap": 32
+              },
+              "W4": {
+                "ratio": 0.72,
+                "cap": 36
+              },
+              "W5": {
+                "ratio": 0.8,
+                "cap": 40
+              }
+            }
+          }
         }
       ],
       "debuffs": [],
@@ -4065,40 +4294,6 @@
       "dazeBonus": 0
     }
   },
-  "13020": {
-    "Id": 13020,
-    "CodeName": "Weapon_A_Common_20",
-    "Name": "The Simmering Pot",
-    "Desc": "",
-    "Desc2": "",
-    "Desc3": "",
-    "Rarity": 3,
-    "Icon": "Weapon_A_Common_20.png",
-    "WeaponType": {
-      "2": "Stun"
-    },
-    "BaseProperty": {
-      "Name": "Base ATK",
-      "Name2": "Base ATK",
-      "Format": "{0:0.#}",
-      "Value": 594
-    },
-    "RandProperty": {
-      "Name": "Impact",
-      "Name2": "Impact",
-      "Format": "{0:0.#%}",
-      "Value": 1500
-    },
-    "Effect": {
-      "Properties": [],
-      "Desc": "When activating an Assist Follow-Up, the equipper's Daze inflicted on the target increases by %, and DMG dealt increases by % for 30s. Repeated triggers reset the duration."
-    },
-    "scoring": {
-      "buffs": [],
-      "debuffs": [],
-      "dazeBonus": 7.2
-    }
-  },
   "14152": {
     "Id": 14152,
     "CodeName": "Weapon_S_1521",
@@ -4145,46 +4340,6 @@
         {
           "type": "CRITRateBonus",
           "value": "25",
-          "format": "%"
-        }
-      ],
-      "debuffs": [],
-      "dazeBonus": 0
-    }
-  },
-  "14154": {
-    "Id": 14154,
-    "CodeName": "Weapon_S_1541",
-    "Name": "Frostfall Sickle",
-    "Desc": "",
-    "Desc2": "",
-    "Desc3": "",
-    "Rarity": 4,
-    "Icon": "Weapon_S_1541.png",
-    "WeaponType": {
-      "3": "Anomaly"
-    },
-    "BaseProperty": {
-      "Name": "Base ATK",
-      "Name2": "Base ATK",
-      "Format": "{0:0.#}",
-      "Value": 713
-    },
-    "RandProperty": {
-      "Name": "Anomaly Mastery",
-      "Name2": "Anomaly Mastery",
-      "Format": "{0:0.#%}",
-      "Value": 3000
-    },
-    "Effect": {
-      "Properties": [],
-      "Desc": "When an Ice equipper uses [Special Attack] or [EX Special Attack], their Ice DMG increases by % for 40s. Max 2 stacks. Can trigger once per use of a skill. Repeated triggers reset the duration. When at 2 stacks, the character's [Abloom] DMG is additionally increased by %."
-    },
-    "scoring": {
-      "buffs": [
-        {
-          "type": "",
-          "value": "",
           "format": "%"
         }
       ],
@@ -4245,6 +4400,46 @@
       "dazeBonus": 0
     }
   },
+  "14154": {
+    "Id": 14154,
+    "CodeName": "Weapon_S_1541",
+    "Name": "Frostfall Sickle",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1541.png",
+    "WeaponType": {
+      "3": "Anomaly"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Anomaly Mastery",
+      "Name2": "Anomaly Mastery",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "When an Ice equipper uses [Special Attack] or [EX Special Attack], their Ice DMG increases by % for 40s. Max 2 stacks. Can trigger once per use of a skill. Repeated triggers reset the duration. When at 2 stacks, the character's [Abloom] DMG is additionally increased by %."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "",
+          "value": "",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
+  },
   "14155": {
     "Id": 14155,
     "CodeName": "Weapon_S_Common_04",
@@ -4294,40 +4489,6 @@
           "format": "%"
         }
       ],
-      "debuffs": [],
-      "dazeBonus": 0
-    }
-  },
-  "13018": {
-    "Id": 13018,
-    "CodeName": "Weapon_A_Common_18",
-    "Name": "Boisterous Echoes",
-    "Desc": "",
-    "Desc2": "",
-    "Desc3": "",
-    "Rarity": 3,
-    "Icon": "Weapon_A_Common_18.png",
-    "WeaponType": {
-      "3": "Anomaly"
-    },
-    "BaseProperty": {
-      "Name": "Base ATK",
-      "Name2": "Base ATK",
-      "Format": "{0:0.#}",
-      "Value": 594
-    },
-    "RandProperty": {
-      "Name": "Anomaly Proficiency",
-      "Name2": "Anomaly Proficiency",
-      "Format": "{0:0.#}",
-      "Value": 75
-    },
-    "Effect": {
-      "Properties": [],
-      "Desc": "When the equipper triggers [Vortex], restore [NUMBER] Energy. This effect can trigger once every 10s. When the equipper attacks enemies afflicted with Attribute Anomaly, DMG dealt increases by %."
-    },
-    "scoring": {
-      "buffs": [],
       "debuffs": [],
       "dazeBonus": 0
     }
@@ -4602,145 +4763,52 @@
       "dazeBonus": 0
     }
   },
-  "13017": {
-    "Id": 13017,
-    "CodeName": "Weapon_A_Common_17",
-    "Name": "Catty Luck",
+  "14162": {
+    "Id": 14162,
+    "CodeName": "Weapon_S_1621",
+    "Name": "Crimson Moon Casket",
     "Desc": "",
     "Desc2": "",
     "Desc3": "",
-    "Rarity": 3,
-    "Icon": "Weapon_A_Common_17.png",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1621.png",
     "WeaponType": {
-      "7": "Armorer"
+      "2": "Stun"
     },
     "BaseProperty": {
-      "Name": "Base DEF",
-      "Name2": "Base DEF",
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
       "Format": "{0:0.#}",
-      "Value": 356
+      "Value": 713
     },
     "RandProperty": {
-      "Name": "DEF",
-      "Name2": "DEF",
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
       "Format": "{0:0.#%}",
-      "Value": 4000
+      "Value": 6000
     },
     "Effect": {
       "Properties": [
         {
-          "Name": "DEF",
-          "Name2": "DEF",
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
           "Format": "{0:0.#%}",
           "Overclock": {
-            "W1": 1600,
-            "W2": 1800,
-            "W3": 2000,
-            "W4": 2200,
-            "W5": 2400
+            "W1": 2400,
+            "W2": 2600,
+            "W3": 2800,
+            "W4": 3000,
+            "W5": 3200
           }
         }
       ],
-      "Desc": "DEF increases by %; when casting EX Special Attack, DEF additionally increases by % for 40 sec; repeated triggers reset the duration."
+      "Desc": "Increases the equipper's CRIT Rate by %. DMG dealt ignores % of the target's Wind Attribute RES. When the equipper launches an [EX Special Attack] that deals Wind DMG, the Daze inflicted is increased by %, and DMG dealt by all other characters in the squad is increased by %, lasting 50s. Repeated triggers reset the duration. The DMG increase effect is unique across the whole squad."
     },
     "scoring": {
       "buffs": [
         {
-          "type": "DEFBonus",
-          "value": "24",
-          "format": "%"
-        }
-      ],
-      "debuffs": [],
-      "dazeBonus": 0
-    }
-  },
-  "13021": {
-    "Id": 13021,
-    "CodeName": "Weapon_A_Common_21",
-    "Name": "Bloodmarrow Coffer",
-    "Desc": "",
-    "Desc2": "",
-    "Desc3": "",
-    "Rarity": 3,
-    "Icon": "Weapon_A_Common_21.png",
-    "WeaponType": {
-      "7": "Armorer"
-    },
-    "BaseProperty": {
-      "Name": "Base DEF",
-      "Name2": "Base DEF",
-      "Format": "{0:0.#}",
-      "Value": 356
-    },
-    "RandProperty": {
-      "Name": "CRIT Rate",
-      "Name2": "CRIT Rate",
-      "Format": "{0:0.#%}",
-      "Value": 2000
-    },
-    "Effect": {
-      "Properties": [],
-      "Desc": "When the equipper's CRIT Rate exceeds 100%, every 1% of CRIT Rate above that increases DMG dealt by the equipper by %, up to a max increase of %."
-    },
-    "scoring": {
-      "buffs": [
-        {
-          "type": "DMGBonus",
-          "value": "0",
-          "format": "%",
-          "condition": {
-            "sourceStat": "critRate",
-            "threshold": 100,
-            "ratio": 0.8,
-            "cap": 40,
-            "Overclock": {
-              "W1": { "ratio": 0.48, "cap": 24 },
-              "W2": { "ratio": 0.56, "cap": 28 },
-              "W3": { "ratio": 0.64, "cap": 32 },
-              "W4": { "ratio": 0.72, "cap": 36 },
-              "W5": { "ratio": 0.8, "cap": 40 }
-            }
-          }
-        }
-      ],
-      "debuffs": [],
-      "dazeBonus": 0
-    }
-  },
-  "12016": {
-    "Id": 12016,
-    "CodeName": "Weapon_B_Common_16",
-    "Name": "[Lunar] Semiluna",
-    "Desc": "",
-    "Desc2": "",
-    "Desc3": "",
-    "Rarity": 2,
-    "Icon": "Weapon_B_Common_16.png",
-    "WeaponType": {
-      "7": "Armorer"
-    },
-    "BaseProperty": {
-      "Name": "Base DEF",
-      "Name2": "Base DEF",
-      "Format": "{0:0.#}",
-      "Value": 282
-    },
-    "RandProperty": {
-      "Name": "DEF",
-      "Name2": "DEF",
-      "Format": "{0:0.#%}",
-      "Value": 3200
-    },
-    "Effect": {
-      "Properties": [],
-      "Desc": "When an [EX Special Attack] is activated, [Basic Attack] DMG increases by % for 10s; repeated triggers reset the duration."
-    },
-    "scoring": {
-      "buffs": [
-        {
-          "type": "DMGBonus",
-          "value": "30",
+          "type": "CRITRateBonus",
+          "value": "2400",
           "format": "%"
         }
       ],

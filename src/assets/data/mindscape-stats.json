@@ -515,6 +515,17 @@
           "note": ""
         }
       ]
+    },
+    "1621": {
+      "comment": "Roxy",
+      "1": [
+        {
+          "type": "CRIT_DMG",
+          "value": 40,
+          "format": "%",
+          "note": ""
+        }
+      ]
     }
   }
 }
