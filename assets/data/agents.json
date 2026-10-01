@@ -84615,12 +84615,12 @@
     "rarity": "S",
     "faction": null,
     "element": {
-      "id": 203,
-      "name": "Electric"
+      "id": 204,
+      "name": "Wind"
     },
     "specialty": {
-      "id": 7,
-      "name": "Armorer"
+      "id": 2,
+      "name": "Stun"
     },
     "lvl60_stats": {
       "HpMax": 8418,
