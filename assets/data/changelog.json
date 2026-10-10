@@ -1,6 +1,17 @@
 {
   "versions": [
     {
+      "version": "7.0.7",
+      "date": "2026-10-10",
+      "features": [],
+      "fixes": [
+        "Fixed Roxy showing an INCOMPLETE rating with all 6 discs equipped. Her scoring data was in the wrong place, so the app never found it"
+      ],
+      "improvements": [
+        "Agent scoring data is now checked at build time, so a missing agent can't break that agent's rating"
+      ]
+    },
+    {
       "version": "7.0.3",
       "date": "2026-09-12",
       "features": [],
