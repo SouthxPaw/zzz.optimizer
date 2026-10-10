@@ -162,6 +162,31 @@ export class ScoringService {
   }
 
   /**
+   * Pull the `agents` map out of a loaded data file, warning about agent entries
+   * that were nested at the wrong level.
+   *
+   * These files are keyed by agent ID inside a single `agents` object. An entry
+   * added one level too high is still valid JSON and still looks correct in an
+   * editor, but is silently invisible here - the agent then scores as INCOMPLETE
+   * with no breakpoints, which reads like a scoring bug rather than a data typo.
+   * Roxy (1621) shipped that way. Warn loudly instead of failing quietly.
+   */
+  private extractAgentsMap(data: any, fileName: string): { [agentId: string]: any } {
+    const agents = data?.agents || {};
+
+    const strays = Object.keys(data || {}).filter(key => /^\d+$/.test(key));
+    if (strays.length > 0) {
+      console.error(
+        `[${fileName}] ${strays.length} agent entr${strays.length > 1 ? 'ies are' : 'y is'} ` +
+          `at the top level of the file instead of inside "agents", so ${strays.length > 1 ? 'they' : 'it'} ` +
+          `will be ignored: ${strays.join(', ')}. Move ${strays.length > 1 ? 'them' : 'it'} inside the "agents" object.`
+      );
+    }
+
+    return agents;
+  }
+
+  /**
    * Load agent breakpoints from JSON file
    */
   private async loadAgentBreakpoints() {
@@ -169,7 +194,7 @@ export class ScoringService {
       const data = await firstValueFrom(
         this.http.get<any>(versionedUrl('assets/data/agent-breakpoints.json'))
       );
-      this.agentBreakpoints = data.agents || {};
+      this.agentBreakpoints = this.extractAgentsMap(data, 'agent-breakpoints.json');
       this.breakpointsLoaded = true;
     } catch (error) {
       console.error('Failed to load agent breakpoints:', error);
@@ -184,7 +209,7 @@ export class ScoringService {
       const data = await firstValueFrom(
         this.http.get<any>(versionedUrl('assets/data/agent-stat-weights.json'))
       );
-      this.agentStatWeights = data.agents || {};
+      this.agentStatWeights = this.extractAgentsMap(data, 'agent-stat-weights.json');
     } catch (error) {
       console.error('Failed to load agent stat weights:', error);
     }

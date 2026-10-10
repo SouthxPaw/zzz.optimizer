@@ -1,12 +1,13 @@
 {
   "name": "zzz.optimizer",
-  "version": "7.0.6",
+  "version": "7.0.7",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "thumbs": "node build-scripts/generate-agent-thumbnails.js",
-    "build": "npm run thumbs && ng build",
-    "build:ghpages": "npm run thumbs && ng build --configuration=github-pages",
+    "validate:data": "node build-scripts/validate-agent-data.js",
+    "build": "npm run validate:data && npm run thumbs && ng build",
+    "build:ghpages": "npm run validate:data && npm run thumbs && ng build --configuration=github-pages",
     "deploy:ghpages": "npm run build:ghpages && npx angular-cli-ghpages --dir=dist/zzz.optimizer/browser --no-silent",
     "deploy:cleanup": "npm run build:ghpages && node -e \"require('fs').copyFileSync('dist/zzz.optimizer/browser/safety-worker.js', 'dist/zzz.optimizer/browser/ngsw-worker.js')\" && npx angular-cli-ghpages --dir=dist/zzz.optimizer/browser --no-silent",
     "watch": "ng build --watch --configuration=development",
