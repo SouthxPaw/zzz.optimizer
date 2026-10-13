@@ -84682,7 +84682,7 @@
     "scoring": {
       "buffs": [
         {
-          "type": "CRITDMG",
+          "type": "CRITDMGBonus",
           "value": "60",
           "format": "%"
         },
