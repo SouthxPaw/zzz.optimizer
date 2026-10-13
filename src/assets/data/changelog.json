@@ -1,6 +1,15 @@
 {
   "versions": [
     {
+      "version": "7.0.9",
+      "date": "2026-10-13",
+      "features": [],
+      "fixes": [
+        "Fixed Koleda not scoring or suggesting Impact as a Drive 6 main stat"
+      ],
+      "improvements": []
+    },
+    {
       "version": "7.0.8",
       "date": "2026-10-13",
       "features": [],
