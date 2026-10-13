@@ -84675,5 +84675,55 @@
     },
     "potentials": [],
     "Icon": "Phoenix"
+  },
+  {
+    "id": 1631,
+    "name": "Severian",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITDMG",
+          "value": "60",
+          "format": "%"
+        },
+        {
+          "type": "ATKBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "critRate",
+            "threshold": 0,
+            "ratio": 8.5,
+            "cap": 850
+          }
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 204,
+      "name": "Wind"
+    },
+    "specialty": {
+      "id": 1,
+      "name": "Attack"
+    },
+    "lvl60_stats": {
+      "HpMax": 7826,
+      "Defence": 606,
+      "Attack": 933,
+      "Crit": 500,
+      "CritDamage": 7880,
+      "PenRate": 0,
+      "BreakStun": 94,
+      "ElementAbnormalPower": 91,
+      "ElementMystery": 90,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "Severian"
   }
 ]
