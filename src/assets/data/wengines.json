@@ -4815,5 +4815,58 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14164": {
+    "Id": 14164,
+    "CodeName": "Weapon_S_1641",
+    "Name": "Nirvana's First Plume",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1641.png",
+    "WeaponType": {
+      "3": "Anomaly"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Anomaly Mastery",
+      "Name2": "Anomaly Mastery",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 9000,
+            "W2": 9900,
+            "W3": 10800,
+            "W4": 11700,
+            "W5": 12600
+          }
+        }
+      ],
+      "Desc": "Increases the equipper's Anomaly Proficiency by [NUMBER]. When Attribute Anomaly DMG dealt by any squad member to an enemy CRITs, the equipper's Fire DMG increases by % for 20s. Repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "90",
+          "format": "flat"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }

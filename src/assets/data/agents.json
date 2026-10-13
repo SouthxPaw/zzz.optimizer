@@ -84636,5 +84636,44 @@
     },
     "potentials": [],
     "Icon": "Roxy"
+  },
+  {
+    "id": 1641,
+    "name": "Phoenix",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "85",
+          "format": "flat"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 201,
+      "name": "Fire"
+    },
+    "specialty": {
+      "id": 3,
+      "name": "Anomaly"
+    },
+    "lvl60_stats": {
+      "HpMax": 7673,
+      "Defence": 612,
+      "Attack": 872,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 86,
+      "ElementAbnormalPower": 152,
+      "ElementMystery": 118,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "Phoenix"
   }
 ]
