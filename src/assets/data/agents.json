@@ -25559,7 +25559,7 @@
     "scoring": {
       "buffs": [
         {
-          "type": "CRITDMG",
+          "type": "CRITDMGBonus",
           "value": "10",
           "format": "%"
         },
@@ -42813,7 +42813,7 @@
           "format": "%"
         },
         {
-          "type": "CRITDMG",
+          "type": "CRITDMGBonus",
           "value": "30",
           "format": "%"
         },
@@ -50005,7 +50005,7 @@
     "scoring": {
       "buffs": [
         {
-          "type": "CRITRate",
+          "type": "CRITRateBonus",
           "value": "16",
           "format": "%"
         },
@@ -66731,7 +66731,7 @@
     "scoring": {
       "buffs": [
         { "type": "CRITRateBonus", "value": "10", "format": "%" },
-        { "type": "CRITDMG", "value": "50", "format": "%" }
+        { "type": "CRITDMGBonus", "value": "50", "format": "%" }
       ],
       "debuffs": [],
       "dazeBonus": 0
@@ -84492,7 +84492,7 @@
     "scoring": {
       "buffs": [
         {
-          "type": "CRITRate",
+          "type": "CRITRateBonus",
           "value": "66",
           "format": "%"
         },
@@ -84536,7 +84536,7 @@
     "scoring": {
       "buffs": [
         {
-          "type": "CRITRate",
+          "type": "CRITRateBonus",
           "value": "30",
           "format": "%"
         },

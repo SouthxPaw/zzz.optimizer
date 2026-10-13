@@ -1,6 +1,15 @@
 {
   "versions": [
     {
+      "version": "7.0.8",
+      "date": "2026-10-13",
+      "features": [],
+      "fixes": [
+        "Fixed Ben, Ju Fufu, Lucia, Manato, Sigrid, and Claret not getting the CRIT Rate or CRIT DMG from their own passives"
+      ],
+      "improvements": []
+    },
+    {
       "version": "7.0.7",
       "date": "2026-10-10",
       "features": [],
