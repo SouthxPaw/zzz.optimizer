@@ -1115,7 +1115,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .map(([slot, d]) => `${slot}:${d!.uid}`)
       .sort()
       .join(',');
-    return `${this.selectedBuild.id}|${this.selectedBuild.equippedWEngine?.id || ''}|${this.selectedBuild.wEngineRefinement || 1}|${this.selectedBuild.mindscapeLevel || 0}|${discUids}|${this.selectedBuild.enabledDiscs ? JSON.stringify(this.selectedBuild.enabledDiscs) : ''}`;
+    return `${this.selectedBuild.id}|${this.selectedBuild.equippedWEngine?.id || ''}|${this.selectedBuild.wEngineRefinement || 1}|${this.selectedBuild.mindscapeLevel || 0}|${discUids}|${this.selectedBuild.enabledDiscs ? JSON.stringify(this.selectedBuild.enabledDiscs) : ''}|${this.selectedBuild.preferredBuildType || ''}`;
   }
 
   getWEngineRefinementBonuses(): Array<{
@@ -1498,10 +1498,39 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     const rollCounts: { [key: string]: number } = {};
     const enabledDiscs = this.selectedBuild.enabledDiscs || {};
 
+    // Resolve priority stats against the build type the user pinned (or that was
+    // auto-detected), so effective substats match the stats we highlight. Dual-build
+    // agents value different stats per profile - a flat per-agent list cannot.
+    const equippedDiscsList = Object.values(
+      this.selectedBuild.equippedDiscs || {},
+    ).filter((d) => d) as Disc[];
+    const buildWeights = this.scoringService.getBuildStatWeights(
+      this.selectedBuild.agentId,
+      this.scoringService.resolveBuildType(
+        equippedDiscsList,
+        this.selectedBuild.agentId,
+        this.selectedBuild.preferredBuildType,
+      ),
+    );
+
+    // Fallback to the breakpoints list for legacy agents with no stat weights,
+    // mirroring isPrioritySubstat().
     const agentBreakpoints = this.scoringService.getAgentBreakpoints(
       this.selectedBuild.agentId,
     );
-    const priorityStats = agentBreakpoints?.priorityStats || [];
+    const priorityStats =
+      Object.keys(buildWeights).length > 0
+        ? Object.keys(buildWeights).filter((stat) => buildWeights[stat] >= 1.0)
+        : agentBreakpoints?.priorityStats || [];
+
+    // Miyabi (1091) is a hybrid - Anomaly Proficiency sits below the weight
+    // threshold on her CRIT profile but still counts. Matches the share image.
+    if (
+      this.selectedBuild.agentId === '1091' &&
+      !priorityStats.includes('Anomaly_Proficiency')
+    ) {
+      priorityStats.push('Anomaly_Proficiency');
+    }
 
     Object.entries(this.selectedBuild.equippedDiscs).forEach(([slot, disc]) => {
       const isEnabled = enabledDiscs[slot] ?? true;

@@ -2693,8 +2693,6 @@
         "CRIT_DMG",
         "Impact",
         "CRIT_Rate",
-        "Anomaly_Mastery",
-        "Anomaly_Proficiency",
         "PEN",
         "ATK",
         "ATK%",
@@ -2703,7 +2701,6 @@
       "statWeights": {
         "CRIT_DMG": 1,
         "CRIT_Rate": 1,
-        "Anomaly_Proficiency": 1.3,
         "PEN": 0.15,
         "ATK": 0.15,
         "ATK%": 1
@@ -3176,7 +3173,6 @@
         "Anomaly_Proficiency",
         "PEN",
         "PEN_Ratio",
-        "PEN",
         "ATK",
         "ATK%",
         "Element_DMG"
@@ -3891,8 +3887,8 @@
       },
       "mainStatWeights": {
         "Drive4": {
-          "CRIT_Rate": 3,
-          "CRIT_DMG": 2,
+          "Anomaly_Proficiency": 3,
+          "PEN_Ratio": 2,
           "ATK%": 2
         },
         "Drive5": {
@@ -3972,8 +3968,8 @@
       },
       "mainStatWeights": {
         "Drive4": {
-          "CRIT_Rate": 3,
-          "CRIT_DMG": 2,
+          "Anomaly_Proficiency": 3,
+          "PEN_Ratio": 2,
           "ATK%": 2
         },
         "Drive5": {
@@ -4046,10 +4042,11 @@
         "CRIT_Rate"
       ],
       "statWeights": {
-        "Anomaly_Proficiency": 1.5,
+        "CRIT_DMG": 1,
+        "CRIT_Rate": 1,
         "PEN": 0.15,
         "ATK": 0.15,
-        "ATK%": 1.5
+        "ATK%": 0.85
       },
       "mainStatWeights": {
         "Drive4": {
@@ -4200,25 +4197,24 @@
       },
       "priorityStats": ["HP%", "HP", "Element_DMG", "CRIT_DMG", "CRIT_Rate"],
       "statWeights": {
-        "Anomaly_Proficiency": 1.5,
-        "PEN": 0.15,
-        "ATK": 0.15,
-        "ATK%": 1.5
+        "CRIT_DMG": 1,
+        "CRIT_Rate": 1,
+        "HP%": 0.85,
+        "HP": 0.15,
+        "ATK%": 0.15
       },
       "mainStatWeights": {
         "Drive4": {
-          "Anomaly_Proficiency": 3,
-          "PEN_Ratio": 2,
-          "ATK%": 2
+          "CRIT_Rate": 3,
+          "CRIT_DMG": 3,
+          "HP%": 2
         },
         "Drive5": {
           "Element_DMG": 3,
-          "ATK%": 3,
-          "PEN_Ratio": 3
+          "HP%": 3
         },
         "Drive6": {
-          "ATK%": 2,
-          "Energy_Regen": 3
+          "HP%": 3
         }
       }
     },
@@ -4273,15 +4269,16 @@
       },
       "priorityStats": ["ATK%", "ATK", "Element_DMG", "CRIT_DMG", "CRIT_Rate"],
       "statWeights": {
-        "Anomaly_Proficiency": 1.5,
+        "CRIT_DMG": 1,
+        "CRIT_Rate": 1,
         "PEN": 0.15,
         "ATK": 0.15,
-        "ATK%": 1.5
+        "ATK%": 0.85
       },
       "mainStatWeights": {
         "Drive4": {
-          "Anomaly_Proficiency": 3,
-          "PEN_Ratio": 2,
+          "CRIT_Rate": 3,
+          "CRIT_DMG": 3,
           "ATK%": 2
         },
         "Drive5": {
@@ -4590,15 +4587,16 @@
       },
       "priorityStats": ["ATK%", "ATK", "Element_DMG", "CRIT_DMG", "CRIT_Rate"],
       "statWeights": {
-        "Anomaly_Proficiency": 1.5,
+        "CRIT_DMG": 1,
+        "CRIT_Rate": 1,
         "PEN": 0.15,
         "ATK": 0.15,
-        "ATK%": 1.5
+        "ATK%": 0.85
       },
       "mainStatWeights": {
         "Drive4": {
-          "Anomaly_Proficiency": 3,
-          "PEN_Ratio": 2,
+          "CRIT_Rate": 3,
+          "CRIT_DMG": 3,
           "ATK%": 2
         },
         "Drive5": {
@@ -4738,15 +4736,16 @@
       },
       "priorityStats": ["ATK%", "ATK", "Element_DMG", "CRIT_DMG", "CRIT_Rate"],
       "statWeights": {
-        "Anomaly_Proficiency": 1.5,
+        "CRIT_DMG": 1,
+        "CRIT_Rate": 1,
         "PEN": 0.15,
         "ATK": 0.15,
-        "ATK%": 1.5
+        "ATK%": 0.85
       },
       "mainStatWeights": {
         "Drive4": {
-          "Anomaly_Proficiency": 3,
-          "PEN_Ratio": 2,
+          "CRIT_Rate": 3,
+          "CRIT_DMG": 3,
           "ATK%": 2
         },
         "Drive5": {
@@ -4809,7 +4808,15 @@
           "optimal": 2.0
         }
       },
-      "priorityStats": ["ATK%", "ATK", "Element_DMG", "CRIT_DMG", "CRIT_Rate"],
+      "priorityStats": [
+        "ATK%",
+        "ATK",
+        "PEN",
+        "PEN_Ratio",
+        "Element_DMG",
+        "Anomaly_Mastery",
+        "Anomaly_Proficiency"
+      ],
       "statWeights": {
         "Anomaly_Proficiency": 1.5,
         "PEN": 0.15,

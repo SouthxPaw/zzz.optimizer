@@ -1,6 +1,26 @@
 {
   "versions": [
     {
+      "version": "7.0.13",
+      "date": "2026-10-21",
+      "features": [],
+      "fixes": [
+        "Total Effective Substats now follows your selected Build Type. Agents with both a CRIT and an Anomaly profile were counting one set of stats while highlighting another, so switching profiles changed which stats were bolded but never changed the total",
+        "Total Effective Substats no longer counts stats your build barely values, so some totals will read lower than before"
+      ],
+      "improvements": []
+    },
+    {
+      "version": "7.0.12",
+      "date": "2026-10-21",
+      "features": [],
+      "fixes": [
+        "Fixed Cissia, Starlight Billy, Pyrois, Sigrid, and Roxy using Anomaly stat weights despite being CRIT agents",
+        "Fixed Pulchra counting Anomaly Proficiency as a priority stat"
+      ],
+      "improvements": []
+    },
+    {
       "version": "7.0.9",
       "date": "2026-10-13",
       "features": [],
