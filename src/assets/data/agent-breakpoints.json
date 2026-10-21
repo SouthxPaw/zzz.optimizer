@@ -4781,20 +4781,20 @@
           "optimal": 0
         },
         "anomalyMastery": {
-          "min": 0,
-          "optimal": 0
+          "min": 230,
+          "optimal": 240
         },
         "critRate": {
-          "min": 60,
-          "optimal": 65
-        },
-        "critDmg": {
-          "min": 60,
-          "optimal": 70
-        },
-        "anomalyProficiency": {
           "min": 0,
           "optimal": 0
+        },
+        "critDmg": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyProficiency": {
+          "min": 300,
+          "optimal": 350
         },
         "pen": {
           "min": 0,
