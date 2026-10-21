@@ -1513,24 +1513,17 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       ),
     );
 
-    // Fallback to the breakpoints list for legacy agents with no stat weights,
-    // mirroring isPrioritySubstat().
     const agentBreakpoints = this.scoringService.getAgentBreakpoints(
       this.selectedBuild.agentId,
     );
+    // Any stat the build values at all counts as effective, matching how the game
+    // and HoYoLAB report effective substats - low-weight stats like flat ATK still
+    // contribute. Agents with no weights fall back to the breakpoints list, as
+    // isPrioritySubstat() does.
     const priorityStats =
       Object.keys(buildWeights).length > 0
-        ? Object.keys(buildWeights).filter((stat) => buildWeights[stat] >= 1.0)
+        ? Object.keys(buildWeights).filter((stat) => buildWeights[stat] > 0)
         : agentBreakpoints?.priorityStats || [];
-
-    // Miyabi (1091) is a hybrid - Anomaly Proficiency sits below the weight
-    // threshold on her CRIT profile but still counts. Matches the share image.
-    if (
-      this.selectedBuild.agentId === '1091' &&
-      !priorityStats.includes('Anomaly_Proficiency')
-    ) {
-      priorityStats.push('Anomaly_Proficiency');
-    }
 
     Object.entries(this.selectedBuild.equippedDiscs).forEach(([slot, disc]) => {
       const isEnabled = enabledDiscs[slot] ?? true;
@@ -1599,10 +1592,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
           displayName = type;
       }
 
-      // Flat HP, ATK, DEF should never be considered priority stats for highlighting/counting
-      const isFlatStat = ['HP', 'ATK', 'DEF'].includes(type);
-
-      const isPriority = !isFlatStat && priorityStats.some((priorityStat: string) => {
+      // Anything the resolved priority list names is highlighted and counted,
+      // flat stats included - the list already reflects what the build values.
+      const isPriority = priorityStats.some((priorityStat: string) => {
         const normalizedType = type.replace(/_/g, ' ').toLowerCase();
         const normalizedPriority = priorityStat
           .replace(/_/g, ' ')
