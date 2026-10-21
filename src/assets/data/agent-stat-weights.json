@@ -12267,7 +12267,7 @@
                 }
               },
               "ATK%": {
-                "mainStatPoints": 3,
+                "mainStatPoints": 2,
                 "substatWeights": {
                   "HP%": 0,
                   "DEF%": 0,
@@ -12282,7 +12282,7 @@
                 }
               },
               "PEN_Ratio": {
-                "mainStatPoints": 2,
+                "mainStatPoints": 3,
                 "substatWeights": {
                   "HP%": 0,
                   "DEF%": 0,
