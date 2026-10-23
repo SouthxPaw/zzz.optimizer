@@ -4868,5 +4868,58 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "13022": {
+    "Id": 13022,
+    "CodeName": "Weapon_A_Common_22",
+    "Name": "Candlelight Conspiracy",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 3,
+    "Icon": "Weapon_A_Common_22.png",
+    "WeaponType": {
+      "7": "Armorer"
+    },
+    "BaseProperty": {
+      "Name": "Base DEF",
+      "Name2": "Base DEF",
+      "Format": "{0:0.#}",
+      "Value": 356
+    },
+    "RandProperty": {
+      "Name": "DEF",
+      "Name2": "Percent DEF",
+      "Format": "{0:0.#%}",
+      "Value": 4000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 800,
+            "W2": 920,
+            "W3": 1040,
+            "W4": 1160,
+            "W5": 1280
+          }
+        }
+      ],
+      "Desc": "When the equipper launches an [EX Special Attack], their CRIT Rate increases by % for 40s. The equipper deals % increased DMG to enemies whose current HP is below 50% of their max HP."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "12.8",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
