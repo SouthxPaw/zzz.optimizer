@@ -6,7 +6,7 @@
       "features": [],
       "fixes": [
         "Total Effective Substats now follows your selected Build Type. Agents with both a CRIT and an Anomaly profile were counting one set of stats while highlighting another, so switching profiles changed which stats were bolded but never changed the total",
-        "Total Effective Substats now counts every stat your build makes use of, including flat ATK and PEN, so it lines up with the effective substat count the game and HoYoLAB show. Most totals will read higher than before"
+        "Total Effective Substats now counts every stat your build makes use of, including flat ATK and PEN, so it lines up with the effective substat count the game and HoYoLAB show for the most part. Most totals will read higher than before"
       ],
       "improvements": [
         "Tidied unused scoring data for Cissia, Starlight Billy, Pyrois, Sigrid, Roxy, Pulchra, and Yuzuha. Their ratings were always correct, the leftover values were simply misleading to read"
