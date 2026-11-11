@@ -59,6 +59,15 @@ export class WhatsNewComponent implements OnInit {
     );
   }
 
+  trackByVersion(_index: number, version: ChangelogVersion): string {
+    return version.version;
+  }
+
+  /** Changelog entries are plain strings, unique within their list. */
+  trackByEntry(index: number, entry: string): string {
+    return `${index}:${entry}`;
+  }
+
   /**
    * Format date for display
    */

@@ -97,22 +97,31 @@ describe('DataTransformerService', () => {
     });
 
     /**
-     * BASELINE (latent bug - see notes): a null array entry aborts the whole
-     * transform instead of being skipped.
+     * Regression guard: a null entry must be skipped, not fatal.
      *
-     * transformAgents wraps each entry in try/catch, but the catch block logs
-     * `rawAgent.id` - which throws again on a null entry, from inside the
-     * handler, so the error escapes the loop. One bad record therefore discards
-     * every remaining agent rather than just itself.
-     *
-     * Pinned as-is per the decision to lock in current behaviour. Fixing it is
-     * a one-line change (log the loop index, or guard the entry before use),
-     * but it changes import behaviour and should be a deliberate edit.
+     * The catch block used to log `rawAgent.id`, which throws again on a null
+     * entry from inside the handler - escaping the try/catch and discarding
+     * every remaining agent. It now reports the loop index instead.
      */
-    it('BASELINE: a null array entry aborts the whole transform', () => {
-      expect(() =>
-        service.transformAgents([rawAgent(), null, rawAgent({ id: 1062, name: 'Other' })])
-      ).toThrow();
+    it('skips a null array entry without aborting the import', () => {
+      const agents = service.transformAgents([
+        rawAgent(),
+        null,
+        rawAgent({ id: 1062, name: 'Other' }),
+      ]);
+      expect(agents.length).toBe(2);
+      expect(agents.map(a => a.name)).toEqual(['Corin', 'Other']);
+    });
+
+    it('survives several malformed entries in a row', () => {
+      const agents = service.transformAgents([
+        null,
+        undefined,
+        { id: 1 },
+        rawAgent({ id: 1063, name: 'Survivor' }),
+      ]);
+      expect(agents.length).toBe(1);
+      expect(agents[0].name).toBe('Survivor');
     });
 
     it('transforms several agents independently', () => {

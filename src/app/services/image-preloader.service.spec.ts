@@ -2,6 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { ImagePreloaderService } from './image-preloader.service';
 
 /**
+ * Must match ImagePreloaderService.CONCURRENCY_LIMIT. Kept as a local constant
+ * because the service's copy is private.
+ */
+const CONCURRENCY_LIMIT = 6;
+
+/**
  * Stub for the global Image constructor so specs never hit the network.
  * Each instance records itself and exposes manual load/error triggers.
  */
@@ -13,6 +19,8 @@ class FakeImage {
 
   onload: (() => void) | null = null;
   onerror: (() => void) | null = null;
+  /** True once this request has been settled, so specs can measure overlap. */
+  resolved = false;
   private _src = '';
 
   constructor() {
@@ -27,15 +35,19 @@ class FakeImage {
   }
 
   triggerLoad(): void {
+    if (this.resolved) return;
+    this.resolved = true;
     this.onload?.();
   }
   triggerError(): void {
+    if (this.resolved) return;
+    this.resolved = true;
     this.onerror?.();
   }
 
   /** Resolve every outstanding fake image created so far. */
   static loadAll(): void {
-    FakeImage.instances.forEach(i => i.triggerLoad());
+    FakeImage.instances.filter(i => !i.resolved).forEach(i => i.triggerLoad());
   }
 }
 
@@ -141,40 +153,80 @@ describe('ImagePreloaderService', () => {
       expect(FakeImage.instances.length).toBe(0);
     });
 
-    it("high priority issues at most 10 requests synchronously", async () => {
+    it('high priority issues at most one window of requests synchronously', async () => {
       const p = service.preloadImages(many(40), 'high');
-      // The first batch is capped at 10; the rest is deferred.
-      expect(FakeImage.instances.length).toBe(10);
+      // Only the first concurrency window is issued up front.
+      expect(FakeImage.instances.length).toBe(CONCURRENCY_LIMIT);
       FakeImage.loadAll();
       await p;
     });
+
+    /**
+     * Requests are created synchronously inside preloadImage, but the windowed
+     * workers await between items - so new FakeImages only appear after
+     * microtasks drain. Pump load+drain until the queue stops growing.
+     */
+    async function drain(expected: number): Promise<void> {
+      for (let i = 0; i < expected * 4; i++) {
+        FakeImage.loadAll();
+        await Promise.resolve();
+        await Promise.resolve();
+        if (new Set(FakeImage.instances.map(x => x.src)).size >= expected) break;
+      }
+      FakeImage.loadAll();
+      await Promise.resolve();
+    }
 
     it('eventually requests every image at high priority', async () => {
       const srcs = many(14);
       const p = service.preloadImages(srcs, 'high');
-      FakeImage.loadAll();
+      await drain(srcs.length);
       await p;
+      await drain(srcs.length);
 
-      // Deferred remainder is scheduled on a timer in the implementation.
-      await new Promise(r => setTimeout(r, 150));
-      FakeImage.loadAll();
-
-      // Every requested src should have been fetched exactly once.
       const requested = new Set(FakeImage.instances.map(i => i.src));
       srcs.forEach(src => expect(requested.has(src)).toBe(true));
     });
 
-    /**
-     * BASELINE (pre-optimisation): the default 'low' priority fans out every
-     * source at once with no concurrency cap. This test documents current
-     * behaviour so the batching fix has something to change deliberately.
-     * See the perf work on preload concurrency.
-     */
-    it('BASELINE: low priority fans out all requests at once (no cap)', async () => {
-      const p = service.preloadImages(many(40));
-      expect(FakeImage.instances.length).toBe(40);
+    it('caps in-flight requests at low priority instead of fanning out', async () => {
+      const srcs = many(40);
+      const p = service.preloadImages(srcs);
+
+      // Without a cap all 40 would be requested before the first await.
+      expect(FakeImage.instances.length).toBe(CONCURRENCY_LIMIT);
+
+      await drain(srcs.length);
+      await p;
+    });
+
+    it('still fetches every image when capped', async () => {
+      const srcs = many(25);
+      const p = service.preloadImages(srcs);
+      await drain(srcs.length);
+      await p;
+
+      const requested = new Set(FakeImage.instances.map(i => i.src));
+      srcs.forEach(src => expect(requested.has(src)).toBe(true));
+    });
+
+    it('never exceeds the concurrency limit at any point', async () => {
+      const srcs = many(30);
+      let peak = 0;
+
+      const p = service.preloadImages(srcs);
+      for (let i = 0; i < srcs.length * 4; i++) {
+        // Measure overlap before settling this wave.
+        peak = Math.max(peak, FakeImage.instances.filter(img => !img.resolved).length);
+        if (new Set(FakeImage.instances.map(x => x.src)).size >= srcs.length) break;
+        FakeImage.loadAll();
+        await Promise.resolve();
+        await Promise.resolve();
+      }
       FakeImage.loadAll();
       await p;
+
+      expect(peak).toBeGreaterThan(0);
+      expect(peak).toBeLessThanOrEqual(CONCURRENCY_LIMIT);
     });
   });
 

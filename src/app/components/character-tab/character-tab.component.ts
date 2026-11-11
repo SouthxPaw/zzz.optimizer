@@ -7,6 +7,7 @@ import {
   ElementRef,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  Injector,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -40,15 +41,22 @@ import {
   MAIN_STAT_BY_SLOT,
 } from '../../constants/main-stat-possibilities';
 import { OptimizerComponent } from '../optimizer/optimizer.component';
-import { EnkaApiService, EnkaImportResult } from '../../services/enka-api.service';
-import { EnkaImportService, ImportComparison } from '../../services/enka-import.service';
+// Type-only (see the CanvasShareImageService note above): the Enka import
+// stack is only reachable from the import modal, so the implementations are
+// fetched on demand in loadEnkaServices().
+import type { EnkaApiService, EnkaImportResult } from '../../services/enka-api.service';
+import type { EnkaImportService, ImportComparison } from '../../services/enka-import.service';
 import { UpgradePlanService } from '../../services/upgrade-plan.service';
 import { LoadingService } from '../../services/loading.service';
 import { NotificationService } from '../../services/notification.service';
 import { UpgradePlan } from '../../models/upgrade-plan.model';
 import { calculateRollCount } from '../../constants/substat-rolls';
 import { UpgradePlansComponent } from '../upgrade-plans/upgrade-plans.component';
-import {
+// Type-only: `import type` is erased at compile time, so referencing
+// ShareImageData here does not pull the 1,700-line canvas service into the
+// eagerly loaded bundle. The implementation is fetched on demand in
+// loadCanvasShareService().
+import type {
   CanvasShareImageService,
   ShareImageData,
 } from '../../services/canvas-share-image.service';
@@ -247,12 +255,27 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Confirmation dialog
   showConfirmDialog = false;
-  confirmDialogData = {
+  confirmDialogData: {
+    title: string;
+    message: string;
+    confirmText: string;
+    cancelText: string;
+    onConfirm: () => void;
+    onCancel?: () => void;
+  } = {
     title: '',
     message: '',
     confirmText: 'Confirm',
     cancelText: 'Cancel',
     onConfirm: () => {},
+  };
+
+  // Info dialog: acknowledgement-only messages that are too long for a toast.
+  showInfoDialog = false;
+  infoDialogData: { title: string; message: string; dismissText: string } = {
+    title: '',
+    message: '',
+    dismissText: 'OK',
   };
 
   // Enka UID Import
@@ -265,6 +288,15 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   showUidHistoryDropdown = false;
   private readonly UID_HISTORY_KEY = 'zzz_uid_history';
   private readonly MAX_UID_HISTORY = 10;
+  /**
+   * UID whose data the saved builds came from.
+   *
+   * Imports overwrite any build whose agent matches, so importing a friend's
+   * profile silently replaces your own mindscapes, W-Engines and discs with
+   * theirs. Remembering the owning UID lets the import warn before doing that,
+   * instead of the damage only becoming visible later as wrong numbers.
+   */
+  private readonly OWNING_UID_KEY = 'zzz_owning_uid';
 
   private destroy$ = new Subject<void>();
   private previouslyFocusedElement: HTMLElement | null = null;
@@ -297,15 +329,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     private scoringService: ScoringService,
     private imagePreloader: ImagePreloaderService,
     private dataMappingService: DataMappingService,
-    private enkaApiService: EnkaApiService,
-    private enkaImportService: EnkaImportService,
     private upgradePlanService: UpgradePlanService,
-    private canvasShareImageService: CanvasShareImageService,
     private loadingService: LoadingService,
     private notificationService: NotificationService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private dbService: DbService,
+    private injector: Injector,
   ) {
     // Load mindscape data
     this.loadMindscapeData();
@@ -2956,6 +2986,9 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     onConfirm: () => void,
     confirmText = 'Confirm',
     cancelText = 'Cancel',
+    // Optional: callers awaiting a decision need to hear about dismissal too,
+    // otherwise cancelling (or pressing Esc) leaves them waiting forever.
+    onCancel?: () => void,
   ) {
     this.confirmDialogData = {
       title,
@@ -2963,18 +2996,46 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       confirmText,
       cancelText,
       onConfirm,
+      onCancel,
     };
     this.showConfirmDialog = true;
     this.cdr.markForCheck();
   }
 
+  /**
+   * In-app replacement for alert().
+   *
+   * Used for messages the user must acknowledge but which carry no choice -
+   * import summaries, failure explanations. A toast is wrong for these: they
+   * run to several lines and auto-dismissing them loses information the user
+   * needs to act on.
+   */
+  showInfo(title: string, message: string, dismissText = 'OK') {
+    this.infoDialogData = { title, message, dismissText };
+    this.showInfoDialog = true;
+    this.cdr.markForCheck();
+  }
+
+  closeInfoDialog() {
+    this.showInfoDialog = false;
+    this.cdr.markForCheck();
+  }
+
   confirmAction() {
-    this.confirmDialogData.onConfirm();
+    const { onConfirm } = this.confirmDialogData;
+    // Clear the cancel handler first: closeConfirmDialog() runs on every exit
+    // path, and must not also report a cancellation for a confirmed action.
+    this.confirmDialogData.onCancel = undefined;
+    onConfirm();
     this.closeConfirmDialog();
   }
 
   closeConfirmDialog() {
+    // Fires for the X button, the cancel button and the Esc shortcut.
+    const { onCancel } = this.confirmDialogData;
+    this.confirmDialogData.onCancel = undefined;
     this.showConfirmDialog = false;
+    onCancel?.();
     this.cdr.markForCheck();
   }
 
@@ -3063,9 +3124,83 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return index;
   }
 
+  trackByUid(_index: number, item: { uid: string }): string {
+    return item.uid;
+  }
+
+  trackByPlanId(_index: number, plan: UpgradePlan): string {
+    return plan.id;
+  }
+
+  /**
+   * For lists of plain strings (stat types, build types, slot names). The value
+   * is its own identity, so the row survives as long as the option does.
+   */
+  trackByValue(_index: number, value: string): string {
+    return value;
+  }
+
+  trackByIndex(index: number, _item: unknown): number {
+    return index;
+  }
+
+  trackByPresetColor(_index: number, preset: { color: string }): string {
+    return preset.color;
+  }
+
+  /** For `{ value, label }` option lists; the value is the stable identity. */
+  trackByOptionValue(_index: number, option: { value: string }): string {
+    return option.value;
+  }
+
   // =====================================
   // Share Build as Image
   // =====================================
+
+  /**
+   * Resolve the canvas share service on first use.
+   *
+   * The implementation is ~1,700 lines and only reachable from the share
+   * modal, so it is fetched as a separate chunk rather than carried in the
+   * initial download. Cached after the first call; concurrent callers share
+   * one in-flight import.
+   */
+  private canvasShareServicePromise?: Promise<CanvasShareImageService>;
+
+  private loadCanvasShareService(): Promise<CanvasShareImageService> {
+    if (!this.canvasShareServicePromise) {
+      this.canvasShareServicePromise = import(
+        '../../services/canvas-share-image.service'
+      ).then(m => this.injector.get(m.CanvasShareImageService));
+    }
+    return this.canvasShareServicePromise;
+  }
+
+  /**
+   * Resolve the Enka import stack on first use, for the same reason as the
+   * canvas service: it is only reachable from the import modal. Both services
+   * load together because every import flow needs the pair.
+   */
+  private enkaServicesPromise?: Promise<{
+    api: EnkaApiService;
+    importer: EnkaImportService;
+  }>;
+
+  private loadEnkaServices(): Promise<{
+    api: EnkaApiService;
+    importer: EnkaImportService;
+  }> {
+    if (!this.enkaServicesPromise) {
+      this.enkaServicesPromise = Promise.all([
+        import('../../services/enka-api.service'),
+        import('../../services/enka-import.service'),
+      ]).then(([apiModule, importModule]) => ({
+        api: this.injector.get(apiModule.EnkaApiService),
+        importer: this.injector.get(importModule.EnkaImportService),
+      }));
+    }
+    return this.enkaServicesPromise;
+  }
 
   async shareAsImage() {
     if (!this.selectedBuild) return;
@@ -3074,7 +3209,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     // Start fetching the shared icons/backgrounds now rather than at app start.
     // No await - generateShareImage() prefetches what it needs anyway, this just
     // gives those requests a head start while the modal renders.
-    this.canvasShareImageService.warmImageCache();
+    void this.loadCanvasShareService().then(service => service.warmImageCache());
 
     // Load agent-specific customizations
     this.loadCustomizations();
@@ -3212,7 +3347,8 @@ async generateShareImage() {
     };
 
     // Generate image using Canvas service
-    const blob = await this.canvasShareImageService.generateShareImage(shareData);
+    const canvasShareImageService = await this.loadCanvasShareService();
+    const blob = await canvasShareImageService.generateShareImage(shareData);
 
     // Display the image on canvas
     const displayCanvas = this.shareCanvasRef.nativeElement;
@@ -3684,17 +3820,27 @@ async generateShareImage() {
     this.loadingService.show(`Fetching data for ${historyItem.username}...`);
 
     try {
+      const enka = await this.loadEnkaServices();
+
       // Fetch data from Enka API
       const enkaResult = await firstValueFrom(
-        this.enkaApiService.fetchPlayerData(historyItem.uid)
+        enka.api.fetchPlayerData(historyItem.uid)
       );
 
       if (!enkaResult) {
         throw new Error('No data received from provided UID');
       }
 
+      this.loadingService.hide();
+
+      if (!(await this.confirmImportOwnership(historyItem.uid, enkaResult.playerName))) {
+        return;
+      }
+
+      this.loadingService.show('Comparing builds...');
+
       // Compare with existing builds
-      const comparison = await this.enkaImportService.compareBuilds(
+      const comparison = await enka.importer.compareBuilds(
         enkaResult.builds,
       );
 
@@ -3705,7 +3851,11 @@ async generateShareImage() {
         comparison.newBuilds.length > 0 ||
         comparison.updatedBuilds.length > 0
       ) {
-        const summary = this.buildImportSummaryMessage(comparison, enkaResult);
+        const summary = this.buildImportSummaryMessage(
+          enka.importer,
+          comparison,
+          enkaResult,
+        );
 
         await this.handleUnknownAgents(enkaResult);
 
@@ -3719,10 +3869,13 @@ async generateShareImage() {
           async () => {
             try {
               this.loadingService.show('Importing builds...');
-              const result = await this.enkaImportService.importBuilds(
+              const result = await enka.importer.importBuilds(
                 comparison,
                 true,
               );
+
+              // The saved builds now reflect this UID.
+              this.setOwningUid(historyItem.uid);
 
               // Reload builds to show the imported data
               await this.buildService.loadBuilds();
@@ -3730,7 +3883,8 @@ async generateShareImage() {
             } catch (error) {
               this.loadingService.hide();
               console.error('Import error:', error);
-              alert(
+              this.showInfo(
+                'Import failed',
                 error instanceof Error
                   ? error.message
                   : 'Failed to import builds'
@@ -3742,12 +3896,13 @@ async generateShareImage() {
         );
       } else {
         await this.handleUnknownAgents(enkaResult);
-        alert(this.buildNoChangesMessage(enkaResult));
+        this.showInfo('Nothing to import', this.buildNoChangesMessage(enkaResult));
       }
     } catch (error) {
       this.loadingService.hide();
       console.error('Enka API error:', error);
-      alert(
+      this.showInfo(
+        'Import failed',
         error instanceof Error
           ? error.message
           : 'Failed to fetch data from provided UID'
@@ -3780,10 +3935,88 @@ async generateShareImage() {
     const skipped = enkaResult.unknownAgentIds.length;
 
     if (skipped === 0) {
-      return 'All builds are already up to date!';
+      // Only showcased agents are ever present in an Enka response, so "up to
+      // date" is a claim about those agents alone. Naming them matters: an
+      // agent left out of the showcase is silently untouched by the import,
+      // and a bare "all up to date" reads as though it was checked and
+      // matched - sending the user hunting for a bug when the real answer is
+      // that the agent was never in the response.
+      const names = enkaResult.builds
+        .map(build => this.getAgentName(build.agentId))
+        .filter((name): name is string => !!name)
+        .sort();
+
+      const checked = names.length > 0
+        ? `\n\nChecked: ${names.join(', ')}.`
+        : '';
+
+      return (
+        'All showcased builds are already up to date!' +
+        checked +
+        '\n\nOnly agents in your in-game Character Showcase can be imported. ' +
+        'Anyone not listed above was left unchanged.'
+      );
     }
 
     return `No builds were imported. ${this.buildSkippedAgentNotice(skipped)}`;
+  }
+
+  /** Display name for an agent id, from loaded reference data. */
+  private getAgentName(agentId: string): string | undefined {
+    return this.referenceAgents.find(agent => agent.id === agentId)?.name;
+  }
+
+  private getOwningUid(): string | null {
+    try {
+      return localStorage.getItem(this.OWNING_UID_KEY);
+    } catch {
+      return null;
+    }
+  }
+
+  private setOwningUid(uid: string): void {
+    try {
+      localStorage.setItem(this.OWNING_UID_KEY, uid);
+    } catch {
+      // Storage unavailable (private mode, quota). The guard simply does not
+      // fire; imports still work.
+    }
+  }
+
+  /**
+   * Confirm before an import from a different UID replaces existing builds.
+   *
+   * Resolves true to proceed. The first import of all claims ownership without
+   * prompting - there is nothing to overwrite yet.
+   */
+  private confirmImportOwnership(uid: string, playerName: string): Promise<boolean> {
+    const owningUid = this.getOwningUid();
+
+    // Same account, or nothing imported yet: nothing to protect.
+    if (!owningUid || owningUid === uid) {
+      return Promise.resolve(true);
+    }
+
+    // Only builds that would actually be replaced are worth warning about.
+    if (this.builds.length === 0) {
+      return Promise.resolve(true);
+    }
+
+    return new Promise<boolean>(resolve => {
+      this.showConfirmation(
+        'Import from a different UID?',
+        `Your saved builds came from UID ${owningUid}, but you are importing ` +
+          `UID ${uid} (${playerName}).\n\n` +
+          'Any agent you both have will be overwritten with their levels, ' +
+          'mindscapes, W-Engines and discs. Your own data for those agents ' +
+          'cannot be recovered.\n\n' +
+          'Continue?',
+        () => resolve(true),
+        'Overwrite my builds',
+        'Cancel',
+        () => resolve(false),
+      );
+    });
   }
 
   /**
@@ -3805,10 +4038,13 @@ async generateShareImage() {
    * partial import doesn't look like a complete one.
    */
   private buildImportSummaryMessage(
+    // Passed in rather than resolved here: the service is lazily loaded, and
+    // every caller already has it in hand, so this stays synchronous.
+    importer: EnkaImportService,
     comparison: ImportComparison,
     enkaResult: EnkaImportResult,
   ): string {
-    const summary = this.enkaImportService.generateImportSummary(comparison);
+    const summary = importer.generateImportSummary(comparison);
     const skipped = enkaResult.unknownAgentIds.length;
 
     if (skipped === 0) {
@@ -3882,20 +4118,32 @@ async generateShareImage() {
     this.cdr.markForCheck();
 
     try {
+      const enka = await this.loadEnkaServices();
+
       // Fetch data from Enka API
       const enkaResult = await firstValueFrom(
-        this.enkaApiService.fetchPlayerData(this.enkaUid)
+        enka.api.fetchPlayerData(this.enkaUid)
       );
 
       if (!enkaResult) {
         throw new Error('No data received from provided UID');
       }
 
+      // Captured now: closeEnkaImportModal() clears this.enkaUid before the
+      // confirmation callback below runs.
+      const importedUid = this.enkaUid;
+
       // Add UID to history on successful fetch
-      this.addToUidHistory(this.enkaUid, enkaResult.playerName);
+      this.addToUidHistory(importedUid, enkaResult.playerName);
+
+      if (!(await this.confirmImportOwnership(importedUid, enkaResult.playerName))) {
+        this.isImportingFromEnka = false;
+        this.cdr.markForCheck();
+        return;
+      }
 
       // Compare with existing builds
-      const comparison = await this.enkaImportService.compareBuilds(
+      const comparison = await enka.importer.compareBuilds(
         enkaResult.builds,
       );
 
@@ -3904,7 +4152,11 @@ async generateShareImage() {
         comparison.newBuilds.length > 0 ||
         comparison.updatedBuilds.length > 0
       ) {
-        const summary = this.buildImportSummaryMessage(comparison, enkaResult);
+        const summary = this.buildImportSummaryMessage(
+          enka.importer,
+          comparison,
+          enkaResult,
+        );
 
         await this.handleUnknownAgents(enkaResult);
 
@@ -3920,10 +4172,13 @@ async generateShareImage() {
           Do you want to import these builds?`,
           async () => {
             try {
-              const result = await this.enkaImportService.importBuilds(
+              const result = await enka.importer.importBuilds(
                 comparison,
                 true,
               );
+
+              // The saved builds now reflect this UID.
+              this.setOwningUid(importedUid);
 
               // Reload builds to show the imported data
               await this.buildService.loadBuilds();
@@ -4141,26 +4396,44 @@ async generateShareImage() {
     return this.discSetService.getDiscSetByName(name);
   }
 
-  getWEngineIconPath(wengine: any): string {
-    // Check if desktop using multiple signals
-    // Only show MP4s on true desktop devices, not mobile/tablet
-    const isDesktop = this.isDesktopDevice();
+  /**
+   * Resolved icon paths, keyed by the W-Engine's own icon path.
+   *
+   * This is bound to a <video [src]> in the template, so it is re-evaluated on
+   * every change detection pass. Returning a freshly built string each time
+   * gives the element a "new" src and makes the browser re-request the video -
+   * which for a multi-megabyte animation means downloading it repeatedly and
+   * restarting playback. Caching keeps the binding referentially stable.
+   */
+  private wEngineIconPathCache = new Map<string, string>();
 
-    if (isDesktop && wengine.icon) {
-      // Try animated version first
+  getWEngineIconPath(wengine: any): string {
+    const iconPath = wengine?.icon;
+    if (!iconPath) {
+      return '';
+    }
+
+    const cached = this.wEngineIconPathCache.get(iconPath);
+    if (cached !== undefined) {
+      return cached;
+    }
+
+    // Only show MP4s on true desktop devices, not mobile/tablet
+    let resolved = iconPath;
+
+    if (this.isDesktopDevice()) {
       // Extract base filename from icon path
       // e.g., "assets/data/images/wengines/Weapon_S_1051.webp" -> "Weapon_S_1051"
-      const iconPath = wengine.icon;
       const fileName = iconPath.split('/').pop()?.replace(/\.(webp|png)$/, '') || '';
 
       if (fileName) {
         // Add ngsw-bypass query parameter to prevent service worker from caching MP4s
-        return `assets/data/images/wengine-gifs/${fileName}.mp4?ngsw-bypass=true`;
+        resolved = `assets/data/images/wengine-gifs/${fileName}.mp4?ngsw-bypass=true`;
       }
     }
 
-    // Fallback to static icon
-    return wengine.icon || '';
+    this.wEngineIconPathCache.set(iconPath, resolved);
+    return resolved;
   }
 
   isWEngineAnimated(wengine: any): boolean {
@@ -4203,6 +4476,38 @@ async generateShareImage() {
                       (!isMobileUA && window.innerWidth >= 769);
 
     return isDesktop;
+  }
+
+  /**
+   * Start playback once the browser has enough data.
+   *
+   * The `autoplay` attribute only reliably fires when the source is present as
+   * the element is created. Here the element is produced by *ngIf and its src
+   * arrives via binding immediately afterwards, which Chrome frequently treats
+   * as too late - the video loads and then sits on its first frame. Switching
+   * agents appears to work only because the element already exists by then,
+   * which is why the stall shows up on a fresh page load.
+   *
+   * play() is still called defensively: it rejects if the browser refuses
+   * (autoplay policy), and an unhandled rejection would surface as a console
+   * error for something that is purely decorative.
+   */
+  onWEngineVideoReady(event: Event): void {
+    const video = event.target as HTMLVideoElement;
+    if (!video.paused) {
+      return;
+    }
+
+    // Enforce muted as a property before playing. The template binds it, but
+    // anything that leaves the element unmuted makes autoplay policy reject
+    // play() outright - and a silent decorative icon has no reason to carry
+    // audio in the first place.
+    video.muted = true;
+
+    void video.play().catch(() => {
+      // Still blocked (policy varies by engagement score). The first frame is
+      // an acceptable result for a decorative icon.
+    });
   }
 
   onWEngineVideoError(event: any, wengine: any): void {

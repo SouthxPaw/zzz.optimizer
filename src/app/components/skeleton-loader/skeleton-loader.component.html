@@ -1,1 +1,1 @@
-<div *ngFor="let item of items" [class]="skeletonClass" [ngStyle]="skeletonStyle"></div>
+<div *ngFor="let item of items; trackBy: trackByIndex" [class]="skeletonClass" [ngStyle]="skeletonStyle"></div>

@@ -19,7 +19,7 @@
       </p>
 
       <!-- Version cards -->
-      <div *ngFor="let version of changelog" class="version-card">
+      <div *ngFor="let version of changelog; trackBy: trackByVersion" class="version-card">
         <div class="version-header">
           <h2>v{{ version.version }}</h2>
           <span class="version-date">{{ formatDate(version.date) }}</span>
@@ -29,7 +29,7 @@
         <div *ngIf="version.features.length > 0" class="changelog-category">
           <h3 class="category-title features">✨ New Features</h3>
           <ul>
-            <li *ngFor="let feature of version.features">{{ feature }}</li>
+            <li *ngFor="let feature of version.features; trackBy: trackByEntry">{{ feature }}</li>
           </ul>
         </div>
 
@@ -37,7 +37,7 @@
         <div *ngIf="version.fixes.length > 0" class="changelog-category">
           <h3 class="category-title fixes">🐛 Bug Fixes</h3>
           <ul>
-            <li *ngFor="let fix of version.fixes">{{ fix }}</li>
+            <li *ngFor="let fix of version.fixes; trackBy: trackByEntry">{{ fix }}</li>
           </ul>
         </div>
 
@@ -45,7 +45,7 @@
         <div *ngIf="version.improvements.length > 0" class="changelog-category">
           <h3 class="category-title improvements">🔧 Improvements</h3>
           <ul>
-            <li *ngFor="let improvement of version.improvements">{{ improvement }}</li>
+            <li *ngFor="let improvement of version.improvements; trackBy: trackByEntry">{{ improvement }}</li>
           </ul>
         </div>
 

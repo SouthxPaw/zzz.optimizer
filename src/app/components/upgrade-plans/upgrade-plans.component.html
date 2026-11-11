@@ -137,11 +137,11 @@
           Mark each main stat as Acceptable or Not Acceptable for each slot.
         </p>
 
-        <div *ngFor="let slot of ['Drive4', 'Drive5', 'Drive6']" class="main-stat-slot">
+        <div *ngFor="let slot of ['Drive4', 'Drive5', 'Drive6']; trackBy: trackByString" class="main-stat-slot">
           <h4>Drive {{ slot.replace('Drive', '') }}</h4>
           <div class="main-stat-grid">
             <div
-              *ngFor="let stat of getMainStatsForSlot(slot)"
+              *ngFor="let stat of getMainStatsForSlot(slot); trackBy: trackByString"
               class="main-stat-item"
               [class.acceptable]="getMainStatPreference(slot, stat) === 'Acceptable'"
               [class.not-acceptable]="getMainStatPreference(slot, stat) === 'Not Acceptable'"

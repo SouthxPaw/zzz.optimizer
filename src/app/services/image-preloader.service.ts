@@ -4,6 +4,13 @@ import { Injectable, OnDestroy } from '@angular/core';
   providedIn: 'root'
 })
 export class ImagePreloaderService implements OnDestroy {
+  /**
+   * Maximum preload requests in flight at once. Matches the per-origin
+   * connection limit browsers enforce (~6), so the queue the browser builds
+   * behind this is short enough that on-demand loads are not starved.
+   */
+  private static readonly CONCURRENCY_LIMIT = 6;
+
   private preloadedImages: Set<string> = new Set();
   private preloadPromises: Map<string, Promise<void>> = new Map();
   private intersectionObserver?: IntersectionObserver;
@@ -79,26 +86,57 @@ export class ImagePreloaderService implements OnDestroy {
   }
 
   /**
-   * Preload multiple images with priority support
+   * Preload multiple images with priority support.
+   *
+   * Requests are issued through a fixed-size window rather than all at once.
+   * Browsers cap connections per origin (~6 in Chrome) and queue the surplus,
+   * so firing hundreds of requests does not make them arrive sooner - it just
+   * puts whatever the user needs next behind a long queue of icons. Keeping the
+   * window near the connection limit leaves the browser's own scheduler room to
+   * prioritise on-demand loads.
+   *
+   * 'high' awaits the first window so above-the-fold images are ready when this
+   * resolves, then finishes the remainder in the background. 'low' resolves only
+   * once everything has been fetched.
    */
   async preloadImages(srcs: string[], priority: 'high' | 'low' = 'low'): Promise<void> {
     const uniqueSrcs = [...new Set(srcs.filter(src => src && src.trim() !== ''))];
+    if (uniqueSrcs.length === 0) {
+      return;
+    }
 
     if (priority === 'high') {
-      // Preload high-priority images immediately (first 10)
-      const highPriority = uniqueSrcs.slice(0, 10);
-      await Promise.allSettled(highPriority.map(src => this.preloadImage(src)));
+      const firstWindow = uniqueSrcs.slice(0, ImagePreloaderService.CONCURRENCY_LIMIT);
+      const remainder = uniqueSrcs.slice(ImagePreloaderService.CONCURRENCY_LIMIT);
 
-      // Preload remaining in background
-      if (uniqueSrcs.length > 10) {
-        setTimeout(() => {
-          Promise.allSettled(uniqueSrcs.slice(10).map(src => this.preloadImage(src)));
-        }, 100);
+      await Promise.allSettled(firstWindow.map(src => this.preloadImage(src)));
+
+      if (remainder.length > 0) {
+        // Deliberately not awaited: the caller only needs the first window.
+        void this.preloadWithLimit(remainder);
       }
-    } else {
-      // Low priority: preload all concurrently
-      await Promise.allSettled(uniqueSrcs.map(src => this.preloadImage(src)));
+      return;
     }
+
+    await this.preloadWithLimit(uniqueSrcs);
+  }
+
+  /**
+   * Work through a list of sources, keeping at most CONCURRENCY_LIMIT requests
+   * in flight. Individual failures are absorbed by preloadImage.
+   */
+  private async preloadWithLimit(srcs: string[]): Promise<void> {
+    let cursor = 0;
+
+    const worker = async (): Promise<void> => {
+      while (cursor < srcs.length) {
+        const src = srcs[cursor++];
+        await this.preloadImage(src);
+      }
+    };
+
+    const workerCount = Math.min(ImagePreloaderService.CONCURRENCY_LIMIT, srcs.length);
+    await Promise.all(Array.from({ length: workerCount }, () => worker()));
   }
 
   /**

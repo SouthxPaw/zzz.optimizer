@@ -19,6 +19,15 @@ export class SkeletonLoaderComponent {
     return Array(this.count).fill(0);
   }
 
+  /**
+   * Placeholders are indistinguishable zeros from a getter that builds a new
+   * array on every read, so position is the only stable identity. Without this
+   * every skeleton row is destroyed and rebuilt on each change detection pass.
+   */
+  trackByIndex(index: number): number {
+    return index;
+  }
+
   get skeletonClass(): string {
     const baseClass = 'skeleton';
     const typeClasses = {

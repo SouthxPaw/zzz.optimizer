@@ -48,7 +48,20 @@ testem.log
 # Local environment file (contains private Cloudflare Worker URL)
 /src/environments/environment.local.ts
 
+# Transient backup of the full agents.json, written while a build slims it.
+# Only present if a build was interrupted; the next build restores from it.
+/src/assets/data/agents.full.json
+
+# Working directories for build-scripts/compress-wengine-videos.js.
+# -compressed holds encode output pending review; -original holds the
+# untouched source set after --apply swaps the compressed files in.
+/src/assets/data/images/wengine-gifs-compressed/
+/src/assets/data/images/wengine-gifs-original/
+
 # System files
 .DS_Store
 Thumbs.db
 nul
+
+# Encode comparison samples (build-scripts/compress-wengine-videos.js)
+/src/assets/data/images/wengine-samples/

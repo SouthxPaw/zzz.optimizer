@@ -70,7 +70,7 @@
             </div>
             <div class="uid-history-list">
               <div
-                *ngFor="let historyItem of uidHistory"
+                *ngFor="let historyItem of uidHistory; trackBy: trackByUid"
                 class="uid-history-item"
                 (click)="selectUidFromHistory(historyItem)"
               >
@@ -90,7 +90,7 @@
           class="plan-select">
           <option [ngValue]="undefined">(Default)</option>
           <option
-            *ngFor="let plan of getPlansForSelectedAgent()"
+            *ngFor="let plan of getPlansForSelectedAgent(); trackBy: trackByPlanId"
             [ngValue]="plan.id">
             {{ plan.name }}
           </option>
@@ -264,7 +264,7 @@
               (click)="showBuildTypeHint = !showBuildTypeHint">Build Type:<span class="build-type-info" aria-hidden="true">?</span></button>
             <div class="build-type-options">
               <button
-                *ngFor="let buildType of getAvailableBuildTypes()"
+                *ngFor="let buildType of getAvailableBuildTypes(); trackBy: trackByValue"
                 type="button"
                 class="build-type-btn"
                 [class.active]="getActiveBuildType() === buildType"
@@ -533,10 +533,12 @@
                   class="wengine-icon animated"
                   autoplay
                   loop
-                  muted
+                  [muted]="true"
                   playsinline
+                  (canplay)="onWEngineVideoReady($event)"
+                  (loadeddata)="onWEngineVideoReady($event)"
                   (error)="onWEngineVideoError($event, selectedBuild.equippedWEngine)"
-                  loading="lazy"
+                  preload="auto"
                 ></video>
                 <!-- Static image for mobile or as fallback when video fails -->
                 <img
@@ -1456,7 +1458,7 @@
             >
               <option value="">Select main stat...</option>
               <option
-                *ngFor="let stat of getMainStatOptionsForSlot()"
+                *ngFor="let stat of getMainStatOptionsForSlot(); trackBy: trackByValue"
                 [value]="stat"
               >
                 {{ formatStatType(stat) }}
@@ -1492,7 +1494,7 @@
               <label class="substat-label">Substat {{ i + 1 }}:</label>
               <select [(ngModel)]="subStat.type" class="substat-type-select">
                 <option
-                  *ngFor="let statType of getAvailableSubstatTypesForIndex(i)"
+                  *ngFor="let statType of getAvailableSubstatTypesForIndex(i); trackBy: trackByOptionValue"
                   [value]="statType.value"
                   [class.priority]="isPrioritySubstat(statType.value)"
                 >
@@ -1581,7 +1583,7 @@
                 <div class="stat-section">
                   <div class="stat-label">Sub Stats:</div>
                   <div
-                    *ngFor="let subStat of selectedBuild.equippedDiscs[compareDiscSlot]!.subStats; let i = index"
+                    *ngFor="let subStat of selectedBuild.equippedDiscs[compareDiscSlot]!.subStats; let i = index; trackBy: trackBySubStatIndex"
                     class="stat-row substat-row"
                   >
                     <span class="substat-type">
@@ -1654,7 +1656,7 @@
                   >
                     <option value="">Select main stat...</option>
                     <option
-                      *ngFor="let stat of getMainStatOptionsForSlot()"
+                      *ngFor="let stat of getMainStatOptionsForSlot(); trackBy: trackByValue"
                       [value]="stat"
                     >
                       {{ formatStatType(stat) }}
@@ -1682,7 +1684,7 @@
               <div class="form-section">
                 <label class="section-label">Sub Stats:</label>
                 <div class="substats-list">
-                  <div *ngFor="let i of [0, 1, 2, 3]" class="substat-row">
+                  <div *ngFor="let i of [0, 1, 2, 3]; trackBy: trackByIndex" class="substat-row">
                     <label class="substat-label">Substat {{ i + 1 }}:</label>
                     <select
                       [value]="compareCustomDisc.subStats?.[i]?.type || ''"
@@ -1691,7 +1693,7 @@
                     >
                       <option value="">Select substat...</option>
                       <option
-                        *ngFor="let statType of getAvailableCompareSubstatTypesForIndex(i)"
+                        *ngFor="let statType of getAvailableCompareSubstatTypesForIndex(i); trackBy: trackByOptionValue"
                         [value]="statType.value"
                         [class.priority]="isPrioritySubstat(statType.value)"
                       >
@@ -1775,6 +1777,50 @@
           aria-label="Confirm action"
         >
           {{ confirmDialogData.confirmText }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Dialog Modal: single-acknowledgement messages that are too long or
+       too important for a toast (import summaries, error explanations). -->
+  <div
+    class="modal-overlay"
+    *ngIf="showInfoDialog"
+    (click)="closeInfoDialog()"
+    @fadeIn
+    role="alertdialog"
+    aria-labelledby="info-dialog-title"
+    aria-describedby="info-dialog-message"
+    aria-modal="true"
+  >
+    <div
+      class="modal-content confirm-dialog-modal"
+      (click)="$event.stopPropagation()"
+      @scaleIn
+    >
+      <div class="modal-header">
+        <h2 id="info-dialog-title">{{ infoDialogData.title }}</h2>
+        <button
+          class="close-btn"
+          (click)="closeInfoDialog()"
+          aria-label="Close dialog"
+        >
+          ×
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="info-dialog-message" class="confirm-message" style="white-space: pre-line;">
+          {{ infoDialogData.message }}
+        </p>
+      </div>
+      <div class="modal-actions">
+        <button
+          class="btn-primary"
+          (click)="closeInfoDialog()"
+          aria-label="Dismiss dialog"
+        >
+          {{ infoDialogData.dismissText }}
         </button>
       </div>
     </div>
@@ -2051,7 +2097,7 @@
             <div class="accent-color-picker">
               <!-- Preset color swatches -->
               <button
-                *ngFor="let preset of presetColors"
+                *ngFor="let preset of presetColors; trackBy: trackByPresetColor"
                 class="color-swatch"
                 [class.active]="accentColor === preset.color"
                 [style.background-color]="preset.color"
@@ -2224,7 +2270,7 @@
           <!-- Disc Selection Grid for Empty Loadout -->
           <div class="empty-loadout-disc-grid">
             <div
-              *ngFor="let slot of discSlots"
+              *ngFor="let slot of discSlots; trackBy: trackByDiscSlot"
               class="empty-loadout-disc-slot"
               [class.has-disc]="newLoadoutDiscs[slot]"
               (click)="newLoadoutDiscs[slot] ? openLoadoutDiscEdit(slot, $event) : openDiscPickerForLoadout(slot)"
@@ -2368,7 +2414,7 @@
               <h4>Discs</h4>
               <div class="preview-disc-grid">
                 <div
-                  *ngFor="let slot of discSlots"
+                  *ngFor="let slot of discSlots; trackBy: trackByDiscSlot"
                   class="preview-disc-slot"
                   [class.missing]="loadoutValidation && loadoutValidation.missingSlots.includes(slot)"
                   [class.available]="loadoutValidation && loadoutValidation.availableSlots.includes(slot)"

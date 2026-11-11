@@ -164,14 +164,8 @@ export class EnkaApiService {
   // Set this in src/environments/environment.local.ts (which is gitignored)
   private readonly CLOUDFLARE_WORKER = environment.enkaProxyUrl;
 
-  // Fallback CORS proxies in case Cloudflare Worker is not configured
-  private readonly FALLBACK_PROXIES = [
-    'https://api.allorigins.win/raw?url=',
-    'https://corsproxy.io/?'
-  ];
-
-  private readonly ENKA_API_URL = 'https://enka.network/api/zzz/uid';
-  private currentProxyIndex = 0;
+  /** A ZZZ UID is digits only. Mirrors the check the Worker enforces. */
+  private static readonly UID_PATTERN = /^\d+$/;
 
   constructor(
     private http: HttpClient,
@@ -179,22 +173,28 @@ export class EnkaApiService {
   ) {}
 
   /**
-   * Build the request URL for Enka API
-   * Uses Cloudflare Worker if configured, otherwise uses CORS proxy fallback
+   * Build the request URL for the Enka import.
+   *
+   * All traffic goes through our own Cloudflare Worker. Public CORS proxies
+   * were previously used as a fallback, but routing a player's profile
+   * request through a third party meant an unrelated operator could log UIDs
+   * or alter the response, so that path has been removed. If the Worker is not
+   * configured the import fails with a clear error rather than silently
+   * handing user data to someone else.
    */
   private buildRequestUrl(uid: string): string {
-    // If Cloudflare Worker is configured, use it.
+    if (!this.CLOUDFLARE_WORKER) {
+      throw { status: 0, configurationMissing: true };
+    }
+
+    if (!EnkaApiService.UID_PATTERN.test(uid)) {
+      throw { status: 400 };
+    }
+
     // fresh=1 bypasses the worker's 5 minute cache - imports are always user
     // initiated, and serving a stale profile makes the app report that builds
     // are up to date when the user just changed their gear in game.
-    if (this.CLOUDFLARE_WORKER) {
-      return `${this.CLOUDFLARE_WORKER}?uid=${uid}&fresh=1`;
-    }
-
-    // Otherwise, use fallback CORS proxy
-    const enkaUrl = `${this.ENKA_API_URL}/${uid}`;
-    const proxy = this.FALLBACK_PROXIES[this.currentProxyIndex % this.FALLBACK_PROXIES.length];
-    return `${proxy}${encodeURIComponent(enkaUrl)}`;
+    return `${this.CLOUDFLARE_WORKER}?uid=${encodeURIComponent(uid)}&fresh=1`;
   }
 
   /**
@@ -203,7 +203,14 @@ export class EnkaApiService {
    * OPTIMIZATION: Added retry logic with exponential backoff for rate limits
    */
   fetchPlayerData(uid: string): Observable<EnkaImportResult> {
-    const requestUrl = this.buildRequestUrl(uid);
+    let requestUrl: string;
+    try {
+      requestUrl = this.buildRequestUrl(uid);
+    } catch (error) {
+      // Keep URL-construction failures on the same error channel as request
+      // failures so callers only handle one shape.
+      return throwError(() => new Error(this.describeError(error as { status?: number })));
+    }
 
     return this.http.get<EnkaResponse>(requestUrl).pipe(
       // OPTIMIZATION: Retry on rate limit (429) with exponential backoff
@@ -226,27 +233,20 @@ export class EnkaApiService {
       switchMap(response => from(this.transformEnkaData(uid, response))),
       catchError(error => {
         console.error('Enka API error:', error);
-
-        // Move to the next fallback proxy so a proxy that is down or has
-        // started rejecting us is not retried on every subsequent import.
-        // Only relevant when no Cloudflare Worker is configured.
-        if (!this.CLOUDFLARE_WORKER && this.isProxyFailure(error)) {
-          this.currentProxyIndex++;
-        }
-
         return throwError(() => new Error(this.describeError(error)));
       })
     );
   }
 
   /**
-   * Guard against a proxy handing back something that is not a profile.
+   * Guard against the import endpoint handing back something that is not a
+   * profile.
    *
-   * The Cloudflare Worker already rejects non-JSON upstream responses, but the
-   * fallback CORS proxies do not preserve status codes: allorigins in
-   * particular answers 200 with an error payload, or with an HTML page that
-   * Angular surfaces as a string rather than an object. Without this check the
-   * failure would surface much later as a confusing transform error.
+   * The Worker rejects non-JSON upstream responses, but a captive portal or an
+   * intercepting proxy on the user's network can still answer 200 with an HTML
+   * page, which Angular surfaces as a string rather than an object. Without
+   * this check the failure would surface much later as a confusing transform
+   * error.
    */
   private assertUsableResponse(response: EnkaResponse): EnkaResponse {
     if (!response || typeof response !== 'object') {
@@ -264,19 +264,6 @@ export class EnkaApiService {
   }
 
   /**
-   * Whether a failure suggests the proxy itself is at fault, rather than the
-   * request being something Enka legitimately rejected. Rotating away on a
-   * 404 would be wrong - the next proxy would give the same answer.
-   */
-  private isProxyFailure(error: { status?: number; proxyFailure?: boolean }): boolean {
-    if (error.proxyFailure) {
-      return true;
-    }
-
-    return error.status === 0 || error.status === 403 || (error.status ?? 0) >= 500;
-  }
-
-  /**
    * Turn a failed request into a message that tells the user what actually
    * went wrong and what (if anything) they can do about it.
    *
@@ -286,11 +273,20 @@ export class EnkaApiService {
    * are completely different: a 404 is the user's problem to solve, a 424 is
    * miHoYo's, and a 502 is ours.
    */
-  private describeError(error: { status?: number; proxyFailure?: boolean }): string {
+  private describeError(
+    error: { status?: number; proxyFailure?: boolean; configurationMissing?: boolean }
+  ): string {
+    // No import endpoint is configured, so there is nothing for the user to
+    // retry. Distinguished from a network failure because the fix is ours.
+    if (error.configurationMissing) {
+      return 'Profile import is not configured for this deployment, ' +
+        'so there is no import service to contact.';
+    }
+
     switch (error.status) {
       case 0:
         // No HTTP response reached us — offline, DNS failure, blocked by an
-        // extension, or the proxy rejected the preflight.
+        // extension, or the request was rejected before it left the browser.
         return 'Could not reach the import service. Check your internet connection, ' +
           'disable any ad blockers for this site, and try again.';
 
@@ -323,9 +319,8 @@ export class EnkaApiService {
       case 502:
       case 503:
       case 504:
-        // Three sources: the worker's fetch to Enka threw (502), the worker
-        // got a non-JSON 200 from Enka (503), or a fallback proxy returned
-        // something unusable (502). In all of them the API is effectively
+        // Two sources: the worker's fetch to Enka threw (502), or the worker
+        // got a non-JSON 200 from Enka (503). In both the API is effectively
         // unreachable rather than reporting a problem with the request.
         return 'The API is not responding right now. It may be down or ' +
           'restarting - please try again in a few minutes.';
@@ -348,16 +343,20 @@ export class EnkaApiService {
 
     const avatarList = data.PlayerInfo?.ShowcaseDetail?.AvatarList || [];
 
-    // Get reference data for validation
+    // Get reference data for validation. Indexed by id because the loop below
+    // looks up every showcased character and its W-Engine, and a linear scan
+    // of ~300 W-Engines per character adds up for no reason.
     const [referenceAgents, referenceWEngines] = await Promise.all([
       this.dbService.getAllAgents(),
       this.dbService.getAllWEngines()
     ]);
+    const agentsById = new Map(referenceAgents.map(a => [a.id, a]));
+    const wEnginesById = new Map(referenceWEngines.map(w => [w.id, w]));
 
     for (const character of avatarList) {
       // Validate agent exists in reference data
       const agentId = character.Id.toString();
-      const agent = referenceAgents.find(a => a.id === agentId);
+      const agent = agentsById.get(agentId);
 
       if (!agent) {
         // Agent is missing from local reference data - usually means the app's
@@ -375,7 +374,7 @@ export class EnkaApiService {
 
       if (character.Weapon) {
         const wEngineId = character.Weapon.Id.toString();
-        wEngine = referenceWEngines.find(w => w.id === wEngineId);
+        wEngine = wEnginesById.get(wEngineId);
 
         if (!wEngine) {
           console.warn(`Unknown W-Engine ID from Enka: ${wEngineId}`);
