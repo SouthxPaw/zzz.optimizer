@@ -1,6 +1,28 @@
 {
   "versions": [
     {
+      "version": "7.1.16",
+      "date": "2026-11-11",
+      "features": [],
+      "fixes": [
+        "Importing a UID no longer wipes mindscapes on agents that are not in your in game Character Showcase. Only showcased agents are sent by the API, so every other agent was being reset to M0 on each import",
+        "Importing someone else's UID now warns you before it overwrites your builds. Previously it replaced any agent you both had with their levels, mindscapes, W Engines and discs with no confirmation",
+        "When an import finds no changes, it now lists which agents were actually checked. The old message said everything was up to date even when agents were missing from the response entirely",
+        "A single malformed agent record no longer cancels the whole data import. One bad entry used to discard every agent after it",
+        "Entering an invalid UID now explains that the format is wrong rather than reporting a network error"
+      ],
+      "improvements": [
+        "Opening the disc picker, loadouts and compare windows is much faster. The whole page behind them was being redrawn on every click and keystroke even though none of it was visible",
+        "Removed a full screen blur effect from behind every popup. It sat behind an almost solid background so it was invisible, but it made the graphics card redraw the entire screen every frame",
+        "Agent data downloads are 90 percent smaller, from 2.56 MB to 0.26 MB. Skill and passive text that the app never reads is now stripped out when the site is built",
+        "Animated W Engine icons are 72 percent smaller, from 409 MB to 116 MB in total. They were stored at 720p and 60 frames per second but only ever shown at 80 pixels",
+        "Popups no longer play one window's closing animation and the next window's opening animation back to back when you move between them",
+        "Removed three animations that had no effect but still ran continuously in the background",
+        "Lists throughout the app now reuse rows instead of rebuilding them whenever anything changes",
+        "Share and import features are now loaded only when you use them, so the first page load is smaller"
+      ]
+    },
+    {
       "version": "7.0.14",
       "date": "2026-10-21",
       "features": [],
