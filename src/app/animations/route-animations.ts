@@ -27,13 +27,21 @@ export const routeAnimations = trigger('routeAnimations', [
 /**
  * Fade in/out animation for elements
  */
+/*
+ * Modal overlay fade.
+ *
+ * Kept short because INP measures an interaction until the UI stops changing,
+ * so this duration is counted as input latency even though the main thread is
+ * idle throughout. 140ms still reads as a fade rather than a cut, while
+ * leaving headroom under the 200ms "good" threshold once paint is added.
+ */
 export const fadeIn = trigger('fadeIn', [
   transition(':enter', [
     style({ opacity: 0 }),
-    animate('300ms ease-out', style({ opacity: 1 }))
+    animate('140ms ease-out', style({ opacity: 1 }))
   ]),
   transition(':leave', [
-    animate('200ms ease-in', style({ opacity: 0 }))
+    animate('100ms ease-in', style({ opacity: 0 }))
   ])
 ]);
 
@@ -59,14 +67,22 @@ export const fadeInFast = trigger('fadeInFast', [
 
 /**
  * Scale in/out animation for cards and modals
+ *
+ * Note for callers: INP measures an interaction until the UI visually
+ * settles, so these durations count toward it. When a modal is covered by
+ * another rather than genuinely closing, disable the animation at the call
+ * site with [@.disabled] instead of shortening it here - chaining one
+ * modal's exit into the next one's entry is what reads as lag.
  */
 export const scaleIn = trigger('scaleIn', [
   transition(':enter', [
-    style({ opacity: 0, transform: 'scale(0.95)' }),
-    animate('300ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+    // A smaller starting scale needs longer to travel, so the subtler 0.97
+    // keeps the motion readable at a shorter duration.
+    style({ opacity: 0, transform: 'scale(0.97)' }),
+    animate('140ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
   ]),
   transition(':leave', [
-    animate('200ms ease-in', style({ opacity: 0, transform: 'scale(0.95)' }))
+    animate('100ms ease-in', style({ opacity: 0, transform: 'scale(0.97)' }))
   ])
 ]);
 
@@ -98,12 +114,18 @@ export const listStagger = trigger('listStagger', [
 /**
  * Expand/collapse animation for accordions
  */
+/*
+ * Animating height forces a layout pass on every frame, unlike opacity or
+ * transform which the compositor handles on its own. Kept because collapsing
+ * to zero height is the point of this trigger, but shortened so the layout
+ * work is over quickly.
+ */
 export const expandCollapse = trigger('expandCollapse', [
   transition(':enter', [
     style({ height: 0, opacity: 0 }),
-    animate('300ms ease-out', style({ height: '*', opacity: 1 }))
+    animate('140ms ease-out', style({ height: '*', opacity: 1 }))
   ]),
   transition(':leave', [
-    animate('200ms ease-in', style({ height: 0, opacity: 0 }))
+    animate('100ms ease-in', style({ height: 0, opacity: 0 }))
   ])
 ]);

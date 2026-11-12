@@ -52,6 +52,7 @@ import { NotificationService } from '../../services/notification.service';
 import { UpgradePlan } from '../../models/upgrade-plan.model';
 import { calculateRollCount } from '../../constants/substat-rolls';
 import { UpgradePlansComponent } from '../upgrade-plans/upgrade-plans.component';
+import { DiscSetPickerComponent } from '../disc-set-picker/disc-set-picker.component';
 // Type-only: `import type` is erased at compile time, so referencing
 // ShareImageData here does not pull the 1,700-line canvas service into the
 // eagerly loaded bundle. The implementation is fetched on demand in
@@ -87,6 +88,7 @@ interface MindscapeData {
     DragDropModule,
     OptimizerComponent,
     UpgradePlansComponent,
+    DiscSetPickerComponent,
   ],
   templateUrl: './character-tab.component.html',
   styleUrls: ['./character-tab.component.css'],
@@ -109,6 +111,16 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Reference data for adding new builds
   referenceAgents: Agent[] = [];
+  /**
+   * referenceAgents indexed by id.
+   *
+   * Agent lookups happen from template bindings - icon, element, rarity and
+   * specialty are each read per build, per change detection pass. A linear
+   * find() over ~60 agents for every one of those turns a trivial property
+   * read into thousands of comparisons per frame, which is a large part of
+   * why interaction feels sluggish on the builds list.
+   */
+  private referenceAgentsById = new Map<string, Agent>();
   referenceWEngines: WEngine[] = [];
   referenceDiscSets: DiscSet[] = [];
 
@@ -424,6 +436,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((agents) => {
         this.referenceAgents = agents;
+        this.referenceAgentsById = new Map(agents.map((a) => [a.id, a]));
         // Preload agent images
         this.preloadAgentImages(agents);
         this.cdr.markForCheck();
@@ -1127,9 +1140,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
+    const agent = this.referenceAgentsById.get(this.selectedBuild!.agentId);
     if (!agent) {
       return false;
     }
@@ -1231,9 +1242,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return [];
     }
 
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
+    const agent = this.referenceAgentsById.get(this.selectedBuild!.agentId);
     if (!agent) {
       return [];
     }
@@ -1344,9 +1353,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       return [];
     }
 
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
+    const agent = this.referenceAgentsById.get(this.selectedBuild!.agentId);
     if (!agent || !agent.scoring?.buffs) {
       return [];
     }
@@ -1681,10 +1688,39 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     return Object.keys(build.equippedDiscs).length;
   }
 
+  /**
+   * Whether a modal is covering the whole page.
+   *
+   * The main view stays mounted behind every modal - visually hidden by the
+   * overlay, but still re-rendered by Angular on every keystroke and click
+   * inside the modal. That is ~250 bindings of invisible work per interaction,
+   * and it is why the pickers felt sluggish no matter how much the modals
+   * themselves were optimised.
+   *
+   * Only full-screen modals are listed. Confirm, info and update dialogs sit
+   * over the page rather than replacing it, so the page behind them has to
+   * keep rendering.
+   *
+   * showWEnginePicker is deliberately absent: it is an inline expanding panel
+   * within the main view, not an overlay, so listing it here would unmount the
+   * section that contains it.
+   */
+  isFullScreenModalOpen(): boolean {
+    return (
+      this.showAddAgentModal ||
+      this.showDiscPicker ||
+      this.showDiscForm ||
+      this.showShareModal ||
+      this.showCompareModal ||
+      this.showLoadoutsModal ||
+      this.showEnkaImportModal
+    );
+  }
+
   // Helper to get agent rank display
   // Helper to get agent icon
   getAgentIcon(agentId: string): string | undefined {
-    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    const agent = this.referenceAgentsById.get(agentId);
     return agent?.icon;
   }
 
@@ -1693,13 +1729,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
    * missing thumbnail is only slow, never a broken image.
    */
   getAgentIconThumb(agentId: string): string | undefined {
-    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    const agent = this.referenceAgentsById.get(agentId);
     return agent?.iconThumb || agent?.icon;
   }
 
   // Helper to get agent element icon (with special element support)
   getAgentElementIcon(agentId: string): string | undefined {
-    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    const agent = this.referenceAgentsById.get(agentId);
     if (!agent) return undefined;
 
     // Use special element icon if available, otherwise use standard element icon
@@ -1713,25 +1749,25 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Helper to get agent rarity
   getAgentRarity(agentId: string): 'A' | 'S' | undefined {
-    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    const agent = this.referenceAgentsById.get(agentId);
     return agent?.rarity;
   }
 
   // Helper to get agent element
   getAgentElement(agentId: string): string | undefined {
-    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    const agent = this.referenceAgentsById.get(agentId);
     return agent?.element;
   }
 
   // Helper to get agent specialty
   getAgentSpecialty(agentId: string): string | undefined {
-    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    const agent = this.referenceAgentsById.get(agentId);
     return agent?.specialty;
   }
 
   // Helper to get agent specialty icon
   getAgentSpecialtyIcon(agentId: string): string | undefined {
-    const agent = this.referenceAgents.find((a) => a.id === agentId);
+    const agent = this.referenceAgentsById.get(agentId);
     return agent?.specialtyIcon;
   }
 
@@ -1821,6 +1857,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
   private clearScoreCaches(): void {
     this.discScoreCache.clear();
     this.buildScoreCache.clear();
+    this.prioritySubstatCache = null;
     this.statCalculator.clearCache();
     this.invalidateBuildCaches();
   }
@@ -1831,6 +1868,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     this.cachedMindscapeBonuses = null;
     this.cachedPassiveBonuses = null;
     this.cachedWEngineRefinementBonuses = null;
+    this.cachedSetBonuses = null;
+    this.cached4pcBonuses = null;
+    // Depends on the selected build's discs and agent, so it has to clear
+    // here as well as in clearScoreCaches() - this is the path that runs when
+    // the selected build changes.
+    this.prioritySubstatCache = null;
+    this.substatOptionsCache.clear();
     this.lastBuildStateKey = '';
   }
 
@@ -1846,25 +1890,51 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Both bonus lists below feed *ngFor directly, so returning a new array on
+   * every call makes Angular re-render the list each change detection pass.
+   * Keyed on the same build-state string the other cached getters use, so they
+   * invalidate together via invalidateBuildCaches().
+   */
+  private cachedSetBonuses: string[] | null = null;
+  private cachedSetBonusesKey = '';
+  private cached4pcBonuses: string[] | null = null;
+  private cached4pcBonusesKey = '';
+
   getSetBonuses(): string[] {
     if (!this.selectedBuild) return [];
-    return this.statCalculator.getSetBonuses(this.selectedBuild.equippedDiscs);
+
+    const key = this.getBuildStateKey();
+    if (this.cachedSetBonuses && this.cachedSetBonusesKey === key) {
+      return this.cachedSetBonuses;
+    }
+
+    this.cachedSetBonuses = this.statCalculator.getSetBonuses(
+      this.selectedBuild.equippedDiscs,
+    );
+    this.cachedSetBonusesKey = key;
+    return this.cachedSetBonuses;
   }
 
   get4pcEffectBonuses(): string[] {
     if (!this.selectedBuild) return [];
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
+    const agent = this.referenceAgentsById.get(this.selectedBuild!.agentId);
     if (!agent) return [];
 
-    return this.statCalculator.get4pcEffectBonuses(
+    const key = this.getBuildStateKey();
+    if (this.cached4pcBonuses && this.cached4pcBonusesKey === key) {
+      return this.cached4pcBonuses;
+    }
+
+    this.cached4pcBonuses = this.statCalculator.get4pcEffectBonuses(
       this.selectedBuild.equippedDiscs,
       agent,
       this.selectedBuild.equippedWEngine || null,
       this.selectedBuild.mindscapeLevel || 0,
       this.selectedBuild.wEngineRefinement || 1,
     );
+    this.cached4pcBonusesKey = key;
+    return this.cached4pcBonuses;
   }
 
   // Disc picker methods
@@ -2091,9 +2161,13 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
    * Opens disc picker to change the disc set in comparison modal
    */
   openCompareDiscPicker() {
-    // selectedDiscSlot is already set from openCompareModal
-    // Close compare modal and open disc picker
-    this.showCompareModal = false;
+    // selectedDiscSlot is already set from openCompareModal.
+    //
+    // The compare modal stays open underneath rather than being torn down:
+    // its content is hidden by the picker (see the template), which avoids
+    // chaining this modal's exit animation into the picker's entry animation.
+    // Keeping the flag set also means cancelling the picker returns here
+    // instead of dropping the user back to the page.
     this.showDiscPicker = true;
     this.cdr.markForCheck();
   }
@@ -2260,11 +2334,26 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .map((s, i) => i !== index ? s.type : null)
       .filter((t): t is SubStatType => t !== null);
 
+    // Cached for the same reason as the disc form's version: this feeds a
+    // <select>'s *ngFor and a new array identity per call rebuilds every
+    // <option> on every change detection pass.
+    const cacheKey = `compare|${mainStatBase}|${selectedSubstats.join(',')}`;
+    const cached = this.substatOptionsCache.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     // Filter out main stat conflicts and already-selected substats
-    return this.availableSubStatTypes.filter(stat =>
+    const options = this.availableSubStatTypes.filter(stat =>
       !this.isMainStatConflict(stat.value, mainStatBase) &&
       !selectedSubstats.includes(stat.value)
     );
+
+    if (this.substatOptionsCache.size > 64) {
+      this.substatOptionsCache.clear();
+    }
+    this.substatOptionsCache.set(cacheKey, options);
+    return options;
   }
 
   /**
@@ -2559,9 +2648,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
     ).filter((d) => d !== undefined);
 
     // Get agent info for damage estimation
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
+    const agent = this.referenceAgentsById.get(this.selectedBuild!.agentId);
 
     // Get active upgrade plan if one is set
     const activePlan = this.selectedBuild.activeUpgradePlanId
@@ -2680,7 +2767,7 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       this.isWEngineSpecialtyMatch(),
       activePlan,
       this.selectedBuild.preferredBuildType,
-      this.referenceAgents.find((a) => a.id === this.selectedBuild!.agentId)
+      this.referenceAgentsById.get(this.selectedBuild!.agentId)
         ?.specialty,
     );
     this.lastFeedbackBuildHash = currentHash;
@@ -2749,6 +2836,18 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
    * 1. The main stat (if it matches exactly)
    * 2. Substats already selected in other dropdown positions
    */
+  /**
+   * Substat option lists for the disc form, cached by the state they depend on.
+   *
+   * This is bound directly to a <select>'s *ngFor, so it is called for every
+   * substat row on every change detection pass. Returning a freshly filtered
+   * array each time gives Angular a new identity to diff, which defeats
+   * trackBy and rebuilds every <option> element - the reason the substat
+   * dropdowns feel sluggish. The options only change when the main stat or the
+   * other rows' selections change, so the result is keyed on exactly that.
+   */
+  private substatOptionsCache = new Map<string, Array<{ value: SubStatType; label: string }>>();
+
   getAvailableSubstatTypesForIndex(index: number): Array<{ value: SubStatType; label: string }> {
     const mainStatBase = this.getMainStatBaseType();
 
@@ -2757,11 +2856,25 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       .map((s, i) => i !== index ? s.type : null)
       .filter((t): t is SubStatType => t !== null);
 
+    const cacheKey = `${mainStatBase}|${selectedSubstats.join(',')}`;
+    const cached = this.substatOptionsCache.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     // Filter out main stat conflicts and already-selected substats
-    return this.availableSubStatTypes.filter(stat =>
+    const options = this.availableSubStatTypes.filter(stat =>
       !this.isMainStatConflict(stat.value, mainStatBase) &&
       !selectedSubstats.includes(stat.value)
     );
+
+    // Bounded: the key space is small (main stat x selected combinations), but
+    // clear rather than grow without limit across a long editing session.
+    if (this.substatOptionsCache.size > 64) {
+      this.substatOptionsCache.clear();
+    }
+    this.substatOptionsCache.set(cacheKey, options);
+    return options;
   }
 
   /**
@@ -2791,14 +2904,27 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
 
   // Check if a substat type is a priority stat for the selected build's agent
   // Now uses build-aware weights that adapt based on detected build type (CRIT vs Anomaly)
-  isPrioritySubstat(substatType: SubStatType): boolean {
-    if (!this.selectedBuild || !this.scoringService.areBreakpointsLoaded()) {
-      return false;
+  /**
+   * Priority substats for the selected build, cached per change.
+   *
+   * Computing this walks the equipped discs, re-detects the build type and
+   * fetches the weight table - and the template asks the question once per
+   * substat row, so the whole chain used to run several times on every change
+   * detection pass. The answer only moves when the build does, and
+   * clearScoreCaches() already runs at exactly those points.
+   */
+  private prioritySubstatCache: Set<string> | null = null;
+
+  private getPrioritySubstats(): Set<string> {
+    if (this.prioritySubstatCache) {
+      return this.prioritySubstatCache;
     }
 
-    // Special case: Miyabi (1091) - always treat Anomaly_Proficiency as priority
-    if (this.selectedBuild.agentId === '1091' && substatType === 'Anomaly_Proficiency') {
-      return true;
+    const priority = new Set<string>();
+    this.prioritySubstatCache = priority;
+
+    if (!this.selectedBuild || !this.scoringService.areBreakpointsLoaded()) {
+      return priority;
     }
 
     // Get all equipped discs for build detection
@@ -2825,24 +2951,39 @@ export class CharacterTabComponent implements OnInit, OnDestroy {
       detectedBuildType,
     );
 
-    // Check if this substat is valued in the detected build (weight >= 1.0)
     if (Object.keys(buildWeights).length > 0) {
-      return (buildWeights[substatType] || 0) >= 1.0;
+      // Valued in the detected build (weight >= 1.0)
+      Object.keys(buildWeights).forEach((stat) => {
+        if ((buildWeights[stat] || 0) >= 1.0) {
+          priority.add(stat);
+        }
+      });
+    } else {
+      // Fallback to priorityStats array if no stat weights available (legacy agents)
+      const breakpoints = this.scoringService.getAgentBreakpoints(
+        this.selectedBuild.agentId,
+      );
+      if (breakpoints?.priorityStats && Array.isArray(breakpoints.priorityStats)) {
+        breakpoints.priorityStats.forEach((stat) => priority.add(stat));
+      }
     }
 
-    // Fallback to priorityStats array if no stat weights available (legacy agents)
-    const breakpoints = this.scoringService.getAgentBreakpoints(
-      this.selectedBuild.agentId,
-    );
-    if (
-      breakpoints?.priorityStats &&
-      Array.isArray(breakpoints.priorityStats)
-    ) {
-      return breakpoints.priorityStats.includes(substatType);
-    }
-
-    return false;
+    return priority;
   }
+
+  isPrioritySubstat(substatType: SubStatType): boolean {
+    if (!this.selectedBuild || !this.scoringService.areBreakpointsLoaded()) {
+      return false;
+    }
+
+    // Special case: Miyabi (1091) - always treat Anomaly_Proficiency as priority
+    if (this.selectedBuild.agentId === '1091' && substatType === 'Anomaly_Proficiency') {
+      return true;
+    }
+
+    return this.getPrioritySubstats().has(substatType);
+  }
+
 
   // Auto-fill main stat value when user selects a main stat type for slots 4-6
   onMainStatTypeChange(): void {
@@ -3276,9 +3417,7 @@ async generateShareImage() {
 
   try {
     // Get agent data
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
+    const agent = this.referenceAgentsById.get(this.selectedBuild!.agentId);
     if (!agent) {
       console.error('Agent not found');
       alert('Error: Agent data not found');
@@ -3385,9 +3524,7 @@ async generateShareImage() {
     if (!this.selectedBuild || !this.shareCanvasRef) return;
 
     const canvas = this.shareCanvasRef.nativeElement;
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
+    const agent = this.referenceAgentsById.get(this.selectedBuild!.agentId);
 
     const timestamp = new Date()
       .toISOString()
@@ -3963,7 +4100,7 @@ async generateShareImage() {
 
   /** Display name for an agent id, from loaded reference data. */
   private getAgentName(agentId: string): string | undefined {
-    return this.referenceAgents.find(agent => agent.id === agentId)?.name;
+    return this.referenceAgentsById.get(agentId)?.name;
   }
 
   private getOwningUid(): string | null {
@@ -4277,9 +4414,7 @@ async generateShareImage() {
 
   isRuptureAgent(): boolean {
     if (!this.selectedBuild) return false;
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
+    const agent = this.referenceAgentsById.get(this.selectedBuild!.agentId);
     return agent?.specialty === 'Rupture';
   }
 
@@ -4288,9 +4423,7 @@ async generateShareImage() {
    */
   isArmorerAgent(): boolean {
     if (!this.selectedBuild) return false;
-    const agent = this.referenceAgents.find(
-      (a) => a.id === this.selectedBuild!.agentId,
-    );
+    const agent = this.referenceAgentsById.get(this.selectedBuild!.agentId);
     return agent?.specialty === 'Armorer';
   }
 
@@ -4785,7 +4918,7 @@ async generateShareImage() {
     this.loadoutValidation = this.discLoadoutService.validateLoadout(loadout, this.allDiscs);
 
     // Get the agent object for stat calculation
-    const agent = this.referenceAgents.find(a => a.id === this.selectedBuild!.agentId);
+    const agent = this.referenceAgentsById.get(this.selectedBuild!.agentId);
     if (!agent) {
       console.error('[DiscLoadout] Could not find agent:', this.selectedBuild.agentId);
       this.loadoutPreviewStats = null;

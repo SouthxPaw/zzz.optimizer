@@ -1,0 +1,74 @@
+<div
+  class="modal-overlay"
+  [class.modal-overlay-high-z]="highZ"
+  (click)="close()"
+  role="dialog"
+  aria-labelledby="disc-picker-title"
+  aria-modal="true"
+>
+  <div
+    class="modal-content disc-picker-modal"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="modal-header">
+      <h2 id="disc-picker-title">Select Disc Set for {{ slotLabel }}</h2>
+      <button class="close-btn" (click)="close()" aria-label="Close modal">
+        ×
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="disc-picker-controls">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search set name..."
+          class="search-input"
+        />
+        <input
+          type="text"
+          [(ngModel)]="effectSearchTerm"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search effects (e.g., CRIT, ATK)..."
+          class="search-input"
+        />
+      </div>
+
+      <div class="disc-set-grid">
+        <div
+          *ngFor="let discSet of filteredDiscSets; trackBy: trackByDiscSetName"
+          class="disc-set-card"
+          (click)="select(discSet)"
+        >
+          <div class="disc-set-header">
+            <img
+              *ngIf="discSet.icon"
+              [src]="discSet.icon"
+              [alt]="discSet.name"
+              class="disc-set-icon"
+              width="48"
+              height="48"
+              loading="lazy"
+            />
+            <div class="disc-set-name">{{ discSet.name }}</div>
+          </div>
+          <div class="disc-set-bonuses">
+            <div
+              *ngFor="let bonus of discSet.bonuses; trackBy: trackByBonusIndex"
+              class="bonus-line"
+            >
+              <strong>{{ bonus.pieces }}-Piece:</strong>
+              {{ bonus.description }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="filteredDiscSets.length === 0" class="no-discs">
+        <p>No disc sets found matching your search.</p>
+        <p class="hint">Try adjusting your search term.</p>
+      </div>
+    </div>
+  </div>
+</div>

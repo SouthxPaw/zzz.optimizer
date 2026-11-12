@@ -1,4 +1,18 @@
 <div class="character-tab" role="region" aria-label="Agent Builds Manager">
+  <!--
+    Main view, skipped while a full-screen modal is covering it.
+
+    These ~990 lines hold the builds list, the six disc slots and the summary
+    panels - roughly 250 bindings that Angular re-evaluated on every keystroke
+    and click inside a modal, even though none of it was visible. ng-container
+    removes them from the view while a modal owns the screen, so modal
+    interaction only renders the modal.
+
+    Dialogs that sit *over* the page without replacing it (confirm, info,
+    update) are deliberately excluded: hiding the page behind them would make
+    the background vanish mid-action.
+  -->
+  <ng-container *ngIf="!isFullScreenModalOpen()">
   <div class="header">
     <h1 id="page-heading">Agents</h1>
   </div>
@@ -985,6 +999,7 @@
       </div>
     </div>
   </div>
+  </ng-container>
 
   <!-- Add Agent Modal -->
   <div
@@ -1299,100 +1314,19 @@
       </div>
     </div>
   </div>
-
-  <!-- Disc Picker Modal -->
-  <div
-    class="modal-overlay"
-    [class.modal-overlay-high-z]="showLoadoutsModal"
+  <!-- Disc Picker Modal (extracted: own change detection boundary) -->
+  <app-disc-set-picker
     *ngIf="showDiscPicker"
-    (click)="closeDiscPicker()"
-    @fadeIn
-    role="dialog"
-    aria-labelledby="disc-picker-title"
-    aria-modal="true"
-  >
-    <div
-      class="modal-content disc-picker-modal"
-      (click)="$event.stopPropagation()"
-      @scaleIn
-    >
-      <div class="modal-header">
-        <h2 id="disc-picker-title">
-          Select Disc Set for {{ formatDiscSlot(selectedDiscSlot!) }}
-        </h2>
-        <button
-          class="close-btn"
-          (click)="closeDiscPicker()"
-          aria-label="Close modal"
-        >
-          ×
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="disc-picker-controls">
-          <input
-            type="text"
-            [(ngModel)]="discSearchTerm"
-            (ngModelChange)="onDiscSearchChange($event)"
-            placeholder="Search set name..."
-            class="search-input"
-          />
-          <input
-            type="text"
-            [(ngModel)]="discEffectSearchTerm"
-            (ngModelChange)="onDiscEffectSearchChange($event)"
-            placeholder="Search effects (e.g., CRIT, ATK)..."
-            class="search-input"
-          />
-        </div>
-
-        <div class="disc-set-grid">
-          <div
-            *ngFor="
-              let discSet of getFilteredDiscSets();
-              trackBy: trackByDiscSetName
-            "
-            class="disc-set-card"
-            (click)="selectDiscSet(discSet)"
-          >
-            <div class="disc-set-header">
-              <img
-                *ngIf="discSet.icon"
-                [src]="discSet.icon"
-                [alt]="discSet.name"
-                class="disc-set-icon"
-                width="48"
-                height="48"
-                loading="lazy"
-              />
-              <div class="disc-set-name">{{ discSet.name }}</div>
-            </div>
-            <div class="disc-set-bonuses">
-              <div
-                *ngFor="
-                  let bonus of discSet.bonuses;
-                  trackBy: trackByBonusIndex
-                "
-                class="bonus-line"
-              >
-                <strong>{{ bonus.pieces }}-Piece:</strong>
-                {{ bonus.description }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div *ngIf="getFilteredDiscSets().length === 0" class="no-discs">
-          <p>No disc sets found matching your search.</p>
-          <p class="hint">Try adjusting your search term.</p>
-        </div>
-      </div>
-    </div>
-  </div>
+    [discSets]="referenceDiscSets"
+    [slotLabel]="selectedDiscSlot ? formatDiscSlot(selectedDiscSlot) : ''"
+    [highZ]="showLoadoutsModal || showCompareModal"
+    (setSelected)="selectDiscSet($event)"
+    (closed)="closeDiscPicker()"
+  ></app-disc-set-picker>
 
   <!-- Disc Stats Form Modal -->
   <div class="modal-overlay"
-       [class.modal-overlay-high-z]="showLoadoutsModal"
+       [class.modal-overlay-high-z]="showLoadoutsModal || showCompareModal"
        *ngIf="showDiscForm"
        (click)="closeDiscForm()"
        @fadeIn>
@@ -1532,10 +1466,25 @@
   <!-- End Builds Tab -->
 
   <!-- Compare Discs Modal -->
-  <div class="modal-overlay" *ngIf="showCompareModal" (click)="closeCompareModal()" @fadeIn>
+  <!--
+    Content is detached while the disc picker covers it, and its animation is
+    disabled for that transition - same reasoning as the loadouts modal:
+    chaining this modal's exit into the picker's entry is measured as
+    interaction latency even though the main thread is idle. Closing the
+    compare modal outright still animates.
+  -->
+  <div
+    class="modal-overlay"
+    [class.is-covered]="showDiscPicker"
+    *ngIf="showCompareModal"
+    (click)="closeCompareModal()"
+    @fadeIn
+  >
     <div
       class="modal-content compare-modal-content"
+      *ngIf="!showDiscPicker"
       (click)="$event.stopPropagation()"
+      [@.disabled]="showDiscPicker"
       @scaleIn
     >
       <div class="modal-header">
@@ -2187,8 +2136,38 @@
   </div>
 
   <!-- Disc Loadouts Modal -->
-  <div class="modal-overlay" *ngIf="showLoadoutsModal" (click)="closeLoadoutsModal()" @fadeIn>
-    <div class="modal-content loadouts-modal-content" (click)="$event.stopPropagation()" @scaleIn>
+  <!--
+    Hidden while the disc picker is layered over it.
+
+    Picking a disc for a loadout keeps showLoadoutsModal true, so this modal -
+    365 lines and ~145 elements - stayed mounted and re-rendered on every
+    keystroke in the picker's search box, from behind it. The content is
+    detached rather than the whole overlay so the dimmed backdrop still reads
+    as "the loadouts modal is still open underneath".
+  -->
+  <div
+    class="modal-overlay"
+    [class.is-covered]="showDiscPicker || showDiscForm"
+    *ngIf="showLoadoutsModal"
+    (click)="closeLoadoutsModal()"
+    @fadeIn
+  >
+    <!--
+      @.disabled suppresses the scale animation when this content is being
+      covered by another modal rather than genuinely closing. Without it,
+      opening the picker from here plays this modal's exit animation and then
+      the picker's entry animation back to back - and INP counts an
+      interaction until the UI settles, so those chained animations are
+      measured as interaction latency even though the main thread is idle.
+      Closing the loadouts modal outright still animates normally.
+    -->
+    <div
+      class="modal-content loadouts-modal-content"
+      *ngIf="!showDiscPicker && !showDiscForm"
+      (click)="$event.stopPropagation()"
+      [@.disabled]="showDiscPicker || showDiscForm"
+      @scaleIn
+    >
       <div class="modal-header">
         <h2>Disc Loadouts - {{ selectedBuild?.name }}</h2>
         <button class="close-btn" (click)="closeLoadoutsModal()">×</button>
