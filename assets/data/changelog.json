@@ -1,6 +1,15 @@
 {
   "versions": [
     {
+      "version": "7.1.17",
+      "date": "2026-11-24",
+      "features": [],
+      "fixes": [
+        "Fixed Cissia's role as an Anomaly agent and fixed it to be an Attack agent."
+      ],
+      "improvements": []
+    },
+    {
       "version": "7.1.16",
       "date": "2026-11-11",
       "features": [],
