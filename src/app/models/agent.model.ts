@@ -44,7 +44,7 @@ export interface Agent {
   icon?: string;
   iconThumb?: string;           // 400px-wide thumbnail for list/grid views (see build-scripts/generate-agent-thumbnails.js)
   elementIcon?: string;
-  specialElementIcon?: string;  // For special element variants (Frost, AuricInk, HonedEdge)
+  specialElementIcon?: string;  // For special element variants (Frost, AuricInk, HonedEdge, GenesisFlare)
   specialtyIcon?: string;
   mindscapeEffects?: MindscapeEffect[];
   coreSkill?: string;

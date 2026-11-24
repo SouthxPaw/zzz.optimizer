@@ -1,6 +1,15 @@
 {
   "versions": [
     {
+      "version": "7.1.17",
+      "date": "2026-11-24",
+      "features": [],
+      "fixes": [
+        "Fixed Cissia being treated as an Anomaly agent. She is an Attack agent, so her ratings and stat priorities were built around Anomaly Proficiency and Anomaly Mastery instead of CRIT"
+      ],
+      "improvements": []
+    },
+    {
       "version": "7.1.16",
       "date": "2026-11-11",
       "features": [],

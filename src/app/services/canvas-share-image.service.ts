@@ -5,6 +5,7 @@ import { WEngine } from '../models/wengine.model';
 import { DiscSet } from './disc-set.service';
 import { Disc } from '../models/disc.model';
 import { BuildRating, DiscRating } from '../constants/disc-scoring';
+import { SPECIAL_ELEMENT_ICON_FILES } from '../constants/special-element-icons';
 
 export interface ShareImageData {
   build: AgentBuild;
@@ -1455,16 +1456,9 @@ export class CanvasShareImageService {
    * Get element icon path
    */
   private getElementIconPath(elementIcon: string): string {
-    // Special element icons mapping (matches DataMappingService)
-    const specialIconMap: { [key: string]: string } = {
-      'Frost': 'IconFrost.webp',
-      'AuricInk': 'IconAuricInk.webp',
-      'HonedEdge': 'IconHonedEdge.webp'
-    };
-
     // Check if it's a special element
-    if (specialIconMap[elementIcon]) {
-      return `assets/data/images/elements/${specialIconMap[elementIcon]}`;
+    if (SPECIAL_ELEMENT_ICON_FILES[elementIcon]) {
+      return `assets/data/images/elements/${SPECIAL_ELEMENT_ICON_FILES[elementIcon]}`;
     }
 
     // Standard element icons
