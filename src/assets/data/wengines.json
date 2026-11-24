@@ -4974,5 +4974,58 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14160": {
+    "Id": 14160,
+    "CodeName": "Weapon_S_1601",
+    "Name": "Dragonfire Mirage",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1601.png",
+    "WeaponType": {
+      "7": "Armorer"
+    },
+    "BaseProperty": {
+      "Name": "Base DEF",
+      "Name2": "Base DEF",
+      "Format": "{0:0.#}",
+      "Value": 446
+    },
+    "RandProperty": {
+      "Name": "DEF",
+      "Name2": "DEF",
+      "Format": "{0:0.#%}",
+      "Value": 4800
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "CRIT Rate",
+          "Name2": "CRIT Rate",
+          "Format": "{0:0.#%}",
+          "Overclock": {
+            "W1": 2000,
+            "W2": 2200,
+            "W3": 2400,
+            "W4": 2600,
+            "W5": 2800
+          }
+        }
+      ],
+      "Desc": "CRIT Rate increases by %. When the equipper activates an EX Special Attack or enters combat, their Fire DMG increases by % and their Fire Sharp DMG increases by % for 25s. Repeated triggers reset the duration."
+    },
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "20",
+          "format": "%"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }
