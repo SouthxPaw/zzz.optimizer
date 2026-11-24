@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Element, Specialty } from '../models/agent.model';
+import { SPECIAL_ELEMENT_ICON_FILES } from '../constants/special-element-icons';
 
 /**
  * Service for mapping game data IDs and codes to application format
@@ -110,19 +111,12 @@ export class DataMappingService {
 
   /**
    * Get element icon path
-   * Can accept a special element icon name (Frost, AuricInk, HonedEdge) or standard element
+   * Can accept a special element icon name (Frost, AuricInk, HonedEdge, GenesisFlare) or standard element
    */
   getElementIconPath(element: Element | string): string {
-    // Special element icons
-    const specialIconMap: { [key: string]: string } = {
-      'Frost': 'IconFrost.webp',
-      'AuricInk': 'IconAuricInk.webp',
-      'HonedEdge': 'IconHonedEdge.webp'
-    };
-
     // Check if it's a special element
-    if (typeof element === 'string' && specialIconMap[element]) {
-      return `assets/data/images/elements/${specialIconMap[element]}`;
+    if (typeof element === 'string' && SPECIAL_ELEMENT_ICON_FILES[element]) {
+      return `assets/data/images/elements/${SPECIAL_ELEMENT_ICON_FILES[element]}`;
     }
 
     // Standard element icons

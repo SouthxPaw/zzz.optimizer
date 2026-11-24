@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Agent, BaseStats } from '../models/agent.model';
 import { WEngine } from '../models/wengine.model';
 import { DataMappingService } from './data-mapping.service';
+import { getSpecialElementIcon } from '../constants/special-element-icons';
 
 /**
  * Service to transform raw game data JSON into app-compatible format
@@ -127,18 +128,7 @@ export class DataTransformerService {
     const elementIcon = `assets/data/images/elements/Icon${mappedElement}.webp`;
 
     // Check for special element icons for specific agents
-    let specialElementIcon: string | undefined;
-    const agentIdStr = id.toString();
-    if (agentIdStr === '1091') {
-      // Miyabi - Frost (Ice variant)
-      specialElementIcon = 'Frost';
-    } else if (agentIdStr === '1371') {
-      // Yi Xuan - AuricInk (Ether variant)
-      specialElementIcon = 'AuricInk';
-    } else if (agentIdStr === '1431') {
-      // Ye Shunguang - HonedEdge (Physical variant)
-      specialElementIcon = 'HonedEdge';
-    }
+    const specialElementIcon = getSpecialElementIcon(id);
 
     // Map specialty icon
     const specialtyIcon = `assets/data/images/roles/Icon${mappedSpecialty === 'Attack' ? 'AttackType' : mappedSpecialty}.webp`;
@@ -683,18 +673,7 @@ export class DataTransformerService {
     const elementIcon = `assets/data/images/elements/Icon${element}.webp`;
 
     // Check for special element icons for specific agents
-    let specialElementIcon: string | undefined;
-    const agentIdStr = id.toString();
-    if (agentIdStr === '1091') {
-      // Miyabi - Frost (Ice variant)
-      specialElementIcon = 'Frost';
-    } else if (agentIdStr === '1371') {
-      // Yi Xuan - AuricInk (Ether variant)
-      specialElementIcon = 'AuricInk';
-    } else if (agentIdStr === '1431') {
-      // Ye Shunguang - HonedEdge (Physical variant)
-      specialElementIcon = 'HonedEdge';
-    }
+    const specialElementIcon = getSpecialElementIcon(id);
 
     // Map specialty icon
     const specialtyIcon = `assets/data/images/roles/Icon${specialty === 'Attack' ? 'AttackType' : specialty}.webp`;
