@@ -25597,13 +25597,7 @@
           }
         }
       ],
-      "debuffs": [
-        {
-          "type": "StunDMGMult",
-          "value": "20",
-          "format": "%"
-        }
-      ],
+      "debuffs": [],
       "dazeBonus": 0
     },
     "rarity": "S",
@@ -84843,5 +84837,55 @@
     },
     "potentials": [],
     "Icon": "Robin"
+  },
+  {
+    "id": 1651,
+    "name": "Kafka",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "84",
+          "format": "flat"
+        },
+        {
+          "type": "AnomalyMastery",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "energyRegen",
+            "threshold": 1.2,
+            "ratio": 83.33,
+            "cap": 140
+          }
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 203,
+      "name": "Electric"
+    },
+    "specialty": {
+      "id": 3,
+      "name": "Anomaly"
+    },
+    "lvl60_stats": {
+      "HpMax": 7788,
+      "Defence": 612,
+      "Attack": 872,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 86,
+      "ElementAbnormalPower": 168,
+      "ElementMystery": 112,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "Kafka"
   }
 ]

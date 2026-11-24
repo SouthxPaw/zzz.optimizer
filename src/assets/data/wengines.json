@@ -5057,7 +5057,59 @@
       "Desc": "Shield granted by the equipper is increased by %. When the equipper grants Shield, the whole squad's Laceration DMG increases by % for 20s. Repeated triggers extend the duration, up to a maximum of 30s. Only one instance of this effect can exist in the same squad. When the equipper launches an Aftershock, the whole squad's DMG increases by % for 20s, stacking up to 2 times. Repeated triggers refresh the duration. Only one instance of this effect can exist in the same squad."
     },
     "scoring": {
+      "buffs": [],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
+  },
+  "14165": {
+    "Id": 14150,
+    "CodeName": "Weapon_S_1651",
+    "Name": "Requiem Araneae",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1651.png",
+    "WeaponType": {
+      "3": "Anomaly"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "Energy Regen",
+      "Name2": "Energy Regen",
+      "Format": "{0:0.#%}",
+      "Value": 6000
+    },
+    "Effect": {
+      "Properties": [
+        {
+          "Name": "Anomaly Proficiency",
+          "Name2": "Anomaly Proficiency",
+          "Format": "{0:0.#}",
+          "Overclock": {
+            "W1": 30,
+            "W2": 35,
+            "W3": 39,
+            "W4": 44,
+            "W5": 48
+          }
+        }
+      ],
+      "Desc": "When the equipper deals Electric DMG with an EX Special Attack, their Anomaly Proficiency increases by [NUMBER] for 30s, stacking up to 3 times. The duration of each stack is calculated separately. This effect can trigger at most once per use of a skill. With 3 stacks, their DMG increases by % and their Disorder DMG increases by %"
+    },
+    "scoring": {
       "buffs": [
+        {
+          "type": "AnomalyProficiency",
+          "value": "30",
+          "format": "flat"
+        }
       ],
       "debuffs": [],
       "dazeBonus": 0

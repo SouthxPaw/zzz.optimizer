@@ -545,6 +545,17 @@
           "note": ""
         }
       ]
+    },
+    "1651": {
+      "comment": "Kafka",
+      "2": [
+        {
+          "type": "Anomaly_Proficiency",
+          "value": 35,
+          "format": "flat",
+          "note": ""
+        }
+      ]
     }
   }
 }
