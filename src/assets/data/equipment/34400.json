@@ -1,0 +1,19 @@
+{
+  "Id": 34400,
+  "Name": "Bloodwing Nocturne",
+  "Desc2": "Energy Regen +20%",
+  "Desc4": "The equipper's CRIT DMG increases by 30%, and Daze dealt by attacks increases by 5%. If the equipper is a Stun character, using an EX Special Attack or Chain Attack while their CRIT Rate is greater than or equal to 50% increases all squad members' Sharp DMG dealt by 8% for 25s. Repeated triggers reset the duration. Only one instance of this effect can exist in the same squad.",
+  "4pcEffect": {
+    "Properties": [
+      {
+        "Name": "CRIT_DMG",
+        "Name2": "CRIT_DMG",
+        "Format": "{0:0.#}%",
+        "Value": 3000
+      }
+    ]
+  },
+  "Story": "",
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitBloodwingNocturne.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitBloodwingNocturne.png"
+}

@@ -12206,7 +12206,13 @@
     "id": 1331,
     "name": "Vivian",
     "scoring": {
-      "buffs": [],
+      "buffs": [
+        {
+          "type": "AnomalyMastery",
+          "value": "18",
+          "format": "flat"
+        }
+      ],
       "debuffs": [],
       "dazeBonus": 0
     },
@@ -25560,7 +25566,7 @@
       "buffs": [
         {
           "type": "CRITDMGBonus",
-          "value": "10",
+          "value": "20",
           "format": "%"
         },
         {
@@ -25576,11 +25582,28 @@
         },
         {
           "type": "ImpactBonus",
-          "value": "25",
+          "value": "50",
           "format": "flat"
+        },
+        {
+          "type": "ImpactBonus",
+          "value": "0",
+          "format": "flat",
+          "condition": {
+            "sourceStat": "atk",
+            "threshold": 2800,
+            "ratio": 0.03,
+            "cap": 20
+          }
         }
       ],
-      "debuffs": [],
+      "debuffs": [
+        {
+          "type": "StunDMGMult",
+          "value": "20",
+          "format": "%"
+        }
+      ],
       "dazeBonus": 0
     },
     "rarity": "S",
@@ -84725,5 +84748,62 @@
     },
     "potentials": [],
     "Icon": "Severian"
+  },
+  {
+    "id": 1601,
+    "name": "Sunbringer",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "CRITRateBonus",
+          "value": "40",
+          "format": "%"
+        },
+        {
+          "type": "CRITRateBonus",
+          "value": "17.5",
+          "format": "%"
+        },
+        {
+          "type": "LacerationBonus",
+          "value": "25",
+          "format": "%"
+        }
+      ],
+      "debuffs": [
+        {
+          "type": "DEFShred",
+          "value": "20",
+          "format": "%"
+        }
+      ],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "faction": null,
+    "element": {
+      "id": 201,
+      "name": "Fire"
+    },
+    "specialty": {
+      "id": 7,
+      "name": "Armorer"
+    },
+    "lvl60_stats": {
+      "HpMax": 5736,
+      "Defence": 441,
+      "Attack": 626,
+      "Crit": 3380,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 93,
+      "ElementAbnormalPower": 78,
+      "ElementMystery": 77,
+      "SpBarPoint": 15,
+      "LacerationDamage": 15000,
+      "SharpnessAutoAccumulation": 15
+    },
+    "potentials": [],
+    "Icon": "Sunbringer"
   }
 ]

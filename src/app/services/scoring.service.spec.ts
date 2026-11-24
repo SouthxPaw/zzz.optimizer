@@ -339,4 +339,114 @@ describe('ScoringService', () => {
       expect(() => service.detectBuildType(sixDiscs(), 'agent1')).not.toThrow();
     });
   });
+
+  describe('LacerationBonus buff', () => {
+    /**
+     * Armorers deal Sharp DMG, which substitutes Laceration for CRIT DMG.
+     * LacerationBonus raises that multiplier rather than adding a DMG% bonus,
+     * so it is applied inside estimateBuildDamage rather than via stats.
+     */
+    const armorerStats = {
+      ATK: 2000,
+      DEF: 3000,
+      critRate: 80,
+      critDMG: 50,
+      lacerationDamage: 150,
+    };
+
+    function estimate(role: string, buffs: any[]) {
+      return service.estimateBuildDamage(
+        armorerStats,
+        '1601',
+        'Sunbringer',
+        role,
+        'Fire',
+        0,
+        { buffs, debuffs: [], dazeBonus: 0 }
+      );
+    }
+
+    const laceration25 = [{ type: 'LacerationBonus', value: '25', format: '%' }];
+
+    it('increases Armorer Sharp DMG', () => {
+      const withoutBuff = estimate('Armorer', []);
+      const withBuff = estimate('Armorer', laceration25);
+
+      expect(withBuff.sharpDamage!).toBeGreaterThan(withoutBuff.sharpDamage!);
+    });
+
+    it('reports Sharp DMG as the damage type for Armorers', () => {
+      expect(estimate('Armorer', laceration25).damageType).toBe('sharp');
+    });
+
+    it('is ignored for non-Armorer roles', () => {
+      const withoutBuff = estimate('Attack', []);
+      const withBuff = estimate('Attack', laceration25);
+
+      expect(withBuff.totalDamage).toBe(withoutBuff.totalDamage);
+    });
+
+    it('scales Sharp DMG with the size of the bonus', () => {
+      const small = estimate('Armorer', [{ type: 'LacerationBonus', value: '10', format: '%' }]);
+      const large = estimate('Armorer', [{ type: 'LacerationBonus', value: '50', format: '%' }]);
+
+      expect(large.sharpDamage!).toBeGreaterThan(small.sharpDamage!);
+    });
+
+    it('accumulates multiple LacerationBonus buffs', () => {
+      const single = estimate('Armorer', laceration25);
+      const stacked = estimate('Armorer', [...laceration25, ...laceration25]);
+
+      expect(stacked.sharpDamage!).toBeGreaterThan(single.sharpDamage!);
+    });
+  });
+
+  describe("Sunbringer's scoring buffs", () => {
+    /**
+     * Sunbringer is the first agent to use LacerationBonus, so these specs pin
+     * the shape of her entries in agents.json against the engine that reads them.
+     */
+    const sunbringerBuffs = [
+      { type: 'CRITRateBonus', value: '40', format: '%' },
+      { type: 'CRITRateBonus', value: '17.5', format: '%' },
+      { type: 'LacerationBonus', value: '25', format: '%' },
+    ];
+    const sunbringerDebuffs = [{ type: 'DEFShred', value: '20', format: '%' }];
+
+    function estimateSunbringer(buffs: any[], debuffs: any[]) {
+      return service.estimateBuildDamage(
+        { ATK: 2000, DEF: 3000, critRate: 97.5, critDMG: 50, lacerationDamage: 150 },
+        '1601',
+        'Sunbringer',
+        'Armorer',
+        'Fire',
+        0,
+        { buffs, debuffs, dazeBonus: 0 }
+      );
+    }
+
+    it('produces Sharp DMG from her full buff/debuff set', () => {
+      const result = estimateSunbringer(sunbringerBuffs, sunbringerDebuffs);
+
+      expect(result.damageType).toBe('sharp');
+      expect(result.sharpDamage!).toBeGreaterThan(0);
+    });
+
+    it('gains damage from her Laceration bonus', () => {
+      const withLaceration = estimateSunbringer(sunbringerBuffs, sunbringerDebuffs);
+      const withoutLaceration = estimateSunbringer(
+        sunbringerBuffs.filter(b => b.type !== 'LacerationBonus'),
+        sunbringerDebuffs
+      );
+
+      expect(withLaceration.sharpDamage!).toBeGreaterThan(withoutLaceration.sharpDamage!);
+    });
+
+    it('gains damage from her DEF Shred debuff', () => {
+      const withShred = estimateSunbringer(sunbringerBuffs, sunbringerDebuffs);
+      const withoutShred = estimateSunbringer(sunbringerBuffs, []);
+
+      expect(withShred.sharpDamage!).toBeGreaterThan(withoutShred.sharpDamage!);
+    });
+  });
 });

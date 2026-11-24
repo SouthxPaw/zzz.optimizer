@@ -1,0 +1,19 @@
+{
+  "Id": 34300,
+  "Name": "Monument of the Star",
+  "Desc2": "DEF +16%",
+  "Desc4": "The equipper's CRIT Rate increases by 12%. When the equipper deals Fire Sharp DMG, they ignore 20% of the enemy's DEF.",
+  "4pcEffect": {
+    "Properties": [
+      {
+        "Name": "CRIT_RATE",
+        "Name2": "CRIT_RATE",
+        "Format": "{0:0.#}%",
+        "Value": 1200
+      }
+    ]
+  },
+  "Story": "",
+  "Icon": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitMonumentoftheStar.png",
+  "Icon2": "UI/Sprite/A1DynamicLoad/IconSuit/UnPacker/SuitMonumentoftheStar.png"
+}

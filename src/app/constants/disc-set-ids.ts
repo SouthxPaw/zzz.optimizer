@@ -33,4 +33,6 @@ export const DISC_SET_EQUIPMENT_IDS = [
   '34000', // The Sky Ablaze
   '34100', // Feathered Fate
   '34200', // Thorned Rose
+  '34300', // Monument of the Star
+  '34400', // Bloodwing Nocturne
 ] as const;

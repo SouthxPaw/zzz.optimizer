@@ -4911,6 +4911,81 @@
           "Energy_Regen": 3
         }
       }
+    },
+    "1601": {
+      "comment": "Sunbringer",
+      "name": "Sunbringer",
+      "breakpoints": {
+        "hp": {
+          "min": 7500,
+          "optimal": 8500
+        },
+        "atk": {
+          "min": 0,
+          "optimal": 0
+        },
+        "def": {
+          "min": 2200,
+          "optimal": 2500
+        },
+        "impact": {
+          "min": 0,
+          "optimal": 0
+        },
+        "anomalyMastery": {
+          "min": 0,
+          "optimal": 0
+        },
+        "critRate": {
+          "min": 115,
+          "optimal": 126
+        },
+        "critDmg": {
+          "min": 50,
+          "optimal": 50
+        },
+        "anomalyProficiency": {
+          "min": 0,
+          "optimal": 0
+        },
+        "pen": {
+          "min": 0,
+          "optimal": 0
+        },
+        "penRatio": {
+          "min": 0,
+          "optimal": 0
+        },
+        "energyRegen": {
+          "min": 0,
+          "optimal": 0
+        }
+      },
+      "priorityStats": ["CRIT_Rate", "DEF%", "CRIT_DMG", "PEN", "DEF"],
+      "statWeights": {
+        "CRIT_Rate": 2.0,
+        "DEF%": 1.5,
+        "CRIT_DMG": 1.0,
+        "PEN": 0.7,
+        "DEF": 0.5,
+        "ATK%": 0.0,
+        "ATK": 0.0
+      },
+      "mainStatWeights": {
+        "Drive4": {
+          "CRIT_Rate": 3,
+          "CRIT_DMG": 2,
+          "DEF%": 2
+        },
+        "Drive5": {
+          "PEN_Ratio": 3,
+          "Element_DMG": 3,
+          "DEF%": 2
+        },
+        "Drive6": {
+          "DEF%": 3
+        }
+      }
     }
   }
 }
