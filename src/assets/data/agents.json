@@ -84805,5 +84805,43 @@
     },
     "potentials": [],
     "Icon": "Sunbringer"
+  },
+  {
+    "id": 1661,
+    "name": "Robin",
+    "scoring": {
+      "buffs": [
+        {
+          "type": "ATKBonus",
+          "value": "800",
+          "format": "flat"
+        }
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    },
+    "rarity": "S",
+    "element": {
+      "id": 205,
+      "name": "Ether"
+    },
+    "specialty": {
+      "id": 5,
+      "name": "Defense"
+    },
+    "lvl60_stats": {
+      "HpMax": 8754,
+      "Defence": 706,
+      "Attack": 750,
+      "Crit": 500,
+      "CritDamage": 5000,
+      "PenRate": 0,
+      "BreakStun": 90,
+      "ElementAbnormalPower": 96,
+      "ElementMystery": 95,
+      "SpBarPoint": 12
+    },
+    "potentials": [],
+    "Icon": "Robin"
   }
 ]

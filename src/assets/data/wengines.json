@@ -5027,5 +5027,40 @@
       "debuffs": [],
       "dazeBonus": 0
     }
+  },
+  "14166": {
+    "Id": 14166,
+    "CodeName": "Weapon_S_1661",
+    "Name": "Iridescent Starsong",
+    "Desc": "",
+    "Desc2": "",
+    "Desc3": "",
+    "Rarity": 4,
+    "Icon": "Weapon_S_1661.png",
+    "WeaponType": {
+      "5": "Defense"
+    },
+    "BaseProperty": {
+      "Name": "Base ATK",
+      "Name2": "Base ATK",
+      "Format": "{0:0.#}",
+      "Value": 713
+    },
+    "RandProperty": {
+      "Name": "HP",
+      "Name2": "Percent HP",
+      "Format": "{0:0.#%}",
+      "Value": 3000
+    },
+    "Effect": {
+      "Properties": [],
+      "Desc": "Shield granted by the equipper is increased by %. When the equipper grants Shield, the whole squad's Laceration DMG increases by % for 20s. Repeated triggers extend the duration, up to a maximum of 30s. Only one instance of this effect can exist in the same squad. When the equipper launches an Aftershock, the whole squad's DMG increases by % for 20s, stacking up to 2 times. Repeated triggers refresh the duration. Only one instance of this effect can exist in the same squad."
+    },
+    "scoring": {
+      "buffs": [
+      ],
+      "debuffs": [],
+      "dazeBonus": 0
+    }
   }
 }

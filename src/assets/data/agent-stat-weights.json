@@ -12674,6 +12674,132 @@
           }
         }
       }
+    },
+    "1661": {
+      "name": "Robin",
+      "builds": {
+        "CRIT": {
+          "contextualWeights": {
+            "Drive1": {
+              "HP": {
+                "mainStatPoints": 3,
+                "substatWeights": {
+                  "HP%": 1.42,
+                  "DEF%": 0,
+                  "ATK%": 0,
+                  "CRIT_Rate": 0.33,
+                  "CRIT_DMG": 0.33,
+                  "ATK": 0.17,
+                  "HP": 0,
+                  "DEF": 0,
+                  "PEN": 0.17,
+                  "Anomaly_Proficiency": 0
+                }
+              }
+            },
+            "Drive2": {
+              "ATK": {
+                "mainStatPoints": 3,
+                "substatWeights": {
+                  "HP%": 1.42,
+                  "DEF%": 0,
+                  "ATK%": 0,
+                  "CRIT_Rate": 0.33,
+                  "CRIT_DMG": 0.33,
+                  "ATK": 0.17,
+                  "HP": 0.67,
+                  "DEF": 0,
+                  "PEN": 0.17,
+                  "Anomaly_Proficiency": 0
+                }
+              }
+            },
+            "Drive3": {
+              "DEF": {
+                "mainStatPoints": 3,
+                "substatWeights": {
+                  "HP%": 1.42,
+                  "DEF%": 0,
+                  "ATK%": 0,
+                  "CRIT_Rate": 0.33,
+                  "CRIT_DMG": 0.33,
+                  "ATK": 0.17,
+                  "HP": 0.67,
+                  "DEF": 0,
+                  "PEN": 0.17,
+                  "Anomaly_Proficiency": 0
+                }
+              }
+            },
+            "Drive4": {
+              "HP%": {
+                "mainStatPoints": 3,
+                "substatWeights": {
+                  "HP%": 0,
+                  "DEF%": 0,
+                  "ATK%": 0,
+                  "CRIT_Rate": 0.33,
+                  "CRIT_DMG": 0.33,
+                  "ATK": 0.17,
+                  "HP": 1.42,
+                  "DEF": 0,
+                  "PEN": 0.17,
+                  "Anomaly_Proficiency": 0
+                }
+              }
+            },
+            "Drive5": {
+              "HP%": {
+                "mainStatPoints": 3,
+                "substatWeights": {
+                  "HP%": 0,
+                  "DEF%": 0,
+                  "ATK%": 0,
+                  "CRIT_Rate": 0.33,
+                  "CRIT_DMG": 0.33,
+                  "ATK": 0.17,
+                  "HP": 1.42,
+                  "DEF": 0,
+                  "PEN": 0.17,
+                  "Anomaly_Proficiency": 0
+                }
+              }
+            },
+            "Drive6": {
+              "Energy_Regen": {
+                "mainStatPoints": 3,
+                "substatWeights": {
+                  "HP%": 1.42,
+                  "DEF%": 0,
+                  "ATK%": 0,
+                  "CRIT_Rate": 0.33,
+                  "CRIT_DMG": 0.33,
+                  "ATK": 0.17,
+                  "HP": 0.67,
+                  "DEF": 0,
+                  "PEN": 0.17,
+                  "Anomaly_Proficiency": 0
+                }
+              },
+              "HP%": {
+                "mainStatPoints": 2,
+                "substatWeights": {
+                  "HP%": 0,
+                  "DEF%": 0,
+                  "ATK%": 0,
+                  "CRIT_Rate": 0.33,
+                  "CRIT_DMG": 0.33,
+                  "ATK": 0.17,
+                  "HP": 1.42,
+                  "DEF": 0,
+                  "PEN": 0.17,
+                  "Anomaly_Proficiency": 0
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
