@@ -5,7 +5,7 @@
       "date": "2026-11-24",
       "features": [],
       "fixes": [
-        "Fixed Cissia being treated as an Anomaly agent. She is an Attack agent, so her ratings and stat priorities were built around Anomaly Proficiency and Anomaly Mastery instead of CRIT"
+        "Fixed Cissia's role as an Anomaly agent and fixed it to be an Attack agent."
       ],
       "improvements": []
     },
