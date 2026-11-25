@@ -84732,8 +84732,13 @@
         },
         {
           "type": "CRITRateBonus",
-          "value": "17.5",
-          "format": "%"
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "critDmg",
+            "threshold": 0,
+            "ratio": 0.35
+          }
         },
         {
           "type": "LacerationBonus",
