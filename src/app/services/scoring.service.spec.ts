@@ -345,6 +345,9 @@ describe('ScoringService', () => {
      * Armorers deal Sharp DMG, which substitutes Laceration for CRIT DMG.
      * LacerationBonus raises that multiplier rather than adding a DMG% bonus,
      * so it is applied inside estimateBuildDamage rather than via stats.
+     *
+     * The buff is gated on the Armorer ROLE, not on any particular agent, so
+     * these specs use a synthetic agent: they must hold for every Armorer.
      */
     const armorerStats = {
       ATK: 2000,
@@ -354,15 +357,15 @@ describe('ScoringService', () => {
       lacerationDamage: 150,
     };
 
-    function estimate(role: string, buffs: any[]) {
+    function estimate(role: string, buffs: any[], debuffs: any[] = []) {
       return service.estimateBuildDamage(
         armorerStats,
-        '1601',
-        'Sunbringer',
+        'test-armorer',
+        'Test Armorer',
         role,
         'Fire',
         0,
-        { buffs, debuffs: [], dazeBonus: 0 }
+        { buffs, debuffs, dazeBonus: 0 }
       );
     }
 
@@ -399,52 +402,12 @@ describe('ScoringService', () => {
 
       expect(stacked.sharpDamage!).toBeGreaterThan(single.sharpDamage!);
     });
-  });
 
-  describe("Sunbringer's scoring buffs", () => {
-    /**
-     * Sunbringer is the first agent to use LacerationBonus, so these specs pin
-     * the shape of her entries in agents.json against the engine that reads them.
-     */
-    const sunbringerBuffs = [
-      { type: 'CRITRateBonus', value: '40', format: '%' },
-      { type: 'CRITRateBonus', value: '17.5', format: '%' },
-      { type: 'LacerationBonus', value: '25', format: '%' },
-    ];
-    const sunbringerDebuffs = [{ type: 'DEFShred', value: '20', format: '%' }];
-
-    function estimateSunbringer(buffs: any[], debuffs: any[]) {
-      return service.estimateBuildDamage(
-        { ATK: 2000, DEF: 3000, critRate: 97.5, critDMG: 50, lacerationDamage: 150 },
-        '1601',
-        'Sunbringer',
-        'Armorer',
-        'Fire',
-        0,
-        { buffs, debuffs, dazeBonus: 0 }
-      );
-    }
-
-    it('produces Sharp DMG from her full buff/debuff set', () => {
-      const result = estimateSunbringer(sunbringerBuffs, sunbringerDebuffs);
-
-      expect(result.damageType).toBe('sharp');
-      expect(result.sharpDamage!).toBeGreaterThan(0);
-    });
-
-    it('gains damage from her Laceration bonus', () => {
-      const withLaceration = estimateSunbringer(sunbringerBuffs, sunbringerDebuffs);
-      const withoutLaceration = estimateSunbringer(
-        sunbringerBuffs.filter(b => b.type !== 'LacerationBonus'),
-        sunbringerDebuffs
-      );
-
-      expect(withLaceration.sharpDamage!).toBeGreaterThan(withoutLaceration.sharpDamage!);
-    });
-
-    it('gains damage from her DEF Shred debuff', () => {
-      const withShred = estimateSunbringer(sunbringerBuffs, sunbringerDebuffs);
-      const withoutShred = estimateSunbringer(sunbringerBuffs, []);
+    it('combines with a DEF Shred debuff on the Sharp DMG path', () => {
+      const withoutShred = estimate('Armorer', laceration25);
+      const withShred = estimate('Armorer', laceration25, [
+        { type: 'DEFShred', value: '20', format: '%' },
+      ]);
 
       expect(withShred.sharpDamage!).toBeGreaterThan(withoutShred.sharpDamage!);
     });
