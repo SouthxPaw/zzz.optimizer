@@ -1665,13 +1665,7 @@
           }
         }
       ],
-      "debuffs": [
-        {
-          "type": "StunDMGMult",
-          "value": "80",
-          "format": "%"
-        }
-      ],
+      "debuffs": [],
       "dazeBonus": 0.2
     },
     "rarity": "S",
@@ -33968,11 +33962,6 @@
           "type": "RESShred",
           "value": "25",
           "format": "%"
-        },
-        {
-          "type": "StunDMGMult",
-          "value": "35",
-          "format": "%"
         }
       ],
       "dazeBonus": 15.8
@@ -46237,13 +46226,7 @@
           }
         }
       ],
-      "debuffs": [
-        {
-          "type": "StunDMGMult",
-          "value": "35",
-          "format": "%"
-        }
-      ],
+      "debuffs": [],
       "dazeBonus": 75
     },
     "rarity": "S",
@@ -58341,13 +58324,7 @@
           }
         }
       ],
-      "debuffs": [
-        {
-          "type": "StunDMGMult",
-          "value": "30",
-          "format": "%"
-        }
-      ],
+      "debuffs": [],
       "dazeBonus": 0
     },
     "rarity": "S",
@@ -70217,13 +70194,7 @@
     "name": "Koleda",
     "scoring": {
       "buffs": [],
-      "debuffs": [
-        {
-          "type": "StunDMGMult",
-          "value": "70",
-          "format": "%"
-        }
-      ],
+      "debuffs": [],
       "dazeBonus": 60
     },
     "rarity": "S",
@@ -84755,8 +84726,13 @@
         },
         {
           "type": "CRITRateBonus",
-          "value": "17.5",
-          "format": "%"
+          "value": "0",
+          "format": "%",
+          "condition": {
+            "sourceStat": "critDmg",
+            "threshold": 0,
+            "ratio": 0.35
+          }
         },
         {
           "type": "LacerationBonus",

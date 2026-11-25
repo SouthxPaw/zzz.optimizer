@@ -1076,7 +1076,6 @@ export class ScoringService {
     let defShred = 0;
     let resShred = 0;
     let damageTaken = 0;
-    let stunDMGMult = 0;
     let dazeBonus = 0;
     let lacerationBonus = 0;
 
@@ -1159,9 +1158,6 @@ export class ScoringService {
               break;
             case 'DamageTaken':
               damageTaken += value;
-              break;
-            case 'StunDMGMult':
-              stunDMGMult += value;
               break;
           }
         });
